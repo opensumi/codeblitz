@@ -1,0 +1,10 @@
+{
+  "extends": "../tsconfig.esm.json",
+  "compilerOptions": {
+    "rootDir": "../../../packages/core/src",
+    "outDir": "../../../packages/core/esm"
+  },
+  "include": [
+    "../../../packages/core/src"
+  ]
+}

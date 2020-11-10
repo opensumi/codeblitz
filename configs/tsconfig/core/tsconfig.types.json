@@ -1,0 +1,10 @@
+{
+  "extends": "../tsconfig.types.json",
+  "compilerOptions": {
+    "rootDir": "../../../packages/core/src",
+    "declarationDir": "../../../packages/core/types"
+  },
+  "include": [
+    "../../../packages/core/src"
+  ]
+}

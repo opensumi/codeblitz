@@ -1,0 +1,15 @@
+{
+  "references": [
+    {
+      "path": "./core/tsconfig.cjs.json"
+    },
+    {
+      "path": "./core/tsconfig.esm.json"
+    },
+    {
+      "path": "./core/tsconfig.types.json"
+    }
+  ],
+  "files": [],
+  "include": []
+}

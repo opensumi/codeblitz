@@ -1,0 +1,60 @@
+{
+  "name": "spacex",
+  "version": "0.0.1",
+  "workspaces": [
+    "packages/*"
+  ],
+  "private": true,
+  "description": "Ant Codespaces for browser",
+  "main": "index.js",
+  "scripts": {
+    "preinstall": "node scripts/checkYarn",
+    "build": "node scripts/build",
+    "create": "node scripts/create",
+    "format": "prettier --write --parser typescript \"packages/**/*.ts?(x)\"",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "antgroup",
+  "license": "ISC",
+  "husky": {
+    "hooks": {
+      "pre-commit": "lint-staged",
+      "commit-msg": "commitlint -E HUSKY_GIT_PARAMS"
+    }
+  },
+  "lint-staged": {
+    "*.js": [
+      "prettier --write"
+    ],
+    "*.ts?(x)": [
+      "echo eslint TODO:",
+      "prettier --parser=typescript --write"
+    ]
+  },
+  "commitlint": {
+    "extends": [
+      "@commitlint/config-conventional"
+    ]
+  },
+  "publishConfig": {
+    "registry": "https://registry.npm.alibaba-inc.com"
+  },
+  "devDependencies": {
+    "@commitlint/cli": "^11.0.0",
+    "@commitlint/config-conventional": "^11.0.0",
+    "@types/jest": "^26.0.15",
+    "@types/node": "^14.14.6",
+    "chalk": "^4.1.0",
+    "gulp": "^4.0.2",
+    "husky": "^4.3.0",
+    "jest": "^26.6.3",
+    "lint-staged": "^10.5.1",
+    "prettier": "^2.1.2",
+    "signale": "^1.4.0",
+    "ts-node": "^9.0.0",
+    "typescript": "^4.0.5"
+  },
+  "tnpm": {
+    "mode": "yarn"
+  }
+}

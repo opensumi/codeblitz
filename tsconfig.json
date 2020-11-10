@@ -1,0 +1,40 @@
+{
+  "compilerOptions": {
+    "module": "esnext",
+    "target": "es2017",
+    "moduleResolution": "node",
+    "strict": true,
+    "strictPropertyInitialization": false,
+    "sourceMap": true,
+    "experimentalDecorators": true,
+    "emitDecoratorMetadata": true,
+    "importHelpers": true,
+    "resolveJsonModule": true,
+    "noFallthroughCasesInSwitch": true,
+    "forceConsistentCasingInFileNames": true,
+    "downlevelIteration": true,
+    "noEmitOnError": false,
+    "noImplicitAny": false,
+    "skipLibCheck": false,
+    "strictFunctionTypes": false,
+    "jsx": "react",
+    "baseUrl": ".",
+    "rootDir": ".",
+    "outDir": "dist",
+    "noUnusedLocals": false,
+    "lib": [
+      "dom",
+      "esnext"
+    ],
+    "paths": {
+      "@alipay/spacex-*": ["packages/*/src"],
+    },
+    "typeRoots": [
+      "./node_modules/@types"
+    ]
+  },
+  "include": [
+    "packages",
+    "scripts"
+  ]
+}
