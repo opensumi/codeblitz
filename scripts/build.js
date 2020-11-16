@@ -8,7 +8,7 @@ const exec = util.promisify(child_process.exec)
 run()
 
 async function run() {
-  signale.pending('开启编译 ts 文件')
+  signale.pending('开始编译 ts 文件')
   const tsconfigPath = path.join(__dirname, '../configs/tsconfig/tsconfig.build.json')
   try {
     await exec(`npx tsc -b ${tsconfigPath}`)

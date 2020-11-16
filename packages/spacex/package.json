@@ -1,0 +1,57 @@
+{
+  "name": "@alipay/spacex",
+  "version": "0.0.1",
+  "description": "@alipay/spacex",
+  "main": "lib/index.js",
+  "module": "esm/index.js",
+  "typing": "types/index.d.ts",
+  "files": [
+    "lib",
+    "esm",
+    "types"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "git@code.alipay.com:winjo.gwj/SpaceX.git"
+  },
+  "keywords": [
+    "kaitian AntCodespaces"
+  ],
+  "scripts": {
+    "start": "webpack-dev-server --env.entry=./src/distribution/app.tsx"
+  },
+  "publishConfig": {
+    "registry": "https://registry.npm.alibaba-inc.com"
+  },
+  "dependencies": {
+    "@alipay/spacex-core": "0.0.1"
+  },
+  "tnpm": {
+    "mode": "yarn"
+  },
+  "devDependencies": {
+    "@types/react": "^16.9.56",
+    "@types/react-dom": "^16.9.9",
+    "copy-webpack-plugin": "^6.3.0",
+    "fork-ts-checker-webpack-plugin": "^6.0.1",
+    "friendly-errors-webpack-plugin": "^1.7.0",
+    "html-webpack-plugin": "^4.5.0",
+    "mini-css-extract-plugin": "^1.3.0",
+    "node-notifier": "^8.0.0",
+    "react": "^17.0.1",
+    "react-dom": "^17.0.1",
+    "thread-loader": "^3.0.1",
+    "tsconfig-paths-webpack-plugin": "^3.3.0",
+    "vscode-languageserver-types": "~3.14",
+    "style-loader": "^0.23.1",
+    "style-resources-loader": "^1.2.1",
+    "ts-loader": "^6.0.1",
+    "webpack": "^4.30.0",
+    "webpack-cli": "^3.3.1",
+    "webpack-dev-server": "^3.3.1",
+    "less": "^3.9.0",
+    "less-loader": "^6.0.0",
+    "css-loader": "^2.1.1",
+    "file-loader": "^3.0.1"
+  }
+}

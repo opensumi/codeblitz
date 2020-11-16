@@ -22,13 +22,14 @@ packages.forEach(async (pkg) => {
   signale.pending(`开启初始化模块：${name}`)
 
   // package.json
+  const pkgName = name === 'spacex' ? `@alipay/spacex` : `@alipay/spacex-${name}`
   const json = {
-    name: `@alipay/spacex-${name}`,
+    name: pkgName,
     version,
-    description: name,
+    description: pkgName,
     main: 'lib/index.js',
     module: 'esm/index.js',
-    typing: 'types/index.d.ts',
+    typings: 'types/index.d.ts',
     files: ['lib', 'esm', 'types'],
     repository: {
       type: 'git',

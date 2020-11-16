@@ -15,19 +15,21 @@
     "downlevelIteration": true,
     "noEmitOnError": false,
     "noImplicitAny": false,
-    "skipLibCheck": false,
+    "skipLibCheck": true,
     "strictFunctionTypes": false,
     "jsx": "react",
     "baseUrl": ".",
     "rootDir": ".",
     "outDir": "dist",
     "noUnusedLocals": false,
+    "allowSyntheticDefaultImports": true,
+    "esModuleInterop": true,
     "lib": [
       "dom",
       "esnext"
     ],
     "paths": {
-      "@alipay/spacex-*": ["packages/*/src"],
+      "@alipay/spacex-*": ["packages/*/src"]
     },
     "typeRoots": [
       "./node_modules/@types"
@@ -35,6 +37,8 @@
   },
   "include": [
     "packages",
+    "typings",
+    "global.d.ts",
     "scripts"
   ]
 }

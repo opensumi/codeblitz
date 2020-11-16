@@ -4,7 +4,7 @@
   "description": "core",
   "main": "lib/index.js",
   "module": "esm/index.js",
-  "typing": "types/index.d.ts",
+  "typings": "types/index.d.ts",
   "files": [
     "lib",
     "esm",
@@ -21,10 +21,24 @@
   "publishConfig": {
     "registry": "https://registry.npm.alibaba-inc.com"
   },
-  "dependencies": {
-    "@alipay/spacex-core": "0.0.1"
-  },
   "tnpm": {
     "mode": "yarn"
+  },
+  "dependencies": {
+    "@ali/common-di": "^5.2.2",
+    "@ali/ide-core-browser": "^1.23.1",
+    "@ali/ide-core-common": "^1.23.1",
+    "@ali/ide-editor": "^1.23.1",
+    "@ali/ide-kaitian-extension": "^1.23.1",
+    "@ali/ide-monaco": "^1.23.1",
+    "@isomorphic-git/lightning-fs": "^4.3.0",
+    "assert": "^2.0.0",
+    "browserfs": "~1.4.3",
+    "fs-extra-factory": "^0.2.0",
+    "uuid": "^8.3.1"
+  },
+  "devDependencies": {
+    "@types/fs-extra": "^9.0.4",
+    "vscode": "^1.1.37"
   }
 }
