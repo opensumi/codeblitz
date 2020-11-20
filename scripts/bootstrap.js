@@ -45,6 +45,7 @@ packages.forEach(async (pkg) => {
     },
     tnpm: {
       mode: 'yarn',
+      lockfile: 'enable'
     },
   }
   await fsp.writeFile(resolve('package.json'), JSON.stringify(json, null, 2))
