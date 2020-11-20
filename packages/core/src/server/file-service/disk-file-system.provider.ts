@@ -1,6 +1,4 @@
-import { fse, path, buffer, os } from '../node'
-import { v4 } from 'uuid'
-import Uri, { UriComponents } from 'vscode-uri'
+import { UriComponents } from 'vscode-uri'
 import {
   Event,
   IDisposable,
@@ -9,14 +7,13 @@ import {
   isUndefined,
   DebugLog,
   DisposableCollection,
-  FileUri,
+  DidFilesChangedParams,
+  Uri
 } from '@ali/ide-core-common'
-import { AppConfig } from '../core/app'
 import {
   FileChangeEvent,
   FileStat,
   FileType,
-  DidFilesChangedParams,
   FileSystemError,
   FileMoveOptions,
   isErrnoException,
@@ -25,20 +22,22 @@ import {
   FileAccess,
 } from '@ali/ide-file-service/lib/common'
 import { Injectable, Autowired } from '@ali/common-di'
-import { RPCService } from '@ali/ide-connection'
-import * as fileType from 'file-type'
 import { ParsedPattern, parse } from '@ali/ide-core-common/lib/utils/glob'
+import { FCService } from '../../connection'
+import { AppConfig } from '../core/app'
+import { FWFileSystemWatcherServer } from './file-service-watcher'
+import { fse, path, Buffer, os, writeFileAtomic } from '../node'
 
 const debugLog = new DebugLog()
-const { Buffer } = buffer
 
 // FIXME: 暂时只用单例
 @Injectable()
-export class DiskFileSystemProvider extends RPCService implements IDiskFileProvider {
+export class DiskFileSystemProvider extends FCService implements IDiskFileProvider {
   private fileChangeEmitter = new Emitter<FileChangeEvent>()
   readonly onDidChangeFile: Event<FileChangeEvent> = this.fileChangeEmitter.event
   protected toDispose = new DisposableCollection()
 
+  private watcherServer: FWFileSystemWatcherServer;
   protected readonly watcherDisposerMap = new Map<number, IDisposable>()
   protected watchFileExcludes: string[] = []
   protected watchFileExcludesMatcherList: ParsedPattern[] = []
@@ -63,9 +62,21 @@ export class DiskFileSystemProvider extends RPCService implements IDiskFileProvi
    * @returns {number}
    * @memberof DiskFileSystemProvider
    */
-  watch(uri: UriComponents, options?: { recursive: boolean; excludes: string[] }) {
-    // TODO:
-    return 0
+  async watch(uri: UriComponents, options?: { recursive: boolean; excludes: string[] }): Promise<number> {
+    const _uri = Uri.revive(uri);
+    const watcherId = await this.watcherServer.watchFileChanges(
+      _uri.toString(),
+      {
+        excludes: options && options.excludes ? options.excludes : [],
+      },
+    )
+    const disposable = {
+      dispose: () => {
+        this.watcherServer.unwatchFileChanges(watcherId);
+      },
+    };
+    this.watcherDisposerMap.set(watcherId, disposable);
+    return watcherId;
   }
 
   unwatch(watcherId: number) {
@@ -81,7 +92,6 @@ export class DiskFileSystemProvider extends RPCService implements IDiskFileProvi
     return new Promise(async (resolve) => {
       this.doGetStat(_uri, 1)
         .then((stat) => {
-          // console.log(stat, 'provider stat bkend');
           resolve(stat)
         })
         .catch((e) => resolve())
@@ -89,14 +99,12 @@ export class DiskFileSystemProvider extends RPCService implements IDiskFileProvi
   }
 
   async readDirectory(uri: UriComponents): Promise<[string, FileType][]> {
-    const _uri = Uri.revive(uri)
     const result: [string, FileType][] = []
     try {
-      const dirList = fse.readdirSync(_uri.fsPath)
-
-      dirList.forEach((name) => {
-        const filePath = path.join(_uri.fsPath, name)
-        result.push([name, this.getFileStatType(fse.statSync(filePath))])
+      const dirList = await fse.readdir(uri.path)
+      dirList.forEach(async (name) => {
+        const filePath = path.join(uri.path, name)
+        result.push([name, this.getFileStatType(await fse.stat(filePath))])
       })
       return result
     } catch (e) {
@@ -116,7 +124,7 @@ export class DiskFileSystemProvider extends RPCService implements IDiskFileProvi
         'Error occurred while creating the directory: path is a file.'
       )
     }
-    await fse.ensureDir(FileUri.fsPath(new URI(_uri)))
+    await fse.ensureDir(uri.path)
     const newStat = await this.doGetStat(_uri, 1)
     if (newStat) {
       return newStat
@@ -125,14 +133,13 @@ export class DiskFileSystemProvider extends RPCService implements IDiskFileProvi
   }
 
   async readFile(uri: UriComponents, encoding = 'utf8'): Promise<string> {
-    const _uri = Uri.revive(uri)
     if (typeof encoding !== 'string') {
       // cancellation token兼容
       encoding = 'utf8'
     }
 
     try {
-      const buffer = await fse.readFile(FileUri.fsPath(new URI(_uri)))
+      const buffer = await fse.readFile(uri.path)
       return buffer.toString(encoding as BufferEncoding)
     } catch (error) {
       if (isErrnoException(error)) {
@@ -178,14 +185,11 @@ export class DiskFileSystemProvider extends RPCService implements IDiskFileProvi
       return await this.createFile(uri, { content: buffer })
     }
 
-    await fse.writeFile(FileUri.fsPath(new URI(_uri)), buffer)
+    await writeFileAtomic(uri.path, buffer)
   }
 
   access(uri: UriComponents, mode: number = FileAccess.Constants.F_OK): Promise<boolean> {
-    return fse
-      .access(FileUri.fsPath(URI.from(uri)), mode)
-      .then(() => true)
-      .catch(() => false)
+    return fse.pathExists(Uri.from(uri).path)
   }
 
   async delete(
@@ -201,24 +205,10 @@ export class DiskFileSystemProvider extends RPCService implements IDiskFileProvi
       debugLog.warn(`DiskFileSystemProvider not support options.recursive!`)
     }
 
-    const filePath = FileUri.fsPath(new URI(_uri))
-    const outputRootPath = path.join(os.tmpdir(), v4())
+    const filePath = uri.path
     try {
-      await new Promise<void>((resolve, reject) => {
-        fse.rename(filePath, outputRootPath, async (error) => {
-          if (error) {
-            return reject(error)
-          }
-          resolve()
-        })
-      })
-      // There is no reason for the promise returned by this function not to resolve
-      // as soon as the move is complete.  Clearing up the temporary files can be
-      // done in the background.
-      fse.remove(FileUri.fsPath(outputRootPath))
-    } catch (error) {
       return fse.remove(filePath)
-    }
+    } catch (err) {}
   }
 
   async rename(
@@ -226,16 +216,7 @@ export class DiskFileSystemProvider extends RPCService implements IDiskFileProvi
     targetUri: UriComponents,
     options: { overwrite: boolean }
   ): Promise<FileStat> {
-    // const _sourceUri = new URI(sourceUri);
-    // const _targetUri = new URI(targetUri);
-    // if (this.client) {
-    //   this.client.onWillMove(sourceUri, targetUri);
-    // }
-    const result = await this.doMove(sourceUri, targetUri, options)
-    // if (this.client) {
-    //   this.client.onDidMove(sourceUri, targetUri);
-    // }
-    return result
+    return this.doMove(sourceUri, targetUri, options)
   }
 
   async copy(
@@ -263,7 +244,7 @@ export class DiskFileSystemProvider extends RPCService implements IDiskFileProvi
         'Cannot perform copy, source and destination are the same.'
       )
     }
-    await fse.copy(FileUri.fsPath(_sourceUri.toString()), FileUri.fsPath(_targetUri.toString()), {
+    await fse.copy(_sourceUri.path, _targetUri.path, {
       overwrite,
       recursive,
     })
@@ -278,10 +259,9 @@ export class DiskFileSystemProvider extends RPCService implements IDiskFileProvi
   }
 
   async getCurrentUserHome(): Promise<FileStat | undefined> {
-    return this.stat(FileUri.create(os.homedir()).codeUri)
+    return this.stat(Uri.file(os.homedir()))
   }
 
-  // 出于通信成本的考虑，排除文件的逻辑必须放在node层（fs provider层，不同的fs实现的exclude应该不一样）
   setWatchFileExcludes(excludes: string[]) {
     debugLog.info('set watch file exclude:', excludes)
     this.watchFileExcludes = excludes
@@ -293,20 +273,36 @@ export class DiskFileSystemProvider extends RPCService implements IDiskFileProvi
   }
 
   protected initWatcher() {
-    // TODO:
+    this.watcherServer = new FWFileSystemWatcherServer({
+      verbose: true,
+    });
+    this.watcherServer.setClient({
+      onDidFilesChanged: (events: DidFilesChangedParams) => {
+        const filteredChange = events.changes.filter((file) => {
+          const uri = new URI(file.uri);
+          const uriString = uri.withoutScheme().toString();
+          return !this.watchFileExcludesMatcherList.some((match) => match(uriString));
+        });
+        this.fileChangeEmitter.fire(filteredChange);
+        if (this.client) {
+          this.client.onDidFilesChanged({
+            changes: filteredChange,
+          });
+        }
+      },
+    });
+    this.toDispose.push({
+      dispose: () => {
+        this.watcherServer.dispose();
+      },
+    });
   }
 
   // Protected or private
 
   protected async createFile(uri: UriComponents, options: { content: Buffer }): Promise<FileStat> {
-    const _uri = Uri.revive(uri)
-    const parentUri = new URI(_uri).parent
-    const parentStat = await this.doGetStat(parentUri.codeUri, 0)
-    if (!parentStat) {
-      await fse.ensureDir(FileUri.fsPath(parentUri))
-    }
-    await fse.writeFile(FileUri.fsPath(_uri.toString()), options.content)
-    const newStat = await this.doGetStat(_uri, 1)
+    await fse.outputFile(uri.path, options.content)
+    const newStat = await this.doGetStat(Uri.revive(uri), 1)
     if (newStat) {
       return newStat
     }
@@ -381,8 +377,6 @@ export class DiskFileSystemProvider extends RPCService implements IDiskFileProvi
       this.mayHaveChildren(_sourceUri),
       this.mayHaveChildren(_targetUri),
     ])
-    // Handling special Windows case when source and target resources are empty folders.
-    // Source should be deleted and target should be touched.
     if (
       overwrite &&
       targetStat &&
@@ -391,11 +385,7 @@ export class DiskFileSystemProvider extends RPCService implements IDiskFileProvi
       !sourceMightHaveChildren &&
       !targetMightHaveChildren
     ) {
-      // The value should be a Unix timestamp in seconds.
-      // For example, `Date.now()` returns milliseconds, so it should be divided by `1000` before passing it in.
-      const now = Date.now() / 1000
-      await fse.utimes(FileUri.fsPath(_targetUri.toString()), now, now)
-      await fse.rmdir(FileUri.fsPath(_sourceUri.toString()))
+      await fse.rmdir(_sourceUri.path)
       const newStat = await this.doGetStat(_targetUri, 1)
       if (newStat) {
         return newStat
@@ -417,7 +407,7 @@ export class DiskFileSystemProvider extends RPCService implements IDiskFileProvi
       await this.delete(sourceUri, { moveToTrash: false })
       return newStat
     } else {
-      await fse.move(_sourceUri.toString(), FileUri.fsPath(_targetUri.toString()), { overwrite })
+      await fse.move(_sourceUri.path, _targetUri.path, { overwrite })
       const newStat = await this.doGetStat(_targetUri, 1)
       return newStat!
     }
@@ -425,25 +415,25 @@ export class DiskFileSystemProvider extends RPCService implements IDiskFileProvi
 
   protected async doGetStat(uri: Uri, depth: number): Promise<FileStat | undefined> {
     try {
-      const filePath = uri.fsPath
+      const filePath = uri.path
       const lstat = await fse.lstat(filePath)
 
       if (lstat.isSymbolicLink()) {
-        let realPath
+        let realPath: string
         try {
-          realPath = await fse.realpath(FileUri.fsPath(new URI(uri)))
+          realPath = await fse.realpath(uri.path)
         } catch (e) {
           return undefined
         }
         const stat = await fse.stat(filePath)
-        const realURI = FileUri.create(realPath)
+        const realURI = Uri.file(realPath)
         const realStat = await fse.lstat(realPath)
 
-        let realStatData
+        let realStatData: FileStat
         if (stat.isDirectory()) {
-          realStatData = await this.doCreateDirectoryStat(realURI.codeUri, realStat, depth)
+          realStatData = await this.doCreateDirectoryStat(realURI, realStat, depth)
         } else {
-          realStatData = await this.doCreateFileStat(realURI.codeUri, realStat)
+          realStatData = await this.doCreateFileStat(realURI, realStat)
         }
 
         return {
@@ -475,18 +465,12 @@ export class DiskFileSystemProvider extends RPCService implements IDiskFileProvi
   }
 
   protected async doCreateFileStat(uri: Uri, stat: any): Promise<FileStat> {
-    // Then stat the target and return that
-    // const isLink = !!(stat && stat.isSymbolicLink());
-    // if (isLink) {
-    //   stat = await fs.stat(FileUri.fsPath(uri));
-    // }
-
     return {
       uri: uri.toString(),
       lastModification: stat.mtime.getTime(),
       createTime: stat.ctime.getTime(),
       isSymbolicLink: stat.isSymbolicLink(),
-      isDirectory: stat.isDirectory(),
+      isDirectory: false,
       size: stat.size,
       type: this.getFileStatType(stat),
     }
@@ -519,7 +503,7 @@ export class DiskFileSystemProvider extends RPCService implements IDiskFileProvi
 
   protected async doGetChildren(uri: Uri, depth: number): Promise<FileStat[]> {
     const _uri = new URI(uri)
-    const files = await fse.readdir(FileUri.fsPath(_uri))
+    const files = await fse.readdir(uri.path)
     const children = await Promise.all(
       files
         .map((fileName) => _uri.resolve(fileName))
@@ -534,26 +518,21 @@ export class DiskFileSystemProvider extends RPCService implements IDiskFileProvi
       if (!uri.startsWith('file:/')) {
         return this._getFileType('')
       }
-      // const lstat = await fs.lstat(FileUri.fsPath(uri));
-      const stat = await fse.stat(FileUri.fsPath(uri))
+      const _uri = new URI(uri)
+      const stat = await fse.stat(_uri.codeUri.path)
 
       let ext: string = ''
       if (!stat.isDirectory()) {
-        // if(lstat.isSymbolicLink){
-
-        // }else {
+        // TODO: 暂时不通过 file-type 来判断
         if (stat.size) {
-          const type = await fileType.stream(fse.createReadStream(FileUri.fsPath(uri)))
-          // 可以拿到 type.fileType 说明为二进制文件
-          if (type.fileType) {
-            ext = type.fileType.ext
+          ext = _uri.path.ext
+          if (ext[0] === '.') {
+            ext = ext.slice(1)
           }
         }
         return this._getFileType(ext)
-        // }
-      } else {
-        return 'directory'
       }
+      return 'directory'
     } catch (error) {
       if (isErrnoException(error)) {
         if (
@@ -587,4 +566,8 @@ export class DiskFileSystemProviderWithoutWatcher extends DiskFileSystemProvider
   initWatcher() {
     // Do nothing
   }
+}
+
+function getPath(uri: UriComponents) {
+  return Uri.from(uri).path
 }

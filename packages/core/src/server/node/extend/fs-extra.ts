@@ -1,5 +1,5 @@
 import fsExtraFactory from 'fs-extra-factory'
-import { fs, path, process, assert, buffer } from './internal'
+import { fs, path, process, assert, buffer } from '../internal'
 
 const fse = fsExtraFactory({
   fs,

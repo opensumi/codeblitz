@@ -11,8 +11,10 @@ export const path = BFSRequire('path')
 
 export const buffer = BFSRequire('buffer')
 
+const { Buffer } = buffer
+
 export const process = BFSRequire('process')
 
 import * as os from './os'
 
-export { assert, os }
+export { assert, os, Buffer }

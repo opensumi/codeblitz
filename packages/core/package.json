@@ -35,10 +35,16 @@
     "assert": "^2.0.0",
     "browserfs": "~1.4.3",
     "fs-extra-factory": "^0.2.0",
-    "uuid": "^8.3.1"
+    "lodash.debounce": "^4.0.8",
+    "md5": "^2.3.0",
+    "uuid": "^3.3.2",
+    "vscode-languageserver-types": "~3.14.0"
   },
   "devDependencies": {
     "@types/fs-extra": "^9.0.4",
+    "@types/lodash.debounce": "^4.0.6",
+    "@types/md5": "^2.2.1",
+    "@types/uuid": "^3",
     "vscode": "^1.1.37"
   }
 }
