@@ -8,6 +8,15 @@
     },
     {
       "path": "./core/tsconfig.types.json"
+    },
+    {
+      "path": "./cli/tsconfig.cjs.json"
+    },
+    {
+      "path": "./cli/tsconfig.esm.json"
+    },
+    {
+      "path": "./cli/tsconfig.types.json"
     }
   ],
   "files": [],

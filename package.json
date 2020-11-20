@@ -57,5 +57,17 @@
   "tnpm": {
     "mode": "yarn",
     "lockfile": "enable"
-  }
+  },
+  "kaitian-extensions": [
+    {
+      "publisher": "kaitian",
+      "name": "ide-dark-theme",
+      "version": "2.0.0"
+    },
+    {
+      "publisher": "vscode-extensions",
+      "name": "vscode-icons",
+      "version": "9.4.0"
+    }
+  ]
 }

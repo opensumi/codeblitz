@@ -90,3 +90,6 @@ configs/tsconfig/.references
 packages/*/lib
 packages/*/esm
 packages/*/types
+
+packages/spacex/extensions
+packages/spacex/kaitian-extensions

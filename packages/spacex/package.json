@@ -27,7 +27,8 @@
     "@alipay/spacex-core": "0.0.1"
   },
   "tnpm": {
-    "mode": "yarn"
+    "mode": "yarn",
+    "lockfile": "enable"
   },
   "devDependencies": {
     "@types/react": "^16.9.56",

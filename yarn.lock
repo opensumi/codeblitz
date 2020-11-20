@@ -178,6 +178,19 @@
     uuid "^7.0.2"
     yauzl "^2.10.0"
 
+"@ali/ide-extension-installer@^2.0.0":
+  version "2.0.0"
+  resolved "https://registry.npm.alibaba-inc.com/@ali/ide-extension-installer/download/@ali/ide-extension-installer-2.0.0.tgz#ecf826b01ad6a1e111401c6b82f194fd2d9d06d5"
+  integrity sha1-7PgmsBrWoeERQBxrgvGU/S2dBtU=
+  dependencies:
+    await-event "^2.1.0"
+    content-disposition "^0.5.3"
+    fs-extra "^8.1.0"
+    lodash.flatten "^4.4.0"
+    urllib "^2.34.2"
+    uuid "^7.0.2"
+    yauzl "^2.10.0"
+
 "@ali/ide-extension-manager@1.24.2":
   version "1.24.2"
   resolved "https://registry.npm.alibaba-inc.com/@ali/ide-extension-manager/download/@ali/ide-extension-manager-1.24.2.tgz#a21241a2c3992a30baa0c32501e7ee1b6d03c39a"
@@ -1587,6 +1600,11 @@
   resolved "https://registry.npm.alibaba-inc.com/@types/normalize-package-data/download/@types/normalize-package-data-2.4.0.tgz#e486d0d97396d79beedd0a6e33f4534ff6b4973e"
   integrity sha1-5IbQ2XOW15vu3QpuM/RTT/a0lz4=
 
+"@types/npmlog@^4.1.2":
+  version "4.1.2"
+  resolved "https://registry.npm.alibaba-inc.com/@types/npmlog/download/@types/npmlog-4.1.2.tgz#d070fe6a6b78755d1092a3dc492d34c3d8f871c4"
+  integrity sha1-0HD+amt4dV0QkqPcSS00w9j4ccQ=
+
 "@types/parse-json@^4.0.0":
   version "4.0.0"
   resolved "https://registry.npm.alibaba-inc.com/@types/parse-json/download/@types/parse-json-4.0.0.tgz#2f8bb441434d163b35fb8ffdccd7138927ffb8c0"
@@ -1623,6 +1641,11 @@
   dependencies:
     "@types/prop-types" "*"
     csstype "^3.0.2"
+
+"@types/semver@^7.3.4":
+  version "7.3.4"
+  resolved "https://registry.npm.alibaba-inc.com/@types/semver/download/@types/semver-7.3.4.tgz#43d7168fec6fa0988bb1a513a697b29296721afb"
+  integrity sha1-Q9cWj+xvoJiLsaUTppeykpZyGvs=
 
 "@types/source-list-map@*":
   version "0.1.2"
@@ -5251,7 +5274,7 @@ fs-extra@^8.1.0:
     jsonfile "^4.0.0"
     universalify "^0.1.0"
 
-fs-extra@^9.0.0:
+fs-extra@^9.0.0, fs-extra@^9.0.1:
   version "9.0.1"
   resolved "https://registry.npm.alibaba-inc.com/fs-extra/download/fs-extra-9.0.1.tgz#910da0062437ba4c39fedd863f1675ccfefcb9fc"
   integrity sha1-kQ2gBiQ3ukw5/t2GPxZ1zP78ufw=
@@ -8413,7 +8436,7 @@ npm-run-path@^4.0.0:
   dependencies:
     path-key "^3.0.0"
 
-npmlog@^4.0.1:
+npmlog@^4.0.1, npmlog@^4.1.2:
   version "4.1.2"
   resolved "https://registry.npm.alibaba-inc.com/npmlog/download/npmlog-4.1.2.tgz#08a7f2a8bf734604779a9efa4ad5cc717abb954b"
   integrity sha1-CKfyqL9zRgR3mp76StXMcXq7lUs=
