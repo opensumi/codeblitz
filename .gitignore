@@ -92,4 +92,4 @@ packages/*/esm
 packages/*/types
 
 packages/spacex/extensions
-packages/spacex/kaitian-extensions
+packages/spacex/.kaitian

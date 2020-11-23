@@ -28,21 +28,28 @@ export interface IExtensionMetaData {
   isDevelopment?: boolean;
 }
 
+export interface NLS {
+  languageId: string
+  filename: string
+}
+
 /**
  * 纯 worker 插件的 metadata，部分字段有更改，在运行时转换补齐
  */
-export interface IWorkExtensionMetaData {
+export interface IWorkerExtensionMetaData {
   id: string;
   extensionId: string;
-  packageJSON: { [key: string]: any };
+  packageJSON: { contributes: any };
   defaultPkgNlsJSON: { [key: string]: any } | undefined;
-  allPkgNlsJSON: { [key: string]: any };
-  extraMetadata: JSONType;
+  pkgNlsJSON: { [key: string]: any };
+  nlsList: NLS[]
   extendConfig: JSONType;
 }
 
-export interface ExtraMetaData {
-  [key: string]: any;
-}
-
 export interface JSONType { [key: string]: any; }
+
+export interface IExtension {
+  publisher: string
+  name: string
+  version: string
+}

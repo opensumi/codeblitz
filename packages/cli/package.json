@@ -2,8 +2,7 @@
   "name": "@alipay/spacex-cli",
   "version": "0.0.1",
   "description": "@alipay/spacex-cli",
-  "main": "lib/index.js",
-  "module": "esm/index.js",
+  "main": "lib/commander.js",
   "typing": "types/index.d.ts",
   "files": [
     "lib",
@@ -27,16 +26,20 @@
   "dependencies": {
     "@ali/ide-extension-installer": "^2.0.0",
     "@alipay/spacex-core": "0.0.1",
+    "commander": "^6.2.0",
     "fs-extra": "^9.0.1",
-    "npmlog": "^4.1.2",
-    "semver": "^7.3.2"
+    "rxjs": "^6.6.3",
+    "semver": "^7.3.2",
+    "signale": "^1.4.0"
   },
   "tnpm": {
     "mode": "yarn",
     "lockfile": "enable"
   },
   "devDependencies": {
-    "@types/npmlog": "^4.1.2",
-    "@types/semver": "^7.3.4"
+    "@types/commander": "^2.12.2",
+    "@types/fs-extra": "^9.0.4",
+    "@types/semver": "^7.3.4",
+    "@types/signale": "^1.4.1"
   }
 }

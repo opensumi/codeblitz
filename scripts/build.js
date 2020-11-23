@@ -1,9 +1,6 @@
 const path = require('path')
-const child_process = require('child_process')
-const util = require('util')
 const signale = require('signale')
-
-const exec = util.promisify(child_process.exec)
+const execa = require('execa')
 
 run()
 
@@ -11,11 +8,12 @@ async function run() {
   signale.pending('开始编译 ts 文件')
   const tsconfigPath = path.join(__dirname, '../configs/tsconfig/tsconfig.build.json')
   try {
-    await exec(`npx tsc -b ${tsconfigPath}`)
+    await execa('tsc', ['-b', tsconfigPath, '--locale', 'zh-cn'], {
+      stdio: 'inherit' // use inherit get pretty error log
+    })
     signale.success('编译成功')
   } catch (err) {
     signale.error('编译失败')
-    console.log(err.stdout)
   }
 }
 

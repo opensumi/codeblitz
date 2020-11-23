@@ -24,7 +24,8 @@
     "registry": "https://registry.npm.alibaba-inc.com"
   },
   "dependencies": {
-    "@alipay/spacex-core": "0.0.1"
+    "@alipay/spacex-core": "0.0.1",
+    "@alipay/spacex-cli": "0.0.1"
   },
   "tnpm": {
     "mode": "yarn",
