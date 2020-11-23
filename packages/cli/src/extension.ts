@@ -1,14 +1,14 @@
 import * as path from 'path'
-import { ExtensionInstaller, Extension } from '@ali/ide-extension-installer';
-import * as fse from 'fs-extra';
+import { ExtensionInstaller, Extension } from '@ali/ide-extension-installer'
+import * as fse from 'fs-extra'
 import { from, of } from 'rxjs'
 import { mergeMap, filter } from 'rxjs/operators'
 import { EXTENSION_DIR, EXTENSION_METADATA_DIR } from './util/constant'
 import { getExtension } from './extension/scanner'
-import { IWorkerExtensionMetaData, IExtension } from './extension/type';
+import { IExtensionBasicMetadata, IExtensionIdentity } from './extension/type'
 import log from './util/log'
-import checkFramework from './util/check-framework';
-import { createMetadataType } from './extension/metadata-type';
+import checkFramework from './util/check-framework'
+import { createMetadataType } from './extension/metadata-type'
 
 let extensionInstaller: ExtensionInstaller
 
@@ -19,30 +19,33 @@ export const install = async () => {
 
   // TODO: 暂时只支持从 package.json 配置，不支持通过 install 安装
   const extensions = await getExtensionFromPackage()
-  
+
   checkExtensions(extensions)
 
   await clearCache()
 
   log.start('开始安装扩展')
 
-  from(extensions).pipe(
-    mergeMap(installExtension, 5), // 限制并发数 5
-    mergeMap(extPath => Array.isArray(extPath) ? from(extPath) : of(extPath)),
-    mergeMap(getExtension, 5),
-    filter(data => !!data),
-    mergeMap(writeMetadata)
-  ).subscribe(
-    (extensionId) => {
-      log.info(`${extensionId} 安装完成`)
-    },
-    () => {
-      log.error('扩展安装失败，请稍后重试')
-    },
-    () => {
-      log.success('扩展安装成功')
-    }
-  )
+  from(extensions)
+    .pipe(
+      mergeMap(installExtension, 5), // 限制并发数 5
+      mergeMap((extPath) => (Array.isArray(extPath) ? from(extPath) : of(extPath))),
+      mergeMap(getExtension, 5),
+      filter((data) => !!data),
+      mergeMap(writeMetadata)
+    )
+    .subscribe(
+      (extensionId) => {
+        log.info(`${extensionId} 安装完成`)
+      },
+      (err) => {
+        log.error('扩展安装失败，请稍后重试')
+        console.error(err)
+      },
+      () => {
+        log.success('扩展安装成功')
+      }
+    )
 }
 
 async function createInstaller() {
@@ -63,7 +66,7 @@ async function clearCache() {
   await fse.ensureDir(EXTENSION_METADATA_DIR)
 }
 
-async function getExtensionFromPackage(): Promise<IExtension[]> {
+async function getExtensionFromPackage(): Promise<IExtensionIdentity[]> {
   try {
     const projectPkgJSON = await fse.readJSON(path.resolve('package.json'))
     return projectPkgJSON?.kaitianExtensions ?? []
@@ -77,9 +80,8 @@ async function setExtensionFromPackage(config: any) {
     const pkgPath = path.resolve('package.json')
     const projectPkgJSON = await fse.readJSON(pkgPath)
     projectPkgJSON.kaitianExtensions = config
-    await fse.writeJSON(pkgPath, projectPkgJSON, { spaces: 2 } )
-  } catch (err) {
-  }
+    await fse.writeJSON(pkgPath, projectPkgJSON, { spaces: 2 })
+  } catch (err) {}
 }
 
 function checkExtensions(extensions: Extension[]) {
@@ -104,35 +106,39 @@ function checkExtensions(extensions: Extension[]) {
   }
 }
 
-async function installExtension(extension: IExtension) {
+async function installExtension(extension: IExtensionIdentity) {
   return extensionInstaller.install({
     publisher: extension.publisher,
     name: extension.name,
-    version: extension.version
+    version: extension.version,
   })
 }
 
-async function writeMetadata(metadata: IWorkerExtensionMetaData) {
+async function writeMetadata(metadata: IExtensionBasicMetadata) {
   await fse.ensureDir(EXTENSION_METADATA_DIR)
 
+  const {
+    extension: { publisher, name },
+  } = metadata
+  const extensionId = `${publisher}.${name}`
   await fse.writeFile(
-    path.join(EXTENSION_METADATA_DIR, `${metadata.extensionId}.js`),
+    path.join(EXTENSION_METADATA_DIR, `${extensionId}.js`),
     `
 module.exports = ${JSON.stringify(metadata, null, 2)}
     `.trim() + '\n'
   )
   await fse.writeFile(
-    path.join(EXTENSION_METADATA_DIR, `${metadata.extensionId}.d.ts`),
-    createMetadataType(metadata.extensionId)
+    path.join(EXTENSION_METADATA_DIR, `${extensionId}.d.ts`),
+    createMetadataType(extensionId)
   )
-  return metadata.extensionId
+  return extensionId
 }
 
 // uninstall
 export async function uninstall(extensionId: string[]) {
   const extensions = await getExtensionFromPackage()
-  const removeExtensions: IExtension[] = []
-  const remainExtensions: IExtension[] = []
+  const removeExtensions: IExtensionIdentity[] = []
+  const remainExtensions: IExtensionIdentity[] = []
   for (const config of extensions) {
     let index = -1
     for (let i = 0; i < extensionId.length; i++) {
@@ -149,17 +155,19 @@ export async function uninstall(extensionId: string[]) {
     }
   }
   if (extensionId.length) {
-    extensionId.forEach(id => {
+    extensionId.forEach((id) => {
       log.error(`${id} 未安装，无法卸载`)
       throw new Error('error')
     })
   }
-  await Promise.all(removeExtensions.map(async (ext) => {
-    const extensionId = `${ext.publisher}.${ext.name}`
-    await fse.remove(path.join(`${EXTENSION_DIR}`, `${extensionId}-${ext.version}`))
-    await fse.remove(path.join(EXTENSION_METADATA_DIR, `${extensionId}.js`))
-    await fse.remove(path.join(EXTENSION_METADATA_DIR, `${extensionId}.d.ts`))
-  }))
+  await Promise.all(
+    removeExtensions.map(async (ext) => {
+      const extensionId = `${ext.publisher}.${ext.name}`
+      await fse.remove(path.join(`${EXTENSION_DIR}`, `${extensionId}-${ext.version}`))
+      await fse.remove(path.join(EXTENSION_METADATA_DIR, `${extensionId}.js`))
+      await fse.remove(path.join(EXTENSION_METADATA_DIR, `${extensionId}.d.ts`))
+    })
+  )
   await setExtensionFromPackage(remainExtensions)
 
   log.success('卸载插件成功')

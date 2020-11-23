@@ -1,5 +1,6 @@
 import { Injector } from '@ali/common-di'
 import { ConstructorOf } from '@ali/ide-core-common'
+import { IExtensionBasicMetadata } from '@alipay/spacex-shared'
 
 import {
   ClientApp,
@@ -10,7 +11,10 @@ import {
 } from '@alipay/spacex-core'
 
 type Options = Omit<IClientAppOpts, 'serverApp'> & {
-  serverModules: ConstructorOf<NodeModule>[]
+  serverOptions: {
+    modules?: ConstructorOf<NodeModule>[]
+    extensionMetadata?: IExtensionBasicMetadata[]
+  }
 }
 
 export async function createApp(opts: Options) {
@@ -25,9 +29,10 @@ export async function createApp(opts: Options) {
 
   const serverApp = new ServerApp({
     injector: serverInjector,
-    modules: opts.serverModules,
+    modules: opts.serverOptions.modules || [],
     workspaceDir: opts.workspaceDir,
     extensionDir: opts.extensionDir,
+    extensionMetadata: opts.serverOptions.extensionMetadata,
   })
 
   await serverApp.start()

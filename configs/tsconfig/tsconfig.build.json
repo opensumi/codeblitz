@@ -1,23 +1,14 @@
 {
   "references": [
     {
-      "path": "./core/tsconfig.cjs.json"
+      "path": "./shared/tsconfig.build.json"
     },
     {
-      "path": "./core/tsconfig.esm.json"
+      "path": "./cli/tsconfig.build.json"
     },
     {
-      "path": "./core/tsconfig.types.json"
+      "path": "./core/tsconfig.build.json"
     },
-    {
-      "path": "./cli/tsconfig.cjs.json"
-    },
-    {
-      "path": "./cli/tsconfig.esm.json"
-    },
-    {
-      "path": "./cli/tsconfig.types.json"
-    }
   ],
   "files": [],
   "include": []

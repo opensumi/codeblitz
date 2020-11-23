@@ -17,9 +17,10 @@ import {
   ReporterMetadata,
   REPORT_HOST,
 } from '@ali/ide-core-common'
+import { IExtensionBasicMetadata } from '@alipay/spacex-shared'
 
 import { INodeLogger, NodeLogger } from './node-logger'
-import { FCServiceCenter, initFCService, createFCService, ServerPort } from '../../connection'
+import { FCServiceCenter, initFCService, ServerPort } from '../../connection'
 import { IServerApp } from '../../common'
 import { bootstrap } from './bootstrap'
 
@@ -50,6 +51,10 @@ interface Config {
    * fileService禁止访问的路径，使用glob匹配
    */
   blockPatterns?: string[]
+  /**
+   * 扩展元数据, CLI 自动生成
+   */
+  extensionMetadata?: IExtensionBasicMetadata[]
 }
 
 export interface AppConfig extends Partial<Config> {}
@@ -83,30 +88,17 @@ export class ServerApp implements IServerApp {
     this.injector = opts.injector || new Injector()
     this.config = {
       injector: this.injector,
-      workspaceDir: opts.workspaceDir || '',
+      workspaceDir: opts.workspaceDir,
       extensionDir: opts.extensionDir,
       logDir: opts.logDir,
       logLevel: opts.logLevel,
       LogServiceClass: opts.LogServiceClass,
+      extensionMetadata: opts.extensionMetadata,
     }
     this.initBaseProvider(opts)
     this.createNodeModules(opts.modules, opts.modulesInstances)
     this.logger = this.injector.get(ILogServiceManager).getLogger(SupportLogNamespace.App)
     this.contributionsProvider = this.injector.get(ServerAppContribution)
-  }
-
-  /**
-   * 将被依赖但未被加入modules的模块加入到待加载模块最后
-   */
-  public resolveModuleDeps(moduleConstructor: ModuleConstructor, modules: any[]) {
-    const dependencies = Reflect.getMetadata('dependencies', moduleConstructor) as []
-    if (dependencies) {
-      dependencies.forEach((dep) => {
-        if (modules.indexOf(dep) === -1) {
-          modules.push(dep)
-        }
-      })
-    }
   }
 
   private get contributions(): ServerAppContribution[] {
@@ -187,9 +179,6 @@ export class ServerApp implements IServerApp {
 
   private createNodeModules(Constructors: ModuleConstructor[] = [], modules: NodeModule[] = []) {
     const allModules = [...modules]
-    Constructors.forEach((c) => {
-      this.resolveModuleDeps(c, Constructors)
-    })
     for (const Constructor of Constructors) {
       allModules.push(this.injector.get(Constructor))
     }

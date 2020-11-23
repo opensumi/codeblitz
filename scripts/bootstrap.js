@@ -42,10 +42,11 @@ packages.forEach(async (pkg) => {
     },
     dependencies: {
       '@alipay/spacex-core': version,
+      '@alipay/spacex-shared': version,
     },
     tnpm: {
       mode: 'yarn',
-      lockfile: 'enable'
+      lockfile: 'enable',
     },
   }
   await fsp.writeFile(resolve('package.json'), JSON.stringify(json, null, 2))

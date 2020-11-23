@@ -17,7 +17,7 @@
     "kaitian AntCodespaces"
   ],
   "engines": {
-    "kaitian": "1.23.1"
+    "kaitian": "1.25.0"
   },
   "scripts": {},
   "publishConfig": {
@@ -26,6 +26,7 @@
   "dependencies": {
     "@ali/ide-extension-installer": "^2.0.0",
     "@alipay/spacex-core": "0.0.1",
+    "@alipay/spacex-shared": "0.0.1",
     "commander": "^6.2.0",
     "fs-extra": "^9.0.1",
     "rxjs": "^6.6.3",

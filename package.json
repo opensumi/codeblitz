@@ -61,14 +61,14 @@
   },
   "kaitianExtensions": [
     {
-      "publisher": "kaitian",
-      "name": "ide-dark-theme",
-      "version": "2.0.0"
+      "publisher": "cloud-ide",
+      "name": "alipay-geek-theme",
+      "version": "1.8.0"
     },
     {
-      "publisher": "vscode-extensions",
-      "name": "vscode-icons",
-      "version": "9.4.0"
+      "publisher": "kaitian",
+      "name": "vsicons-slim",
+      "version": "1.0.4"
     }
   ]
 }

@@ -12,6 +12,8 @@ import '@ali/ide-core-browser/lib/style/index.less'
 
 import '../styles.less'
 import { LayoutComponent } from '../layout'
+import vsicons from '../../extensions/kaitian.vsicons-slim'
+import theme from '../../extensions/cloudide.alipay-geek-theme'
 
 // 视图和slot插槽的对应关系
 const layoutConfig = {
@@ -38,7 +40,6 @@ loadMonaco({
 
 createApp({
   modules: ClientModules,
-  serverModules: ServerModules,
   layoutConfig,
   layoutComponent: LayoutComponent,
   useCdnIcon: true,
@@ -54,6 +55,10 @@ createApp({
     'general.language': 'en-US',
   },
   workspaceDir: '/root/SpaceX',
+  serverOptions: {
+    modules: ServerModules,
+    extensionMetadata: [vsicons, theme],
+  },
 }).then(async (app) => {
   await app.start(document.getElementById('main')!)
   const loadingDom = document.getElementById('loading')

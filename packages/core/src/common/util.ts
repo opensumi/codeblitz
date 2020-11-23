@@ -1,3 +1,6 @@
+import { IExtensionIdentity } from '@alipay/spacex-shared'
+import { EXT_SCHEME } from './constant'
+
 /**
  * 获取对象上所有函数的 property
  */
@@ -24,4 +27,12 @@ export const getFunctionProps = (obj: Record<string, any>): string[] => {
       })
     } while ((obj = Object.getPrototypeOf(obj)))
   }
+}
+
+export const getExtensionPath = (ext: IExtensionIdentity) => {
+  return [
+    EXT_SCHEME,
+    '://alipay-rmsdeploy-image.cn-hangzhou.alipay.aliyun-inc.com/marketplace/assets/',
+    `${ext.publisher}.${ext.name}/v${ext.version}/extension`,
+  ].join('')
 }

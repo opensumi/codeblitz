@@ -2,11 +2,10 @@ import * as fse from 'fs-extra'
 import { EXTENSION_METADATA_TYPE_PATH, FRAMEWORK_NAME } from '../util/constant'
 
 export function createMetadataType(extensionId: string) {
-  const content = `
-declare module "${FRAMEWORK_NAME}/extensions/${extensionId}" {
-  declare var data: { [key: string]: any }
-  export = data
-}
+  const content =
+    `
+declare var data: any
+export = data
   `.trim() + '\n'
   return content
 }
