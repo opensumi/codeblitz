@@ -699,6 +699,11 @@
     "@ali/ide-core-common" "1.25.0"
     "@ali/ide-file-service" "1.25.0"
 
+"@ali/kaitian-textmate-languages@^2.2.0":
+  version "2.2.0"
+  resolved "https://registry.npm.alibaba-inc.com/@ali/kaitian-textmate-languages/download/@ali/kaitian-textmate-languages-2.2.0.tgz#da90b2e40332f7df9cfa0b78dfedbf00329a5dfc"
+  integrity sha1-2pCy5AMy99+c+gt43+2/ADKaXfw=
+
 "@ali/vscode-jsonrpc@^4.0.1":
   version "4.0.4"
   resolved "https://registry.npm.alibaba-inc.com/@ali/vscode-jsonrpc/download/@ali/vscode-jsonrpc-4.0.4.tgz#38f2045e0970aaa02bd239ba13006f08993050bd"

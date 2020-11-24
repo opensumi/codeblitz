@@ -567,7 +567,3 @@ export class DiskFileSystemProviderWithoutWatcher extends DiskFileSystemProvider
     // Do nothing
   }
 }
-
-function getPath(uri: UriComponents) {
-  return Uri.from(uri).path
-}

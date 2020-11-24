@@ -11,7 +11,7 @@ import '@ali/ide-core-browser/lib/style/index.less'
 import '../styles.less'
 import { LayoutComponent } from '../layout'
 import vsicons from '../../extensions/kaitian.vsicons-slim'
-import theme from '../../extensions/cloudide.alipay-geek-theme'
+import theme from '../../extensions/cloud-ide.alipay-geek-theme'
 
 // 视图和slot插槽的对应关系
 const layoutConfig = {
@@ -32,9 +32,9 @@ const layoutConfig = {
   },
 }
 
-loadMonaco({
-  monacoCDNBase: 'https://g.alicdn.com/tb-ide/monaco-editor-core/0.17.0/',
-})
+// loadMonaco({
+//   monacoCDNBase: 'https://g.alicdn.com/tb-ide/monaco-editor-core/0.17.0/',
+// })
 
 createApp({
   modules: ClientModules,

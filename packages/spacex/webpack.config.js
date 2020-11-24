@@ -43,7 +43,7 @@ module.exports = (env) => ({
   },
   bail: true,
   mode: 'development',
-  devtool: 'inline-cheap-source-map',
+  devtool: 'inline-source-map',
   module: {
     // https://github.com/webpack/webpack/issues/196#issuecomment-397606728
     exprContextCritical: false,
@@ -164,7 +164,9 @@ module.exports = (env) => ({
       filename: '[name].[chunkhash:8].css',
       chunkFilename: '[id].css',
     }),
-    new webpack.DefinePlugin({}),
+    new webpack.DefinePlugin({
+      'process.env.IS_DEV': 1,
+    }),
     new FriendlyErrorsWebpackPlugin({
       compilationSuccessInfo: {
         messages: [`Your application is running here: http://localhost:${port}`],

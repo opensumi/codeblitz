@@ -85,7 +85,7 @@ export async function getExtension(
     pkgNlsJSON['zh-CN'] = await fse.readJSON(zhLocalizedPath)
   }
   if (enLocalizedPath) {
-    pkgNlsJSON['zh-CN'] = await fse.readJSON(enLocalizedPath)
+    pkgNlsJSON['en-US'] = await fse.readJSON(enLocalizedPath)
   }
 
   const nlsList = await getAllLocalized(extensionPath, 'package.nls', '.json')
@@ -96,10 +96,12 @@ export async function getExtension(
     packageJSON.contributes
   )
 
+  const { publisher, name } = getExtensionIdByPath(extensionPath, packageJSON.version)
+
   const metadata: IExtensionBasicMetadata = {
     extension: {
-      publisher: packageJSON.publisher,
-      name: getExtensionNameByExtensionPath(extensionPath, packageJSON.version),
+      publisher,
+      name,
       version: packageJSON.version,
     },
     packageJSON: {
@@ -169,44 +171,21 @@ async function getAllLocalized(
 }
 
 /**
- * 通过文件夹名获取插件 id
- * 文件夹名目前有两种：
- *  1. ${publisher}.${name}-${version} (推荐)
- *  2. ${extensionId}-${name}-${version}
- *  以上两种
- * @param folderName
- * @param version 可能有用户使用非 semver 的规范，所以传进来
+ * 获取插件的 publisher 和 name，可能和 package.json 的 name 不一致，所以从文件名获取
  */
-function getExtensionIdByExtensionPath(extensionPath: string, version?: string) {
+function getExtensionIdByPath(extensionPath: string, version?: string) {
   const regExp = version
     ? new RegExp(`^(.+?)\\.(.+?)-(${version})$`)
     : /^(.+?)\.(.+?)-(\d+\.\d+\.\d+)$/
   const dirName = path.basename(extensionPath)
-  const match = regExp.exec(dirName)
+  const match = dirName.match(regExp)
 
-  if (match == null) {
-    // 按照第二种方式返回
-    return dirName.split('-')[0]
+  if (match === null) {
+    throw new Error('无法获取 extensionId')
   }
 
-  const [, publisher, name] = match
-  return `${publisher}.${name}`
-}
-
-/**
- * 获取插件的名称，名称可能和 package.json 的 name 不一致，所以从文件名获取
- */
-function getExtensionNameByExtensionPath(extensionPath: string, version?: string) {
-  const regExp = version
-    ? new RegExp(`^(.+?)\\.(.+?)-(${version})$`)
-    : /^(.+?)\.(.+?)-(\d+\.\d+\.\d+)$/
-  const dirName = path.basename(extensionPath)
-  const match = regExp.exec(dirName)
-
-  if (match == null) {
-    // 按照第二种方式返回
-    return dirName.split('-')[1]
+  return {
+    publisher: match[1],
+    name: match[2],
   }
-
-  return match[2]
 }

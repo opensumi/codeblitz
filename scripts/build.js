@@ -6,7 +6,7 @@ const args = require('minimist')(process.argv.slice(2))
 run()
 
 async function run() {
-  signale.pending('开始编译 ts 文件')
+  signale.pending(`开始编译 ${args.scope || 'all'}`)
   const tsconfigPath = path.join(__dirname, '../packages', args.scope || '', 'tsconfig.build.json')
   try {
     const watch = args.w || args.watch ? '--watch' : ''

@@ -9,6 +9,9 @@ import { BasicModule } from '@ali/ide-core-common'
 
 import { FCServiceCenter, ClientPort, initFCService } from '../connection'
 import { KaitianExtFsProvider, KtExtFsProviderContribution } from './extension'
+import { TextmateLanguageGrammarContribution } from './textmate-language-grammar/index.contribution'
+import { ILanguageGrammarRegistrationService } from './textmate-language-grammar/base'
+import { LanguageGrammarRegistrationService } from './textmate-language-grammar/language-grammar.service'
 import { IServerApp } from '../common'
 
 export * from './extension'
@@ -17,7 +20,15 @@ export type ModuleConstructor = ConstructorOf<BrowserModule>
 
 @Injectable()
 export class ClientModule extends BrowserModule {
-  providers = [KaitianExtFsProvider, KtExtFsProviderContribution]
+  providers = [
+    KaitianExtFsProvider,
+    KtExtFsProviderContribution,
+    TextmateLanguageGrammarContribution,
+    {
+      token: ILanguageGrammarRegistrationService,
+      useClass: LanguageGrammarRegistrationService,
+    },
+  ]
 }
 
 export interface IClientAppOpts extends IBasicClientAppOpts {

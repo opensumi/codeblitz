@@ -2,6 +2,7 @@ import { configure } from 'browserfs'
 import { os, fse } from '../node'
 import { AppConfig } from './app'
 import { WORKSPACE_DIR } from '../../common'
+import { IndexedDBName } from '../../common/constant'
 
 export const bootstrap = async (appConfig: AppConfig) => {
   await new Promise<void>((resolve, reject) => {
@@ -9,7 +10,7 @@ export const bootstrap = async (appConfig: AppConfig) => {
       {
         fs: 'MountableFileSystem',
         options: {
-          [os.homedir()]: { fs: 'IndexedDB', options: {} },
+          [os.homedir()]: { fs: 'IndexedDB', options: { storeName: IndexedDBName } },
           [os.tmpdir()]: { fs: 'InMemory', options: {} },
         },
       },

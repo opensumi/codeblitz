@@ -12,3 +12,5 @@ export interface IServerApp {
   start(): Promise<void>
   dispose(): void
 }
+
+export const IndexedDBName = 'spacex-file-system'
