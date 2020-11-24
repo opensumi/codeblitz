@@ -206,7 +206,7 @@ fs.closeSync = (fd) => {
 const _writeFile = fs.writeFile
 fs.writeFile = (filename: any, data: any, arg3?: any, cb?: any) => {
   const p = resolvePath(filename)
-  const flag = arg3 && typeof arg3 === 'object' ? arg3.flag : 'w'
+  const flag = arg3?.flag ?? 'w'
   fs.stat(p, (err) => {
     // 文件不存在且为写模式，那么会自动创建文件
     const willCreated = err && mayCreatedFile(flag)
@@ -215,7 +215,6 @@ fs.writeFile = (filename: any, data: any, arg3?: any, cb?: any) => {
     const newCb: any = (err: any, fd: any) => {
       const res = _cb(err, fd)
       if (!err) {
-        console.log(11111111)
         emitter.fire({
           action: willCreated ? ActionType.CREATED : ActionType.MODIFIED,
           directory: path.dirname(p),
@@ -235,7 +234,7 @@ fs.writeFile = (filename: any, data: any, arg3?: any, cb?: any) => {
 const _writeFileSync = fs.writeFileSync
 fs.writeFileSync = (filename: any, data: any, arg3?: any) => {
   const p = resolvePath(filename)
-  const flag = arg3 && typeof arg3 === 'object' ? arg3.flag : 'w'
+  const flag = arg3?.flag ?? 'w'
   const willCreated = !fs.existsSync(p) && mayCreatedFile(flag)
   _writeFileSync(p, data, arg3)
   emitter.fire({

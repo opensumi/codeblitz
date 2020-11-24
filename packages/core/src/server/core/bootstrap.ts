@@ -24,5 +24,9 @@ export const bootstrap = async (appConfig: AppConfig) => {
       }
     )
   })
-  await fse.ensureDir(appConfig.workspaceDir || WORKSPACE_DIR)
+  // 初始化文件目录
+  await Promise.all([
+    await fse.ensureDir(appConfig.workspaceDir || WORKSPACE_DIR),
+    await fse.ensureDir(appConfig.marketplace.extensionDir),
+  ])
 }

@@ -16,6 +16,7 @@ import {
   ReporterService,
   ReporterMetadata,
   REPORT_HOST,
+  StoragePaths,
 } from '@ali/ide-core-common'
 import { IExtensionBasicMetadata } from '@alipay/spacex-shared'
 
@@ -23,6 +24,7 @@ import { INodeLogger, NodeLogger } from './node-logger'
 import { FCServiceCenter, initFCService, ServerPort } from '../../connection'
 import { IServerApp } from '../../common'
 import { bootstrap } from './bootstrap'
+import { path, os } from '../node'
 
 export abstract class NodeModule extends BasicModule {}
 
@@ -57,7 +59,11 @@ interface Config {
   extensionMetadata?: IExtensionBasicMetadata[]
 }
 
-export interface AppConfig extends Partial<Config> {}
+export interface AppConfig extends Partial<Config> {
+  marketplace: {
+    extensionDir: string
+  }
+}
 
 export interface IServerAppOpts extends Partial<Config> {
   modules?: ModuleConstructor[]
@@ -90,6 +96,13 @@ export class ServerApp implements IServerApp {
       injector: this.injector,
       workspaceDir: opts.workspaceDir,
       extensionDir: opts.extensionDir,
+      marketplace: {
+        extensionDir: path.join(
+          os.homedir(),
+          StoragePaths.DEFAULT_STORAGE_DIR_NAME,
+          StoragePaths.MARKETPLACE_DIR
+        ),
+      },
       logDir: opts.logDir,
       logLevel: opts.logLevel,
       LogServiceClass: opts.LogServiceClass,
