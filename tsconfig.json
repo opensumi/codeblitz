@@ -24,6 +24,7 @@
     "noUnusedLocals": false,
     "allowSyntheticDefaultImports": true,
     "esModuleInterop": true,
+    "noEmit": true,
     "lib": [
       "dom",
       "esnext"
@@ -38,7 +39,6 @@
   "include": [
     "packages",
     "typings",
-    "global.d.ts",
     "scripts"
   ]
 }

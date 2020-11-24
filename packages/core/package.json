@@ -27,6 +27,7 @@
   },
   "dependencies": {
     "@alipay/spacex-shared": "0.0.1",
+    "@alipay/spacex-aa": "0.0.1",
     "@ali/common-di": "^5.2.2",
     "@ali/ide-core-browser": "1.25.0",
     "@ali/ide-core-common": "1.25.0",

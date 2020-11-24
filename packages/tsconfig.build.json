@@ -8,7 +8,7 @@
     },
     {
       "path": "./core/tsconfig.build.json"
-    },
+    }
   ],
   "files": [],
   "include": []

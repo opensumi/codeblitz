@@ -8,7 +8,7 @@ import {
   DebugLog,
   DisposableCollection,
   DidFilesChangedParams,
-  Uri
+  Uri,
 } from '@ali/ide-core-common'
 import {
   FileChangeEvent,
@@ -37,7 +37,7 @@ export class DiskFileSystemProvider extends FCService implements IDiskFileProvid
   readonly onDidChangeFile: Event<FileChangeEvent> = this.fileChangeEmitter.event
   protected toDispose = new DisposableCollection()
 
-  private watcherServer: FWFileSystemWatcherServer;
+  private watcherServer: FWFileSystemWatcherServer
   protected readonly watcherDisposerMap = new Map<number, IDisposable>()
   protected watchFileExcludes: string[] = []
   protected watchFileExcludesMatcherList: ParsedPattern[] = []
@@ -62,21 +62,21 @@ export class DiskFileSystemProvider extends FCService implements IDiskFileProvid
    * @returns {number}
    * @memberof DiskFileSystemProvider
    */
-  async watch(uri: UriComponents, options?: { recursive: boolean; excludes: string[] }): Promise<number> {
-    const _uri = Uri.revive(uri);
-    const watcherId = await this.watcherServer.watchFileChanges(
-      _uri.toString(),
-      {
-        excludes: options && options.excludes ? options.excludes : [],
-      },
-    )
+  async watch(
+    uri: UriComponents,
+    options?: { recursive: boolean; excludes: string[] }
+  ): Promise<number> {
+    const _uri = Uri.revive(uri)
+    const watcherId = await this.watcherServer.watchFileChanges(_uri.toString(), {
+      excludes: options && options.excludes ? options.excludes : [],
+    })
     const disposable = {
       dispose: () => {
-        this.watcherServer.unwatchFileChanges(watcherId);
+        this.watcherServer.unwatchFileChanges(watcherId)
       },
-    };
-    this.watcherDisposerMap.set(watcherId, disposable);
-    return watcherId;
+    }
+    this.watcherDisposerMap.set(watcherId, disposable)
+    return watcherId
   }
 
   unwatch(watcherId: number) {
@@ -92,9 +92,9 @@ export class DiskFileSystemProvider extends FCService implements IDiskFileProvid
     return new Promise(async (resolve) => {
       this.doGetStat(_uri, 1)
         .then((stat) => {
-          resolve(stat)
+          resolve(stat!)
         })
-        .catch((e) => resolve())
+        .catch((e) => resolve(undefined as any))
     })
   }
 
@@ -275,27 +275,27 @@ export class DiskFileSystemProvider extends FCService implements IDiskFileProvid
   protected initWatcher() {
     this.watcherServer = new FWFileSystemWatcherServer({
       verbose: true,
-    });
+    })
     this.watcherServer.setClient({
       onDidFilesChanged: (events: DidFilesChangedParams) => {
         const filteredChange = events.changes.filter((file) => {
-          const uri = new URI(file.uri);
-          const uriString = uri.withoutScheme().toString();
-          return !this.watchFileExcludesMatcherList.some((match) => match(uriString));
-        });
-        this.fileChangeEmitter.fire(filteredChange);
+          const uri = new URI(file.uri)
+          const uriString = uri.withoutScheme().toString()
+          return !this.watchFileExcludesMatcherList.some((match) => match(uriString))
+        })
+        this.fileChangeEmitter.fire(filteredChange)
         if (this.client) {
           this.client.onDidFilesChanged({
             changes: filteredChange,
-          });
+          })
         }
       },
-    });
+    })
     this.toDispose.push({
       dispose: () => {
-        this.watcherServer.dispose();
+        this.watcherServer.dispose()
       },
-    });
+    })
   }
 
   // Protected or private

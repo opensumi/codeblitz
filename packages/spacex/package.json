@@ -26,6 +26,7 @@
   "dependencies": {
     "@alipay/spacex-core": "0.0.1",
     "@alipay/spacex-cli": "0.0.1",
+    "@alipay/spacex-shared": "0.0.1",
     "@ali/ide-main-layout": "1.25.0",
     "@ali/ide-logs": "1.25.0",
     "@ali/ide-monaco": "1.25.0",

@@ -127,10 +127,7 @@ async function writeMetadata(metadata: IExtensionBasicMetadata) {
 module.exports = ${JSON.stringify(metadata, null, 2)}
     `.trim() + '\n'
   )
-  await fse.writeFile(
-    path.join(EXTENSION_METADATA_DIR, `${extensionId}.d.ts`),
-    createMetadataType(extensionId)
-  )
+  await createMetadataType(extensionId)
   return extensionId
 }
 

@@ -13,7 +13,7 @@ const mutex = {
     if (!this._waiting.has(path)) {
       this._waiting.set(path, [])
     }
-    return new Promise((resolve) => {
+    return new Promise<void>((resolve) => {
       const resolveList = this._waiting.get(path)!
       resolveList.push(resolve)
       if (resolveList.length === 1) {
@@ -33,7 +33,7 @@ const mutex = {
     } else {
       this._waiting.delete(path)
     }
-  }
+  },
 }
 
 const writeFileAtomic = async (filename: string, data: any, options?: any) => {
@@ -46,7 +46,4 @@ const writeFileAtomic = async (filename: string, data: any, options?: any) => {
   }
 }
 
-export {
-  writeFileAtomic,
-  writeFileAtomic as writeFileAtomicAsync
-}
+export { writeFileAtomic, writeFileAtomic as writeFileAtomicAsync }

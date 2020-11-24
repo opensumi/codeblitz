@@ -1,8 +1,6 @@
 import '@ali/ide-i18n/lib/browser'
 import { SlotLocation } from '@ali/ide-core-browser'
 import { loadMonaco } from '@ali/ide-monaco/lib/browser/monaco-loader'
-import * as React from 'react'
-import * as ReactDOM from 'react-dom'
 
 import { ClientModules, ServerModules } from './module'
 import { createApp } from '../createApp'

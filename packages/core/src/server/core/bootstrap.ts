@@ -4,7 +4,7 @@ import { AppConfig } from './app'
 import { WORKSPACE_DIR } from '../../common'
 
 export const bootstrap = async (appConfig: AppConfig) => {
-  await new Promise((resolve, reject) => {
+  await new Promise<void>((resolve, reject) => {
     configure(
       {
         fs: 'MountableFileSystem',

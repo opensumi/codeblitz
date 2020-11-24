@@ -3,8 +3,7 @@
   "version": "0.0.1",
   "description": "@alipay/spacex-shared",
   "main": "lib/index.js",
-  "module": "esm/index.js",
-  "typing": "types/index.d.ts",
+  "typing": "lib/index.d.ts",
   "files": [
     "lib",
     "esm",

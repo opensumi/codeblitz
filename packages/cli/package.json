@@ -3,7 +3,6 @@
   "version": "0.0.1",
   "description": "@alipay/spacex-cli",
   "main": "lib/commander.js",
-  "typing": "types/index.d.ts",
   "files": [
     "lib",
     "esm",
