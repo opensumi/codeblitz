@@ -9,6 +9,7 @@
   "main": "index.js",
   "scripts": {
     "preinstall": "node scripts/preinstall",
+    "ext": "node packages/spacex/bin/spacex ext",
     "build": "node scripts/build",
     "create": "node scripts/create",
     "format": "prettier --write --parser typescript \"packages/**/*.ts?(x)\"",
@@ -70,5 +71,8 @@
       "name": "vsicons-slim",
       "version": "1.0.4"
     }
-  ]
+  ],
+  "dependencies": {
+    "object-assign": "^4.1.1"
+  }
 }

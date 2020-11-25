@@ -9,6 +9,11 @@
 ### 安装依赖
 在根目录安装依赖 yarn 会 warn，需要加 -W 参数，在 packages 安装依赖会自动提升，如果不需要提升，加 --focus
 
+### 安装 worker 扩展
+```bash
+npm run ext
+```
+
 ### 增加 package
 1. 在 packages 新建文件夹，然后运行 node scripts/bootstrap 会自动为所有无 package.json 的项目初始化
 2. 通过命令 npm run create <package> 新建项目
@@ -18,9 +23,9 @@
 # 构建所有 packages
 npm run build
 # 单独构建 package
-npm run build <package>
+npm run build -- --scope <package>
 # 单独构建并监听
-npm run build -w <package>
+npm run build -- --scope <package> --watch
 # 运行 app 集成版本
 npm start app
 ```
