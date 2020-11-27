@@ -3,54 +3,54 @@
  * 连接 Cline 和 Server, RPC 的模拟实现
  */
 
-import { getFunctionProps } from '../common/util'
+import { getFunctionProps } from '../common/util';
 
 export interface Port {
-  listen(cb: (...args: any[]) => any): void
-  call(...args: any): any
+  listen(cb: (...args: any[]) => any): void;
+  call(...args: any): any;
 }
 
 const createChannel: () => { port1: Port; port2: Port } = () => {
   type InnerPort = {
-    callback(...args: any[]): any
-    listen(cb: (...args: any[]) => any): void
-    call(...args: any[]): any
-    _entangledPort: InnerPort | null
-  }
+    callback(...args: any[]): any;
+    listen(cb: (...args: any[]) => any): void;
+    call(...args: any[]): any;
+    _entangledPort: InnerPort | null;
+  };
 
-  const noop = () => {}
+  const noop = () => {};
 
   const createPort: (name: string) => InnerPort = (name) => ({
     _entangledPort: null,
     _name: name,
     callback: noop,
     listen(cb: (...args: any[]) => any) {
-      this.callback = cb
+      this.callback = cb;
     },
     call(...args: any) {
-      return this._entangledPort?.callback(...args)
+      return this._entangledPort?.callback(...args);
     },
-  })
+  });
 
-  const port1 = createPort('client')
-  const port2 = createPort('server')
-  port1._entangledPort = port2
-  port2._entangledPort = port1
-  return { port1, port2 }
-}
+  const port1 = createPort('client');
+  const port2 = createPort('server');
+  port1._entangledPort = port2;
+  port2._entangledPort = port1;
+  return { port1, port2 };
+};
 
-const { port1, port2 } = createChannel()
+const { port1, port2 } = createChannel();
 
-export { port1 as ClientPort, port2 as ServerPort }
+export { port1 as ClientPort, port2 as ServerPort };
 
 export abstract class FCService {
-  client?: any
+  client?: any;
 }
 
-export const NOTREGISTERMETHOD = '$$NOTREGISTERMETHOD'
+export const NOTREGISTERMETHOD = '$$NOTREGISTERMETHOD';
 
-export type FCServiceMethod = (...args: any[]) => any
-export type ServiceProxy = any
+export type FCServiceMethod = (...args: any[]) => any;
+export type ServiceProxy = any;
 
 export enum ServiceType {
   Service,
@@ -60,54 +60,54 @@ export enum ServiceType {
 export function initFCService(center: FCServiceCenter) {
   return {
     createFCService: (name: string, service?: any): any => {
-      const proxy = new FCServiceStub(name, center, ServiceType.Service).getProxy()
+      const proxy = new FCServiceStub(name, center, ServiceType.Service).getProxy();
       if (service) {
-        proxy.onRequestService(service)
+        proxy.onRequestService(service);
       }
 
-      return proxy
+      return proxy;
     },
     getFCService: (name: string): any => {
-      return new FCServiceStub(name, center, ServiceType.Stub).getProxy()
+      return new FCServiceStub(name, center, ServiceType.Stub).getProxy();
     },
-  }
+  };
 }
 
 export function createFCService(name: string, center: FCServiceCenter): any {
-  return new FCServiceStub(name, center, ServiceType.Service).getProxy()
+  return new FCServiceStub(name, center, ServiceType.Service).getProxy();
 }
 
 export function getFCService(name: string, center: FCServiceCenter): any {
-  return new FCServiceStub(name, center, ServiceType.Stub).getProxy()
+  return new FCServiceStub(name, center, ServiceType.Stub).getProxy();
 }
 
 export class FCServiceCenter {
-  private serviceMethodMap = {}
+  private serviceMethodMap = {};
 
   constructor(private port: Port, private logger?: any) {
-    this.logger = logger || console
+    this.logger = logger || console;
     this.port.listen((name, args) => {
       if (!this.serviceMethodMap[name]) {
-        return NOTREGISTERMETHOD
+        return NOTREGISTERMETHOD;
       }
-      return this.serviceMethodMap[name](...args)
-    })
+      return this.serviceMethodMap[name](...args);
+    });
   }
 
   when() {
-    return true
+    return true;
   }
 
   onRequest(name: string, method: FCServiceMethod) {
-    this.serviceMethodMap[name] = method
+    this.serviceMethodMap[name] = method;
   }
 
   async broadcast(name: string, ...args: any[]): Promise<any> {
     if (name.startsWith('on')) {
-      this.port.call(name, args)
-      return
+      this.port.call(name, args);
+      return;
     }
-    return this.port.call(name, args)
+    return this.port.call(name, args);
   }
 }
 
@@ -122,42 +122,42 @@ export class FCServiceStub {
   ) {}
 
   async ready() {
-    return this.center.when()
+    return this.center.when();
   }
 
   getNotificationName(name: string) {
-    return `on:${this.serviceName}:${name}`
+    return `on:${this.serviceName}:${name}`;
   }
 
   getRequestName(name: string) {
-    return `${this.serviceName}:${name}`
+    return `${this.serviceName}:${name}`;
   }
 
   on(name: string, method: FCServiceMethod) {
-    this.onRequest(name, method)
+    this.onRequest(name, method);
   }
 
   getServiceMethod(service: any): string[] {
-    return getFunctionProps(service)
+    return getFunctionProps(service);
   }
 
   onRequestService(service: any) {
-    const methods = this.getServiceMethod(service)
+    const methods = this.getServiceMethod(service);
     for (const method of methods) {
-      this.onRequest(method, service[method].bind(service))
+      this.onRequest(method, service[method].bind(service));
     }
   }
 
   onRequest(name: string, method: FCServiceMethod) {
-    this.center.onRequest(this.getMethodName(name), method)
+    this.center.onRequest(this.getMethodName(name), method);
   }
 
   broadcast(name: string, ...args: any[]) {
-    return this.center.broadcast(this.getMethodName(name), ...args)
+    return this.center.broadcast(this.getMethodName(name), ...args);
   }
 
   getMethodName(name: string) {
-    return name.startsWith('on') ? this.getNotificationName(name) : this.getRequestName(name)
+    return name.startsWith('on') ? this.getNotificationName(name) : this.getRequestName(name);
   }
 
   getProxy = () => {
@@ -166,24 +166,24 @@ export class FCServiceStub {
       get: (target, prop: string) => {
         if (!target[prop]) {
           if (typeof prop === 'symbol') {
-            return Promise.resolve()
+            return Promise.resolve();
           } else {
             return async (...args: any[]) => {
-              await this.ready()
-              const result = await this.broadcast(prop, ...args)
-              return result === NOTREGISTERMETHOD ? undefined : result
-            }
+              await this.ready();
+              const result = await this.broadcast(prop, ...args);
+              return result === NOTREGISTERMETHOD ? undefined : result;
+            };
           }
         } else {
-          return target[prop]
+          return target[prop];
         }
       },
-    })
-  }
+    });
+  };
 }
 
 // 避免 getter 取值
 function checkPropIsFunction(obj: any, prop: string) {
-  const descriptor = Object.getOwnPropertyDescriptor(obj, prop)
-  return descriptor && typeof descriptor.value === 'function'
+  const descriptor = Object.getOwnPropertyDescriptor(obj, prop);
+  return descriptor && typeof descriptor.value === 'function';
 }

@@ -1,4 +1,4 @@
-import { Injectable, Autowired } from '@ali/common-di'
+import { Injectable, Autowired } from '@ali/common-di';
 import {
   ILogService,
   ILogServiceOptions,
@@ -10,13 +10,13 @@ import {
   ILogServiceForClient,
   DebugLog,
   IBaseLogService,
-} from '@ali/ide-logs/lib/common'
+} from '@ali/ide-logs/lib/common';
 
-import { FCService } from '../../connection'
+import { FCService } from '../../connection';
 
-import { path, os } from '../node'
+import { path, os } from '../node';
 
-export const DEFAULT_LOG_FOLDER = path.join(os.homedir(), `.kaitian/logs/`)
+export const DEFAULT_LOG_FOLDER = path.join(os.homedir(), `.kaitian/logs/`);
 
 export const LogLevelMessageMap = {
   [LogLevel.Verbose]: 'VERBOSE',
@@ -25,205 +25,205 @@ export const LogLevelMessageMap = {
   [LogLevel.Warning]: 'WARNING',
   [LogLevel.Error]: 'ERROR',
   [LogLevel.Critical]: 'CRITICAL',
-}
+};
 
 // TODO: 临时用 DebugLog 打印
 export class BaseLogService implements IBaseLogService {
-  protected namespace: string
-  protected debugLog: DebugLog
-  protected logLevel: LogLevel
+  protected namespace: string;
+  protected debugLog: DebugLog;
+  protected logLevel: LogLevel;
 
   constructor(options: BaseLogServiceOptions) {
-    this.init(options)
-    this.debugLog = new DebugLog(this.namespace)
+    this.init(options);
+    this.debugLog = new DebugLog(this.namespace);
   }
 
   protected init(options: BaseLogServiceOptions) {
-    this.namespace = options.namespace || SupportLogNamespace.OTHER
-    this.logLevel = options.logLevel || LogLevel.Info
+    this.namespace = options.namespace || SupportLogNamespace.OTHER;
+    this.logLevel = options.logLevel || LogLevel.Info;
   }
 
   verbose(): void {
-    const message = format(arguments)
-    this.showDebugLog(LogLevel.Verbose, message)
+    const message = format(arguments);
+    this.showDebugLog(LogLevel.Verbose, message);
   }
 
   debug(): void {
-    const message = format(arguments)
-    this.showDebugLog(LogLevel.Debug, message)
+    const message = format(arguments);
+    this.showDebugLog(LogLevel.Debug, message);
   }
 
   log(): void {
-    const message = format(arguments)
-    this.showDebugLog(LogLevel.Info, message)
+    const message = format(arguments);
+    this.showDebugLog(LogLevel.Info, message);
   }
 
   warn(): void {
-    const message = format(arguments)
-    this.showDebugLog(LogLevel.Warning, message)
+    const message = format(arguments);
+    this.showDebugLog(LogLevel.Warning, message);
   }
 
   error(): void {
-    const arg = arguments[0]
-    let message: string
+    const arg = arguments[0];
+    let message: string;
 
     if (arg instanceof Error) {
-      const array = Array.prototype.slice.call(arguments) as any[]
-      array[0] = arg.stack
-      message = format(array)
+      const array = Array.prototype.slice.call(arguments) as any[];
+      array[0] = arg.stack;
+      message = format(array);
     } else {
-      message = format(arguments)
+      message = format(arguments);
     }
-    this.showDebugLog(LogLevel.Error, message)
+    this.showDebugLog(LogLevel.Error, message);
   }
 
   critical(): void {
-    const message = format(arguments)
-    this.showDebugLog(LogLevel.Critical, message)
+    const message = format(arguments);
+    this.showDebugLog(LogLevel.Critical, message);
   }
 
   getLevel(): LogLevel {
-    return this.logLevel
+    return this.logLevel;
   }
 
   setLevel(level: LogLevel): void {
-    this.logLevel = level
+    this.logLevel = level;
   }
 
   protected showDebugLog(level: LogLevel, message: string): void {
     switch (level) {
       case LogLevel.Verbose:
-        return this.debugLog.log(message)
+        return this.debugLog.log(message);
       case LogLevel.Debug:
-        return this.debugLog.debug(message)
+        return this.debugLog.debug(message);
       case LogLevel.Info:
-        return this.debugLog.info(message)
+        return this.debugLog.info(message);
       case LogLevel.Warning:
-        return this.debugLog.warn(message)
+        return this.debugLog.warn(message);
       case LogLevel.Error:
-        return this.debugLog.error(message)
+        return this.debugLog.error(message);
       case LogLevel.Critical:
-        return this.debugLog.error(message)
+        return this.debugLog.error(message);
       default:
-        throw new Error('Invalid log level')
+        throw new Error('Invalid log level');
     }
   }
 
   sendLog(level: LogLevel, message: string) {}
   drop() {
-    return Promise.resolve()
+    return Promise.resolve();
   }
   flush() {
-    return Promise.resolve()
+    return Promise.resolve();
   }
   dispose() {}
 }
 
 export class LogService extends BaseLogService implements ILogService {
-  protected logServiceManager: ILogServiceManager
+  protected logServiceManager: ILogServiceManager;
 
   constructor(options: ILogServiceOptions) {
-    super(options)
+    super(options);
   }
 
   protected init(options: ILogServiceOptions) {
-    this.logServiceManager = options.logServiceManager
-    this.namespace = options.namespace || SupportLogNamespace.OTHER
-    this.logLevel = options.logLevel || LogLevel.Info
+    this.logServiceManager = options.logServiceManager;
+    this.namespace = options.namespace || SupportLogNamespace.OTHER;
+    this.logLevel = options.logLevel || LogLevel.Info;
   }
 
   setOptions(options: BaseLogServiceOptions) {
     if (options.logLevel) {
-      this.logLevel = options.logLevel
+      this.logLevel = options.logLevel;
     }
   }
 
   getLevel(): LogLevel {
-    return this.logServiceManager.getGlobalLogLevel()
+    return this.logServiceManager.getGlobalLogLevel();
   }
 
   setLevel(level: LogLevel): void {
-    this.logServiceManager.setGlobalLogLevel(level)
+    this.logServiceManager.setGlobalLogLevel(level);
   }
 
   dispose() {
-    super.dispose()
-    this.logServiceManager.removeLogger(this.namespace as SupportLogNamespace)
+    super.dispose();
+    this.logServiceManager.removeLogger(this.namespace as SupportLogNamespace);
   }
 }
 
 @Injectable()
 export class LogServiceForClient extends FCService implements ILogServiceForClient {
   @Autowired(ILogServiceManager)
-  loggerManager: ILogServiceManager
+  loggerManager: ILogServiceManager;
 
   constructor() {
-    super()
+    super();
     this.loggerManager.onDidChangeLogLevel((level) => {
-      this.client?.onDidLogLevelChanged(level)
-    })
+      this.client?.onDidLogLevelChanged(level);
+    });
   }
 
   getLevel(namespace: SupportLogNamespace) {
-    return this.getLogger(namespace).getLevel()
+    return this.getLogger(namespace).getLevel();
   }
 
   setLevel(namespace: SupportLogNamespace, level: LogLevel) {
-    this.getLogger(namespace).setLevel(level)
+    this.getLogger(namespace).setLevel(level);
   }
 
   verbose(namespace: SupportLogNamespace, message: string, pid?: number) {
-    const logger = this.getLogger(namespace, { pid })
-    logger.sendLog(LogLevel.Verbose, message)
+    const logger = this.getLogger(namespace, { pid });
+    logger.sendLog(LogLevel.Verbose, message);
   }
 
   debug(namespace: SupportLogNamespace, message: string, pid?: number) {
-    const logger = this.getLogger(namespace, { pid })
-    logger.sendLog(LogLevel.Debug, message)
+    const logger = this.getLogger(namespace, { pid });
+    logger.sendLog(LogLevel.Debug, message);
   }
 
   log(namespace: SupportLogNamespace, message: string, pid?: number) {
-    const logger = this.getLogger(namespace, { pid })
-    logger.sendLog(LogLevel.Info, message)
+    const logger = this.getLogger(namespace, { pid });
+    logger.sendLog(LogLevel.Info, message);
   }
 
   warn(namespace: SupportLogNamespace, message: string, pid?: number) {
-    const logger = this.getLogger(namespace, { pid })
-    logger.sendLog(LogLevel.Warning, message)
+    const logger = this.getLogger(namespace, { pid });
+    logger.sendLog(LogLevel.Warning, message);
   }
 
   error(namespace: SupportLogNamespace, message: string, pid?: number) {
-    const logger = this.getLogger(namespace, { pid })
-    logger.sendLog(LogLevel.Error, message)
+    const logger = this.getLogger(namespace, { pid });
+    logger.sendLog(LogLevel.Error, message);
   }
 
   critical(namespace: SupportLogNamespace, message: string, pid?: number) {
-    const logger = this.getLogger(namespace, { pid })
-    logger.sendLog(LogLevel.Critical, message)
+    const logger = this.getLogger(namespace, { pid });
+    logger.sendLog(LogLevel.Critical, message);
   }
 
   dispose(namespace: SupportLogNamespace) {
-    this.getLogger(namespace).dispose()
+    this.getLogger(namespace).dispose();
   }
 
   setGlobalLogLevel(level: LogLevel) {
-    this.loggerManager.setGlobalLogLevel(level)
+    this.loggerManager.setGlobalLogLevel(level);
   }
 
   getGlobalLogLevel() {
-    this.loggerManager.getGlobalLogLevel()
+    this.loggerManager.getGlobalLogLevel();
   }
 
   disposeAll() {
-    this.loggerManager.dispose()
+    this.loggerManager.dispose();
   }
 
   async getLogFolder() {
-    return this.loggerManager.getLogFolder()
+    return this.loggerManager.getLogFolder();
   }
 
   protected getLogger(namespace: SupportLogNamespace, options?: BaseLogServiceOptions) {
-    const logger = this.loggerManager.getLogger(namespace, Object.assign({}, options))
-    return logger
+    const logger = this.loggerManager.getLogger(namespace, Object.assign({}, options));
+    return logger;
   }
 }

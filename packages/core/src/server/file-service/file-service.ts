@@ -1,5 +1,5 @@
 import { Injectable, Autowired, Injector, INJECTOR_TOKEN } from '@ali/common-di';
-import { Uri } from '@ali/ide-core-common'
+import { Uri } from '@ali/ide-core-common';
 import { TextDocumentContentChangeEvent, TextDocument } from 'vscode-languageserver-types';
 import {
   URI,
@@ -26,11 +26,10 @@ import {
   FileCopyOptions,
   IDiskFileProvider,
 } from '@ali/ide-file-service/lib/common';
-import { FCService } from '../../connection'
-import { Buffer, path, fse, os } from '../node'
-import { AppConfig } from '../core/app'
-import { INodeLogger } from '../core/node-logger'
-
+import { FCService } from '../../connection';
+import { Buffer, path, fse, os } from '../node';
+import { AppConfig } from '../core/app';
+import { INodeLogger } from '../core/node-logger';
 
 export abstract class FileSystemNodeOptions {
   public static DEFAULT: FileSystemNodeOptions = {
@@ -62,14 +61,14 @@ export class FileService extends FCService implements IFileService {
   private readonly logger: INodeLogger;
 
   @Autowired(IDiskFileProvider)
-  diskService: IDiskFileProvider
+  diskService: IDiskFileProvider;
 
   @Autowired(INJECTOR_TOKEN)
   injector: Injector;
 
   constructor(protected readonly options: FileSystemNodeOptions) {
     super();
-    this.addDisposable()
+    this.addDisposable();
   }
 
   /**
@@ -84,17 +83,17 @@ export class FileService extends FCService implements IFileService {
     this.toDisposable.push({
       dispose: () => {
         this.watcherList.forEach((id) => this.unwatchFileChanges(id));
-      }
-    })
+      },
+    });
   }
 
-  async watchFileChanges(uri: string, options?: { excludes: string []}): Promise<number> {
+  async watchFileChanges(uri: string, options?: { excludes: string[] }): Promise<number> {
     const id = this.watcherId++;
     const _uri = this.getUri(uri);
 
     const watcherId = await this.diskService.watch(_uri.codeUri, {
       recursive: true,
-      excludes: (options && options.excludes) || []
+      excludes: (options && options.excludes) || [],
     });
     this.watcherDisposerMap.set(id, {
       dispose: () => this.diskService.unwatch!(watcherId),
@@ -104,11 +103,11 @@ export class FileService extends FCService implements IFileService {
   }
 
   async unwatchFileChanges(watcherId: number) {
-    this.watcherDisposerMap.get(watcherId)?.dispose?.()
+    this.watcherDisposerMap.get(watcherId)?.dispose?.();
   }
 
   setWatchFileExcludes(excludes: string[]) {
-    this.diskService.setWatchFileExcludes(excludes)
+    this.diskService.setWatchFileExcludes(excludes);
   }
 
   getWatchFileExcludes(): string[] {
@@ -141,11 +140,16 @@ export class FileService extends FCService implements IFileService {
   }
 
   async exists(uri: string): Promise<boolean> {
-    this.logger.warn('Deprecated Warning: fileService.exists is deprecated, please use fileService.access instead!');
+    this.logger.warn(
+      'Deprecated Warning: fileService.exists is deprecated, please use fileService.access instead!'
+    );
     return this.access(uri);
   }
 
-  async resolveContent(uri: string, options?: FileSetContentOptions): Promise<{ stat: FileStat, content: string }> {
+  async resolveContent(
+    uri: string,
+    options?: FileSetContentOptions
+  ): Promise<{ stat: FileStat; content: string }> {
     const _uri = this.getUri(uri);
     const stat = await this.diskService.stat(_uri.codeUri);
     if (!stat) {
@@ -159,7 +163,11 @@ export class FileService extends FCService implements IFileService {
     return { stat, content };
   }
 
-  async setContent(file: FileStat, content: string, options?: FileSetContentOptions): Promise<FileStat> {
+  async setContent(
+    file: FileStat,
+    content: string,
+    options?: FileSetContentOptions
+  ): Promise<FileStat> {
     const _uri = this.getUri(file.uri);
     const stat = await this.diskService.stat(_uri.codeUri);
 
@@ -173,7 +181,11 @@ export class FileService extends FCService implements IFileService {
       throw this.createOutOfSyncError(file, stat);
     }
     const encoding = await this.doGetEncoding(options);
-    await this.diskService.writeFile(_uri.codeUri, content, { create: false, overwrite: true, encoding });
+    await this.diskService.writeFile(_uri.codeUri, content, {
+      create: false,
+      overwrite: true,
+      encoding,
+    });
     const newStat = await this.diskService.stat(_uri.codeUri);
     if (newStat) {
       return newStat;
@@ -181,7 +193,11 @@ export class FileService extends FCService implements IFileService {
     throw FileSystemError.FileNotFound(file.uri, 'Error occurred while writing file content.');
   }
 
-  async updateContent(file: FileStat, contentChanges: TextDocumentContentChangeEvent[], options?: FileSetContentOptions): Promise<FileStat> {
+  async updateContent(
+    file: FileStat,
+    contentChanges: TextDocumentContentChangeEvent[],
+    options?: FileSetContentOptions
+  ): Promise<FileStat> {
     const _uri = this.getUri(file.uri);
     const stat = await this.diskService.stat(_uri.codeUri);
     if (!stat) {
@@ -200,7 +216,11 @@ export class FileService extends FCService implements IFileService {
     const buffer = this.getNodeBuffer(await this.diskService.readFile(_uri.codeUri));
     const content = decode(buffer, encoding);
     const newContent = this.applyContentChanges(content, contentChanges);
-    await this.diskService.writeFile(_uri.codeUri, newContent, { create: false, overwrite: true, encoding });
+    await this.diskService.writeFile(_uri.codeUri, newContent, {
+      create: false,
+      overwrite: true,
+      encoding,
+    });
     const newStat = await this.diskService.stat(_uri.codeUri);
     if (newStat) {
       return newStat;
@@ -212,11 +232,9 @@ export class FileService extends FCService implements IFileService {
     const _sourceUri = this.getUri(sourceUri);
     const _targetUri = this.getUri(targetUri);
 
-    const result: any = await this.diskService.rename(
-      _sourceUri.codeUri,
-      _targetUri.codeUri,
-      { overwrite: !!options?.overwrite }
-    );
+    const result: any = await this.diskService.rename(_sourceUri.codeUri, _targetUri.codeUri, {
+      overwrite: !!options?.overwrite,
+    });
 
     if (result) {
       return result;
@@ -224,24 +242,16 @@ export class FileService extends FCService implements IFileService {
     return this.diskService.stat(_targetUri.codeUri);
   }
 
-  async copy(
-    sourceUri: string,
-    targetUri: string,
-    options?: FileCopyOptions
-  ): Promise<FileStat> {
+  async copy(sourceUri: string, targetUri: string, options?: FileCopyOptions): Promise<FileStat> {
     const _sourceUri = this.getUri(sourceUri);
     const _targetUri = this.getUri(targetUri);
     const overwrite = await this.doGetOverwrite(options);
 
-    const result: any = await this.diskService.copy(
-      _sourceUri.codeUri,
-      _targetUri.codeUri,
-      {
-        overwrite: !!overwrite,
-      }
-    )
+    const result: any = await this.diskService.copy(_sourceUri.codeUri, _targetUri.codeUri, {
+      overwrite: !!overwrite,
+    });
 
-    if(result) {
+    if (result) {
       return result;
     }
     return this.diskService.stat(_targetUri.codeUri);
@@ -286,7 +296,7 @@ export class FileService extends FCService implements IFileService {
 
     return this.diskService.delete(_uri.codeUri, {
       recursive: true,
-      moveToTrash: await this.doGetMoveToTrash(options)
+      moveToTrash: await this.doGetMoveToTrash(options),
     });
   }
 
@@ -300,7 +310,7 @@ export class FileService extends FCService implements IFileService {
     return UTF8;
   }
 
-  getEncodingInfo = getEncodingInfo
+  getEncodingInfo = getEncodingInfo;
 
   // FIXME: no usage any more?
   async getRoots(): Promise<FileStat[]> {
@@ -312,7 +322,7 @@ export class FileService extends FCService implements IFileService {
   }
 
   getDrives(): Promise<string[]> {
-    return Promise.resolve([])
+    return Promise.resolve([]);
   }
 
   /**
@@ -327,41 +337,45 @@ export class FileService extends FCService implements IFileService {
     }
   }
 
-  async getFileType(uri: string): Promise<string|undefined>{
+  async getFileType(uri: string): Promise<string | undefined> {
     try {
       if (!uri.startsWith('file:/')) {
         return this._getFileType('');
       }
-      const _uri = new URI(uri)
+      const _uri = new URI(uri);
       const stat = await fse.stat(_uri.codeUri.path);
 
       let ext: string = '';
       if (stat.isDirectory()) {
-        return 'directory'
+        return 'directory';
       }
       // TODO: 暂时不通过 file-type 来判断
       if (stat.size) {
-        ext = _uri.path.ext
+        ext = _uri.path.ext;
         if (ext[0] === '.') {
-          ext = ext.slice(1)
+          ext = ext.slice(1);
         }
       }
       return this._getFileType(ext);
     } catch (error) {
       if (isErrnoException(error)) {
-        if (error.code === 'ENOENT' || error.code === 'EACCES' || error.code === 'EBUSY' || error.code === 'EPERM') {
+        if (
+          error.code === 'ENOENT' ||
+          error.code === 'EACCES' ||
+          error.code === 'EBUSY' ||
+          error.code === 'EPERM'
+        ) {
           return undefined;
         }
       }
     }
-
   }
 
   getUri(uri: string | Uri): URI {
-    const _uri = new URI(uri)
+    const _uri = new URI(uri);
 
     if (!_uri.scheme) {
-      throw new Error(`没有设置 scheme: ${uri}`)
+      throw new Error(`没有设置 scheme: ${uri}`);
     }
 
     return _uri;
@@ -391,14 +405,14 @@ export class FileService extends FCService implements IFileService {
       if (this.workspaceRoots.length > 0) {
         this.workspaceRoots.forEach((root: string) => {
           // FIXME: 这里为啥不直接 path.join，toString(true) ?# 也会转码，和实际路径可能不匹配
-          const uri = new URI(root)
+          const uri = new URI(root);
           const uriWithExclude = uri.resolve(str).withoutScheme();
           this.filesExcludesMatcherList.push(parse(uriWithExclude.toString(true)));
         });
       } else {
         this.filesExcludesMatcherList.push(parse(str));
       }
-    })
+    });
   }
 
   private isExclude(uriString: string) {
@@ -442,7 +456,7 @@ export class FileService extends FCService implements IFileService {
   }
 
   private getNodeBuffer(asBuffer: any): Buffer {
-    if(Buffer.isBuffer(asBuffer)) {
+    if (Buffer.isBuffer(asBuffer)) {
       return asBuffer;
     }
     if (isArray(asBuffer)) {
@@ -451,22 +465,31 @@ export class FileService extends FCService implements IFileService {
     if (asBuffer && isArray(asBuffer.data)) {
       return Buffer.from(asBuffer.data);
     }
-    if (!asBuffer ||  isEmptyObject(asBuffer)) {
+    if (!asBuffer || isEmptyObject(asBuffer)) {
       return Buffer.from([]);
     }
     return asBuffer;
   }
 
-  protected applyContentChanges(content: string, contentChanges: TextDocumentContentChangeEvent[]): string {
+  protected applyContentChanges(
+    content: string,
+    contentChanges: TextDocumentContentChangeEvent[]
+  ): string {
     let document = TextDocument.create('', '', 1, content);
     for (const change of contentChanges) {
       let newContent = change.text;
       if (change.range) {
         const start = document.offsetAt(change.range.start);
         const end = document.offsetAt(change.range.end);
-        newContent = document.getText().substr(0, start) + change.text + document.getText().substr(end);
+        newContent =
+          document.getText().substr(0, start) + change.text + document.getText().substr(end);
       }
-      document = TextDocument.create(document.uri, document.languageId, document.version, newContent);
+      document = TextDocument.create(
+        document.uri,
+        document.languageId,
+        document.version,
+        newContent
+      );
     }
     return document.getText();
   }
@@ -486,38 +509,38 @@ export class FileService extends FCService implements IFileService {
     return FileSystemError.FileIsOutOfSync(file, stat);
   }
 
-  private _getFileType(ext: string){
-    let type = 'text'
+  private _getFileType(ext: string) {
+    let type = 'text';
 
-    if (['png', 'gif', 'jpg', 'jpeg', 'svg'].indexOf(ext) !== -1){
-      type = 'image'
-    } else if (ext && ['xml'].indexOf(ext) === -1){
-      type = 'binary'
+    if (['png', 'gif', 'jpg', 'jpeg', 'svg'].indexOf(ext) !== -1) {
+      type = 'image';
+    } else if (ext && ['xml'].indexOf(ext) === -1) {
+      type = 'binary';
     }
 
-    return type
+    return type;
   }
 
   protected async doGetEncoding(option?: { encoding?: string }): Promise<string> {
-    return option && typeof (option.encoding) !== 'undefined'
+    return option && typeof option.encoding !== 'undefined'
       ? option.encoding
       : this.options.encoding;
   }
 
   protected async doGetOverwrite(option?: { overwrite?: boolean }): Promise<boolean | undefined> {
-    return option && typeof (option.overwrite) !== 'undefined'
+    return option && typeof option.overwrite !== 'undefined'
       ? option.overwrite
       : this.options.overwrite;
   }
 
   protected async doGetRecursive(option?: { recursive?: boolean }): Promise<boolean> {
-    return option && typeof (option.recursive) !== 'undefined'
+    return option && typeof option.recursive !== 'undefined'
       ? option.recursive
       : this.options.recursive;
   }
 
   protected async doGetMoveToTrash(option?: { moveToTrash?: boolean }): Promise<boolean> {
-    return option && typeof (option.moveToTrash) !== 'undefined'
+    return option && typeof option.moveToTrash !== 'undefined'
       ? option.moveToTrash
       : this.options.moveToTrash;
   }
@@ -525,36 +548,46 @@ export class FileService extends FCService implements IFileService {
   protected async doGetContent(option?: { content?: string }): Promise<string> {
     return (option && option.content) || '';
   }
-
 }
 export function getSafeFileService(injector: Injector) {
   const fileService = injector.get(FileService, [FileSystemNodeOptions.DEFAULT]);
   const appConfig: AppConfig = injector.get(AppConfig);
-  fileServiceInterceptor(fileService, [
-    'exists',
-    'resolveContent',
-    'setContent',
-    'updateContent',
-    'createFile',
-    'createFolder',
-    'delete',
-    'access',
-    'getFsPath',
-    'getFileType',
-    'getFileStat',
-    'move',
-    'copy',
-  ], appConfig.blockPatterns || [])
+  fileServiceInterceptor(
+    fileService,
+    [
+      'exists',
+      'resolveContent',
+      'setContent',
+      'updateContent',
+      'createFile',
+      'createFolder',
+      'delete',
+      'access',
+      'getFsPath',
+      'getFileType',
+      'getFileStat',
+      'move',
+      'copy',
+    ],
+    appConfig.blockPatterns || []
+  );
   return fileService;
 }
 
 // tslint:disable-next-line:no-any
 function isErrnoException(error: any | NodeJS.ErrnoException): error is NodeJS.ErrnoException {
-  return (error as NodeJS.ErrnoException).code !== undefined && (error as NodeJS.ErrnoException).errno !== undefined;
+  return (
+    (error as NodeJS.ErrnoException).code !== undefined &&
+    (error as NodeJS.ErrnoException).errno !== undefined
+  );
 }
 
 // 对于首个参数为uri的方法进行安全拦截
-function fileServiceInterceptor(fileService: IFileService, blackList: string[], blockPatterns: string[]) {
+function fileServiceInterceptor(
+  fileService: IFileService,
+  blackList: string[],
+  blockPatterns: string[]
+) {
   for (const method of blackList) {
     if (typeof fileService[method] === 'function') {
       // tslint:disable-next-line: ban-types
@@ -565,13 +598,13 @@ function fileServiceInterceptor(fileService: IFileService, blackList: string[], 
           const uri = typeof args[0] === 'string' ? args[0] : args[0].uri;
           if (typeof uri === 'string') {
             let resolvedURI = uri;
-            if(uri.startsWith('file://')){
+            if (uri.startsWith('file://')) {
               /**
                * match('file:///test/folder/**', 'file:///test/foo/../test/token')
                *
                * 防止被绕过
                */
-              resolvedURI = `file://${path.resolve(uri.slice(7))}`
+              resolvedURI = `file://${path.resolve(uri.slice(7))}`;
             }
             for (const blockPattern of blockPatterns) {
               if (match(blockPattern, resolvedURI)) {

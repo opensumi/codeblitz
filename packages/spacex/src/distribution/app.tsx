@@ -1,17 +1,17 @@
-import '@ali/ide-i18n/lib/browser'
-import { SlotLocation } from '@ali/ide-core-browser'
-import { loadMonaco } from '@ali/ide-monaco/lib/browser/monaco-loader'
+import '@ali/ide-i18n/lib/browser';
+import { SlotLocation } from '@ali/ide-core-browser';
+import { loadMonaco } from '@ali/ide-monaco/lib/browser/monaco-loader';
 
-import { ClientModules, ServerModules } from './module'
-import { createApp } from '../createApp'
+import { ClientModules, ServerModules } from './module';
+import { createApp } from '../createApp';
 
 // 引入公共样式文件
-import '@ali/ide-core-browser/lib/style/index.less'
+import '@ali/ide-core-browser/lib/style/index.less';
 
-import '../styles.less'
-import { LayoutComponent } from '../layout'
-import vsicons from '../../extensions/kaitian.vsicons-slim'
-import theme from '../../extensions/cloud-ide.alipay-geek-theme'
+import '../styles.less';
+import { LayoutComponent } from '../layout';
+import vsicons from '../../extensions/kaitian.vsicons-slim';
+import theme from '../../extensions/cloud-ide.alipay-geek-theme';
 
 // 视图和slot插槽的对应关系
 const layoutConfig = {
@@ -30,7 +30,7 @@ const layoutConfig = {
   [SlotLocation.extra]: {
     modules: [],
   },
-}
+};
 
 // loadMonaco({
 //   monacoCDNBase: 'https://g.alicdn.com/tb-ide/monaco-editor-core/0.17.0/',
@@ -58,10 +58,10 @@ createApp({
     extensionMetadata: [vsicons, theme],
   },
 }).then(async (app) => {
-  await app.start(document.getElementById('main')!)
-  const loadingDom = document.getElementById('loading')
+  await app.start(document.getElementById('main')!);
+  const loadingDom = document.getElementById('loading');
   if (loadingDom) {
-    loadingDom.classList.add('loading-hidden')
-    loadingDom.remove()
+    loadingDom.classList.add('loading-hidden');
+    loadingDom.remove();
   }
-})
+});

@@ -2,101 +2,101 @@
  * copy from @ali/ide-kaitian-extension/src/node/extension.scanner.ts
  */
 
-import * as path from 'path'
-import * as fse from 'fs-extra'
+import * as path from 'path';
+import * as fse from 'fs-extra';
 
-import { mergeContributes } from './merge-contributes'
-import { NLS, IExtensionBasicMetadata, IExtensionIdentity } from './type'
+import { mergeContributes } from './merge-contributes';
+import { NLS, IExtensionBasicMetadata, IExtensionIdentity } from './type';
 
 export async function getExtension(
   extensionPath: string
 ): Promise<IExtensionBasicMetadata | undefined> {
   if (!(await fse.pathExists(extensionPath))) {
-    return undefined
+    return undefined;
   }
 
-  const pkgPath = path.join(extensionPath, 'package.json')
-  const defaultPkgNlsPath = path.join(extensionPath, 'package.nls.json')
-  const extendPath = path.join(extensionPath, 'kaitian.js')
+  const pkgPath = path.join(extensionPath, 'package.json');
+  const defaultPkgNlsPath = path.join(extensionPath, 'package.nls.json');
+  const extendPath = path.join(extensionPath, 'kaitian.js');
 
-  const pkgExist = await fse.pathExists(pkgPath)
-  const defaultPkgNlsPathExist = await fse.pathExists(defaultPkgNlsPath)
-  const extendExist = await fse.pathExists(extendPath)
+  const pkgExist = await fse.pathExists(pkgPath);
+  const defaultPkgNlsPathExist = await fse.pathExists(defaultPkgNlsPath);
+  const extendExist = await fse.pathExists(extendPath);
 
-  let pkgCheckResult = pkgExist
-  const extendCheckResult = extendExist
+  let pkgCheckResult = pkgExist;
+  const extendCheckResult = extendExist;
 
   if (pkgExist) {
     try {
-      const packageJSON = await fse.readJSON(pkgPath)
+      const packageJSON = await fse.readJSON(pkgPath);
       if (!packageJSON.engines) {
-        pkgCheckResult = false
+        pkgCheckResult = false;
       } else if (!(packageJSON.engines.vscode || packageJSON.engines.kaitian)) {
-        pkgCheckResult = false
+        pkgCheckResult = false;
       }
     } catch (e) {
-      console.error(e)
-      pkgCheckResult = false
+      console.error(e);
+      pkgCheckResult = false;
     }
   }
 
   if (!(pkgCheckResult || extendCheckResult)) {
-    return
+    return;
   }
 
-  let defaultPkgNlsJSON: { [key: string]: string } | undefined
+  let defaultPkgNlsJSON: { [key: string]: string } | undefined;
   if (defaultPkgNlsPathExist) {
-    defaultPkgNlsJSON = await fse.readJSON(defaultPkgNlsPath)
+    defaultPkgNlsJSON = await fse.readJSON(defaultPkgNlsPath);
   }
 
-  let packageJSON = {} as any
+  let packageJSON = {} as any;
   try {
-    packageJSON = await fse.readJSON(pkgPath)
+    packageJSON = await fse.readJSON(pkgPath);
   } catch (e) {
-    console.error(e)
-    return
+    console.error(e);
+    return;
   }
 
-  let extendConfig = {}
+  let extendConfig = {};
   if (await fse.pathExists(extendPath)) {
     try {
       // 这里必须clear cache, 不然每次都一样
-      delete require.cache[extendPath]
-      extendConfig = require(extendPath)
+      delete require.cache[extendPath];
+      extendConfig = require(extendPath);
     } catch (e) {
-      console.error(e)
+      console.error(e);
     }
   }
 
-  const pkgNlsJSON: any = {}
+  const pkgNlsJSON: any = {};
   const zhLocalizedPath = await getLocalizedExtraMetadataPath(
     'package.nls',
     extensionPath,
     'zh-CN',
     '.json'
-  )
+  );
   const enLocalizedPath = await getLocalizedExtraMetadataPath(
     'package.nls',
     extensionPath,
     'en-US',
     '.json'
-  )
+  );
   if (zhLocalizedPath) {
-    pkgNlsJSON['zh-CN'] = await fse.readJSON(zhLocalizedPath)
+    pkgNlsJSON['zh-CN'] = await fse.readJSON(zhLocalizedPath);
   }
   if (enLocalizedPath) {
-    pkgNlsJSON['en-US'] = await fse.readJSON(enLocalizedPath)
+    pkgNlsJSON['en-US'] = await fse.readJSON(enLocalizedPath);
   }
 
-  const nlsList = await getAllLocalized(extensionPath, 'package.nls', '.json')
+  const nlsList = await getAllLocalized(extensionPath, 'package.nls', '.json');
 
   // merge for `kaitianContributes` and `contributes`
   packageJSON.contributes = mergeContributes(
     packageJSON.kaitianContributes,
     packageJSON.contributes
-  )
+  );
 
-  const { publisher, name } = getExtensionIdByPath(extensionPath, packageJSON.version)
+  const { publisher, name } = getExtensionIdByPath(extensionPath, packageJSON.version);
 
   const metadata: IExtensionBasicMetadata = {
     extension: {
@@ -112,8 +112,8 @@ export async function getExtension(
     pkgNlsJSON,
     nlsList,
     extendConfig,
-  }
-  return metadata
+  };
+  return metadata;
 }
 
 async function getLocalizedExtraMetadataPath(
@@ -122,8 +122,8 @@ async function getLocalizedExtraMetadataPath(
   localization: string,
   suffix: string
 ): Promise<string | undefined> {
-  const lowerCasePrefix = prefix.toLowerCase()
-  const lowerCaseLocalization = localization.toLowerCase()
+  const lowerCasePrefix = prefix.toLowerCase();
+  const lowerCaseLocalization = localization.toLowerCase();
   const maybeExist = [
     `${prefix}.${localization}${suffix}`, // {prefix}.zh-CN{suffix}
     `${lowerCasePrefix}.${localization}${suffix}`,
@@ -131,15 +131,15 @@ async function getLocalizedExtraMetadataPath(
     `${lowerCasePrefix}.${lowerCaseLocalization}${suffix}`,
     `${prefix}.${localization.split('-')[0]}${suffix}`, // {prefix}.zh{suffix}
     `${lowerCasePrefix}.${localization.split('-')[0]}${suffix}`,
-  ]
+  ];
 
   for (const maybe of maybeExist) {
-    const filepath = path.join(extensionPath, maybe)
+    const filepath = path.join(extensionPath, maybe);
     if (await fse.pathExists(filepath)) {
-      return filepath
+      return filepath;
     }
   }
-  return undefined
+  return undefined;
 }
 
 /**
@@ -150,24 +150,24 @@ async function getAllLocalized(
   prefix: string,
   suffix: string
 ): Promise<NLS[]> {
-  const fileList = await fse.readdir(extensionPath)
-  const result: NLS[] = []
+  const fileList = await fse.readdir(extensionPath);
+  const result: NLS[] = [];
   for (const file of fileList) {
-    const filePath = path.join(extensionPath, file)
-    const fileStat = await fse.stat(filePath)
+    const filePath = path.join(extensionPath, file);
+    const fileStat = await fse.stat(filePath);
     if (fileStat.isFile()) {
       const matched = file.match(
         new RegExp(`^(?:${prefix}|${prefix.toLocaleLowerCase()})(.+)${suffix}$`)
-      )
+      );
       if (matched) {
         result.push({
           filename: matched[0],
           languageId: matched[1],
-        })
+        });
       }
     }
   }
-  return result
+  return result;
 }
 
 /**
@@ -176,16 +176,16 @@ async function getAllLocalized(
 function getExtensionIdByPath(extensionPath: string, version?: string) {
   const regExp = version
     ? new RegExp(`^(.+?)\\.(.+?)-(${version})$`)
-    : /^(.+?)\.(.+?)-(\d+\.\d+\.\d+)$/
-  const dirName = path.basename(extensionPath)
-  const match = dirName.match(regExp)
+    : /^(.+?)\.(.+?)-(\d+\.\d+\.\d+)$/;
+  const dirName = path.basename(extensionPath);
+  const match = dirName.match(regExp);
 
   if (match === null) {
-    throw new Error('无法获取 extensionId')
+    throw new Error('无法获取 extensionId');
   }
 
   return {
     publisher: match[1],
     name: match[2],
-  }
+  };
 }

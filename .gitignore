@@ -86,6 +86,7 @@ dist
 .pnp.*
 
 # Custom
+.vscode
 configs/tsconfig/.references
 packages/*/lib
 packages/*/esm

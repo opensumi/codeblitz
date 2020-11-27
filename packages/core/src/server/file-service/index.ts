@@ -1,8 +1,13 @@
-import { Injectable, Provider } from '@ali/common-di'
-import { IDiskFileProvider, DiskFileServicePath, IFileService, FileServicePath } from '@ali/ide-file-service/lib/common'
-import { NodeModule } from '../core/app'
-import { DiskFileSystemProvider } from './disk-file-system.provider'
-import { getSafeFileService } from './file-service'
+import { Injectable, Provider } from '@ali/common-di';
+import {
+  IDiskFileProvider,
+  DiskFileServicePath,
+  IFileService,
+  FileServicePath,
+} from '@ali/ide-file-service/lib/common';
+import { NodeModule } from '../core/app';
+import { DiskFileSystemProvider } from './disk-file-system.provider';
+import { getSafeFileService } from './file-service';
 
 @Injectable()
 export class FileServiceModule extends NodeModule {
@@ -13,9 +18,9 @@ export class FileServiceModule extends NodeModule {
     },
     {
       token: IFileService,
-      useFactory: getSafeFileService
-    }
-  ]
+      useFactory: getSafeFileService,
+    },
+  ];
 
   backServices = [
     {
@@ -26,5 +31,5 @@ export class FileServiceModule extends NodeModule {
       servicePath: FileServicePath,
       token: IFileService,
     },
-  ]
+  ];
 }

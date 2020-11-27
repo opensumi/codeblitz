@@ -7,7 +7,7 @@ import { IExtensionContributions, IKaitianExtensionContributions } from './type'
 
 export function mergeContributes(
   contributes: IExtensionContributions | undefined,
-  kaitianContributes: IKaitianExtensionContributions | undefined,
+  kaitianContributes: IKaitianExtensionContributions | undefined
 ): IKaitianExtensionContributions {
   if (contributes === undefined) {
     return kaitianContributes || {};
@@ -45,5 +45,5 @@ export function mergeContributes(
 }
 
 function asArray<T>(x: T | T[]): T[] {
-	return Array.isArray(x) ? x : [x];
+  return Array.isArray(x) ? x : [x];
 }

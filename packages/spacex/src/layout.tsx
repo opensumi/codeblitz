@@ -1,6 +1,6 @@
-import * as React from 'react'
-import { SlotRenderer } from '@ali/ide-core-browser'
-import { BoxPanel, SplitPanel } from '@ali/ide-core-browser/lib/components'
+import * as React from 'react';
+import { SlotRenderer } from '@ali/ide-core-browser';
+import { BoxPanel, SplitPanel } from '@ali/ide-core-browser/lib/components';
 
 // 插槽的划分
 export function LayoutComponent() {
@@ -12,5 +12,5 @@ export function LayoutComponent() {
         <SlotRenderer flexGrow={1} minResize={300} slot="main" />
       </SplitPanel>
     </BoxPanel>
-  )
+  );
 }

@@ -1,12 +1,12 @@
-import { Injectable } from '@ali/common-di'
-import { LogServiceManager } from './log-manager'
+import { Injectable } from '@ali/common-di';
+import { LogServiceManager } from './log-manager';
 import {
   LogServiceForClientPath,
   ILogServiceForClient,
   ILogServiceManager,
-} from '@ali/ide-logs/lib/common'
-import { LogServiceForClient } from './log.service'
-import { NodeModule } from '../core/app'
+} from '@ali/ide-logs/lib/common';
+import { LogServiceForClient } from './log.service';
+import { NodeModule } from '../core/app';
 
 @Injectable()
 export class LogServiceModule extends NodeModule {
@@ -19,12 +19,12 @@ export class LogServiceModule extends NodeModule {
       token: ILogServiceManager,
       useClass: LogServiceManager,
     },
-  ]
+  ];
 
   backServices = [
     {
       servicePath: LogServiceForClientPath,
       token: ILogServiceForClient,
     },
-  ]
+  ];
 }

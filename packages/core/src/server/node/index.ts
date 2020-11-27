@@ -1,8 +1,8 @@
-export * from './internal'
+export * from './internal';
 
 // should place before other fs api
-export * from './extend/fs-watch'
+export * from './extend/fs-watch';
 
-export { default as fse } from './extend/fs-extra'
+export { default as fse } from './extend/fs-extra';
 
-export * from './extend/write-file-atomic'
+export * from './extend/write-file-atomic';

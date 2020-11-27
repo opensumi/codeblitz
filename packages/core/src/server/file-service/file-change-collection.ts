@@ -21,8 +21,8 @@ export enum FileChangeType {
 }
 
 export interface FileChange {
-  uri: string
-  type: FileChangeType
+  uri: string;
+  type: FileChangeType;
 }
 
 /**
@@ -40,39 +40,39 @@ export interface FileChange {
  * - DELETED + DELETED => DELETED
  */
 export class FileChangeCollection {
-  protected readonly changes = new Map<string, FileChange>()
+  protected readonly changes = new Map<string, FileChange>();
 
   push(change: FileChange): void {
-    const current = this.changes.get(change.uri)
+    const current = this.changes.get(change.uri);
     if (current) {
       if (this.isDeleted(current, change)) {
-        this.changes.delete(change.uri)
+        this.changes.delete(change.uri);
       } else if (this.isUpdated(current, change)) {
-        current.type = FileChangeType.UPDATED
+        current.type = FileChangeType.UPDATED;
       } else if (!this.shouldSkip(current, change)) {
-        current.type = change.type
+        current.type = change.type;
       }
     } else {
-      this.changes.set(change.uri, change)
+      this.changes.set(change.uri, change);
     }
   }
 
   protected isDeleted(current: FileChange, change: FileChange): boolean {
-    return current.type === FileChangeType.ADDED && change.type === FileChangeType.DELETED
+    return current.type === FileChangeType.ADDED && change.type === FileChangeType.DELETED;
   }
 
   protected isUpdated(current: FileChange, change: FileChange): boolean {
-    return current.type === FileChangeType.DELETED && change.type === FileChangeType.ADDED
+    return current.type === FileChangeType.DELETED && change.type === FileChangeType.ADDED;
   }
 
   protected shouldSkip(current: FileChange, change: FileChange): boolean {
     return (
       (current.type === FileChangeType.ADDED && change.type === FileChangeType.UPDATED) ||
       (current.type === FileChangeType.UPDATED && change.type === FileChangeType.ADDED)
-    )
+    );
   }
 
   values(): FileChange[] {
-    return Array.from(this.changes.values())
+    return Array.from(this.changes.values());
   }
 }

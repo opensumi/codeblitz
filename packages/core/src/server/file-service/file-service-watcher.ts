@@ -1,12 +1,18 @@
 import { parse, ParsedPattern } from '@ali/ide-core-common/lib/utils/glob';
 import {
-  IDisposable, Disposable, DisposableCollection, Uri,
-  FileChangeType, FileSystemWatcherClient, FileSystemWatcherServer, WatchOptions,
+  IDisposable,
+  Disposable,
+  DisposableCollection,
+  Uri,
+  FileChangeType,
+  FileSystemWatcherClient,
+  FileSystemWatcherServer,
+  WatchOptions,
 } from '@ali/ide-core-common';
 import debounce from 'lodash.debounce';
 import { FileChangeCollection } from './file-change-collection';
-import { fse, path, watch } from '../node'
-import { ChangeEvent, FW } from '../node/extend/fs-watch'
+import { fse, path, watch } from '../node';
+import { ChangeEvent, FW } from '../node/extend/fs-watch';
 
 export interface WatcherOptions {
   excludesPattern: ParsedPattern[];
@@ -23,20 +29,20 @@ export class FWFileSystemWatcherServer implements FileSystemWatcherServer {
   protected client: FileSystemWatcherClient | undefined;
   protected watcherSequence = 1;
   protected watcherOptions = new Map<number, WatcherOptions>();
-  protected readonly watchers = new Map<number, {path: string, disposable: IDisposable}>();
+  protected readonly watchers = new Map<number, { path: string; disposable: IDisposable }>();
 
   protected readonly toDispose = new DisposableCollection(
-    Disposable.create(() => this.setClient(undefined)),
+    Disposable.create(() => this.setClient(undefined))
   );
 
   protected changes = new FileChangeCollection();
 
   protected readonly options: {
-    verbose: boolean,
+    verbose: boolean;
     // tslint:disable-next-line
-    info: (message: string, ...args: any[]) => void,
+    info: (message: string, ...args: any[]) => void;
     // tslint:disable-next-line
-    error: (message: string, ...args: any[]) => void,
+    error: (message: string, ...args: any[]) => void;
   };
 
   constructor(options?: NsfwFileSystemWatcherOption) {
@@ -76,7 +82,7 @@ export class FWFileSystemWatcherServer implements FileSystemWatcherServer {
   }
 
   async watchFileChanges(uri: string, options?: WatchOptions): Promise<number> {
-    const basePath = Uri.parse(uri).path
+    const basePath = Uri.parse(uri).path;
     const realpath = await fse.realpath(basePath);
     let watcherId = this.checkIsParentWatched(realpath)!;
     if (watcherId) {
@@ -108,7 +114,12 @@ export class FWFileSystemWatcherServer implements FileSystemWatcherServer {
     return watcherId;
   }
 
-  protected async start(watcherId: number, basePath: string, rawOptions: WatchOptions | undefined, toDisposeWatcher: DisposableCollection): Promise<void> {
+  protected async start(
+    watcherId: number,
+    basePath: string,
+    rawOptions: WatchOptions | undefined,
+    toDisposeWatcher: DisposableCollection
+  ): Promise<void> {
     const options: WatchOptions = {
       excludes: [],
       ...rawOptions,
@@ -145,15 +156,17 @@ export class FWFileSystemWatcherServer implements FileSystemWatcherServer {
       this.options.info('Stopped watching:', basePath);
       return;
     }
-    toDisposeWatcher.push(Disposable.create(async () => {
-      this.watcherOptions.delete(watcherId);
-      if (watcher) {
-        this.debug('Stopping watching:', basePath);
-        watcher.stop();
-        watcher = undefined;
-        this.options.info('Stopped watching:', basePath);
-      }
-    }));
+    toDisposeWatcher.push(
+      Disposable.create(async () => {
+        this.watcherOptions.delete(watcherId);
+        if (watcher) {
+          this.debug('Stopping watching:', basePath);
+          watcher.stop();
+          watcher = undefined;
+          this.options.info('Stopped watching:', basePath);
+        }
+      })
+    );
     this.watcherOptions.set(watcherId, {
       excludesPattern: options.excludes.map((pattern) => parse(pattern)),
       excludes: options.excludes,
@@ -196,7 +209,7 @@ export class FWFileSystemWatcherServer implements FileSystemWatcherServer {
       return;
     }
 
-    const uri = Uri.file(path).toString()
+    const uri = Uri.file(path).toString();
     this.changes.push({ uri, type });
 
     this.fireDidFilesChanged();
@@ -210,7 +223,10 @@ export class FWFileSystemWatcherServer implements FileSystemWatcherServer {
    * Fires file changes to clients.
    * It is debounced in the case if the filesystem is spamming to avoid overwhelming clients with events.
    */
-  protected readonly fireDidFilesChanged: () => void = debounce(() => this.doFireDidFilesChanged(), 100);
+  protected readonly fireDidFilesChanged: () => void = debounce(
+    () => this.doFireDidFilesChanged(),
+    100
+  );
   protected doFireDidFilesChanged(): void {
     const changes = this.changes.values();
     this.changes = new FileChangeCollection();

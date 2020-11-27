@@ -9,9 +9,9 @@ export const UTF8 = 'utf8';
 export const UTF8_WITH_BOM = 'utf8bom';
 export const UTF16BE = 'utf16be';
 export const UTF16LE = 'utf16le';
-export const UTF16BE_BOM = [0xFE, 0xFF];
-export const UTF16LE_BOM = [0xFF, 0xFE];
-export const UTF8_BOM = [0xEF, 0xBB, 0xBF];
+export const UTF16BE_BOM = [0xfe, 0xff];
+export const UTF16LE_BOM = [0xff, 0xfe];
+export const UTF8_BOM = [0xef, 0xbb, 0xbf];
 
 export function detectEncodingByBOMFromBuffer(buffer: Buffer | null): string | null {
   if (!buffer || buffer.length < 2) {
@@ -47,12 +47,12 @@ export function detectEncodingByBOMFromBuffer(buffer: Buffer | null): string | n
 
 export function detectEncodingByBuffer(buffer: Buffer): string | null {
   // TODO:
-  return UTF8
+  return UTF8;
 }
 
 export function detectEncodingByURI(uri: URI): string | null {
   // TODO:
-  return UTF8
+  return UTF8;
 }
 
 export function getEncodingInfo(encoding: string | null): null | EncodingInfo {
@@ -69,21 +69,24 @@ export function getEncodingInfo(encoding: string | null): null | EncodingInfo {
 }
 
 export function decode(buffer: Buffer, encoding: string): string {
-  return buffer.toString(encoding as BufferEncoding)
+  return buffer.toString(encoding as BufferEncoding);
 }
 
 export function encode(content: string, encoding: string, options?: { addBOM?: boolean }): Buffer {
-  return Buffer.from(content, encoding as BufferEncoding)
+  return Buffer.from(content, encoding as BufferEncoding);
 }
 
 export function encodingExists(encoding: string): boolean {
-  return encoding === UTF8
+  return encoding === UTF8;
 }
 
 export function decodeStream(encoding: string | null): NodeJS.ReadWriteStream {
-  throw new Error('not support decodeStream')
+  throw new Error('not support decodeStream');
 }
 
-export function encodeStream(encoding: string, options?: { addBOM?: boolean }): NodeJS.ReadWriteStream {
-  throw new Error('not support encodeStream')
+export function encodeStream(
+  encoding: string,
+  options?: { addBOM?: boolean }
+): NodeJS.ReadWriteStream {
+  throw new Error('not support encodeStream');
 }

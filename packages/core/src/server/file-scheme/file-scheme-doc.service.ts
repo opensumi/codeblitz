@@ -1,10 +1,20 @@
 import { Injectable, Autowired } from '@ali/common-di';
-import { IEditorDocumentModelSaveResult, URI, IEditorDocumentChange, BasicTextLines, isEditChange } from '@ali/ide-core-common';
+import {
+  IEditorDocumentModelSaveResult,
+  URI,
+  IEditorDocumentChange,
+  BasicTextLines,
+  isEditChange,
+} from '@ali/ide-core-common';
 import { IFileService } from '@ali/ide-file-service/lib/common';
 import md5 from 'md5';
-import { IFileSchemeDocNodeService, ISavingContent, IContentChange } from '@ali/ide-file-scheme/lib/common';
+import {
+  IFileSchemeDocNodeService,
+  ISavingContent,
+  IContentChange,
+} from '@ali/ide-file-scheme/lib/common';
 import { fse } from '../node';
-import { encode, decode } from '../file-service/encoding'
+import { encode, decode } from '../file-service/encoding';
 
 @Injectable()
 export class FileSchemeDocNodeServiceImpl implements IFileSchemeDocNodeService {
@@ -13,7 +23,12 @@ export class FileSchemeDocNodeServiceImpl implements IFileSchemeDocNodeService {
 
   // 由于此处只处理file协议，为了简洁，不再使用 fileService,
 
-  async $saveByChange(uri: string, change: IContentChange, encoding?: string | undefined, force: boolean = false): Promise<IEditorDocumentModelSaveResult> {
+  async $saveByChange(
+    uri: string,
+    change: IContentChange,
+    encoding?: string | undefined,
+    force: boolean = false
+  ): Promise<IEditorDocumentModelSaveResult> {
     try {
       const fsPath = new URI(uri).codeUri.path;
       if (await fse.pathExists(fsPath)) {
@@ -40,7 +55,7 @@ export class FileSchemeDocNodeServiceImpl implements IFileSchemeDocNodeService {
       return {
         state: 'error',
         errorMessage: 'useByContent',
-      }
+      };
     } catch (e) {
       return {
         state: 'error',
@@ -49,24 +64,29 @@ export class FileSchemeDocNodeServiceImpl implements IFileSchemeDocNodeService {
     }
   }
 
-  async $saveByContent(uri: string, content: ISavingContent, encoding?: string | undefined, force: boolean = false): Promise<IEditorDocumentModelSaveResult> {
+  async $saveByContent(
+    uri: string,
+    content: ISavingContent,
+    encoding?: string | undefined,
+    force: boolean = false
+  ): Promise<IEditorDocumentModelSaveResult> {
     try {
       const stat = await this.fileService.getFileStat(uri);
       if (stat) {
         if (!force) {
-          const res = await this.fileService.resolveContent(uri, {encoding});
+          const res = await this.fileService.resolveContent(uri, { encoding });
           if (content.baseMd5 !== md5(res.content)) {
             return {
               state: 'diff',
             };
           }
         }
-        await this.fileService.setContent(stat, content.content, {encoding});
+        await this.fileService.setContent(stat, content.content, { encoding });
         return {
           state: 'success',
         };
       }
-      await this.fileService.createFile(uri, {content: content.content, encoding});
+      await this.fileService.createFile(uri, { content: content.content, encoding });
       return {
         state: 'success',
       };
@@ -81,7 +101,7 @@ export class FileSchemeDocNodeServiceImpl implements IFileSchemeDocNodeService {
   async $getMd5(uri: string, encoding?: string | undefined): Promise<string | undefined> {
     try {
       if (await this.fileService.access(uri)) {
-        const res = await this.fileService.resolveContent(uri, {encoding});
+        const res = await this.fileService.resolveContent(uri, { encoding });
         return md5(res.content);
       }
     } catch (e) {
@@ -91,7 +111,11 @@ export class FileSchemeDocNodeServiceImpl implements IFileSchemeDocNodeService {
 }
 
 // TODO: eol 哪里的
-export function applyChanges(content: string, changes: IEditorDocumentChange[], eol: '\n' | '\r\n'): string {
+export function applyChanges(
+  content: string,
+  changes: IEditorDocumentChange[],
+  eol: '\n' | '\r\n'
+): string {
   const textLines = new BasicTextLines(content.split(eol), eol);
   changes.forEach((change) => {
     if (isEditChange(change)) {

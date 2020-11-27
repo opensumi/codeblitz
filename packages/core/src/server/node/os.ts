@@ -1,59 +1,59 @@
 export function endianness() {
-  return 'LE'
+  return 'LE';
 }
 
 export function hostname() {
   if (typeof location !== 'undefined') {
-    return location.hostname
+    return location.hostname;
   }
-  return ''
+  return '';
 }
 
 export function loadavg() {
-  return []
+  return [];
 }
 
 export function uptime() {
-  return 0
+  return 0;
 }
 
 export function freemem() {
-  return Number.MAX_VALUE
+  return Number.MAX_VALUE;
 }
 
 export function totalmem() {
-  return Number.MAX_VALUE
+  return Number.MAX_VALUE;
 }
 
 export function cpus() {
-  return []
+  return [];
 }
 
 export function type() {
-  return 'Browser'
+  return 'Browser';
 }
 
 export function release() {
   if (typeof navigator !== 'undefined') {
-    return navigator.appVersion
+    return navigator.appVersion;
   }
-  return ''
+  return '';
 }
 
 export function arch() {
-  return 'javascript'
+  return 'javascript';
 }
 
 export function platform() {
-  return 'browser'
+  return 'browser';
 }
 
 export function tmpdir() {
-  return '/tmp'
+  return '/tmp';
 }
 
-export const EOL = '\n'
+export const EOL = '\n';
 
 export function homedir() {
-  return '/root'
+  return '/root';
 }

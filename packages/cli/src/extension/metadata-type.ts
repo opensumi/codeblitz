@@ -1,11 +1,11 @@
-import * as fse from 'fs-extra'
-import * as path from 'path'
-import { FRAMEWORK_NAME, EXTENSION_METADATA_DIR } from '../util/constant'
+import * as fse from 'fs-extra';
+import * as path from 'path';
+import { FRAMEWORK_NAME, EXTENSION_METADATA_DIR } from '../util/constant';
 
-const referenceFile = '_reference.d.ts'
+const referenceFile = '_reference.d.ts';
 
 async function createReference() {
-  const p = path.join(EXTENSION_METADATA_DIR, referenceFile)
+  const p = path.join(EXTENSION_METADATA_DIR, referenceFile);
   if (!(await fse.pathExists(p))) {
     await fse.writeFile(
       p,
@@ -32,7 +32,7 @@ interface IExtensionBasicMetadata {
   extendConfig: JSONType
 }
   `.trim() + '\n'
-    )
+    );
   }
 }
 
@@ -42,9 +42,9 @@ export async function createMetadataType(extensionId: string) {
 /// <reference path="${referenceFile}" />
 declare var data: IExtensionBasicMetadata
 export = data
-  `.trim() + '\n'
-  await createReference()
-  return fse.writeFile(path.join(EXTENSION_METADATA_DIR, `${extensionId}.d.ts`), content)
+  `.trim() + '\n';
+  await createReference();
+  return fse.writeFile(path.join(EXTENSION_METADATA_DIR, `${extensionId}.d.ts`), content);
 }
 
 // export async function removeMetadataType(extensionId: string) {

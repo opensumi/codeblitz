@@ -5,9 +5,9 @@
  * API 保持和目前 ide-fw 中使用的 nsfw 中一致
  */
 
-import { fs, path } from '../internal'
-import { Emitter, IDisposable } from '@ali/ide-core-common'
-import debounce from 'lodash.debounce'
+import { fs, path } from '../internal';
+import { Emitter, IDisposable } from '@ali/ide-core-common';
+import debounce from 'lodash.debounce';
 
 export const enum ActionType {
   CREATED = 0,
@@ -16,71 +16,71 @@ export const enum ActionType {
   RENAMED = 3,
 }
 
-type CreatedFileEvent = GenericFileEvent<ActionType.CREATED>
-type DeletedFileEvent = GenericFileEvent<ActionType.DELETED>
-type ModifiedFileEvent = GenericFileEvent<ActionType.MODIFIED>
-type FileChangeEvent = CreatedFileEvent | DeletedFileEvent | ModifiedFileEvent | RenamedFileEvent
+type CreatedFileEvent = GenericFileEvent<ActionType.CREATED>;
+type DeletedFileEvent = GenericFileEvent<ActionType.DELETED>;
+type ModifiedFileEvent = GenericFileEvent<ActionType.MODIFIED>;
+type FileChangeEvent = CreatedFileEvent | DeletedFileEvent | ModifiedFileEvent | RenamedFileEvent;
 
 interface RenamedFileEvent {
   /** the type of event that occurred */
-  action: ActionType.RENAMED
+  action: ActionType.RENAMED;
   /** the directory before a rename */
-  directory: string
+  directory: string;
   /**  the name of the file before a rename*/
-  oldFile: string
+  oldFile: string;
   /** the new location of the file(only useful on linux) */
-  newDirectory: string
+  newDirectory: string;
   /** the name of the file after a rename */
-  newFile: string
+  newFile: string;
 }
 
 interface GenericFileEvent<T extends ActionType> {
   /** the type of event that occurred */
-  action: T
+  action: T;
   /** the location the event took place */
-  directory: string
+  directory: string;
   /** the name of the file that was changed(Not available for rename events) */
-  file: string
+  file: string;
 }
 
 export interface ChangeEvent {
-  action: ActionType
-  directory: string
-  file?: string
-  oldFile?: string
-  newFile?: string
-  newDirectory?: string
+  action: ActionType;
+  directory: string;
+  file?: string;
+  oldFile?: string;
+  newFile?: string;
+  newDirectory?: string;
 }
 
 interface Options {
   /** time in milliseconds to debounce the event callback */
-  debounceMS?: number
+  debounceMS?: number;
 }
 
-const emitter = new Emitter<FileChangeEvent>()
+const emitter = new Emitter<FileChangeEvent>();
 
 const api = [
   { name: 'mkdir', action: ActionType.CREATED },
   { name: 'rmdir', action: ActionType.DELETED },
   { name: 'unlink', action: ActionType.DELETED },
   { name: 'rename', action: ActionType.RENAMED },
-] as const
+] as const;
 
 const apiSync = [
   { name: 'mkdirSync', action: ActionType.CREATED },
   { name: 'rmdirSync', action: ActionType.DELETED },
   { name: 'unlinkSync', action: ActionType.DELETED },
   { name: 'renameSync', action: ActionType.RENAMED },
-] as const
+] as const;
 
 api.forEach(({ name, action }) => {
-  const method: any = fs[name]
+  const method: any = fs[name];
   fs[name] = (p: string, ...args: any[]) => {
-    p = path.resolve(p)
-    const cb = args[args.length - 1]
-    checkCb(cb)
+    p = path.resolve(p);
+    const cb = args[args.length - 1];
+    checkCb(cb);
     args[args.length - 1] = (err: any) => {
-      const res = cb(err)
+      const res = cb(err);
       if (!err) {
         emitter.fire({
           action,
@@ -94,19 +94,19 @@ api.forEach(({ name, action }) => {
                 newDirectory: path.dirname(args[1]),
                 newFile: path.basename(args[1]),
               }),
-        } as FileChangeEvent)
+        } as FileChangeEvent);
       }
-      return res
-    }
-    method(p, ...args)
-  }
-})
+      return res;
+    };
+    method(p, ...args);
+  };
+});
 
 apiSync.forEach(({ name, action }) => {
-  const method: any = fs[name]
+  const method: any = fs[name];
   fs[name] = (p: string, ...args: any[]) => {
-    p = path.resolve(p)
-    const res = method(p, ...args)
+    p = path.resolve(p);
+    const res = method(p, ...args);
     emitter.fire({
       action,
       directory: path.dirname(p),
@@ -119,143 +119,143 @@ apiSync.forEach(({ name, action }) => {
             newDirectory: path.dirname(args[1]),
             newFile: path.basename(args[1]),
           }),
-    } as FileChangeEvent)
-    return res
-  }
-})
+    } as FileChangeEvent);
+    return res;
+  };
+});
 
-const fd2Path: Record<number, string> = {}
+const fd2Path: Record<number, string> = {};
 
-const _open = fs.open
+const _open = fs.open;
 fs.open = (p: string, flag: string, mode: any, cb?: any) => {
-  p = resolvePath(p)
+  p = resolvePath(p);
   fs.stat(p, (err) => {
     // 文件不存在且为写模式，那么会自动创建文件
-    const willCreated = err && mayCreatedFile(flag)
-    const _cb = typeof mode === 'function' ? mode : cb
-    checkCb(cb)
+    const willCreated = err && mayCreatedFile(flag);
+    const _cb = typeof mode === 'function' ? mode : cb;
+    checkCb(cb);
     const newCb = (err: any, fd: any) => {
-      fd2Path[fd] = p
-      const res = _cb(err, fd)
+      fd2Path[fd] = p;
+      const res = _cb(err, fd);
       if (!err && willCreated) {
         emitter.fire({
           action: ActionType.CREATED,
           directory: path.dirname(p),
           file: path.basename(p),
-        })
+        });
       }
-      return res
-    }
+      return res;
+    };
     if (typeof mode === 'function') {
-      _open(p, flag, newCb)
+      _open(p, flag, newCb);
     } else {
-      _open(p, flag, mode, newCb)
+      _open(p, flag, mode, newCb);
     }
-  })
-}
+  });
+};
 
-const _openSync = fs.openSync
+const _openSync = fs.openSync;
 fs.openSync = (p, flag, mode) => {
-  p = resolvePath(p)
-  const willCreated = !fs.existsSync(p) && mayCreatedFile(flag)
-  const fd = _openSync(p, flag, mode)
-  fd2Path[fd] = p
+  p = resolvePath(p);
+  const willCreated = !fs.existsSync(p) && mayCreatedFile(flag);
+  const fd = _openSync(p, flag, mode);
+  fd2Path[fd] = p;
   if (willCreated) {
     emitter.fire({
       action: ActionType.CREATED,
       directory: path.dirname(p),
       file: path.basename(p),
-    })
+    });
   }
-  return fd
-}
+  return fd;
+};
 
 /**
  * browserfs 在 close 关闭时才写入
  */
 
-const _close = fs.close
+const _close = fs.close;
 fs.close = (fd, cb) => {
-  checkCb(cb)
+  checkCb(cb);
   _close(fd, (err) => {
-    cb(err)
+    cb(err);
     if (!err) {
-      const p = fd2Path[fd]
+      const p = fd2Path[fd];
       emitter.fire({
         action: ActionType.MODIFIED,
         directory: path.dirname(p),
         file: path.basename(p),
-      })
+      });
     }
-    delete fd2Path[fd]
-  })
-}
+    delete fd2Path[fd];
+  });
+};
 
-const _closeSync = fs.closeSync
+const _closeSync = fs.closeSync;
 fs.closeSync = (fd) => {
-  _closeSync(fd)
-  const p = fd2Path[fd]
+  _closeSync(fd);
+  const p = fd2Path[fd];
   emitter.fire({
     action: ActionType.MODIFIED,
     directory: path.dirname(p),
     file: path.basename(p),
-  })
-  delete fd2Path[fd]
-}
+  });
+  delete fd2Path[fd];
+};
 
-const _writeFile = fs.writeFile
+const _writeFile = fs.writeFile;
 fs.writeFile = (filename: any, data: any, arg3?: any, cb?: any) => {
-  const p = resolvePath(filename)
-  const flag = arg3?.flag ?? 'w'
+  const p = resolvePath(filename);
+  const flag = arg3?.flag ?? 'w';
   fs.stat(p, (err) => {
     // 文件不存在且为写模式，那么会自动创建文件
-    const willCreated = err && mayCreatedFile(flag)
-    const _cb = typeof arg3 === 'function' ? arg3 : cb
-    checkCb(cb)
+    const willCreated = err && mayCreatedFile(flag);
+    const _cb = typeof arg3 === 'function' ? arg3 : cb;
+    checkCb(cb);
     const newCb: any = (err: any, fd: any) => {
-      const res = _cb(err, fd)
+      const res = _cb(err, fd);
       if (!err) {
         emitter.fire({
           action: willCreated ? ActionType.CREATED : ActionType.MODIFIED,
           directory: path.dirname(p),
           file: path.basename(p),
-        })
+        });
       }
-      return res
-    }
+      return res;
+    };
     if (typeof arg3 === 'function') {
-      _writeFile(p, data, newCb)
+      _writeFile(p, data, newCb);
     } else {
-      _writeFile(p, data, arg3, newCb)
+      _writeFile(p, data, arg3, newCb);
     }
-  })
-}
+  });
+};
 
-const _writeFileSync = fs.writeFileSync
+const _writeFileSync = fs.writeFileSync;
 fs.writeFileSync = (filename: any, data: any, arg3?: any) => {
-  const p = resolvePath(filename)
-  const flag = arg3?.flag ?? 'w'
-  const willCreated = !fs.existsSync(p) && mayCreatedFile(flag)
-  _writeFileSync(p, data, arg3)
+  const p = resolvePath(filename);
+  const flag = arg3?.flag ?? 'w';
+  const willCreated = !fs.existsSync(p) && mayCreatedFile(flag);
+  _writeFileSync(p, data, arg3);
   emitter.fire({
     action: willCreated ? ActionType.CREATED : ActionType.MODIFIED,
     directory: path.dirname(p),
     file: path.basename(p),
-  })
-}
+  });
+};
 
 function resolvePath(p: string) {
-  return path.resolve(p)
+  return path.resolve(p);
 }
 
 function checkCb(cb: any): asserts cb is Function {
   if (typeof cb !== 'function') {
-    throw new Error('Callback must be a function.')
+    throw new Error('Callback must be a function.');
   }
 }
 
 function mayCreatedFile(flag: string) {
-  return flag !== 'r+' && (flag.includes('w') || flag.includes('a') || flag.includes('+'))
+  return flag !== 'r+' && (flag.includes('w') || flag.includes('a') || flag.includes('+'));
 }
 
 function call(cb: Function, args: any[]) {
@@ -264,19 +264,19 @@ function call(cb: Function, args: any[]) {
    */
   switch (args.length) {
     case 1:
-      return cb(args[0])
+      return cb(args[0]);
     case 2:
-      return cb(args[0], args[1])
+      return cb(args[0], args[1]);
     case 3:
-      return cb(args[0], args[2], args[3])
+      return cb(args[0], args[2], args[3]);
     default:
-      return cb(...args)
+      return cb(...args);
   }
 }
 
 export interface FW {
-  start: () => void
-  stop: () => void
+  start: () => void;
+  stop: () => void;
 }
 
 interface FWFunction {
@@ -284,8 +284,8 @@ interface FWFunction {
     watchPath: string,
     eventCallback: (events: Array<ChangeEvent>) => void,
     options?: Partial<Options>
-  ): Promise<FW>
-  actions: Record<keyof typeof ActionType, number>
+  ): Promise<FW>;
+  actions: Record<keyof typeof ActionType, number>;
 }
 
 export const watch: FWFunction = (
@@ -295,94 +295,94 @@ export const watch: FWFunction = (
 ) => {
   if (Number.isInteger(debounceMS)) {
     if (debounceMS < 1) {
-      throw new Error('Minimum debounce is 1ms.')
+      throw new Error('Minimum debounce is 1ms.');
     }
   } else {
-    throw new Error('debounceMS must be an integer.')
+    throw new Error('debounceMS must be an integer.');
   }
 
   return new Promise<FW>((resolve, reject) => {
     fs.stat(dirOrFile, (err, stat) => {
       if (err) {
-        reject(new Error('Path must be a valid path to a file or a directory.'))
+        reject(new Error('Path must be a valid path to a file or a directory.'));
       }
-      let dir = dirOrFile
-      let file = ''
+      let dir = dirOrFile;
+      let file = '';
       if (stat!.isFile()) {
-        dir = path.dirname(dirOrFile)
-        file = path.basename(dirOrFile)
+        dir = path.dirname(dirOrFile);
+        file = path.basename(dirOrFile);
       }
-      let disposables: IDisposable[] = []
-      let changeEvents: ChangeEvent[] = []
+      let disposables: IDisposable[] = [];
+      let changeEvents: ChangeEvent[] = [];
       resolve({
         start() {
           const debouncedEvent = debounce(() => {
-            eventHandler([...changeEvents])
-            changeEvents.length = 0
-          }, debounceMS)
+            eventHandler([...changeEvents]);
+            changeEvents.length = 0;
+          }, debounceMS);
           disposables.push({
             dispose: debouncedEvent.cancel,
-          })
+          });
           const collect = (change: ChangeEvent) => {
-            changeEvents.push(change)
-            debouncedEvent()
-          }
+            changeEvents.push(change);
+            debouncedEvent();
+          };
           emitter.event(
             (change) => {
               if (file) {
                 if (change.directory !== dir) {
-                  return
+                  return;
                 }
                 if (change.action !== ActionType.RENAMED && change.file === file) {
-                  collect(change)
+                  collect(change);
                 } else if (change.action === ActionType.RENAMED && change.oldFile === file) {
                   collect({
                     action: ActionType.DELETED,
                     directory: change.directory,
                     file: change.oldFile,
-                  })
+                  });
                 }
               } else {
                 if (change.action !== ActionType.RENAMED) {
                   if (change.directory.startsWith(dir)) {
-                    collect(change)
+                    collect(change);
                   }
                 } else {
                   if (change.directory.startsWith(dir) && change.newDirectory?.startsWith(dir)) {
-                    collect(change)
+                    collect(change);
                   } else if (change.directory.startsWith(dir)) {
                     // deleted
                     collect({
                       action: ActionType.DELETED,
                       directory: change.directory,
                       file: change.oldFile,
-                    })
+                    });
                   } else if (change.newDirectory?.startsWith(dir)) {
                     // created
                     collect({
                       action: ActionType.CREATED,
                       directory: change.newDirectory,
                       file: change.newFile,
-                    })
+                    });
                   }
                 }
               }
             },
             null,
             disposables
-          )
+          );
         },
         stop() {
-          disposables.forEach((d) => d.dispose())
+          disposables.forEach((d) => d.dispose());
         },
-      })
-    })
-  })
-}
+      });
+    });
+  });
+};
 
 watch.actions = {
   CREATED: ActionType.CREATED,
   DELETED: ActionType.DELETED,
   MODIFIED: ActionType.MODIFIED,
   RENAMED: ActionType.RENAMED,
-}
+};

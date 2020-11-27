@@ -1,29 +1,29 @@
 interface JSONType {
-  [key: string]: any
+  [key: string]: any;
 }
 
 export interface NLS {
-  languageId: string
-  filename: string
+  languageId: string;
+  filename: string;
 }
 
 /**
  * 纯 worker 插件的 metadata，部分字段有更改，在运行时转换补齐
  */
 export interface IExtensionBasicMetadata {
-  extension: IExtensionIdentity
+  extension: IExtensionIdentity;
   packageJSON: {
-    name: string
-    contributes: any
-  }
-  defaultPkgNlsJSON: JSONType | undefined
-  pkgNlsJSON: JSONType
-  nlsList: NLS[]
-  extendConfig: JSONType
+    name: string;
+    contributes: any;
+  };
+  defaultPkgNlsJSON: JSONType | undefined;
+  pkgNlsJSON: JSONType;
+  nlsList: NLS[];
+  extendConfig: JSONType;
 }
 
 export interface IExtensionIdentity {
-  publisher: string
-  name: string
-  version: string
+  publisher: string;
+  name: string;
+  version: string;
 }

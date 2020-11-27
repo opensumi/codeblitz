@@ -1,3 +1,3 @@
 interface A {
-  a: string
+  a: string;
 }
