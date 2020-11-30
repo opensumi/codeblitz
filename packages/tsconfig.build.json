@@ -1,0 +1,15 @@
+{
+  "references": [
+    {
+      "path": "./shared/tsconfig.build.json"
+    },
+    {
+      "path": "./cli/tsconfig.build.json"
+    },
+    {
+      "path": "./core/tsconfig.build.json"
+    }
+  ],
+  "files": [],
+  "include": []
+}

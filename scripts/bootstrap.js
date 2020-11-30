@@ -1,5 +1,6 @@
 const fs = require('fs')
 const path = require('path')
+const args = require('minimist')(process.argv.slice(2))
 const version = require('../package.json').version
 const signale = require('signale')
 
@@ -17,19 +18,19 @@ packages.forEach(async (pkg) => {
   const resolve = (file = '') => path.join(__dirname, '../packages', name, file)
 
   const pkgPath = resolve('package.json')
-  if (fs.existsSync(pkgPath)) return
+  if (fs.existsSync(pkgPath) && !args.force) return
 
   signale.pending(`开启初始化模块：${name}`)
 
   // package.json
+  const pkgName = name === 'spacex' ? `@alipay/spacex` : `@alipay/spacex-${name}`
   const json = {
-    name: `@alipay/spacex-${name}`,
+    name: pkgName,
     version,
-    description: name,
+    description: pkgName,
     main: 'lib/index.js',
-    module: 'esm/index.js',
-    typing: 'types/index.d.ts',
-    files: ['lib', 'esm', 'types'],
+    typings: 'lib/index.d.ts',
+    files: ['lib'],
     repository: {
       type: 'git',
       url: 'git@code.alipay.com:winjo.gwj/SpaceX.git',
@@ -41,9 +42,11 @@ packages.forEach(async (pkg) => {
     },
     dependencies: {
       '@alipay/spacex-core': version,
+      '@alipay/spacex-shared': version,
     },
     tnpm: {
       mode: 'yarn',
+      lockfile: 'enable',
     },
   }
   await fsp.writeFile(resolve('package.json'), JSON.stringify(json, null, 2))
@@ -67,44 +70,22 @@ describe('test', () => {
   )
 
   // tsconfig.json
-  const resolveTSConfig = (relativePath) =>
-    path.join(__dirname, '../configs/tsconfig', relativePath)
-  const pkgTSConfigPath = resolveTSConfig(name)
-  if (fs.existsSync(pkgTSConfigPath)) return
+  const tsconfig = {
+    extends: '../tsconfig.base.json',
+    compilerOptions: {
+      rootDir: './src',
+      outDir: './lib',
+    },
+    include: ['./src'],
+  }
+  await fsp.writeFile(resolve('tsconfig.build.json'), JSON.stringify(tsconfig, null, 2))
 
-  const buildTSConfigPath = resolveTSConfig('tsconfig.build.json')
+  const buildTSConfigPath = path.join(__dirname, '../packages/tsconfig.build.json')
   const buildTSConfigJSON = require(buildTSConfigPath)
-  const configType = ['cjs', 'esm', 'types']
-  for (const type of configType) {
-    buildTSConfigJSON.references.push({
-      path: `./${name}/tsconfig.${type}.json`,
-    })
-  }
+  buildTSConfigJSON.references.push({
+    path: `./${name}/tsconfig.build.json`,
+  })
   await fsp.writeFile(buildTSConfigPath, JSON.stringify(buildTSConfigJSON, null, 2))
-  await fsp.mkdir(resolveTSConfig(name))
-  const outDirs = {
-    cjs: 'lib',
-    esm: 'esm',
-    types: 'types',
-  }
-  for (const type of configType) {
-    const content = {
-      extends: `../tsconfig.${type}.json`,
-      compilerOptions: {
-        rootDir: `../../../packages/${name}/src`,
-        outDir: `../../../packages/${name}/${outDirs[type]}`,
-      },
-      include: [`../../../packages/${name}/src`],
-    }
-    if (type === 'types') {
-      content.compilerOptions.declarationDir = content.compilerOptions.outDir
-      delete content.compilerOptions.outDir
-    }
-    await fsp.writeFile(
-      resolveTSConfig(`./${name}/tsconfig.${type}.json`),
-      JSON.stringify(content, null, 2)
-    )
-  }
 
   signale.success(`模块 ${name} 初始化成功`)
 })

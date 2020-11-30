@@ -4,7 +4,7 @@
   "description": "core",
   "main": "lib/index.js",
   "module": "esm/index.js",
-  "typing": "types/index.d.ts",
+  "typings": "types/index.d.ts",
   "files": [
     "lib",
     "esm",
@@ -21,10 +21,32 @@
   "publishConfig": {
     "registry": "https://registry.npm.alibaba-inc.com"
   },
-  "dependencies": {
-    "@alipay/spacex-core": "0.0.1"
-  },
   "tnpm": {
-    "mode": "yarn"
+    "mode": "yarn",
+    "lockfile": "enable"
+  },
+  "dependencies": {
+    "@alipay/spacex-shared": "0.0.1",
+    "@ali/common-di": "^5.2.2",
+    "@ali/ide-core-browser": "1.25.0",
+    "@ali/ide-core-common": "1.25.0",
+    "@ali/ide-file-service": "1.25.0",
+    "@ali/ide-file-scheme": "1.25.0",
+    "@ali/ide-logs": "1.25.0",
+    "@ali/ide-kaitian-extension": "1.25.0",
+    "assert": "^2.0.0",
+    "browserfs": "~1.4.3",
+    "fs-extra-factory": "^0.2.0",
+    "lodash.debounce": "^4.0.8",
+    "md5": "^2.3.0",
+    "uuid": "^3.3.2",
+    "vscode-languageserver-types": "~3.14.0"
+  },
+  "devDependencies": {
+    "@types/fs-extra": "^9.0.4",
+    "@types/lodash.debounce": "^4.0.6",
+    "@types/md5": "^2.2.1",
+    "@types/uuid": "^3",
+    "vscode": "^1.1.37"
   }
 }

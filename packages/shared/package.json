@@ -1,0 +1,34 @@
+{
+  "name": "@alipay/spacex-shared",
+  "version": "0.0.1",
+  "description": "@alipay/spacex-shared",
+  "main": "lib/index.js",
+  "typing": "lib/index.d.ts",
+  "files": [
+    "lib",
+    "esm",
+    "types"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "git@code.alipay.com:winjo.gwj/SpaceX.git"
+  },
+  "keywords": [
+    "kaitian AntCodespaces"
+  ],
+  "scripts": {
+    "start": "webpack-dev-server --env.entry=./src/distribution/app.tsx"
+  },
+  "publishConfig": {
+    "registry": "https://registry.npm.alibaba-inc.com"
+  },
+  "dependencies": {
+    "@alipay/spacex-cli": "0.0.1",
+    "@alipay/spacex-core": "0.0.1"
+  },
+  "tnpm": {
+    "mode": "yarn",
+    "lockfile": "enable"
+  },
+  "devDependencies": {}
+}
