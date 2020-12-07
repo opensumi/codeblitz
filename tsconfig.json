@@ -1,7 +1,7 @@
 {
   "compilerOptions": {
-    "module": "esnext",
-    "target": "es2017",
+    "module": "ESNext",
+    "target": "ES2017",
     "moduleResolution": "node",
     "strict": true,
     "strictPropertyInitialization": false,
@@ -15,7 +15,7 @@
     "downlevelIteration": true,
     "noEmitOnError": false,
     "noImplicitAny": false,
-    "skipLibCheck": true,
+    "skipLibCheck": false,
     "strictFunctionTypes": false,
     "jsx": "react",
     "baseUrl": ".",
@@ -24,21 +24,23 @@
     "noUnusedLocals": false,
     "allowSyntheticDefaultImports": true,
     "esModuleInterop": true,
-    "noEmit": true,
+    "declaration": true,
+    "declarationMap": true,
     "lib": [
-      "dom",
-      "esnext"
+      "DOM",
+      "ES2015",
+      "ES2016",
+      "ES2017"
     ],
     "paths": {
       "@alipay/spacex-*": ["packages/*/src"]
     },
-    "typeRoots": [
-      "./node_modules/@types"
+    "types": [
+      "jest"
     ]
   },
   "include": [
     "packages",
-    "typings",
-    "scripts"
+    "typings"
   ]
 }

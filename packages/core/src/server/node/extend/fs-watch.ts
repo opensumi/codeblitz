@@ -5,9 +5,10 @@
  * API 保持和目前 ide-fw 中使用的 nsfw 中一致
  */
 
-import { fs, path } from '../internal';
 import { Emitter, IDisposable } from '@ali/ide-core-common';
 import debounce from 'lodash.debounce';
+import * as path from 'path';
+import { fs } from '../bfs';
 
 export const enum ActionType {
   CREATED = 0,

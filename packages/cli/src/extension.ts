@@ -5,26 +5,44 @@ import { from, of } from 'rxjs';
 import { mergeMap, filter } from 'rxjs/operators';
 import { EXTENSION_DIR, EXTENSION_METADATA_DIR } from './util/constant';
 import { getExtension } from './extension/scanner';
-import { IExtensionBasicMetadata, IExtensionIdentity } from './extension/type';
-import log from './util/log';
+import { IExtensionBasicMetadata, IExtensionId, IExtensionIdentity } from './extension/type';
+import { log, error } from './util/log';
 import checkFramework from './util/check-framework';
+import { formatExtension } from './util';
 import { createMetadataType } from './extension/metadata-type';
 
 let extensionInstaller: ExtensionInstaller;
+let shouldWriteConfig = false;
 
-export const install = async () => {
+export const install = async (extensionId?: string[]) => {
   checkFramework();
 
   createInstaller();
 
-  // TODO: 暂时只支持从 package.json 配置，不支持通过 install 安装
-  const extensions = await getExtensionFromPackage();
+  let extensions: IExtensionId[] = [];
 
-  checkExtensions(extensions);
-
-  await clearCache();
+  if (extensionId?.length) {
+    extensions = parseExtensionId(extensionId);
+    shouldWriteConfig = true;
+    await Promise.all(extensions.map((ext) => removeExtensionById(ext)));
+  } else {
+    const extensionConfig = await getExtensionFromPackage();
+    if (!extensionConfig.length) {
+      log.warn('当前未配置 kaitianExtensions，请运行 npx spacex ext -h 查看帮助');
+      return;
+    }
+    checkExtensionConfig(extensionConfig);
+    extensions = extensionConfig;
+    await removeAllExtension();
+  }
 
   log.start('开始安装扩展');
+  extensions.forEach((ext) => {
+    console.log(`    * ${formatExtension(ext)}`);
+  });
+  console.log();
+
+  const installedExtensions: IExtensionIdentity[] = [];
 
   from(extensions)
     .pipe(
@@ -35,14 +53,18 @@ export const install = async () => {
       mergeMap(writeMetadata)
     )
     .subscribe(
-      (extensionId) => {
-        log.info(`${extensionId} 安装完成`);
+      (ext) => {
+        installedExtensions.push(ext);
+        log.info(`${formatExtension(ext)} 安装完成`);
       },
       (err) => {
         log.error('扩展安装失败，请稍后重试');
         console.error(err);
       },
       () => {
+        if (shouldWriteConfig) {
+          modifyPkgJSON(installedExtensions);
+        }
         log.success('扩展安装成功');
       }
     );
@@ -59,14 +81,25 @@ async function createInstaller() {
   });
 }
 
-async function clearCache() {
+async function removeAllExtension() {
   await fse.remove(EXTENSION_DIR);
   await fse.remove(EXTENSION_METADATA_DIR);
   await fse.ensureDir(EXTENSION_DIR);
   await fse.ensureDir(EXTENSION_METADATA_DIR);
 }
 
-async function getExtensionFromPackage(): Promise<IExtensionIdentity[]> {
+async function removeExtensionById(ext: IExtensionId) {
+  const extensionId = `${ext.publisher}.${ext.name}`;
+  return Promise.all([
+    await fse.remove(
+      path.join(`${EXTENSION_DIR}`, `${extensionId}${ext.version ? `-${ext.version}` : ''}`)
+    ),
+    await fse.remove(path.join(EXTENSION_METADATA_DIR, `${extensionId}.js`)),
+    await fse.remove(path.join(EXTENSION_METADATA_DIR, `${extensionId}.d.ts`)),
+  ]);
+}
+
+async function getExtensionFromPackage(): Promise<IExtensionId[]> {
   try {
     const projectPkgJSON = await fse.readJSON(path.resolve('package.json'));
     return projectPkgJSON?.kaitianExtensions ?? [];
@@ -84,7 +117,7 @@ async function setExtensionFromPackage(config: any) {
   } catch (err) {}
 }
 
-function checkExtensions(extensions: Extension[]) {
+function checkExtensionConfig(extensions: Extension[]) {
   for (const ext of extensions) {
     const { publisher, name, version } = ext;
     let errMsg = '';
@@ -92,21 +125,35 @@ function checkExtensions(extensions: Extension[]) {
       errMsg = '缺少 publisher';
     } else if (!name) {
       errMsg = '缺少 name';
-    } else if (!version) {
-      errMsg = '缺少 version';
+    }
+    if (!version) {
+      shouldWriteConfig = true;
     }
     // TODO: should valid version ??
     // else if (!semver.valid(version)) {
-    //   errMsg = '缺少 publisher'
+    //   errMsg = 'version 不合法'
     // }
     if (errMsg) {
-      log.error(`${JSON.stringify(ext)} ${errMsg}`);
-      throw new Error('error');
+      error(`${JSON.stringify(ext)} ${errMsg}`);
     }
   }
 }
 
-async function installExtension(extension: IExtensionIdentity) {
+function parseExtensionId(extensionIds: string[]) {
+  const extensions: IExtensionId[] = [];
+  for (const extId of extensionIds) {
+    const reg = /^([a-zA-Z][0-9a-zA-Z_-]*)\.([a-zA-Z][0-9a-zA-Z_-]*)(?:@(\d+\.\d+\.\d+.*))?$/;
+    const matched = extId.match(reg);
+    if (!matched) {
+      return error(`${extId} 格式不合法，请输入 publisher.name[@version] 的形式`);
+    }
+    const [, publisher, name, version] = matched;
+    extensions.push({ publisher, name, version });
+  }
+  return extensions;
+}
+
+async function installExtension(extension: IExtensionId) {
   return extensionInstaller.install({
     publisher: extension.publisher,
     name: extension.name,
@@ -117,10 +164,8 @@ async function installExtension(extension: IExtensionIdentity) {
 async function writeMetadata(metadata: IExtensionBasicMetadata) {
   await fse.ensureDir(EXTENSION_METADATA_DIR);
 
-  const {
-    extension: { publisher, name },
-  } = metadata;
-  const extensionId = `${publisher}.${name}`;
+  const { extension } = metadata;
+  const extensionId = `${extension.publisher}.${extension.name}`;
   await fse.writeFile(
     path.join(EXTENSION_METADATA_DIR, `${extensionId}.js`),
     `
@@ -128,14 +173,30 @@ module.exports = ${JSON.stringify(metadata, null, 2)}
     `.trim() + '\n'
   );
   await createMetadataType(extensionId);
-  return extensionId;
+  return extension;
+}
+
+async function modifyPkgJSON(extensions: IExtensionIdentity[]) {
+  const extConfig = await getExtensionFromPackage();
+  const newConfig = [...extConfig];
+  extensions.forEach((ext) => {
+    const obj = extConfig.find(
+      (item) => item.publisher === ext.publisher && item.name === ext.name
+    );
+    if (obj) {
+      obj.version = ext.version;
+    } else {
+      newConfig.push(ext);
+    }
+  });
+  setExtensionFromPackage(newConfig);
 }
 
 // uninstall
 export async function uninstall(extensionId: string[]) {
   const extensions = await getExtensionFromPackage();
-  const removeExtensions: IExtensionIdentity[] = [];
-  const remainExtensions: IExtensionIdentity[] = [];
+  const removeExtensions: IExtensionId[] = [];
+  const remainExtensions: IExtensionId[] = [];
   for (const config of extensions) {
     let index = -1;
     for (let i = 0; i < extensionId.length; i++) {
@@ -157,15 +218,8 @@ export async function uninstall(extensionId: string[]) {
       throw new Error('error');
     });
   }
-  await Promise.all(
-    removeExtensions.map(async (ext) => {
-      const extensionId = `${ext.publisher}.${ext.name}`;
-      await fse.remove(path.join(`${EXTENSION_DIR}`, `${extensionId}-${ext.version}`));
-      await fse.remove(path.join(EXTENSION_METADATA_DIR, `${extensionId}.js`));
-      await fse.remove(path.join(EXTENSION_METADATA_DIR, `${extensionId}.d.ts`));
-    })
-  );
+  await Promise.all(removeExtensions.map((ext) => removeExtensionById(ext)));
   await setExtensionFromPackage(remainExtensions);
 
-  log.success('卸载插件成功');
+  log.success('卸载扩展成功');
 }

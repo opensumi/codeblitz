@@ -28,7 +28,8 @@ import { WebviewModule } from '@ali/ide-webview/lib/browser';
 import { OutputModule } from '@ali/ide-output/lib/browser';
 import { FileSchemeModule } from '@ali/ide-file-scheme/lib/browser';
 
-import { ClientModule } from '@alipay/spacex-core';
+import { ClientModule, ServerModuleCollection, NodeModule } from '@alipay/spacex-core';
+import { StartupClientModule, StartupServerModule } from './startup.module';
 
 export const ClientModules: ConstructorOf<BrowserModule>[] = [
   FileServiceClientModule,
@@ -62,6 +63,12 @@ export const ClientModules: ConstructorOf<BrowserModule>[] = [
 
   // Browser Core Module
   ClientModule,
+
+  // local module
+  StartupClientModule,
 ];
 
-export { ServerModules } from '@alipay/spacex-core';
+export const ServerModules: ConstructorOf<NodeModule>[] = [
+  ...ServerModuleCollection,
+  StartupServerModule,
+];

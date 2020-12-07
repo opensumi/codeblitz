@@ -3,17 +3,10 @@
   "version": "0.0.1",
   "description": "core",
   "main": "lib/index.js",
-  "module": "esm/index.js",
-  "typings": "types/index.d.ts",
+  "typings": "lib/index.d.ts",
   "files": [
-    "lib",
-    "esm",
-    "types"
+    "lib"
   ],
-  "repository": {
-    "type": "git",
-    "url": "git@code.alipay.com:winjo.gwj/SpaceX.git"
-  },
   "keywords": [
     "kaitian AntCodespaces"
   ],

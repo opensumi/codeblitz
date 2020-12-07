@@ -10,16 +10,10 @@
     "esm",
     "types"
   ],
-  "repository": {
-    "type": "git",
-    "url": "git@code.alipay.com:winjo.gwj/SpaceX.git"
-  },
   "keywords": [
     "kaitian AntCodespaces"
   ],
-  "scripts": {
-    "start": "webpack-dev-server --env.entry=./src/distribution/app.tsx"
-  },
+  "scripts": {},
   "publishConfig": {
     "registry": "https://registry.npm.alibaba-inc.com"
   },
@@ -30,6 +24,7 @@
     "@ali/ide-decoration": "1.25.0",
     "@ali/ide-editor": "1.25.0",
     "@ali/ide-explorer": "1.25.0",
+    "@ali/ide-express-file-server": "1.25.0",
     "@ali/ide-extension-storage": "1.25.0",
     "@ali/ide-file-scheme": "1.25.0",
     "@ali/ide-file-service": "1.25.0",
@@ -65,26 +60,8 @@
   "devDependencies": {
     "@types/react": "^16.9.56",
     "@types/react-dom": "^16.9.9",
-    "copy-webpack-plugin": "^6.3.0",
-    "css-loader": "^2.1.1",
-    "file-loader": "^3.0.1",
-    "fork-ts-checker-webpack-plugin": "^6.0.1",
-    "friendly-errors-webpack-plugin": "^1.7.0",
-    "html-webpack-plugin": "^4.5.0",
-    "less": "^3.9.0",
-    "less-loader": "^6.0.0",
-    "mini-css-extract-plugin": "^1.3.0",
-    "node-notifier": "^8.0.0",
     "react": "^16.14.0",
     "react-dom": "^16.14.0",
-    "style-loader": "^0.23.1",
-    "style-resources-loader": "^1.2.1",
-    "thread-loader": "^3.0.1",
-    "ts-loader": "^6.0.1",
-    "tsconfig-paths-webpack-plugin": "^3.3.0",
-    "vscode-languageserver-types": "~3.14",
-    "webpack": "^4.30.0",
-    "webpack-cli": "^3.3.1",
-    "webpack-dev-server": "^3.3.1"
+    "vscode-languageserver-types": "~3.14"
   }
 }

@@ -3,6 +3,7 @@
   "compilerOptions": {
     "rootDir": "./src",
     "outDir": "./lib",
+    "types": ["node"],
     "module": "commonjs",
     "target": "ES5"
   },

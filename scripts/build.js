@@ -1,20 +1,22 @@
-const path = require('path')
-const signale = require('signale')
-const execa = require('execa')
-const args = require('minimist')(process.argv.slice(2))
+const path = require('path');
+const signale = require('signale');
+const execa = require('execa');
+const args = require('minimist')(process.argv.slice(2));
+const invoke = require('./utils/invoke');
 
-run()
+invoke(async () => {
+  await execa.command('npm run clean');
 
-async function run() {
-  signale.pending(`开始编译 ${args.scope || 'all'}`)
-  const tsconfigPath = path.join(__dirname, '../packages', args.scope || '', 'tsconfig.build.json')
+  signale.pending(`开始编译 ${args.scope || 'all'}`);
+
   try {
-    const watch = args.w || args.watch ? '--watch' : ''
-    await execa('tsc', ['-b', tsconfigPath, watch, '--locale', 'zh-cn'], {
+    const watch = args.w || args.watch ? '--watch' : '';
+    await execa.command(`npx tsc --build packages/tsconfig.build.json ${watch}`, {
       stdio: 'inherit', // use inherit get pretty error log
-    })
-    signale.success('编译成功')
+    });
+    signale.success('编译成功');
   } catch (err) {
-    signale.error('编译失败')
+    console.error(err);
+    signale.error('编译失败');
   }
-}
+});

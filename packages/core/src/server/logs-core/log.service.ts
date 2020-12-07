@@ -11,10 +11,10 @@ import {
   DebugLog,
   IBaseLogService,
 } from '@ali/ide-logs/lib/common';
+import path from 'path';
+import os from 'os';
 
 import { FCService } from '../../connection';
-
-import { path, os } from '../node';
 
 export const DEFAULT_LOG_FOLDER = path.join(os.homedir(), `.kaitian/logs/`);
 

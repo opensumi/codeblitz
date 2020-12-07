@@ -3,8 +3,8 @@
  * 目前不考虑多线程的情况，因此只根据 filename 加锁即可
  */
 
-import { path } from '../internal';
 import fse from './fs-extra';
+import * as path from 'path';
 
 const mutex = {
   _waiting: new Map<string, (() => void)[]>(),

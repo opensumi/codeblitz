@@ -5,4 +5,9 @@ const log = new Signale({
   scope: PRODUCT,
 });
 
-export default log;
+const error = (msg) => {
+  log.error(msg);
+  throw new Error(msg);
+};
+
+export { log, error };

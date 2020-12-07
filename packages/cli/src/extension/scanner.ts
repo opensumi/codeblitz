@@ -4,9 +4,10 @@
 
 import * as path from 'path';
 import * as fse from 'fs-extra';
+import { mergeContributes } from '@ali/ide-kaitian-extension/lib/node/merge-contributes';
+import pick from 'lodash.pick';
 
-import { mergeContributes } from './merge-contributes';
-import { NLS, IExtensionBasicMetadata, IExtensionIdentity } from './type';
+import { NLS, IExtensionBasicMetadata } from './type';
 
 export async function getExtension(
   extensionPath: string
@@ -104,10 +105,12 @@ export async function getExtension(
       name,
       version: packageJSON.version,
     },
-    packageJSON: {
-      name: packageJSON.name,
-      contributes: packageJSON.contributes,
-    },
+    packageJSON: pick(packageJSON, [
+      'name',
+      'activationEvents',
+      'kaitianContributes',
+      'contributes',
+    ]),
     defaultPkgNlsJSON,
     pkgNlsJSON,
     nlsList,
@@ -171,12 +174,12 @@ async function getAllLocalized(
 }
 
 /**
- * 获取插件的 publisher 和 name，可能和 package.json 的 name 不一致，所以从文件名获取
+ * 获取插件的 publisher 和 name，可能和 package.json 上的 publisher 及 name 不一致，所以从文件名获取
  */
 function getExtensionIdByPath(extensionPath: string, version?: string) {
   const regExp = version
     ? new RegExp(`^(.+?)\\.(.+?)-(${version})$`)
-    : /^(.+?)\.(.+?)-(\d+\.\d+\.\d+)$/;
+    : /^(.+?)\.(.+?)-(\d+\.\d+\.\d+.*)$/;
   const dirName = path.basename(extensionPath);
   const match = dirName.match(regExp);
 

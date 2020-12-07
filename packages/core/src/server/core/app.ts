@@ -4,8 +4,6 @@ import {
   ContributionProvider,
   createContributionProvider,
   BasicModule,
-} from '@ali/ide-core-common';
-import {
   LogLevel,
   ILogServiceManager,
   ILogService,
@@ -19,12 +17,13 @@ import {
   StoragePaths,
 } from '@ali/ide-core-common';
 import { IExtensionBasicMetadata } from '@alipay/spacex-shared';
+import path from 'path';
+import os from 'os';
 
 import { INodeLogger, NodeLogger } from './node-logger';
 import { FCServiceCenter, initFCService, ServerPort } from '../../connection';
 import { IServerApp } from '../../common';
 import { bootstrap } from './bootstrap';
-import { path, os } from '../node';
 
 export abstract class NodeModule extends BasicModule {}
 

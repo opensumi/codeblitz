@@ -7,13 +7,18 @@
   "private": true,
   "description": "Ant Codespaces for browser",
   "main": "index.js",
+  "engines": {
+    "kaitian": "1.25.0"
+  },
   "scripts": {
     "preinstall": "node scripts/preinstall",
     "ext": "node packages/spacex/bin/spacex ext",
     "build": "node scripts/build",
     "create": "node scripts/create",
     "format": "prettier --write --parser typescript \"packages/**/*.ts?(x)\"",
-    "start": "yarn workspace @alipay/spacex start"
+    "start": "npm run dev",
+    "dev": "yarn workspace @alipay/spacex-toolkit dev",
+    "clean": "rimraf packages/*/lib"
   },
   "author": "antgroup",
   "license": "ISC",
@@ -39,13 +44,20 @@
   "publishConfig": {
     "registry": "https://registry.npm.alibaba-inc.com"
   },
+  "repository": {
+    "type": "git",
+    "url": "git@code.alipay.com:cloud-ide/crew-dragon.git"
+  },
   "devDependencies": {
+    "@ali/ide-extension-installer": "^2.1.0",
+    "@alipay/basement": "^3.5.0",
     "@commitlint/cli": "^11.0.0",
     "@commitlint/config-conventional": "^11.0.0",
     "@types/jest": "^26.0.15",
     "@types/node": "^14.14.6",
     "chalk": "^4.1.0",
     "execa": "^4.1.0",
+    "fs-extra": "^9.0.1",
     "gulp": "^4.0.2",
     "husky": "^4.3.0",
     "jest": "^26.6.3",
@@ -54,7 +66,8 @@
     "prettier": "^2.1.2",
     "signale": "^1.4.0",
     "ts-node": "^9.0.0",
-    "typescript": "^4.0.5"
+    "typescript": "^4.0.5",
+    "urllib": "^2.36.1"
   },
   "tnpm": {
     "mode": "yarn",
@@ -69,10 +82,22 @@
     {
       "publisher": "kaitian",
       "name": "vsicons-slim",
-      "version": "1.0.4"
+      "version": "1.0.5"
+    },
+    {
+      "publisher": "kaitian-worker",
+      "name": "html-language-features",
+      "version": "1.0.0-beta-1"
+    },
+    {
+      "publisher": "kaitian-worker",
+      "name": "json-language-features",
+      "version": "1.0.0"
+    },
+    {
+      "publisher": "CodeX",
+      "name": "json-language-features",
+      "version": "1.0.0"
     }
-  ],
-  "dependencies": {
-    "object-assign": "^4.1.1"
-  }
+  ]
 }
