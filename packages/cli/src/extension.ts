@@ -5,7 +5,7 @@ import { from, of } from 'rxjs';
 import { mergeMap, filter } from 'rxjs/operators';
 import { EXTENSION_DIR, EXTENSION_METADATA_DIR } from './util/constant';
 import { getExtension } from './extension/scanner';
-import { IExtensionBasicMetadata, IExtensionId, IExtensionIdentity } from './extension/type';
+import { IExtensionBasicMetadata, IExtensionDesc, IExtensionIdentity } from './extension/type';
 import { log, error } from './util/log';
 import checkFramework from './util/check-framework';
 import { formatExtension } from './util';
@@ -19,7 +19,7 @@ export const install = async (extensionId?: string[]) => {
 
   createInstaller();
 
-  let extensions: IExtensionId[] = [];
+  let extensions: IExtensionDesc[] = [];
 
   if (extensionId?.length) {
     extensions = parseExtensionId(extensionId);
@@ -88,7 +88,7 @@ async function removeAllExtension() {
   await fse.ensureDir(EXTENSION_METADATA_DIR);
 }
 
-async function removeExtensionById(ext: IExtensionId) {
+async function removeExtensionById(ext: IExtensionDesc) {
   const extensionId = `${ext.publisher}.${ext.name}`;
   return Promise.all([
     await fse.remove(
@@ -99,7 +99,7 @@ async function removeExtensionById(ext: IExtensionId) {
   ]);
 }
 
-async function getExtensionFromPackage(): Promise<IExtensionId[]> {
+async function getExtensionFromPackage(): Promise<IExtensionDesc[]> {
   try {
     const projectPkgJSON = await fse.readJSON(path.resolve('package.json'));
     return projectPkgJSON?.kaitianExtensions ?? [];
@@ -140,7 +140,7 @@ function checkExtensionConfig(extensions: Extension[]) {
 }
 
 function parseExtensionId(extensionIds: string[]) {
-  const extensions: IExtensionId[] = [];
+  const extensions: IExtensionDesc[] = [];
   for (const extId of extensionIds) {
     const reg = /^([a-zA-Z][0-9a-zA-Z_-]*)\.([a-zA-Z][0-9a-zA-Z_-]*)(?:@(\d+\.\d+\.\d+.*))?$/;
     const matched = extId.match(reg);
@@ -153,7 +153,7 @@ function parseExtensionId(extensionIds: string[]) {
   return extensions;
 }
 
-async function installExtension(extension: IExtensionId) {
+async function installExtension(extension: IExtensionDesc) {
   return extensionInstaller.install({
     publisher: extension.publisher,
     name: extension.name,
@@ -195,8 +195,8 @@ async function modifyPkgJSON(extensions: IExtensionIdentity[]) {
 // uninstall
 export async function uninstall(extensionId: string[]) {
   const extensions = await getExtensionFromPackage();
-  const removeExtensions: IExtensionId[] = [];
-  const remainExtensions: IExtensionId[] = [];
+  const removeExtensions: IExtensionDesc[] = [];
+  const remainExtensions: IExtensionDesc[] = [];
   for (const config of extensions) {
     let index = -1;
     for (let i = 0; i < extensionId.length; i++) {

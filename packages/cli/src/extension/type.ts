@@ -1,6 +1,8 @@
+import { Uri } from '@ali/ide-core-common';
+
 export { IExtensionBasicMetadata, NLS, IExtensionIdentity } from '@alipay/spacex-shared';
 
-export interface IExtensionId {
+export interface IExtensionDesc {
   publisher: string;
   name: string;
   version?: string;
@@ -25,11 +27,5 @@ export interface IExtensionMetaData {
   extendConfig: JSONType;
   isBuiltin: boolean;
   isDevelopment?: boolean;
-  uri?: {
-    scheme: string;
-    authority: string;
-    path: string;
-    query: string;
-    fragment: string;
-  };
+  uri?: Uri;
 }
