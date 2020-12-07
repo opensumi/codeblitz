@@ -148,7 +148,7 @@ async function getLocalizedExtraMetadataPath(
 /**
  * 获取所有的 localized 文件
  */
-async function getAllLocalized(
+export async function getAllLocalized(
   extensionPath: string,
   prefix: string,
   suffix: string
@@ -176,7 +176,7 @@ async function getAllLocalized(
 /**
  * 获取插件的 publisher 和 name，可能和 package.json 上的 publisher 及 name 不一致，所以从文件名获取
  */
-function getExtensionIdByPath(extensionPath: string, version?: string) {
+export function getExtensionIdByPath(extensionPath: string, version?: string) {
   const regExp = version
     ? new RegExp(`^(.+?)\\.(.+?)-(${version})$`)
     : /^(.+?)\.(.+?)-(\d+\.\d+\.\d+.*)$/;

@@ -57,11 +57,13 @@ packages.forEach(async (pkg) => {
   // test
   await fsp.mkdir(resolve('__tests__'));
   await fsp.writeFile(
-    resolve('__tests__/index.ts'),
+    resolve('__tests__/index.test.ts'),
     `
-describe('test', () => {
-
-})
+describe(${name}, () => {
+  it('example', () => {
+    expect(1 + 1).toBe(2);
+  });
+});
     `.trim() + '\n'
   );
 

@@ -18,7 +18,8 @@
     "format": "prettier --write --parser typescript \"packages/**/*.ts?(x)\"",
     "start": "npm run dev",
     "dev": "yarn workspace @alipay/spacex-toolkit dev",
-    "clean": "rimraf packages/*/lib"
+    "clean": "rimraf packages/*/lib",
+    "test": "jest --runInBand"
   },
   "author": "antgroup",
   "license": "ISC",
@@ -53,7 +54,7 @@
     "@alipay/basement": "^3.5.0",
     "@commitlint/cli": "^11.0.0",
     "@commitlint/config-conventional": "^11.0.0",
-    "@types/jest": "^26.0.15",
+    "@types/jest": "^26.0.16",
     "@types/node": "^14.14.6",
     "chalk": "^4.1.0",
     "execa": "^4.1.0",
@@ -65,6 +66,7 @@
     "minimist": "^1.2.5",
     "prettier": "^2.1.2",
     "signale": "^1.4.0",
+    "ts-jest": "^26.4.4",
     "ts-node": "^9.0.0",
     "typescript": "^4.0.5",
     "urllib": "^2.36.1"
