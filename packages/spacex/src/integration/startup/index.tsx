@@ -29,6 +29,12 @@ const layoutConfig = {
   [SlotLocation.extra]: {
     modules: [],
   },
+  [SlotLocation.bottom]: {
+    modules: ['@ali/ide-output', '@ali/ide-markers'],
+  },
+  [SlotLocation.statusBar]: {
+    modules: ['@ali/ide-status-bar'],
+  },
 };
 
 createApp({
@@ -38,7 +44,8 @@ createApp({
     layoutComponent: LayoutComponent,
     useCdnIcon: true,
     noExtHost: true,
-    extWorkerHost: process.env.EXTENSION_WORKER_HOST,
+    extWorkerHost: process.env.WORKER_HOST,
+    webviewEndpoint: process.env.WEBVIEW_ENDPOINT,
     defaultPreferences: {
       'general.theme': 'Default Dark+',
       'general.icon': 'vscode-icons',

@@ -1,31 +1,14 @@
-import { Uri } from '@ali/ide-core-common';
+import { JSONType } from '@alipay/spacex-shared';
 
-export { IExtensionBasicMetadata, NLS, IExtensionIdentity } from '@alipay/spacex-shared';
-
-export interface IExtensionDesc {
-  publisher: string;
-  name: string;
-  version?: string;
-}
-
-export interface JSONType {
-  [key: string]: any;
-}
+export {
+  IExtensionBasicMetadata,
+  NLSInfo,
+  IExtensionIdentity,
+  IExtensionDesc,
+  JSONType,
+  IExtensionMetadata,
+} from '@alipay/spacex-shared';
 
 export interface IExtensionContributions extends JSONType {}
 
 export interface IKaitianExtensionContributions extends JSONType {}
-export interface IExtensionMetaData {
-  id: string;
-  extensionId: string;
-  path: string;
-  packageJSON: { [key: string]: any };
-  defaultPkgNlsJSON: { [key: string]: any } | undefined;
-  packageNlsJSON: { [key: string]: any } | undefined;
-  extraMetadata: JSONType;
-  realPath: string; // 真实路径，用于去除symbolicLink
-  extendConfig: JSONType;
-  isBuiltin: boolean;
-  isDevelopment?: boolean;
-  uri?: Uri;
-}

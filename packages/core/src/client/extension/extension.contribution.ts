@@ -25,7 +25,7 @@ export class KtExtFsProviderContribution
       scheme: EXT_SCHEME,
       resolveStaticResource: (uri: URI) => {
         // kt-ext 协议统一走 scheme 头转换为 https
-        return uri.withScheme('https');
+        return uri.withScheme(location.protocol.slice(0, -1));
       },
     });
   }

@@ -26,7 +26,7 @@ export class KaitianExtFsProvider implements FileSystemProvider {
   }
 
   async readFile(uri: Uri): Promise<string> {
-    const requestUrl = uri.with({ scheme: 'https' });
+    const requestUrl = uri.with({ scheme: location.protocol.slice(0, -1) });
 
     return await fetch(requestUrl.toString(), {
       headers: {

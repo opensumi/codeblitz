@@ -27,6 +27,8 @@ import { CommentsModule } from '@ali/ide-comments/lib/browser';
 import { WebviewModule } from '@ali/ide-webview/lib/browser';
 import { OutputModule } from '@ali/ide-output/lib/browser';
 import { FileSchemeModule } from '@ali/ide-file-scheme/lib/browser';
+import { MarkersModule } from '@ali/ide-markers/lib/browser';
+import { DebugModule } from '@ali/ide-debug/lib/browser';
 
 import { ClientModule, ServerModuleCollection, NodeModule } from '@alipay/spacex-core';
 import { StartupClientModule, StartupServerModule } from './startup.module';
@@ -60,6 +62,8 @@ export const ClientModules: ConstructorOf<BrowserModule>[] = [
   OutputModule,
   FileSchemeModule,
   KaitianExtensionModule,
+  MarkersModule,
+  DebugModule,
 
   // Browser Core Module
   ClientModule,

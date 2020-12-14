@@ -22,6 +22,8 @@ const defaultLanguages = [
   'pug',
   'json',
   'python',
+  'handlebars',
+  'yaml',
 ];
 
 @Injectable()

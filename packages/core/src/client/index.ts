@@ -12,6 +12,7 @@ import { KaitianExtFsProvider, KtExtFsProviderContribution } from './extension';
 import { TextmateLanguageGrammarContribution } from './textmate-language-grammar/index.contribution';
 import { ILanguageGrammarRegistrationService } from './textmate-language-grammar/base';
 import { LanguageGrammarRegistrationService } from './textmate-language-grammar/language-grammar.service';
+import { injectDebugPreferences } from './debug';
 import { IServerApp } from '../common';
 
 export * from './extension';
@@ -29,6 +30,7 @@ export class ClientModule extends BrowserModule {
       useClass: LanguageGrammarRegistrationService,
     },
   ];
+  preferences = injectDebugPreferences;
 }
 
 export interface IClientAppOpts extends IBasicClientAppOpts {
