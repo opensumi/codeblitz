@@ -23,7 +23,7 @@ export class ExtensionServiceClientImpl implements IExtensionNodeClientService {
     if (!extensionMetadata?.length) {
       return [];
     }
-    const extensions = await Promise.all(
+    const extensions: IExtensionMetaData[] = await Promise.all(
       extensionMetadata.map(async (ext) => {
         // package.json 的 name 和 插件的 name 不是一回事
         const extensionPath = getExtensionPath(ext.extension);

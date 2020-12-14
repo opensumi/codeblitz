@@ -1,6 +1,5 @@
 // TODO: 暂时只支持 utf8，引入 iconv-lite-umd 支持更多的编码，通过配置项懒加载资源
 
-import { Buffer } from '../node';
 import { URI } from '@ali/ide-core-common';
 import { SUPPORTED_ENCODINGS } from '@ali/ide-core-common/lib/const';
 import { EncodingInfo } from '@ali/ide-file-service/lib/common/encoding';

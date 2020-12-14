@@ -21,7 +21,9 @@ interface IExtensionBasicMetadata {
   }
   packageJSON: {
     name: string
-    contributes: any
+    activationEvents?: string[]
+    kaitianContributes?: Record<string, any>
+    contributes?: Record<string, any>
   }
   defaultPkgNlsJSON: JSONType | undefined
   pkgNlsJSON: JSONType

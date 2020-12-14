@@ -10,8 +10,9 @@ import {
   WatchOptions,
 } from '@ali/ide-core-common';
 import debounce from 'lodash.debounce';
+import path from 'path';
 import { FileChangeCollection } from './file-change-collection';
-import { fse, path, watch } from '../node';
+import { fse, watch } from '../node';
 import { ChangeEvent, FW } from '../node/extend/fs-watch';
 
 export interface WatcherOptions {

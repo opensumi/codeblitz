@@ -1,0 +1,10 @@
+{
+  "compilerOptions": {
+    "checkJs": false
+  },
+  "include": [
+    "./webpack",
+    "./polyfill",
+    "./fixtures"
+  ]
+}

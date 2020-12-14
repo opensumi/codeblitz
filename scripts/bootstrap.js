@@ -1,29 +1,29 @@
-const fs = require('fs')
-const path = require('path')
-const args = require('minimist')(process.argv.slice(2))
-const version = require('../package.json').version
-const signale = require('signale')
+const fs = require('fs');
+const path = require('path');
+const args = require('minimist')(process.argv.slice(2));
+const version = require('../package.json').version;
+const signale = require('signale');
 
-const { promises: fsp } = fs
+const { promises: fsp } = fs;
 
-const packageDir = path.join(__dirname, '../packages')
+const packageDir = path.join(__dirname, '../packages');
 
-const packages = fs.readdirSync(packageDir, { withFileTypes: true })
+const packages = fs.readdirSync(packageDir, { withFileTypes: true });
 
 packages.forEach(async (pkg) => {
-  if (!pkg.isDirectory()) return
+  if (!pkg.isDirectory()) return;
 
-  const { name } = pkg
+  const { name } = pkg;
 
-  const resolve = (file = '') => path.join(__dirname, '../packages', name, file)
+  const resolve = (file = '') => path.join(__dirname, '../packages', name, file);
 
-  const pkgPath = resolve('package.json')
-  if (fs.existsSync(pkgPath) && !args.force) return
+  const pkgPath = resolve('package.json');
+  if (fs.existsSync(pkgPath) && !args.force) return;
 
-  signale.pending(`开启初始化模块：${name}`)
+  signale.pending(`开启初始化模块：${name}`);
 
   // package.json
-  const pkgName = name === 'spacex' ? `@alipay/spacex` : `@alipay/spacex-${name}`
+  const pkgName = name === 'spacex' ? `@alipay/spacex` : `@alipay/spacex-${name}`;
   const json = {
     name: pkgName,
     version,
@@ -31,43 +31,41 @@ packages.forEach(async (pkg) => {
     main: 'lib/index.js',
     typings: 'lib/index.d.ts',
     files: ['lib'],
-    repository: {
-      type: 'git',
-      url: 'git@code.alipay.com:winjo.gwj/SpaceX.git',
-    },
     keywords: ['kaitian AntCodespaces'],
     scripts: {},
     publishConfig: {
       registry: 'https://registry.npm.alibaba-inc.com',
     },
-    dependencies: {
-      '@alipay/spacex-core': version,
-      '@alipay/spacex-shared': version,
-    },
     tnpm: {
       mode: 'yarn',
       lockfile: 'enable',
     },
-  }
-  await fsp.writeFile(resolve('package.json'), JSON.stringify(json, null, 2))
+    dependencies: {
+      '@alipay/spacex-core': version,
+      '@alipay/spacex-shared': version,
+    },
+  };
+  await fsp.writeFile(resolve('package.json'), JSON.stringify(json, null, 2));
 
   // README.md
-  await fsp.writeFile(resolve('README.md'), `# ${name}`)
+  await fsp.writeFile(resolve('README.md'), `# ${name}`);
 
   // src
-  await fsp.mkdir(resolve('src'))
-  await fsp.writeFile(resolve('src/index.ts'), '')
+  await fsp.mkdir(resolve('src'));
+  await fsp.writeFile(resolve('src/index.ts'), '');
 
   // test
-  await fsp.mkdir(resolve('__tests__'))
+  await fsp.mkdir(resolve('__tests__'));
   await fsp.writeFile(
-    resolve('__tests__/index.ts'),
+    resolve('__tests__/index.test.ts'),
     `
-describe('test', () => {
-
-})
+describe(${name}, () => {
+  it('example', () => {
+    expect(1 + 1).toBe(2);
+  });
+});
     `.trim() + '\n'
-  )
+  );
 
   // tsconfig.json
   const tsconfig = {
@@ -77,15 +75,15 @@ describe('test', () => {
       outDir: './lib',
     },
     include: ['./src'],
-  }
-  await fsp.writeFile(resolve('tsconfig.build.json'), JSON.stringify(tsconfig, null, 2))
+  };
+  await fsp.writeFile(resolve('tsconfig.build.json'), JSON.stringify(tsconfig, null, 2));
 
-  const buildTSConfigPath = path.join(__dirname, '../packages/tsconfig.build.json')
-  const buildTSConfigJSON = require(buildTSConfigPath)
+  const buildTSConfigPath = path.join(__dirname, '../packages/tsconfig.build.json');
+  const buildTSConfigJSON = require(buildTSConfigPath);
   buildTSConfigJSON.references.push({
     path: `./${name}/tsconfig.build.json`,
-  })
-  await fsp.writeFile(buildTSConfigPath, JSON.stringify(buildTSConfigJSON, null, 2))
+  });
+  await fsp.writeFile(buildTSConfigPath, JSON.stringify(buildTSConfigJSON, null, 2));
 
-  signale.success(`模块 ${name} 初始化成功`)
-})
+  signale.success(`模块 ${name} 初始化成功`);
+});

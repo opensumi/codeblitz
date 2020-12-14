@@ -4,19 +4,14 @@
   "description": "@alipay/spacex-cli",
   "main": "lib/commander.js",
   "files": [
-    "lib",
-    "esm",
-    "types"
+    "lib"
   ],
-  "repository": {
-    "type": "git",
-    "url": "git@code.alipay.com:winjo.gwj/SpaceX.git"
-  },
   "keywords": [
     "kaitian AntCodespaces"
   ],
   "engines": {
-    "kaitian": "1.25.0"
+    "kaitian": "1.25.0",
+    "node": ">=10.0.0"
   },
   "scripts": {},
   "publishConfig": {
@@ -24,10 +19,12 @@
   },
   "dependencies": {
     "@ali/ide-extension-installer": "^2.0.0",
+    "@ali/ide-kaitian-extension": "1.25.1",
     "@alipay/spacex-core": "0.0.1",
     "@alipay/spacex-shared": "0.0.1",
     "commander": "^6.2.0",
     "fs-extra": "^9.0.1",
+    "lodash.pick": "^4.4.0",
     "rxjs": "^6.6.3",
     "semver": "^7.3.2",
     "signale": "^1.4.0"
@@ -39,6 +36,7 @@
   "devDependencies": {
     "@types/commander": "^2.12.2",
     "@types/fs-extra": "^9.0.4",
+    "@types/lodash.pick": "^4.4.6",
     "@types/semver": "^7.3.4",
     "@types/signale": "^1.4.1"
   }

@@ -94,3 +94,5 @@ packages/*/types
 
 packages/spacex/extensions
 packages/spacex/.kaitian
+
+packages/toolkit/extensions

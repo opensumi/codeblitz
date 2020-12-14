@@ -1,0 +1,22 @@
+{
+  "name": "worker.example",
+  "version": "0.0.1",
+  "publisher": "spacex",
+  "engines": {
+    "kaitian": "*"
+  },
+  "activationEvents": [
+    "*"
+  ],
+  "kaitianContributes": {
+    "workerMain": "./worker.js"
+  },
+  "contributes": {
+    "jsonValidation": [
+      {
+        "fileMatch": "package.json",
+        "url": "./package.schema.json"
+      }
+    ]
+  }
+}

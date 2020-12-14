@@ -10,7 +10,7 @@ export * from './core';
 export * from './kaitian-extension';
 export * from './logs-core';
 
-export const ServerModules: ConstructorOf<NodeModule>[] = [
+export const ServerModuleCollection: ConstructorOf<NodeModule>[] = [
   ServerCommonModule,
   KaitianExtensionModule,
   LogServiceModule,

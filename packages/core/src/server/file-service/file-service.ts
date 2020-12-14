@@ -26,8 +26,10 @@ import {
   FileCopyOptions,
   IDiskFileProvider,
 } from '@ali/ide-file-service/lib/common';
+import os from 'os';
+import path from 'path';
 import { FCService } from '../../connection';
-import { Buffer, path, fse, os } from '../node';
+import { fse } from '../node';
 import { AppConfig } from '../core/app';
 import { INodeLogger } from '../core/node-logger';
 
