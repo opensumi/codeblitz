@@ -1,13 +1,13 @@
 /**
- * @typedef {import('./config').WebpackConfiguration} Configuration
- * @typedef {import('./config').ConfigParam} ConfigParam
- * @typedef {import('./config').ConfigFn} ConfigFn
+ * @typedef {import('./util/type').WebpackConfiguration} Configuration
+ * @typedef {import('./util/type').ConfigOption} ConfigOption
+ * @typedef {import('./util/type').ConfigFn} ConfigFn
  */
 
 const path = require('path');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 const MiniCssExtractPlugin = require('mini-css-extract-plugin');
-const TsconfigPathsPlugin = require('tsconfig-paths-webpack-plugin');
+const TsconfigPathsPlugin = require('./util/tsconfig-paths-plugin');
 const FriendlyErrorsWebpackPlugin = require('friendly-errors-webpack-plugin');
 const CopyPlugin = require('copy-webpack-plugin');
 const webpack = require('webpack');
@@ -16,17 +16,17 @@ const { merge } = require('webpack-merge');
 const notifier = require('node-notifier');
 
 const { nodePolyfill } = require('./util');
-const { findPort } = require('./util/find-porter');
-
-const defaultPort = process.env.PORT || 9009;
+const { findPortSync } = require('./util/find-porter');
+const { config } = require('./util');
 
 /** @type {ConfigFn} */
-module.exports = async (config) => {
-  const port = await findPort(defaultPort);
+module.exports = (option) => {
+  const port = findPortSync(option.port || process.env.PORT || 9009);
 
-  const outputPath = path.resolve(config.outputPath || 'dist');
-  const mode = config.mode || 'development';
+  const outputPath = path.resolve(option.outputPath || 'dist');
+  const mode = option.mode || 'development';
   const isDev = mode === 'development';
+  const baseURL = `http://localhost:${port}`;
 
   const styleLoader = isDev ? require.resolve('style-loader') : MiniCssExtractPlugin.loader;
 
@@ -38,13 +38,12 @@ module.exports = async (config) => {
       path: outputPath,
       filename: '[name].js',
       chunkFilename: '[name].js',
-      publicPath: '',
     },
     resolve: {
       extensions: ['.ts', '.tsx', '.js', '.json', '.less'],
       plugins: [
-        new TsconfigPathsPlugin.default({
-          ...(config.tsconfigPath ? { configFile: config.tsconfigPath } : {}),
+        new TsconfigPathsPlugin({
+          configFile: option.tsconfigPath,
         }),
       ],
       fallback: {
@@ -65,7 +64,7 @@ module.exports = async (config) => {
               loader: 'ts-loader',
               options: {
                 transpileOnly: true,
-                configFile: config.tsconfigPath,
+                configFile: option.tsconfigPath,
               },
             },
           ],
@@ -151,7 +150,7 @@ module.exports = async (config) => {
             {
               loader: 'url-loader',
               options: {
-                limit: config.inlineLimit || 10000,
+                limit: option.inlineLimit || 10000,
                 name: '[name].[ext]',
                 // require 图片的时候不用加 .default
                 esModule: false,
@@ -186,18 +185,21 @@ module.exports = async (config) => {
     },
     plugins: [
       new HtmlWebpackPlugin({
-        template: config.template || path.join(__dirname, '../public/index.html'),
+        filename: 'index.html',
+        template: option.template || path.join(__dirname, '../public/index.html'),
       }),
       new webpack.DefinePlugin({
         'process.env': {
           IS_DEV: isDev,
-          EXTENSION_WORKER_HOST: isDev
-            ? JSON.stringify(
-                `/assets/~${
-                  process.env.EXTENSION_WORKER_PATH ||
-                  path.join(__dirname, '../dist/worker-host.js')
-                }`
-              )
+          WORKER_HOST: option.useLocalWorkerAndWebviewHost
+            ? process.env.WORKER_PATH
+              ? JSON.stringify(`/assets/~${process.env.WORKER_PATH}`)
+              : JSON.stringify(`${baseURL}/${config.workerEntry}.js`)
+            : '', // TODO: cdn 地址
+          WEBVIEW_ENDPOINT: option.useLocalWorkerAndWebviewHost
+            ? process.env.WEBVIEW_PATH
+              ? JSON.stringify(`/assets/~${process.env.WEBVIEW_PATH}`)
+              : JSON.stringify(`${baseURL}/${config.webviewEntry}`)
             : '', // TODO: cdn 地址
         },
         ...config.define,
@@ -207,7 +209,7 @@ module.exports = async (config) => {
       }),
       new FriendlyErrorsWebpackPlugin({
         compilationSuccessInfo: {
-          messages: [`Your application is running here: http://localhost:${port}`],
+          messages: [`Your application is running here: ${baseURL}`],
           notes: [],
         },
         onErrors: (severity, errors) => {
@@ -224,10 +226,10 @@ module.exports = async (config) => {
         },
         clearConsole: true,
       }),
-      ...(config.copy ? [new CopyPlugin(config.copy)] : []),
+      ...(option.copy ? [new CopyPlugin(option.copy)] : []),
       new ForkTsCheckerWebpackPlugin({
         typescript: {
-          configFile: config.tsconfigPath,
+          configFile: option.tsconfigPath,
         },
       }),
       ...(isDev
@@ -248,24 +250,16 @@ module.exports = async (config) => {
       overlay: true,
       open: process.env.OPEN ? true : false,
       hot: true,
-      // before(app) {
-      //   app.get('/assets', (req, res) => {
-      //     const { path: filePath } = req.query;
-      //     if (!filePath) {
-      //       res.status(404)
-      //       res.send('file is not exist')
-      //       return;
-      //     }
-      //     // @ts-ignore
-      //     res.sendFile(filePath, {
-      //       headers: {
-      //         'Access-Control-Allow-Origin': '*'
-      //       }
-      //     })
-      //   })
-      // },
+      contentBasePublicPath: '/assets/~',
+      contentBase: '/',
+      quiet: true,
+      staticOptions: {
+        setHeaders: (res) => {
+          res.setHeader('Access-Control-Allow-Origin', '*');
+        },
+      },
     },
   };
 
-  return merge(baseConfig, config.webpackConfig);
+  return merge(baseConfig, option.webpackConfig);
 };

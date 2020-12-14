@@ -14,7 +14,13 @@
   "contributes": {
     "jsonValidation": [
       {
-        "fileMatch": "package.json",
+        "fileMatch": "/package.json",
+        "url": "./package.schema.json"
+      }
+    ],
+    "yamlValidation": [
+      {
+        "fileMatch": "/my.yml",
         "url": "./package.schema.json"
       }
     ]
