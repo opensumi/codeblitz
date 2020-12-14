@@ -3,7 +3,8 @@ declare module 'process' {
     namespace NodeJS {
       interface ProcessEnv {
         IS_DEV: boolean;
-        EXTENSION_WORKER_HOST: string;
+        WORKER_HOST: string;
+        WEBVIEW_ENDPOINT: string;
       }
     }
   }

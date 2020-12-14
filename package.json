@@ -8,7 +8,7 @@
   "description": "Ant Codespaces for browser",
   "main": "index.js",
   "engines": {
-    "kaitian": "1.25.0"
+    "kaitian": "1.28.0"
   },
   "scripts": {
     "preinstall": "node scripts/preinstall",

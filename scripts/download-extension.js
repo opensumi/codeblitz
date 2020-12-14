@@ -9,6 +9,12 @@ const extensions = [
     version: '1.0.0',
     ignore: false,
   },
+  {
+    publisher: 'kaitian-worker',
+    name: 'html-language-features',
+    version: '1.0.0-beta-1',
+    ignore: true,
+  },
 ];
 
 const path = require('path');

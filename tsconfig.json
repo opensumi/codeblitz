@@ -42,5 +42,8 @@
   "include": [
     "packages",
     "typings"
+  ],
+  "exclude": [
+    "packages/toolkit"
   ]
 }
