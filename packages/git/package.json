@@ -1,9 +1,9 @@
 {
-  "name": "@alipay/spacex-shared",
+  "name": "@alipay/spacex-git",
   "version": "0.0.1",
-  "description": "@alipay/spacex-shared",
+  "description": "@alipay/spacex-git",
   "main": "lib/index.js",
-  "typing": "lib/index.d.ts",
+  "typings": "lib/index.d.ts",
   "files": [
     "lib"
   ],
@@ -19,6 +19,7 @@
     "lockfile": "enable"
   },
   "dependencies": {
-    "umi-request": "^1.3.5"
+    "@alipay/spacex-core": "0.0.1",
+    "@alipay/spacex-shared": "0.0.1"
   }
 }

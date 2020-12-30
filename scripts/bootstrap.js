@@ -59,7 +59,7 @@ packages.forEach(async (pkg) => {
   await fsp.writeFile(
     resolve('__tests__/index.test.ts'),
     `
-describe(${name}, () => {
+describe('${name}', () => {
   it('example', () => {
     expect(1 + 1).toBe(2);
   });

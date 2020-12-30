@@ -23,7 +23,7 @@ export async function createApp({ clientOptions, serverOptions }: Options) {
   const serverApp = new ServerApp({
     injector: serverInjector,
     modules: serverOptions.modules || [],
-    workspaceDir: serverOptions.workspaceDir,
+    workspaceDir: clientOptions.workspaceDir,
     extensionDir: serverOptions.extensionDir,
     extensionMetadata: serverOptions.extensionMetadata,
   });
