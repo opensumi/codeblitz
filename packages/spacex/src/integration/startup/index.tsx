@@ -55,7 +55,7 @@ createApp({
       'editor.scrollBeyondLastLine': false,
       'general.language': 'en-US',
     },
-    workspaceDir: '/root/SpaceX',
+    workspaceDir: '/root/ide-s/TypeScript-Node-Starter',
     staticServicePath: location.origin,
   },
   serverOptions: {

@@ -16,6 +16,16 @@ module.exports = () => {
       entry: {
         [config.appEntry]: './packages/spacex/src/integration/startup',
       },
+      devServer: {
+        proxy: {
+          '/api': {
+            target: 'http://100.88.230.6:8090/',
+          },
+          '/webapi': {
+            target: 'http://100.88.230.6:8090/',
+          },
+        },
+      },
     },
   });
 

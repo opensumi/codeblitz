@@ -31,6 +31,7 @@ import { MarkersModule } from '@ali/ide-markers/lib/browser';
 import { DebugModule } from '@ali/ide-debug/lib/browser';
 
 import { ClientModule, ServerModuleCollection, NodeModule } from '@alipay/spacex-core';
+import { GitFileSchemeModule } from '@alipay/spacex-git';
 import { StartupClientModule, StartupServerModule } from './startup.module';
 
 export const ClientModules: ConstructorOf<BrowserModule>[] = [
@@ -67,6 +68,8 @@ export const ClientModules: ConstructorOf<BrowserModule>[] = [
 
   // Browser Core Module
   ClientModule,
+
+  GitFileSchemeModule,
 
   // local module
   StartupClientModule,
