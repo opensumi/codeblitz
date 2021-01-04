@@ -6,7 +6,6 @@ import {
   IClientAppOpts as IBasicClientAppOpts,
 } from '@ali/ide-core-browser';
 import { BasicModule } from '@ali/ide-core-common';
-import { IRuntimeConfig, RuntimeConfig } from '@alipay/spacex-shared';
 
 import { FCServiceCenter, ClientPort, initFCService } from '../connection';
 import { KaitianExtFsProvider, KtExtFsProviderContribution } from './extension';
@@ -17,6 +16,7 @@ import { injectDebugPreferences } from './debug';
 import { IServerApp } from '../common';
 import { IServerAppOpts, ServerApp } from '../server/core/app';
 import { isBackServicesInBrowser } from '../common/util';
+import { RuntimeConfig } from '../common/types';
 
 export * from './extension';
 
@@ -38,7 +38,7 @@ export class ClientModule extends BrowserModule {
 
 export interface IClientAppOpts extends IBasicClientAppOpts {
   serverOptions?: IServerAppOpts;
-  runtimeConfig?: IRuntimeConfig;
+  runtimeConfig?: RuntimeConfig;
 }
 
 export class ClientApp extends BasicClientApp {

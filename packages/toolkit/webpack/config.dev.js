@@ -4,6 +4,7 @@ const createWorkerConfig = require('./config.worker');
 const createWebviewConfig = require('./config.webview');
 const getLocalExtensions = require('./util/scan-extension');
 const { config } = require('./util');
+require('dotenv').config({ path: path.join(__dirname, '../../../.env') });
 
 process.env.NODE_ENV = 'development';
 
@@ -19,7 +20,11 @@ module.exports = () => {
       devServer: {
         proxy: {
           '/code-service': {
-            target: 'http://100.88.230.6:8090/',
+            target: 'https://code.alipay.com',
+            headers: {
+              'PRIVATE-TOKEN': process.env.PRIVATE_TOKEN,
+            },
+            changeOrigin: true,
             pathRewrite: {
               '^/code-service': '',
             },

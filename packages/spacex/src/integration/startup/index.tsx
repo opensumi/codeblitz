@@ -42,8 +42,8 @@ const layoutConfig = {
 const GIT_PROJECT = 'ide-s/TypeScript-Node-Starter';
 
 loadMonaco({
-  monacoCDNBase: 'https://g.alicdn.com/tb-ide/monaco-editor-core/0.17.0/',
-  // monacoCDNBase: 'https://dev.g.alicdn.com/tb-ide/monaco-editor-core/0.17.99/',
+  // monacoCDNBase: 'https://g.alicdn.com/tb-ide/monaco-editor-core/0.17.0/',
+  monacoCDNBase: 'https://dev.g.alicdn.com/tb-ide/monaco-editor-core/0.17.99/',
 });
 
 createApp({

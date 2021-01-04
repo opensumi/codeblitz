@@ -12,6 +12,7 @@
   },
   "scripts": {
     "preinstall": "node scripts/preinstall",
+    "init": "npm run clean && npm run build && npm run ext",
     "ext": "node packages/spacex/bin/spacex ext",
     "build": "node scripts/build",
     "create": "node scripts/create",
@@ -57,6 +58,7 @@
     "@types/jest": "^26.0.16",
     "@types/node": "^14.14.6",
     "chalk": "^4.1.0",
+    "dotenv": "^8.2.0",
     "execa": "^4.1.0",
     "fs-extra": "^9.0.1",
     "gulp": "^4.0.2",

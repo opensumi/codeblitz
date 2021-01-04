@@ -7,9 +7,8 @@ import {
   makeWorkspaceDir,
   GIT_ROOT,
   IServerApp,
+  RuntimeConfig,
 } from '@alipay/spacex-core';
-import { RuntimeConfig } from '@alipay/spacex-shared';
-import type { IRuntimeConfig } from '@alipay/spacex-shared';
 import configureFileSystem from './file-system/configure';
 import { IGitAPIService } from './types';
 
@@ -19,7 +18,7 @@ export class GitContribution implements ServerAppContribution {
   gitApiService: IGitAPIService;
 
   @Autowired(RuntimeConfig)
-  runtimeConfig: IRuntimeConfig;
+  runtimeConfig: RuntimeConfig;
 
   @Autowired(INJECTOR_TOKEN)
   injector: Injector;
@@ -45,16 +44,5 @@ export class GitContribution implements ServerAppContribution {
     rootFS.mount(workspaceDir, overlayFileSystem);
     // git 以 /git 作为目录读取只读文件系统数据
     rootFS.mount(`/${GIT_ROOT}`, gitFileSystem);
-  }
-}
-
-// Declaration Merging
-declare module '@alipay/spacex-shared' {
-  export interface IRuntimeConfig {
-    git?: {
-      project: string;
-      commit?: string;
-      branch?: string;
-    };
   }
 }

@@ -67,7 +67,7 @@ export class GitAPIService implements IGitAPIService {
   // 根据 commit 和 path 获取 tree
   async getTree(path: string = '') {
     await this.ready;
-    return request<API.ResponseGetTree>(`/webapi/projects/${this.projectId}/repository/tree`, {
+    return request<API.ResponseGetTree>(`/api/v3/projects/${this.projectId}/repository/tree`, {
       params: {
         ref_name: this.commit,
         path,
