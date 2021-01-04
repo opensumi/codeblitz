@@ -6,6 +6,7 @@ import {
   IClientAppOpts as IBasicClientAppOpts,
 } from '@ali/ide-core-browser';
 import { BasicModule } from '@ali/ide-core-common';
+import { IRuntimeConfig, RuntimeConfig } from '@alipay/spacex-shared';
 
 import { FCServiceCenter, ClientPort, initFCService } from '../connection';
 import { KaitianExtFsProvider, KtExtFsProviderContribution } from './extension';
@@ -14,6 +15,8 @@ import { ILanguageGrammarRegistrationService } from './textmate-language-grammar
 import { LanguageGrammarRegistrationService } from './textmate-language-grammar/language-grammar.service';
 import { injectDebugPreferences } from './debug';
 import { IServerApp } from '../common';
+import { IServerAppOpts, ServerApp } from '../server/core/app';
+import { isBackServicesInBrowser } from '../common/util';
 
 export * from './extension';
 
@@ -34,26 +37,49 @@ export class ClientModule extends BrowserModule {
 }
 
 export interface IClientAppOpts extends IBasicClientAppOpts {
-  serverApp: IServerApp;
+  serverOptions?: IServerAppOpts;
+  runtimeConfig?: IRuntimeConfig;
 }
 
 export class ClientApp extends BasicClientApp {
   constructor(opts: IClientAppOpts) {
     super(opts);
-    opts.injector?.addProviders({
+
+    const runtimeConfig = opts.runtimeConfig || {};
+    // 基于场景的运行时数据
+    this.injector.addProviders({
+      token: RuntimeConfig,
+      useValue: runtimeConfig,
+    });
+
+    (window as any)[RuntimeConfig] = runtimeConfig;
+
+    this.initServer(opts);
+  }
+
+  private initServer(opts: IClientAppOpts) {
+    const serverApp = new ServerApp({
+      injector: this.injector,
+      workspaceDir: opts.workspaceDir,
+      extensionDir: opts.extensionDir,
+      extensionMetadata: opts.serverOptions?.extensionMetadata,
+      modules: this.modules,
+    });
+    this.injector.addProviders({
       token: IServerApp,
-      useValue: opts.serverApp,
+      useValue: serverApp,
     });
   }
 
   public async start(container: HTMLElement | IAppRenderer, type?: string): Promise<void> {
+    // 先启动 server 进行必要的初始化，应用的权限等也在 server 中处理
+    await (this.injector.get(IServerApp) as IServerApp).start();
     bindConnectionService(this.injector, this.modules);
     return super.start(container, type);
   }
 
   public dispose() {
     this.injector.disposeAll();
-    this.injector.get(IServerApp).dispose();
   }
 }
 
@@ -68,6 +94,9 @@ export async function bindConnectionService(injector: Injector, modules: ModuleC
       continue;
     }
     for (const backService of moduleInstance.backServices) {
+      if (!isBackServicesInBrowser(backService)) {
+        continue;
+      }
       const { servicePath } = backService;
       const fcService = getFCService(servicePath);
 

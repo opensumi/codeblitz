@@ -18,13 +18,13 @@ import {
   FileMoveOptions,
   isErrnoException,
   notEmpty,
-  IDiskFileProvider,
   FileAccess,
 } from '@ali/ide-file-service/lib/common';
 import { Injectable, Autowired } from '@ali/common-di';
 import { ParsedPattern, parse } from '@ali/ide-core-common/lib/utils/glob';
 import os from 'os';
 import path from 'path';
+import { IDiskFileProvider } from './base';
 import { FCService } from '../../connection';
 import { AppConfig } from '../core/app';
 import { FWFileSystemWatcherServer } from './file-service-watcher';

@@ -1,7 +1,8 @@
 import '@ali/ide-i18n/lib/browser';
 import { SlotLocation } from '@ali/ide-core-browser';
+import { loadMonaco } from '@ali/ide-monaco/lib/browser/monaco-loader';
 
-import { ClientModules, ServerModules } from './module';
+import { Modules } from './module';
 import { createApp } from '../../common/create-app';
 
 // 引入公共样式文件
@@ -37,36 +38,50 @@ const layoutConfig = {
   },
 };
 
+// TODO: 从 query 上取
+const GIT_PROJECT = 'ide-s/TypeScript-Node-Starter';
+
+loadMonaco({
+  monacoCDNBase: 'https://g.alicdn.com/tb-ide/monaco-editor-core/0.17.0/',
+  // monacoCDNBase: 'https://dev.g.alicdn.com/tb-ide/monaco-editor-core/0.17.99/',
+});
+
 createApp({
-  clientOptions: {
-    modules: ClientModules,
-    layoutConfig,
-    layoutComponent: LayoutComponent,
-    useCdnIcon: true,
-    noExtHost: true,
-    extWorkerHost: process.env.WORKER_HOST,
-    webviewEndpoint: process.env.WEBVIEW_ENDPOINT,
-    defaultPreferences: {
-      'general.theme': 'Default Dark+',
-      'general.icon': 'vscode-icons',
-      'application.confirmExit': 'never',
-      'editor.quickSuggestionsDelay': 100,
-      'editor.quickSuggestionsMaxCount': 50,
-      'editor.scrollBeyondLastLine': false,
-      'general.language': 'en-US',
+  modules: Modules,
+  layoutConfig,
+  layoutComponent: LayoutComponent,
+  useCdnIcon: true,
+  noExtHost: true,
+  extWorkerHost: process.env.WORKER_HOST,
+  webviewEndpoint: process.env.WEBVIEW_ENDPOINT,
+  defaultPreferences: {
+    'general.theme': 'alipay-geek-dark',
+    'general.icon': 'vsicons-slim',
+    'application.confirmExit': 'never',
+    'editor.quickSuggestionsDelay': 10,
+    'editor.quickSuggestionsMaxCount': 50,
+    'editor.scrollBeyondLastLine': false,
+    'general.language': 'zh-CN',
+  },
+  staticServicePath: location.origin,
+  runtimeConfig: {
+    git: {
+      project: GIT_PROJECT,
     },
-    workspaceDir: '/root/ide-s/TypeScript-Node-Starter',
-    staticServicePath: location.origin,
+    scene: 'project',
   },
   serverOptions: {
-    modules: ServerModules,
     extensionMetadata: [vsicons, theme],
   },
-}).then(async (app) => {
-  await app.start(document.getElementById('main')!);
-  const loadingDom = document.getElementById('loading');
-  if (loadingDom) {
-    loadingDom.classList.add('loading-hidden');
-    loadingDom.remove();
-  }
-});
+})
+  .then(async (app) => {
+    await app.start(document.getElementById('main')!);
+    const loadingDom = document.getElementById('loading');
+    if (loadingDom) {
+      loadingDom.classList.add('loading-hidden');
+      loadingDom.remove();
+    }
+  })
+  .catch((err) => {
+    console.error(err);
+  });

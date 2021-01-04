@@ -1,12 +1,11 @@
 import { Injectable } from '@ali/common-di';
 import { LogServiceManager } from './log-manager';
-import {
-  LogServiceForClientPath,
-  ILogServiceForClient,
-  ILogServiceManager,
-} from '@ali/ide-logs/lib/common';
+import { LogServiceForClientPath, ILogServiceForClient } from './base';
+import { ILogServiceManager } from '../core/base';
 import { LogServiceForClient } from './log.service';
 import { NodeModule } from '../core/app';
+
+export * from './base';
 
 @Injectable()
 export class LogServiceModule extends NodeModule {

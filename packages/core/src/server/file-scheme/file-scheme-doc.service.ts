@@ -6,13 +6,10 @@ import {
   BasicTextLines,
   isEditChange,
 } from '@ali/ide-core-common';
-import { IFileService } from '@ali/ide-file-service/lib/common';
+import { IFileService } from '../file-service/base';
 import md5 from 'md5';
-import {
-  IFileSchemeDocNodeService,
-  ISavingContent,
-  IContentChange,
-} from '@ali/ide-file-scheme/lib/common';
+import { ISavingContent, IContentChange } from '@ali/ide-file-scheme/lib/common';
+import { IFileSchemeDocNodeService } from './base';
 import { fse } from '../node';
 import { encode, decode } from '../file-service/encoding';
 

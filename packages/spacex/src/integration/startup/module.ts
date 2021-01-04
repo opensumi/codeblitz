@@ -1,11 +1,11 @@
+import { ConstructorOf } from '@ali/ide-core-common';
+import { BrowserModule, ClientCommonModule } from '@ali/ide-core-browser';
 import { MainLayoutModule } from '@ali/ide-main-layout/lib/browser';
 import { LogModule } from '@ali/ide-logs/lib/browser';
 import { MonacoModule } from '@ali/ide-monaco/lib/browser';
 import { EditorModule } from '@ali/ide-editor/lib/browser';
 import { StatusBarModule } from '@ali/ide-status-bar/lib/browser';
-import { ClientCommonModule, BrowserModule } from '@ali/ide-core-browser';
 import { QuickOpenModule } from '@ali/ide-quick-open/lib/browser';
-import { ConstructorOf } from '@ali/ide-core-common';
 import { FileTreeNextModule } from '@ali/ide-file-tree-next/lib/browser';
 import { FileServiceClientModule } from '@ali/ide-file-service/lib/browser';
 import { ThemeModule } from '@ali/ide-theme/lib/browser';
@@ -30,11 +30,11 @@ import { FileSchemeModule } from '@ali/ide-file-scheme/lib/browser';
 import { MarkersModule } from '@ali/ide-markers/lib/browser';
 import { DebugModule } from '@ali/ide-debug/lib/browser';
 
-import { ClientModule, ServerModuleCollection, NodeModule } from '@alipay/spacex-core';
+import { ClientModule, ServerModuleCollection } from '@alipay/spacex-core';
 import { GitFileSchemeModule } from '@alipay/spacex-git';
-import { StartupClientModule, StartupServerModule } from './startup.module';
+import { StartupModule } from './startup.module';
 
-export const ClientModules: ConstructorOf<BrowserModule>[] = [
+export const Modules: ConstructorOf<BrowserModule>[] = [
   FileServiceClientModule,
   MainLayoutModule,
   OverlayModule,
@@ -71,11 +71,9 @@ export const ClientModules: ConstructorOf<BrowserModule>[] = [
 
   GitFileSchemeModule,
 
-  // local module
-  StartupClientModule,
-];
-
-export const ServerModules: ConstructorOf<NodeModule>[] = [
+  // service module
   ...ServerModuleCollection,
-  StartupServerModule,
+
+  // local module
+  StartupModule,
 ];

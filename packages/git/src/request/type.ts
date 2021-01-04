@@ -27,6 +27,4 @@ export namespace API {
   }
 
   export type ResponseGetTree = ObjectTree[];
-
-  export type ResponseGetBlob = string;
 }

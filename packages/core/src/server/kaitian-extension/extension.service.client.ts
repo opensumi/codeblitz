@@ -1,6 +1,6 @@
 import { Injectable, Autowired } from '@ali/common-di';
 import { Uri } from '@ali/ide-core-common';
-import { IExtensionNodeClientService, IExtensionMetadata, ExtraMetadata } from './common';
+import { IExtensionNodeClientService, IExtensionMetadata, ExtraMetadata } from './base';
 import { AppConfig } from '../core/app';
 import { getExtensionPath } from '../../common/util';
 

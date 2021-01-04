@@ -1,10 +1,6 @@
 import { Injectable, Autowired } from '@ali/common-di';
-import {
-  ILogServiceManager,
-  SupportLogNamespace,
-  ILogService,
-  LogLevel,
-} from '@ali/ide-core-common';
+import { SupportLogNamespace, ILogService, LogLevel } from '@ali/ide-core-common';
+import { ILogServiceManager } from './base';
 
 // tslint:disable-next-line:no-empty-interface
 export interface INodeLogger extends ILogService {}

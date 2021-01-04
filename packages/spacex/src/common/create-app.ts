@@ -1,39 +1,17 @@
 import { Injector } from '@ali/common-di';
 
-import {
-  ClientApp,
-  ServerApp,
-  EXTENSION_DIR,
-  IClientAppOpts,
-  IServerAppOpts,
-} from '@alipay/spacex-core';
+import { ClientApp, EXTENSION_DIR, IClientAppOpts } from '@alipay/spacex-core';
 
-interface Options {
-  clientOptions: Omit<IClientAppOpts, 'serverApp'>;
-  serverOptions: IServerAppOpts;
-}
+export async function createApp(opts: IClientAppOpts) {
+  const injector = new Injector();
 
-export async function createApp({ clientOptions, serverOptions }: Options) {
-  const clientInjector = new Injector();
-  const serverInjector = new Injector();
+  opts = { ...opts };
 
-  clientOptions.injector = clientInjector;
-  clientOptions.extensionDir ||= EXTENSION_DIR;
+  opts.injector = injector;
+  opts.extensionDir ||= EXTENSION_DIR;
 
-  const serverApp = new ServerApp({
-    injector: serverInjector,
-    modules: serverOptions.modules || [],
-    workspaceDir: clientOptions.workspaceDir,
-    extensionDir: serverOptions.extensionDir,
-    extensionMetadata: serverOptions.extensionMetadata,
-  });
+  const app = new ClientApp(opts);
 
-  await serverApp.start();
-
-  const app = new ClientApp({
-    ...clientOptions,
-    serverApp,
-  });
   app.fireOnReload = () => {
     window.location.reload();
   };

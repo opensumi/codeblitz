@@ -18,11 +18,11 @@ module.exports = () => {
       },
       devServer: {
         proxy: {
-          '/api': {
+          '/code-service': {
             target: 'http://100.88.230.6:8090/',
-          },
-          '/webapi': {
-            target: 'http://100.88.230.6:8090/',
+            pathRewrite: {
+              '^/code-service': '',
+            },
           },
         },
       },

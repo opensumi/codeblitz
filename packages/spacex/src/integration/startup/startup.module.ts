@@ -79,13 +79,9 @@ class ExtensionServiceClient extends ExtensionServiceClientImpl {
 }
 
 @Injectable()
-export class StartupClientModule extends BrowserModule {
-  providers: Provider[] = [FileServerContribution];
-}
-
-@Injectable()
-export class StartupServerModule extends NodeModule {
+export class StartupModule extends BrowserModule {
   providers: Provider[] = [
+    FileServerContribution,
     {
       token: IExtensionNodeClientService,
       useClass: ExtensionServiceClient,

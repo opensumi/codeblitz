@@ -1,13 +1,10 @@
 import { Injectable, Provider } from '@ali/common-di';
-import {
-  IDiskFileProvider,
-  DiskFileServicePath,
-  IFileService,
-  FileServicePath,
-} from '@ali/ide-file-service/lib/common';
+import { IDiskFileProvider, DiskFileServicePath, IFileService, FileServicePath } from './base';
 import { NodeModule } from '../core/app';
 import { DiskFileSystemProvider } from './disk-file-system.provider';
 import { getSafeFileService } from './file-service';
+
+export * from './base';
 
 @Injectable()
 export class FileServiceModule extends NodeModule {
