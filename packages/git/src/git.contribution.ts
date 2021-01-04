@@ -43,6 +43,6 @@ export class GitContribution implements ServerAppContribution {
     const { gitFileSystem, overlayFileSystem } = await configureFileSystem(this.gitApiService);
     rootFS.mount(workspaceDir, overlayFileSystem);
     // git 以 /git 作为目录读取只读文件系统数据
-    rootFS.mount(`/${GIT_ROOT}`, gitFileSystem);
+    rootFS.mount(GIT_ROOT, gitFileSystem);
   }
 }
