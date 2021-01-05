@@ -29,6 +29,7 @@ import { FCService } from '../../connection';
 import { AppConfig } from '../core/app';
 import { FWFileSystemWatcherServer } from './file-service-watcher';
 import { fse, writeFileAtomic } from '../node';
+import { decode, encode } from './encoding';
 
 const debugLog = new DebugLog();
 
@@ -186,7 +187,7 @@ export class DiskFileSystemProvider extends FCService implements IDiskFileProvid
 
     try {
       const buffer = await fse.readFile(uri.path);
-      return buffer.toString(encoding as BufferEncoding);
+      return decode(buffer, encoding);
     } catch (error) {
       if (isErrnoException(error)) {
         if (error.code === 'ENOENT') {
@@ -225,7 +226,7 @@ export class DiskFileSystemProvider extends FCService implements IDiskFileProvid
     } else if (!exists && !options.create) {
       throw FileSystemError.FileNotFound(_uri.toString());
     }
-    const buffer = Buffer.from(content, (options.encoding as BufferEncoding) || 'utf8');
+    const buffer = encode(content, options.encoding || 'utf8');
 
     if (options.create) {
       return await this.createFile(uri, { content: buffer });
