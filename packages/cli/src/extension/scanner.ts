@@ -7,7 +7,7 @@ import * as fse from 'fs-extra';
 import { mergeContributes } from '@ali/ide-kaitian-extension/lib/node/merge-contributes';
 import pick from 'lodash.pick';
 
-import { NLS, IExtensionBasicMetadata } from './type';
+import { NLSInfo, IExtensionBasicMetadata } from './type';
 
 export async function getExtension(
   extensionPath: string
@@ -152,9 +152,9 @@ export async function getAllLocalized(
   extensionPath: string,
   prefix: string,
   suffix: string
-): Promise<NLS[]> {
+): Promise<NLSInfo[]> {
   const fileList = await fse.readdir(extensionPath);
-  const result: NLS[] = [];
+  const result: NLSInfo[] = [];
   for (const file of fileList) {
     const filePath = path.join(extensionPath, file);
     const fileStat = await fse.stat(filePath);

@@ -14,7 +14,7 @@ import { createMetadataType } from './extension/metadata-type';
 let extensionInstaller: ExtensionInstaller;
 let shouldWriteConfig = false;
 
-export const install = async (extensionId?: string[]) => {
+export const install = async (extensionId?: string[], options?: { silent: boolean }) => {
   checkFramework();
 
   createInstaller();
@@ -27,7 +27,7 @@ export const install = async (extensionId?: string[]) => {
     await Promise.all(extensions.map((ext) => removeExtensionById(ext)));
   } else {
     const extensionConfig = await getExtensionFromPackage();
-    if (!extensionConfig.length) {
+    if (!extensionConfig.length && !options?.silent) {
       log.warn('当前未配置 kaitianExtensions，请运行 npx spacex ext -h 查看帮助');
       return;
     }
@@ -36,7 +36,7 @@ export const install = async (extensionId?: string[]) => {
     await removeAllExtension();
   }
 
-  log.start('开始安装扩展');
+  log.start('开始安装扩展\n');
   extensions.forEach((ext) => {
     console.log(`    * ${formatExtension(ext)}`);
   });

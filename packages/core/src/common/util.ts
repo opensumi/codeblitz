@@ -1,5 +1,7 @@
+import { BackService } from '@ali/ide-core-common';
 import { IExtensionIdentity } from '@alipay/spacex-shared';
-import { EXT_SCHEME } from './constant';
+import { posix } from 'path';
+import { EXT_SCHEME, WORKSPACE_ROOT } from './constant';
 
 /**
  * 获取对象上所有函数的 property
@@ -35,4 +37,19 @@ export const getExtensionPath = (ext: IExtensionIdentity) => {
     '://alipay-rmsdeploy-image.cn-hangzhou.alipay.aliyun-inc.com/marketplace/assets/',
     `${ext.publisher}.${ext.name}/v${ext.version}/extension`,
   ].join('');
+};
+
+export const makeWorkspaceDir = (scene: string, path: string) => {
+  return posix.join(WORKSPACE_ROOT, scene, path);
+};
+
+/**
+ * 通过是否同时存在 servicePath 和 token 确定是否在 server 层
+ */
+export const isBackServicesInServer = (backService: BackService) => {
+  return !!(backService.servicePath && backService.token);
+};
+
+export const isBackServicesInBrowser = (backService: BackService) => {
+  return !isBackServicesInServer(backService);
 };

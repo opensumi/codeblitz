@@ -17,5 +17,8 @@
   "tnpm": {
     "mode": "yarn",
     "lockfile": "enable"
+  },
+  "dependencies": {
+    "umi-request": "^1.3.5"
   }
 }

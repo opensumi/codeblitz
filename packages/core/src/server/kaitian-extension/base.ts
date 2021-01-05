@@ -1,30 +1,10 @@
-import { Uri } from '@ali/ide-core-common';
+import { ExtraMetadata, IExtensionMetadata } from '@alipay/spacex-shared';
 
-export interface JSONType {
-  [key: string]: any;
-}
-
-export interface ExtraMetaData {
-  [key: string]: any;
-}
+// https://medium.com/javascript-in-plain-english/leveraging-type-only-imports-and-exports-with-typescript-3-8-5c1be8bd17fb
+// https://blog.logrocket.com/whats-new-in-typescript-3-8/
+export type { ExtraMetadata, IExtensionMetadata };
 
 export const ExtensionNodeServiceServerPath = 'ExtensionNodeServiceServerPath';
-
-export interface IExtensionMetaData {
-  id: string;
-  extensionId: string;
-  // 支持使用自定义uri
-  path: string;
-  uri?: Uri;
-  packageJSON: { [key: string]: any };
-  defaultPkgNlsJSON: { [key: string]: any } | undefined;
-  packageNlsJSON: { [key: string]: any } | undefined;
-  extraMetadata: JSONType;
-  realPath: string; // 真实路径，用于去除symbolicLink
-  extendConfig: JSONType;
-  isBuiltin: boolean;
-  isDevelopment?: boolean;
-}
 
 export const IExtensionNodeClientService = Symbol('IExtensionNodeClientService');
 export interface IExtensionNodeClientService {
@@ -33,14 +13,14 @@ export interface IExtensionNodeClientService {
     scan: string[],
     extensionCandidate: string[],
     localization: string,
-    extraMetaData: ExtraMetaData
-  ): Promise<IExtensionMetaData[]>;
+    extraMetaData: ExtraMetadata
+  ): Promise<IExtensionMetadata[]>;
   createProcess(clientId: string): Promise<void>;
   getExtension(
     extensionPath: string,
     localization: string,
-    extraMetaData?: ExtraMetaData
-  ): Promise<IExtensionMetaData | undefined>;
+    extraMetaData?: ExtraMetadata
+  ): Promise<IExtensionMetadata | undefined>;
   infoProcessNotExist(): void;
   infoProcessCrash(): void;
   disposeClientExtProcess(clientId: string, info: boolean): Promise<void>;

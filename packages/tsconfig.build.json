@@ -8,6 +8,9 @@
     },
     {
       "path": "./core/tsconfig.build.json"
+    },
+    {
+      "path": "./git/tsconfig.build.json"
     }
   ],
   "files": [],

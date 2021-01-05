@@ -16,7 +16,6 @@ import { decode, UTF8, getEncodingInfo } from './encoding';
 import {
   FileSystemError,
   FileStat,
-  IFileService,
   FileMoveOptions,
   FileDeleteOptions,
   FileAccess,
@@ -24,10 +23,10 @@ import {
   FileSetContentOptions,
   FileCreateOptions,
   FileCopyOptions,
-  IDiskFileProvider,
 } from '@ali/ide-file-service/lib/common';
 import os from 'os';
 import path from 'path';
+import { IDiskFileProvider, IFileService } from './base';
 import { FCService } from '../../connection';
 import { fse } from '../node';
 import { AppConfig } from '../core/app';

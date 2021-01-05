@@ -5,7 +5,6 @@ import {
   createContributionProvider,
   BasicModule,
   LogLevel,
-  ILogServiceManager,
   ILogService,
   SupportLogNamespace,
   IReporter,
@@ -20,10 +19,15 @@ import { IExtensionBasicMetadata } from '@alipay/spacex-shared';
 import path from 'path';
 import os from 'os';
 
+import { ILogServiceManager } from './base';
 import { INodeLogger, NodeLogger } from './node-logger';
 import { FCServiceCenter, initFCService, ServerPort } from '../../connection';
 import { IServerApp } from '../../common';
-import { bootstrap } from './bootstrap';
+import { initializeRootFileSystem } from './util';
+import { BrowserFS, fse } from '../node';
+import { WORKSPACE_ROOT } from '../../common/constant';
+import { RootFS } from '../../common/types';
+import { isBackServicesInServer } from '../../common/util';
 
 export abstract class NodeModule extends BasicModule {}
 
@@ -31,11 +35,11 @@ type ModuleConstructor = ConstructorOf<NodeModule>;
 export type ContributionConstructor = ConstructorOf<ServerAppContribution>;
 
 export const AppConfig = Symbol('AppConfig');
-
 interface Config {
   injector: Injector;
   workspaceDir: string;
   extensionDir?: string;
+  modules?: ModuleConstructor[];
   /**
    * 设置落盘日志级别，默认为 Info 级别的log落盘
    */
@@ -64,11 +68,9 @@ export interface AppConfig extends Partial<Config> {
   };
 }
 
-export interface IServerAppOpts extends Partial<Config> {
-  modules?: ModuleConstructor[];
-  contributions?: ContributionConstructor[];
-  modulesInstances?: NodeModule[];
-}
+export { AppConfig as ServerAppConfig };
+
+export interface IServerAppOpts extends Partial<Config> {}
 
 export const ServerAppContribution = Symbol('ServerAppContribution');
 
@@ -76,6 +78,8 @@ export interface ServerAppContribution {
   initialize?(app: IServerApp): MaybePromise<void>;
   onStart?(app: IServerApp): MaybePromise<void>;
   onStop?(app: IServerApp): MaybePromise<void>;
+  // 应用启动在所有初始话之前，此时会检查应用可访问性，并动态更改配置数据，如 workspaceDir，同时可自定义挂载文件系统
+  launch?(app: IServerApp): MaybePromise<void>;
 }
 
 export class ServerApp implements IServerApp {
@@ -85,12 +89,15 @@ export class ServerApp implements IServerApp {
 
   private logger: ILogService;
 
-  private modulesInstances: NodeModule[];
+  private modules: ModuleConstructor[];
 
   protected contributionsProvider: ContributionProvider<ServerAppContribution>;
 
+  public rootFS: RootFS;
+
   constructor(opts: IServerAppOpts) {
     this.injector = opts.injector || new Injector();
+    this.modules = opts.modules || [];
     this.config = {
       injector: this.injector,
       workspaceDir: opts.workspaceDir,
@@ -107,14 +114,20 @@ export class ServerApp implements IServerApp {
       LogServiceClass: opts.LogServiceClass,
       extensionMetadata: opts.extensionMetadata,
     };
+    this.registerEventListeners();
     this.initBaseProvider(opts);
-    this.createNodeModules(opts.modules, opts.modulesInstances);
     this.logger = this.injector.get(ILogServiceManager).getLogger(SupportLogNamespace.App);
     this.contributionsProvider = this.injector.get(ServerAppContribution);
   }
 
   private get contributions(): ServerAppContribution[] {
     return this.contributionsProvider.getContributions();
+  }
+
+  private registerEventListeners() {
+    window.addEventListener('unload', () => {
+      this.stopContribution();
+    });
   }
 
   private initBaseProvider(opts: IServerAppOpts) {
@@ -128,105 +141,81 @@ export class ServerApp implements IServerApp {
       {
         token: INodeLogger,
         useClass: NodeLogger,
-      },
-      {
-        token: IReporter,
-        useClass: DefaultReporter,
-      },
-      {
-        token: IReporterService,
-        useClass: ReporterService,
-      },
-      {
-        token: ReporterMetadata,
-        useValue: {
-          host: REPORT_HOST.NODE,
-        },
       }
+      // TODO: 和 browser 共用一套就行
+      // {
+      //   token: IReporter,
+      //   useClass: DefaultReporter,
+      // },
+      // {
+      //   token: IReporterService,
+      //   useClass: ReporterService,
+      // },
+      // {
+      //   token: ReporterMetadata,
+      //   useValue: {
+      //     host: REPORT_HOST.NODE,
+      //   },
+      // }
     );
   }
 
-  private async initializeContribution() {
+  private async runContributionsPhase(phaseName: keyof ServerAppContribution, ...args: any[]) {
     for (const contribution of this.contributions) {
-      if (contribution.initialize) {
+      if (contribution[phaseName]) {
         try {
-          await contribution.initialize(this);
+          await contribution[phaseName as any](...args);
         } catch (error) {
-          this.logger.error('Could not initialize contribution', error);
+          this.logger.error(`Could not ${phaseName} contribution`, error);
         }
       }
     }
+  }
+
+  private async launch() {
+    this.rootFS = await initializeRootFileSystem();
+    await this.runContributionsPhase('launch', this);
+    // 初始化文件目录
+    await Promise.all([
+      await fse.ensureDir(this.config.workspaceDir || WORKSPACE_ROOT),
+      await fse.ensureDir(this.config.marketplace.extensionDir),
+    ]);
+  }
+
+  private async initializeContribution() {
+    return this.runContributionsPhase('initialize', this);
   }
 
   private async startContribution() {
-    for (const contrib of this.contributions) {
-      if (contrib.onStart) {
-        try {
-          await contrib.onStart(this);
-        } catch (error) {
-          this.logger.error('Could not start contribution', error);
-        }
-      }
-    }
+    return this.runContributionsPhase('onStart', this);
+  }
+
+  private async stopContribution() {
+    return this.runContributionsPhase('onStop', this);
   }
 
   async start() {
-    await bootstrap(this.config);
+    await this.launch();
     await this.initializeContribution();
-    bindModuleBackService(this.injector, this.modulesInstances);
+    bindModuleBackService(this.injector, this.modules);
     await this.startContribution();
-  }
-
-  private async onStop() {
-    for (const contrib of this.contributions) {
-      if (contrib.onStop) {
-        try {
-          await contrib.onStop(this);
-        } catch (error) {
-          this.logger.error('Could not stop contribution', error);
-        }
-      }
-    }
-  }
-
-  private createNodeModules(Constructors: ModuleConstructor[] = [], modules: NodeModule[] = []) {
-    const allModules = [...modules];
-    for (const Constructor of Constructors) {
-      allModules.push(this.injector.get(Constructor));
-    }
-    for (const instance of allModules) {
-      if (instance.providers) {
-        this.injector.addProviders(...instance.providers);
-      }
-
-      if (instance.contributionProvider) {
-        if (Array.isArray(instance.contributionProvider)) {
-          for (const contributionProvider of instance.contributionProvider) {
-            createContributionProvider(this.injector, contributionProvider);
-          }
-        } else {
-          createContributionProvider(this.injector, instance.contributionProvider);
-        }
-      }
-    }
-    this.modulesInstances = allModules;
-  }
-
-  dispose() {
-    this.injector.disposeAll();
   }
 }
 
-export function bindModuleBackService(injector: Injector, modules: NodeModule[]) {
+export function bindModuleBackService(injector: Injector, modules: ModuleConstructor[]) {
   const logger = injector.get(INodeLogger);
   const serviceCenter = new FCServiceCenter(ServerPort);
   const { createFCService } = initFCService(serviceCenter);
 
   for (const module of modules) {
-    if (!module.backServices) {
+    const moduleInstance = injector.get(module) as BasicModule;
+    if (!moduleInstance.backServices) {
       continue;
     }
-    for (const service of module.backServices) {
+    for (const service of moduleInstance.backServices) {
+      if (!isBackServicesInServer(service)) {
+        continue;
+      }
       const { token: serviceToken, servicePath } = service;
       if (!serviceToken) {
         continue;

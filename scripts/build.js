@@ -5,7 +5,8 @@ const args = require('minimist')(process.argv.slice(2));
 const invoke = require('./utils/invoke');
 
 invoke(async () => {
-  await execa.command('npm run clean');
+  const scope = args.scope || 'all';
+  await execa.command(`npx rimraf packages/${scope === 'all' ? '*' : scope}/lib`);
 
   signale.pending(`开始编译 ${args.scope || 'all'}`);
 

@@ -1,7 +1,6 @@
 import { Injectable, Autowired } from '@ali/common-di';
 import { Uri } from '@ali/ide-core-common';
-import { ExtraMetaData } from '@ali/ide-kaitian-extension/lib/common';
-import type { IExtensionNodeClientService, IExtensionMetaData } from './common';
+import { IExtensionNodeClientService, IExtensionMetadata, ExtraMetadata } from './base';
 import { AppConfig } from '../core/app';
 import { getExtensionPath } from '../../common/util';
 
@@ -17,13 +16,13 @@ export class ExtensionServiceClientImpl implements IExtensionNodeClientService {
     scan: string[],
     extensionCandidate: string[],
     localization: string,
-    extraMetaData: ExtraMetaData
-  ): Promise<IExtensionMetaData[]> {
+    extraMetaData: ExtraMetadata
+  ): Promise<IExtensionMetadata[]> {
     const { extensionMetadata } = this.appConfig;
     if (!extensionMetadata?.length) {
       return [];
     }
-    const extensions: IExtensionMetaData[] = await Promise.all(
+    const extensions: IExtensionMetadata[] = await Promise.all(
       extensionMetadata.map(async (ext) => {
         // package.json 的 name 和 插件的 name 不是一回事
         const extensionPath = getExtensionPath(ext.extension);
@@ -76,7 +75,7 @@ export class ExtensionServiceClientImpl implements IExtensionNodeClientService {
   createProcess(): Promise<void> {
     throw new Error('Method not implemented.');
   }
-  getExtension(): Promise<IExtensionMetaData | undefined> {
+  getExtension(): Promise<IExtensionMetadata | undefined> {
     throw new Error('Method not implemented.');
   }
   infoProcessNotExist(): void {

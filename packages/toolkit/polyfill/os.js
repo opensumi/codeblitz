@@ -58,5 +58,5 @@ exports.tmpdir = exports.tmpDir = function () {
 exports.EOL = '\n';
 
 exports.homedir = function () {
-  return '/root';
+  return '/home';
 };

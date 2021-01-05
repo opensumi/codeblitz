@@ -30,6 +30,12 @@ exports.nodePolyfill = {
   },
 };
 
+exports.config = {
+  appEntry: 'app',
+  workerEntry: 'worker-host',
+  webviewEntry: 'webview',
+};
+
 function resolvePolyfill(moduleName) {
   return path.join(__dirname, '../../polyfill', moduleName);
 }

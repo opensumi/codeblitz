@@ -3,10 +3,10 @@ import {
   ILogService,
   LogLevel,
   SupportLogNamespace,
-  ILogServiceManager,
   BaseLogServiceOptions,
   LoggerManagerInitOptions,
 } from '@ali/ide-logs/lib/common';
+import { ILogServiceManager } from '../core/base';
 import { Emitter } from '@ali/ide-core-common';
 import { AppConfig } from '../core/app';
 import { LogService, DEFAULT_LOG_FOLDER } from './log.service';

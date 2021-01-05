@@ -1,6 +1,6 @@
 {
   "compilerOptions": {
-    "checkJs": false
+    "checkJs": true
   },
   "include": [
     "./webpack",

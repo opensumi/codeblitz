@@ -18,13 +18,13 @@ import {
   FileMoveOptions,
   isErrnoException,
   notEmpty,
-  IDiskFileProvider,
   FileAccess,
 } from '@ali/ide-file-service/lib/common';
 import { Injectable, Autowired } from '@ali/common-di';
 import { ParsedPattern, parse } from '@ali/ide-core-common/lib/utils/glob';
 import os from 'os';
 import path from 'path';
+import { IDiskFileProvider } from './base';
 import { FCService } from '../../connection';
 import { AppConfig } from '../core/app';
 import { FWFileSystemWatcherServer } from './file-service-watcher';
@@ -45,6 +45,50 @@ export class DiskFileSystemProvider extends FCService implements IDiskFileProvid
   protected watchFileExcludesMatcherList: ParsedPattern[] = [];
 
   static H5VideoExtList = ['mp4', 'ogg', 'webm'];
+
+  static BinaryExtList = [
+    'aac',
+    'avi',
+    'bmp',
+    'flv',
+    'm1v',
+    'm2a',
+    'm2v',
+    'm3a',
+    'mid',
+    'midi',
+    'mk3d',
+    'mks',
+    'mkv',
+    'mov',
+    'movie',
+    'mp2',
+    'mp2a',
+    'mp3',
+    'mp4',
+    'mp4a',
+    'mp4v',
+    'mpe',
+    'mpeg',
+    'mpg',
+    'mpg4',
+    'mpga',
+    'oga',
+    'ogg',
+    'ogv',
+    'psd',
+    'qt',
+    'spx',
+    'tga',
+    'tif',
+    'tiff',
+    'wav',
+    'webm',
+    'webp',
+    'wma',
+    'wmv',
+    'woff',
+  ];
 
   @Autowired(AppConfig)
   appConfig: AppConfig;
@@ -554,10 +598,8 @@ export class DiskFileSystemProvider extends FCService implements IDiskFileProvid
 
     if (['png', 'gif', 'jpg', 'jpeg', 'svg'].indexOf(ext) !== -1) {
       type = 'image';
-    } else if (DiskFileSystemProvider.H5VideoExtList.indexOf(ext) !== -1) {
+    } else if (DiskFileSystemProvider.BinaryExtList.indexOf(ext) !== -1) {
       type = 'video';
-    } else if (ext && ['xml'].indexOf(ext) === -1) {
-      type = 'binary';
     }
 
     return type;

@@ -1,4 +1,4 @@
-export { fs } from './bfs';
+export * from './bfs';
 
 // should place before other fs api
 export * from './extend/fs-watch';
