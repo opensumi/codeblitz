@@ -1,6 +1,6 @@
 // TODO: iconv-lite-umd 和 jschardet 使用异步加载，加快主应用启动速度
 import { fse as fs } from '../node';
-import * as jschardet from 'jschardet';
+// import * as jschardet from 'jschardet';
 import * as iconv from 'iconv-lite-umd';
 import { URI } from '@ali/ide-core-common';
 import { FileUri } from '@ali/ide-core-node';
@@ -147,7 +147,9 @@ export function detectEncodingByBuffer(buffer: Buffer): string | null {
   }
 
   // Support encodings http://chardet.readthedocs.io/en/latest/supported-encodings.html
-  const detected = jschardet.detect(buffer, { minimumThreshold: 0.2 });
+  // const detected = jschardet.detect(buffer, { minimumThreshold: 0.2 });
+  // 字符越少，识别率越低，看框架侧去解决
+  const detected: any = null;
 
   if (!detected || !detected.encoding) {
     return null;

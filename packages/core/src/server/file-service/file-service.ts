@@ -9,11 +9,10 @@ import {
   DisposableCollection,
   isArray,
   isEmptyObject,
-  Schemas,
 } from '@ali/ide-core-common';
 import { parse, ParsedPattern, match } from '@ali/ide-core-common/lib/utils/glob';
 import { FileChangeEvent } from '@ali/ide-core-common';
-import { decode, UTF8, getEncodingInfo, detectEncodingByURI } from './encoding';
+import { decode, UTF8, getEncodingInfo } from './encoding';
 import {
   FileSystemError,
   FileStat,
