@@ -264,10 +264,11 @@ export default class GitRemote extends BaseFileSystem implements FileSystem {
         cb(new ApiError(ErrorCode.EINVAL, e.message));
       }
       entryList?.forEach((item) => {
+        // TODO: submodule type 为 commit，当做文件夹处理，是否需要更好的提示方式，antcode 中为外链
         const node =
-          item.type === 'tree'
-            ? new DirInode()
-            : new FileInode(new Stats(FileType.FILE, -1, +item.mode));
+          item.type === 'blob'
+            ? new FileInode(new Stats(FileType.FILE, -1, +item.mode))
+            : new DirInode();
         let p = item.path;
         if (p[0] !== '/') {
           p = `/${p}`;

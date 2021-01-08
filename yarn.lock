@@ -5999,6 +5999,11 @@ husky@^4.3.0:
     slash "^3.0.0"
     which-pm-runs "^1.0.0"
 
+iconv-lite-umd@^0.6.8:
+  version "0.6.8"
+  resolved "https://registry.npm.alibaba-inc.com/iconv-lite-umd/download/iconv-lite-umd-0.6.8.tgz#5ad310ec126b260621471a2d586f7f37b9958ec0"
+  integrity sha1-WtMQ7BJrJgYhRxotWG9/N7mVjsA=
+
 iconv-lite@0.4.24, iconv-lite@^0.4.15:
   version "0.4.24"
   resolved "https://registry.npm.alibaba-inc.com/iconv-lite/download/iconv-lite-0.4.24.tgz#2022b4b25fbddc21d2f524974a474aafe733908b"
@@ -7023,7 +7028,7 @@ jsbn@~0.1.0:
   resolved "https://registry.npm.alibaba-inc.com/jsbn/download/jsbn-0.1.1.tgz#a5e654c2e5a2deb5f201d96cefbca80c0ef2f513"
   integrity sha1-peZUwuWi3rXyAdls77yoDA7y9RM=
 
-jschardet@^2.1.0:
+jschardet@^2.1.0, jschardet@^2.2.1:
   version "2.2.1"
   resolved "https://registry.npm.alibaba-inc.com/jschardet/download/jschardet-2.2.1.tgz#03b0264669a90c7a5c436a68c5a7d4e4cb0c9823"
   integrity sha1-A7AmRmmpDHpcQ2poxafU5MsMmCM=
