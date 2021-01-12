@@ -1,4 +1,4 @@
-import { ExtraMetadata, IExtensionMetadata } from '@alipay/spacex-shared';
+import { ExtraMetadata, IExtensionMetadata } from '@alipay/alex-shared';
 
 // https://medium.com/javascript-in-plain-english/leveraging-type-only-imports-and-exports-with-typescript-3-8-5c1be8bd17fb
 // https://blog.logrocket.com/whats-new-in-typescript-3-8/

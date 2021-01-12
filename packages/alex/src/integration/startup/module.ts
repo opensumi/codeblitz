@@ -31,9 +31,9 @@ import { MarkersModule } from '@ali/ide-markers/lib/browser';
 import { DebugModule } from '@ali/ide-debug/lib/browser';
 import { OutlineModule } from '@ali/ide-outline/lib/browser';
 
-import { ClientModule, ServerModuleCollection } from '@alipay/spacex-core';
-import { GitFileSchemeModule } from '@alipay/spacex-git';
-import { MemFSModule } from '@alipay/spacex-memfs';
+import { ClientModule, ServerModuleCollection } from '@alipay/alex-core';
+import { GitFileSchemeModule } from '@alipay/alex-git';
+import { MemFSModule } from '@alipay/alex-memfs';
 
 import { StartupModule } from './startup.module';
 

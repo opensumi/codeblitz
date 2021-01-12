@@ -23,7 +23,7 @@ packages.forEach(async (pkg) => {
   signale.pending(`开启初始化模块：${name}`);
 
   // package.json
-  const pkgName = name === 'spacex' ? `@alipay/spacex` : `@alipay/spacex-${name}`;
+  const pkgName = name === 'alex' ? `@alipay/alex` : `@alipay/alex-${name}`;
   const json = {
     name: pkgName,
     version,
@@ -41,8 +41,8 @@ packages.forEach(async (pkg) => {
       lockfile: 'enable',
     },
     dependencies: {
-      '@alipay/spacex-core': version,
-      '@alipay/spacex-shared': version,
+      '@alipay/alex-core': version,
+      '@alipay/alex-shared': version,
     },
   };
   await fsp.writeFile(resolve('package.json'), JSON.stringify(json, null, 2));

@@ -1,7 +1,7 @@
 {
-  "name": "@alipay/spacex",
+  "name": "@alipay/alex",
   "version": "0.0.1",
-  "description": "@alipay/spacex",
+  "description": "@alipay/alex",
   "main": "lib/index.js",
   "module": "esm/index.js",
   "typing": "types/index.d.ts",
@@ -57,9 +57,9 @@
     "@ali/ide-workspace": "1.31.1",
     "@ali/ide-workspace-edit": "1.31.1",
     "@ali/kaitian-textmate-languages": "^2.2.0",
-    "@alipay/spacex-cli": "0.0.1",
-    "@alipay/spacex-core": "0.0.1",
-    "@alipay/spacex-shared": "0.0.1",
+    "@alipay/alex-cli": "0.0.1",
+    "@alipay/alex-core": "0.0.1",
+    "@alipay/alex-shared": "0.0.1",
     "iconv-lite-umd": "^0.6.8",
     "jschardet": "^2.2.1"
   },

@@ -10,7 +10,7 @@ async function createReference() {
     await fse.writeFile(
       refPath,
       `
-import { IExtensionBasicMetadata } from '@alipay/spacex-shared'
+import { IExtensionBasicMetadata } from '@alipay/alex-shared'
 declare const metadata: IExtensionBasicMetadata;
 export { metadata }
     `.trim() + '\n'

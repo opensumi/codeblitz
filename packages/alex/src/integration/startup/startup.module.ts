@@ -10,14 +10,14 @@ import {
   ExtensionServiceClientImpl,
   IExtensionNodeClientService,
   NodeModule,
-} from '@alipay/spacex-core';
-import { IExtensionMetadata } from '@alipay/spacex-shared';
+} from '@alipay/alex-core';
+import { IExtensionMetadata } from '@alipay/alex-shared';
 import {
   StaticResourceContribution,
   StaticResourceService,
 } from '@ali/ide-static-resource/lib/browser/static.definition';
 import { IFileServiceClient } from '@ali/ide-file-service';
-import { KaitianExtFsProvider } from '@alipay/spacex-core';
+import { KaitianExtFsProvider } from '@alipay/alex-core';
 
 const KT_EXT_LOCAL_SCHEME = 'kt-ext-local';
 

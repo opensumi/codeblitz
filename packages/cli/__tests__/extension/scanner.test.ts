@@ -26,8 +26,8 @@ describe('cli extension scanner', () => {
 
     expect(() => getExtensionIdByPath(path, '1.0.1')).toThrow();
 
-    path = 'spacex.worker-0.0.1';
+    path = 'alex.worker-0.0.1';
     version = '0.0.1';
-    expect(getExtensionIdByPath(path, version)).toEqual({ publisher: 'spacex', name: 'worker' });
+    expect(getExtensionIdByPath(path, version)).toEqual({ publisher: 'alex', name: 'worker' });
   });
 });

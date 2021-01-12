@@ -5,6 +5,6 @@ if (fs.existsSync(path.join(__dirname, '.no-postinstall'))) {
   return;
 }
 
-require('@alipay/spacex-cli/lib/extension')
+require('@alipay/alex-cli/lib/extension')
   .install([], { silent: true })
   .catch((err) => console.error(err));

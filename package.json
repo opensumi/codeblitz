@@ -1,5 +1,5 @@
 {
-  "name": "spacex",
+  "name": "alex",
   "version": "0.0.1",
   "workspaces": [
     "packages/*"
@@ -13,12 +13,12 @@
   "scripts": {
     "preinstall": "node scripts/preinstall",
     "init": "npm run clean && npm run build && npm run ext",
-    "ext": "node packages/spacex/bin/spacex ext",
+    "ext": "node packages/alex/bin/alex ext",
     "build": "node scripts/build",
     "create": "node scripts/create",
     "format": "prettier --write --parser typescript \"packages/**/*.ts?(x)\"",
     "start": "npm run dev",
-    "dev": "yarn workspace @alipay/spacex-toolkit dev",
+    "dev": "yarn workspace @alipay/alex-toolkit dev",
     "clean": "rimraf packages/*/lib",
     "test": "jest --runInBand"
   },

@@ -19,7 +19,7 @@ import {
 import { IMainLayoutService } from '@ali/ide-main-layout/lib/common';
 import { WorkbenchEditorService, BrowserEditorContribution } from '@ali/ide-editor/lib/browser';
 import { ExplorerOpenedEditorViewId } from '@ali/ide-opened-editor/lib/browser/opened-editor.contribution';
-import { RuntimeConfig, FileIndex } from '@alipay/spacex-core';
+import { RuntimeConfig, FileIndex } from '@alipay/alex-core';
 import * as paths from 'path';
 import { walkFileIndex } from './util';
 

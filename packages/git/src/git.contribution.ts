@@ -8,7 +8,7 @@ import {
   GIT_ROOT,
   IServerApp,
   RuntimeConfig,
-} from '@alipay/spacex-core';
+} from '@alipay/alex-core';
 import configureFileSystem from './file-system/configure';
 import { IGitAPIService } from './types';
 

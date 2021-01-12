@@ -2,7 +2,7 @@ import program from 'commander';
 import { install, uninstall } from './extension';
 import { log } from './util/log';
 
-program.version(`spacex ${require('../package').version}`).usage('<command> [options]');
+program.version(`alex ${require('../package').version}`).usage('<command> [options]');
 
 const extensionProgram = program
   .command('extension')

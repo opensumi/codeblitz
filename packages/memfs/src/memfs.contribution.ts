@@ -9,12 +9,12 @@ import {
   WORKSPACE_ROOT,
   BrowserFS,
   FileIndex,
-} from '@alipay/spacex-core';
+} from '@alipay/alex-core';
 import { EditorDocumentModelSavedEvent } from '@ali/ide-editor/lib/browser';
 import { IFileServiceClient } from '@ali/ide-file-service/lib/common';
 import * as path from 'path';
 import { walkFileIndex } from './util';
-import { ServerAppConfig } from '@alipay/spacex-core';
+import { ServerAppConfig } from '@alipay/alex-core';
 
 export class FileChangeEvent extends BasicEvent<{
   filepath: string;

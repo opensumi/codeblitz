@@ -15,7 +15,7 @@ module.exports = () => {
     webpackConfig: {
       context: path.join(__dirname, '../../..'),
       entry: {
-        [config.appEntry]: './packages/spacex/src/integration/startup',
+        [config.appEntry]: './packages/alex/src/integration/startup',
       },
       devServer: {
         proxy: {

@@ -1,4 +1,4 @@
-import { FileIndex } from '@alipay/spacex-core';
+import { FileIndex } from '@alipay/alex-core';
 
 interface WalkEvent {
   (params: { type: 'file'; path: string; content: string }): void;

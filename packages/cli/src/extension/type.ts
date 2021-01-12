@@ -1,4 +1,4 @@
-import { JSONType } from '@alipay/spacex-shared';
+import { JSONType } from '@alipay/alex-shared';
 
 export {
   IExtensionBasicMetadata,
@@ -7,7 +7,7 @@ export {
   IExtensionDesc,
   JSONType,
   IExtensionMetadata,
-} from '@alipay/spacex-shared';
+} from '@alipay/alex-shared';
 
 export interface IExtensionContributions extends JSONType {}
 

@@ -15,7 +15,7 @@ import {
   REPORT_HOST,
   StoragePaths,
 } from '@ali/ide-core-common';
-import { IExtensionBasicMetadata } from '@alipay/spacex-shared';
+import { IExtensionBasicMetadata } from '@alipay/alex-shared';
 import path from 'path';
 import os from 'os';
 

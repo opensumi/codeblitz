@@ -1,5 +1,5 @@
 import { isDevelopment } from '@ali/ide-core-common';
-import { umiRequest } from '@alipay/spacex-shared';
+import { umiRequest } from '@alipay/alex-shared';
 import { API } from './type';
 
 const request = umiRequest.extend({

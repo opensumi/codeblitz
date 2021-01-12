@@ -1,7 +1,7 @@
 {
-  "name": "@alipay/spacex-toolkit",
+  "name": "@alipay/alex-toolkit",
   "version": "0.0.1",
-  "description": "@alipay/spacex-toolkit",
+  "description": "@alipay/alex-toolkit",
   "main": "lib/index.js",
   "typings": "lib/index.d.ts",
   "files": [

@@ -1,7 +1,7 @@
 {
-  "name": "@alipay/spacex-git",
+  "name": "@alipay/alex-git",
   "version": "0.0.1",
-  "description": "@alipay/spacex-git",
+  "description": "@alipay/alex-git",
   "main": "lib/index.js",
   "typings": "lib/index.d.ts",
   "files": [
@@ -19,7 +19,7 @@
     "lockfile": "enable"
   },
   "dependencies": {
-    "@alipay/spacex-core": "0.0.1",
-    "@alipay/spacex-shared": "0.0.1"
+    "@alipay/alex-core": "0.0.1",
+    "@alipay/alex-shared": "0.0.1"
   }
 }

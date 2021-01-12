@@ -1,5 +1,5 @@
 import { BackService } from '@ali/ide-core-common';
-import { IExtensionIdentity } from '@alipay/spacex-shared';
+import { IExtensionIdentity } from '@alipay/alex-shared';
 import { posix } from 'path';
 import { EXT_SCHEME, WORKSPACE_ROOT } from './constant';
 

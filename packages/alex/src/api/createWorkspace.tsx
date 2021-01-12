@@ -1,7 +1,7 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import { Deferred } from '@ali/ide-core-common';
-import { IClientAppOpts } from '@alipay/spacex-core';
+import { IClientAppOpts } from '@alipay/alex-core';
 import { createApp } from '../core/createApp';
 import { Root } from '../core/Root';
 

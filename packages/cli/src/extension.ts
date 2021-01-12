@@ -28,7 +28,7 @@ export const install = async (extensionId?: string[], options?: { silent: boolea
   } else {
     const extensionConfig = await getExtensionFromPackage();
     if (!extensionConfig.length && !options?.silent) {
-      log.warn('当前未配置 kaitianExtensions，请运行 npx spacex ext -h 查看帮助');
+      log.warn('当前未配置 kaitianExtensions，请运行 npx alex ext -h 查看帮助');
       return;
     }
     checkExtensionConfig(extensionConfig);
