@@ -10,7 +10,7 @@
     "kaitian AntCodespaces"
   ],
   "engines": {
-    "kaitian": "1.30.1",
+    "kaitian": "1.31.1",
     "node": ">=10.0.0"
   },
   "scripts": {},
@@ -19,7 +19,7 @@
   },
   "dependencies": {
     "@ali/ide-extension-installer": "^2.0.0",
-    "@ali/ide-kaitian-extension": "1.30.1",
+    "@ali/ide-kaitian-extension": "1.31.1",
     "@alipay/spacex-shared": "0.0.1",
     "commander": "^6.2.0",
     "fs-extra": "^9.0.1",
