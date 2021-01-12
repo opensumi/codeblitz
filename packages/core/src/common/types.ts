@@ -11,6 +11,10 @@ export interface IServerApp {
 
 export const RuntimeConfig = Symbol('RuntimeConfig');
 
+export interface FileIndex {
+  [key: string]: FileIndex | string;
+}
+
 export interface RuntimeConfig {
   // 场景
   scene?: string;
@@ -19,5 +23,14 @@ export interface RuntimeConfig {
     project: string;
     branch?: string;
     commit?: string;
+  };
+  // memfs 配置
+  memfs?: {
+    // 文件索引
+    fileIndex: FileIndex;
+    // 初始打开全部文件
+    openAll?: boolean;
+    // 默认打开文件
+    defaultOpenFile?: string;
   };
 }

@@ -1,0 +1,52 @@
+.workspace-root {
+  width: 100%;
+  height: 100%;
+  position: relative;
+}
+
+.landing {
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: 0;
+  bottom: 0;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+.logo {
+  margin-bottom: 56px;
+  width: 200px;
+  height: 200px;
+  img {
+    width: 100%;
+    height: 100%;
+  }
+}
+
+.tip {
+  margin-bottom: 32px;
+  .error {
+    color: #FF4D4F;
+  }
+}
+
+.dark {
+  .landing {
+    background-color: #202224;
+  }
+  .tip {
+    color: #FFF;
+  }
+}
+
+.light {
+  .landing {
+    background-color: #FFF;
+  }
+  .tip {
+    color: #000;
+  }
+}

@@ -174,7 +174,12 @@ export class ServerApp implements IServerApp {
 
   private async launch() {
     this.rootFS = await initializeRootFileSystem();
-    await this.runContributionsPhase('launch', this);
+    // 启动发生的错误抛到全局处理，不启动应用
+    for (const contribution of this.contributions) {
+      if (contribution.launch) {
+        await contribution.launch(this);
+      }
+    }
     // 初始化文件目录
     await Promise.all([
       await fse.ensureDir(this.config.workspaceDir || WORKSPACE_ROOT),

@@ -1,14 +1,15 @@
 import { Injector } from '@ali/common-di';
 
-import { ClientApp, EXTENSION_DIR, IClientAppOpts } from '@alipay/spacex-core';
+import { ClientApp, EXTENSION_DIR, WORKSPACE_ROOT, IClientAppOpts } from '@alipay/spacex-core';
 
-export async function createApp(opts: IClientAppOpts) {
+export function createApp(opts: IClientAppOpts) {
   const injector = new Injector();
 
   opts = { ...opts };
 
   opts.injector = injector;
   opts.extensionDir ||= EXTENSION_DIR;
+  opts.workspaceDir ||= '';
 
   const app = new ClientApp(opts);
 

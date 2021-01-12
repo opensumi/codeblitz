@@ -47,6 +47,7 @@ export class FileServerContribution implements StaticResourceContribution, FsPro
         // const staticUri = new URI(this.appConfig.staticServicePath);
         // return staticUri.withPath(`/assets/~${uri.codeUri.path}`);
       },
+      roots: [location.origin],
     });
   }
 
