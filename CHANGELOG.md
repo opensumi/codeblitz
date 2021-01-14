@@ -1,0 +1,37 @@
+## 0.0.1 (2021-01-14)
+
+
+### Bug Fixes
+
+* build-assets ([6ff8fb0](https://code.alipay.com/cloud-ide/crew-dragon/commits/6ff8fb064c339e3142634a4319ae7682caba1533))
+* file ext judge ([b58ccf0](https://code.alipay.com/cloud-ide/crew-dragon/commits/b58ccf003045537e950c4a233574c8681d692c73))
+* fs-watch and react version ([6a5d8bd](https://code.alipay.com/cloud-ide/crew-dragon/commits/6a5d8bdb1a6054ac41bdb21681b4ab090f22f20e))
+* remove jschardet ([0def4f1](https://code.alipay.com/cloud-ide/crew-dragon/commits/0def4f12ea35ab5d93237d9a59461ac36bdfe8ac))
+* submodule as folder ([56d1f44](https://code.alipay.com/cloud-ide/crew-dragon/commits/56d1f4402e47f42022c65a5991a99168d6cc0d03))
+
+
+### Features
+
+* add ci bin ([77adf3e](https://code.alipay.com/cloud-ide/crew-dragon/commits/77adf3e23c55dc555e9491e0b69139799dc3d09c))
+* add cli package ([2d00d54](https://code.alipay.com/cloud-ide/crew-dragon/commits/2d00d5426328e80ca464c0a5fff19f11ea3dd685))
+* add extenison server api ([43084f4](https://code.alipay.com/cloud-ide/crew-dragon/commits/43084f47ea584c281966f40332154e431bb79ca6))
+* add git file-system ([8f7cba7](https://code.alipay.com/cloud-ide/crew-dragon/commits/8f7cba74d4e88c18fa122b28f07040ea416c35be))
+* add git package ([05a818e](https://code.alipay.com/cloud-ide/crew-dragon/commits/05a818eac677bcdf772f21897f58217a0c3cdd5f))
+* add iconv-lite-umd to support encoding ([80709e8](https://code.alipay.com/cloud-ide/crew-dragon/commits/80709e8b54166ebe4bb9e94c93f1dabc48df2b9f))
+* add language service ([d886b59](https://code.alipay.com/cloud-ide/crew-dragon/commits/d886b595524396ee4c05780a207a841946a6ddd5))
+* add memfs package ([5b2a5a9](https://code.alipay.com/cloud-ide/crew-dragon/commits/5b2a5a91cf6f6f9d8d7255b7502c82a7cebc42ab))
+* add shared package ([556e886](https://code.alipay.com/cloud-ide/crew-dragon/commits/556e886e989bdd49e562c3fd29172188e2106fd3))
+* add some moudles ([1390620](https://code.alipay.com/cloud-ide/crew-dragon/commits/1390620705d5e7cb00c89467cd1eb566ac0e61e7))
+* add upgrade kaitian script ([4f0d78a](https://code.alipay.com/cloud-ide/crew-dragon/commits/4f0d78aa0a533f0ca5cf95818aca72d18aef57ca))
+* add webview, upgrade kaitian ([57e7413](https://code.alipay.com/cloud-ide/crew-dragon/commits/57e7413b1d4ace95fc784a78a4d2155c5f0ce6c5))
+* change spacex to alex ([1ddee84](https://code.alipay.com/cloud-ide/crew-dragon/commits/1ddee84705e6cc424e9ebc515cec75ca71154cb5))
+* init ([865f5bf](https://code.alipay.com/cloud-ide/crew-dragon/commits/865f5bf1967fa86447ac4c997b66adef07a4b4e5))
+* tsbuild ([c14278e](https://code.alipay.com/cloud-ide/crew-dragon/commits/c14278ec6912c2c7f69ed5b26c1d0ab1a554fc2a))
+* 使用 antcode private_token 请求 ([c612ad8](https://code.alipay.com/cloud-ide/crew-dragon/commits/c612ad8a41b1e8c7b582d93d19a9d8fca9fc2917))
+* 增加 app 集成版本 ([523f358](https://code.alipay.com/cloud-ide/crew-dragon/commits/523f3585124f26e6b360f9743865156229fff213))
+* 增加文件监听等 ([25273fe](https://code.alipay.com/cloud-ide/crew-dragon/commits/25273feec53b317f937cf50fb040ee36661d4ca5))
+* 对接 code 接口 ([42eca1c](https://code.alipay.com/cloud-ide/crew-dragon/commits/42eca1cad1f494e1851f6dbf4dfed5a867645f5e))
+* 打通 worker 插件 ([3504b02](https://code.alipay.com/cloud-ide/crew-dragon/commits/3504b02bb2459de5d69c5e6607524b17bf197b76))
+
+
+

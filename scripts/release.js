@@ -117,8 +117,6 @@ invoke(async () => {
     console.log('(SKIP)');
   }
 
-  return;
-
   step('生成 changelog');
   await exec('yarn changelog');
 
@@ -131,19 +129,17 @@ invoke(async () => {
     console.log('无变更文件');
   }
 
-  // publish packages
   step('发布 packages');
   for (const pkg of packages) {
     await publishPackage(pkg, targetVersion);
   }
 
-  // push to GitHub
   step('提交到远程');
   await exec(`git tag v${targetVersion}`);
   await exec(`git push origin refs/tags/v${targetVersion}`);
   await exec('git push');
 
-  signale.success('发布成功');
+  signale.success('发布完成');
 });
 
 function getPkgRoot(pkg) {
@@ -189,20 +185,20 @@ function replace(code, replacement) {
   return { code, result };
 }
 
-async function publishPackage(pkgName, version, runIfNotDry) {
+async function publishPackage(pkgName, version) {
   const pkgRoot = getPkgRoot(pkgName);
   const pkgPath = path.resolve(pkgRoot, 'package.json');
   const pkg = await fse.readJSON(pkgPath);
+  signale.info(`发布 ${pkgName}...`);
   if (pkg.private) {
+    signale.note(`${pkgName} 跳过`);
     return;
   }
-
-  step(`发布 ${pkgName}...`);
   try {
     await exec(`tnpm publish --tag ${args.tag || 'latest'}`, {
       cwd: pkgRoot,
     });
-    signale.info(`${pkgName}@${version} 发布成功`);
+    signale.success(`${pkgName}@${version} 发布成功`);
   } catch (e) {
     throw e;
   }
