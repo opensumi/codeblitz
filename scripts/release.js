@@ -20,7 +20,7 @@ const packages = fse
 let stepIndex = 0;
 const step = (message) => {
   stepIndex++;
-  console.log(chalk.cyan(`\nStep ${stepIndex}: ${message}\n`));
+  console.log(chalk.cyan(`\nStep ${stepIndex}: ${message}`));
 };
 
 invoke(async () => {
@@ -78,15 +78,20 @@ invoke(async () => {
     await exec('npx jest --clearCache');
     await exec('yarn test');
   } else {
-    console.log(`(skipped)`);
+    console.log('(SKIP)');
   }
 
-  step('构建发布 worker-host 和 webview 资源');
-  await exec('node scripts/build-assets');
+  step('构建发布 worker-host 和 webview 资源'); // --no-assets 跳过
+  if (args.assets !== false) {
+    await exec('node scripts/build-assets');
+  } else {
+    console.log('(SKIP)');
+  }
 
   step('更新全部 packages 依赖');
   updatePackage(path.resolve(__dirname, '..'), targetVersion);
   packages.forEach((p) => updatePackage(getPkgRoot(p), targetVersion));
+  console.log('(DONE)');
 
   step('构建所有 packages...'); // --no-build 跳过
   if (args.build !== false) {
@@ -104,10 +109,15 @@ invoke(async () => {
     );
     if (result) {
       await fse.writeFile(targetFile, code);
+      console.log('(DONE)');
+    } else {
+      console.log('(SKIP)');
     }
   } else {
-    console.log(`(skipped)`);
+    console.log('(SKIP)');
   }
+
+  return;
 
   step('生成 changelog');
   await exec('yarn changelog');
@@ -141,7 +151,8 @@ function getPkgRoot(pkg) {
 }
 
 async function updatePackage(pkgRoot, version) {
-  const pkgJSON = await fse.readJSON(path.resolve(pkgRoot, 'package.json'));
+  const pkgPath = path.resolve(pkgRoot, 'package.json');
+  const pkgJSON = await fse.readJSON(pkgPath);
   pkgJSON.version = version;
   ['dependencies', 'devDependencies'].forEach((field) => {
     const obj = pkgJSON[field];
@@ -172,7 +183,7 @@ function replace(code, replacement) {
   let result = false;
   code = code.replace(pattern, (match) => {
     result = true;
-    return replacement[match];
+    return JSON.stringify(replacement[match]);
   });
 
   return { code, result };

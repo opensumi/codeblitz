@@ -11,8 +11,8 @@ const { upload } = require('./utils/upload');
 invoke(async () => {
   signale.pending(`开始编译 worker-host 和 webview`);
 
-  await execa('npx rimraf ./packages/toolkit/dist');
-  await execa(`npx yarn workspace @alipay/alex-toolkit build:host`);
+  await exec('npx rimraf ./packages/toolkit/dist');
+  await exec(`yarn workspace @alipay/alex-toolkit build:host`);
 
   signale.info('构建成功，开始上传 cdn');
 
@@ -27,13 +27,20 @@ invoke(async () => {
 
   const config = {};
   const transformHttps = (str) => str.replace(/^http:/, 'https:');
+  const obj = {
+    'worker-host.js': {
+      name: '__WORKER_HOST__',
+      transform: transformHttps,
+    },
+    'webview/index.html': {
+      name: '__WEBVIEW_ENDPOINT__',
+      transform: (v) => transformHttps(v.slice(0, v.lastIndexOf('/'))),
+    },
+  };
   Object.keys(cdnResult).forEach((key) => {
-    if (key === 'worker-host.js') {
-      config.WORKER_HOST = transformHttps(cdnResult[key]);
-    } else if (key === 'webview/index.html') {
-      config.WEBVIEW_ENDPOINT = transformHttps(
-        cdnResult[key].slice(0, cdnResult[key].lastIndexOf('/'))
-      );
+    if (obj[key]) {
+      const { name, transform } = obj[key];
+      config[name] = transform(cdnResult[key]);
     }
   });
   fs.writeFileSync(path.resolve('packages/alex/config.json'), JSON.stringify(config, null, 2));

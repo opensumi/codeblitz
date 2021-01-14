@@ -1,3 +1,14 @@
 {
-  "extends": "../tsconfig.base.json"
+  "extends": "../tsconfig.base.json",
+  "compilerOptions": {
+    "rootDir": "./src",
+    "outDir": "./lib"
+  },
+  "include": [
+    "./src",
+    "../../typings"
+  ],
+  "exclude": [
+    "./integration"
+  ]
 }

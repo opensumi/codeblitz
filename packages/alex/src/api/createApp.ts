@@ -5,8 +5,8 @@ export function createApp(opts: IClientAppOpts) {
     modules: [],
     useCdnIcon: true,
     noExtHost: true,
-    extWorkerHost: process.env.WORKER_HOST,
-    webviewEndpoint: process.env.WEBVIEW_ENDPOINT,
+    extWorkerHost: __WORKER_HOST__,
+    webviewEndpoint: __WEBVIEW_ENDPOINT__,
     defaultPreferences: {
       'general.theme': 'alipay-geek-dark',
       'general.icon': 'vsicons-slim',
@@ -20,15 +20,6 @@ export function createApp(opts: IClientAppOpts) {
     workspaceDir: '',
     extensionDir: EXTENSION_DIR,
   };
-
-  if (process.env.IS_DEV) {
-    appOpts.extWorkerHost = process.env.WORKER_HOST;
-    appOpts.webviewEndpoint = process.env.WEBVIEW_ENDPOINT;
-  } else {
-    const config = require('../../config.json');
-    appOpts.extWorkerHost = config.WORKER_HOST;
-    appOpts.webviewEndpoint = config.WEBVIEW_ENDPOINT;
-  }
 
   const { defaultPreferences, ...restOpts } = opts;
   if (defaultPreferences) {
