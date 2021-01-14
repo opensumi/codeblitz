@@ -16,34 +16,41 @@ invoke(async () => {
 
   signale.info('构建成功，开始上传 cdn');
 
-  const distDir = path.resolve('packages/toolkit/dist');
+  const distDir = path.resolve(__dirname, '../packages/toolkit/dist');
   const manifest = require(path.join(distDir, 'manifest.json'));
-  Object.keys(manifest).forEach((file) => {
-    manifest[file] = path.join(distDir, manifest[file]);
-  });
-  const cdnResult = await upload(manifest);
+  const fileJSON = Object.keys(manifest).reduce((obj, key) => {
+    obj[key] = {
+      filename: manifest[key],
+      filepath: path.join(distDir, manifest[key]),
+    };
+    return obj;
+  }, {});
+  const cdnResult = await upload(fileJSON);
 
   signale.info('上传成功，生成 config.json');
 
-  const config = {};
   const transformHttps = (str) => str.replace(/^http:/, 'https:');
-  const obj = {
-    'worker-host.js': {
-      name: '__WORKER_HOST__',
+  const env = {
+    __WORKER_HOST__: {
+      key: 'worker-host.js',
       transform: transformHttps,
     },
-    'webview/index.html': {
-      name: '__WEBVIEW_ENDPOINT__',
+    __WEBVIEW_ENDPOINT__: {
+      key: 'webview/index.html',
       transform: (v) => transformHttps(v.slice(0, v.lastIndexOf('/'))),
     },
   };
-  Object.keys(cdnResult).forEach((key) => {
-    if (obj[key]) {
-      const { name, transform } = obj[key];
-      config[name] = transform(cdnResult[key]);
+  const config = Object.keys(env).reduce((obj, name) => {
+    const { key, transform } = env[name];
+    if (cdnResult[key]) {
+      obj[name] = transform(cdnResult[key]);
     }
-  });
-  fs.writeFileSync(path.resolve('packages/alex/config.json'), JSON.stringify(config, null, 2));
+    return obj;
+  }, {});
+  fs.writeFileSync(
+    path.resolve(__dirname, '../packages/alex/config.json'),
+    JSON.stringify(config, null, 2)
+  );
 
   signale.success('构建资源成功');
 });

@@ -22,16 +22,17 @@ exports.uploadFile = async (filepath, filename) => {
     };
   }
   const res = await basement.file.upload(filename, filepath, options);
-  console.log('========== INTERNAL ==========');
+  console.log('>>>>>>>>>> INTERNAL >>>>>>>>>>');
   console.log(res);
-  console.log('========== INTERNAL ==========');
+  console.log('<<<<<<<<<< INTERNAL <<<<<<<<<<');
   return res;
 };
 
 exports.upload = async (manifest) => {
   const result = {};
   for (const key of Object.keys(manifest)) {
-    const res = await this.uploadFile(manifest[key], key);
+    const { filepath, filename } = manifest[key];
+    const res = await this.uploadFile(filepath, filename);
     result[key] = res.url;
   }
   return result;
