@@ -36,6 +36,9 @@ exports.config = {
   webviewEntry: 'webview',
 };
 
+// just for shared
+exports.manifestSeed = {};
+
 function resolvePolyfill(moduleName) {
   return path.join(__dirname, '../../polyfill', moduleName);
 }

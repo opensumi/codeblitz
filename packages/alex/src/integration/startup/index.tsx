@@ -66,7 +66,6 @@ createWorkspace(document.getElementById('main')!, {
     'general.language': 'zh-CN',
   },
   staticServicePath: location.origin,
-  // workspaceDir: '/',
   runtimeConfig: {
     git: {
       project: GIT_PROJECT,

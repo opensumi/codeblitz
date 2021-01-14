@@ -21,7 +21,7 @@ const path = require('path');
 const fse = require('fs-extra');
 const { ExtensionInstaller } = require('@ali/ide-extension-installer');
 const pkg = require('../package.json');
-const invoke = require('./utils/invoke');
+const { invoke } = require('./utils/utils');
 
 const targetDir = path.resolve(__dirname, '../packages/toolkit/extensions');
 

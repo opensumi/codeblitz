@@ -1,7 +1,8 @@
 const path = require('path');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
+const { WebpackManifestPlugin } = require('webpack-manifest-plugin');
 
-const { config } = require('./util');
+const { config, manifestSeed } = require('./util');
 
 module.exports = (option = {}) => {
   const isDev = process.env.NODE_ENV === 'development';
@@ -12,13 +13,17 @@ module.exports = (option = {}) => {
     },
     output: {
       filename: `[name].${isDev ? 'js' : '[contenthash:8].js'}`,
-      path: path.resolve(__dirname, '../dist'),
+      path: path.resolve(__dirname, `../dist`),
     },
     devtool: isDev ? 'inline-source-map' : false,
     mode: isDev ? 'development' : 'production',
     plugins: [
+      new WebpackManifestPlugin({
+        publicPath: '',
+        seed: manifestSeed,
+      }),
       new HtmlWebpackPlugin({
-        filename: 'webview/index.html',
+        filename: `[name]/index.html`,
         template: option.template || path.join(__dirname, '../public/webview.html'),
       }),
     ],

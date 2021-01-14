@@ -73,9 +73,9 @@ export const Modules: ConstructorOf<BrowserModule>[] = [
   // Browser Core Module
   ClientModule,
 
-  MemFSModule,
+  // MemFSModule,
 
-  // GitFileSchemeModule,
+  GitFileSchemeModule,
 
   // service module
   ...ServerModuleCollection,
