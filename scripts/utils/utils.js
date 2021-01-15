@@ -11,7 +11,7 @@ exports.invoke = async (fn) => {
 
 exports.exec = async (command, options, silent = false) => {
   try {
-    await execa.command(command, {
+    return await execa.command(command, {
       stdio: 'inherit',
       ...options,
     });

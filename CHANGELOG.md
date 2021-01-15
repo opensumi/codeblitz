@@ -1,3 +1,12 @@
+## [0.0.2](https://code.alipay.com/cloud-ide/crew-dragon/compare/v0.0.1...v0.0.2) (2021-01-15)
+
+
+### Features
+
+* add api ([876f4b5](https://code.alipay.com/cloud-ide/crew-dragon/commits/876f4b5812ec5f38e3c12ad70a66bf7e44225b1c))
+
+
+
 ## 0.0.1 (2021-01-14)
 
 
