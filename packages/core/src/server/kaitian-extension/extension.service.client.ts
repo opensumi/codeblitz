@@ -1,13 +1,13 @@
 import { Injectable, Autowired } from '@ali/common-di';
 import { Uri } from '@ali/ide-core-common';
 import { IExtensionNodeClientService, IExtensionMetadata, ExtraMetadata } from './base';
-import { AppConfig } from '../core/app';
+import { ServerConfig } from '../core/app';
 import { getExtensionPath } from '../../common/util';
 
 @Injectable()
 export class ExtensionServiceClientImpl implements IExtensionNodeClientService {
-  @Autowired(AppConfig)
-  appConfig: AppConfig;
+  @Autowired(ServerConfig)
+  serverConfig: ServerConfig;
 
   getElectronMainThreadListenPath(): Promise<string> {
     throw new Error('Method not implemented.');
@@ -18,7 +18,7 @@ export class ExtensionServiceClientImpl implements IExtensionNodeClientService {
     localization: string,
     extraMetaData: ExtraMetadata
   ): Promise<IExtensionMetadata[]> {
-    const { extensionMetadata } = this.appConfig;
+    const { extensionMetadata } = this.serverConfig;
     if (!extensionMetadata?.length) {
       return [];
     }

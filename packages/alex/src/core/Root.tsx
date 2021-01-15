@@ -1,13 +1,17 @@
 import React, { FC } from 'react';
 import { Landing } from './Landing';
-import styles from './style.module.less';
 import { RootProps } from './types';
 
 export const Root: FC<RootProps> = (props) => {
+  const LandingComponent = props.Landing!;
   return (
-    <div className={`${props.theme} ${styles['workspace-root']}`}>
-      {(props.status === 'loading' || props.status === 'error') && <Landing {...props} />}
+    <div id="alex-app-root">
+      {(props.status === 'loading' || props.status === 'error') && <LandingComponent {...props} />}
       {props.children}
     </div>
   );
+};
+
+Root.defaultProps = {
+  Landing,
 };

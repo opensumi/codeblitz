@@ -1,4 +1,7 @@
-.workspace-root {
+@kt-html-selector: #alex-app-root;
+@kt-body-selector: #alex-app-root;
+
+:global(#alex-app-root) {
   width: 100%;
   height: 100%;
   position: relative;
@@ -16,37 +19,20 @@
   align-items: center;
 }
 
-.logo {
-  margin-bottom: 56px;
-  width: 200px;
-  height: 200px;
-  img {
-    width: 100%;
-    height: 100%;
+.loading {
+  animation: loadingCircle 1s infinite linear;
+  margin-right: 8px;
+  vertical-align: -2px;
+}
+
+@keyframes loadingCircle {
+  100% {
+    transform: rotate(360deg);
   }
 }
 
 .tip {
-  margin-bottom: 32px;
   .error {
     color: #FF4D4F;
-  }
-}
-
-.dark {
-  .landing {
-    background-color: #202224;
-  }
-  .tip {
-    color: #FFF;
-  }
-}
-
-.light {
-  .landing {
-    background-color: #FFF;
-  }
-  .tip {
-    color: #000;
   }
 }

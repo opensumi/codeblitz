@@ -12,8 +12,6 @@ export const WORKSPACE_ROOT = '/workspace';
 
 export const GIT_ROOT = '/git';
 
-export const EXTENSION_DIR = '.kaitian';
-
 export const HOME_IDB_NAME = 'SPACEX_HOME';
 
 export const WORKSPACE_IDB_NAME = 'SPACEX_WORKSPACE';

@@ -1,5 +1,7 @@
 import { BrowserFS } from '../server/node';
 
+export { AppConfig } from '@ali/ide-core-browser';
+
 export type RootFS = InstanceType<typeof BrowserFS.FileSystem.MountableFileSystem>;
 
 export const IServerApp = Symbol('IServerApp');

@@ -13,11 +13,12 @@
   "scripts": {
     "preinstall": "node scripts/preinstall",
     "init": "npm run clean && npm run build && npm run ext",
+    "start": "npm run dev",
     "ext": "node packages/alex/bin/alex ext",
+    "sdk": "INTEGRATION=sdk npm run dev",
     "build": "node scripts/build",
     "create": "node scripts/create",
     "format": "prettier --write --parser typescript \"packages/**/*.ts?(x)\"",
-    "start": "npm run dev",
     "dev": "yarn workspace @alipay/alex-toolkit dev",
     "clean": "rimraf packages/*/lib",
     "test": "jest --runInBand",
@@ -80,31 +81,5 @@
     "mode": "yarn",
     "lockfile": "enable"
   },
-  "kaitianExtensions": [
-    {
-      "publisher": "cloud-ide",
-      "name": "alipay-geek-theme",
-      "version": "1.8.0"
-    },
-    {
-      "publisher": "kaitian",
-      "name": "vsicons-slim",
-      "version": "1.0.5"
-    },
-    {
-      "publisher": "kaitian-worker",
-      "name": "html-language-features",
-      "version": "1.0.0-beta-1"
-    },
-    {
-      "publisher": "kaitian-worker",
-      "name": "json-language-features",
-      "version": "1.0.0"
-    },
-    {
-      "publisher": "CodeX",
-      "name": "json-language-features",
-      "version": "1.0.0"
-    }
-  ]
+  "kaitianExtensions": []
 }
