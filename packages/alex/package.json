@@ -8,7 +8,7 @@
     "lib",
     "bin",
     "scripts",
-    "!script/.no-postinstall",
+    "!scripts/.no-postinstall",
     "modules"
   ],
   "keywords": [
