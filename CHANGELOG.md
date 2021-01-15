@@ -1,3 +1,12 @@
+## [0.0.5](https://code.alipay.com/cloud-ide/crew-dragon/compare/v0.0.3...v0.0.5) (2021-01-15)
+
+
+### Bug Fixes
+
+* posix path ([72b5da5](https://code.alipay.com/cloud-ide/crew-dragon/commits/72b5da5b15efafa0edb87f2fba1941d487f3db33))
+
+
+
 ## [0.0.3](https://code.alipay.com/cloud-ide/crew-dragon/compare/v0.0.2...v0.0.3) (2021-01-15)
 
 
