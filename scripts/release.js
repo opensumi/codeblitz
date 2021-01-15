@@ -139,7 +139,7 @@ invoke(async () => {
   await exec(`git push origin refs/tags/v${targetVersion}`);
   await exec('git push');
 
-  signale.success('\n发布完成');
+  signale.success('发布完成');
 });
 
 function getPkgRoot(pkg) {

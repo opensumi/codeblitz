@@ -1,6 +1,6 @@
 import { BackService } from '@ali/ide-core-common';
 import { IExtensionIdentity } from '@alipay/alex-shared';
-import { posix } from 'path';
+import * as paths from 'path';
 import { EXT_SCHEME, WORKSPACE_ROOT } from './constant';
 
 /**
@@ -40,7 +40,8 @@ export const getExtensionPath = (ext: IExtensionIdentity) => {
 };
 
 export const makeWorkspaceDir = (path: string = '') => {
-  return posix.join(WORKSPACE_ROOT, path);
+  const posixPath = paths.posix || paths;
+  return posixPath.join(WORKSPACE_ROOT, path);
 };
 
 /**
