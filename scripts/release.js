@@ -124,7 +124,7 @@ invoke(async () => {
   const { stdout } = await exec('git diff', { stdio: 'pipe' });
   if (stdout) {
     await exec('git add -A');
-    await exec(`git commit -m release: v${targetVersion}`);
+    await exec(`git commit -m build:\\ v${targetVersion}`);
   } else {
     console.log('无变更文件');
   }
@@ -139,7 +139,7 @@ invoke(async () => {
   await exec(`git push origin refs/tags/v${targetVersion}`);
   await exec('git push');
 
-  signale.success('发布完成');
+  signale.success('\n发布完成');
 });
 
 function getPkgRoot(pkg) {
