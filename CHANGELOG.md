@@ -1,3 +1,12 @@
+## [0.0.3](https://code.alipay.com/cloud-ide/crew-dragon/compare/v0.0.2...v0.0.3) (2021-01-15)
+
+
+### Bug Fixes
+
+* build scripts ([c91eada](https://code.alipay.com/cloud-ide/crew-dragon/commits/c91eada00c5c16d7828200f87aecd45474e221cb))
+
+
+
 ## [0.0.2](https://code.alipay.com/cloud-ide/crew-dragon/compare/v0.0.1...v0.0.2) (2021-01-15)
 
 
