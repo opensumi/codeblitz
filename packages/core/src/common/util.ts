@@ -10,7 +10,7 @@ export const getFunctionProps = (obj: Record<string, any>): string[] => {
   const props = new Set<string>();
 
   // class 上的原型方法不可遍历
-  if (/^class\s/.test(Function.prototype.toString.call(obj.constructor))) {
+  if (/^\s*class/.test(Function.prototype.toString.call(obj.constructor))) {
     addFunctionProps(obj, 'getOwnPropertyNames');
   } else {
     addFunctionProps(obj, 'keys');
