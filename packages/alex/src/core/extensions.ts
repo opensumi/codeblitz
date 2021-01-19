@@ -29,6 +29,36 @@ export const IconSlim: IExtensionBasicMetadata = {
   extendConfig: {},
 };
 
+export const IDETheme: IExtensionBasicMetadata = {
+  extension: {
+    publisher: 'kaitian',
+    name: 'ide-dark-theme',
+    version: '2.2.0',
+  },
+  packageJSON: {
+    name: 'ide-dark-theme',
+    contributes: {
+      themes: [
+        {
+          id: 'ide-dark',
+          label: 'IDE Dark',
+          uiTheme: 'vs-dark',
+          path: './themes/dark/plus.json',
+        },
+        {
+          id: 'ide-light',
+          label: 'IDE Light',
+          uiTheme: 'vs',
+          path: './themes/light/plus.json',
+        },
+      ],
+    },
+  },
+  pkgNlsJSON: {},
+  nlsList: [],
+  extendConfig: {},
+};
+
 export const GeekTheme: IExtensionBasicMetadata = {
   extension: {
     publisher: 'cloud-ide',

@@ -1,46 +1,46 @@
-import { SlotLocation } from '@ali/ide-core-browser';
-import { renderApp } from '../../api/renderApp';
-import { LayoutComponent } from './layout';
-import { GitFileSchemeModule, MenuBarModule } from '../../core/modules';
+import React from 'react';
+import ReactDOM from 'react-dom';
+import { AppRenderer, renderApp } from '../../api/renderApp';
+import { StartupModule } from './startup.module';
+import './languages';
 
-// 视图和slot插槽的对应关系
-const layoutConfig = {
-  [SlotLocation.top]: {
-    modules: ['@ali/ide-menu-bar'],
-  },
-  [SlotLocation.action]: {
-    modules: [''],
-  },
-  [SlotLocation.left]: {
-    modules: ['@ali/ide-explorer'],
-  },
-  [SlotLocation.main]: {
-    modules: ['@ali/ide-editor'],
-  },
-  [SlotLocation.bottom]: {
-    modules: ['@ali/ide-output', '@ali/ide-markers'],
-  },
-  [SlotLocation.statusBar]: {
-    modules: ['@ali/ide-status-bar'],
-  },
-  [SlotLocation.extra]: {
-    modules: ['breadcrumb-menu'],
-  },
-};
+const query = location.search
+  .slice(1)
+  .split('&')
+  .reduce<Record<string, string>>((obj, pair) => {
+    const [key, value] = pair.split('=');
+    obj[decodeURIComponent(key)] = decodeURIComponent(value || '');
+    return obj;
+  }, {});
 
-renderApp(document.getElementById('main')!, {
-  appConfig: (config) => {
-    config.modules.push(GitFileSchemeModule);
-    config.layoutConfig = layoutConfig;
-    config.layoutComponent = LayoutComponent;
-    config.workspaceDir = 'ide-s/TypeScript-Node-Starter';
-    return config;
-  },
-  runtimeConfig: {
-    // TODO: 从 query 上取
-    git: {
-      project: 'ide-s/TypeScript-Node-Starter',
-      commit: '3b887f70532f9b17e4502f5956531903e6449a91',
-    },
-  },
-});
+ReactDOM.render(
+  <AppRenderer
+    appConfig={{
+      modules: [StartupModule],
+    }}
+    runtimeConfig={{
+      git: {
+        baseURL: '/code-service',
+        project: query.project || 'ide-s/TypeScript-Node-Starter',
+        branch: query.branch,
+        commit: query.commit,
+      },
+    }}
+  />,
+  document.getElementById('main')
+);
+
+// renderApp(document.getElementById('main')!, {
+//   appConfig: {
+//     modules: [StartupModule]
+//   },
+//   runtimeConfig: {
+//     // TODO: 从 query 上取
+//     git: {
+//       baseURL: '/code-service',
+//       project: query.project || 'ide-s/TypeScript-Node-Starter',
+//       branch: query.branch,
+//       commit: query.commit,
+//     },
+//   },
+// });

@@ -8,7 +8,7 @@
   "description": "Ant Codespaces for browser",
   "main": "index.js",
   "engines": {
-    "kaitian": "1.31.1"
+    "kaitian": "1.32.0"
   },
   "scripts": {
     "preinstall": "node scripts/preinstall",
@@ -82,5 +82,21 @@
     "mode": "yarn",
     "lockfile": "enable"
   },
-  "kaitianExtensions": []
+  "kaitianExtensions": [
+    {
+      "publisher": "kaitian",
+      "name": "vsicons-slim",
+      "version": "1.0.5"
+    },
+    {
+      "publisher": "vscode-extensions",
+      "name": "vscode-icons",
+      "version": "9.4.0"
+    },
+    {
+      "publisher": "kaitian",
+      "name": "ide-dark-theme",
+      "version": "2.1.2"
+    }
+  ]
 }

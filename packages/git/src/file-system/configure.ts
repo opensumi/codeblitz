@@ -1,8 +1,5 @@
 import { BrowserFS, WORKSPACE_IDB_NAME } from '@alipay/alex-core';
-import GitRemote from './GitRemote';
 import { IGitAPIService } from '../types';
-
-BrowserFS.addFileSystemType('GitRemote', GitRemote);
 
 const stripSlash = (p: string) => {
   if (p[0] === '/') {
@@ -22,7 +19,7 @@ const configureFileSystem = async (apiService: IGitAPIService) => {
     (apiService[name](p) as Promise<any>).then((res) => cb(null, res)).catch((err) => cb(err));
   };
 
-  const gitFileSystem = await BrowserFS.createFileSystem(GitRemote, {
+  const gitFileSystem = await BrowserFS.createFileSystem(BrowserFS.FileSystem.CodeHost, {
     requestStat: requestByMethod('getTreeEntry'),
     requestDir: requestByMethod('getTree'),
     requestFile: requestByMethod('getBlob'),

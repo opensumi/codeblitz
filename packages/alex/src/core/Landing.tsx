@@ -1,13 +1,13 @@
 import React, { FC } from 'react';
-import { RootProps } from './types';
+import { LandingProps } from './types';
 import styles from './style.module.less';
 
-export const Landing: FC<RootProps> = ({ status, errorMessage }) => {
+export const Landing: FC<LandingProps> = ({ status, error }) => {
   return (
     <div className={styles.landing}>
       <div className={styles.tip}>
         {status === 'error' ? (
-          <span className={styles.error}>{errorMessage}</span>
+          <span className={styles.error}>{error}</span>
         ) : (
           <span>
             <svg

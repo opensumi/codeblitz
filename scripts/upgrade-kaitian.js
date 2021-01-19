@@ -33,13 +33,13 @@ invoke(async () => {
 
 async function getOrCheckVersion(version) {
   if (version) {
-    const { stdout: name } = await exec(`tnpm view ${pkg}@${version} name`);
+    const { stdout: name } = await exec(`tnpm view ${pkg}@${version} name`, { stdio: 'pipe' });
     if (!name) {
       signale.fatal(`${version} 不存在`);
       process.exit(128);
     }
   } else {
-    ({ stdout: version } = await exec(`tnpm view ${pkg}@latest version`));
+    ({ stdout: version } = await exec(`tnpm view ${pkg}@latest version`, { stdio: 'pipe' }));
     if (!version) {
       signale.fatal(`查找最新版本失败`);
       process.exit(128);

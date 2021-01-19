@@ -6,18 +6,16 @@ import {
   BrowserModule,
   FsProviderContribution,
 } from '@ali/ide-core-browser';
-import {
-  ExtensionServiceClientImpl,
-  IExtensionNodeClientService,
-  NodeModule,
-} from '@alipay/alex-core';
+import { ExtensionServiceClientImpl, IExtensionNodeClientService } from '@alipay/alex-core';
 import { IExtensionMetadata } from '@alipay/alex-shared';
-import {
-  StaticResourceContribution,
-  StaticResourceService,
-} from '@ali/ide-static-resource/lib/browser/static.definition';
+// import {
+//   StaticResourceContribution,
+//   StaticResourceService,
+// } from '@ali/ide-static-resource/lib/browser/static.definition';
 import { IFileServiceClient } from '@ali/ide-file-service';
 import { KaitianExtFsProvider } from '@alipay/alex-core';
+
+import { StaticResourceContribution, StaticResourceService } from '../../modules/static-resource';
 
 const KT_EXT_LOCAL_SCHEME = 'kt-ext-local';
 

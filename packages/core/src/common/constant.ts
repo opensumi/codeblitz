@@ -1,4 +1,4 @@
-import * as os from 'os';
+import { os } from '../server/node';
 
 export const EXT_SCHEME = 'kt-ext';
 

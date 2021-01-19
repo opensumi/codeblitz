@@ -3,28 +3,26 @@ import {
   MaybePromise,
   ContributionProvider,
   createContributionProvider,
-  BasicModule,
   LogLevel,
   ILogService,
   SupportLogNamespace,
   StoragePaths,
 } from '@ali/ide-core-common';
-import { AppConfig } from '@ali/ide-core-browser';
+import { AppConfig, BrowserModule } from '@ali/ide-core-browser';
 import { IExtensionBasicMetadata } from '@alipay/alex-shared';
 import path from 'path';
-import os from 'os';
 
 import { ILogServiceManager } from './base';
 import { INodeLogger, NodeLogger } from './node-logger';
 import { FCServiceCenter, initFCService, ServerPort } from '../../connection';
 import { IServerApp } from '../../common';
 import { initializeRootFileSystem } from './util';
-import { BrowserFS, fse } from '../node';
+import { fse, os } from '../node';
 import { WORKSPACE_ROOT } from '../../common/constant';
 import { RootFS } from '../../common/types';
 import { isBackServicesInServer } from '../../common/util';
 
-export abstract class NodeModule extends BasicModule {}
+export abstract class NodeModule extends BrowserModule {}
 
 type ModuleConstructor = ConstructorOf<NodeModule>;
 export type ContributionConstructor = ConstructorOf<ServerAppContribution>;
@@ -74,7 +72,7 @@ export const LaunchContribution = Symbol('LaunchContribution');
 
 export interface LaunchContribution {
   // 应用启动在所有初始话之前，此时会检查应用可访问性，并动态更改配置数据，如 workspaceDir，同时可自定义挂载文件系统
-  launch?(app: IServerApp): MaybePromise<void>;
+  launch(app: IServerApp): MaybePromise<void>;
 }
 
 export class ServerApp implements IServerApp {
@@ -218,7 +216,7 @@ export function bindModuleBackService(injector: Injector, modules: ModuleConstru
   const { createFCService } = initFCService(serviceCenter);
 
   for (const module of modules) {
-    const moduleInstance = injector.get(module) as BasicModule;
+    const moduleInstance = injector.get(module) as BrowserModule;
     if (!moduleInstance.backServices) {
       continue;
     }

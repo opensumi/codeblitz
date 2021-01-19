@@ -16,9 +16,11 @@ import { injectDebugPreferences } from './debug';
 import { IServerApp } from '../common';
 import { IServerAppOpts, ServerApp } from '../server/core/app';
 import { isBackServicesInBrowser } from '../common/util';
-import { RuntimeConfig } from '../common/types';
+import { FileTreeCustomContribution, EditorActionEventContribution } from './custom';
 
 export * from './extension';
+
+export { TextmateLanguageGrammarContribution, LanguageGrammarRegistrationService };
 
 export type ModuleConstructor = ConstructorOf<BrowserModule>;
 
@@ -32,6 +34,8 @@ export class ClientModule extends BrowserModule {
       token: ILanguageGrammarRegistrationService,
       useClass: LanguageGrammarRegistrationService,
     },
+    FileTreeCustomContribution,
+    EditorActionEventContribution,
   ];
   preferences = injectDebugPreferences;
 }

@@ -1,4 +1,4 @@
-import { Autowired, Injector, INJECTOR_TOKEN } from '@ali/common-di';
+import { Autowired } from '@ali/common-di';
 import { Domain } from '@ali/ide-core-common';
 import {
   LaunchContribution,
@@ -10,6 +10,7 @@ import {
 } from '@alipay/alex-core';
 import configureFileSystem from './file-system/configure';
 import { IGitAPIService } from './types';
+import { request } from './request';
 
 @Domain(LaunchContribution)
 export class GitContribution implements LaunchContribution {
@@ -24,16 +25,16 @@ export class GitContribution implements LaunchContribution {
 
   async launch({ rootFS }: IServerApp) {
     // TODO: 判断权限抛出规范化的错误码，用于全局处理
-    const { git, scene } = this.runtimeConfig || {};
-    if (!git) {
-      throw new Error('git scene must config git in runtimeConfig firstly');
+    const { git } = this.runtimeConfig || {};
+    if (!git) return;
+    if (git.baseURL) {
+      request.extendOptions({ prefix: git.baseURL });
     }
+
     await this.gitApiService.initProject(git);
 
     const workspaceDir = makeWorkspaceDir(
-      `${scene || 'git'}/${this.gitApiService.projectId}/${this.gitApiService.commit}/${
-        this.gitApiService.project
-      }`
+      `git/${this.gitApiService.projectId}/${this.gitApiService.commit}/${this.gitApiService.project}`
     );
     this.appConfig.workspaceDir = workspaceDir;
 

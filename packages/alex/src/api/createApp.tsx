@@ -1,140 +1,79 @@
-import '../core/normalize.less';
-import React from 'react';
-import { ClientApp, IAppOpts, RuntimeConfig, makeWorkspaceDir } from '@alipay/alex-core';
-import '@ali/ide-i18n/lib/browser';
-import { SlotRenderer, SlotLocation } from '@ali/ide-core-browser';
+import { ClientApp, RuntimeConfig, makeWorkspaceDir, IAppOpts } from '@alipay/alex-core';
+import { SlotRenderer, SlotLocation, IAppRenderer } from '@ali/ide-core-browser';
 import { BoxPanel, SplitPanel } from '@ali/ide-core-browser/lib/components';
-import {
-  ClientModule,
-  ServerModuleCollection,
-  ClientCommonModule,
-  FileServiceClientModule,
-  MainLayoutModule,
-  OverlayModule,
-  LogModule,
-  MonacoModule,
-  ExplorerModule,
-  EditorModule,
-  QuickOpenModule,
-  KeymapsModule,
-  FileTreeNextModule,
-  ThemeModule,
-  WorkspaceModule,
-  ExtensionStorageModule,
-  StorageModule,
-  PreferencesModule,
-  OpenedEditorModule,
-  DecorationModule,
-  StaticResourceModule,
-  WorkspaceEditModule,
-  WebviewModule,
-  FileSchemeModule,
-  KaitianExtensionModule,
-  OutlineModule,
-  CommentsModule,
-  StatusBarModule,
-  MenuBarModule,
-} from '../core/modules';
-import { IconSlim, GeekTheme } from '../core/extensions';
+import { IThemeService } from '@ali/ide-theme/lib/common';
+import '@ali/ide-i18n/lib/browser';
+import '../core/normalize.less';
+import { modules } from '../core/modules';
+import { IconSlim, IDETheme } from '../core/extensions';
+import { mergeConfig, themeStorage } from '../core/utils';
+import { LayoutComponent, layoutConfig } from '../core/layout';
+import { IConfig } from './types';
 
 export { SlotLocation, SlotRenderer, BoxPanel, SplitPanel };
 
-export interface IAppConfig {
-  /**
-   * 应用相关配置
-   */
-  appConfig?: IAppOpts | ((defaultOpts: IAppOpts) => IAppOpts);
-  /**
-   * 运行相关配置
-   */
-  runtimeConfig?: RuntimeConfig;
-}
-
-export const DEFAULT_APP_CONFIG: IAppOpts = {
-  modules: [
-    ClientCommonModule,
-    FileServiceClientModule,
-    MainLayoutModule,
-    OverlayModule,
-    LogModule,
-    MonacoModule,
-    ExplorerModule,
-    EditorModule,
-    QuickOpenModule,
-    KeymapsModule,
-    FileTreeNextModule,
-    ThemeModule,
-    WorkspaceModule,
-    ExtensionStorageModule,
-    StorageModule,
-    PreferencesModule,
-    OpenedEditorModule,
-    DecorationModule,
-    StaticResourceModule,
-    WorkspaceEditModule,
-    WebviewModule,
-    FileSchemeModule,
-    KaitianExtensionModule,
-    OutlineModule,
-    CommentsModule,
-    StatusBarModule,
-    MenuBarModule,
-    ClientModule,
-    ...ServerModuleCollection,
-  ],
+const getDefaultAppConfig = (): IAppOpts => ({
+  modules,
   useCdnIcon: true,
   noExtHost: true,
   extWorkerHost: __WORKER_HOST__,
   webviewEndpoint: __WEBVIEW_ENDPOINT__,
   defaultPreferences: {
-    'general.theme': 'alipay-geek-dark',
+    'general.theme': 'ide-dark',
+    'general.language': 'zh-CN',
     'general.icon': 'vsicons-slim',
     'application.confirmExit': 'never',
     'editor.quickSuggestionsDelay': 10,
     'editor.quickSuggestionsMaxCount': 50,
     'editor.scrollBeyondLastLine': false,
-    'general.language': 'zh-CN',
     'settings.userBeforeWorkspace': true,
   },
-  extensionMetadata: [IconSlim, GeekTheme],
-  layoutComponent: () => (
-    <BoxPanel direction="top-to-bottom">
-      <SplitPanel overflow="hidden" id="main-horizontal" flex={1}>
-        <SlotRenderer slot="left" defaultSize={310} minResize={204} minSize={49} />
-        <SplitPanel id="main-vertical" minResize={300} flexGrow={1} direction="top-to-bottom">
-          <SlotRenderer flex={2} flexGrow={1} minResize={200} slot="main" />
-        </SplitPanel>
-      </SplitPanel>
-    </BoxPanel>
-  ),
-  layoutConfig: {
-    [SlotLocation.action]: {
-      modules: [''],
-    },
-    [SlotLocation.left]: {
-      modules: ['@ali/ide-explorer'],
-    },
-    [SlotLocation.main]: {
-      modules: ['@ali/ide-editor'],
-    },
-    [SlotLocation.extra]: {
-      modules: ['breadcrumb-menu'],
-    },
+  layoutConfig,
+  layoutComponent: LayoutComponent,
+  extensionMetadata: [IconSlim, IDETheme],
+  defaultPanels: {
+    bottom: '',
   },
-};
+});
 
-export function createApp({ appConfig, runtimeConfig }: IAppConfig) {
-  const opts =
-    (typeof appConfig === 'function' ? appConfig(DEFAULT_APP_CONFIG) : appConfig) ??
-    DEFAULT_APP_CONFIG;
+export const DEFAULT_APP_CONFIG = getDefaultAppConfig();
 
-  if (!opts.workspaceDir) {
-    throw new Error('请配置 workspaceDir，需确保 workspaceDir 唯一，推荐 group/repository 的形式');
+export function createApp({ appConfig, runtimeConfig }: IConfig) {
+  const customConfig = (typeof appConfig === 'function' ? appConfig() : appConfig) ?? {};
+  const opts = mergeConfig(getDefaultAppConfig(), customConfig);
+
+  // TODO: workspaceDir 是否需要强制，共用 workspaceDir 可能的问题是缓存状态会共享
+  // if (!opts.workspaceDir) {
+  //   throw new Error('请配置 workspaceDir，最好确保 workspaceDir 唯一，推荐类似 group/repository 的形式，内部根据 workspaceDir 缓存打开状态，如果不关心单独 workspaceDir，共用一个 workspaceDir 亦可');
+  // }
+  opts.workspaceDir = makeWorkspaceDir(opts.workspaceDir || '');
+
+  let themeType = themeStorage.get();
+  if (!themeType) {
+    const defaultTheme = opts.defaultPreferences?.['general.theme'];
+    opts.extensionMetadata?.find((item) => {
+      const themeConfig = item.packageJSON.contributes?.themes?.find(
+        (item: any) => item.id === defaultTheme
+      );
+      if (themeConfig) {
+        themeType = !themeConfig.uiTheme || themeConfig.uiTheme === 'vs-dark' ? 'dark' : 'light';
+        themeStorage.set(themeType);
+      }
+    });
   }
-  opts.workspaceDir = makeWorkspaceDir(opts.workspaceDir);
 
   const app = new ClientApp(opts);
 
+  const _start = app.start;
+  app.start = async (container: HTMLElement | IAppRenderer) => {
+    await _start.call(app, container);
+    // 在 start 不能 injector.get，否则有的 service 立即初始化，此时 file-system 还没有初始化完成
+    (app.injector.get(IThemeService) as IThemeService).onThemeChange((e) => {
+      themeStorage.set(e.type);
+    });
+  };
+
+  runtimeConfig ??= {};
   // 基于场景的运行时数据
   app.injector.addProviders({
     token: RuntimeConfig,

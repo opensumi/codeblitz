@@ -93,6 +93,8 @@ packages/*/esm
 packages/*/types
 
 packages/alex/extensions
+packages/alex/languages
+packages/alex/modules
 packages/alex/config.json
 packages/alex/.kaitian
 

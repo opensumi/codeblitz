@@ -5,6 +5,8 @@
  */
 
 const path = require('path');
+const fs = require('fs');
+const https = require('https');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 const TsconfigPathsPlugin = require('./util/tsconfig-paths-plugin');
@@ -14,7 +16,9 @@ const webpack = require('webpack');
 const ForkTsCheckerWebpackPlugin = require('fork-ts-checker-webpack-plugin');
 const { merge } = require('webpack-merge');
 const notifier = require('node-notifier');
+const BundleAnalyzerPlugin = require('umi-webpack-bundle-analyzer').BundleAnalyzerPlugin;
 
+const BannerPlugin = require('./util/banner-plugin');
 const { nodePolyfill } = require('./util');
 const { findPortSync } = require('./util/find-porter');
 const { config } = require('./util');
@@ -33,7 +37,6 @@ module.exports = (option) => {
   /** @type {Configuration} */
   const baseConfig = {
     mode,
-    devtool: isDev ? 'eval-cheap-module-source-map' : false,
     output: {
       path: outputPath,
       filename: '[name].js',
@@ -203,38 +206,71 @@ module.exports = (option) => {
       new webpack.ProvidePlugin({
         ...nodePolyfill.provider,
       }),
-      new FriendlyErrorsWebpackPlugin({
-        compilationSuccessInfo: {
-          messages: [`Your application is running here: ${baseURL}`],
-          notes: [],
-        },
-        onErrors: (severity, errors) => {
-          if (severity !== 'error') {
-            return;
-          }
-          /** @type {*} */
-          const error = errors[0];
-          notifier.notify({
-            title: 'Webpack error',
-            message: severity + ': ' + error.name,
-            subtitle: error.file || '',
-          });
-        },
-        clearConsole: true,
-      }),
       ...(option.copy ? [new CopyPlugin(option.copy)] : []),
       new ForkTsCheckerWebpackPlugin({
         typescript: {
           configFile: option.tsconfigPath,
         },
       }),
+      new BannerPlugin({
+        banner: async () => {
+          const content = await new Promise((resolve, reject) => {
+            https
+              .get(
+                'https://gw-office.alipayobjects.com/bmw-prod/f8d166cf-e3fb-49e6-bad8-2b63630829b3.js',
+                (res) => {
+                  res.setEncoding('utf8');
+                  let rawData = '';
+                  res.on('data', (chunk) => {
+                    rawData += chunk;
+                  });
+                  res.on('end', () => {
+                    resolve(rawData);
+                  });
+                }
+              )
+              .on('error', reject);
+          });
+          return `
+(function(){
+${content}
+window.amdLoader = amdLoader;
+window.AMDLoader = AMDLoader;
+window.define = define;
+}).call(window);
+`;
+        },
+        raw: true,
+        entryOnly: true,
+      }),
       ...(isDev
-        ? []
+        ? [
+            new FriendlyErrorsWebpackPlugin({
+              compilationSuccessInfo: {
+                messages: [`Your application is running here: ${baseURL}`],
+                notes: [],
+              },
+              onErrors: (severity, errors) => {
+                if (severity !== 'error') {
+                  return;
+                }
+                /** @type {*} */
+                const error = errors[0];
+                notifier.notify({
+                  title: 'Webpack error',
+                  message: severity + ': ' + error.name,
+                  subtitle: error.file || '',
+                });
+              },
+              clearConsole: true,
+            }),
+          ]
         : [
             new MiniCssExtractPlugin({
-              filename: '[name].[chunkhash:8].css',
+              filename: '[name].css',
               chunkFilename: '[id].css',
             }),
+            ...(process.env.ANALYZE === '1' ? [new BundleAnalyzerPlugin()] : []),
           ]),
     ],
     devServer: {

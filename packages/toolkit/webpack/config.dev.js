@@ -19,6 +19,7 @@ module.exports = () => {
           process.env.INTEGRATION || 'startup'
         }`,
       },
+      devtool: 'eval-cheap-module-source-map',
       devServer: {
         proxy: {
           '/code-service': {

@@ -11,10 +11,18 @@ export * from './kaitian-extension';
 export * from './logs-core';
 export * from './node';
 
+export {
+  ServerCommonModule,
+  KaitianExtensionModule,
+  LogServiceModule,
+  FileServiceModule,
+  FileSchemeNodeModule,
+};
+
 export const ServerModuleCollection = [
   ServerCommonModule,
   KaitianExtensionModule,
   LogServiceModule,
   FileServiceModule,
   FileSchemeNodeModule,
-] as ConstructorOf<BrowserModule>[]; // make types fun
+];

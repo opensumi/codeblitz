@@ -1,7 +1,7 @@
-@kt-html-selector: #alex-app-root;
-@kt-body-selector: #alex-app-root;
+@kt-html-selector: .alex-root;
+@kt-body-selector: .alex-root;
 
-:global(#alex-app-root) {
+:global(.alex-root) {
   width: 100%;
   height: 100%;
   position: relative;
@@ -17,6 +17,13 @@
   flex-direction: column;
   justify-content: center;
   align-items: center;
+  color: #4D4D4D;
+  background-color: #FFF;
+}
+
+:global(.alex-dark) .landing {
+  color: #D7DBDE;
+  background-color: #202224;
 }
 
 .loading {

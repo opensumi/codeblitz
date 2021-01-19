@@ -4,7 +4,7 @@ import { request, API } from './request';
 import { IGitAPIService } from './types';
 
 // TODO: 适配 gitlab 接口
-
+// TODO: 放到集成侧去做？AntCode 上如果也用 IDE，那么也会造成重复
 @Injectable()
 export class GitAPIService implements IGitAPIService {
   private initialized = new Deferred();
@@ -13,17 +13,22 @@ export class GitAPIService implements IGitAPIService {
   public commit: string;
   public branch: string;
 
-  async initProject(config: { project: string; commit?: string; branch?: string }) {
+  async initProject(config: {
+    project: string;
+    projectId?: number;
+    commit?: string;
+    branch?: string;
+  }) {
     this.project = config.project;
-    if (config.commit) {
+    if (config.projectId && config.commit) {
+      // 唯一确定一个项目
+      this.projectId = config.projectId;
       this.commit = config.commit;
+      return;
     }
-    if (config.branch) {
-      this.branch = config.branch;
-    }
-    const projectInfo = await this.getProjectInfo();
-    this.projectId = projectInfo.id;
-    if (!this.branch) {
+    if (!config.projectId || config.branch) {
+      const projectInfo = await this.getProjectInfo();
+      this.projectId = projectInfo.id;
       this.branch = projectInfo.default_branch;
     }
     if (!this.commit) {
