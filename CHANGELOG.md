@@ -1,3 +1,12 @@
+## [0.1.1](https://code.alipay.com/cloud-ide/crew-dragon/compare/v0.1.0...v0.1.1) (2021-01-19)
+
+
+### Bug Fixes
+
+* use es2015 module ([9c33501](https://code.alipay.com/cloud-ide/crew-dragon/commits/9c33501ad4be25bb1ad8518754e80d46ce1bbdc4))
+
+
+
 # [0.1.0](https://code.alipay.com/cloud-ide/crew-dragon/compare/v0.0.5...v0.1.0) (2021-01-19)
 
 
