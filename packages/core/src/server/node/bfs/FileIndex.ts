@@ -1,7 +1,7 @@
-import { BrowserFS, FileIndex } from '@alipay/alex-core';
 import { BFSCallback, FileSystemOptions } from 'browserfs/dist/node/core/file_system';
 import { FileFlag } from 'browserfs/dist/node/core/file_flag';
 import InMemory from 'browserfs/dist/node/backend/InMemory';
+import { FileIndex } from '../../../common/types';
 
 export interface FileIndexSystemOptions {
   requestFileIndex: () => Promise<FileIndex>;

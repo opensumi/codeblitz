@@ -16,7 +16,7 @@ import {
   IMenuItem,
 } from '@ali/ide-core-browser/lib/menu/next';
 import { WorkbenchEditorService } from '@ali/ide-editor/lib/browser';
-import { RuntimeConfig } from '@alipay/alex-core';
+import { RuntimeConfig } from '../../common/types';
 
 /**
  * 禁用掉文件树的新增、删除、重命名等操作，用于纯编辑场景
