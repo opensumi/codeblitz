@@ -1,3 +1,12 @@
+## [0.1.2](https://code.alipay.com/cloud-ide/crew-dragon/compare/v0.1.1...v0.1.2) (2021-01-19)
+
+
+### Bug Fixes
+
+* getFunctionProps ([4395d7a](https://code.alipay.com/cloud-ide/crew-dragon/commits/4395d7aef6fe393be39801459d28ad52d748c5e7))
+
+
+
 ## [0.1.1](https://code.alipay.com/cloud-ide/crew-dragon/compare/v0.1.0...v0.1.1) (2021-01-19)
 
 
