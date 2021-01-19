@@ -13,13 +13,7 @@
       "path": "./git/tsconfig.build.json"
     },
     {
-      "path": "./memfs/tsconfig.build.json"
-    },
-    {
       "path": "./alex/tsconfig.build.json"
-    },
-    {
-      "path": "./file-system/tsconfig.build.json"
     }
   ],
   "files": [],
