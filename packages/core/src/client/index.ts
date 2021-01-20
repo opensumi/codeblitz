@@ -3,7 +3,7 @@ import {
   BrowserModule,
   ClientApp as BasicClientApp,
   IAppRenderer,
-  IClientAppOpts as IBasicClientAppOpts,
+  IClientAppOpts,
 } from '@ali/ide-core-browser';
 import { BasicModule } from '@ali/ide-core-common';
 
@@ -36,34 +36,26 @@ export class ClientModule extends BrowserModule {
   preferences = injectDebugPreferences;
 }
 
-export interface IClientAppOpts extends IBasicClientAppOpts {
-  serverOptions?: IServerAppOpts;
-  runtimeConfig?: RuntimeConfig;
-}
+export interface IAppOpts extends IClientAppOpts, IServerAppOpts {}
+
+export { IClientAppOpts };
 
 export class ClientApp extends BasicClientApp {
-  constructor(opts: IClientAppOpts) {
+  constructor(opts: IAppOpts) {
     super(opts);
-
-    const runtimeConfig = opts.runtimeConfig || {};
-    // 基于场景的运行时数据
-    this.injector.addProviders({
-      token: RuntimeConfig,
-      useValue: runtimeConfig,
-    });
-
-    (window as any)[RuntimeConfig] = runtimeConfig;
-
     this.initServer(opts);
   }
 
-  private initServer(opts: IClientAppOpts) {
+  private initServer(opts: IAppOpts) {
     const serverApp = new ServerApp({
       injector: this.injector,
-      workspaceDir: opts.workspaceDir,
-      extensionDir: opts.extensionDir,
-      extensionMetadata: opts.serverOptions?.extensionMetadata,
       modules: this.modules,
+      appConfig: this.config,
+      logDir: opts.logDir,
+      logLevel: opts.logLevel,
+      LogServiceClass: opts.LogServiceClass,
+      extensionMetadata: opts.extensionMetadata,
+      blockPatterns: opts.blockPatterns,
     });
     this.injector.addProviders({
       token: IServerApp,

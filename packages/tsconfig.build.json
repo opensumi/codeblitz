@@ -11,6 +11,12 @@
     },
     {
       "path": "./git/tsconfig.build.json"
+    },
+    {
+      "path": "./memfs/tsconfig.build.json"
+    },
+    {
+      "path": "./alex/tsconfig.build.json"
     }
   ],
   "files": [],

@@ -10,35 +10,35 @@
     reflect-metadata "^0.1.12"
     tslib "^1.9.3"
 
-"@ali/ide-addons@1.30.1":
-  version "1.30.1"
-  resolved "https://registry.npm.alibaba-inc.com/@ali/ide-addons/download/@ali/ide-addons-1.30.1.tgz#9ded662b868b333a5357509ebcacf5534b3814cc"
-  integrity sha1-ne1mK4aLMzpTV1CevKz1U0s4FMw=
+"@ali/ide-addons@1.31.1":
+  version "1.31.1"
+  resolved "https://registry.npm.alibaba-inc.com/@ali/ide-addons/download/@ali/ide-addons-1.31.1.tgz#ea82b85849258e4e711f13386d42de5b9077a1f3"
+  integrity sha1-6oK4WEkljk5xHxM4bULeW5B3ofM=
   dependencies:
-    "@ali/ide-core-common" "1.30.1"
-    "@ali/ide-core-node" "1.30.1"
+    "@ali/ide-core-common" "1.31.1"
+    "@ali/ide-core-node" "1.31.1"
 
-"@ali/ide-comments@1.30.1":
-  version "1.30.1"
-  resolved "https://registry.npm.alibaba-inc.com/@ali/ide-comments/download/@ali/ide-comments-1.30.1.tgz#0a50dac238698d4322d44d9bb380e22063ce5de0"
-  integrity sha1-ClDawjhpjUMi1E2bs4DiIGPOXeA=
+"@ali/ide-comments@1.31.1":
+  version "1.31.1"
+  resolved "https://registry.npm.alibaba-inc.com/@ali/ide-comments/download/@ali/ide-comments-1.31.1.tgz#1ed34b46f833b75ab62e90a8fcb6f907e38bcd51"
+  integrity sha1-HtNLRvgzt1q2LpCo/Lb5B+OLzVE=
   dependencies:
-    "@ali/ide-components" "1.30.1"
-    "@ali/ide-core-browser" "1.30.1"
-    "@ali/ide-core-common" "1.30.1"
-    "@ali/ide-core-node" "1.30.1"
-    "@ali/ide-editor" "1.30.1"
-    "@ali/ide-main-layout" "1.30.1"
-    "@ali/ide-monaco-enhance" "1.30.1"
-    "@ali/ide-theme" "1.30.1"
+    "@ali/ide-components" "1.31.1"
+    "@ali/ide-core-browser" "1.31.1"
+    "@ali/ide-core-common" "1.31.1"
+    "@ali/ide-core-node" "1.31.1"
+    "@ali/ide-editor" "1.31.1"
+    "@ali/ide-main-layout" "1.31.1"
+    "@ali/ide-monaco-enhance" "1.31.1"
+    "@ali/ide-theme" "1.31.1"
     lodash.flattendeep "^4.4.0"
     lodash.groupby "^4.6.0"
     react-mentions "^3.3.1"
 
-"@ali/ide-components@1.30.1":
-  version "1.30.1"
-  resolved "https://registry.npm.alibaba-inc.com/@ali/ide-components/download/@ali/ide-components-1.30.1.tgz#8c7b187c2c3b92cf6470d0f623380bc142c3e06d"
-  integrity sha1-jHsYfCw7ks9kcND2IzgLwULD4G0=
+"@ali/ide-components@1.31.1":
+  version "1.31.1"
+  resolved "https://registry.npm.alibaba-inc.com/@ali/ide-components/download/@ali/ide-components-1.31.1.tgz#794ae0e69924d72f49babb1c72b1ca3357a1a41e"
+  integrity sha1-eUrg5pkk1y9JursccrHKM1ehpB4=
   dependencies:
     antd "^3.20.3"
     fuzzy "^0.1.3"
@@ -47,27 +47,27 @@
     react-virtualized-auto-sizer "^1.0.2"
     react-window "^1.8.5"
 
-"@ali/ide-connection@1.30.1":
-  version "1.30.1"
-  resolved "https://registry.npm.alibaba-inc.com/@ali/ide-connection/download/@ali/ide-connection-1.30.1.tgz#5139f0fc77e98f23f8251dd165a3cbe525be5835"
-  integrity sha1-UTnw/HfpjyP4JR3RZaPL5SW+WDU=
+"@ali/ide-connection@1.31.1":
+  version "1.31.1"
+  resolved "https://registry.npm.alibaba-inc.com/@ali/ide-connection/download/@ali/ide-connection-1.31.1.tgz#3f3e606174ea6331c91573c9db945553c5e1f982"
+  integrity sha1-Pz5gYXTqYzHJFXPJ25RVU8Xh+YI=
   dependencies:
-    "@ali/ide-components" "1.30.1"
-    "@ali/ide-core-common" "1.30.1"
+    "@ali/ide-components" "1.31.1"
+    "@ali/ide-core-common" "1.31.1"
     "@ali/vscode-jsonrpc" "^4.0.1"
     lzutf8 "^0.5.5"
     path-match "^1.2.4"
     shortid "^2.2.14"
     ws "^7.2.0"
 
-"@ali/ide-core-browser@1.30.1":
-  version "1.30.1"
-  resolved "https://registry.npm.alibaba-inc.com/@ali/ide-core-browser/download/@ali/ide-core-browser-1.30.1.tgz#b223e7f74211b4a5a35322db88e39f75a264c91e"
-  integrity sha1-siPn90IRtKWjUyLbiOOfdaJkyR4=
+"@ali/ide-core-browser@1.31.1":
+  version "1.31.1"
+  resolved "https://registry.npm.alibaba-inc.com/@ali/ide-core-browser/download/@ali/ide-core-browser-1.31.1.tgz#6bdee470537b6baa5666e2473f4f93d21f22561b"
+  integrity sha1-a97kcFN7a6pWZuJHP0+T0h8iVhs=
   dependencies:
-    "@ali/ide-components" "1.30.1"
-    "@ali/ide-connection" "1.30.1"
-    "@ali/ide-core-common" "1.30.1"
+    "@ali/ide-components" "1.31.1"
+    "@ali/ide-connection" "1.31.1"
+    "@ali/ide-core-common" "1.31.1"
     ajv "^6.10.0"
     ansi-to-react "^5.0.0"
     antd "^3.20.3"
@@ -92,6 +92,7 @@
     react-autosize-textarea "^7.0.0"
     react-ctxmenu-trigger "^1.0.0"
     react-custom-scrollbars "^4.2.1"
+    react-is "^16.8.6"
     react-perfect-scrollbar "^1.5.2"
     react-sticky "^6.0.3"
     react-window "^1.8.5"
@@ -103,10 +104,10 @@
     vscode-languageserver-protocol "^3.14.1"
     vscode-textmate "^5.1.1"
 
-"@ali/ide-core-common@1.30.1":
-  version "1.30.1"
-  resolved "https://registry.npm.alibaba-inc.com/@ali/ide-core-common/download/@ali/ide-core-common-1.30.1.tgz#e04250d5f65f122ad08342e3a5363e2036fe7e16"
-  integrity sha1-4EJQ1fZfEirQg0LjpTY+IDb+fhY=
+"@ali/ide-core-common@1.31.1":
+  version "1.31.1"
+  resolved "https://registry.npm.alibaba-inc.com/@ali/ide-core-common/download/@ali/ide-core-common-1.31.1.tgz#49b2e35636c4103572431c30247571e7b703766a"
+  integrity sha1-SbLjVjbEEDVyQxwwJHVx57cDdmo=
   dependencies:
     "@ali/common-di" "^5.0.0"
     shortid "^2.2.14"
@@ -114,68 +115,68 @@
     tslib "^1.9.3"
     vscode-uri "1.0.6"
 
-"@ali/ide-core-node@1.30.1":
-  version "1.30.1"
-  resolved "https://registry.npm.alibaba-inc.com/@ali/ide-core-node/download/@ali/ide-core-node-1.30.1.tgz#10e00bb7cbc1b9c08567122fe86c661b116eaeae"
-  integrity sha1-EOALt8vBucCFZxIv6GxmGxFurq4=
+"@ali/ide-core-node@1.31.1":
+  version "1.31.1"
+  resolved "https://registry.npm.alibaba-inc.com/@ali/ide-core-node/download/@ali/ide-core-node-1.31.1.tgz#7e2dfbec83fd3a3757280771aeb4d57e1ad2cdd0"
+  integrity sha1-fi377IP9OjdXKAdxrrTVfhrSzdA=
   dependencies:
-    "@ali/ide-connection" "1.30.1"
-    "@ali/ide-core-common" "1.30.1"
+    "@ali/ide-connection" "1.31.1"
+    "@ali/ide-core-common" "1.31.1"
     socket.io "^2.2.0"
     vscode-uri "1.0.6"
 
-"@ali/ide-debug@1.30.1":
-  version "1.30.1"
-  resolved "https://registry.npm.alibaba-inc.com/@ali/ide-debug/download/@ali/ide-debug-1.30.1.tgz#a711422f4f3531dbd3874273b59b937d28f266f5"
-  integrity sha1-pxFCL081MdvTh0JztZuTfSjyZvU=
+"@ali/ide-debug@1.31.1":
+  version "1.31.1"
+  resolved "https://registry.npm.alibaba-inc.com/@ali/ide-debug/download/@ali/ide-debug-1.31.1.tgz#6077b89a65d77937bc06b3e29b3fd7da021dea54"
+  integrity sha1-YHe4mmXXeTe8BrPimz/X2gId6lQ=
   dependencies:
-    "@ali/ide-components" "1.30.1"
-    "@ali/ide-connection" "1.30.1"
-    "@ali/ide-core-common" "1.30.1"
-    "@ali/ide-core-node" "1.30.1"
-    "@ali/ide-process" "1.30.1"
-    "@ali/ide-task" "1.30.1"
+    "@ali/ide-components" "1.31.1"
+    "@ali/ide-connection" "1.31.1"
+    "@ali/ide-core-common" "1.31.1"
+    "@ali/ide-core-node" "1.31.1"
+    "@ali/ide-process" "1.31.1"
+    "@ali/ide-task" "1.31.1"
     ansi-to-react "^5.0.0"
     btoa "^1.2.1"
 
-"@ali/ide-decoration@1.30.1":
-  version "1.30.1"
-  resolved "https://registry.npm.alibaba-inc.com/@ali/ide-decoration/download/@ali/ide-decoration-1.30.1.tgz#dd1800daa8f8e74984b536d8fb0648cac237c811"
-  integrity sha1-3RgA2qj450mEtTbY+wZIysI3yBE=
+"@ali/ide-decoration@1.31.1":
+  version "1.31.1"
+  resolved "https://registry.npm.alibaba-inc.com/@ali/ide-decoration/download/@ali/ide-decoration-1.31.1.tgz#5bd66b265f65e4a2ad4ada7a1fde18c2fb1e0ff2"
+  integrity sha1-W9ZrJl9l5KKtStp6H94YwvseD/I=
   dependencies:
-    "@ali/ide-core-common" "1.30.1"
-    "@ali/ide-core-node" "1.30.1"
+    "@ali/ide-core-common" "1.31.1"
+    "@ali/ide-core-node" "1.31.1"
 
-"@ali/ide-editor@1.30.1":
-  version "1.30.1"
-  resolved "https://registry.npm.alibaba-inc.com/@ali/ide-editor/download/@ali/ide-editor-1.30.1.tgz#fc62f1146451a4aaebae88dd8dcf7e26525b2abc"
-  integrity sha1-/GLxFGRRpKrrrojdjc9+JlJbKrw=
+"@ali/ide-editor@1.31.1":
+  version "1.31.1"
+  resolved "https://registry.npm.alibaba-inc.com/@ali/ide-editor/download/@ali/ide-editor-1.31.1.tgz#2c75d14cbf09f1f14579abeb40647833ba0bc478"
+  integrity sha1-LHXRTL8J8fFFeavrQGR4M7oLxHg=
   dependencies:
-    "@ali/ide-components" "1.30.1"
-    "@ali/ide-core-common" "1.30.1"
-    "@ali/ide-core-node" "1.30.1"
-    "@ali/ide-file-service" "1.30.1"
-    "@ali/ide-main-layout" "1.30.1"
-    "@ali/ide-overlay" "1.30.1"
-    "@ali/ide-theme" "1.30.1"
-    "@ali/ide-workspace" "1.30.1"
+    "@ali/ide-components" "1.31.1"
+    "@ali/ide-core-common" "1.31.1"
+    "@ali/ide-core-node" "1.31.1"
+    "@ali/ide-file-service" "1.31.1"
+    "@ali/ide-main-layout" "1.31.1"
+    "@ali/ide-overlay" "1.31.1"
+    "@ali/ide-theme" "1.31.1"
+    "@ali/ide-workspace" "1.31.1"
     md5 "^2.2.1"
 
-"@ali/ide-explorer@1.30.1":
-  version "1.30.1"
-  resolved "https://registry.npm.alibaba-inc.com/@ali/ide-explorer/download/@ali/ide-explorer-1.30.1.tgz#6f9650e2a8f9a0e4f455caeb55f960c2c9ee50d9"
-  integrity sha1-b5ZQ4qj5oOT0VcrrVflgwsnuUNk=
+"@ali/ide-explorer@1.31.1":
+  version "1.31.1"
+  resolved "https://registry.npm.alibaba-inc.com/@ali/ide-explorer/download/@ali/ide-explorer-1.31.1.tgz#b795b57c531262651b558086af4825ca5470c650"
+  integrity sha1-t5W1fFMSYmUbVYCGr0glylRwxlA=
   dependencies:
-    "@ali/ide-core-node" "1.30.1"
+    "@ali/ide-core-node" "1.31.1"
 
-"@ali/ide-express-file-server@1.30.1":
-  version "1.30.1"
-  resolved "https://registry.npm.alibaba-inc.com/@ali/ide-express-file-server/download/@ali/ide-express-file-server-1.30.1.tgz#864d1d2e6a4e827bd4ec7c436b9804e288713764"
-  integrity sha1-hk0dLmpOgnvU7HxDa5gE4ohxN2Q=
+"@ali/ide-express-file-server@1.31.1":
+  version "1.31.1"
+  resolved "https://registry.npm.alibaba-inc.com/@ali/ide-express-file-server/download/@ali/ide-express-file-server-1.31.1.tgz#4bb9991db90ecc9ce2afd4c6d0ff3cb58055acdc"
+  integrity sha1-S7mZHbkOzJzir9TG0P88tYBVrNw=
   dependencies:
-    "@ali/ide-core-common" "1.30.1"
-    "@ali/ide-core-node" "1.30.1"
-    "@ali/ide-static-resource" "1.30.1"
+    "@ali/ide-core-common" "1.31.1"
+    "@ali/ide-core-node" "1.31.1"
+    "@ali/ide-static-resource" "1.31.1"
     koa-mount "^4.0.0"
     koa-static "^5.0.0"
 
@@ -193,71 +194,71 @@
     uuid "^7.0.2"
     yauzl "^2.10.0"
 
-"@ali/ide-extension-manager@1.30.1":
-  version "1.30.1"
-  resolved "https://registry.npm.alibaba-inc.com/@ali/ide-extension-manager/download/@ali/ide-extension-manager-1.30.1.tgz#89ba4b89f9da5642cfb0ea49e6bd63004bb47abf"
-  integrity sha1-ibpLifnaVkLPsOpJ5r1jAEu0er8=
+"@ali/ide-extension-manager@1.31.1":
+  version "1.31.1"
+  resolved "https://registry.npm.alibaba-inc.com/@ali/ide-extension-manager/download/@ali/ide-extension-manager-1.31.1.tgz#af33dd16402651213c92503aa1a120c04e665695"
+  integrity sha1-rzPdFkAmUSE8klA6oaEgwE5mVpU=
   dependencies:
-    "@ali/ide-components" "1.30.1"
-    "@ali/ide-core-common" "1.30.1"
-    "@ali/ide-core-node" "1.30.1"
-    "@ali/ide-editor" "1.30.1"
+    "@ali/ide-components" "1.31.1"
+    "@ali/ide-core-common" "1.31.1"
+    "@ali/ide-core-node" "1.31.1"
+    "@ali/ide-editor" "1.31.1"
     "@ali/ide-extension-installer" "^2.1.0"
-    "@ali/ide-kaitian-extension" "1.30.1"
-    "@ali/ide-main-layout" "1.30.1"
-    "@ali/ide-markdown" "1.30.1"
-    "@ali/ide-overlay" "1.30.1"
-    "@ali/ide-static-resource" "1.30.1"
-    "@ali/ide-theme" "1.30.1"
+    "@ali/ide-kaitian-extension" "1.31.1"
+    "@ali/ide-main-layout" "1.31.1"
+    "@ali/ide-markdown" "1.31.1"
+    "@ali/ide-overlay" "1.31.1"
+    "@ali/ide-static-resource" "1.31.1"
+    "@ali/ide-theme" "1.31.1"
     compare-versions "^3.5.1"
     fs-extra "^8.1.0"
     query-string "^6.8.3"
     urllib "^2.34.1"
 
-"@ali/ide-extension-storage@1.30.1":
-  version "1.30.1"
-  resolved "https://registry.npm.alibaba-inc.com/@ali/ide-extension-storage/download/@ali/ide-extension-storage-1.30.1.tgz#a5656fd45353d8a576aebcc026236e9372e4527f"
-  integrity sha1-pWVv1FNT2KV2rrzAJiNuk3LkUn8=
+"@ali/ide-extension-storage@1.31.1":
+  version "1.31.1"
+  resolved "https://registry.npm.alibaba-inc.com/@ali/ide-extension-storage/download/@ali/ide-extension-storage-1.31.1.tgz#7a4ac9fee668d12aec6c443003262bb10b6b6e63"
+  integrity sha1-ekrJ/uZo0SrsbEQwAyYrsQtrbmM=
   dependencies:
-    "@ali/ide-core-common" "1.30.1"
-    "@ali/ide-core-node" "1.30.1"
-    "@ali/ide-file-service" "1.30.1"
-    "@ali/ide-logs" "1.30.1"
-    "@ali/ide-workspace" "1.30.1"
+    "@ali/ide-core-common" "1.31.1"
+    "@ali/ide-core-node" "1.31.1"
+    "@ali/ide-file-service" "1.31.1"
+    "@ali/ide-logs" "1.31.1"
+    "@ali/ide-workspace" "1.31.1"
 
-"@ali/ide-file-scheme@1.30.1":
-  version "1.30.1"
-  resolved "https://registry.npm.alibaba-inc.com/@ali/ide-file-scheme/download/@ali/ide-file-scheme-1.30.1.tgz#5e9b7b0262bcef7eb9f4715921bb43941d0068e4"
-  integrity sha1-Xpt7AmK873659HFZIbtDlB0AaOQ=
+"@ali/ide-file-scheme@1.31.1":
+  version "1.31.1"
+  resolved "https://registry.npm.alibaba-inc.com/@ali/ide-file-scheme/download/@ali/ide-file-scheme-1.31.1.tgz#9d9bce2d3f79a78672a0f034811aea9c6794e3f0"
+  integrity sha1-nZvOLT95p4ZyoPA0gRrqnGeU4/A=
   dependencies:
-    "@ali/ide-core-browser" "1.30.1"
-    "@ali/ide-core-common" "1.30.1"
-    "@ali/ide-core-node" "1.30.1"
-    "@ali/ide-editor" "1.30.1"
-    "@ali/ide-file-service" "1.30.1"
-    "@ali/ide-overlay" "1.30.1"
-    "@ali/ide-static-resource" "1.30.1"
+    "@ali/ide-core-browser" "1.31.1"
+    "@ali/ide-core-common" "1.31.1"
+    "@ali/ide-core-node" "1.31.1"
+    "@ali/ide-editor" "1.31.1"
+    "@ali/ide-file-service" "1.31.1"
+    "@ali/ide-overlay" "1.31.1"
+    "@ali/ide-static-resource" "1.31.1"
 
-"@ali/ide-file-search@1.30.1":
-  version "1.30.1"
-  resolved "https://registry.npm.alibaba-inc.com/@ali/ide-file-search/download/@ali/ide-file-search-1.30.1.tgz#de308ead93b2fc65d6ba77fce8c88a089ac1f209"
-  integrity sha1-3jCOrZOy/GXWunf86MiKCJrB8gk=
+"@ali/ide-file-search@1.31.1":
+  version "1.31.1"
+  resolved "https://registry.npm.alibaba-inc.com/@ali/ide-file-search/download/@ali/ide-file-search-1.31.1.tgz#976c2cd5198b539d1480ceb1814302df8173de77"
+  integrity sha1-l2ws1RmLU50UgM6xgUMC34Fz3nc=
   dependencies:
-    "@ali/ide-core-common" "1.30.1"
-    "@ali/ide-core-node" "1.30.1"
-    "@ali/ide-process" "1.30.1"
+    "@ali/ide-core-common" "1.31.1"
+    "@ali/ide-core-node" "1.31.1"
+    "@ali/ide-process" "1.31.1"
     "@ali/vscode-ripgrep" "^1.3.1-release"
     fuzzy "^0.1.3"
     readline "^1.3.0"
 
-"@ali/ide-file-service@1.30.1":
-  version "1.30.1"
-  resolved "https://registry.npm.alibaba-inc.com/@ali/ide-file-service/download/@ali/ide-file-service-1.30.1.tgz#9c87640b15bacbaa6d16a01778512ed3bf0c1280"
-  integrity sha1-nIdkCxW6y6ptFqAXeFEu078MEoA=
+"@ali/ide-file-service@1.31.1":
+  version "1.31.1"
+  resolved "https://registry.npm.alibaba-inc.com/@ali/ide-file-service/download/@ali/ide-file-service-1.31.1.tgz#ad5184cc1070608cc90a55884462bb874f78502a"
+  integrity sha1-rVGEzBBwYIzJClWIRGK7h094UCo=
   dependencies:
-    "@ali/ide-connection" "1.30.1"
-    "@ali/ide-core-common" "1.30.1"
-    "@ali/ide-core-node" "1.30.1"
+    "@ali/ide-connection" "1.31.1"
+    "@ali/ide-core-common" "1.31.1"
+    "@ali/ide-core-node" "1.31.1"
     drivelist "^6.4.3"
     file-type "^12.0.0"
     iconv-lite "^0.5.0"
@@ -270,70 +271,70 @@
     vscode-languageserver-types "^3.16.0"
     write-file-atomic "^3.0.0"
 
-"@ali/ide-file-tree-next@1.30.1":
-  version "1.30.1"
-  resolved "https://registry.npm.alibaba-inc.com/@ali/ide-file-tree-next/download/@ali/ide-file-tree-next-1.30.1.tgz#a909b2986f9cd23fd5dc9705eefa0b1ce80ce2fb"
-  integrity sha1-qQmymG+c0j/V3JcF7voLHOgM4vs=
+"@ali/ide-file-tree-next@1.31.1":
+  version "1.31.1"
+  resolved "https://registry.npm.alibaba-inc.com/@ali/ide-file-tree-next/download/@ali/ide-file-tree-next-1.31.1.tgz#f2446a4c4c34db4e777afc761046e5931415fe60"
+  integrity sha1-8kRqTEw02053evx2EEblkxQV/mA=
   dependencies:
-    "@ali/ide-components" "1.30.1"
-    "@ali/ide-core-common" "1.30.1"
-    "@ali/ide-core-node" "1.30.1"
-    "@ali/ide-file-service" "1.30.1"
-    "@ali/ide-workspace" "1.30.1"
-    "@ali/ide-workspace-edit" "1.30.1"
+    "@ali/ide-components" "1.31.1"
+    "@ali/ide-core-common" "1.31.1"
+    "@ali/ide-core-node" "1.31.1"
+    "@ali/ide-file-service" "1.31.1"
+    "@ali/ide-workspace" "1.31.1"
+    "@ali/ide-workspace-edit" "1.31.1"
 
-"@ali/ide-file-tree@1.30.1":
-  version "1.30.1"
-  resolved "https://registry.npm.alibaba-inc.com/@ali/ide-file-tree/download/@ali/ide-file-tree-1.30.1.tgz#00c25f998f730a57b7e9f8db8d78a086bbb36fac"
-  integrity sha1-AMJfmY9zCle36fjbjXighruzb6w=
+"@ali/ide-file-tree@1.31.1":
+  version "1.31.1"
+  resolved "https://registry.npm.alibaba-inc.com/@ali/ide-file-tree/download/@ali/ide-file-tree-1.31.1.tgz#2b018192aa3e541ca13daef968be7e72b88cd929"
+  integrity sha1-KwGBkqo+VByhPa75aL5+criM2Sk=
   dependencies:
-    "@ali/ide-components" "1.30.1"
-    "@ali/ide-core-common" "1.30.1"
-    "@ali/ide-core-node" "1.30.1"
-    "@ali/ide-file-service" "1.30.1"
-    "@ali/ide-workspace" "1.30.1"
-    "@ali/ide-workspace-edit" "1.30.1"
+    "@ali/ide-components" "1.31.1"
+    "@ali/ide-core-common" "1.31.1"
+    "@ali/ide-core-node" "1.31.1"
+    "@ali/ide-file-service" "1.31.1"
+    "@ali/ide-workspace" "1.31.1"
+    "@ali/ide-workspace-edit" "1.31.1"
 
-"@ali/ide-i18n@1.30.1":
-  version "1.30.1"
-  resolved "https://registry.npm.alibaba-inc.com/@ali/ide-i18n/download/@ali/ide-i18n-1.30.1.tgz#019b402df7416a0ca4684edce053e29e506e55be"
-  integrity sha1-AZtALfdBagykaE7c4FPinlBuVb4=
+"@ali/ide-i18n@1.31.1":
+  version "1.31.1"
+  resolved "https://registry.npm.alibaba-inc.com/@ali/ide-i18n/download/@ali/ide-i18n-1.31.1.tgz#b96ea7c582768078183cc6a97cd4a237c5ccdd81"
+  integrity sha1-uW6nxYJ2gHgYPMapfNSiN8XM3YE=
   dependencies:
-    "@ali/ide-core-common" "1.30.1"
-    "@ali/ide-core-node" "1.30.1"
+    "@ali/ide-core-common" "1.31.1"
+    "@ali/ide-core-node" "1.31.1"
 
-"@ali/ide-kaitian-extension@1.30.1":
-  version "1.30.1"
-  resolved "https://registry.npm.alibaba-inc.com/@ali/ide-kaitian-extension/download/@ali/ide-kaitian-extension-1.30.1.tgz#8f1e1cf6d7bf54875e4dfecc429cc3d1a35d2181"
-  integrity sha1-jx4c9te/VIdeTf7MQpzD0aNdIYE=
+"@ali/ide-kaitian-extension@1.31.1":
+  version "1.31.1"
+  resolved "https://registry.npm.alibaba-inc.com/@ali/ide-kaitian-extension/download/@ali/ide-kaitian-extension-1.31.1.tgz#b91315500c040f1b4f46fa23321c73585600995a"
+  integrity sha1-uRMVUAwEDxtPRvojMhxzWFYAmVo=
   dependencies:
-    "@ali/ide-comments" "1.30.1"
-    "@ali/ide-components" "1.30.1"
-    "@ali/ide-connection" "1.30.1"
-    "@ali/ide-core-browser" "1.30.1"
-    "@ali/ide-core-common" "1.30.1"
-    "@ali/ide-core-node" "1.30.1"
-    "@ali/ide-debug" "1.30.1"
-    "@ali/ide-decoration" "1.30.1"
-    "@ali/ide-editor" "1.30.1"
-    "@ali/ide-extension-storage" "1.30.1"
-    "@ali/ide-file-search" "1.30.1"
-    "@ali/ide-file-service" "1.30.1"
-    "@ali/ide-logs" "1.30.1"
-    "@ali/ide-main-layout" "1.30.1"
-    "@ali/ide-monaco" "1.30.1"
-    "@ali/ide-output" "1.30.1"
-    "@ali/ide-overlay" "1.30.1"
-    "@ali/ide-quick-open" "1.30.1"
-    "@ali/ide-scm" "1.30.1"
-    "@ali/ide-static-resource" "1.30.1"
-    "@ali/ide-task" "1.30.1"
-    "@ali/ide-terminal-next" "1.30.1"
-    "@ali/ide-theme" "1.30.1"
-    "@ali/ide-toolbar" "1.30.1"
-    "@ali/ide-webview" "1.30.1"
-    "@ali/ide-workspace" "1.30.1"
-    "@ali/ide-workspace-edit" "1.30.1"
+    "@ali/ide-comments" "1.31.1"
+    "@ali/ide-components" "1.31.1"
+    "@ali/ide-connection" "1.31.1"
+    "@ali/ide-core-browser" "1.31.1"
+    "@ali/ide-core-common" "1.31.1"
+    "@ali/ide-core-node" "1.31.1"
+    "@ali/ide-debug" "1.31.1"
+    "@ali/ide-decoration" "1.31.1"
+    "@ali/ide-editor" "1.31.1"
+    "@ali/ide-extension-storage" "1.31.1"
+    "@ali/ide-file-search" "1.31.1"
+    "@ali/ide-file-service" "1.31.1"
+    "@ali/ide-logs" "1.31.1"
+    "@ali/ide-main-layout" "1.31.1"
+    "@ali/ide-monaco" "1.31.1"
+    "@ali/ide-output" "1.31.1"
+    "@ali/ide-overlay" "1.31.1"
+    "@ali/ide-quick-open" "1.31.1"
+    "@ali/ide-scm" "1.31.1"
+    "@ali/ide-static-resource" "1.31.1"
+    "@ali/ide-task" "1.31.1"
+    "@ali/ide-terminal-next" "1.31.1"
+    "@ali/ide-theme" "1.31.1"
+    "@ali/ide-toolbar" "1.31.1"
+    "@ali/ide-webview" "1.31.1"
+    "@ali/ide-workspace" "1.31.1"
+    "@ali/ide-workspace-edit" "1.31.1"
     "@ali/vscode-jsonrpc" "^4.0.1"
     "@ali/vscode-ripgrep" "^1.3.1-release"
     address "^1.1.2"
@@ -346,300 +347,300 @@
     tree-kill "^1.2.2"
     v8-inspect-profiler "^0.0.20"
 
-"@ali/ide-keymaps@1.30.1":
-  version "1.30.1"
-  resolved "https://registry.npm.alibaba-inc.com/@ali/ide-keymaps/download/@ali/ide-keymaps-1.30.1.tgz#96407f3eb709d0790bb61e435268a09dbc66b3ce"
-  integrity sha1-lkB/PrcJ0HkLth5DUmignbxms84=
+"@ali/ide-keymaps@1.31.1":
+  version "1.31.1"
+  resolved "https://registry.npm.alibaba-inc.com/@ali/ide-keymaps/download/@ali/ide-keymaps-1.31.1.tgz#813de08159be53ecef5c7b3441a2fbde808be6c3"
+  integrity sha1-gT3ggVm+U+zvXHs0QaL73oCL5sM=
   dependencies:
-    "@ali/ide-core-common" "1.30.1"
+    "@ali/ide-core-common" "1.31.1"
 
-"@ali/ide-logs@1.30.1":
-  version "1.30.1"
-  resolved "https://registry.npm.alibaba-inc.com/@ali/ide-logs/download/@ali/ide-logs-1.30.1.tgz#83f0b1a6f9e67519e266ab85ee03e6017a941ada"
-  integrity sha1-g/CxpvnmdRniZquF7gPmAXqUGto=
+"@ali/ide-logs@1.31.1":
+  version "1.31.1"
+  resolved "https://registry.npm.alibaba-inc.com/@ali/ide-logs/download/@ali/ide-logs-1.31.1.tgz#1e0349a322860d2415c50e672b604ddfeb5bf26f"
+  integrity sha1-HgNJoyKGDSQVxQ5nK2BN3+tb8m8=
   dependencies:
-    "@ali/ide-connection" "1.30.1"
-    "@ali/ide-core-common" "1.30.1"
-    "@ali/ide-core-node" "1.30.1"
+    "@ali/ide-connection" "1.31.1"
+    "@ali/ide-core-common" "1.31.1"
+    "@ali/ide-core-node" "1.31.1"
     archiver "^3.1.1"
     spdlog "^0.9.0"
 
-"@ali/ide-main-layout@1.30.1":
-  version "1.30.1"
-  resolved "https://registry.npm.alibaba-inc.com/@ali/ide-main-layout/download/@ali/ide-main-layout-1.30.1.tgz#f16500496afddc986e19938e545ae57d30dae809"
-  integrity sha1-8WUASWr93JhuGZOOVFrlfTDa6Ak=
+"@ali/ide-main-layout@1.31.1":
+  version "1.31.1"
+  resolved "https://registry.npm.alibaba-inc.com/@ali/ide-main-layout/download/@ali/ide-main-layout-1.31.1.tgz#3e2a9b011ba835b9754c23490495cf9eb79a497d"
+  integrity sha1-PiqbARuoNbl1TCNJBJXPnreaSX0=
   dependencies:
-    "@ali/ide-components" "1.30.1"
-    "@ali/ide-core-common" "1.30.1"
+    "@ali/ide-components" "1.31.1"
+    "@ali/ide-core-common" "1.31.1"
 
-"@ali/ide-markdown@1.30.1":
-  version "1.30.1"
-  resolved "https://registry.npm.alibaba-inc.com/@ali/ide-markdown/download/@ali/ide-markdown-1.30.1.tgz#647bbf78eb79e57eacc1d97ec586520126da1ee1"
-  integrity sha1-ZHu/eOt55X6swdl+xYZSASbaHuE=
+"@ali/ide-markdown@1.31.1":
+  version "1.31.1"
+  resolved "https://registry.npm.alibaba-inc.com/@ali/ide-markdown/download/@ali/ide-markdown-1.31.1.tgz#e41db887c97649500798b985173d110601d9836f"
+  integrity sha1-5B24h8l2SVAHmLmFFz0RBgHZg28=
   dependencies:
-    "@ali/ide-core-common" "1.30.1"
-    "@ali/ide-core-node" "1.30.1"
-    "@ali/ide-editor" "1.30.1"
-    "@ali/ide-webview" "1.30.1"
+    "@ali/ide-core-common" "1.31.1"
+    "@ali/ide-core-node" "1.31.1"
+    "@ali/ide-editor" "1.31.1"
+    "@ali/ide-webview" "1.31.1"
     marked "0.7.0"
 
-"@ali/ide-markers@1.30.1":
-  version "1.30.1"
-  resolved "https://registry.npm.alibaba-inc.com/@ali/ide-markers/download/@ali/ide-markers-1.30.1.tgz#8e19503f9ffb8327dc22cfa04b3583df57a1ad40"
-  integrity sha1-jhlQP5/7gyfcIs+gSzWD31ehrUA=
+"@ali/ide-markers@1.31.1":
+  version "1.31.1"
+  resolved "https://registry.npm.alibaba-inc.com/@ali/ide-markers/download/@ali/ide-markers-1.31.1.tgz#02a98bf2ff0e636d103ce3aaeab6cc57ed321a45"
+  integrity sha1-AqmL8v8OY20QPOOq6rbMV+0yGkU=
   dependencies:
-    "@ali/ide-components" "1.30.1"
-    "@ali/ide-core-common" "1.30.1"
-    "@ali/ide-editor" "1.30.1"
-    "@ali/ide-main-layout" "1.30.1"
-    "@ali/ide-theme" "1.30.1"
+    "@ali/ide-components" "1.31.1"
+    "@ali/ide-core-common" "1.31.1"
+    "@ali/ide-editor" "1.31.1"
+    "@ali/ide-main-layout" "1.31.1"
+    "@ali/ide-theme" "1.31.1"
 
-"@ali/ide-menu-bar@1.30.1":
-  version "1.30.1"
-  resolved "https://registry.npm.alibaba-inc.com/@ali/ide-menu-bar/download/@ali/ide-menu-bar-1.30.1.tgz#89836d101e0574208efe11117c02b7e0387443b0"
-  integrity sha1-iYNtEB4FdCCO/hERfAK34Dh0Q7A=
+"@ali/ide-menu-bar@1.31.1":
+  version "1.31.1"
+  resolved "https://registry.npm.alibaba-inc.com/@ali/ide-menu-bar/download/@ali/ide-menu-bar-1.31.1.tgz#878c2f6fc166edaf86e5614c91a455a6e0792fa1"
+  integrity sha1-h4wvb8Fm7a+G5WFMkaRVpuB5L6E=
   dependencies:
-    "@ali/ide-components" "1.30.1"
-    "@ali/ide-core-common" "1.30.1"
-    "@ali/ide-core-node" "1.30.1"
+    "@ali/ide-components" "1.31.1"
+    "@ali/ide-core-common" "1.31.1"
+    "@ali/ide-core-node" "1.31.1"
 
-"@ali/ide-monaco-enhance@1.30.1":
-  version "1.30.1"
-  resolved "https://registry.npm.alibaba-inc.com/@ali/ide-monaco-enhance/download/@ali/ide-monaco-enhance-1.30.1.tgz#a91c70a92e495d012d9585bef9afbf32d796ade6"
-  integrity sha1-qRxwqS5JXQEtlYW++a+/MteWreY=
+"@ali/ide-monaco-enhance@1.31.1":
+  version "1.31.1"
+  resolved "https://registry.npm.alibaba-inc.com/@ali/ide-monaco-enhance/download/@ali/ide-monaco-enhance-1.31.1.tgz#8e5e0680eb88e0584d5ba4c8e2add249ddc1f389"
+  integrity sha1-jl4GgOuI4FhNW6TI4q3SSd3B84k=
   dependencies:
-    "@ali/ide-core-common" "1.30.1"
-    "@ali/ide-core-node" "1.30.1"
+    "@ali/ide-core-common" "1.31.1"
+    "@ali/ide-core-node" "1.31.1"
 
-"@ali/ide-monaco@1.30.1":
-  version "1.30.1"
-  resolved "https://registry.npm.alibaba-inc.com/@ali/ide-monaco/download/@ali/ide-monaco-1.30.1.tgz#b539d3c2984e9e71e16aa2b5679aeb478d6f70a3"
-  integrity sha1-tTnTwphOnnHhaqK1Z5rrR41vcKM=
+"@ali/ide-monaco@1.31.1":
+  version "1.31.1"
+  resolved "https://registry.npm.alibaba-inc.com/@ali/ide-monaco/download/@ali/ide-monaco-1.31.1.tgz#fa3bc1b18d956bf5320423a0fde2fec2a7a55eed"
+  integrity sha1-+jvBsY2Va/UyBCOg/eL+wqelXu0=
   dependencies:
-    "@ali/ide-core-browser" "1.30.1"
-    "@ali/ide-core-common" "1.30.1"
-    "@ali/ide-core-node" "1.30.1"
-    "@ali/ide-editor" "1.30.1"
-    "@ali/ide-file-service" "1.30.1"
-    "@ali/ide-theme" "1.30.1"
+    "@ali/ide-core-browser" "1.31.1"
+    "@ali/ide-core-common" "1.31.1"
+    "@ali/ide-core-node" "1.31.1"
+    "@ali/ide-editor" "1.31.1"
+    "@ali/ide-file-service" "1.31.1"
+    "@ali/ide-theme" "1.31.1"
     "@reexport/vsc-modules" "^1.1.0"
     monaco-editor-core "^0.17.0"
     vscode-oniguruma "1.3.1"
 
-"@ali/ide-opened-editor@1.30.1":
-  version "1.30.1"
-  resolved "https://registry.npm.alibaba-inc.com/@ali/ide-opened-editor/download/@ali/ide-opened-editor-1.30.1.tgz#b32b5e0411cfc4a94d758ff724b6a4da214ad5af"
-  integrity sha1-syteBBHPxKlNdY/3JLak2iFK1a8=
+"@ali/ide-opened-editor@1.31.1":
+  version "1.31.1"
+  resolved "https://registry.npm.alibaba-inc.com/@ali/ide-opened-editor/download/@ali/ide-opened-editor-1.31.1.tgz#5b2780a804fce6c3484586a4767e55a311982b7b"
+  integrity sha1-WyeAqAT85sNIRYakdn5VoxGYK3s=
   dependencies:
-    "@ali/ide-core-common" "1.30.1"
-    "@ali/ide-core-node" "1.30.1"
-    "@ali/ide-editor" "1.30.1"
-    "@ali/ide-file-service" "1.30.1"
+    "@ali/ide-core-common" "1.31.1"
+    "@ali/ide-core-node" "1.31.1"
+    "@ali/ide-editor" "1.31.1"
+    "@ali/ide-file-service" "1.31.1"
 
-"@ali/ide-outline@1.30.1":
-  version "1.30.1"
-  resolved "https://registry.npm.alibaba-inc.com/@ali/ide-outline/download/@ali/ide-outline-1.30.1.tgz#f3ea601909eedb7f25594733bb919bd86c484fb4"
-  integrity sha1-8+pgGQnu238lWUczu5Gb2GxIT7Q=
+"@ali/ide-outline@1.31.1":
+  version "1.31.1"
+  resolved "https://registry.npm.alibaba-inc.com/@ali/ide-outline/download/@ali/ide-outline-1.31.1.tgz#601cdf646eb299d3d29a3a4dda04adc1f38a9de6"
+  integrity sha1-YBzfZG6ymdPSmjpN2gStwfOKneY=
 
-"@ali/ide-output@1.30.1":
-  version "1.30.1"
-  resolved "https://registry.npm.alibaba-inc.com/@ali/ide-output/download/@ali/ide-output-1.30.1.tgz#2402b0e50406db9305ed23e7255a02932e22b716"
-  integrity sha1-JAKw5QQG25MF7SPnJVoCky4itxY=
+"@ali/ide-output@1.31.1":
+  version "1.31.1"
+  resolved "https://registry.npm.alibaba-inc.com/@ali/ide-output/download/@ali/ide-output-1.31.1.tgz#ad4f5044c5f51bf01fcf20d0baaf2209bdd5aa5c"
+  integrity sha1-rU9QRMX1G/AfzyDQuq8iCb3Vqlw=
   dependencies:
-    "@ali/ide-components" "1.30.1"
-    "@ali/ide-core-browser" "1.30.1"
-    "@ali/ide-core-common" "1.30.1"
-    "@ali/ide-editor" "1.30.1"
-    "@ali/ide-main-layout" "1.30.1"
-    "@ali/ide-workspace" "1.30.1"
+    "@ali/ide-components" "1.31.1"
+    "@ali/ide-core-browser" "1.31.1"
+    "@ali/ide-core-common" "1.31.1"
+    "@ali/ide-editor" "1.31.1"
+    "@ali/ide-main-layout" "1.31.1"
+    "@ali/ide-workspace" "1.31.1"
     anser "^1.4.9"
     escape-carriage "^1.3.0"
 
-"@ali/ide-overlay@1.30.1":
-  version "1.30.1"
-  resolved "https://registry.npm.alibaba-inc.com/@ali/ide-overlay/download/@ali/ide-overlay-1.30.1.tgz#0bfde3f5747539962880b65dadddefd833d85ca5"
-  integrity sha1-C/3j9XR1OZYogLZdrd3v2DPYXKU=
+"@ali/ide-overlay@1.31.1":
+  version "1.31.1"
+  resolved "https://registry.npm.alibaba-inc.com/@ali/ide-overlay/download/@ali/ide-overlay-1.31.1.tgz#913049055c779667bd48f228f64f39ea172c01a2"
+  integrity sha1-kTBJBVx3lme9SPIo9k856hcsAaI=
   dependencies:
-    "@ali/ide-core-common" "1.30.1"
-    "@ali/ide-core-node" "1.30.1"
+    "@ali/ide-core-common" "1.31.1"
+    "@ali/ide-core-node" "1.31.1"
 
-"@ali/ide-preferences@1.30.1":
-  version "1.30.1"
-  resolved "https://registry.npm.alibaba-inc.com/@ali/ide-preferences/download/@ali/ide-preferences-1.30.1.tgz#e924f2e0b0c70fd9098d051053baea19f57588f6"
-  integrity sha1-6STy4LDHD9kJjQUQU7rqGfV1iPY=
+"@ali/ide-preferences@1.31.1":
+  version "1.31.1"
+  resolved "https://registry.npm.alibaba-inc.com/@ali/ide-preferences/download/@ali/ide-preferences-1.31.1.tgz#bad8c9b6e6df8794fc4e69fb24a4e72fe6450621"
+  integrity sha1-utjJtubfh5T8Tmn7JKTnL+ZFBiE=
   dependencies:
-    "@ali/ide-components" "1.30.1"
-    "@ali/ide-core-browser" "1.30.1"
-    "@ali/ide-core-common" "1.30.1"
-    "@ali/ide-editor" "1.30.1"
-    "@ali/ide-file-service" "1.30.1"
-    "@ali/ide-overlay" "1.30.1"
-    "@ali/ide-userstorage" "1.30.1"
-    "@ali/ide-workspace" "1.30.1"
+    "@ali/ide-components" "1.31.1"
+    "@ali/ide-core-browser" "1.31.1"
+    "@ali/ide-core-common" "1.31.1"
+    "@ali/ide-editor" "1.31.1"
+    "@ali/ide-file-service" "1.31.1"
+    "@ali/ide-overlay" "1.31.1"
+    "@ali/ide-userstorage" "1.31.1"
+    "@ali/ide-workspace" "1.31.1"
 
-"@ali/ide-process@1.30.1":
-  version "1.30.1"
-  resolved "https://registry.npm.alibaba-inc.com/@ali/ide-process/download/@ali/ide-process-1.30.1.tgz#593f53a150e6ff68994bd7997b1c7ddd61e62327"
-  integrity sha1-WT9ToVDm/2iZS9eZexx93WHmIyc=
+"@ali/ide-process@1.31.1":
+  version "1.31.1"
+  resolved "https://registry.npm.alibaba-inc.com/@ali/ide-process/download/@ali/ide-process-1.31.1.tgz#e0fdc47ae4376a6cfd73f119c46975e8b7d7b0f9"
+  integrity sha1-4P3EeuQ3amz9c/EZxGl16LfXsPk=
   dependencies:
-    "@ali/ide-core-common" "1.30.1"
-    "@ali/ide-core-node" "1.30.1"
+    "@ali/ide-core-common" "1.31.1"
+    "@ali/ide-core-node" "1.31.1"
 
-"@ali/ide-quick-open@1.30.1":
-  version "1.30.1"
-  resolved "https://registry.npm.alibaba-inc.com/@ali/ide-quick-open/download/@ali/ide-quick-open-1.30.1.tgz#975329ec90d3c6ec8599363d6041184d266afe00"
-  integrity sha1-l1Mp7JDTxuyFmTY9YEEYTSZq/gA=
+"@ali/ide-quick-open@1.31.1":
+  version "1.31.1"
+  resolved "https://registry.npm.alibaba-inc.com/@ali/ide-quick-open/download/@ali/ide-quick-open-1.31.1.tgz#6617e69f56ee3f0c81c44f68e68c4e61793f9717"
+  integrity sha1-Zhfmn1buPwyBxE9o5oxOYXk/lxc=
   dependencies:
-    "@ali/ide-core-browser" "1.30.1"
-    "@ali/ide-core-common" "1.30.1"
-    "@ali/ide-monaco" "1.30.1"
-    "@ali/ide-startup" "1.30.1"
-    "@ali/ide-static-resource" "1.30.1"
-    "@ali/ide-theme" "1.30.1"
-    "@ali/ide-workspace" "1.30.1"
+    "@ali/ide-core-browser" "1.31.1"
+    "@ali/ide-core-common" "1.31.1"
+    "@ali/ide-monaco" "1.31.1"
+    "@ali/ide-startup" "1.31.1"
+    "@ali/ide-static-resource" "1.31.1"
+    "@ali/ide-theme" "1.31.1"
+    "@ali/ide-workspace" "1.31.1"
 
-"@ali/ide-scm@1.30.1":
-  version "1.30.1"
-  resolved "https://registry.npm.alibaba-inc.com/@ali/ide-scm/download/@ali/ide-scm-1.30.1.tgz#47c29783e4d31da1d5cb367f476b9634f8b3b52c"
-  integrity sha1-R8KXg+TTHaHVyzZ/R2uWNPiztSw=
+"@ali/ide-scm@1.31.1":
+  version "1.31.1"
+  resolved "https://registry.npm.alibaba-inc.com/@ali/ide-scm/download/@ali/ide-scm-1.31.1.tgz#4a6ecbe90c438b0d23d3033fed70396ce6c86d1c"
+  integrity sha1-Sm7L6QxDiw0j0wM/7XA5bObIbRw=
   dependencies:
-    "@ali/ide-components" "1.30.1"
-    "@ali/ide-core-browser" "1.30.1"
-    "@ali/ide-core-common" "1.30.1"
-    "@ali/ide-editor" "1.30.1"
-    "@ali/ide-main-layout" "1.30.1"
-    "@ali/ide-monaco-enhance" "1.30.1"
-    "@ali/ide-status-bar" "1.30.1"
-    "@ali/ide-theme" "1.30.1"
+    "@ali/ide-components" "1.31.1"
+    "@ali/ide-core-browser" "1.31.1"
+    "@ali/ide-core-common" "1.31.1"
+    "@ali/ide-editor" "1.31.1"
+    "@ali/ide-main-layout" "1.31.1"
+    "@ali/ide-monaco-enhance" "1.31.1"
+    "@ali/ide-status-bar" "1.31.1"
+    "@ali/ide-theme" "1.31.1"
 
-"@ali/ide-search@1.30.1":
-  version "1.30.1"
-  resolved "https://registry.npm.alibaba-inc.com/@ali/ide-search/download/@ali/ide-search-1.30.1.tgz#c7f6df751471164d7c57e7047f6ae279b3419f8c"
-  integrity sha1-x/bfdRRxFk18V+cEf2riebNBn4w=
+"@ali/ide-search@1.31.1":
+  version "1.31.1"
+  resolved "https://registry.npm.alibaba-inc.com/@ali/ide-search/download/@ali/ide-search-1.31.1.tgz#05a485497d80c371fc678cf8130d9082ee6ceb01"
+  integrity sha1-BaSFSX2Aw3H8Z4z4Ew2Qgu5s6wE=
   dependencies:
-    "@ali/ide-components" "1.30.1"
-    "@ali/ide-connection" "1.30.1"
-    "@ali/ide-core-common" "1.30.1"
-    "@ali/ide-core-node" "1.30.1"
-    "@ali/ide-editor" "1.30.1"
-    "@ali/ide-logs" "1.30.1"
-    "@ali/ide-main-layout" "1.30.1"
-    "@ali/ide-overlay" "1.30.1"
-    "@ali/ide-process" "1.30.1"
-    "@ali/ide-workspace" "1.30.1"
-    "@ali/ide-workspace-edit" "1.30.1"
+    "@ali/ide-components" "1.31.1"
+    "@ali/ide-connection" "1.31.1"
+    "@ali/ide-core-common" "1.31.1"
+    "@ali/ide-core-node" "1.31.1"
+    "@ali/ide-editor" "1.31.1"
+    "@ali/ide-logs" "1.31.1"
+    "@ali/ide-main-layout" "1.31.1"
+    "@ali/ide-overlay" "1.31.1"
+    "@ali/ide-process" "1.31.1"
+    "@ali/ide-workspace" "1.31.1"
+    "@ali/ide-workspace-edit" "1.31.1"
     "@ali/vscode-ripgrep" "^1.3.1-release"
 
-"@ali/ide-startup@1.30.1":
-  version "1.30.1"
-  resolved "https://registry.npm.alibaba-inc.com/@ali/ide-startup/download/@ali/ide-startup-1.30.1.tgz#ee8db8845a285dde06d7008b269f859400155e52"
-  integrity sha1-7o24hFooXd4G1wCLJp+FlAAVXlI=
+"@ali/ide-startup@1.31.1":
+  version "1.31.1"
+  resolved "https://registry.npm.alibaba-inc.com/@ali/ide-startup/download/@ali/ide-startup-1.31.1.tgz#167887557880b4b6db2d0de21bb030ba117a6c3f"
+  integrity sha1-FniHVXiAtLbbLQ3iG7AwuhF6bD8=
   dependencies:
-    "@ali/ide-addons" "1.30.1"
-    "@ali/ide-comments" "1.30.1"
-    "@ali/ide-core-browser" "1.30.1"
-    "@ali/ide-core-common" "1.30.1"
-    "@ali/ide-core-node" "1.30.1"
-    "@ali/ide-debug" "1.30.1"
-    "@ali/ide-decoration" "1.30.1"
-    "@ali/ide-editor" "1.30.1"
-    "@ali/ide-explorer" "1.30.1"
-    "@ali/ide-extension-manager" "1.30.1"
-    "@ali/ide-extension-storage" "1.30.1"
-    "@ali/ide-file-scheme" "1.30.1"
-    "@ali/ide-file-search" "1.30.1"
-    "@ali/ide-file-service" "1.30.1"
-    "@ali/ide-file-tree" "1.30.1"
-    "@ali/ide-file-tree-next" "1.30.1"
-    "@ali/ide-i18n" "1.30.1"
-    "@ali/ide-kaitian-extension" "1.30.1"
-    "@ali/ide-keymaps" "1.30.1"
-    "@ali/ide-logs" "1.30.1"
-    "@ali/ide-main-layout" "1.30.1"
-    "@ali/ide-markdown" "1.30.1"
-    "@ali/ide-markers" "1.30.1"
-    "@ali/ide-menu-bar" "1.30.1"
-    "@ali/ide-monaco" "1.30.1"
-    "@ali/ide-monaco-enhance" "1.30.1"
-    "@ali/ide-opened-editor" "1.30.1"
-    "@ali/ide-outline" "1.30.1"
-    "@ali/ide-output" "1.30.1"
-    "@ali/ide-overlay" "1.30.1"
-    "@ali/ide-preferences" "1.30.1"
-    "@ali/ide-process" "1.30.1"
-    "@ali/ide-quick-open" "1.30.1"
-    "@ali/ide-scm" "1.30.1"
-    "@ali/ide-search" "1.30.1"
-    "@ali/ide-static-resource" "1.30.1"
-    "@ali/ide-status-bar" "1.30.1"
-    "@ali/ide-storage" "1.30.1"
-    "@ali/ide-task" "1.30.1"
-    "@ali/ide-terminal-next" "1.30.1"
-    "@ali/ide-theme" "1.30.1"
-    "@ali/ide-toolbar" "1.30.1"
-    "@ali/ide-userstorage" "1.30.1"
-    "@ali/ide-variable" "1.30.1"
-    "@ali/ide-webview" "1.30.1"
-    "@ali/ide-workspace" "1.30.1"
-    "@ali/ide-workspace-edit" "1.30.1"
+    "@ali/ide-addons" "1.31.1"
+    "@ali/ide-comments" "1.31.1"
+    "@ali/ide-core-browser" "1.31.1"
+    "@ali/ide-core-common" "1.31.1"
+    "@ali/ide-core-node" "1.31.1"
+    "@ali/ide-debug" "1.31.1"
+    "@ali/ide-decoration" "1.31.1"
+    "@ali/ide-editor" "1.31.1"
+    "@ali/ide-explorer" "1.31.1"
+    "@ali/ide-extension-manager" "1.31.1"
+    "@ali/ide-extension-storage" "1.31.1"
+    "@ali/ide-file-scheme" "1.31.1"
+    "@ali/ide-file-search" "1.31.1"
+    "@ali/ide-file-service" "1.31.1"
+    "@ali/ide-file-tree" "1.31.1"
+    "@ali/ide-file-tree-next" "1.31.1"
+    "@ali/ide-i18n" "1.31.1"
+    "@ali/ide-kaitian-extension" "1.31.1"
+    "@ali/ide-keymaps" "1.31.1"
+    "@ali/ide-logs" "1.31.1"
+    "@ali/ide-main-layout" "1.31.1"
+    "@ali/ide-markdown" "1.31.1"
+    "@ali/ide-markers" "1.31.1"
+    "@ali/ide-menu-bar" "1.31.1"
+    "@ali/ide-monaco" "1.31.1"
+    "@ali/ide-monaco-enhance" "1.31.1"
+    "@ali/ide-opened-editor" "1.31.1"
+    "@ali/ide-outline" "1.31.1"
+    "@ali/ide-output" "1.31.1"
+    "@ali/ide-overlay" "1.31.1"
+    "@ali/ide-preferences" "1.31.1"
+    "@ali/ide-process" "1.31.1"
+    "@ali/ide-quick-open" "1.31.1"
+    "@ali/ide-scm" "1.31.1"
+    "@ali/ide-search" "1.31.1"
+    "@ali/ide-static-resource" "1.31.1"
+    "@ali/ide-status-bar" "1.31.1"
+    "@ali/ide-storage" "1.31.1"
+    "@ali/ide-task" "1.31.1"
+    "@ali/ide-terminal-next" "1.31.1"
+    "@ali/ide-theme" "1.31.1"
+    "@ali/ide-toolbar" "1.31.1"
+    "@ali/ide-userstorage" "1.31.1"
+    "@ali/ide-variable" "1.31.1"
+    "@ali/ide-webview" "1.31.1"
+    "@ali/ide-workspace" "1.31.1"
+    "@ali/ide-workspace-edit" "1.31.1"
 
-"@ali/ide-static-resource@1.30.1":
-  version "1.30.1"
-  resolved "https://registry.npm.alibaba-inc.com/@ali/ide-static-resource/download/@ali/ide-static-resource-1.30.1.tgz#8af500491ff3ff7696335100f833a918346725cd"
-  integrity sha1-ivUASR/z/3aWM1EA+DOpGDRnJc0=
+"@ali/ide-static-resource@1.31.1":
+  version "1.31.1"
+  resolved "https://registry.npm.alibaba-inc.com/@ali/ide-static-resource/download/@ali/ide-static-resource-1.31.1.tgz#989baa8067f9afc68200c5dd25df6d29fe5b3916"
+  integrity sha1-mJuqgGf5r8aCAMXdJd9tKf5bORY=
   dependencies:
-    "@ali/ide-core-common" "1.30.1"
-    "@ali/ide-core-node" "1.30.1"
+    "@ali/ide-core-common" "1.31.1"
+    "@ali/ide-core-node" "1.31.1"
 
-"@ali/ide-status-bar@1.30.1":
-  version "1.30.1"
-  resolved "https://registry.npm.alibaba-inc.com/@ali/ide-status-bar/download/@ali/ide-status-bar-1.30.1.tgz#d84a376a1be9633e244da5dbcfa230232d4043eb"
-  integrity sha1-2Eo3ahvpYz4kTaXbz6IwIy1AQ+s=
+"@ali/ide-status-bar@1.31.1":
+  version "1.31.1"
+  resolved "https://registry.npm.alibaba-inc.com/@ali/ide-status-bar/download/@ali/ide-status-bar-1.31.1.tgz#c1ae4ffd27d60c57fff09547909a03f8beb2bc07"
+  integrity sha1-wa5P/SfWDFf/8JVHkJoD+L6yvAc=
   dependencies:
-    "@ali/ide-core-common" "1.30.1"
-    "@ali/ide-core-node" "1.30.1"
-    "@ali/ide-startup" "1.30.1"
+    "@ali/ide-core-common" "1.31.1"
+    "@ali/ide-core-node" "1.31.1"
+    "@ali/ide-startup" "1.31.1"
 
-"@ali/ide-storage@1.30.1":
-  version "1.30.1"
-  resolved "https://registry.npm.alibaba-inc.com/@ali/ide-storage/download/@ali/ide-storage-1.30.1.tgz#93915dab04ddb447418b31f426dd51c0b4821050"
-  integrity sha1-k5FdqwTdtEdBizH0Jt1RwLSCEFA=
+"@ali/ide-storage@1.31.1":
+  version "1.31.1"
+  resolved "https://registry.npm.alibaba-inc.com/@ali/ide-storage/download/@ali/ide-storage-1.31.1.tgz#e42a62dae437e86489da50e7c5431cd929b2a4f5"
+  integrity sha1-5Cpi2uQ36GSJ2lDnxUMc2SmypPU=
   dependencies:
-    "@ali/ide-core-common" "1.30.1"
-    "@ali/ide-core-node" "1.30.1"
-    "@ali/ide-file-service" "1.30.1"
-    "@ali/ide-workspace" "1.30.1"
+    "@ali/ide-core-common" "1.31.1"
+    "@ali/ide-core-node" "1.31.1"
+    "@ali/ide-file-service" "1.31.1"
+    "@ali/ide-workspace" "1.31.1"
 
-"@ali/ide-task@1.30.1":
-  version "1.30.1"
-  resolved "https://registry.npm.alibaba-inc.com/@ali/ide-task/download/@ali/ide-task-1.30.1.tgz#0678db771d050cb6e5315989d5a1a2cae8f5344b"
-  integrity sha1-Bnjbdx0FDLblMVmJ1aGiyuj1NEs=
+"@ali/ide-task@1.31.1":
+  version "1.31.1"
+  resolved "https://registry.npm.alibaba-inc.com/@ali/ide-task/download/@ali/ide-task-1.31.1.tgz#c43ad727b2654502405b9aca3b153d71f858b4fa"
+  integrity sha1-xDrXJ7JlRQJAW5rKOxU9cfhYtPo=
   dependencies:
-    "@ali/ide-core-browser" "1.30.1"
-    "@ali/ide-core-common" "1.30.1"
-    "@ali/ide-core-node" "1.30.1"
-    "@ali/ide-editor" "1.30.1"
-    "@ali/ide-output" "1.30.1"
-    "@ali/ide-preferences" "1.30.1"
-    "@ali/ide-terminal-next" "1.30.1"
-    "@ali/ide-variable" "1.30.1"
-    "@ali/ide-workspace" "1.30.1"
+    "@ali/ide-core-browser" "1.31.1"
+    "@ali/ide-core-common" "1.31.1"
+    "@ali/ide-core-node" "1.31.1"
+    "@ali/ide-editor" "1.31.1"
+    "@ali/ide-output" "1.31.1"
+    "@ali/ide-preferences" "1.31.1"
+    "@ali/ide-terminal-next" "1.31.1"
+    "@ali/ide-variable" "1.31.1"
+    "@ali/ide-workspace" "1.31.1"
 
-"@ali/ide-terminal-next@1.30.1":
-  version "1.30.1"
-  resolved "https://registry.npm.alibaba-inc.com/@ali/ide-terminal-next/download/@ali/ide-terminal-next-1.30.1.tgz#3a5f01a209bb9aa77221697324c41b0ffa6347e8"
-  integrity sha1-Ol8Bogm7mqdyIWlzJMQbD/pjR+g=
+"@ali/ide-terminal-next@1.31.1":
+  version "1.31.1"
+  resolved "https://registry.npm.alibaba-inc.com/@ali/ide-terminal-next/download/@ali/ide-terminal-next-1.31.1.tgz#9bccd5c5c4b963a658975c5d40524e380fc821f0"
+  integrity sha1-m8zVxcS5Y6ZYl1xdQFJOOA/IIfA=
   dependencies:
-    "@ali/ide-components" "1.30.1"
-    "@ali/ide-connection" "1.30.1"
-    "@ali/ide-core-browser" "1.30.1"
-    "@ali/ide-core-common" "1.30.1"
-    "@ali/ide-core-node" "1.30.1"
-    "@ali/ide-editor" "1.30.1"
-    "@ali/ide-file-service" "1.30.1"
-    "@ali/ide-main-layout" "1.30.1"
-    "@ali/ide-theme" "1.30.1"
-    "@ali/ide-workspace" "1.30.1"
+    "@ali/ide-components" "1.31.1"
+    "@ali/ide-connection" "1.31.1"
+    "@ali/ide-core-browser" "1.31.1"
+    "@ali/ide-core-common" "1.31.1"
+    "@ali/ide-core-node" "1.31.1"
+    "@ali/ide-editor" "1.31.1"
+    "@ali/ide-file-service" "1.31.1"
+    "@ali/ide-main-layout" "1.31.1"
+    "@ali/ide-theme" "1.31.1"
+    "@ali/ide-workspace" "1.31.1"
     event-kit "^2.5.3"
     lodash.omit "^4.1.1"
     node-pty "^0.9.0"
@@ -650,68 +651,68 @@
     xterm-addon-search "^0.6.0"
     xterm-addon-web-links "^0.2.1"
 
-"@ali/ide-theme@1.30.1":
-  version "1.30.1"
-  resolved "https://registry.npm.alibaba-inc.com/@ali/ide-theme/download/@ali/ide-theme-1.30.1.tgz#127140dca05ab3a2beb3a106a97aad3614686073"
-  integrity sha1-EnFA3KBas6K+s6EGqXqtNhRoYHM=
+"@ali/ide-theme@1.31.1":
+  version "1.31.1"
+  resolved "https://registry.npm.alibaba-inc.com/@ali/ide-theme/download/@ali/ide-theme-1.31.1.tgz#76d8c4c03d43a74513f1c943572203fb2a1d757c"
+  integrity sha1-dtjEwD1Dp0UT8clDVyID+yoddXw=
   dependencies:
-    "@ali/ide-core-common" "1.30.1"
-    "@ali/ide-core-node" "1.30.1"
-    "@ali/ide-file-service" "1.30.1"
-    "@ali/ide-static-resource" "1.30.1"
+    "@ali/ide-core-common" "1.31.1"
+    "@ali/ide-core-node" "1.31.1"
+    "@ali/ide-file-service" "1.31.1"
+    "@ali/ide-static-resource" "1.31.1"
 
-"@ali/ide-toolbar@1.30.1":
-  version "1.30.1"
-  resolved "https://registry.npm.alibaba-inc.com/@ali/ide-toolbar/download/@ali/ide-toolbar-1.30.1.tgz#5443a7bebd88b1bb004b65f72a2857cb4a009590"
-  integrity sha1-VEOnvr2IsbsAS2X3KihXy0oAlZA=
+"@ali/ide-toolbar@1.31.1":
+  version "1.31.1"
+  resolved "https://registry.npm.alibaba-inc.com/@ali/ide-toolbar/download/@ali/ide-toolbar-1.31.1.tgz#5c534886d2caedd4f3d54943435a8a5bd08af74e"
+  integrity sha1-XFNIhtLK7dTz1UlDQ1qKW9CK904=
   dependencies:
-    "@ali/ide-core-common" "1.30.1"
-    "@ali/ide-core-node" "1.30.1"
+    "@ali/ide-core-common" "1.31.1"
+    "@ali/ide-core-node" "1.31.1"
 
-"@ali/ide-userstorage@1.30.1":
-  version "1.30.1"
-  resolved "https://registry.npm.alibaba-inc.com/@ali/ide-userstorage/download/@ali/ide-userstorage-1.30.1.tgz#53f48e9c3ec88ca20242dff01cfd01ff2dcd6995"
-  integrity sha1-U/SOnD7IjKICQt/wHP0B/y3NaZU=
+"@ali/ide-userstorage@1.31.1":
+  version "1.31.1"
+  resolved "https://registry.npm.alibaba-inc.com/@ali/ide-userstorage/download/@ali/ide-userstorage-1.31.1.tgz#ec1eab32e2297d8c6b291daff4c9d8aa9381c2e3"
+  integrity sha1-7B6rMuIpfYxrKR2v9MnYqpOBwuM=
   dependencies:
-    "@ali/ide-core-browser" "1.30.1"
-    "@ali/ide-core-common" "1.30.1"
-    "@ali/ide-file-service" "1.30.1"
+    "@ali/ide-core-browser" "1.31.1"
+    "@ali/ide-core-common" "1.31.1"
+    "@ali/ide-file-service" "1.31.1"
 
-"@ali/ide-variable@1.30.1":
-  version "1.30.1"
-  resolved "https://registry.npm.alibaba-inc.com/@ali/ide-variable/download/@ali/ide-variable-1.30.1.tgz#619969732ed70d4ed5782028b51d3e7a26c2da8f"
-  integrity sha1-YZlpcy7XDU7VeCAotR0+eibC2o8=
+"@ali/ide-variable@1.31.1":
+  version "1.31.1"
+  resolved "https://registry.npm.alibaba-inc.com/@ali/ide-variable/download/@ali/ide-variable-1.31.1.tgz#14d7a16181df369a039e8119429cb3a1c023ca11"
+  integrity sha1-FNehYYHfNpoDnoEZQpyzocAjyhE=
   dependencies:
-    "@ali/ide-core-common" "1.30.1"
-    "@ali/ide-core-node" "1.30.1"
-    "@ali/ide-quick-open" "1.30.1"
+    "@ali/ide-core-common" "1.31.1"
+    "@ali/ide-core-node" "1.31.1"
+    "@ali/ide-quick-open" "1.31.1"
 
-"@ali/ide-webview@1.30.1":
-  version "1.30.1"
-  resolved "https://registry.npm.alibaba-inc.com/@ali/ide-webview/download/@ali/ide-webview-1.30.1.tgz#eaef467f4ee8874258bbb96a74702dadae04eac3"
-  integrity sha1-6u9Gf07oh0JYu7lqdHAtra4E6sM=
+"@ali/ide-webview@1.31.1":
+  version "1.31.1"
+  resolved "https://registry.npm.alibaba-inc.com/@ali/ide-webview/download/@ali/ide-webview-1.31.1.tgz#3ef45896f16ecbecb9d8feb3e715f68ee30838af"
+  integrity sha1-PvRYlvFuy+y52P6z5xX2juMIOK8=
   dependencies:
-    "@ali/ide-core-common" "1.30.1"
-    "@ali/ide-core-node" "1.30.1"
+    "@ali/ide-core-common" "1.31.1"
+    "@ali/ide-core-node" "1.31.1"
 
-"@ali/ide-workspace-edit@1.30.1":
-  version "1.30.1"
-  resolved "https://registry.npm.alibaba-inc.com/@ali/ide-workspace-edit/download/@ali/ide-workspace-edit-1.30.1.tgz#36373a387927092fe2ab7f56794aa3b767d4bdfc"
-  integrity sha1-Njc6OHknCS/iq39WeUqjt2fUvfw=
+"@ali/ide-workspace-edit@1.31.1":
+  version "1.31.1"
+  resolved "https://registry.npm.alibaba-inc.com/@ali/ide-workspace-edit/download/@ali/ide-workspace-edit-1.31.1.tgz#e97485adf0325f090b6cef040a4115031cb89296"
+  integrity sha1-6XSFrfAyXwkLbO8ECkEVAxy4kpY=
   dependencies:
-    "@ali/ide-core-common" "1.30.1"
-    "@ali/ide-core-node" "1.30.1"
-    "@ali/ide-editor" "1.30.1"
-    "@ali/ide-file-service" "1.30.1"
+    "@ali/ide-core-common" "1.31.1"
+    "@ali/ide-core-node" "1.31.1"
+    "@ali/ide-editor" "1.31.1"
+    "@ali/ide-file-service" "1.31.1"
 
-"@ali/ide-workspace@1.30.1":
-  version "1.30.1"
-  resolved "https://registry.npm.alibaba-inc.com/@ali/ide-workspace/download/@ali/ide-workspace-1.30.1.tgz#29576a3e49bcdf582b3d6edb0732a9f99e6dca8f"
-  integrity sha1-KVdqPkm831grPW7bBzKp+Z5tyo8=
+"@ali/ide-workspace@1.31.1":
+  version "1.31.1"
+  resolved "https://registry.npm.alibaba-inc.com/@ali/ide-workspace/download/@ali/ide-workspace-1.31.1.tgz#f558b53953580c8bf9722549d994c30fb4d96dfd"
+  integrity sha1-9Vi1OVNYDIv5ciVJ2ZTDD7TZbf0=
   dependencies:
-    "@ali/ide-core-browser" "1.30.1"
-    "@ali/ide-core-common" "1.30.1"
-    "@ali/ide-file-service" "1.30.1"
+    "@ali/ide-core-browser" "1.31.1"
+    "@ali/ide-core-common" "1.31.1"
+    "@ali/ide-file-service" "1.31.1"
 
 "@ali/kaitian-textmate-languages@^2.2.0":
   version "2.2.0"
@@ -2023,6 +2024,11 @@ add-px-to-style@1.0.0:
   resolved "https://registry.npm.alibaba-inc.com/add-px-to-style/download/add-px-to-style-1.0.0.tgz#d0c135441fa8014a8137904531096f67f28f263a"
   integrity sha1-0ME1RB+oAUqBN5BFMQlvZ/KPJjo=
 
+add-stream@^1.0.0:
+  version "1.0.0"
+  resolved "https://registry.npm.alibaba-inc.com/add-stream/download/add-stream-1.0.0.tgz#6a7990437ca736d5e1288db92bd3266d5f5cb2aa"
+  integrity sha1-anmQQ3ynNtXhKI25K9MmbV9csqo=
+
 address@>=0.0.1, address@^1.1.2:
   version "1.1.2"
   resolved "https://registry.npm.alibaba-inc.com/address/download/address-1.1.2.tgz#bf1116c9c758c51b7a933d296b72c221ed9428b6"
@@ -2365,6 +2371,11 @@ array-filter@^1.0.0:
   version "1.0.0"
   resolved "https://registry.npm.alibaba-inc.com/array-filter/download/array-filter-1.0.0.tgz#baf79e62e6ef4c2a4c0b831232daffec251f9d83"
   integrity sha1-uveeYubvTCpMC4MSMtr/7CUfnYM=
+
+array-find-index@^1.0.1:
+  version "1.0.2"
+  resolved "https://registry.npm.alibaba-inc.com/array-find-index/download/array-find-index-1.0.2.tgz#df010aa1287e164bbda6f9723b0a96a1ec4187a1"
+  integrity sha1-3wEKoSh+Fku9pvlyOwqWoexBh6E=
 
 array-flatten@1.1.1:
   version "1.1.1"
@@ -3016,6 +3027,14 @@ camel-case@^4.1.1:
     pascal-case "^3.1.2"
     tslib "^2.0.3"
 
+camelcase-keys@^2.0.0:
+  version "2.1.0"
+  resolved "https://registry.npm.alibaba-inc.com/camelcase-keys/download/camelcase-keys-2.1.0.tgz#308beeaffdf28119051efa1d932213c91b8f92e7"
+  integrity sha1-MIvur/3ygRkFHvodkyITyRuPkuc=
+  dependencies:
+    camelcase "^2.0.0"
+    map-obj "^1.0.0"
+
 camelcase-keys@^6.2.2:
   version "6.2.2"
   resolved "https://registry.npm.alibaba-inc.com/camelcase-keys/download/camelcase-keys-6.2.2.tgz#5e755d6ba51aa223ec7d3d52f25778210f9dc3c0"
@@ -3024,6 +3043,11 @@ camelcase-keys@^6.2.2:
     camelcase "^5.3.1"
     map-obj "^4.0.0"
     quick-lru "^4.0.1"
+
+camelcase@^2.0.0:
+  version "2.1.1"
+  resolved "https://registry.npm.alibaba-inc.com/camelcase/download/camelcase-2.1.1.tgz#7c1d16d679a1bbe59ca02cacecfb011e201f5a1f"
+  integrity sha1-fB0W1nmhu+WcoCys7PsBHiAfWh8=
 
 camelcase@^3.0.0:
   version "3.0.0"
@@ -3089,6 +3113,11 @@ char-regex@^1.0.2:
   version "1.0.2"
   resolved "https://registry.npm.alibaba-inc.com/char-regex/download/char-regex-1.0.2.tgz#d744358226217f981ed58f479b1d6bcc29545dcf"
   integrity sha1-10Q1giYhf5ge1Y9Hmx1rzClUXc8=
+
+chardet@^0.7.0:
+  version "0.7.0"
+  resolved "https://registry.npm.alibaba-inc.com/chardet/download/chardet-0.7.0.tgz#90094849f0937f2eedc2425d0d28a9e5f0cbad9e"
+  integrity sha1-kAlISfCTfy7twkJdDSip5fDLrZ4=
 
 charenc@0.0.2:
   version "0.0.2"
@@ -3205,6 +3234,11 @@ cli-truncate@^2.1.0:
   dependencies:
     slice-ansi "^3.0.0"
     string-width "^4.2.0"
+
+cli-width@^3.0.0:
+  version "3.0.0"
+  resolved "https://registry.npm.alibaba-inc.com/cli-width/download/cli-width-3.0.0.tgz#a2f48437a2caa9a22436e794bf071ec9e61cedf6"
+  integrity sha1-ovSEN6LKqaIkNueUvwceyeYc7fY=
 
 cliui@^3.2.0:
   version "3.2.0"
@@ -3521,7 +3555,7 @@ content-type@^1.0.2, content-type@~1.0.4:
   resolved "https://registry.npm.alibaba-inc.com/content-type/download/content-type-1.0.4.tgz#e138cc75e040c727b1966fe5e5f8c9aee256fe3b"
   integrity sha1-4TjMdeBAxyexlm/l5fjJruJW/js=
 
-conventional-changelog-angular@^5.0.0:
+conventional-changelog-angular@^5.0.0, conventional-changelog-angular@^5.0.12:
   version "5.0.12"
   resolved "https://registry.npm.alibaba-inc.com/conventional-changelog-angular/download/conventional-changelog-angular-5.0.12.tgz#c979b8b921cbfe26402eb3da5bbfda02d865a2b9"
   integrity sha1-yXm4uSHL/iZALrPaW7/aAthlork=
@@ -3529,7 +3563,32 @@ conventional-changelog-angular@^5.0.0:
     compare-func "^2.0.0"
     q "^1.5.1"
 
-conventional-changelog-conventionalcommits@^4.3.1:
+conventional-changelog-atom@^2.0.8:
+  version "2.0.8"
+  resolved "https://registry.npm.alibaba-inc.com/conventional-changelog-atom/download/conventional-changelog-atom-2.0.8.tgz#a759ec61c22d1c1196925fca88fe3ae89fd7d8de"
+  integrity sha1-p1nsYcItHBGWkl/KiP466J/X2N4=
+  dependencies:
+    q "^1.5.1"
+
+conventional-changelog-cli@^2.1.1:
+  version "2.1.1"
+  resolved "https://registry.npm.alibaba-inc.com/conventional-changelog-cli/download/conventional-changelog-cli-2.1.1.tgz#7a11980bc399938e0509d2adf8e7a0e213eb994e"
+  integrity sha1-ehGYC8OZk44FCdKt+Oeg4hPrmU4=
+  dependencies:
+    add-stream "^1.0.0"
+    conventional-changelog "^3.1.24"
+    lodash "^4.17.15"
+    meow "^8.0.0"
+    tempfile "^3.0.0"
+
+conventional-changelog-codemirror@^2.0.8:
+  version "2.0.8"
+  resolved "https://registry.npm.alibaba-inc.com/conventional-changelog-codemirror/download/conventional-changelog-codemirror-2.0.8.tgz#398e9530f08ce34ec4640af98eeaf3022eb1f7dc"
+  integrity sha1-OY6VMPCM407EZAr5jurzAi6x99w=
+  dependencies:
+    q "^1.5.1"
+
+conventional-changelog-conventionalcommits@^4.3.1, conventional-changelog-conventionalcommits@^4.5.0:
   version "4.5.0"
   resolved "https://registry.npm.alibaba-inc.com/conventional-changelog-conventionalcommits/download/conventional-changelog-conventionalcommits-4.5.0.tgz#a02e0b06d11d342fdc0f00c91d78265ed0bc0a62"
   integrity sha1-oC4LBtEdNC/cDwDJHXgmXtC8CmI=
@@ -3538,7 +3597,110 @@ conventional-changelog-conventionalcommits@^4.3.1:
     lodash "^4.17.15"
     q "^1.5.1"
 
-conventional-commits-parser@^3.0.0:
+conventional-changelog-core@^4.2.1:
+  version "4.2.2"
+  resolved "https://registry.npm.alibaba-inc.com/conventional-changelog-core/download/conventional-changelog-core-4.2.2.tgz#f0897df6d53b5d63dec36b9442bd45354f8b3ce5"
+  integrity sha1-8Il99tU7XWPew2uUQr1FNU+LPOU=
+  dependencies:
+    add-stream "^1.0.0"
+    conventional-changelog-writer "^4.0.18"
+    conventional-commits-parser "^3.2.0"
+    dateformat "^3.0.0"
+    get-pkg-repo "^1.0.0"
+    git-raw-commits "^2.0.8"
+    git-remote-origin-url "^2.0.0"
+    git-semver-tags "^4.1.1"
+    lodash "^4.17.15"
+    normalize-package-data "^3.0.0"
+    q "^1.5.1"
+    read-pkg "^3.0.0"
+    read-pkg-up "^3.0.0"
+    shelljs "^0.8.3"
+    through2 "^4.0.0"
+
+conventional-changelog-ember@^2.0.9:
+  version "2.0.9"
+  resolved "https://registry.npm.alibaba-inc.com/conventional-changelog-ember/download/conventional-changelog-ember-2.0.9.tgz#619b37ec708be9e74a220f4dcf79212ae1c92962"
+  integrity sha1-YZs37HCL6edKIg9Nz3khKuHJKWI=
+  dependencies:
+    q "^1.5.1"
+
+conventional-changelog-eslint@^3.0.9:
+  version "3.0.9"
+  resolved "https://registry.npm.alibaba-inc.com/conventional-changelog-eslint/download/conventional-changelog-eslint-3.0.9.tgz#689bd0a470e02f7baafe21a495880deea18b7cdb"
+  integrity sha1-aJvQpHDgL3uq/iGklYgN7qGLfNs=
+  dependencies:
+    q "^1.5.1"
+
+conventional-changelog-express@^2.0.6:
+  version "2.0.6"
+  resolved "https://registry.npm.alibaba-inc.com/conventional-changelog-express/download/conventional-changelog-express-2.0.6.tgz#420c9d92a347b72a91544750bffa9387665a6ee8"
+  integrity sha1-QgydkqNHtyqRVEdQv/qTh2Zabug=
+  dependencies:
+    q "^1.5.1"
+
+conventional-changelog-jquery@^3.0.11:
+  version "3.0.11"
+  resolved "https://registry.npm.alibaba-inc.com/conventional-changelog-jquery/download/conventional-changelog-jquery-3.0.11.tgz#d142207400f51c9e5bb588596598e24bba8994bf"
+  integrity sha1-0UIgdAD1HJ5btYhZZZjiS7qJlL8=
+  dependencies:
+    q "^1.5.1"
+
+conventional-changelog-jshint@^2.0.9:
+  version "2.0.9"
+  resolved "https://registry.npm.alibaba-inc.com/conventional-changelog-jshint/download/conventional-changelog-jshint-2.0.9.tgz#f2d7f23e6acd4927a238555d92c09b50fe3852ff"
+  integrity sha1-8tfyPmrNSSeiOFVdksCbUP44Uv8=
+  dependencies:
+    compare-func "^2.0.0"
+    q "^1.5.1"
+
+conventional-changelog-preset-loader@^2.3.4:
+  version "2.3.4"
+  resolved "https://registry.npm.alibaba-inc.com/conventional-changelog-preset-loader/download/conventional-changelog-preset-loader-2.3.4.tgz#14a855abbffd59027fd602581f1f34d9862ea44c"
+  integrity sha1-FKhVq7/9WQJ/1gJYHx802YYupEw=
+
+conventional-changelog-writer@^4.0.18:
+  version "4.1.0"
+  resolved "https://registry.npm.alibaba-inc.com/conventional-changelog-writer/download/conventional-changelog-writer-4.1.0.tgz#1ca7880b75aa28695ad33312a1f2366f4b12659f"
+  integrity sha1-HKeIC3WqKGla0zMSofI2b0sSZZ8=
+  dependencies:
+    compare-func "^2.0.0"
+    conventional-commits-filter "^2.0.7"
+    dateformat "^3.0.0"
+    handlebars "^4.7.6"
+    json-stringify-safe "^5.0.1"
+    lodash "^4.17.15"
+    meow "^8.0.0"
+    semver "^6.0.0"
+    split "^1.0.0"
+    through2 "^4.0.0"
+
+conventional-changelog@^3.1.24:
+  version "3.1.24"
+  resolved "https://registry.npm.alibaba-inc.com/conventional-changelog/download/conventional-changelog-3.1.24.tgz#ebd180b0fd1b2e1f0095c4b04fd088698348a464"
+  integrity sha1-69GAsP0bLh8AlcSwT9CIaYNIpGQ=
+  dependencies:
+    conventional-changelog-angular "^5.0.12"
+    conventional-changelog-atom "^2.0.8"
+    conventional-changelog-codemirror "^2.0.8"
+    conventional-changelog-conventionalcommits "^4.5.0"
+    conventional-changelog-core "^4.2.1"
+    conventional-changelog-ember "^2.0.9"
+    conventional-changelog-eslint "^3.0.9"
+    conventional-changelog-express "^2.0.6"
+    conventional-changelog-jquery "^3.0.11"
+    conventional-changelog-jshint "^2.0.9"
+    conventional-changelog-preset-loader "^2.3.4"
+
+conventional-commits-filter@^2.0.7:
+  version "2.0.7"
+  resolved "https://registry.npm.alibaba-inc.com/conventional-commits-filter/download/conventional-commits-filter-2.0.7.tgz#f8d9b4f182fce00c9af7139da49365b136c8a0b3"
+  integrity sha1-+Nm08YL84Aya9xOdpJNlsTbIoLM=
+  dependencies:
+    lodash.ismatch "^4.4.0"
+    modify-values "^1.0.0"
+
+conventional-commits-parser@^3.0.0, conventional-commits-parser@^3.2.0:
   version "3.2.0"
   resolved "https://registry.npm.alibaba-inc.com/conventional-commits-parser/download/conventional-commits-parser-3.2.0.tgz#9e261b139ca4b7b29bcebbc54460da36894004ca"
   integrity sha1-niYbE5ykt7KbzrvFRGDaNolABMo=
@@ -3812,6 +3974,13 @@ csstype@^3.0.2:
   resolved "https://registry.npm.alibaba-inc.com/csstype/download/csstype-3.0.5.tgz#7fdec6a28a67ae18647c51668a9ff95bb2fa7bb8"
   integrity sha1-f97GoopnrhhkfFFmip/5W7L6e7g=
 
+currently-unhandled@^0.4.1:
+  version "0.4.1"
+  resolved "https://registry.npm.alibaba-inc.com/currently-unhandled/download/currently-unhandled-0.4.1.tgz#988df33feab191ef799a61369dd76c17adf957ea"
+  integrity sha1-mI3zP+qxke95mmE2nddsF635V+o=
+  dependencies:
+    array-find-index "^1.0.1"
+
 d@1, d@^1.0.1:
   version "1.0.1"
   resolved "https://registry.npm.alibaba-inc.com/d/download/d-1.0.1.tgz#8698095372d58dbee346ffd0c7093f99f8f9eb5a"
@@ -3845,6 +4014,11 @@ data-urls@^2.0.0:
     abab "^2.0.3"
     whatwg-mimetype "^2.3.0"
     whatwg-url "^8.0.0"
+
+dateformat@^3.0.0:
+  version "3.0.3"
+  resolved "https://registry.npm.alibaba-inc.com/dateformat/download/dateformat-3.0.3.tgz#a6e37499a4d9a9cf85ef5872044d62901c9889ae"
+  integrity sha1-puN0maTZqc+F71hyBE1ikByYia4=
 
 debug@2, debug@2.6.9, debug@^2.2.0, debug@^2.3.3, debug@^2.6.9:
   version "2.6.9"
@@ -3889,7 +4063,7 @@ decamelize-keys@^1.1.0:
     decamelize "^1.1.0"
     map-obj "^1.0.0"
 
-decamelize@^1.1.0, decamelize@^1.1.1, decamelize@^1.2.0:
+decamelize@^1.1.0, decamelize@^1.1.1, decamelize@^1.1.2, decamelize@^1.2.0:
   version "1.2.0"
   resolved "https://registry.npm.alibaba-inc.com/decamelize/download/decamelize-1.2.0.tgz#f6534d15148269b20352e7bee26f501f9a191290"
   integrity sha1-9lNNFRSCabIDUue+4m9QH5oZEpA=
@@ -4803,6 +4977,15 @@ extend@^3.0.0, extend@~3.0.2:
   resolved "https://registry.npm.alibaba-inc.com/extend/download/extend-3.0.2.tgz#f8b1136b4071fbd8eb140aff858b1019ec2915fa"
   integrity sha1-+LETa0Bx+9jrFAr/hYsQGewpFfo=
 
+external-editor@^3.0.3:
+  version "3.1.0"
+  resolved "https://registry.npm.alibaba-inc.com/external-editor/download/external-editor-3.1.0.tgz#cb03f740befae03ea4d283caed2741a83f335495"
+  integrity sha1-ywP3QL764D6k0oPK7SdBqD8zVJU=
+  dependencies:
+    chardet "^0.7.0"
+    iconv-lite "^0.4.24"
+    tmp "^0.0.33"
+
 extglob@^2.0.4:
   version "2.0.4"
   resolved "https://registry.npm.alibaba-inc.com/extglob/download/extglob-2.0.4.tgz#ad00fe4dc612a9232e8718711dc5cb5ab0285543"
@@ -4929,7 +5112,7 @@ figures@^2.0.0:
   dependencies:
     escape-string-regexp "^1.0.5"
 
-figures@^3.2.0:
+figures@^3.0.0, figures@^3.2.0:
   version "3.2.0"
   resolved "https://registry.npm.alibaba-inc.com/figures/download/figures-3.2.0.tgz#625c18bd293c604dc4a8ddb2febf0c88341746af"
   integrity sha1-YlwYvSk8YE3EqN2y/r8MiDQXRq8=
@@ -5335,6 +5518,17 @@ get-package-type@^0.1.0:
   resolved "https://registry.npm.alibaba-inc.com/get-package-type/download/get-package-type-0.1.0.tgz#8de2d803cff44df3bc6c456e6668b36c3926e11a"
   integrity sha1-jeLYA8/0TfO8bEVuZmizbDkm4Ro=
 
+get-pkg-repo@^1.0.0:
+  version "1.4.0"
+  resolved "https://registry.npm.alibaba-inc.com/get-pkg-repo/download/get-pkg-repo-1.4.0.tgz#c73b489c06d80cc5536c2c853f9e05232056972d"
+  integrity sha1-xztInAbYDMVTbCyFP54FIyBWly0=
+  dependencies:
+    hosted-git-info "^2.1.4"
+    meow "^3.3.0"
+    normalize-package-data "^2.3.0"
+    parse-github-repo-url "^1.3.0"
+    through2 "^2.0.0"
+
 get-ready@^1.0.0:
   version "1.0.0"
   resolved "https://registry.npm.alibaba-inc.com/get-ready/download/get-ready-1.0.0.tgz#f91817f1e9adecfea13a562adfc8de883ab34782"
@@ -5344,6 +5538,11 @@ get-stdin@8.0.0:
   version "8.0.0"
   resolved "https://registry.npm.alibaba-inc.com/get-stdin/download/get-stdin-8.0.0.tgz#cbad6a73feb75f6eeb22ba9e01f89aa28aa97a53"
   integrity sha1-y61qc/63X27rIrqeAfiaooqpelM=
+
+get-stdin@^4.0.1:
+  version "4.0.1"
+  resolved "https://registry.npm.alibaba-inc.com/get-stdin/download/get-stdin-4.0.1.tgz#b968c6b0a04384324902e8bf1a5df32579a450fe"
+  integrity sha1-uWjGsKBDhDJJAui/Gl3zJXmkUP4=
 
 get-stream@^2.2.0:
   version "2.3.1"
@@ -5406,6 +5605,40 @@ git-raw-commits@^2.0.0:
     meow "^8.0.0"
     split2 "^2.0.0"
     through2 "^4.0.0"
+
+git-raw-commits@^2.0.8:
+  version "2.0.9"
+  resolved "https://registry.npm.alibaba-inc.com/git-raw-commits/download/git-raw-commits-2.0.9.tgz#5cbc707a615cb77b71e687f8a1ee54af46208b22"
+  integrity sha1-XLxwemFct3tx5of4oe5Ur0YgiyI=
+  dependencies:
+    dargs "^7.0.0"
+    lodash.template "^4.0.2"
+    meow "^8.0.0"
+    split2 "^3.0.0"
+    through2 "^4.0.0"
+
+git-remote-origin-url@^2.0.0:
+  version "2.0.0"
+  resolved "https://registry.npm.alibaba-inc.com/git-remote-origin-url/download/git-remote-origin-url-2.0.0.tgz#5282659dae2107145a11126112ad3216ec5fa65f"
+  integrity sha1-UoJlna4hBxRaERJhEq0yFuxfpl8=
+  dependencies:
+    gitconfiglocal "^1.0.0"
+    pify "^2.3.0"
+
+git-semver-tags@^4.1.1:
+  version "4.1.1"
+  resolved "https://registry.npm.alibaba-inc.com/git-semver-tags/download/git-semver-tags-4.1.1.tgz#63191bcd809b0ec3e151ba4751c16c444e5b5780"
+  integrity sha1-YxkbzYCbDsPhUbpHUcFsRE5bV4A=
+  dependencies:
+    meow "^8.0.0"
+    semver "^6.0.0"
+
+gitconfiglocal@^1.0.0:
+  version "1.0.0"
+  resolved "https://registry.npm.alibaba-inc.com/gitconfiglocal/download/gitconfiglocal-1.0.0.tgz#41d045f3851a5ea88f03f24ca1c6178114464b9b"
+  integrity sha1-QdBF84UaXqiPA/JMocYXgRRGS5s=
+  dependencies:
+    ini "^1.3.2"
 
 github-from-package@0.0.0:
   version "0.0.0"
@@ -5484,7 +5717,7 @@ glob@^6.0.1:
     once "^1.3.0"
     path-is-absolute "^1.0.0"
 
-glob@^7.0.3, glob@^7.1.1, glob@^7.1.2, glob@^7.1.3, glob@^7.1.4:
+glob@^7.0.0, glob@^7.0.3, glob@^7.1.1, glob@^7.1.2, glob@^7.1.3, glob@^7.1.4, glob@^7.1.6:
   version "7.1.6"
   resolved "https://registry.npm.alibaba-inc.com/glob/download/glob-7.1.6.tgz#141f33b81a7c2492e125594307480c46679278a6"
   integrity sha1-FB8zuBp8JJLhJVlDB0gMRmeSeKY=
@@ -5640,6 +5873,18 @@ handle-thing@^2.0.0:
   version "2.0.1"
   resolved "https://registry.npm.alibaba-inc.com/handle-thing/download/handle-thing-2.0.1.tgz#857f79ce359580c340d43081cc648970d0bb234e"
   integrity sha1-hX95zjWVgMNA1DCBzGSJcNC7I04=
+
+handlebars@^4.7.6:
+  version "4.7.6"
+  resolved "https://registry.npm.alibaba-inc.com/handlebars/download/handlebars-4.7.6.tgz#d4c05c1baf90e9945f77aa68a7a219aa4a7df74e"
+  integrity sha1-1MBcG6+Q6ZRfd6pop6IZqkp9904=
+  dependencies:
+    minimist "^1.2.5"
+    neo-async "^2.6.0"
+    source-map "^0.6.1"
+    wordwrap "^1.0.0"
+  optionalDependencies:
+    uglify-js "^3.1.4"
 
 har-schema@^2.0.0:
   version "2.0.0"
@@ -6004,7 +6249,7 @@ iconv-lite-umd@^0.6.8:
   resolved "https://registry.npm.alibaba-inc.com/iconv-lite-umd/download/iconv-lite-umd-0.6.8.tgz#5ad310ec126b260621471a2d586f7f37b9958ec0"
   integrity sha1-WtMQ7BJrJgYhRxotWG9/N7mVjsA=
 
-iconv-lite@0.4.24, iconv-lite@^0.4.15:
+iconv-lite@0.4.24, iconv-lite@^0.4.15, iconv-lite@^0.4.24:
   version "0.4.24"
   resolved "https://registry.npm.alibaba-inc.com/iconv-lite/download/iconv-lite-0.4.24.tgz#2022b4b25fbddc21d2f524974a474aafe733908b"
   integrity sha1-ICK0sl+93CHS9SSXSkdKr+czkIs=
@@ -6089,6 +6334,13 @@ imurmurhash@^0.1.4:
   resolved "https://registry.npm.alibaba-inc.com/imurmurhash/download/imurmurhash-0.1.4.tgz#9218b9b2b928a238b13dc4fb6b6d576f231453ea"
   integrity sha1-khi5srkoojixPcT7a21XbyMUU+o=
 
+indent-string@^2.1.0:
+  version "2.1.0"
+  resolved "https://registry.npm.alibaba-inc.com/indent-string/download/indent-string-2.1.0.tgz#8e2d48348742121b4a8218b7a137e9a52049dc80"
+  integrity sha1-ji1INIdCEhtKghi3oTfppSBJ3IA=
+  dependencies:
+    repeating "^2.0.0"
+
 indent-string@^4.0.0:
   version "4.0.0"
   resolved "https://registry.npm.alibaba-inc.com/indent-string/download/indent-string-4.0.0.tgz#624f8f4497d619b2d9768531d58f4122854d7251"
@@ -6132,10 +6384,34 @@ inherits@2.0.3:
   resolved "https://registry.npm.alibaba-inc.com/inherits/download/inherits-2.0.3.tgz#633c2c83e3da42a502f52466022480f4208261de"
   integrity sha1-Yzwsg+PaQqUC9SRmAiSA9CCCYd4=
 
+ini@^1.3.2:
+  version "1.3.8"
+  resolved "https://registry.npm.alibaba-inc.com/ini/download/ini-1.3.8.tgz#a29da425b48806f34767a4efce397269af28432c"
+  integrity sha1-op2kJbSIBvNHZ6Tvzjlyaa8oQyw=
+
 ini@^1.3.4, ini@~1.3.0:
   version "1.3.5"
   resolved "https://registry.npm.alibaba-inc.com/ini/download/ini-1.3.5.tgz#eee25f56db1c9ec6085e0c22778083f596abf927"
   integrity sha1-7uJfVtscnsYIXgwid4CD9Zar+Sc=
+
+inquirer@^7.3.3:
+  version "7.3.3"
+  resolved "https://registry.npm.alibaba-inc.com/inquirer/download/inquirer-7.3.3.tgz#04d176b2af04afc157a83fd7c100e98ee0aad003"
+  integrity sha1-BNF2sq8Er8FXqD/XwQDpjuCq0AM=
+  dependencies:
+    ansi-escapes "^4.2.1"
+    chalk "^4.1.0"
+    cli-cursor "^3.1.0"
+    cli-width "^3.0.0"
+    external-editor "^3.0.3"
+    figures "^3.0.0"
+    lodash "^4.17.19"
+    mute-stream "0.0.8"
+    run-async "^2.4.0"
+    rxjs "^6.6.0"
+    string-width "^4.1.0"
+    strip-ansi "^6.0.0"
+    through "^2.3.6"
 
 internal-ip@^4.3.0:
   version "4.3.0"
@@ -6145,7 +6421,7 @@ internal-ip@^4.3.0:
     default-gateway "^4.2.0"
     ipaddr.js "^1.9.0"
 
-interpret@^1.4.0:
+interpret@^1.0.0, interpret@^1.4.0:
   version "1.4.0"
   resolved "https://registry.npm.alibaba-inc.com/interpret/download/interpret-1.4.0.tgz#665ab8bc4da27a774a40584e812e3e0fa45b1a1e"
   integrity sha1-Zlq4vE2iendKQFhOgS4+D6RbGh4=
@@ -6322,6 +6598,11 @@ is-extglob@^2.1.0, is-extglob@^2.1.1:
   version "2.1.1"
   resolved "https://registry.npm.alibaba-inc.com/is-extglob/download/is-extglob-2.1.1.tgz#a88c02535791f02ed37c76a1b9ea9773c833f8c2"
   integrity sha1-qIwCU1eR8C7TfHahueqXc8gz+MI=
+
+is-finite@^1.0.0:
+  version "1.1.0"
+  resolved "https://registry.npm.alibaba-inc.com/is-finite/download/is-finite-1.1.0.tgz#904135c77fb42c0641d6aa1bcdbc4daa8da082f3"
+  integrity sha1-kEE1x3+0LAZB1qobzbxNqo2ggvM=
 
 is-fullwidth-code-point@^1.0.0:
   version "1.0.0"
@@ -7095,7 +7376,7 @@ json-stable-stringify-without-jsonify@^1.0.1:
   resolved "https://registry.npm.alibaba-inc.com/json-stable-stringify-without-jsonify/download/json-stable-stringify-without-jsonify-1.0.1.tgz#9db7b59496ad3f3cfef30a75142d2d930ad72651"
   integrity sha1-nbe1lJatPzz+8wp1FC0tkwrXJlE=
 
-json-stringify-safe@~5.0.1:
+json-stringify-safe@^5.0.1, json-stringify-safe@~5.0.1:
   version "5.0.1"
   resolved "https://registry.npm.alibaba-inc.com/json-stringify-safe/download/json-stringify-safe-5.0.1.tgz#1296a2d58fd45f19a0f6ce01d65701e2c735b6eb"
   integrity sha1-Epai1Y/UXxmg9s4B1lcB4sc1tus=
@@ -7511,6 +7792,11 @@ lodash.isinteger@^4.0.4:
   resolved "https://registry.npm.alibaba-inc.com/lodash.isinteger/download/lodash.isinteger-4.0.4.tgz#619c0af3d03f8b04c31f5882840b77b11cd68343"
   integrity sha1-YZwK89A/iwTDH1iChAt3sRzWg0M=
 
+lodash.ismatch@^4.4.0:
+  version "4.4.0"
+  resolved "https://registry.npm.alibaba-inc.com/lodash.ismatch/download/lodash.ismatch-4.4.0.tgz#756cb5150ca3ba6f11085a78849645f188f85f37"
+  integrity sha1-dWy1FQyjum8RCFp4hJZF8Yj4Xzc=
+
 lodash.isplainobject@^4.0.6:
   version "4.0.6"
   resolved "https://registry.npm.alibaba-inc.com/lodash.isplainobject/download/lodash.isplainobject-4.0.6.tgz#7c526a52d89b45c45cc690b88163be0497f550cb"
@@ -7610,6 +7896,14 @@ loose-envify@^1.0.0, loose-envify@^1.1.0, loose-envify@^1.3.1, loose-envify@^1.4
   dependencies:
     js-tokens "^3.0.0 || ^4.0.0"
 
+loud-rejection@^1.0.0:
+  version "1.6.0"
+  resolved "https://registry.npm.alibaba-inc.com/loud-rejection/download/loud-rejection-1.6.0.tgz#5b46f80147edee578870f086d04821cf998e551f"
+  integrity sha1-W0b4AUft7leIcPCG0Eghz5mOVR8=
+  dependencies:
+    currently-unhandled "^0.4.1"
+    signal-exit "^3.0.0"
+
 lower-case@^2.0.2:
   version "2.0.2"
   resolved "https://registry.npm.alibaba-inc.com/lower-case/download/lower-case-2.0.2.tgz#6fa237c63dbdc4a82ca0fd882e4722dc5e634e28"
@@ -7697,7 +7991,7 @@ map-cache@^0.2.0, map-cache@^0.2.2:
   resolved "https://registry.npm.alibaba-inc.com/map-cache/download/map-cache-0.2.2.tgz#c32abd0bd6525d9b051645bb4f26ac5dc98a0dbf"
   integrity sha1-wyq9C9ZSXZsFFkW7TyasXcmKDb8=
 
-map-obj@^1.0.0:
+map-obj@^1.0.0, map-obj@^1.0.1:
   version "1.0.1"
   resolved "https://registry.npm.alibaba-inc.com/map-obj/download/map-obj-1.0.1.tgz#d933ceb9205d82bdcf4886f6742bdc2b4dea146d"
   integrity sha1-2TPOuSBdgr3PSIb2dCvcK03qFG0=
@@ -7779,6 +8073,22 @@ memory-fs@^0.5.0:
   dependencies:
     errno "^0.1.3"
     readable-stream "^2.0.1"
+
+meow@^3.3.0:
+  version "3.7.0"
+  resolved "https://registry.npm.alibaba-inc.com/meow/download/meow-3.7.0.tgz#72cb668b425228290abbfa856892587308a801fb"
+  integrity sha1-cstmi0JSKCkKu/qFaJJYcwioAfs=
+  dependencies:
+    camelcase-keys "^2.0.0"
+    decamelize "^1.1.2"
+    loud-rejection "^1.0.0"
+    map-obj "^1.0.1"
+    minimist "^1.1.3"
+    normalize-package-data "^2.3.4"
+    object-assign "^4.0.1"
+    read-pkg-up "^1.0.1"
+    redent "^1.0.0"
+    trim-newlines "^1.0.0"
 
 meow@^8.0.0:
   version "8.0.0"
@@ -7931,7 +8241,7 @@ minimist@0.0.8:
   resolved "https://registry.npm.alibaba-inc.com/minimist/download/minimist-0.0.8.tgz#857fcabfc3397d2625b8228262e86aa7a011b05d"
   integrity sha1-hX/Kv8M5fSYluCKCYuhqp6ARsF0=
 
-minimist@^1.1.0, minimist@^1.1.1, minimist@^1.2.0, minimist@^1.2.5:
+minimist@^1.1.0, minimist@^1.1.1, minimist@^1.1.3, minimist@^1.2.0, minimist@^1.2.5:
   version "1.2.5"
   resolved "https://registry.npm.alibaba-inc.com/minimist/download/minimist-1.2.5.tgz#67d66014b66a6a8aaa0c083c5fd58df4e4e97602"
   integrity sha1-Z9ZgFLZqaoqqDAg8X9WN9OTpdgI=
@@ -8026,6 +8336,11 @@ mocha@^5.2.0:
     mkdirp "0.5.1"
     supports-color "5.4.0"
 
+modify-values@^1.0.0:
+  version "1.0.1"
+  resolved "https://registry.npm.alibaba-inc.com/modify-values/download/modify-values-1.0.1.tgz#b3939fa605546474e3e3e3c63d64bd43b4ee6022"
+  integrity sha1-s5OfpgVUZHTj4+PGPWS9Q7TuYCI=
+
 moment@2.x, moment@^2.24.0:
   version "2.29.1"
   resolved "https://registry.npm.alibaba-inc.com/moment/download/moment-2.29.1.tgz#b2be769fa31940be9eeea6469c075e35006fa3d3"
@@ -8091,6 +8406,11 @@ mute-stdout@^1.0.0:
   version "1.0.1"
   resolved "https://registry.npm.alibaba-inc.com/mute-stdout/download/mute-stdout-1.0.1.tgz#acb0300eb4de23a7ddeec014e3e96044b3472331"
   integrity sha1-rLAwDrTeI6fd7sAU4+lgRLNHIzE=
+
+mute-stream@0.0.8:
+  version "0.0.8"
+  resolved "https://registry.npm.alibaba-inc.com/mute-stream/download/mute-stream-0.0.8.tgz#1630c42b2251ff81e2a283de96a5497ea92e5e0d"
+  integrity sha1-FjDEKyJR/4HiooPelqVJfqkuXg0=
 
 mv@^2.1.1:
   version "2.1.1"
@@ -8173,7 +8493,7 @@ negotiator@0.6.2:
   resolved "https://registry.npm.alibaba-inc.com/negotiator/download/negotiator-0.6.2.tgz#feacf7ccf525a77ae9634436a64883ffeca346fb"
   integrity sha1-/qz3zPUlp3rpY0Q2pkiD/+yjRvs=
 
-neo-async@^2.6.2:
+neo-async@^2.6.0, neo-async@^2.6.2:
   version "2.6.2"
   resolved "https://registry.npm.alibaba-inc.com/neo-async/download/neo-async-2.6.2.tgz#b4aafb93e3aeb2d8174ca53cf163ab7d7308305f"
   integrity sha1-tKr7k+OustgXTKU88WOrfXMIMF8=
@@ -8273,7 +8593,7 @@ noop-logger@^0.1.1:
   resolved "https://registry.npm.alibaba-inc.com/noop-logger/download/noop-logger-0.1.1.tgz#94a2b1633c4f1317553007d8966fd0e841b6a4c2"
   integrity sha1-lKKxYzxPExdVMAfYlm/Q6EG2pMI=
 
-normalize-package-data@^2.3.2, normalize-package-data@^2.5.0:
+normalize-package-data@^2.3.0, normalize-package-data@^2.3.2, normalize-package-data@^2.3.4, normalize-package-data@^2.5.0:
   version "2.5.0"
   resolved "https://registry.npm.alibaba-inc.com/normalize-package-data/download/normalize-package-data-2.5.0.tgz#e66db1838b200c1dfc233225d12cb36520e234a8"
   integrity sha1-5m2xg4sgDB38IzIl0SyzZSDiNKg=
@@ -8574,6 +8894,11 @@ os-name@~1.0.3:
     osx-release "^1.0.0"
     win-release "^1.0.0"
 
+os-tmpdir@~1.0.2:
+  version "1.0.2"
+  resolved "https://registry.npm.alibaba-inc.com/os-tmpdir/download/os-tmpdir-1.0.2.tgz#bbe67406c79aa85c5cfec766fe5734555dfa1274"
+  integrity sha1-u+Z0BseaqFxc/sdm/lc0VV36EnQ=
+
 osx-release@^1.0.0:
   version "1.1.0"
   resolved "https://registry.npm.alibaba-inc.com/osx-release/download/osx-release-1.1.0.tgz#f217911a28136949af1bf9308b241e2737d3cd6c"
@@ -8745,6 +9070,11 @@ parse-filepath@^1.0.1:
     is-absolute "^1.0.0"
     map-cache "^0.2.0"
     path-root "^0.1.1"
+
+parse-github-repo-url@^1.3.0:
+  version "1.4.1"
+  resolved "https://registry.npm.alibaba-inc.com/parse-github-repo-url/download/parse-github-repo-url-1.4.1.tgz#9e7d8bb252a6cb6ba42595060b7bf6df3dbc1f50"
+  integrity sha1-nn2LslKmy2ukJZUGC3v23z28H1A=
 
 parse-json@^2.2.0:
   version "2.2.0"
@@ -9846,7 +10176,7 @@ react-dom@^16.14.0:
     prop-types "^15.6.2"
     scheduler "^0.19.1"
 
-react-is@^16.12.0, react-is@^16.7.0, react-is@^16.8.1:
+react-is@^16.12.0, react-is@^16.7.0, react-is@^16.8.1, react-is@^16.8.6:
   version "16.13.1"
   resolved "https://registry.npm.alibaba-inc.com/react-is/download/react-is-16.13.1.tgz#789729a4dc36de2999dc156dd6c1d9c18cea56a4"
   integrity sha1-eJcppNw23imZ3BVt1sHZwYzqVqQ=
@@ -9938,6 +10268,14 @@ read-pkg-up@^1.0.1:
     find-up "^1.0.0"
     read-pkg "^1.0.0"
 
+read-pkg-up@^3.0.0:
+  version "3.0.0"
+  resolved "https://registry.npm.alibaba-inc.com/read-pkg-up/download/read-pkg-up-3.0.0.tgz#3ed496685dba0f8fe118d0691dc51f4a1ff96f07"
+  integrity sha1-PtSWaF26D4/hGNBpHcUfSh/5bwc=
+  dependencies:
+    find-up "^2.0.0"
+    read-pkg "^3.0.0"
+
 read-pkg-up@^7.0.1:
   version "7.0.1"
   resolved "https://registry.npm.alibaba-inc.com/read-pkg-up/download/read-pkg-up-7.0.1.tgz#f3a6135758459733ae2b95638056e1854e7ef507"
@@ -9955,6 +10293,15 @@ read-pkg@^1.0.0:
     load-json-file "^1.0.0"
     normalize-package-data "^2.3.2"
     path-type "^1.0.0"
+
+read-pkg@^3.0.0:
+  version "3.0.0"
+  resolved "https://registry.npm.alibaba-inc.com/read-pkg/download/read-pkg-3.0.0.tgz#9cbc686978fee65d16c00e2b19c237fcf6e38389"
+  integrity sha1-nLxoaXj+5l0WwA4rGcI3/Pbjg4k=
+  dependencies:
+    load-json-file "^4.0.0"
+    normalize-package-data "^2.3.2"
+    path-type "^3.0.0"
 
 read-pkg@^5.2.0:
   version "5.2.0"
@@ -9989,7 +10336,7 @@ readable-stream@2, readable-stream@^2.0.0, readable-stream@^2.0.1, readable-stre
     string_decoder "~1.1.1"
     util-deprecate "~1.0.1"
 
-readable-stream@3, readable-stream@^3.0.6, readable-stream@^3.1.1, readable-stream@^3.4.0:
+readable-stream@3, readable-stream@^3.0.0, readable-stream@^3.0.6, readable-stream@^3.1.1, readable-stream@^3.4.0:
   version "3.6.0"
   resolved "https://registry.npm.alibaba-inc.com/readable-stream/download/readable-stream-3.6.0.tgz#337bbda3adc0706bd3e024426a286d4b4b2c9198"
   integrity sha1-M3u9o63AcGvT4CRCaihtS0sskZg=
@@ -10037,6 +10384,14 @@ reconnecting-websocket@^4.2.0:
   version "4.4.0"
   resolved "https://registry.npm.alibaba-inc.com/reconnecting-websocket/download/reconnecting-websocket-4.4.0.tgz#3b0e5b96ef119e78a03135865b8bb0af1b948783"
   integrity sha1-Ow5blu8RnnigMTWGW4uwrxuUh4M=
+
+redent@^1.0.0:
+  version "1.0.0"
+  resolved "https://registry.npm.alibaba-inc.com/redent/download/redent-1.0.0.tgz#cf916ab1fd5f1f16dfb20822dd6ec7f730c2afde"
+  integrity sha1-z5Fqsf1fHxbfsggi3W7H9zDCr94=
+  dependencies:
+    indent-string "^2.1.0"
+    strip-indent "^1.0.1"
 
 redent@^3.0.0:
   version "3.0.0"
@@ -10129,6 +10484,13 @@ repeat-string@^1.6.1:
   version "1.6.1"
   resolved "https://registry.npm.alibaba-inc.com/repeat-string/download/repeat-string-1.6.1.tgz#8dcae470e1c88abc2d600fff4a776286da75e637"
   integrity sha1-jcrkcOHIirwtYA//Sndihtp15jc=
+
+repeating@^2.0.0:
+  version "2.0.1"
+  resolved "https://registry.npm.alibaba-inc.com/repeating/download/repeating-2.0.1.tgz#5214c53a926d3552707527fbab415dbc08d06dda"
+  integrity sha1-UhTFOpJtNVJwdSf7q0FdvAjQbdo=
+  dependencies:
+    is-finite "^1.0.0"
 
 replace-ext@^1.0.0:
   version "1.0.1"
@@ -10347,12 +10709,17 @@ run-applescript@^3.2.0:
   dependencies:
     execa "^0.10.0"
 
+run-async@^2.4.0:
+  version "2.4.1"
+  resolved "https://registry.npm.alibaba-inc.com/run-async/download/run-async-2.4.1.tgz#8440eccf99ea3e70bd409d49aab88e10c189a455"
+  integrity sha1-hEDsz5nqPnC9QJ1JqriOEMGJpFU=
+
 run-parallel@^1.1.9:
   version "1.1.10"
   resolved "https://registry.npm.alibaba-inc.com/run-parallel/download/run-parallel-1.1.10.tgz#60a51b2ae836636c81377df16cb107351bcd13ef"
   integrity sha1-YKUbKug2Y2yBN33xbLEHNRvNE+8=
 
-rxjs@^6.6.3:
+rxjs@^6.6.0, rxjs@^6.6.3:
   version "6.6.3"
   resolved "https://registry.npm.alibaba-inc.com/rxjs/download/rxjs-6.6.3.tgz#8ca84635c4daa900c0d3967a6ee7ac60271ee552"
   integrity sha1-jKhGNcTaqQDA05Z6buesYCce5VI=
@@ -10629,6 +10996,15 @@ shell-path@^2.1.0:
   integrity sha1-6n0GrhBwh0obrFxlu5vdYuT2ejg=
   dependencies:
     shell-env "^0.3.0"
+
+shelljs@^0.8.3:
+  version "0.8.4"
+  resolved "https://registry.npm.alibaba-inc.com/shelljs/download/shelljs-0.8.4.tgz#de7684feeb767f8716b326078a8a00875890e3c2"
+  integrity sha1-3naE/ut2f4cWsyYHiooAh1iQ48I=
+  dependencies:
+    glob "^7.0.0"
+    interpret "^1.0.0"
+    rechoir "^0.6.2"
 
 shellwords@^0.1.1:
   version "0.1.1"
@@ -10973,6 +11349,20 @@ split2@^2.0.0:
   dependencies:
     through2 "^2.0.2"
 
+split2@^3.0.0:
+  version "3.2.2"
+  resolved "https://registry.npm.alibaba-inc.com/split2/download/split2-3.2.2.tgz#bf2cf2a37d838312c249c89206fd7a17dd12365f"
+  integrity sha1-vyzyo32DgxLCSciSBv16F90SNl8=
+  dependencies:
+    readable-stream "^3.0.0"
+
+split@^1.0.0:
+  version "1.0.1"
+  resolved "https://registry.npm.alibaba-inc.com/split/download/split-1.0.1.tgz#605bd9be303aa59fb35f9229fbea0ddec9ea07d9"
+  integrity sha1-YFvZvjA6pZ+zX5Ip++oN3snqB9k=
+  dependencies:
+    through "2"
+
 sprintf-js@~1.0.2:
   version "1.0.3"
   resolved "https://registry.npm.alibaba-inc.com/sprintf-js/download/sprintf-js-1.0.3.tgz#04e6926f662895354f3dd015203633b857297e2c"
@@ -11207,6 +11597,13 @@ strip-final-newline@^2.0.0:
   resolved "https://registry.npm.alibaba-inc.com/strip-final-newline/download/strip-final-newline-2.0.0.tgz#89b852fb2fcbe936f6f4b3187afb0a12c1ab58ad"
   integrity sha1-ibhS+y/L6Tb29LMYevsKEsGrWK0=
 
+strip-indent@^1.0.1:
+  version "1.0.1"
+  resolved "https://registry.npm.alibaba-inc.com/strip-indent/download/strip-indent-1.0.1.tgz#0c7962a6adefa7bbd4ac366460a638552ae1a0a2"
+  integrity sha1-DHlipq3vp7vUrDZkYKY4VSrhoKI=
+  dependencies:
+    get-stdin "^4.0.1"
+
 strip-indent@^3.0.0:
   version "3.0.0"
   resolved "https://registry.npm.alibaba-inc.com/strip-indent/download/strip-indent-3.0.0.tgz#c32e1cee940b6b3432c771bc2c54bcce73cd3001"
@@ -11367,6 +11764,19 @@ tar@^6.0.2:
     mkdirp "^1.0.3"
     yallist "^4.0.0"
 
+temp-dir@^2.0.0:
+  version "2.0.0"
+  resolved "https://registry.npm.alibaba-inc.com/temp-dir/download/temp-dir-2.0.0.tgz#bde92b05bdfeb1516e804c9c00ad45177f31321e"
+  integrity sha1-vekrBb3+sVFugEycAK1FF38xMh4=
+
+tempfile@^3.0.0:
+  version "3.0.0"
+  resolved "https://registry.npm.alibaba-inc.com/tempfile/download/tempfile-3.0.0.tgz#5376a3492de7c54150d0cc0612c3f00e2cdaf76c"
+  integrity sha1-U3ajSS3nxUFQ0MwGEsPwDiza92w=
+  dependencies:
+    temp-dir "^2.0.0"
+    uuid "^3.3.2"
+
 terminal-link@^2.0.0:
   version "2.1.1"
   resolved "https://registry.npm.alibaba-inc.com/terminal-link/download/terminal-link-2.1.1.tgz#14a64a27ab3c0df933ea546fba55f2d078edc994"
@@ -11461,7 +11871,7 @@ through2@^4.0.0:
   dependencies:
     readable-stream "3"
 
-"through@>=2.2.7 <3", through@^2.3.8, through@~2.3:
+through@2, "through@>=2.2.7 <3", through@^2.3.6, through@^2.3.8, through@~2.3:
   version "2.3.8"
   resolved "https://registry.npm.alibaba-inc.com/through/download/through-2.3.8.tgz#0dd4c9ffaabc357960b1b724115d7e0e86a2e1f5"
   integrity sha1-DdTJ/6q8NXlgsbckEV1+Doai4fU=
@@ -11485,6 +11895,13 @@ tinycolor2@^1.4.1:
   version "1.4.2"
   resolved "https://registry.npm.alibaba-inc.com/tinycolor2/download/tinycolor2-1.4.2.tgz#3f6a4d1071ad07676d7fa472e1fac40a719d8803"
   integrity sha1-P2pNEHGtB2dtf6Ry4frECnGdiAM=
+
+tmp@^0.0.33:
+  version "0.0.33"
+  resolved "https://registry.npm.alibaba-inc.com/tmp/download/tmp-0.0.33.tgz#6d34335889768d21b2bcda0aa277ced3b1bfadf9"
+  integrity sha1-bTQzWIl2jSGyvNoKonfO07G/rfk=
+  dependencies:
+    os-tmpdir "~1.0.2"
 
 tmpl@1.0.x:
   version "1.0.4"
@@ -11626,6 +12043,11 @@ tree-kill@^1.2.2:
   version "1.2.2"
   resolved "https://registry.npm.alibaba-inc.com/tree-kill/download/tree-kill-1.2.2.tgz#4ca09a9092c88b73a7cdc5e8a01b507b0790a0cc"
   integrity sha1-TKCakJLIi3OnzcXooBtQeweQoMw=
+
+trim-newlines@^1.0.0:
+  version "1.0.0"
+  resolved "https://registry.npm.alibaba-inc.com/trim-newlines/download/trim-newlines-1.0.0.tgz#5887966bb582a4503a41eb524f7d35011815a613"
+  integrity sha1-WIeWa7WCpFA6QetST301ARgVphM=
 
 trim-newlines@^3.0.0:
   version "3.0.0"
@@ -11799,6 +12221,11 @@ ua-parser-js@^0.7.18:
   version "0.7.22"
   resolved "https://registry.npm.alibaba-inc.com/ua-parser-js/download/ua-parser-js-0.7.22.tgz#960df60a5f911ea8f1c818f3747b99c6e177eae3"
   integrity sha1-lg32Cl+RHqjxyBjzdHuZxuF36uM=
+
+uglify-js@^3.1.4:
+  version "3.12.4"
+  resolved "https://registry.npm.alibaba-inc.com/uglify-js/download/uglify-js-3.12.4.tgz#93de48bb76bb3ec0fc36563f871ba46e2ee5c7ee"
+  integrity sha1-k95Iu3a7PsD8NlY/hxukbi7lx+4=
 
 ultron@~1.1.0:
   version "1.1.1"
@@ -12360,6 +12787,14 @@ webpack-log@^2.0.0:
     ansi-colors "^3.0.0"
     uuid "^3.3.2"
 
+webpack-manifest-plugin@^3.0.0:
+  version "3.0.0"
+  resolved "https://registry.npm.alibaba-inc.com/webpack-manifest-plugin/download/webpack-manifest-plugin-3.0.0.tgz#426644300e5dc41a75a9c996c4d4f876eb3c2b5b"
+  integrity sha1-QmZEMA5dxBp1qcmWxNT4dus8K1s=
+  dependencies:
+    tapable "^2.0.0"
+    webpack-sources "^2.2.0"
+
 webpack-merge@^4.2.2:
   version "4.2.2"
   resolved "https://registry.npm.alibaba-inc.com/webpack-merge/download/webpack-merge-4.2.2.tgz#a27c52ea783d1398afd2087f547d7b9d2f43634d"
@@ -12383,7 +12818,7 @@ webpack-sources@^1.1.0, webpack-sources@^1.4.3:
     source-list-map "^2.0.0"
     source-map "~0.6.1"
 
-webpack-sources@^2.1.1:
+webpack-sources@^2.1.1, webpack-sources@^2.2.0:
   version "2.2.0"
   resolved "https://registry.npm.alibaba-inc.com/webpack-sources/download/webpack-sources-2.2.0.tgz#058926f39e3d443193b6c31547229806ffd02bac"
   integrity sha1-BYkm8549RDGTtsMVRyKYBv/QK6w=
@@ -12532,6 +12967,11 @@ word-wrap@~1.2.3:
   version "1.2.3"
   resolved "https://registry.npm.alibaba-inc.com/word-wrap/download/word-wrap-1.2.3.tgz#610636f6b1f703891bd34771ccb17fb93b47079c"
   integrity sha1-YQY29rH3A4kb00dxzLF/uTtHB5w=
+
+wordwrap@^1.0.0:
+  version "1.0.0"
+  resolved "https://registry.npm.alibaba-inc.com/wordwrap/download/wordwrap-1.0.0.tgz#27584810891456a4171c8d0226441ade90cbcaeb"
+  integrity sha1-J1hIEIkUVqQXHI0CJkQa3pDLyus=
 
 wordwrapjs@^4.0.0:
   version "4.0.0"

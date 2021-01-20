@@ -1,8 +1,8 @@
 import * as path from 'path';
 
-export const PRODUCT = 'spacex';
+export const PRODUCT = 'alex';
 
-export const FRAMEWORK_NAME = '@alipay/spacex';
+export const FRAMEWORK_NAME = '@alipay/alex';
 
 export const FRAMEWORK_PATH = resolveFramework();
 

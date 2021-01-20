@@ -26,7 +26,6 @@ import os from 'os';
 import path from 'path';
 import { IDiskFileProvider } from './base';
 import { FCService } from '../../connection';
-import { AppConfig } from '../core/app';
 import { FWFileSystemWatcherServer } from './file-service-watcher';
 import { fse, writeFileAtomic } from '../node';
 import { decode, encode } from './encoding';
@@ -90,9 +89,6 @@ export class DiskFileSystemProvider extends FCService implements IDiskFileProvid
     'wmv',
     'woff',
   ];
-
-  @Autowired(AppConfig)
-  appConfig: AppConfig;
 
   constructor() {
     super();

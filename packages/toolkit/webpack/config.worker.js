@@ -1,6 +1,7 @@
 const path = require('path');
 const webpack = require('webpack');
-const { nodePolyfill, config } = require('./util');
+const { WebpackManifestPlugin } = require('webpack-manifest-plugin');
+const { nodePolyfill, config, manifestSeed } = require('./util');
 
 module.exports = () => {
   const isDev = process.env.NODE_ENV === 'development';
@@ -29,6 +30,10 @@ module.exports = () => {
       },
     },
     plugins: [
+      new WebpackManifestPlugin({
+        publicPath: '',
+        seed: manifestSeed,
+      }),
       new webpack.ProvidePlugin({
         ...nodePolyfill.provider,
       }),

@@ -29,7 +29,7 @@ import path from 'path';
 import { IDiskFileProvider, IFileService } from './base';
 import { FCService } from '../../connection';
 import { fse } from '../node';
-import { AppConfig } from '../core/app';
+import { ServerConfig } from '../core/app';
 import { INodeLogger } from '../core/node-logger';
 
 export abstract class FileSystemNodeOptions {
@@ -566,7 +566,7 @@ export class FileService extends FCService implements IFileService {
 }
 export function getSafeFileService(injector: Injector) {
   const fileService = injector.get(FileService, [FileSystemNodeOptions.DEFAULT]);
-  const appConfig: AppConfig = injector.get(AppConfig);
+  const serverConfig: ServerConfig = injector.get(ServerConfig);
   fileServiceInterceptor(
     fileService,
     [
@@ -584,7 +584,7 @@ export function getSafeFileService(injector: Injector) {
       'move',
       'copy',
     ],
-    appConfig.blockPatterns || []
+    serverConfig.blockPatterns || []
   );
   return fileService;
 }

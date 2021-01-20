@@ -29,9 +29,12 @@ import { OutputModule } from '@ali/ide-output/lib/browser';
 import { FileSchemeModule } from '@ali/ide-file-scheme/lib/browser';
 import { MarkersModule } from '@ali/ide-markers/lib/browser';
 import { DebugModule } from '@ali/ide-debug/lib/browser';
+import { OutlineModule } from '@ali/ide-outline/lib/browser';
 
-import { ClientModule, ServerModuleCollection } from '@alipay/spacex-core';
-import { GitFileSchemeModule } from '@alipay/spacex-git';
+import { ClientModule, ServerModuleCollection } from '@alipay/alex-core';
+import { GitFileSchemeModule } from '@alipay/alex-git';
+import { MemFSModule } from '@alipay/alex-memfs';
+
 import { StartupModule } from './startup.module';
 
 export const Modules: ConstructorOf<BrowserModule>[] = [
@@ -65,9 +68,12 @@ export const Modules: ConstructorOf<BrowserModule>[] = [
   KaitianExtensionModule,
   MarkersModule,
   DebugModule,
+  OutlineModule,
 
   // Browser Core Module
   ClientModule,
+
+  // MemFSModule,
 
   GitFileSchemeModule,
 

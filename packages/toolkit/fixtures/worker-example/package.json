@@ -1,7 +1,7 @@
 {
   "name": "worker.example",
   "version": "0.0.1",
-  "publisher": "spacex",
+  "publisher": "alex",
   "engines": {
     "kaitian": "*"
   },

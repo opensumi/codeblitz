@@ -1,0 +1,25 @@
+{
+  "name": "@alipay/alex-memfs",
+  "version": "0.0.5",
+  "description": "@alipay/alex-memfs",
+  "main": "lib/index.js",
+  "typings": "lib/index.d.ts",
+  "files": [
+    "lib"
+  ],
+  "keywords": [
+    "kaitian AntCodespaces"
+  ],
+  "scripts": {},
+  "publishConfig": {
+    "registry": "https://registry.npm.alibaba-inc.com"
+  },
+  "tnpm": {
+    "mode": "yarn",
+    "lockfile": "enable"
+  },
+  "dependencies": {
+    "@alipay/alex-core": "0.0.5",
+    "@alipay/alex-shared": "0.0.5"
+  }
+}

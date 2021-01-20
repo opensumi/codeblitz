@@ -3,11 +3,13 @@ declare module 'process' {
     namespace NodeJS {
       interface ProcessEnv {
         IS_DEV: boolean;
-        WORKER_HOST: string;
-        WEBVIEW_ENDPOINT: string;
       }
     }
   }
 }
+
+// build 时会被替换
+declare var __WORKER_HOST__: string;
+declare var __WEBVIEW_ENDPOINT__: string;
 
 type Optional<T, K extends keyof T> = Omit<T, K> & Partial<T>;

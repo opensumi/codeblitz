@@ -29,11 +29,11 @@ export interface IExtensionBasicMetadata {
   extension: IExtensionIdentity;
   packageJSON: {
     name: string;
-    activationEvents: string[];
+    activationEvents?: string[];
     kaitianContributes?: JSONType;
     contributes?: JSONType;
   };
-  defaultPkgNlsJSON: JSONType | undefined;
+  defaultPkgNlsJSON?: JSONType;
   pkgNlsJSON: JSONType;
   nlsList: NLSInfo[];
   extendConfig: JSONType;

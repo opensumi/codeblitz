@@ -7,15 +7,10 @@ import {
   LogLevel,
   ILogService,
   SupportLogNamespace,
-  IReporter,
-  DefaultReporter,
-  IReporterService,
-  ReporterService,
-  ReporterMetadata,
-  REPORT_HOST,
   StoragePaths,
 } from '@ali/ide-core-common';
-import { IExtensionBasicMetadata } from '@alipay/spacex-shared';
+import { AppConfig } from '@ali/ide-core-browser';
+import { IExtensionBasicMetadata } from '@alipay/alex-shared';
 import path from 'path';
 import os from 'os';
 
@@ -34,18 +29,15 @@ export abstract class NodeModule extends BasicModule {}
 type ModuleConstructor = ConstructorOf<NodeModule>;
 export type ContributionConstructor = ConstructorOf<ServerAppContribution>;
 
-export const AppConfig = Symbol('AppConfig');
+export const ServerConfig = Symbol('ServerConfig');
 interface Config {
-  injector: Injector;
-  workspaceDir: string;
-  extensionDir?: string;
-  modules?: ModuleConstructor[];
   /**
    * 设置落盘日志级别，默认为 Info 级别的log落盘
    */
   logLevel?: LogLevel;
+
   /**
-   * 设置日志的目录，默认：~/.kaitian/logs
+   * TODO: remove
    */
   logDir?: string;
   /**
@@ -62,13 +54,11 @@ interface Config {
   extensionMetadata?: IExtensionBasicMetadata[];
 }
 
-export interface AppConfig extends Partial<Config> {
+export interface ServerConfig extends Partial<Config> {
   marketplace: {
     extensionDir: string;
   };
 }
-
-export { AppConfig as ServerAppConfig };
 
 export interface IServerAppOpts extends Partial<Config> {}
 
@@ -78,6 +68,11 @@ export interface ServerAppContribution {
   initialize?(app: IServerApp): MaybePromise<void>;
   onStart?(app: IServerApp): MaybePromise<void>;
   onStop?(app: IServerApp): MaybePromise<void>;
+}
+
+export const LaunchContribution = Symbol('LaunchContribution');
+
+export interface LaunchContribution {
   // 应用启动在所有初始话之前，此时会检查应用可访问性，并动态更改配置数据，如 workspaceDir，同时可自定义挂载文件系统
   launch?(app: IServerApp): MaybePromise<void>;
 }
@@ -85,7 +80,9 @@ export interface ServerAppContribution {
 export class ServerApp implements IServerApp {
   private injector: Injector;
 
-  private config: AppConfig;
+  private appConfig: AppConfig;
+
+  private serverConfig: ServerConfig;
 
   private logger: ILogService;
 
@@ -93,15 +90,21 @@ export class ServerApp implements IServerApp {
 
   protected contributionsProvider: ContributionProvider<ServerAppContribution>;
 
+  protected launchContributionsProvider: ContributionProvider<LaunchContribution>;
+
   public rootFS: RootFS;
 
-  constructor(opts: IServerAppOpts) {
-    this.injector = opts.injector || new Injector();
+  constructor(
+    opts: IServerAppOpts & {
+      injector: Injector;
+      modules: ModuleConstructor[];
+      appConfig: AppConfig;
+    }
+  ) {
+    this.injector = opts.injector;
     this.modules = opts.modules || [];
-    this.config = {
-      injector: this.injector,
-      workspaceDir: opts.workspaceDir,
-      extensionDir: opts.extensionDir,
+    this.appConfig = opts.appConfig;
+    this.serverConfig = {
       marketplace: {
         extensionDir: path.join(
           os.homedir(),
@@ -115,9 +118,10 @@ export class ServerApp implements IServerApp {
       extensionMetadata: opts.extensionMetadata,
     };
     this.registerEventListeners();
-    this.initBaseProvider(opts);
+    this.initBaseProvider();
     this.logger = this.injector.get(ILogServiceManager).getLogger(SupportLogNamespace.App);
     this.contributionsProvider = this.injector.get(ServerAppContribution);
+    this.launchContributionsProvider = this.injector.get(LaunchContribution);
   }
 
   private get contributions(): ServerAppContribution[] {
@@ -130,12 +134,13 @@ export class ServerApp implements IServerApp {
     });
   }
 
-  private initBaseProvider(opts: IServerAppOpts) {
+  private initBaseProvider() {
     const { injector } = this;
+    createContributionProvider(this.injector, LaunchContribution);
     createContributionProvider(this.injector, ServerAppContribution);
     injector.addProviders({
-      token: AppConfig,
-      useValue: this.config,
+      token: ServerConfig,
+      useValue: this.serverConfig,
     });
     injector.addProviders(
       {
@@ -174,11 +179,16 @@ export class ServerApp implements IServerApp {
 
   private async launch() {
     this.rootFS = await initializeRootFileSystem();
-    await this.runContributionsPhase('launch', this);
+    // 启动发生的错误抛到全局处理，不启动应用
+    for (const contribution of this.launchContributionsProvider.getContributions()) {
+      if (contribution.launch) {
+        await contribution.launch(this);
+      }
+    }
     // 初始化文件目录
     await Promise.all([
-      await fse.ensureDir(this.config.workspaceDir || WORKSPACE_ROOT),
-      await fse.ensureDir(this.config.marketplace.extensionDir),
+      fse.ensureDir(this.appConfig.workspaceDir || WORKSPACE_ROOT),
+      fse.ensureDir(this.serverConfig.marketplace.extensionDir),
     ]);
   }
 

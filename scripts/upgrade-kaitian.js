@@ -1,5 +1,4 @@
-const execa = require('execa');
-const invoke = require('./utils/invoke');
+const { invoke, exec } = require('./utils/utils');
 const signale = require('signale');
 const args = require('minimist')(process.argv.slice(2));
 const fse = require('fs-extra');
@@ -29,20 +28,18 @@ invoke(async () => {
   signale.await(`正在写入数据`);
   await Promise.all(pkgPathList.map((pkgPath) => upgradeKaitianDeps(pkgPath, version, packages)));
   signale.await(`yarn 重装依赖`);
-  await execa.command('npx yarn --network-timeout 100000', {
-    stdio: 'inherit',
-  });
+  await exec('npx yarn --network-timeout 100000');
 });
 
 async function getOrCheckVersion(version) {
   if (version) {
-    const { stdout: name } = await execa.command(`tnpm view ${pkg}@${version} name`);
+    const { stdout: name } = await exec(`tnpm view ${pkg}@${version} name`);
     if (!name) {
       signale.fatal(`${version} 不存在`);
       process.exit(128);
     }
   } else {
-    ({ stdout: version } = await execa.command(`tnpm view ${pkg}@latest version`));
+    ({ stdout: version } = await exec(`tnpm view ${pkg}@latest version`));
     if (!version) {
       signale.fatal(`查找最新版本失败`);
       process.exit(128);

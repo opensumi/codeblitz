@@ -191,17 +191,13 @@ module.exports = (option) => {
       new webpack.DefinePlugin({
         'process.env': {
           IS_DEV: isDev,
-          WORKER_HOST: option.useLocalWorkerAndWebviewHost
-            ? process.env.WORKER_PATH
-              ? JSON.stringify(`/assets/~${process.env.WORKER_PATH}`)
-              : JSON.stringify(`${baseURL}/${config.workerEntry}.js`)
-            : '', // TODO: cdn 地址
-          WEBVIEW_ENDPOINT: option.useLocalWorkerAndWebviewHost
-            ? process.env.WEBVIEW_PATH
-              ? JSON.stringify(`/assets/~${process.env.WEBVIEW_PATH}`)
-              : JSON.stringify(`${baseURL}/${config.webviewEntry}`)
-            : '', // TODO: cdn 地址
         },
+        __WORKER_HOST__: process.env.WORKER_PATH
+          ? JSON.stringify(`/assets/~${process.env.WORKER_PATH}`)
+          : JSON.stringify(`${baseURL}/${config.workerEntry}.js`),
+        __WEBVIEW_ENDPOINT__: process.env.WEBVIEW_ENDPOINT
+          ? JSON.stringify(`/assets/~${process.env.WEBVIEW_ENDPOINT}`)
+          : JSON.stringify(`${baseURL}/${config.webviewEntry}`),
         ...config.define,
       }),
       new webpack.ProvidePlugin({

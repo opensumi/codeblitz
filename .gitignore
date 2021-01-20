@@ -92,7 +92,8 @@ packages/*/lib
 packages/*/esm
 packages/*/types
 
-packages/spacex/extensions
-packages/spacex/.kaitian
+packages/alex/extensions
+packages/alex/config.json
+packages/alex/.kaitian
 
 packages/toolkit/extensions

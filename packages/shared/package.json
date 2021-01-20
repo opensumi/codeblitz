@@ -1,7 +1,7 @@
 {
-  "name": "@alipay/spacex-shared",
-  "version": "0.0.1",
-  "description": "@alipay/spacex-shared",
+  "name": "@alipay/alex-shared",
+  "version": "0.0.5",
+  "description": "@alipay/alex-shared",
   "main": "lib/index.js",
   "typing": "lib/index.d.ts",
   "files": [

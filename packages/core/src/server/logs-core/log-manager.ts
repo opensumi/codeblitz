@@ -8,13 +8,13 @@ import {
 } from '@ali/ide-logs/lib/common';
 import { ILogServiceManager } from '../core/base';
 import { Emitter } from '@ali/ide-core-common';
-import { AppConfig } from '../core/app';
+import { ServerConfig } from '../core/app';
 import { LogService, DEFAULT_LOG_FOLDER } from './log.service';
 
 @Injectable()
 export class LogServiceManager implements ILogServiceManager {
-  @Autowired(AppConfig)
-  private appConfig: AppConfig;
+  @Autowired(ServerConfig)
+  private serverConfig: ServerConfig;
 
   protected readonly logLevelChangeEmitter = new Emitter<LogLevel>();
   private globalLogLevel: LogLevel;
@@ -25,8 +25,8 @@ export class LogServiceManager implements ILogServiceManager {
 
   constructor() {
     this.init({
-      logDir: this.appConfig.logDir,
-      logLevel: this.appConfig.logLevel,
+      logDir: this.serverConfig.logDir,
+      logLevel: this.serverConfig.logLevel,
     });
     this.cleanOldLogs();
   }
@@ -35,7 +35,7 @@ export class LogServiceManager implements ILogServiceManager {
     this.logRootFolderPath = options.logDir || DEFAULT_LOG_FOLDER;
     this.logFolderPath = this._getLogFolder();
     this.globalLogLevel = options.logLevel || LogLevel.Info;
-    this.LogServiceClass = this.appConfig.LogServiceClass || LogService;
+    this.LogServiceClass = this.serverConfig.LogServiceClass || LogService;
   };
 
   getLogger = (

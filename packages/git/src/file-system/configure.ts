@@ -1,4 +1,4 @@
-import { BrowserFS, WORKSPACE_IDB_NAME } from '@alipay/spacex-core';
+import { BrowserFS, WORKSPACE_IDB_NAME } from '@alipay/alex-core';
 import GitRemote from './GitRemote';
 import { IGitAPIService } from '../types';
 
