@@ -23,7 +23,7 @@ module.exports = () => {
       devServer: {
         proxy: {
           '/code-service': {
-            target: 'https://code.alipay.com',
+            target: process.env.CODE_SERVICE_HOST || 'https://code.alipay.com',
             headers: {
               'PRIVATE-TOKEN': process.env.PRIVATE_TOKEN,
             },

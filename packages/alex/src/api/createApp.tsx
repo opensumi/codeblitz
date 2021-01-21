@@ -3,7 +3,7 @@ import { SlotRenderer, SlotLocation, IAppRenderer } from '@ali/ide-core-browser'
 import { BoxPanel, SplitPanel } from '@ali/ide-core-browser/lib/components';
 import { IThemeService } from '@ali/ide-theme/lib/common';
 import '@ali/ide-i18n/lib/browser';
-import '../core/normalize.less';
+import '@ali/ide-core-browser/lib/style/index.less';
 import { modules } from '../core/modules';
 import { IconSlim, IDETheme } from '../core/extensions';
 import { mergeConfig, themeStorage } from '../core/utils';

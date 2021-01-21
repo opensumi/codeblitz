@@ -142,6 +142,10 @@ module.exports = (option) => {
               options: {
                 lessOptions: {
                   javascriptEnabled: true,
+                  modifyVars: {
+                    'kt-html-selector': 'alex-root',
+                    'kt-body-selector': 'alex-root',
+                  },
                 },
               },
             },

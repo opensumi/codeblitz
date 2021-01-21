@@ -1,6 +1,5 @@
 import React, { useState, useMemo, useEffect } from 'react';
 import ReactDOM from 'react-dom';
-import { Deferred } from '@ali/ide-core-common';
 import { ClientApp } from '@alipay/alex-core';
 import { createApp } from './createApp';
 import { Root } from '../core/Root';
