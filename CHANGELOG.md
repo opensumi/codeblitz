@@ -1,3 +1,12 @@
+## [0.2.2](https://code.alipay.com/cloud-ide/crew-dragon/compare/v0.2.1...v0.2.2) (2021-01-25)
+
+
+### Bug Fixes
+
+* onEvent 初始化问题 ([9c7ace3](https://code.alipay.com/cloud-ide/crew-dragon/commits/9c7ace3165db982d6f2dbe94c346fd0d8ca43b01))
+
+
+
 ## [0.2.1](https://code.alipay.com/cloud-ide/crew-dragon/compare/v0.2.0...v0.2.1) (2021-01-25)
 
 
