@@ -1,3 +1,14 @@
+# [0.2.0](https://code.alipay.com/cloud-ide/crew-dragon/compare/v0.1.2...v0.2.0) (2021-01-25)
+
+
+### Features
+
+* change extensions field ([bd39ba1](https://code.alipay.com/cloud-ide/crew-dragon/commits/bd39ba1a8b45ed89ae6622284496aadb1f6b4eb1))
+* use custom elements for alex-root ([a6decfc](https://code.alipay.com/cloud-ide/crew-dragon/commits/a6decfcef990470d7df447f86bfeb61210a4a7ee))
+* 生成 bundle ([0f08258](https://code.alipay.com/cloud-ide/crew-dragon/commits/0f08258285cd5bb99f2b67ce3c4f8c04c513ba83))
+
+
+
 ## [0.1.2](https://code.alipay.com/cloud-ide/crew-dragon/compare/v0.1.1...v0.1.2) (2021-01-19)
 
 
