@@ -83,7 +83,7 @@
     "mode": "yarn",
     "lockfile": "enable"
   },
-  "kaitianExtensions": [
+  "cloudideExtensions": [
     {
       "publisher": "cloud-ide-ext",
       "name": "sarif-viewer",

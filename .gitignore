@@ -99,5 +99,6 @@ packages/alex/polyfills
 packages/alex/shims
 packages/alex/bundle
 packages/alex/.kaitian
+packages/alex/.cloudide
 
 packages/toolkit/extensions

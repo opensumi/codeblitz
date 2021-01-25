@@ -6,13 +6,13 @@ export const FRAMEWORK_NAME = '@alipay/alex';
 
 export const FRAMEWORK_PATH = resolveFramework();
 
-export const EXTENSION_DIR = path.join(FRAMEWORK_PATH, '.kaitian/extensions');
+export const EXTENSION_DIR = path.join(FRAMEWORK_PATH, '.cloudide/extensions');
 
 export const EXTENSION_METADATA_DIR = path.join(FRAMEWORK_PATH, 'extensions');
 
 export const EXTENSION_METADATA_TYPE_PATH = path.join(FRAMEWORK_PATH, 'extensions.d.ts');
 
-export const EXTENSION_FIELDS = 'cloudideExtensions';
+export const EXTENSION_FIELD = 'cloudideExtensions';
 
 function resolveFramework() {
   try {

@@ -9,7 +9,7 @@ import { ResourceService, IResource, WorkbenchEditorService } from '@ali/ide-edi
 import { IIconService, IconType } from '@ali/ide-theme';
 import { Autowired } from '@ali/common-di';
 import { IWorkspaceService } from '@ali/ide-workspace';
-import { RuntimeConfig, AppConfig } from '@alipay/alex-core';
+import { RuntimeConfig, AppConfig } from '../../common';
 import { EditorWelcomeComponent } from './welcome.view';
 import { CommonConfig } from '../../common/config';
 import styles from './welcome.module.less';

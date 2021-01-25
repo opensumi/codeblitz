@@ -3,7 +3,7 @@ import { ExtensionInstaller, Extension } from '@ali/ide-extension-installer';
 import * as fse from 'fs-extra';
 import { from, of } from 'rxjs';
 import { mergeMap, filter } from 'rxjs/operators';
-import { EXTENSION_DIR, EXTENSION_METADATA_DIR } from './util/constant';
+import { EXTENSION_DIR, EXTENSION_METADATA_DIR, EXTENSION_FIELD } from './util/constant';
 import { getExtension } from './extension/scanner';
 import { IExtensionBasicMetadata, IExtensionDesc, IExtensionIdentity } from './extension/type';
 import { log, error } from './util/log';
@@ -28,7 +28,7 @@ export const install = async (extensionId?: string[], options?: { silent: boolea
   } else {
     const extensionConfig = await getExtensionFromPackage();
     if (!extensionConfig.length && !options?.silent) {
-      log.warn('当前未配置 kaitianExtensions，请运行 npx alex ext -h 查看帮助');
+      log.warn(`当前未配置 ${EXTENSION_FIELD} npx alex ext -h 查看帮助`);
       return;
     }
     checkExtensionConfig(extensionConfig);
@@ -102,7 +102,7 @@ async function removeExtensionById(ext: IExtensionDesc) {
 async function getExtensionFromPackage(): Promise<IExtensionDesc[]> {
   try {
     const projectPkgJSON = await fse.readJSON(resolveCWDPkgJSON());
-    return projectPkgJSON?.kaitianExtensions ?? [];
+    return projectPkgJSON?.[EXTENSION_FIELD] ?? [];
   } catch (err) {
     return [];
   }
@@ -112,7 +112,7 @@ async function setExtensionFromPackage(config: any) {
   try {
     const pkgPath = resolveCWDPkgJSON();
     const projectPkgJSON = await fse.readJSON(pkgPath);
-    projectPkgJSON.kaitianExtensions = config;
+    projectPkgJSON[EXTENSION_FIELD] = config;
     await fse.writeJSON(pkgPath, projectPkgJSON, { spaces: 2 });
   } catch (err) {}
 }
@@ -225,6 +225,6 @@ export async function uninstall(extensionId: string[]) {
 }
 
 function resolveCWDPkgJSON() {
-  const initCWD = process.env.INIT_CWD || path.join(__dirname, '../../../..');
+  const initCWD = process.env.INIT_CWD || process.cwd();
   return path.resolve(initCWD, 'package.json');
 }
