@@ -1,5 +1,6 @@
-import { Autowired, Injectable } from '@ali/common-di';
-import { OnEvent, WithEventBus, BasicEvent } from '@ali/ide-core-common';
+import { Autowired } from '@ali/common-di';
+import { ClientAppContribution } from '@ali/ide-core-browser';
+import { OnEvent, WithEventBus, BasicEvent, Domain } from '@ali/ide-core-common';
 import { EditorDocumentModelSavedEvent } from '@ali/ide-editor/lib/browser';
 import { IFileServiceClient } from '@ali/ide-file-service/lib/common';
 import { AppConfig, RuntimeConfig } from '../../common/types';
@@ -10,8 +11,8 @@ export class FileChangeEvent extends BasicEvent<{
   content: string;
 }> {}
 
-@Injectable()
-export class EditorActionEventContribution extends WithEventBus {
+@Domain(ClientAppContribution)
+export class EditorActionEventContribution extends WithEventBus implements ClientAppContribution {
   @Autowired(IFileServiceClient)
   fileService: IFileServiceClient;
 
@@ -20,6 +21,8 @@ export class EditorActionEventContribution extends WithEventBus {
 
   @Autowired(RuntimeConfig)
   runtimeConfig: RuntimeConfig;
+
+  onStart() {}
 
   @OnEvent(EditorDocumentModelSavedEvent)
   async onEditorDocumentModelSavingEvent(e: EditorDocumentModelSavedEvent) {
