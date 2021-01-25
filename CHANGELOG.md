@@ -1,3 +1,12 @@
+## [0.2.1](https://code.alipay.com/cloud-ide/crew-dragon/compare/v0.2.0...v0.2.1) (2021-01-25)
+
+
+### Bug Fixes
+
+* bundle define ([e012cb1](https://code.alipay.com/cloud-ide/crew-dragon/commits/e012cb13670ea2ae982ffea01fe8d83c0022357b))
+
+
+
 # [0.2.0](https://code.alipay.com/cloud-ide/crew-dragon/compare/v0.1.2...v0.2.0) (2021-01-25)
 
 
