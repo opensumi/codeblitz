@@ -8,18 +8,19 @@
   "description": "Ant Codespaces for browser",
   "main": "index.js",
   "engines": {
-    "kaitian": "1.32.0"
+    "kaitian": "1.33.0"
   },
   "scripts": {
     "preinstall": "node scripts/preinstall",
     "init": "npm run clean && npm run build && npm run ext",
     "start": "npm run dev",
-    "ext": "node packages/alex/bin/alex ext",
+    "ext": "alex ext",
     "sdk": "INTEGRATION=sdk npm run dev",
+    "inspect": "INTEGRATION=inspect npm run dev",
     "build": "node scripts/build",
     "create": "node scripts/create",
     "format": "prettier --write --parser typescript \"packages/**/*.ts?(x)\"",
-    "dev": "yarn workspace @alipay/alex-toolkit dev",
+    "dev": "webpack serve --config packages/toolkit/webpack/config.dev.js",
     "clean": "rimraf packages/*/lib",
     "test": "jest --runInBand",
     "changelog": "conventional-changelog -p angular -i CHANGELOG.md -s"
@@ -84,19 +85,34 @@
   },
   "kaitianExtensions": [
     {
-      "publisher": "kaitian",
-      "name": "vsicons-slim",
-      "version": "1.0.5"
+      "publisher": "cloud-ide-ext",
+      "name": "sarif-viewer",
+      "version": "0.0.5"
     },
     {
-      "publisher": "vscode-extensions",
-      "name": "vscode-icons",
-      "version": "9.4.0"
+      "publisher": "alex",
+      "name": "css-language-features-worker",
+      "version": "1.0.0-beta.1"
     },
     {
-      "publisher": "kaitian",
-      "name": "ide-dark-theme",
-      "version": "2.1.2"
+      "publisher": "alex",
+      "name": "markdown-language-features-worker",
+      "version": "1.0.0-beta.1"
+    },
+    {
+      "publisher": "alex",
+      "name": "html-language-features-worker",
+      "version": "1.0.0-beta.1"
+    },
+    {
+      "publisher": "alex",
+      "name": "json-language-features-worker",
+      "version": "1.0.0-beta.1"
+    },
+    {
+      "publisher": "alex",
+      "name": "typescript-language-features-worker",
+      "version": "1.0.0-beta.2"
     }
   ]
 }

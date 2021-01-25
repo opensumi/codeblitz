@@ -1,52 +1,59 @@
-import * as Addons from '../modules/addons';
-import * as Comments from '../modules/comments';
-import * as Components from '../modules/components';
-import * as CoreBrowser from '../modules/core-browser';
-import * as CoreCommon from '../modules/core-common';
-import * as Debug from '../modules/debug';
-import * as Decoration from '../modules/decoration';
-import * as Editor from '../modules/editor';
-import * as Explorer from '../modules/explorer';
-import * as ExpressFileServer from '../modules/express-file-server';
-import * as ExtensionManager from '../modules/extension-manager';
-import * as ExtensionStorage from '../modules/extension-storage';
-import * as FileScheme from '../modules/file-scheme';
-import * as FileSearch from '../modules/file-search';
-import * as FileService from '../modules/file-service';
-import * as FileTreeNext from '../modules/file-tree-next';
-import * as KaitianExtension from '../modules/kaitian-extension';
-import * as Keymaps from '../modules/keymaps';
-import * as Logs from '../modules/logs';
-import * as MainLayout from '../modules/main-layout';
-import * as Markdown from '../modules/markdown';
-import * as Markers from '../modules/markers';
-import * as MenuBar from '../modules/menu-bar';
-import * as Monaco from '../modules/monaco';
-import * as MonacoEnhance from '../modules/monaco-enhance';
-import * as OpenedEditor from '../modules/opened-editor';
-import * as Outline from '../modules/outline';
-import * as Output from '../modules/output';
-import * as Overlay from '../modules/overlay';
-import * as Preferences from '../modules/preferences';
-import * as QuickOpen from '../modules/quick-open';
-import * as Scm from '../modules/scm';
-import * as Search from '../modules/search';
-import * as Startup from '../modules/startup';
-import * as StaticResource from '../modules/static-resource';
-import * as StatusBar from '../modules/status-bar';
-import * as Storage from '../modules/storage';
-// import * as Task from '../ide/task'
-// import * as TerminalNext from '../ide/terminal-next'
-import * as Theme from '../modules/theme';
-import * as Toolbar from '../modules/toolbar';
-import * as Variable from '../modules/variable';
-import * as Webview from '../modules/webview';
-import * as Workspace from '../modules/workspace';
-import * as WorkspaceEdit from '../modules/workspace-edit';
+/**
+ * ide 目前未引用模块
+ * express-file-server, extension-manager, task, terminal-next,
+ */
+
+import * as Addons from '../modules/ali__ide-addons';
+import * as Comments from '../modules/ali__ide-comments';
+import * as Components from '../modules/ali__ide-components';
+import * as CoreBrowser from '../modules/ali__ide-core-browser';
+import * as CoreCommon from '../modules/ali__ide-core-common';
+import * as Debug from '../modules/ali__ide-debug';
+import * as Decoration from '../modules/ali__ide-decoration';
+import * as Editor from '../modules/ali__ide-editor';
+import * as Explorer from '../modules/ali__ide-explorer';
+import * as ExtensionStorage from '../modules/ali__ide-extension-storage';
+import * as FileScheme from '../modules/ali__ide-file-scheme';
+import * as FileSearch from '../modules/ali__ide-file-search';
+import * as FileService from '../modules/ali__ide-file-service';
+import * as FileTreeNext from '../modules/ali__ide-file-tree-next';
+import * as KaitianExtension from '../modules/ali__ide-kaitian-extension';
+import * as Keymaps from '../modules/ali__ide-keymaps';
+import * as Logs from '../modules/ali__ide-logs';
+import * as MainLayout from '../modules/ali__ide-main-layout';
+import * as Markdown from '../modules/ali__ide-markdown';
+import * as Markers from '../modules/ali__ide-markers';
+import * as MenuBar from '../modules/ali__ide-menu-bar';
+import * as Monaco from '../modules/ali__ide-monaco';
+import * as MonacoEnhance from '../modules/ali__ide-monaco-enhance';
+import * as OpenedEditor from '../modules/ali__ide-opened-editor';
+import * as Outline from '../modules/ali__ide-outline';
+import * as Output from '../modules/ali__ide-output';
+import * as Overlay from '../modules/ali__ide-overlay';
+import * as Preferences from '../modules/ali__ide-preferences';
+import * as QuickOpen from '../modules/ali__ide-quick-open';
+import * as Scm from '../modules/ali__ide-scm';
+import * as Search from '../modules/ali__ide-search';
+import * as StaticResource from '../modules/ali__ide-static-resource';
+import * as StatusBar from '../modules/ali__ide-status-bar';
+import * as Storage from '../modules/ali__ide-storage';
+import * as Theme from '../modules/ali__ide-theme';
+import * as Toolbar from '../modules/ali__ide-toolbar';
+import * as Variable from '../modules/ali__ide-variable';
+import * as Webview from '../modules/ali__ide-webview';
+import * as Workspace from '../modules/ali__ide-workspace';
+import * as WorkspaceEdit from '../modules/ali__ide-workspace-edit';
 
 // others
-import * as CommonDI from '../modules/common-di';
-import * as AlexCore from '../modules/alex-core';
+import * as CommonDI from '../modules/ali__common-di';
+import * as AlexCore from '../modules/alipay__alex-core';
+
+// node
+import * as os from 'os';
+import * as crypto from 'crypto';
+import * as buffer from 'buffer';
+import * as assert from 'assert';
+import * as path from 'path';
 
 export function requireModule(module: '@ali/ide-addons'): typeof Addons;
 export function requireModule(module: '@ali/ide-comments'): typeof Comments;
@@ -57,8 +64,6 @@ export function requireModule(module: '@ali/ide-debug'): typeof Debug;
 export function requireModule(module: '@ali/ide-decoration'): typeof Decoration;
 export function requireModule(module: '@ali/ide-editor'): typeof Editor;
 export function requireModule(module: '@ali/ide-explorer'): typeof Explorer;
-export function requireModule(module: '@ali/ide-express-file-server'): typeof ExpressFileServer;
-export function requireModule(module: '@ali/ide-extension-manager'): typeof ExtensionManager;
 export function requireModule(module: '@ali/ide-extension-storage'): typeof ExtensionStorage;
 export function requireModule(module: '@ali/ide-file-search'): typeof FileSearch;
 export function requireModule(module: '@ali/ide-file-service'): typeof FileService;
@@ -81,12 +86,9 @@ export function requireModule(module: '@ali/ide-preferences'): typeof Preference
 export function requireModule(module: '@ali/ide-quick-open'): typeof QuickOpen;
 export function requireModule(module: '@ali/ide-scm'): typeof Scm;
 export function requireModule(module: '@ali/ide-search'): typeof Search;
-export function requireModule(module: '@ali/ide-startup'): typeof Startup;
 export function requireModule(module: '@ali/ide-static-resource'): typeof StaticResource;
 export function requireModule(module: '@ali/ide-status-bar'): typeof StatusBar;
 export function requireModule(module: '@ali/ide-storage'): typeof Storage;
-// export function requireModule(module: '@ali/ide-task'): typeof Task;
-// export function requireModule(module: '@ali/ide-terminal-next'): typeof TerminalNext;
 export function requireModule(module: '@ali/ide-theme'): typeof Theme;
 export function requireModule(module: '@ali/ide-toolbar'): typeof Toolbar;
 export function requireModule(module: '@ali/ide-variable'): typeof Variable;
@@ -96,6 +98,16 @@ export function requireModule(module: '@ali/ide-workspace-edit'): typeof Workspa
 
 export function requireModule(module: '@ali/common-di'): typeof CommonDI;
 export function requireModule(module: '@alipay/alex-core'): typeof AlexCore;
+
+export function requireModule(module: 'fs'): typeof AlexCore.fs;
+export function requireModule(module: 'fs-extra'): typeof AlexCore.fse;
+export function requireModule(module: 'os'): typeof os;
+export function requireModule(module: 'crypto'): typeof crypto;
+export function requireModule(module: 'buffer'): typeof buffer;
+export function requireModule(module: 'process'): typeof process;
+export function requireModule(module: 'assert'): typeof assert;
+export function requireModule(module: 'path'): typeof path;
+
 export function requireModule(module: string): any {
   switch (module) {
     case '@ali/ide-addons':
@@ -116,10 +128,6 @@ export function requireModule(module: string): any {
       return Editor;
     case '@ali/ide-explorer':
       return Explorer;
-    case '@ali/ide-express-file-server':
-      return ExpressFileServer;
-    case '@ali/ide-extension-manager':
-      return ExtensionManager;
     case '@ali/ide-extension-storage':
       return ExtensionStorage;
     case '@ali/ide-file-search':
@@ -164,18 +172,12 @@ export function requireModule(module: string): any {
       return Scm;
     case '@ali/ide-search':
       return Search;
-    case '@ali/ide-startup':
-      return Startup;
     case '@ali/ide-static-resource':
       return StaticResource;
     case '@ali/ide-status-bar':
       return StatusBar;
     case '@ali/ide-storage':
       return Storage;
-    case '@ali/ide-task':
-    //   return Task;
-    // case '@ali/ide-terminal-next':
-    //   return TerminalNext;
     case '@ali/ide-theme':
       return Theme;
     case '@ali/ide-toolbar':
@@ -193,6 +195,23 @@ export function requireModule(module: string): any {
       return CommonDI;
     case '@alipay/alex-core':
       return AlexCore;
+
+    case 'fs':
+      return AlexCore.fs;
+    case 'fs-extra':
+      return AlexCore.fse;
+    case 'os':
+      return os;
+    case 'crypto':
+      return crypto;
+    case 'buffer':
+      return buffer;
+    case 'process':
+      return process;
+    case 'assert':
+      return assert;
+    case 'path':
+      return path;
 
     default:
       throw new Error(`not found module ${module}`);

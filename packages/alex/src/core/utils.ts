@@ -28,6 +28,10 @@ export const mergeConfig = (target: IAppOpts, source: IAppConfig) => {
           });
         }
         break;
+      case 'defaultPreferences':
+      case 'defaultPanels':
+        Object.assign(targetValue, sourceValue);
+        break;
       default:
         target[key] = sourceValue;
     }

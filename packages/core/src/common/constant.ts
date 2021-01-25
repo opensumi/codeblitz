@@ -1,4 +1,4 @@
-import { os } from '../server/node';
+import * as os from 'os';
 
 export const EXT_SCHEME = 'kt-ext';
 
@@ -12,6 +12,9 @@ export const WORKSPACE_ROOT = '/workspace';
 
 export const GIT_ROOT = '/git';
 
-export const HOME_IDB_NAME = 'SPACEX_HOME';
+// 全局数据存储目录
+export const STORAGE_NAME = '.cloudide';
 
-export const WORKSPACE_IDB_NAME = 'SPACEX_WORKSPACE';
+export const HOME_IDB_NAME = 'ALEX_HOME';
+
+export const WORKSPACE_IDB_NAME = 'ALEX_WORKSPACE';

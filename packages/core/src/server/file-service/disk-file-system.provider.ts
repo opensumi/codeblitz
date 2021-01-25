@@ -22,11 +22,12 @@ import {
 } from '@ali/ide-file-service/lib/common';
 import { Injectable, Autowired } from '@ali/common-di';
 import { ParsedPattern, parse } from '@ali/ide-core-common/lib/utils/glob';
-import path from 'path';
+import * as path from 'path';
+import * as os from 'os';
 import { IDiskFileProvider } from './base';
 import { FCService } from '../../connection';
 import { FWFileSystemWatcherServer } from './file-service-watcher';
-import { fse, writeFileAtomic, os } from '../node';
+import { fse, writeFileAtomic } from '../node';
 import { decode, encode } from './encoding';
 
 const debugLog = new DebugLog();

@@ -24,10 +24,11 @@ import {
   FileCreateOptions,
   FileCopyOptions,
 } from '@ali/ide-file-service/lib/common';
-import path from 'path';
+import * as path from 'path';
+import * as os from 'os';
 import { IDiskFileProvider, IFileService } from './base';
 import { FCService } from '../../connection';
-import { fse, os } from '../node';
+import { fse } from '../node';
 import { ServerConfig } from '../core/app';
 import { INodeLogger } from '../core/node-logger';
 

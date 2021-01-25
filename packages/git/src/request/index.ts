@@ -1,7 +1,7 @@
-import { umiRequest } from '@alipay/alex-shared';
+import { extend } from 'umi-request';
 import { API } from './type';
 
-const request = umiRequest.extend({});
+const request = extend({});
 
 request.use(async (ctx, next) => {
   if (!ctx) return next();

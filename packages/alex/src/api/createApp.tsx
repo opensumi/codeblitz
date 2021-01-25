@@ -1,14 +1,22 @@
-import { ClientApp, RuntimeConfig, makeWorkspaceDir, IAppOpts } from '@alipay/alex-core';
+import {
+  ClientApp,
+  RuntimeConfig,
+  makeWorkspaceDir,
+  IAppOpts,
+  STORAGE_NAME,
+} from '@alipay/alex-core';
 import { SlotRenderer, SlotLocation, IAppRenderer } from '@ali/ide-core-browser';
 import { BoxPanel, SplitPanel } from '@ali/ide-core-browser/lib/components';
 import { IThemeService } from '@ali/ide-theme/lib/common';
 import '@ali/ide-i18n/lib/browser';
+import '@alipay/alex-i18n';
 import '@ali/ide-core-browser/lib/style/index.less';
+import * as os from 'os';
 import { modules } from '../core/modules';
 import { IconSlim, IDETheme } from '../core/extensions';
 import { mergeConfig, themeStorage } from '../core/utils';
 import { LayoutComponent, layoutConfig } from '../core/layout';
-import { IConfig } from './types';
+import { IConfig, IAppInstance } from './types';
 
 export { SlotLocation, SlotRenderer, BoxPanel, SplitPanel };
 
@@ -34,19 +42,24 @@ const getDefaultAppConfig = (): IAppOpts => ({
   defaultPanels: {
     bottom: '',
   },
+  logDir: `${os.homedir()}/${STORAGE_NAME}/logs/`,
+  preferenceDirName: STORAGE_NAME,
+  storageDirName: STORAGE_NAME,
+  extensionStorageDirName: STORAGE_NAME,
 });
 
 export const DEFAULT_APP_CONFIG = getDefaultAppConfig();
 
-export function createApp({ appConfig, runtimeConfig }: IConfig) {
-  const customConfig = (typeof appConfig === 'function' ? appConfig() : appConfig) ?? {};
+export function createApp({ appConfig, runtimeConfig }: IConfig): IAppInstance {
+  const customConfig = typeof appConfig === 'function' ? appConfig() : appConfig;
   const opts = mergeConfig(getDefaultAppConfig(), customConfig);
 
-  // TODO: workspaceDir 是否需要强制，共用 workspaceDir 可能的问题是缓存状态会共享
-  // if (!opts.workspaceDir) {
-  //   throw new Error('请配置 workspaceDir，最好确保 workspaceDir 唯一，推荐类似 group/repository 的形式，内部根据 workspaceDir 缓存打开状态，如果不关心单独 workspaceDir，共用一个 workspaceDir 亦可');
-  // }
-  opts.workspaceDir = makeWorkspaceDir(opts.workspaceDir || '');
+  if (!opts.workspaceDir) {
+    throw new Error(
+      '需工作空间目录，最好确保不同项目名称不同，如 group/repository 的形式，工作空间目录会挂载到 /workspace 目录下'
+    );
+  }
+  opts.workspaceDir = makeWorkspaceDir(opts.workspaceDir);
 
   let themeType = themeStorage.get();
   if (!themeType) {
@@ -62,7 +75,7 @@ export function createApp({ appConfig, runtimeConfig }: IConfig) {
     });
   }
 
-  const app = new ClientApp(opts);
+  const app = new ClientApp(opts) as IAppInstance;
 
   const _start = app.start;
   app.start = async (container: HTMLElement | IAppRenderer) => {

@@ -24,7 +24,7 @@ export interface RuntimeConfig {
   scenario?: string;
   // 工作空间配置
   workspace?: {
-    fileSystemConfig?: FileSystemConfiguration;
+    filesystem?: FileSystemConfiguration;
     onDidSaveTextDocument?: (data: { filepath: string; content: string }) => void;
   };
   // 基于 git repository 的配置
@@ -40,7 +40,7 @@ export interface RuntimeConfig {
     commit?: string;
   };
   // 默认打开文件
-  defaultOpenFile?: string;
+  defaultOpenFile?: string | string[];
   // 禁止文件树更改，此时无法新增、删除、重命名文件
   disableModifyFileTree?: boolean;
 }

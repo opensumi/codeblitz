@@ -27,7 +27,7 @@ const { config } = require('./util');
 module.exports = (option) => {
   const port = findPortSync(option.port || process.env.PORT || 9009);
 
-  const outputPath = path.resolve(option.outputPath || 'dist');
+  const outputPath = option.outputPath || path.resolve(__dirname, '../dist');
   const mode = option.mode || 'development';
   const isDev = mode === 'development';
   const baseURL = `http://localhost:${port}`;
@@ -191,10 +191,6 @@ module.exports = (option) => {
       ],
     },
     plugins: [
-      new HtmlWebpackPlugin({
-        filename: 'index.html',
-        template: option.template || path.join(__dirname, '../public/index.html'),
-      }),
       new webpack.DefinePlugin({
         'process.env': {
           IS_DEV: isDev,
@@ -205,7 +201,7 @@ module.exports = (option) => {
         __WEBVIEW_ENDPOINT__: process.env.WEBVIEW_ENDPOINT
           ? JSON.stringify(`/assets/~${process.env.WEBVIEW_ENDPOINT}`)
           : JSON.stringify(`${baseURL}/${config.webviewEntry}`),
-        ...config.define,
+        ...option.define,
       }),
       new webpack.ProvidePlugin({
         ...nodePolyfill.provider,
@@ -235,9 +231,13 @@ module.exports = (option) => {
               )
               .on('error', reject);
           });
-          return `
+          return `// global loader
 (function(){
+var module;
+var require;
+// ==================== LOADER SOURCE START ====================
 ${content}
+// ==================== LOADER SOURCE END ====================
 window.amdLoader = amdLoader;
 window.AMDLoader = AMDLoader;
 window.define = define;
@@ -249,6 +249,10 @@ window.define = define;
       }),
       ...(isDev
         ? [
+            new HtmlWebpackPlugin({
+              filename: 'index.html',
+              template: option.template || path.join(__dirname, '../public/index.html'),
+            }),
             new FriendlyErrorsWebpackPlugin({
               compilationSuccessInfo: {
                 messages: [`Your application is running here: ${baseURL}`],

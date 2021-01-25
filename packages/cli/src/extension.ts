@@ -38,7 +38,7 @@ export const install = async (extensionId?: string[], options?: { silent: boolea
 
   log.start('开始安装扩展\n');
   extensions.forEach((ext) => {
-    console.log(`    * ${formatExtension(ext)}`);
+    console.log(`  * ${formatExtension(ext)}`);
   });
   console.log();
 
@@ -101,7 +101,7 @@ async function removeExtensionById(ext: IExtensionDesc) {
 
 async function getExtensionFromPackage(): Promise<IExtensionDesc[]> {
   try {
-    const projectPkgJSON = await fse.readJSON(path.resolve('package.json'));
+    const projectPkgJSON = await fse.readJSON(resolveCWDPkgJSON());
     return projectPkgJSON?.kaitianExtensions ?? [];
   } catch (err) {
     return [];
@@ -110,7 +110,7 @@ async function getExtensionFromPackage(): Promise<IExtensionDesc[]> {
 
 async function setExtensionFromPackage(config: any) {
   try {
-    const pkgPath = path.resolve('package.json');
+    const pkgPath = resolveCWDPkgJSON();
     const projectPkgJSON = await fse.readJSON(pkgPath);
     projectPkgJSON.kaitianExtensions = config;
     await fse.writeJSON(pkgPath, projectPkgJSON, { spaces: 2 });
@@ -222,4 +222,9 @@ export async function uninstall(extensionId: string[]) {
   await setExtensionFromPackage(remainExtensions);
 
   log.success('卸载扩展成功');
+}
+
+function resolveCWDPkgJSON() {
+  const initCWD = process.env.INIT_CWD || path.join(__dirname, '../../../..');
+  return path.resolve(initCWD, 'package.json');
 }

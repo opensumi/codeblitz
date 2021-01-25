@@ -7,6 +7,7 @@ import { IGitAPIService } from './types';
 // TODO: 放到集成侧去做？AntCode 上如果也用 IDE，那么也会造成重复
 @Injectable()
 export class GitAPIService implements IGitAPIService {
+  public platform = 'antcode';
   private initialized = new Deferred();
   public project: string;
   public projectId: number;

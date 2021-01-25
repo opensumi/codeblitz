@@ -15,7 +15,8 @@
     "dev": "webpack serve --config webpack/config.dev.js",
     "build": "webpack --config webpack/config.build.js",
     "analyze": "ANALYZE=1 npm run build",
-    "build:host": "webpack --config webpack/config.worker.js --config webpack/config.webview.js"
+    "build:host": "webpack --config webpack/config.worker.js --config webpack/config.webview.js",
+    "playground": "webpack serve --config playground/webpack.config.js"
   },
   "publishConfig": {
     "registry": "https://registry.npm.alibaba-inc.com"
@@ -25,8 +26,8 @@
     "lockfile": "enable"
   },
   "dependencies": {
-    "@ali/ide-kaitian-extension": "1.32.0",
-    "@ali/ide-webview": "1.32.0",
+    "@ali/ide-kaitian-extension": "1.33.0",
+    "@ali/ide-webview": "1.33.0",
     "asserts": "^4.0.2",
     "buffer": "^6.0.3",
     "path-browserify": "^1.0.1"

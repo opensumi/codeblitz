@@ -35,13 +35,13 @@
     "paths": {
       "@alipay/alex-*": ["packages/*/src"]
     },
-    "types": [
-      "jest"
+    "typeRoots": [
+      "./node_modules/@types",
+      "./typings"
     ]
   },
   "include": [
-    "packages",
-    "typings"
+    "packages"
   ],
   "exclude": [
     "packages/toolkit"

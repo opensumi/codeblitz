@@ -9,7 +9,19 @@
     "*"
   ],
   "kaitianContributes": {
-    "workerMain": "./worker.js"
+    "workerMain": "./worker.js",
+    "browserMain": "./browser.js",
+    "browserViews": {
+      "left": {
+        "type": "add",
+        "view": [
+          {
+            "id": "Component",
+            "icon": "extension"
+          }
+        ]
+      }
+    }
   },
   "contributes": {
     "jsonValidation": [

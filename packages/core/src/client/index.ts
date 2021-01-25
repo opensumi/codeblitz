@@ -6,6 +6,12 @@ import {
   IClientAppOpts,
 } from '@ali/ide-core-browser';
 import { BasicModule } from '@ali/ide-core-common';
+import { WSChannelHandler } from '@ali/ide-connection';
+
+import { IEditorDocumentModelService } from '@ali/ide-editor/lib/browser';
+import { EditorDocumentModelServiceImpl } from '@ali/ide-editor/lib/browser/doc-model/editor-document-model-service';
+import { EditorDocumentModel } from '@ali/ide-editor/lib/browser/doc-model/editor-document-model';
+import { isMonacoLoaded } from '@ali/ide-monaco/lib/browser/monaco-loader';
 
 import { FCServiceCenter, ClientPort, initFCService } from '../connection';
 import { KaitianExtFsProvider, KtExtFsProviderContribution } from './extension';
@@ -16,13 +22,24 @@ import { injectDebugPreferences } from './debug';
 import { IServerApp } from '../common';
 import { IServerAppOpts, ServerApp } from '../server/core/app';
 import { isBackServicesInBrowser } from '../common/util';
-import { FileTreeCustomContribution, EditorActionEventContribution } from './custom';
+import {
+  FileTreeCustomContribution,
+  EditorActionEventContribution,
+  MenuConfigContribution,
+} from './custom';
+import { EditorEmptyContribution } from './editor-empty/editor-empty.contribution';
+import { WelcomeContribution } from './welcome/welcome.contributon';
 
 export * from './extension';
 
 export { TextmateLanguageGrammarContribution, LanguageGrammarRegistrationService };
 
 export type ModuleConstructor = ConstructorOf<BrowserModule>;
+
+let codeEditorService: any = null;
+isMonacoLoaded()?.then(() => {
+  codeEditorService = (monaco as any).services.StaticServices.codeEditorService;
+});
 
 @Injectable()
 export class ClientModule extends BrowserModule {
@@ -36,6 +53,9 @@ export class ClientModule extends BrowserModule {
     },
     FileTreeCustomContribution,
     EditorActionEventContribution,
+    EditorEmptyContribution,
+    WelcomeContribution,
+    MenuConfigContribution,
   ];
   preferences = injectDebugPreferences;
 }
@@ -71,10 +91,30 @@ export class ClientApp extends BasicClientApp {
     // 先启动 server 进行必要的初始化，应用的权限等也在 server 中处理
     await (this.injector.get(IServerApp) as IServerApp).start();
     bindConnectionService(this.injector, this.modules);
+    // 避免 KaitianExtensionClientAppContribution.onStop 报错
+    this.injector.addProviders({
+      token: WSChannelHandler,
+      useValue: { clientId: 'alex' },
+    });
     return super.start(container, type);
   }
 
   public dispose() {
+    // from acr
+    // TODO: dispose 会存在报错，需要解决
+    if (this.injector.hasInstance(IEditorDocumentModelService)) {
+      const editorDocModelService = this.injector.get(
+        IEditorDocumentModelService
+      ) as EditorDocumentModelServiceImpl;
+      for (const instance of Array.from(
+        editorDocModelService['_modelReferenceManager'].instances.values()
+      ) as EditorDocumentModel[]) {
+        instance['monacoModel'].dispose();
+      }
+    }
+    if (codeEditorService) {
+      codeEditorService._value = null;
+    }
     this.injector.disposeAll();
   }
 }

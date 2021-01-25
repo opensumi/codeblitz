@@ -5,10 +5,10 @@ import { createApp } from './createApp';
 import { Root } from '../core/Root';
 import { RootProps, LandingProps } from '../core/types';
 import { themeStorage } from '../core/utils';
-import { IConfig } from './types';
+import { IConfig, IAppInstance } from './types';
 
 export interface IRenderProps extends IConfig {
-  onLoad?(app: ClientApp): void;
+  onLoad?(app: IAppInstance): void;
   Landing?: React.ComponentType<LandingProps>;
 }
 
@@ -63,8 +63,13 @@ export const AppRenderer: React.FC<IRenderProps> = ({ onLoad, Landing, ...opts }
         onLoad?.(app);
       })
       .catch((err: Error) => {
+        console.error(err);
         setState({ error: err?.message || '', status: 'error' });
       });
+
+    return () => {
+      app.dispose();
+    };
   }, []);
 
   return (

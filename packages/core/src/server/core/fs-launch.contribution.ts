@@ -1,5 +1,6 @@
 import { Autowired } from '@ali/common-di';
-import { Domain, ContributionProvider } from '@ali/ide-core-common';
+import { Domain, ContributionProvider, localize } from '@ali/ide-core-common';
+import { IMessageService } from '@ali/ide-overlay';
 import { IServerApp, RuntimeConfig, RootFS, AppConfig } from '../../common/types';
 import { LaunchContribution } from './app';
 import { FileSystemContribution } from './base';
@@ -31,11 +32,23 @@ export class FileSystemConfigContribution implements FileSystemContribution {
   @Autowired(RuntimeConfig)
   runtimeConfig: RuntimeConfig;
 
+  @Autowired(IMessageService)
+  messageService: IMessageService;
+
   async mountFileSystem(rootFS: RootFS) {
-    const { workspaceDir } = this.appConfig;
-    const fsConfig = this.runtimeConfig.workspace?.fileSystemConfig;
+    const fsConfig = this.runtimeConfig.workspace?.filesystem;
     if (!fsConfig) return;
-    const workspaceFS = await BrowserFS.getFileSystem(fsConfig);
-    rootFS.mount(workspaceDir, workspaceFS);
+    const { workspaceDir } = this.appConfig;
+    try {
+      const workspaceFS = await BrowserFS.getFileSystem(fsConfig);
+      rootFS.mount(workspaceDir, workspaceFS);
+    } catch (err) {
+      this.messageService.error(localize('workspace.initialize.failed'));
+      // 使用内存作为回退文件系统
+      rootFS.mount(
+        workspaceDir,
+        await BrowserFS.createFileSystem(BrowserFS.FileSystem.InMemory, {})
+      );
+    }
   }
 }

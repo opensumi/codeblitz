@@ -10,15 +10,16 @@ import {
 } from '@ali/ide-core-common';
 import { AppConfig, BrowserModule } from '@ali/ide-core-browser';
 import { IExtensionBasicMetadata } from '@alipay/alex-shared';
-import path from 'path';
+import * as path from 'path';
+import * as os from 'os';
 
 import { ILogServiceManager } from './base';
 import { INodeLogger, NodeLogger } from './node-logger';
 import { FCServiceCenter, initFCService, ServerPort } from '../../connection';
 import { IServerApp } from '../../common';
 import { initializeRootFileSystem } from './util';
-import { fse, os } from '../node';
-import { WORKSPACE_ROOT } from '../../common/constant';
+import { fse } from '../node';
+import { WORKSPACE_ROOT, STORAGE_NAME } from '../../common/constant';
 import { RootFS } from '../../common/types';
 import { isBackServicesInServer } from '../../common/util';
 
@@ -104,11 +105,7 @@ export class ServerApp implements IServerApp {
     this.appConfig = opts.appConfig;
     this.serverConfig = {
       marketplace: {
-        extensionDir: path.join(
-          os.homedir(),
-          StoragePaths.DEFAULT_STORAGE_DIR_NAME,
-          StoragePaths.MARKETPLACE_DIR
-        ),
+        extensionDir: path.join(os.homedir(), STORAGE_NAME, StoragePaths.MARKETPLACE_DIR),
       },
       logDir: opts.logDir,
       logLevel: opts.logLevel,

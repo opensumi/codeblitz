@@ -17,6 +17,7 @@ import FolderAdapter, { FolderAdapterOptions } from 'browserfs/dist/node/backend
 import OverlayFS, { OverlayFSOptions } from 'browserfs/dist/node/backend/OverlayFS';
 import { CodeHost, CodeHostOptions } from './CodeHost';
 import { FileIndexSystem, FileIndexSystemOptions } from './FileIndex';
+import { WORKSPACE_IDB_NAME } from '../../../common';
 
 const Backends = {
   MountableFileSystem,
@@ -43,6 +44,9 @@ function patchCreateForCheck(fsType: FileSystemConstructor) {
       if (e) {
         normalizedCb(e);
       } else {
+        if (fsType.Name === OverlayFS.Name) {
+          normalizedOpts.storeName ||= WORKSPACE_IDB_NAME;
+        }
         create.call(fsType, normalizedOpts, normalizedCb);
       }
     }
@@ -58,14 +62,17 @@ function initialize(rootfs: FileSystem) {
 }
 
 export type FileSystemConfiguration =
-  | { fs: 'MountableFileSystem'; options: MountableFileSystemOptions }
-  | { fs: 'IndexedDB'; options: IndexedDBFileSystemOptions }
-  | { fs: 'InMemory'; options: FileSystemOptions }
-  | { fs: 'FolderAdapter'; options: FolderAdapterOptions }
-  | { fs: 'OverlayFS'; options: OverlayFSOptions }
+  | { fs: 'MountableFileSystem'; options: { [mountPoint: string]: FileSystemConfiguration } }
+  | {
+      fs: 'OverlayFS';
+      options: { writable: FileSystemConfiguration; readable: FileSystemConfiguration };
+    }
+  | { fs: 'IndexedDB'; options?: IndexedDBFileSystemOptions }
+  | { fs: 'InMemory'; options?: FileSystemOptions }
+  | { fs: 'FolderAdapter'; options: { folder: string; wrapped: FileSystemConfiguration } }
   | { fs: 'CodeHost'; options: CodeHostOptions }
-  | { fs: 'FileIndexSystem'; options: FileIndexSystemOptions }
-  | { fs: string; options: any };
+  | { fs: 'CodeHostOverlay'; options: CodeHostOptions }
+  | { fs: 'FileIndexSystem'; options: FileIndexSystemOptions };
 
 async function configure(config: FileSystemConfiguration) {
   const fs = await getFileSystem(config);
@@ -92,7 +99,6 @@ function createFileSystem<T extends FileSystemConstructor>(
 /**
  * Retrieve a file system with the given configuration.
  * @param config A FileSystemConfiguration object. See FileSystemConfiguration for details.
- * @param shareFileSystem 是否共享 filesystem 实例，同一 fs name 使用同一个实例
  */
 async function getFileSystem({ fs, options }: FileSystemConfiguration): Promise<FileSystem> {
   if (!fs) {
@@ -126,7 +132,7 @@ async function getFileSystem({ fs, options }: FileSystemConfiguration): Promise<
       `File system ${fs} is not available in BrowserFS.`
     );
   } else {
-    return createFileSystem(fsc, options);
+    return createFileSystem(fsc, options || {});
   }
 }
 

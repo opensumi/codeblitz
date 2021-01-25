@@ -41,7 +41,7 @@ export const getExtensionPath = (ext: IExtensionIdentity) => {
 
 export const makeWorkspaceDir = (path: string = '') => {
   const posixPath = paths.posix || paths;
-  return posixPath.join(WORKSPACE_ROOT, path);
+  return posixPath.join(WORKSPACE_ROOT, posixPath.resolve('/', path));
 };
 
 /**

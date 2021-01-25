@@ -3,6 +3,7 @@ import { API } from './request';
 export const IGitAPIService = Symbol('IGitAPIService');
 
 export interface IGitAPIService {
+  platform: string;
   project: string;
   projectId: number;
   commit: string;

@@ -11,7 +11,6 @@ const pkg = '@ali/ide-core-common';
 invoke(async () => {
   const v = args.v || args.version;
   const version = await getOrCheckVersion(v);
-  console.log(version);
   signale.info(`版本: ${version}`);
 
   const { packages } = await getKaitianDeps(version);
@@ -25,7 +24,6 @@ invoke(async () => {
       pkgPathList.push(path.join(packagesDir, dirent.name, 'package.json'));
     }
   });
-  signale.await(`正在写入数据`);
   await Promise.all(pkgPathList.map((pkgPath) => upgradeKaitianDeps(pkgPath, version, packages)));
   signale.await(`yarn 重装依赖`);
   await exec('npx yarn --network-timeout 100000');

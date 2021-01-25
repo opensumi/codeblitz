@@ -1,6 +1,7 @@
 import { BFSCallback, FileSystemOptions } from 'browserfs/dist/node/core/file_system';
 import { FileFlag } from 'browserfs/dist/node/core/file_flag';
 import InMemory from 'browserfs/dist/node/backend/InMemory';
+import { ApiError, ErrorCode } from 'browserfs/dist/node/core/api_error';
 import { FileIndex } from '../../../common/types';
 
 export interface FileIndexSystemOptions {
@@ -54,26 +55,30 @@ export class FileIndexSystem extends InMemory {
       if (err || !memfs) {
         return cb(err);
       }
-      options.requestFileIndex().then((fileIndex) => {
-        if (!fileIndex) {
-          throw new Error('requestFileIndex should return a object bu got nil');
-        }
-        const mode = 0x1ff; // 0x777
-        const encoding = 'utf8';
-        const flag = FileFlag.getFileFlag('w');
-        if (!memfs.existsSync('/')) {
-          memfs.mkdirSync('/', mode);
-        }
-        walkFileIndex(fileIndex, ({ type, path, content }) => {
-          if (type === 'file') {
-            memfs.writeFileSync(path, content, encoding, flag, mode);
-          } else if (type === 'dir') {
-            memfs.mkdirSync(path, mode);
+      options
+        .requestFileIndex()
+        .then((fileIndex) => {
+          if (!fileIndex) {
+            throw new Error('requestFileIndex should return a object but got nil');
           }
+          const mode = 0x1ff; // 0x777
+          const encoding = 'utf8';
+          const flag = FileFlag.getFileFlag('w');
+          if (!memfs.existsSync('/')) {
+            memfs.mkdirSync('/', mode);
+          }
+          walkFileIndex(fileIndex, ({ type, path, content }) => {
+            if (type === 'file') {
+              memfs.writeFileSync(path, content, encoding, flag, mode);
+            } else if (type === 'dir') {
+              memfs.mkdirSync(path, mode);
+            }
+          });
+          cb(null, memfs);
+        })
+        .catch(() => {
+          cb(new ApiError(ErrorCode.EINVAL, 'failed to requestFileIndex'));
         });
-      });
-
-      cb(null, memfs);
     });
   }
 }

@@ -12,6 +12,8 @@ export const EXTENSION_METADATA_DIR = path.join(FRAMEWORK_PATH, 'extensions');
 
 export const EXTENSION_METADATA_TYPE_PATH = path.join(FRAMEWORK_PATH, 'extensions.d.ts');
 
+export const EXTENSION_FIELDS = 'cloudideExtensions';
+
 function resolveFramework() {
   try {
     const pkgPath = require.resolve(`${FRAMEWORK_NAME}/package.json`);
