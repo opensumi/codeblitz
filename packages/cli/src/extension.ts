@@ -36,6 +36,8 @@ export const install = async (extensionId?: string[], options?: { silent: boolea
     await removeAllExtension();
   }
 
+  if (!extensions.length) return;
+
   log.start('开始安装扩展\n');
   extensions.forEach((ext) => {
     console.log(`  * ${formatExtension(ext)}`);

@@ -11,7 +11,7 @@ module.exports = createWebpackConfig({
   tsconfigPath: path.join(__dirname, '../../../tsconfig.json'),
   outputPath: path.join(__dirname, '../../alex/bundle'),
   define: Object.keys(define).reduce((obj, key) => {
-    obj[key] = JSON.stringify(obj[key]);
+    obj[key] = JSON.stringify(define[key]);
     return obj;
   }, {}),
   webpackConfig: {
