@@ -73,7 +73,6 @@ export class GitContribution extends Disposable implements LaunchContribution {
           rootFS.umount(this.appConfig.workspaceDir);
         },
       });
-      let message = '';
       if (isResponseError(err)) {
         if (err.name === 'RequestError') {
           this.messageService.error(localize('api.request.error'));
@@ -82,7 +81,7 @@ export class GitContribution extends Disposable implements LaunchContribution {
         if (err.name === 'ResponseError') {
           const status = err.response?.status;
           if (status === 401) {
-            this.reporter.point('gitProject', 'responseError', { status: 401 });
+            this.reporter.point('gitProject', 'responseError', { status });
             const goto = localize('api.login.goto');
             this.messageService
               .error(localize('api.response.no-login-antcode'), [goto])
@@ -93,11 +92,12 @@ export class GitContribution extends Disposable implements LaunchContribution {
               });
             return;
           }
-          if (err.response.status === 403) {
-            this.reporter.point('gitProject', 'responseError', { status: 403 });
+          let message = '';
+          if (status === 403) {
+            this.reporter.point('gitProject', 'responseError', { status });
             message = localize('api.response.project-no-access');
-          } else if (err.response?.status === 404) {
-            this.reporter.point('gitProject', 'responseError', { status: 404 });
+          } else if (status === 404) {
+            this.reporter.point('gitProject', 'responseError', { status });
             message = formatLocalize('api.response.project-not-found', this.gitApiService.project);
           }
           this.messageService.error(message || localize('api.response.unknown-error'));
