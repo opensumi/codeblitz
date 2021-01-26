@@ -1,3 +1,12 @@
+## [0.2.3](https://code.alipay.com/cloud-ide/crew-dragon/compare/v0.2.2...v0.2.3) (2021-01-26)
+
+
+### Features
+
+* add git init reposonseError report ([57c0cfc](https://code.alipay.com/cloud-ide/crew-dragon/commits/57c0cfc0c0a63c884034bc232ff5751a8c7c7e13))
+
+
+
 ## [0.2.2](https://code.alipay.com/cloud-ide/crew-dragon/compare/v0.2.1...v0.2.2) (2021-01-25)
 
 
