@@ -97,7 +97,6 @@ export class GitContribution extends Disposable implements LaunchContribution {
             this.reporter.point('gitProject', 'responseError', { status: 403 });
             message = localize('api.response.project-no-access');
           } else if (err.response?.status === 404) {
-            debugger;
             this.reporter.point('gitProject', 'responseError', { status: 404 });
             message = formatLocalize('api.response.project-not-found', this.gitApiService.project);
           }
