@@ -38,7 +38,7 @@ exports.generateModules = async () => {
       path.join(targetDir, `${name}.js`),
       `
 const { requireModule } = ${lib};
-requireModule("${scope}/${name}");
+module.exports = requireModule("${scope}/${name}");
         `.trim() + '\n'
     );
     fse.writeFileSync(

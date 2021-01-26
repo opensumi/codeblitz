@@ -1,5 +1,11 @@
 import { Autowired } from '@ali/common-di';
-import { Domain, localize, formatLocalize, Disposable } from '@ali/ide-core-common';
+import {
+  Domain,
+  localize,
+  formatLocalize,
+  Disposable,
+  IReporterService,
+} from '@ali/ide-core-common';
 import {
   LaunchContribution,
   AppConfig,
@@ -29,7 +35,8 @@ export class GitContribution extends Disposable implements LaunchContribution {
   @Autowired(IMessageService)
   messageService: IMessageService;
 
-  protected;
+  @Autowired(IReporterService)
+  reporter: IReporterService;
 
   async launch({ rootFS }: IServerApp) {
     // TODO: 判断权限抛出规范化的错误码，用于全局处理
@@ -75,6 +82,7 @@ export class GitContribution extends Disposable implements LaunchContribution {
         if (err.name === 'ResponseError') {
           const status = err.response?.status;
           if (status === 401) {
+            this.reporter.point('gitProject', 'responseError', { status: 401 });
             const goto = localize('api.login.goto');
             this.messageService
               .error(localize('api.response.no-login-antcode'), [goto])
@@ -86,8 +94,11 @@ export class GitContribution extends Disposable implements LaunchContribution {
             return;
           }
           if (err.response.status === 403) {
+            this.reporter.point('gitProject', 'responseError', { status: 403 });
             message = localize('api.response.project-no-access');
           } else if (err.response?.status === 404) {
+            debugger;
+            this.reporter.point('gitProject', 'responseError', { status: 404 });
             message = formatLocalize('api.response.project-not-found', this.gitApiService.project);
           }
           this.messageService.error(message || localize('api.response.unknown-error'));
