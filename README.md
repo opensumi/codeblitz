@@ -34,6 +34,10 @@ npm run build
 npm run build -- --scope <package>
 # 单独构建并监听
 npm run build -- --scope <package> --watch
-# 运行 app 集成版本
-npm start app
+# 构建 worker 和 webview 资源并发布 cdn
+node scripts/build-assets
+# bundle 成 umd 文件
+node scripts/bundle
+# 发布，此步骤会自动构建打包，运行测试等，可通过 --no 跳过一些步骤
+node scripts/release
 ```
