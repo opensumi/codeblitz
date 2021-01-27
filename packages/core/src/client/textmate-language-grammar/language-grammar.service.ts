@@ -3,13 +3,19 @@ import { Disposable, Deferred, Emitter, Event, URI } from '@ali/ide-core-common'
 import { TextmateService } from '@ali/ide-monaco/lib/browser/textmate.service';
 import { LanguagesContribution, GrammarsContribution } from '@ali/ide-monaco';
 
+const languageListCache: LanguagesContribution[] = [];
+const grammarListCache: GrammarsContribution[] = [];
+
+class SingleEventEmitter<T> extends Emitter<T> {
+  clear() {
+    this._listeners?.clear();
+  }
+}
+
 @Injectable()
 export class LanguageGrammarRegistrationService extends Disposable {
-  static languageEmitter = new Emitter<LanguagesContribution>();
-  static grammarEmitter = new Emitter<GrammarsContribution>();
-
-  static languageEvent = Event.buffer(LanguageGrammarRegistrationService.languageEmitter.event);
-  static grammarEvent = Event.buffer(LanguageGrammarRegistrationService.grammarEmitter.event);
+  static languageEmitter = new SingleEventEmitter<LanguagesContribution>();
+  static grammarEmitter = new SingleEventEmitter<GrammarsContribution>();
 
   @Autowired(TextmateService)
   private readonly textMateService: TextmateService;
@@ -20,14 +26,38 @@ export class LanguageGrammarRegistrationService extends Disposable {
   }
 
   async initRegisterLanguageAndGrammar() {
-    // TODO: 框架侧参数类型改为可选
+    // 没啥作用，只是确保传参类型正确
     const uri = new URI();
-    LanguageGrammarRegistrationService.languageEvent((contrib) => {
+    languageListCache.forEach((contrib) => {
       this.textMateService.registerLanguage(contrib, uri);
     });
-    LanguageGrammarRegistrationService.grammarEvent((contrib) => {
+    grammarListCache.forEach((contrib) => {
+      this.textMateService.registerGrammar(contrib, uri);
+    });
+    this.clear();
+    LanguageGrammarRegistrationService.languageEmitter.event((contrib) => {
+      this.textMateService.registerLanguage(contrib, uri);
+    });
+    LanguageGrammarRegistrationService.grammarEmitter.event((contrib) => {
       this.textMateService.registerGrammar(contrib, uri);
     });
     this.languageDidRegisterDeferred.resolve();
   }
+
+  clear() {
+    LanguageGrammarRegistrationService.languageEmitter.clear();
+    LanguageGrammarRegistrationService.grammarEmitter.clear();
+  }
+
+  dispose() {
+    this.clear();
+  }
 }
+
+LanguageGrammarRegistrationService.languageEmitter.event((e) => {
+  languageListCache.push(e);
+});
+
+LanguageGrammarRegistrationService.grammarEmitter.event((e) => {
+  grammarListCache.push(e);
+});

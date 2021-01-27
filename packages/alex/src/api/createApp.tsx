@@ -16,6 +16,7 @@ import { IEditorDocumentModelService } from '@ali/ide-editor/lib/browser';
 import { EditorDocumentModelServiceImpl } from '@ali/ide-editor/lib/browser/doc-model/editor-document-model-service';
 import { EditorDocumentModel } from '@ali/ide-editor/lib/browser/doc-model/editor-document-model';
 import { FileTreeModelService } from '@ali/ide-file-tree-next/lib/browser/services/file-tree-model.service';
+import { WorkerExtensionService } from '@ali/ide-kaitian-extension/lib/browser/extension.worker.service';
 import * as os from 'os';
 
 import { modules } from '../core/modules';
@@ -101,6 +102,11 @@ export function createApp({ appConfig, runtimeConfig }: IConfig): IAppInstance {
     app.injector.get(FileTreeModelService).handleTreeBlur();
   };
 
+  /**
+   * 目前整个应用有太多的副作用，尤其是注册到 monaco 的事件，如 DocumentSymbolProviderRegistry.onChange
+   * 在 monaco 上的事件无法注销，除非重新全局实例化一个 monaco，目前 kaitian 并未暴露，暂时不可行
+   * 因此这里的 destroy 仍然可能有不少副作用无法清除，暂时清理已知的，避免报错
+   */
   let destroyed = false;
   app.destroy = () => {
     if (destroyed) {
@@ -119,6 +125,12 @@ export function createApp({ appConfig, runtimeConfig }: IConfig): IAppInstance {
     if (codeEditorService) {
       codeEditorService._value = null;
     }
+    (monaco as any).services.StaticServices.modeService._value = null;
+    // @ts-ignore
+    // common-di 通过参数实例化无法自动 dispose
+    app.injector.get(WorkerExtensionService).protocol._locals.forEach((instance) => {
+      instance.dispose?.();
+    });
     app.injector.disposeAll();
   };
 
