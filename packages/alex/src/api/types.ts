@@ -20,5 +20,14 @@ export interface IConfig {
 }
 
 export interface IAppInstance extends ClientApp {
+  /**
+   * 启动应用
+   * @param container 挂载位置
+   */
   start(container: HTMLElement | IAppRenderer): Promise<void>;
+
+  /**
+   * 销毁应用
+   */
+  destroy(): void;
 }

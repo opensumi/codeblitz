@@ -11,7 +11,13 @@ import { IThemeService } from '@ali/ide-theme/lib/common';
 import '@ali/ide-i18n/lib/browser';
 import '@alipay/alex-i18n';
 import '@ali/ide-core-browser/lib/style/index.less';
+import { isMonacoLoaded, loadMonaco } from '@ali/ide-monaco/lib/browser/monaco-loader';
+import { IEditorDocumentModelService } from '@ali/ide-editor/lib/browser';
+import { EditorDocumentModelServiceImpl } from '@ali/ide-editor/lib/browser/doc-model/editor-document-model-service';
+import { EditorDocumentModel } from '@ali/ide-editor/lib/browser/doc-model/editor-document-model';
+import { FileTreeModelService } from '@ali/ide-file-tree-next/lib/browser/services/file-tree-model.service';
 import * as os from 'os';
+
 import { modules } from '../core/modules';
 import { IconSlim, IDETheme } from '../core/extensions';
 import { mergeConfig, themeStorage } from '../core/utils';
@@ -50,6 +56,13 @@ const getDefaultAppConfig = (): IAppOpts => ({
 
 export const DEFAULT_APP_CONFIG = getDefaultAppConfig();
 
+// 提前加载 monaco 并提前缓存 codeEditorService
+loadMonaco();
+let codeEditorService: any = null;
+isMonacoLoaded()?.then(() => {
+  codeEditorService = (monaco as any).services.StaticServices.codeEditorService;
+});
+
 export function createApp({ appConfig, runtimeConfig }: IConfig): IAppInstance {
   const customConfig = typeof appConfig === 'function' ? appConfig() : appConfig;
   const opts = mergeConfig(getDefaultAppConfig(), customConfig);
@@ -84,6 +97,29 @@ export function createApp({ appConfig, runtimeConfig }: IConfig): IAppInstance {
     (app.injector.get(IThemeService) as IThemeService).onThemeChange((e) => {
       themeStorage.set(e.type);
     });
+    // IDE 销毁时，组件会触发 handleTreeBlur，但是 FileContextKey 实例会获取，此时在 dispose 阶段，injector.get(FileContextKey) 会抛出错误
+    app.injector.get(FileTreeModelService).handleTreeBlur();
+  };
+
+  let destroyed = false;
+  app.destroy = () => {
+    if (destroyed) {
+      return;
+    }
+    destroyed = true;
+    // from acr
+    const editorDocModelService = app.injector.get(
+      IEditorDocumentModelService
+    ) as EditorDocumentModelServiceImpl;
+    for (const instance of Array.from(
+      editorDocModelService['_modelReferenceManager'].instances.values()
+    ) as EditorDocumentModel[]) {
+      instance['monacoModel'].dispose();
+    }
+    if (codeEditorService) {
+      codeEditorService._value = null;
+    }
+    app.injector.disposeAll();
   };
 
   runtimeConfig ??= {};

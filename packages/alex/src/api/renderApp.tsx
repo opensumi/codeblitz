@@ -40,6 +40,10 @@ export const renderApp = (domElement: HTMLElement, props: IRenderProps) => {
         domElement
       );
     });
+
+  return () => {
+    app.destroy();
+  };
 };
 
 export const AppRenderer: React.FC<IRenderProps> = ({ onLoad, Landing, ...opts }) => {
@@ -68,7 +72,7 @@ export const AppRenderer: React.FC<IRenderProps> = ({ onLoad, Landing, ...opts }
       });
 
     return () => {
-      app.dispose();
+      app.destroy();
     };
   }, []);
 

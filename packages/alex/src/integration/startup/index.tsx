@@ -80,6 +80,7 @@ ReactDOM.render(
 //   },
 // });
 
+// for test
 (window as any).destroy = () => {
-  ReactDOM.render(<div>11</div>, document.getElementById('main'));
+  ReactDOM.render(<div>destroyed</div>, document.getElementById('main'));
 };

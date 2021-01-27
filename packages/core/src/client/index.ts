@@ -8,11 +8,6 @@ import {
 import { BasicModule } from '@ali/ide-core-common';
 import { WSChannelHandler } from '@ali/ide-connection';
 
-import { IEditorDocumentModelService } from '@ali/ide-editor/lib/browser';
-import { EditorDocumentModelServiceImpl } from '@ali/ide-editor/lib/browser/doc-model/editor-document-model-service';
-import { EditorDocumentModel } from '@ali/ide-editor/lib/browser/doc-model/editor-document-model';
-import { isMonacoLoaded } from '@ali/ide-monaco/lib/browser/monaco-loader';
-
 import { FCServiceCenter, ClientPort, initFCService } from '../connection';
 import { KaitianExtFsProvider, KtExtFsProviderContribution } from './extension';
 import { TextmateLanguageGrammarContribution } from './textmate-language-grammar/index.contribution';
@@ -35,11 +30,6 @@ export * from './extension';
 export { TextmateLanguageGrammarContribution, LanguageGrammarRegistrationService };
 
 export type ModuleConstructor = ConstructorOf<BrowserModule>;
-
-let codeEditorService: any = null;
-isMonacoLoaded()?.then(() => {
-  codeEditorService = (monaco as any).services.StaticServices.codeEditorService;
-});
 
 @Injectable()
 export class ClientModule extends BrowserModule {
@@ -65,6 +55,8 @@ export interface IAppOpts extends IClientAppOpts, IServerAppOpts {}
 export { IClientAppOpts };
 
 export class ClientApp extends BasicClientApp {
+  private disposed = false;
+
   constructor(opts: IAppOpts) {
     super(opts);
     this.initServer(opts);
@@ -99,23 +91,25 @@ export class ClientApp extends BasicClientApp {
     return super.start(container, type);
   }
 
-  public dispose() {
-    // from acr
-    // TODO: dispose 会存在报错，需要解决
-    if (this.injector.hasInstance(IEditorDocumentModelService)) {
-      const editorDocModelService = this.injector.get(
-        IEditorDocumentModelService
-      ) as EditorDocumentModelServiceImpl;
-      for (const instance of Array.from(
-        editorDocModelService['_modelReferenceManager'].instances.values()
-      ) as EditorDocumentModel[]) {
-        instance['monacoModel'].dispose();
-      }
+  stopContributions() {
+    if (!this.disposed) {
+      super.stopContributions();
     }
-    if (codeEditorService) {
-      codeEditorService._value = null;
+  }
+
+  preventStop() {
+    if (!this.disposed) {
+      return super.preventStop();
     }
-    this.injector.disposeAll();
+    return false;
+  }
+
+  /**
+   * kaitian 中没有注销注册在 window 上上的事件，在把 IDE 销毁后，此时刷新页面依然会执行事件
+   * 此时 injector.get 都会报错，因此这里加个状态判断
+   */
+  dispose() {
+    this.disposed = true;
   }
 }
 

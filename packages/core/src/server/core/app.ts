@@ -7,6 +7,7 @@ import {
   ILogService,
   SupportLogNamespace,
   StoragePaths,
+  DisposableCollection,
 } from '@ali/ide-core-common';
 import { AppConfig, BrowserModule } from '@ali/ide-core-browser';
 import { IExtensionBasicMetadata } from '@alipay/alex-shared';
@@ -93,6 +94,8 @@ export class ServerApp implements IServerApp {
 
   public rootFS: RootFS;
 
+  private disposeCollection = new DisposableCollection();
+
   constructor(
     opts: IServerAppOpts & {
       injector: Injector;
@@ -124,8 +127,15 @@ export class ServerApp implements IServerApp {
   }
 
   private registerEventListeners() {
-    window.addEventListener('unload', () => {
+    const handleUnload = () => {
       this.stopContribution();
+    };
+    window.addEventListener('unload', handleUnload);
+
+    this.disposeCollection.push({
+      dispose: () => {
+        window.removeEventListener('unload', handleUnload);
+      },
     });
   }
 
@@ -204,6 +214,10 @@ export class ServerApp implements IServerApp {
     await this.initializeContribution();
     bindModuleBackService(this.injector, this.modules);
     await this.startContribution();
+  }
+
+  dispose() {
+    this.disposeCollection.dispose();
   }
 }
 
