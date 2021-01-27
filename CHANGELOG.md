@@ -1,3 +1,12 @@
+## [0.2.6](https://code.alipay.com/cloud-ide/crew-dragon/compare/v0.2.5...v0.2.6) (2021-01-27)
+
+
+### Bug Fixes
+
+* clear side effect when destroy ([e994e6e](https://code.alipay.com/cloud-ide/crew-dragon/commits/e994e6ead6f9ca5f70f2b1563ea1c63e5841a2c8))
+
+
+
 ## [0.2.5](https://code.alipay.com/cloud-ide/crew-dragon/compare/v0.2.3...v0.2.5) (2021-01-27)
 
 
