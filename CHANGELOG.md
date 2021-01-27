@@ -1,3 +1,12 @@
+## [0.2.5](https://code.alipay.com/cloud-ide/crew-dragon/compare/v0.2.3...v0.2.5) (2021-01-27)
+
+
+### Bug Fixes
+
+* 修复 app dispose 报错问题 ([f180b01](https://code.alipay.com/cloud-ide/crew-dragon/commits/f180b01af12d345e885789b4a6ba04bb42033444))
+
+
+
 ## [0.2.3](https://code.alipay.com/cloud-ide/crew-dragon/compare/v0.2.2...v0.2.3) (2021-01-26)
 
 
