@@ -1,3 +1,92 @@
+## [0.2.6](https://code.alipay.com/cloud-ide/crew-dragon/compare/v0.2.5...v0.2.6) (2021-01-27)
+
+
+### Bug Fixes
+
+* clear side effect when destroy ([e994e6e](https://code.alipay.com/cloud-ide/crew-dragon/commits/e994e6ead6f9ca5f70f2b1563ea1c63e5841a2c8))
+
+
+
+## [0.2.5](https://code.alipay.com/cloud-ide/crew-dragon/compare/v0.2.3...v0.2.5) (2021-01-27)
+
+
+### Bug Fixes
+
+* 修复 app dispose 报错问题 ([f180b01](https://code.alipay.com/cloud-ide/crew-dragon/commits/f180b01af12d345e885789b4a6ba04bb42033444))
+
+
+
+## [0.2.3](https://code.alipay.com/cloud-ide/crew-dragon/compare/v0.2.2...v0.2.3) (2021-01-26)
+
+
+### Features
+
+* add git init reposonseError report ([57c0cfc](https://code.alipay.com/cloud-ide/crew-dragon/commits/57c0cfc0c0a63c884034bc232ff5751a8c7c7e13))
+
+
+
+## [0.2.2](https://code.alipay.com/cloud-ide/crew-dragon/compare/v0.2.1...v0.2.2) (2021-01-25)
+
+
+### Bug Fixes
+
+* onEvent 初始化问题 ([9c7ace3](https://code.alipay.com/cloud-ide/crew-dragon/commits/9c7ace3165db982d6f2dbe94c346fd0d8ca43b01))
+
+
+
+## [0.2.1](https://code.alipay.com/cloud-ide/crew-dragon/compare/v0.2.0...v0.2.1) (2021-01-25)
+
+
+### Bug Fixes
+
+* bundle define ([e012cb1](https://code.alipay.com/cloud-ide/crew-dragon/commits/e012cb13670ea2ae982ffea01fe8d83c0022357b))
+
+
+
+# [0.2.0](https://code.alipay.com/cloud-ide/crew-dragon/compare/v0.1.2...v0.2.0) (2021-01-25)
+
+
+### Features
+
+* change extensions field ([bd39ba1](https://code.alipay.com/cloud-ide/crew-dragon/commits/bd39ba1a8b45ed89ae6622284496aadb1f6b4eb1))
+* use custom elements for alex-root ([a6decfc](https://code.alipay.com/cloud-ide/crew-dragon/commits/a6decfcef990470d7df447f86bfeb61210a4a7ee))
+* 生成 bundle ([0f08258](https://code.alipay.com/cloud-ide/crew-dragon/commits/0f08258285cd5bb99f2b67ce3c4f8c04c513ba83))
+
+
+
+## [0.1.2](https://code.alipay.com/cloud-ide/crew-dragon/compare/v0.1.1...v0.1.2) (2021-01-19)
+
+
+### Bug Fixes
+
+* getFunctionProps ([4395d7a](https://code.alipay.com/cloud-ide/crew-dragon/commits/4395d7aef6fe393be39801459d28ad52d748c5e7))
+
+
+
+## [0.1.1](https://code.alipay.com/cloud-ide/crew-dragon/compare/v0.1.0...v0.1.1) (2021-01-19)
+
+
+### Bug Fixes
+
+* use es2015 module ([9c33501](https://code.alipay.com/cloud-ide/crew-dragon/commits/9c33501ad4be25bb1ad8518754e80d46ce1bbdc4))
+
+
+
+# [0.1.0](https://code.alipay.com/cloud-ide/crew-dragon/compare/v0.0.5...v0.1.0) (2021-01-19)
+
+
+### Bug Fixes
+
+* core reference ([823d923](https://code.alipay.com/cloud-ide/crew-dragon/commits/823d9232151d9e1297e611a20ec5c382fa7b48db))
+* remove miss references path ([b76a6a8](https://code.alipay.com/cloud-ide/crew-dragon/commits/b76a6a8b5063d64bf05ecd54915cdbccdba41f98))
+
+
+### Features
+
+* 重新梳理代码结构及构建 ([28a9cfb](https://code.alipay.com/cloud-ide/crew-dragon/commits/28a9cfb2ccae39c5c07c5e1df0a826e480be0539))
+
+
+
 ## [0.0.5](https://code.alipay.com/cloud-ide/crew-dragon/compare/v0.0.3...v0.0.5) (2021-01-15)
 
 

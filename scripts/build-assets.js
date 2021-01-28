@@ -27,7 +27,7 @@ invoke(async () => {
   }, {});
   const cdnResult = await upload(fileJSON);
 
-  signale.info('上传成功，生成 config.json');
+  signale.info('上传成功，生成 define.json');
 
   const transformHttps = (str) => str.replace(/^http:/, 'https:');
   const env = {
@@ -48,7 +48,7 @@ invoke(async () => {
     return obj;
   }, {});
   fs.writeFileSync(
-    path.resolve(__dirname, '../packages/alex/config.json'),
+    path.resolve(__dirname, '../packages/toolkit/define.json'),
     JSON.stringify(config, null, 2)
   );
 

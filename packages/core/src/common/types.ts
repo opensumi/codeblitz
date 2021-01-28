@@ -1,4 +1,6 @@
-import { BrowserFS } from '../server/node';
+import type * as vscode from 'vscode';
+import { Event } from '@ali/ide-core-common';
+import { BrowserFS, FileSystemConfiguration } from '../server/node';
 
 export { AppConfig } from '@ali/ide-core-browser';
 
@@ -18,21 +20,27 @@ export interface FileIndex {
 }
 
 export interface RuntimeConfig {
-  // 场景
-  scene?: string;
-  // git 配置
+  // 场景标识
+  scenario?: string;
+  // 工作空间配置
+  workspace?: {
+    filesystem?: FileSystemConfiguration;
+    onDidSaveTextDocument?: (data: { filepath: string; content: string }) => void;
+  };
+  // 基于 git repository 的配置
   git?: {
+    baseURL: string;
+    // 项目 IDE
+    projectId?: number;
+    // 项目名称 group/repository
     project: string;
+    // 分支
     branch?: string;
+    // commit sha
     commit?: string;
   };
-  // memfs 配置
-  memfs?: {
-    // 文件索引
-    fileIndex: FileIndex;
-    // 初始打开全部文件
-    openAll?: boolean;
-    // 默认打开文件
-    defaultOpenFile?: string;
-  };
+  // 默认打开文件
+  defaultOpenFile?: string | string[];
+  // 禁止文件树更改，此时无法新增、删除、重命名文件
+  disableModifyFileTree?: boolean;
 }

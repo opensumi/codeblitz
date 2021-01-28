@@ -24,8 +24,8 @@ import {
   FileCreateOptions,
   FileCopyOptions,
 } from '@ali/ide-file-service/lib/common';
-import os from 'os';
-import path from 'path';
+import * as path from 'path';
+import * as os from 'os';
 import { IDiskFileProvider, IFileService } from './base';
 import { FCService } from '../../connection';
 import { fse } from '../node';

@@ -11,6 +11,7 @@ const args = require('minimist')(process.argv.slice(2));
 const { SEMVER_INC, getNewVersion, isValidVersion, isVersionGreat } = require('./utils/version');
 const currentVersion = require('../package.json').version;
 const signale = require('signale');
+const { generateAll } = require('./utils/generate-alias');
 
 const packages = fse
   .readdirSync(path.resolve(__dirname, '../packages'), { withFileTypes: true })
@@ -93,9 +94,20 @@ invoke(async () => {
   packages.forEach((p) => updatePackage(getPkgRoot(p), targetVersion));
   console.log('(DONE)');
 
+  step('生成 bundle');
+  if (args.bundle !== false) {
+    // --no-bundle 跳过
+    await exec('node scripts/bundle');
+  } else {
+    console.log('(SKIP)');
+  }
+
+  step('生成 languages, modules, shims 资源路径');
+  await generateAll();
+
   step('构建所有 packages...'); // --no-build 跳过
   if (args.build !== false) {
-    const configPath = path.resolve(__dirname, '..', 'packages/alex/config.json');
+    const configPath = path.resolve(__dirname, '..', 'packages/toolkit/define.json');
     if (!fse.existsSync(configPath)) {
       throw new Error('请先运行 build-assets 构建资源');
     }

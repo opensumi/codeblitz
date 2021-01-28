@@ -5,19 +5,22 @@ import {
   AppConfig,
   BrowserModule,
   FsProviderContribution,
+  CommandContribution,
+  CommandRegistry,
 } from '@ali/ide-core-browser';
-import {
-  ExtensionServiceClientImpl,
-  IExtensionNodeClientService,
-  NodeModule,
-} from '@alipay/alex-core';
+import { ExtensionServiceClientImpl, IExtensionNodeClientService } from '@alipay/alex-core';
 import { IExtensionMetadata } from '@alipay/alex-shared';
+// import {
+//   StaticResourceContribution,
+//   StaticResourceService,
+// } from '@ali/ide-static-resource/lib/browser/static.definition';
+import { IFileServiceClient } from '@ali/ide-file-service';
+import { KaitianExtFsProvider } from '@alipay/alex-core';
+
 import {
   StaticResourceContribution,
   StaticResourceService,
-} from '@ali/ide-static-resource/lib/browser/static.definition';
-import { IFileServiceClient } from '@ali/ide-file-service';
-import { KaitianExtFsProvider } from '@alipay/alex-core';
+} from '../../modules/ali__ide-static-resource';
 
 const KT_EXT_LOCAL_SCHEME = 'kt-ext-local';
 
@@ -79,6 +82,28 @@ class ExtensionServiceClient extends ExtensionServiceClientImpl {
   }
 }
 
+@Domain(CommandContribution)
+export class AlexAppContribution implements CommandContribution {
+  registerCommands(commands: CommandRegistry): void {
+    // 保持和 api-server 一致
+    commands.registerCommand(
+      { id: 'cloudide.command.workspace.getRuntimeConfig' },
+      {
+        execute: (property: string) => {
+          let val;
+          try {
+            const query = { taskId: '14417925' };
+            val = query[property];
+          } catch (e) {
+            return undefined;
+          }
+          return val;
+        },
+      }
+    );
+  }
+}
+
 @Injectable()
 export class StartupModule extends BrowserModule {
   providers: Provider[] = [
@@ -88,5 +113,6 @@ export class StartupModule extends BrowserModule {
       useClass: ExtensionServiceClient,
       override: true,
     },
+    AlexAppContribution,
   ];
 }

@@ -1,150 +1,63 @@
 import { Autowired, Injectable } from '@ali/common-di';
-import { Disposable, Deferred, ILogger } from '@ali/ide-core-common';
+import { Disposable, Deferred, Emitter, Event, URI } from '@ali/ide-core-common';
 import { TextmateService } from '@ali/ide-monaco/lib/browser/textmate.service';
-import type { LanguageDesc, loadLanguageAndGrammar } from '@ali/kaitian-textmate-languages';
-import {
-  getLanguageByExtnameAndFilename,
-  getLanguageById,
-} from '@ali/kaitian-textmate-languages/es/utils';
-import * as paths from '@ali/ide-core-common/lib/path';
+import { LanguagesContribution, GrammarsContribution } from '@ali/ide-monaco';
 
-import { ILanguageGrammarRegistrationService } from './base';
+const languageListCache: LanguagesContribution[] = [];
+const grammarListCache: GrammarsContribution[] = [];
 
-// TODO: 罗列所有支持的语言，对比按需加载
-const defaultLanguages = [
-  'yaml',
-  'bat',
-  'clojure',
-  'coffeescript',
-  'c',
-  'cpp',
-  'csharp',
-  'dockerfile',
-  'fsharp',
-  'groovy',
-  'handlebars',
-  'hlsl',
-  'ini',
-  'properties',
-  'log',
-  'lua',
-  'makefile',
-  'objective-c',
-  'objective-cpp',
-  'perl',
-  'perl6',
-  'php',
-  'powershell',
-  'jade',
-  'razor',
-  'ruby',
-  'rust',
-  'shaderlab',
-  'shellscript',
-  'sql',
-  'swift',
-  'vb',
-  'xml',
-  'xsl',
-  'javascriptreact',
-  'javascript',
-  'jsx-tags',
-  'typescript',
-  'typescriptreact',
-  'jsonc',
-  'css',
-  'go',
-  'html',
-  'java',
-  'json',
-  'jsonc',
-  'less',
-  'markdown',
-  'python',
-  'scss',
-];
+class SingleEventEmitter<T> extends Emitter<T> {
+  clear() {
+    this._listeners?.clear();
+  }
+}
 
 @Injectable()
-export class LanguageGrammarRegistrationService
-  extends Disposable
-  implements ILanguageGrammarRegistrationService {
+export class LanguageGrammarRegistrationService extends Disposable {
+  static languageEmitter = new SingleEventEmitter<LanguagesContribution>();
+  static grammarEmitter = new SingleEventEmitter<GrammarsContribution>();
+
   @Autowired(TextmateService)
   private readonly textMateService: TextmateService;
-
-  @Autowired(ILogger)
-  private readonly logger: ILogger;
 
   private languageDidRegisterDeferred = new Deferred<void>();
   public get languageDidRegistered() {
     return this.languageDidRegisterDeferred.promise;
   }
 
-  private registeredLanguageSet = new Set<string>();
-
   async initRegisterLanguageAndGrammar() {
-    // antcode 接口只能获取 master 分支上的语言
-    const languageIdList = defaultLanguages;
-    const validLanguageList = this.getValidLanguages(languageIdList);
-
-    // FIXME: 需要打点记录语言支持情况
-    // languages/grammars registration
-    for (const language of validLanguageList) {
-      if (language.extensionPackageName) {
-        await this.registerLanguageAndGrammar(language.extensionPackageName);
-      }
-    }
+    // 没啥作用，只是确保传参类型正确
+    const uri = new URI();
+    languageListCache.forEach((contrib) => {
+      this.textMateService.registerLanguage(contrib, uri);
+    });
+    grammarListCache.forEach((contrib) => {
+      this.textMateService.registerGrammar(contrib, uri);
+    });
+    this.clear();
+    LanguageGrammarRegistrationService.languageEmitter.event((contrib) => {
+      this.textMateService.registerLanguage(contrib, uri);
+    });
+    LanguageGrammarRegistrationService.grammarEmitter.event((contrib) => {
+      this.textMateService.registerGrammar(contrib, uri);
+    });
     this.languageDidRegisterDeferred.resolve();
   }
 
-  /**
-   * 通过文件后缀名来注册
-   * @param extname string
-   */
-  async registerByFilename(filename: string) {
-    const extname = paths.extname(filename);
-    if (extname === '.') {
-      return;
-    }
-
-    const language = getLanguageByExtnameAndFilename(extname, filename);
-    if (!language) {
-      this.logger.warn(`No language matched for extname: ${extname}`);
-      return;
-    }
-
-    if (language.extensionPackageName) {
-      await this.registerLanguageAndGrammar(language.extensionPackageName);
-    }
+  clear() {
+    LanguageGrammarRegistrationService.languageEmitter.clear();
+    LanguageGrammarRegistrationService.grammarEmitter.clear();
   }
 
-  async registerLanguageAndGrammar(languageId: string) {
-    if (this.registeredLanguageSet.has(languageId)) {
-      this.logger.warn(`This language: ${languageId} already registered`);
-      return;
-    }
-
-    this.registeredLanguageSet.add(languageId);
-
-    const mod = require(`@ali/kaitian-textmate-languages/lib/${languageId}`);
-    const loadLanguage: loadLanguageAndGrammar = 'default' in mod ? mod.default : mod;
-    const registrationPromise = loadLanguage(
-      this.textMateService.registerLanguage.bind(this.textMateService),
-      this.textMateService.registerGrammar.bind(this.textMateService)
-    );
-    // FIXME: 后续考虑改成 queue 方式注册
-    await Promise.all(registrationPromise);
-  }
-
-  private getValidLanguages(languages: string[]): LanguageDesc[] {
-    const validLanguageList: LanguageDesc[] = [];
-    languages.forEach((language) => {
-      const targetLanguage = getLanguageById(language);
-      if (!targetLanguage) {
-        this.logger.warn(`No language matched for extname: ${language}`);
-        return;
-      }
-      validLanguageList.push(targetLanguage);
-    });
-    return validLanguageList;
+  dispose() {
+    this.clear();
   }
 }
+
+LanguageGrammarRegistrationService.languageEmitter.event((e) => {
+  languageListCache.push(e);
+});
+
+LanguageGrammarRegistrationService.grammarEmitter.event((e) => {
+  grammarListCache.push(e);
+});

@@ -5,8 +5,7 @@
     "outDir": "./lib"
   },
   "include": [
-    "./src",
-    "../../typings"
+    "./src"
   ],
   "exclude": [
     "./integration"

@@ -93,7 +93,12 @@ packages/*/esm
 packages/*/types
 
 packages/alex/extensions
-packages/alex/config.json
+packages/alex/languages
+packages/alex/modules
+packages/alex/polyfills
+packages/alex/shims
+packages/alex/bundle
 packages/alex/.kaitian
+packages/alex/.cloudide
 
 packages/toolkit/extensions

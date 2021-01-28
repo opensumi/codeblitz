@@ -19,10 +19,11 @@ module.exports = () => {
           process.env.INTEGRATION || 'startup'
         }`,
       },
+      devtool: 'eval-cheap-module-source-map',
       devServer: {
         proxy: {
           '/code-service': {
-            target: 'https://code.alipay.com',
+            target: process.env.CODE_SERVICE_HOST || 'https://code.alipay.com',
             headers: {
               'PRIVATE-TOKEN': process.env.PRIVATE_TOKEN,
             },

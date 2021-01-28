@@ -1,8 +1,13 @@
-@import '~@ali/ide-core-browser/lib/style/entry.less';
+@import "~@ali/ide-core-browser/lib/style/variable.less";
+@import '~@ali/ide-core-browser/lib/style/icon/index.less';
+@import '~@ali/ide-core-browser/lib/style/antd-override.less';
+@import '~@ali/ide-core-browser/lib/style/monaco-override.less';
+@import '~@ali/ide-core-browser/lib/style/utilities.less';
+@import '~@ali/ide-core-browser/lib/style/toolbar.less';
 @import '~@ali/ide-core-browser/lib/style/codicons/codicon-animations.css';
 
-@kt-html-selector: #alex-app-root;
-@kt-body-selector: #alex-app-root;
+@kt-html-selector: alex-root;
+@kt-body-selector: alex-root;
 
 @{kt-html-selector},
 @{kt-body-selector} {
@@ -68,6 +73,16 @@
 
   li {
     list-style: none;
+  }
+}
+
+a {
+  color: var(--textLink-foreground);
+
+  &:hover,
+  &:active,
+  &:focus {
+    color: var(--textLink-activeForeground);
   }
 }
 

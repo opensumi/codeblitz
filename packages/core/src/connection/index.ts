@@ -84,13 +84,28 @@ export function getFCService(name: string, center: FCServiceCenter): any {
 export class FCServiceCenter {
   private serviceMethodMap = {};
 
+  private serviceNameMap = {};
+
   constructor(private port: Port, private logger?: any) {
     this.logger = logger || console;
-    this.port.listen((name, args) => {
-      if (!this.serviceMethodMap[name]) {
+    this.port.listen((name: string, args: any[]) => {
+      // 通过 on 直接注册的 method，目前发现此种用法只在 kaitian-extension 使用过一次
+      if (this.serviceMethodMap[name]) {
+        return this.serviceMethodMap[name](...args);
+      }
+      if (name.startsWith('on:')) {
+        name = name.slice(3);
+      }
+      const [serviceName, serviceMethod] = name.split(':');
+      const service = this.serviceNameMap[serviceName];
+      if (!service) {
         return NOTREGISTERMETHOD;
       }
-      return this.serviceMethodMap[name](...args);
+      const method = service[serviceMethod];
+      if (typeof method !== 'function') {
+        return NOTREGISTERMETHOD;
+      }
+      return method.call(service, ...args);
     });
   }
 
@@ -100,6 +115,15 @@ export class FCServiceCenter {
 
   onRequest(name: string, method: FCServiceMethod) {
     this.serviceMethodMap[name] = method;
+  }
+
+  /**
+   * 区别于 kaitian，这里使用 serviceName register 服务，减少遍历，同时如果避免代码 class 被编译成 function 造成问题
+   * @param serviceName
+   * @param service
+   */
+  onRegister(serviceName: string, service: string) {
+    this.serviceNameMap[serviceName] = service;
   }
 
   async broadcast(name: string, ...args: any[]): Promise<any> {
@@ -142,10 +166,7 @@ export class FCServiceStub {
   }
 
   onRequestService(service: any) {
-    const methods = this.getServiceMethod(service);
-    for (const method of methods) {
-      this.onRequest(method, service[method].bind(service));
-    }
+    this.center.onRegister(this.serviceName, service);
   }
 
   onRequest(name: string, method: FCServiceMethod) {
@@ -180,10 +201,4 @@ export class FCServiceStub {
       },
     });
   };
-}
-
-// 避免 getter 取值
-function checkPropIsFunction(obj: any, prop: string) {
-  const descriptor = Object.getOwnPropertyDescriptor(obj, prop);
-  return descriptor && typeof descriptor.value === 'function';
 }
