@@ -16,5 +16,6 @@ export const localizationBundle = {
     'api.response.no-login-antcode':
       'Login to antcode is expired, please refresh page if you are logged in',
     'api.login.goto': 'Go to login',
+    'error.unknown': 'Unknown Error',
   },
 };

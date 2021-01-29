@@ -15,5 +15,6 @@ export const localizationBundle = {
     'api.response.project-no-access': '无权限访问该项目',
     'api.response.no-login-antcode': 'antcode 登录已失效，如已登录请刷新页面',
     'api.login.goto': '前往登录',
+    'error.unknown': '未知错误',
   },
 };

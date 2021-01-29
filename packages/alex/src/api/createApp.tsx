@@ -1,3 +1,5 @@
+import '@ali/ide-i18n/lib/browser';
+import '@alipay/alex-i18n';
 import {
   ClientApp,
   RuntimeConfig,
@@ -8,8 +10,6 @@ import {
 import { SlotRenderer, SlotLocation, IAppRenderer } from '@ali/ide-core-browser';
 import { BoxPanel, SplitPanel } from '@ali/ide-core-browser/lib/components';
 import { IThemeService } from '@ali/ide-theme/lib/common';
-import '@ali/ide-i18n/lib/browser';
-import '@alipay/alex-i18n';
 import '@ali/ide-core-browser/lib/style/index.less';
 import { isMonacoLoaded, loadMonaco } from '@ali/ide-monaco/lib/browser/monaco-loader';
 import { IEditorDocumentModelService } from '@ali/ide-editor/lib/browser';
@@ -35,7 +35,7 @@ const getDefaultAppConfig = (): IAppOpts => ({
   webviewEndpoint: __WEBVIEW_ENDPOINT__,
   defaultPreferences: {
     'general.theme': 'ide-dark',
-    'general.language': 'zh-CN',
+    // 'general.language': 'zh-CN',
     'general.icon': 'vsicons-slim',
     'application.confirmExit': 'never',
     'editor.quickSuggestionsDelay': 10,

@@ -1,7 +1,7 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
+import { AppRenderer, renderApp, IAppInstance } from '../..';
 import { GitFileSchemeModule } from '@alipay/alex-git';
-import { AppRenderer, renderApp } from '../../api/renderApp';
 import { StartupModule } from './startup.module';
 import './languages';
 import SarifViewer from '../../../extensions/cloud-ide-ext.sarif-viewer';
@@ -25,13 +25,7 @@ const project = query.project || 'ide-s/TypeScript-Node-Starter';
 ReactDOM.render(
   <AppRenderer
     onLoad={(app) => {
-      // (window as any).app = app
-      // app.service.fs.onFilesChanged(e => {
-      //   e.forEach(async item => {
-      //     console.log('>>>content', await app.service.fs.resolveContent(item.uri))
-      //     console.log('>>>path', item.uri)
-      //   })
-      // })
+      window.app = app;
     }}
     appConfig={{
       modules: [GitFileSchemeModule, StartupModule],
@@ -44,6 +38,9 @@ ReactDOM.render(
         project,
         branch: query.branch,
         commit: query.commit,
+        transformStaticResource({ baseURL, project, commit, path }) {
+          return `${baseURL}/${project}/raw/${commit}/${path}`;
+        },
       },
       // workspace: {
       //   filesystem: {
@@ -65,22 +62,14 @@ ReactDOM.render(
   document.getElementById('main')
 );
 
-// renderApp(document.getElementById('main')!, {
-//   appConfig: {
-//     modules: [StartupModule]
-//   },
-//   runtimeConfig: {
-//     // TODO: 从 query 上取
-//     git: {
-//       baseURL: '/code-service',
-//       project: query.project || 'ide-s/TypeScript-Node-Starter',
-//       branch: query.branch,
-//       commit: query.commit,
-//     },
-//   },
-// });
-
 // for test
-(window as any).destroy = () => {
+window.destroy = () => {
   ReactDOM.render(<div>destroyed</div>, document.getElementById('main'));
 };
+
+declare global {
+  interface Window {
+    app: IAppInstance;
+    destroy(): void;
+  }
+}

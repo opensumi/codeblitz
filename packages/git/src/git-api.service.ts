@@ -21,16 +21,25 @@ export class GitAPIService implements IGitAPIService {
     branch?: string;
   }) {
     this.project = config.project;
-    if (config.projectId && config.commit) {
-      // 唯一确定一个项目
+    if (config.projectId) {
       this.projectId = config.projectId;
+    }
+    if (config.commit) {
       this.commit = config.commit;
+    }
+    if (config.branch) {
+      this.branch = config.branch;
+    }
+    // 唯一确定一个项目
+    if (this.projectId && this.commit) {
       return;
     }
-    if (!config.projectId || config.branch) {
+    if (!this.projectId || !this.branch) {
       const projectInfo = await this.getProjectInfo();
       this.projectId = projectInfo.id;
-      this.branch = projectInfo.default_branch;
+      if (!this.branch) {
+        this.branch = projectInfo.default_branch;
+      }
     }
     if (!this.commit) {
       const commitInfo = await this.getCommit(this.branch);

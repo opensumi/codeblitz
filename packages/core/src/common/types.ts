@@ -19,6 +19,18 @@ export interface FileIndex {
   [key: string]: FileIndex | string;
 }
 
+interface GitConfig {
+  baseURL: string;
+  // 项目 IDE
+  projectId?: number;
+  // 项目名称 group/repository
+  project: string;
+  // 分支
+  branch?: string;
+  // commit sha
+  commit?: string;
+}
+
 export interface RuntimeConfig {
   // 场景标识
   scenario?: string;
@@ -28,16 +40,9 @@ export interface RuntimeConfig {
     onDidSaveTextDocument?: (data: { filepath: string; content: string }) => void;
   };
   // 基于 git repository 的配置
-  git?: {
-    baseURL: string;
-    // 项目 IDE
-    projectId?: number;
-    // 项目名称 group/repository
-    project: string;
-    // 分支
-    branch?: string;
-    // commit sha
-    commit?: string;
+  git?: GitConfig & {
+    // 静态资源转换
+    transformStaticResource?(config: Required<GitConfig> & { path: string }): string;
   };
   // 默认打开文件
   defaultOpenFile?: string | string[];

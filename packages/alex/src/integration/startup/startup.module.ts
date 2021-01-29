@@ -7,13 +7,10 @@ import {
   FsProviderContribution,
   CommandContribution,
   CommandRegistry,
+  getLanguageId,
 } from '@ali/ide-core-browser';
 import { ExtensionServiceClientImpl, IExtensionNodeClientService } from '@alipay/alex-core';
 import { IExtensionMetadata } from '@alipay/alex-shared';
-// import {
-//   StaticResourceContribution,
-//   StaticResourceService,
-// } from '@ali/ide-static-resource/lib/browser/static.definition';
 import { IFileServiceClient } from '@ali/ide-file-service';
 import { KaitianExtFsProvider } from '@alipay/alex-core';
 
@@ -36,19 +33,10 @@ export class FileServerContribution implements StaticResourceContribution, FsPro
   private readonly ktExtFsProvider: KaitianExtFsProvider;
 
   registerStaticResolver(service: StaticResourceService): void {
-    // service.registerStaticResourceProvider({
-    //   scheme: 'file',
-    //   resolveStaticResource: (uri: URI) => {
-    //     return new URI(`${this.appConfig.staticServicePath}/assets/~${uri.codeUri.path}`);
-    //   },
-    // });
-
     service.registerStaticResourceProvider({
       scheme: KT_EXT_LOCAL_SCHEME,
       resolveStaticResource: (uri: URI) => {
         return uri.withScheme(location.protocol.slice(0, -1));
-        // const staticUri = new URI(this.appConfig.staticServicePath);
-        // return staticUri.withPath(`/assets/~${uri.codeUri.path}`);
       },
       roots: [location.origin],
     });
@@ -90,7 +78,7 @@ export class AlexAppContribution implements CommandContribution {
       { id: 'cloudide.command.workspace.getRuntimeConfig' },
       {
         execute: (property: string) => {
-          let val;
+          let val: string | undefined;
           try {
             const query = { taskId: '14417925' };
             val = query[property];
@@ -99,6 +87,13 @@ export class AlexAppContribution implements CommandContribution {
           }
           return val;
         },
+      }
+    );
+
+    commands.registerCommand(
+      { id: 'alex.command.env.language' },
+      {
+        execute: () => getLanguageId(),
       }
     );
   }
