@@ -53,6 +53,8 @@ const getDefaultAppConfig = (): IAppOpts => ({
   preferenceDirName: STORAGE_NAME,
   storageDirName: STORAGE_NAME,
   extensionStorageDirName: STORAGE_NAME,
+  appName: 'ALEX',
+  allowSetDocumentTitleFollowWorkspaceDir: false,
 });
 
 export const DEFAULT_APP_CONFIG = getDefaultAppConfig();
@@ -128,7 +130,7 @@ export function createApp({ appConfig, runtimeConfig }: IConfig): IAppInstance {
     (monaco as any).services.StaticServices.modeService._value = null;
     // @ts-ignore
     // common-di 通过参数实例化无法自动 dispose
-    app.injector.get(WorkerExtensionService).protocol._locals.forEach((instance) => {
+    app.injector.get(WorkerExtensionService)?.protocol?._locals?.forEach((instance) => {
       instance.dispose?.();
     });
     app.injector.disposeAll();

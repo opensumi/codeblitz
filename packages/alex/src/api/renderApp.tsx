@@ -41,7 +41,7 @@ export const renderApp = (domElement: HTMLElement, props: IRenderProps) => {
       );
 
       (app.injector.get(IReporterService) as IReporterService).point('alex:error', 'startApp', {
-        err,
+        error: err,
       });
       getDebugLogger().error(err);
       setTimeout(() => {
@@ -78,7 +78,7 @@ export const AppRenderer: React.FC<IRenderProps> = ({ onLoad, Landing, ...opts }
         setState({ error: err?.message || localize('error.unknown'), status: 'error' });
 
         (app.injector.get(IReporterService) as IReporterService).point('alex:error', 'startApp', {
-          err,
+          error: err,
         });
         getDebugLogger().error(err);
         setTimeout(() => {
