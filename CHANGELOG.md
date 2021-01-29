@@ -1,3 +1,12 @@
+## [0.2.7](https://code.alipay.com/cloud-ide/crew-dragon/compare/v0.2.6...v0.2.7) (2021-01-29)
+
+
+### Features
+
+* 增加 git 静态资源 resolver ([8512a63](https://code.alipay.com/cloud-ide/crew-dragon/commits/8512a6348fec368df9ae0c16d8a36979b40d95c0))
+
+
+
 ## [0.2.6](https://code.alipay.com/cloud-ide/crew-dragon/compare/v0.2.5...v0.2.6) (2021-01-27)
 
 
