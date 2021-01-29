@@ -39,7 +39,6 @@ const getDefaultAppConfig = (): IAppOpts => ({
     'application.confirmExit': 'never',
     'editor.quickSuggestionsDelay': 10,
     'editor.quickSuggestionsMaxCount': 50,
-    'editor.scrollBeyondLastLine': false,
     'settings.userBeforeWorkspace': true,
   },
   layoutConfig,
