@@ -35,7 +35,6 @@ const getDefaultAppConfig = (): IAppOpts => ({
   webviewEndpoint: __WEBVIEW_ENDPOINT__,
   defaultPreferences: {
     'general.theme': 'ide-dark',
-    // 'general.language': 'zh-CN',
     'general.icon': 'vsicons-slim',
     'application.confirmExit': 'never',
     'editor.quickSuggestionsDelay': 10,
