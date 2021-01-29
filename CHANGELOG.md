@@ -1,3 +1,12 @@
+## [0.2.8](https://code.alipay.com/cloud-ide/crew-dragon/compare/v0.2.7...v0.2.8) (2021-01-29)
+
+
+### Features
+
+* add some default config ([d8e7b4e](https://code.alipay.com/cloud-ide/crew-dragon/commits/d8e7b4e415af62e6fd005600c21dfbbddb0fdd9a))
+
+
+
 ## [0.2.7](https://code.alipay.com/cloud-ide/crew-dragon/compare/v0.2.6...v0.2.7) (2021-01-29)
 
 
