@@ -1,3 +1,17 @@
+# [0.3.0](https://code.alipay.com/cloud-ide/crew-dragon/compare/v0.2.9...v0.3.0) (2021-02-01)
+
+
+### Bug Fixes
+
+* 调整 startup 模块顺序,避免语言选择出不来 ([a81de0e](https://code.alipay.com/cloud-ide/crew-dragon/commits/a81de0e5d086182d643928568c3fec20cf5c31c9))
+
+
+### Features
+
+* rename module git to code-service ([5db0429](https://code.alipay.com/cloud-ide/crew-dragon/commits/5db0429179ea0a1a7fecc96c6ca0ed609087ab87))
+
+
+
 ## [0.2.9](https://code.alipay.com/cloud-ide/crew-dragon/compare/v0.2.8...v0.2.9) (2021-02-01)
 
 
