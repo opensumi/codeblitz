@@ -49,41 +49,39 @@ const App: React.FC = () => {
         <Button onClick={() => setKey((k) => k + 1)}>重置</Button>
       </div>
       <div style={{ height: 'calc(100% - 40px)', width: '50%' }}>
-        {key === 0 && (
-          <AppRenderer
-            key={key}
-            appConfig={{
-              workspaceDir: 'playground',
-              layoutConfig,
-              layoutComponent: LayoutComponent,
-              defaultPreferences: {
-                'general.theme': 'ide-light',
-              },
-              panelSizes: {
-                [SlotLocation.left]: 220,
-              },
-            }}
-            runtimeConfig={{
-              disableModifyFileTree: true,
-              defaultOpenFile: 'main.js',
-              workspace: {
-                filesystem: {
-                  fs: 'FileIndexSystem',
-                  options: {
-                    requestFileIndex() {
-                      return Promise.resolve({
-                        'main.html': '<div id="root"></div>',
-                        'main.css': 'body {}',
-                        'main.js': 'console.log("main")',
-                        'package.json': '{\n  "name": "Riddle"\n}',
-                      });
-                    },
+        <AppRenderer
+          key={key}
+          appConfig={{
+            workspaceDir: 'playground',
+            layoutConfig,
+            layoutComponent: LayoutComponent,
+            defaultPreferences: {
+              'general.theme': 'ide-light',
+            },
+            panelSizes: {
+              [SlotLocation.left]: 220,
+            },
+          }}
+          runtimeConfig={{
+            disableModifyFileTree: true,
+            defaultOpenFile: 'main.js',
+            workspace: {
+              filesystem: {
+                fs: 'FileIndexSystem',
+                options: {
+                  requestFileIndex() {
+                    return Promise.resolve({
+                      'main.html': '<div id="root"></div>',
+                      'main.css': 'body {}',
+                      'main.js': 'console.log("main")',
+                      'package.json': '{\n  "name": "Riddle"\n}',
+                    });
                   },
                 },
               },
-            }}
-          />
-        )}
+            },
+          }}
+        />
       </div>
     </div>
   );

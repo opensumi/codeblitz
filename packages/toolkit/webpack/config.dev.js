@@ -22,6 +22,14 @@ module.exports = () => {
       devtool: 'eval-cheap-module-source-map',
       devServer: {
         proxy: {
+          // 通过 cookie 请求测试平台
+          '/code-test': {
+            target: 'http://100.88.230.6:8090',
+            changeOrigin: true,
+            pathRewrite: {
+              '^/code-test': '',
+            },
+          },
           '/code-service': {
             target: process.env.CODE_SERVICE_HOST || 'https://code.alipay.com',
             headers: {

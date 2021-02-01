@@ -1,5 +1,3 @@
-import type * as vscode from 'vscode';
-import { Event } from '@ali/ide-core-common';
 import { BrowserFS, FileSystemConfiguration } from '../server/node';
 
 export { AppConfig } from '@ali/ide-core-browser';
@@ -19,6 +17,21 @@ export interface FileIndex {
   [key: string]: FileIndex | string;
 }
 
+interface CodeServiceConfig {
+  // 平台
+  platform: string;
+  // host
+  baseURL: string;
+  // 项目 IDE
+  projectId?: number | string;
+  // 项目名称 group/repository
+  project: string;
+  // 分支
+  branch?: string;
+  // commit sha
+  commit?: string;
+}
+
 export interface RuntimeConfig {
   // 场景标识
   scenario?: string;
@@ -28,16 +41,9 @@ export interface RuntimeConfig {
     onDidSaveTextDocument?: (data: { filepath: string; content: string }) => void;
   };
   // 基于 git repository 的配置
-  git?: {
-    baseURL: string;
-    // 项目 IDE
-    projectId?: number;
-    // 项目名称 group/repository
-    project: string;
-    // 分支
-    branch?: string;
-    // commit sha
-    commit?: string;
+  codeService?: CodeServiceConfig & {
+    // 静态资源转换
+    transformStaticResource?(config: Required<CodeServiceConfig> & { path: string }): string;
   };
   // 默认打开文件
   defaultOpenFile?: string | string[];

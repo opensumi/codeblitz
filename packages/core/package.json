@@ -1,6 +1,6 @@
 {
   "name": "@alipay/alex-core",
-  "version": "0.2.6",
+  "version": "0.2.9",
   "description": "core",
   "main": "lib/index.js",
   "typings": "lib/index.d.ts",
@@ -19,7 +19,7 @@
     "lockfile": "enable"
   },
   "dependencies": {
-    "@alipay/alex-shared": "0.2.6",
+    "@alipay/alex-shared": "0.2.9",
     "@ali/common-di": "^5.2.2",
     "@ali/ide-core-browser": "1.33.0",
     "@ali/ide-core-common": "1.33.0",
@@ -34,7 +34,9 @@
     "lodash.debounce": "^4.0.8",
     "md5": "^2.3.0",
     "uuid": "^3.3.2",
-    "vscode-languageserver-types": "~3.14.0"
+    "vscode-languageserver-types": "~3.14.0",
+    "iconv-lite-umd": "^0.6.8",
+    "jschardet": "^2.2.1"
   },
   "devDependencies": {
     "@types/fs-extra": "^9.0.4",

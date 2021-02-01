@@ -1,7 +1,7 @@
 {
-  "name": "@alipay/alex-git",
-  "version": "0.2.6",
-  "description": "@alipay/alex-git",
+  "name": "@alipay/alex-code-service",
+  "version": "0.2.9",
+  "description": "@alipay/alex-code-service",
   "main": "lib/index.js",
   "typings": "lib/index.d.ts",
   "files": [
@@ -19,7 +19,7 @@
     "lockfile": "enable"
   },
   "dependencies": {
-    "@alipay/alex-core": "0.2.6",
+    "@alipay/alex-core": "0.2.9",
     "umi-request": "^1.3.5"
   }
 }

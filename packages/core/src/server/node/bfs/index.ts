@@ -1,3 +1,4 @@
+import './patch';
 import fs from 'browserfs/dist/node/core/node_fs';
 import { checkOptions } from 'browserfs/dist/node/core/util';
 import {

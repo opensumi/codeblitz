@@ -7,6 +7,7 @@ alex-root {
 
 .landing {
   position: absolute;
+  z-index: 10;
   left: 0;
   right: 0;
   top: 0;
@@ -39,5 +40,16 @@ alex-root {
 .tip {
   .error {
     color: #FF4D4F;
+  }
+}
+
+// override kaitian style
+:global {
+  // fix image-preview style
+  [class^='kt_image_preview'] img {
+    max-width: 100%;
+    max-height: 100%;
+    object-fit: contain;
+    width: auto !important;
   }
 }

@@ -1,3 +1,32 @@
+## [0.2.9](https://code.alipay.com/cloud-ide/crew-dragon/compare/v0.2.8...v0.2.9) (2021-02-01)
+
+
+### Features
+
+* remove scrollBeyondLastLine default false value ([d158735](https://code.alipay.com/cloud-ide/crew-dragon/commits/d1587358d594c9c299fb9e76aa7d57a66cb98b00))
+* remove some config ([4c2b82c](https://code.alipay.com/cloud-ide/crew-dragon/commits/4c2b82c54b7e53c26f9dea722f34cfe1fc3c6d98))
+* 优化 git 文件写系统 ([aba60f5](https://code.alipay.com/cloud-ide/crew-dragon/commits/aba60f5e9a0f5b99938e54b27ab5fa1198f25d01))
+
+
+
+## [0.2.8](https://code.alipay.com/cloud-ide/crew-dragon/compare/v0.2.7...v0.2.8) (2021-01-29)
+
+
+### Features
+
+* add some default config ([d8e7b4e](https://code.alipay.com/cloud-ide/crew-dragon/commits/d8e7b4e415af62e6fd005600c21dfbbddb0fdd9a))
+
+
+
+## [0.2.7](https://code.alipay.com/cloud-ide/crew-dragon/compare/v0.2.6...v0.2.7) (2021-01-29)
+
+
+### Features
+
+* 增加 git 静态资源 resolver ([8512a63](https://code.alipay.com/cloud-ide/crew-dragon/commits/8512a6348fec368df9ae0c16d8a36979b40d95c0))
+
+
+
 ## [0.2.6](https://code.alipay.com/cloud-ide/crew-dragon/compare/v0.2.5...v0.2.6) (2021-01-27)
 
 

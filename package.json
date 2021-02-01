@@ -1,6 +1,6 @@
 {
   "name": "alex",
-  "version": "0.2.6",
+  "version": "0.2.9",
   "workspaces": [
     "packages/*"
   ],
@@ -15,9 +15,9 @@
     "init": "npm run clean && npm run build && npm run ext",
     "start": "npm run dev",
     "ext": "alex ext",
-    "sdk": "INTEGRATION=sdk npm run dev",
     "inspect": "INTEGRATION=inspect npm run dev",
     "build": "node scripts/build",
+    "bundle": "node scripts/bundle",
     "create": "node scripts/create",
     "format": "prettier --write --parser typescript \"packages/**/*.ts?(x)\"",
     "dev": "webpack serve --config packages/toolkit/webpack/config.dev.js",
@@ -87,7 +87,7 @@
     {
       "publisher": "cloud-ide-ext",
       "name": "sarif-viewer",
-      "version": "0.0.5"
+      "version": "0.0.6"
     },
     {
       "publisher": "alex",

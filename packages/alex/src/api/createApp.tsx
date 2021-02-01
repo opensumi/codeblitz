@@ -1,3 +1,5 @@
+import '@ali/ide-i18n/lib/browser';
+import '@alipay/alex-i18n';
 import {
   ClientApp,
   RuntimeConfig,
@@ -5,11 +7,9 @@ import {
   IAppOpts,
   STORAGE_NAME,
 } from '@alipay/alex-core';
-import { SlotRenderer, SlotLocation, IAppRenderer } from '@ali/ide-core-browser';
+import { SlotRenderer, SlotLocation, IAppRenderer, FILES_DEFAULTS } from '@ali/ide-core-browser';
 import { BoxPanel, SplitPanel } from '@ali/ide-core-browser/lib/components';
 import { IThemeService } from '@ali/ide-theme/lib/common';
-import '@ali/ide-i18n/lib/browser';
-import '@alipay/alex-i18n';
 import '@ali/ide-core-browser/lib/style/index.less';
 import { isMonacoLoaded, loadMonaco } from '@ali/ide-monaco/lib/browser/monaco-loader';
 import { IEditorDocumentModelService } from '@ali/ide-editor/lib/browser';
@@ -35,13 +35,16 @@ const getDefaultAppConfig = (): IAppOpts => ({
   webviewEndpoint: __WEBVIEW_ENDPOINT__,
   defaultPreferences: {
     'general.theme': 'ide-dark',
-    'general.language': 'zh-CN',
     'general.icon': 'vsicons-slim',
     'application.confirmExit': 'never',
     'editor.quickSuggestionsDelay': 10,
     'editor.quickSuggestionsMaxCount': 50,
-    'editor.scrollBeyondLastLine': false,
     'settings.userBeforeWorkspace': true,
+    'files.exclude': {
+      ...FILES_DEFAULTS.filesExclude,
+      // browserfs OverlayFS 用来记录删除的文件
+      '**/.deletedFiles.log': true,
+    },
   },
   layoutConfig,
   layoutComponent: LayoutComponent,
@@ -53,6 +56,8 @@ const getDefaultAppConfig = (): IAppOpts => ({
   preferenceDirName: STORAGE_NAME,
   storageDirName: STORAGE_NAME,
   extensionStorageDirName: STORAGE_NAME,
+  appName: 'ALEX',
+  allowSetDocumentTitleFollowWorkspaceDir: false,
 });
 
 export const DEFAULT_APP_CONFIG = getDefaultAppConfig();
@@ -98,7 +103,7 @@ export function createApp({ appConfig, runtimeConfig }: IConfig): IAppInstance {
     (app.injector.get(IThemeService) as IThemeService).onThemeChange((e) => {
       themeStorage.set(e.type);
     });
-    // IDE 销毁时，组件会触发 handleTreeBlur，但是 FileContextKey 实例会获取，此时在 dispose 阶段，injector.get(FileContextKey) 会抛出错误
+    // IDE 销毁时，组件会触发 handleTreeBlur，但是 FileContextKey 实例尚未初始化，此时在 dispose 阶段，injector.get(FileContextKey) 会抛出错误
     app.injector.get(FileTreeModelService).handleTreeBlur();
   };
 
@@ -128,7 +133,7 @@ export function createApp({ appConfig, runtimeConfig }: IConfig): IAppInstance {
     (monaco as any).services.StaticServices.modeService._value = null;
     // @ts-ignore
     // common-di 通过参数实例化无法自动 dispose
-    app.injector.get(WorkerExtensionService).protocol._locals.forEach((instance) => {
+    app.injector.get(WorkerExtensionService)?.protocol?._locals?.forEach((instance) => {
       instance.dispose?.();
     });
     app.injector.disposeAll();
