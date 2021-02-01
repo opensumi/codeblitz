@@ -1,7 +1,7 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-import { GitFileSchemeModule } from '@alipay/alex-code-service';
 import { IAppInstance, AppRenderer } from '../..';
+import { GitFileSchemeModule } from '@alipay/alex-code-service';
 import * as Alex from '../..';
 import { StartupModule } from './startup.module';
 import './languages';
