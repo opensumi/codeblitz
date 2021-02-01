@@ -7,7 +7,7 @@ import {
   IAppOpts,
   STORAGE_NAME,
 } from '@alipay/alex-core';
-import { SlotRenderer, SlotLocation, IAppRenderer } from '@ali/ide-core-browser';
+import { SlotRenderer, SlotLocation, IAppRenderer, FILES_DEFAULTS } from '@ali/ide-core-browser';
 import { BoxPanel, SplitPanel } from '@ali/ide-core-browser/lib/components';
 import { IThemeService } from '@ali/ide-theme/lib/common';
 import '@ali/ide-core-browser/lib/style/index.less';
@@ -40,6 +40,11 @@ const getDefaultAppConfig = (): IAppOpts => ({
     'editor.quickSuggestionsDelay': 10,
     'editor.quickSuggestionsMaxCount': 50,
     'settings.userBeforeWorkspace': true,
+    'files.exclude': {
+      ...FILES_DEFAULTS.filesExclude,
+      // browserfs OverlayFS 用来记录删除的文件
+      '**/.deletedFiles.log': true,
+    },
   },
   layoutConfig,
   layoutComponent: LayoutComponent,

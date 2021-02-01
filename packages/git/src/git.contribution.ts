@@ -5,12 +5,14 @@ import {
   formatLocalize,
   Disposable,
   IReporterService,
+  getDebugLogger,
 } from '@ali/ide-core-common';
 import {
   LaunchContribution,
   AppConfig,
   makeWorkspaceDir,
   GIT_ROOT,
+  IDB_ROOT,
   IServerApp,
   RuntimeConfig,
   BrowserFS,
@@ -20,11 +22,15 @@ import { ResponseError } from 'umi-request';
 import configureFileSystem from './filesystem/configure';
 import { IGitAPIService } from './types';
 import { request } from './request';
+import { GitModelService } from './git-model.service';
 
 @Domain(LaunchContribution)
 export class GitContribution extends Disposable implements LaunchContribution {
   @Autowired(IGitAPIService)
-  gitApiService: IGitAPIService;
+  gitAPIService: IGitAPIService;
+
+  @Autowired()
+  gitModel: GitModelService;
 
   @Autowired(RuntimeConfig)
   runtimeConfig: RuntimeConfig;
@@ -47,22 +53,28 @@ export class GitContribution extends Disposable implements LaunchContribution {
     }
 
     try {
-      await this.gitApiService.initProject(git);
-      const workspaceDir = makeWorkspaceDir(
-        `git/${this.gitApiService.projectId}/${this.gitApiService.commit}/${this.gitApiService.project}`
+      await this.gitModel.initProject(git);
+      const workspaceDir = makeWorkspaceDir(`${this.gitModel.platform}/${this.gitModel.project}`);
+      this.appConfig.workspaceDir = workspaceDir;
+
+      const { gitFileSystem, idbFileSystem, overlayFileSystem } = await configureFileSystem(
+        this.gitModel,
+        this.gitAPIService
       );
-      const { gitFileSystem, overlayFileSystem } = await configureFileSystem(this.gitApiService);
       rootFS.mount(workspaceDir, overlayFileSystem);
       // git 以 /git 作为目录读取只读文件系统数据
       rootFS.mount(GIT_ROOT, gitFileSystem);
-      this.appConfig.workspaceDir = workspaceDir;
+      // 将 writable 挂载到 /idb
+      rootFS.mount(IDB_ROOT, idbFileSystem);
       this.addDispose({
         dispose: () => {
           rootFS.umount(workspaceDir);
           rootFS.umount(GIT_ROOT);
+          rootFS.umount(IDB_ROOT);
         },
       });
     } catch (err: any) {
+      getDebugLogger().error(err);
       // 使用内存作为回退文件系统
       rootFS.mount(
         this.appConfig.workspaceDir,
@@ -98,7 +110,7 @@ export class GitContribution extends Disposable implements LaunchContribution {
             message = localize('api.response.project-no-access');
           } else if (status === 404) {
             this.reporter.point('gitProject', 'responseError', { status });
-            message = formatLocalize('api.response.project-not-found', this.gitApiService.project);
+            message = formatLocalize('api.response.project-not-found', this.gitModel.project);
           }
           this.messageService.error(message || localize('api.response.unknown-error'));
           return;

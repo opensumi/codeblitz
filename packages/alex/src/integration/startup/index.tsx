@@ -1,7 +1,8 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-import { AppRenderer, renderApp, IAppInstance } from '../..';
 import { GitFileSchemeModule } from '@alipay/alex-git';
+import { IAppInstance, AppRenderer } from '../..';
+import * as Alex from '../..';
 import { StartupModule } from './startup.module';
 import './languages';
 import SarifViewer from '../../../extensions/cloud-ide-ext.sarif-viewer';
@@ -10,6 +11,8 @@ import html from '../../../extensions/alex.html-language-features-worker';
 import json from '../../../extensions/alex.json-language-features-worker';
 import markdown from '../../../extensions/alex.markdown-language-features-worker';
 import typescript from '../../../extensions/alex.typescript-language-features-worker';
+
+(window as any).alex = Alex;
 
 const query = location.search
   .slice(1)
@@ -34,6 +37,7 @@ ReactDOM.render(
     }}
     runtimeConfig={{
       git: {
+        platform: 'antcode',
         baseURL: '/code-service',
         project,
         branch: query.branch,

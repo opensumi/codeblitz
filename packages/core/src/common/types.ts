@@ -1,5 +1,3 @@
-import type * as vscode from 'vscode';
-import { Event } from '@ali/ide-core-common';
 import { BrowserFS, FileSystemConfiguration } from '../server/node';
 
 export { AppConfig } from '@ali/ide-core-browser';
@@ -20,9 +18,12 @@ export interface FileIndex {
 }
 
 interface GitConfig {
+  // 平台
+  platform: string;
+  // host
   baseURL: string;
   // 项目 IDE
-  projectId?: number;
+  projectId?: number | string;
   // 项目名称 group/repository
   project: string;
   // 分支

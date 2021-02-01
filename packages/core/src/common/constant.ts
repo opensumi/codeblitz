@@ -12,6 +12,8 @@ export const WORKSPACE_ROOT = '/workspace';
 
 export const GIT_ROOT = '/git';
 
+export const IDB_ROOT = '/idb';
+
 // 全局数据存储目录
 export const STORAGE_NAME = '.cloudide';
 

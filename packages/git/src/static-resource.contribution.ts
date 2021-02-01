@@ -6,7 +6,7 @@ import {
 } from '@ali/ide-static-resource/lib/browser/static.definition';
 import { AppConfig, RuntimeConfig } from '@alipay/alex-core';
 import * as paths from 'path';
-import { IGitAPIService } from './types';
+import { GitModelService } from './git-model.service';
 
 @Domain(StaticResourceContribution)
 export class GitStaticResourceContribution implements StaticResourceContribution {
@@ -16,8 +16,8 @@ export class GitStaticResourceContribution implements StaticResourceContribution
   @Autowired(RuntimeConfig)
   runtimeConfig: RuntimeConfig;
 
-  @Autowired(IGitAPIService)
-  gitApiService: IGitAPIService;
+  @Autowired()
+  gitModel: GitModelService;
 
   registerStaticResolver(staticService: StaticResourceService) {
     if (!this.runtimeConfig.git) return;
@@ -28,8 +28,9 @@ export class GitStaticResourceContribution implements StaticResourceContribution
         resolveStaticResource: (uri: URI) => {
           const fsPath = uri.codeUri.path;
           const path = paths.relative(this.appConfig.workspaceDir, fsPath);
-          const { project, projectId, branch, commit } = this.gitApiService;
+          const { project, projectId, branch, commit, platform } = this.gitModel;
           const url = transformStaticResource({
+            platform,
             project,
             projectId,
             branch,
