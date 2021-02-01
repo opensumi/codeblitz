@@ -1,8 +1,8 @@
 import { API } from './request';
 
-export const IGitAPIService = Symbol('IGitAPIService');
+export const ICodeAPIService = Symbol('ICodeAPIService');
 
-export interface IGitAPIService {
+export interface ICodeAPIService {
   /**
    * 获取仓库信息
    */

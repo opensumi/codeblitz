@@ -1,12 +1,12 @@
 import { Injectable, Autowired } from '@ali/common-di';
-import { GitModelService } from './git-model.service';
+import { CodeModelService } from './code-model.service';
 import { request, API } from './request';
-import { IGitAPIService } from './types';
+import { ICodeAPIService } from './types';
 
 @Injectable()
-export class GitAPIService implements IGitAPIService {
+export class CodeAPIService implements ICodeAPIService {
   @Autowired()
-  gitModel: GitModelService;
+  gitModel: CodeModelService;
 
   getProjectInfo() {
     return request<API.ResponseGetProjectById>(

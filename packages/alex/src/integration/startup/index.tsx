@@ -1,6 +1,6 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-import { GitFileSchemeModule } from '@alipay/alex-git';
+import { GitFileSchemeModule } from '@alipay/alex-code-service';
 import { IAppInstance, AppRenderer } from '../..';
 import * as Alex from '../..';
 import { StartupModule } from './startup.module';
@@ -36,7 +36,7 @@ ReactDOM.render(
       workspaceDir: project,
     }}
     runtimeConfig={{
-      git: {
+      codeService: {
         platform: 'antcode',
         baseURL: '/code-service',
         project,

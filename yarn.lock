@@ -12687,7 +12687,7 @@ vscode-languageserver-types@^3.16.0:
   resolved "https://registry.npm.alibaba-inc.com/vscode-languageserver-types/download/vscode-languageserver-types-3.16.0.tgz#ecf393fc121ec6974b2da3efb3155644c514e247"
   integrity sha1-7POT/BIexpdLLaPvsxVWRMUU4kc=
 
-vscode-languageserver-types@~3.14, vscode-languageserver-types@~3.14.0:
+vscode-languageserver-types@~3.14.0:
   version "3.14.0"
   resolved "https://registry.npm.alibaba-inc.com/vscode-languageserver-types/download/vscode-languageserver-types-3.14.0.tgz#d3b5952246d30e5241592b6dde8280e03942e743"
   integrity sha1-07WVIkbTDlJBWStt3oKA4DlC50M=

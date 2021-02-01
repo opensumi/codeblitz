@@ -17,7 +17,7 @@ export interface FileIndex {
   [key: string]: FileIndex | string;
 }
 
-interface GitConfig {
+interface CodeServiceConfig {
   // 平台
   platform: string;
   // host
@@ -41,9 +41,9 @@ export interface RuntimeConfig {
     onDidSaveTextDocument?: (data: { filepath: string; content: string }) => void;
   };
   // 基于 git repository 的配置
-  git?: GitConfig & {
+  codeService?: CodeServiceConfig & {
     // 静态资源转换
-    transformStaticResource?(config: Required<GitConfig> & { path: string }): string;
+    transformStaticResource?(config: Required<CodeServiceConfig> & { path: string }): string;
   };
   // 默认打开文件
   defaultOpenFile?: string | string[];

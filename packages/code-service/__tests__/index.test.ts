@@ -1,4 +1,4 @@
-describe('git', () => {
+describe('code-service', () => {
   it('example', () => {
     expect(1 + 1).toBe(2);
   });

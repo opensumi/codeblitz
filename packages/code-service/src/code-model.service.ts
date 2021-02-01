@@ -1,11 +1,11 @@
 import { Injectable, Autowired } from '@ali/common-di';
 import { Deferred } from '@ali/ide-core-common';
-import { IGitAPIService } from './types';
+import { ICodeAPIService } from './types';
 
 @Injectable()
-export class GitModelService {
-  @Autowired(IGitAPIService)
-  gitAPIService: IGitAPIService;
+export class CodeModelService {
+  @Autowired(ICodeAPIService)
+  codeAPI: ICodeAPIService;
 
   private initialized = new Deferred();
 
@@ -58,18 +58,18 @@ export class GitModelService {
       this._branch = config.branch;
     }
     // 唯一确定一个项目
-    if (this.projectId && this.commit) {
+    if (this._projectId && this._commit) {
       return;
     }
-    if (!this.projectId || !this.branch) {
-      const projectInfo = await this.gitAPIService.getProjectInfo();
+    if (!this._projectId || !this._branch) {
+      const projectInfo = await this.codeAPI.getProjectInfo();
       this._projectId = projectInfo.id;
-      if (!this.branch) {
+      if (!this._branch) {
         this._branch = projectInfo.default_branch;
       }
     }
-    if (!this.commit) {
-      const commitInfo = await this.gitAPIService.getCommit(this.branch);
+    if (!this._commit) {
+      const commitInfo = await this.codeAPI.getCommit(this._branch);
       this._commit = commitInfo.id;
     }
     this.initialized.resolve();

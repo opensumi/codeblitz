@@ -10,7 +10,7 @@ export const TMP_ROOT = os.tmpdir();
 
 export const WORKSPACE_ROOT = '/workspace';
 
-export const GIT_ROOT = '/git';
+export const CODE_ROOT = '/code';
 
 export const IDB_ROOT = '/idb';
 

@@ -1,6 +1,6 @@
 import { BrowserFS, WORKSPACE_IDB_NAME } from '@alipay/alex-core';
-import { IGitAPIService } from '../types';
-import { GitModelService } from '../git-model.service';
+import { ICodeAPIService } from '../types';
+import { CodeModelService } from '../code-model.service';
 
 const stripSlash = (p: string) => {
   if (p[0] === '/') {
@@ -11,7 +11,7 @@ const stripSlash = (p: string) => {
 
 type Callback<T = any> = (err: Error | null, rv?: T) => void;
 
-const configureFileSystem = async (model: GitModelService, api: IGitAPIService) => {
+const configureFileSystem = async (model: CodeModelService, api: ICodeAPIService) => {
   const requestByMethod = (name: 'getTreeEntry' | 'getTree' | 'getBlob' | 'getBlobSize') => (
     p: string,
     cb: Callback<any>
@@ -25,7 +25,7 @@ const configureFileSystem = async (model: GitModelService, api: IGitAPIService) 
     FileSystem: { CodeHost, OverlayFS, FolderAdapter, IndexedDB },
   } = BrowserFS;
 
-  const [gitFileSystem, idbFileSystem] = await Promise.all([
+  const [codeFileSystem, idbFileSystem] = await Promise.all([
     createFileSystem(CodeHost, {
       requestStat: requestByMethod('getTreeEntry'),
       requestDir: requestByMethod('getTree'),
@@ -48,11 +48,11 @@ const configureFileSystem = async (model: GitModelService, api: IGitAPIService) 
     });
   });
   const overlayFileSystem = await createFileSystem(OverlayFS, {
-    readable: gitFileSystem,
+    readable: codeFileSystem,
     writable: folderSystem,
   });
   return {
-    gitFileSystem,
+    codeFileSystem,
     idbFileSystem,
     folderSystem,
     overlayFileSystem,

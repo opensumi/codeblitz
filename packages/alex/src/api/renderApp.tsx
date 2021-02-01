@@ -1,6 +1,7 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import ReactDOM from 'react-dom';
 import { IReporterService, localize, getDebugLogger } from '@ali/ide-core-common';
+import { REPORT_NAME } from '@alipay/alex-core';
 import { createApp } from './createApp';
 import { Root } from '../core/Root';
 import { RootProps, LandingProps } from '../core/types';
@@ -40,9 +41,9 @@ export const renderApp = (domElement: HTMLElement, props: IRenderProps) => {
         domElement
       );
 
-      (app.injector.get(IReporterService) as IReporterService).point('alex:error', 'startApp', {
-        error: err,
-      });
+      (app.injector.get(
+        IReporterService
+      ) as IReporterService).point(REPORT_NAME.ALEX_APP_START_ERROR, err?.message, { error: err });
       getDebugLogger().error(err);
       setTimeout(() => {
         throw err;
@@ -57,7 +58,7 @@ export const renderApp = (domElement: HTMLElement, props: IRenderProps) => {
 export const AppRenderer: React.FC<IRenderProps> = ({ onLoad, Landing, ...opts }) => {
   const app = useConstant(() => createApp(opts));
   const themeType = useConstant(() => themeStorage.get());
-  const [appElement, setAppElement] = useState<React.ReactElement | null>(null);
+  const appElementRef = useRef<React.ReactElement | null>(null);
 
   const [state, setState] = useState<{
     status: RootProps['status'];
@@ -67,17 +68,19 @@ export const AppRenderer: React.FC<IRenderProps> = ({ onLoad, Landing, ...opts }
   useEffect(() => {
     app
       .start((appElement) => {
-        setAppElement(appElement);
+        appElementRef.current = appElement;
+        setState({ status: 'success' });
         return Promise.resolve();
       })
       .then(() => {
-        setState({ status: 'success' });
         onLoad?.(app);
       })
       .catch((err: Error) => {
         setState({ error: err?.message || localize('error.unknown'), status: 'error' });
 
-        (app.injector.get(IReporterService) as IReporterService).point('alex:error', 'startApp', {
+        (app.injector.get(
+          IReporterService
+        ) as IReporterService).point(REPORT_NAME.ALEX_APP_START_ERROR, err?.message, {
           error: err,
         });
         getDebugLogger().error(err);
@@ -93,7 +96,7 @@ export const AppRenderer: React.FC<IRenderProps> = ({ onLoad, Landing, ...opts }
 
   return (
     <Root {...state} theme={themeType} Landing={Landing}>
-      {appElement}
+      {appElementRef.current}
     </Root>
   );
 };

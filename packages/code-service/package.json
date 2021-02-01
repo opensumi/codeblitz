@@ -1,7 +1,7 @@
 {
-  "name": "@alipay/alex-git",
+  "name": "@alipay/alex-code-service",
   "version": "0.2.9",
-  "description": "@alipay/alex-git",
+  "description": "@alipay/alex-code-service",
   "main": "lib/index.js",
   "typings": "lib/index.d.ts",
   "files": [

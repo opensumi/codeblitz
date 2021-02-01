@@ -6,10 +6,10 @@ import {
 } from '@ali/ide-static-resource/lib/browser/static.definition';
 import { AppConfig, RuntimeConfig } from '@alipay/alex-core';
 import * as paths from 'path';
-import { GitModelService } from './git-model.service';
+import { CodeModelService } from './code-model.service';
 
 @Domain(StaticResourceContribution)
-export class GitStaticResourceContribution implements StaticResourceContribution {
+export class CodeStaticResourceContribution implements StaticResourceContribution {
   @Autowired(AppConfig)
   appConfig: AppConfig;
 
@@ -17,11 +17,11 @@ export class GitStaticResourceContribution implements StaticResourceContribution
   runtimeConfig: RuntimeConfig;
 
   @Autowired()
-  gitModel: GitModelService;
+  gitModel: CodeModelService;
 
   registerStaticResolver(staticService: StaticResourceService) {
-    if (!this.runtimeConfig.git) return;
-    const { transformStaticResource, baseURL } = this.runtimeConfig.git;
+    if (!this.runtimeConfig.codeService) return;
+    const { transformStaticResource, baseURL } = this.runtimeConfig.codeService;
     if (transformStaticResource) {
       staticService.registerStaticResourceProvider({
         scheme: 'file',
