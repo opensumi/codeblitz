@@ -5,7 +5,7 @@ import {
   RuntimeConfig,
   makeWorkspaceDir,
   IAppOpts,
-  STORAGE_NAME,
+  STORAGE_DIR,
 } from '@alipay/alex-core';
 import { SlotRenderer, SlotLocation, IAppRenderer, FILES_DEFAULTS } from '@ali/ide-core-browser';
 import { BoxPanel, SplitPanel } from '@ali/ide-core-browser/lib/components';
@@ -52,10 +52,10 @@ const getDefaultAppConfig = (): IAppOpts => ({
   defaultPanels: {
     bottom: '',
   },
-  logDir: `${os.homedir()}/${STORAGE_NAME}/logs/`,
-  preferenceDirName: STORAGE_NAME,
-  storageDirName: STORAGE_NAME,
-  extensionStorageDirName: STORAGE_NAME,
+  logDir: `${os.homedir()}/${STORAGE_DIR}/logs/`,
+  preferenceDirName: STORAGE_DIR,
+  storageDirName: STORAGE_DIR,
+  extensionStorageDirName: STORAGE_DIR,
   appName: 'ALEX',
   allowSetDocumentTitleFollowWorkspaceDir: false,
 });

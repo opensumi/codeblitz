@@ -136,7 +136,7 @@ invoke(async () => {
   const { stdout } = await exec('git diff', { stdio: 'pipe' });
   if (stdout) {
     await exec('git add -A');
-    await exec(`git commit -m build:\\ v${targetVersion}`);
+    await exec(`git commit -m release:\\ v${targetVersion}`);
   } else {
     console.log('无变更文件');
   }

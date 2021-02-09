@@ -1,6 +1,6 @@
 {
   "name": "alex",
-  "version": "0.3.0",
+  "version": "0.3.1",
   "workspaces": [
     "packages/*"
   ],
@@ -39,11 +39,6 @@
     ],
     "*.ts?(x)": [
       "prettier --parser=typescript --write"
-    ]
-  },
-  "commitlint": {
-    "extends": [
-      "@commitlint/config-conventional"
     ]
   },
   "publishConfig": {
@@ -87,7 +82,7 @@
     {
       "publisher": "cloud-ide-ext",
       "name": "sarif-viewer",
-      "version": "0.0.6"
+      "version": "0.0.9"
     },
     {
       "publisher": "alex",
@@ -113,6 +108,11 @@
       "publisher": "alex",
       "name": "typescript-language-features-worker",
       "version": "1.0.0-beta.2"
+    },
+    {
+      "publisher": "cloud-ide",
+      "name": "vscode-lsif",
+      "version": "0.1.2"
     }
   ]
 }

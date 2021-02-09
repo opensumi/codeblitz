@@ -18,10 +18,10 @@ import { ILogServiceManager } from './base';
 import { INodeLogger, NodeLogger } from './node-logger';
 import { FCServiceCenter, initFCService, ServerPort } from '../../connection';
 import { IServerApp } from '../../common';
-import { initializeRootFileSystem } from './util';
+import { initializeRootFileSystem, filesystemDeferred } from './filesystem';
 import { fse } from '../node';
-import { WORKSPACE_ROOT, STORAGE_NAME } from '../../common/constant';
-import { RootFS } from '../../common/types';
+import { WORKSPACE_ROOT, STORAGE_DIR } from '../../common/constant';
+import { RootFS, RuntimeConfig } from '../../common/types';
 import { isBackServicesInServer } from '../../common/util';
 
 export abstract class NodeModule extends BrowserModule {}
@@ -108,7 +108,7 @@ export class ServerApp implements IServerApp {
     this.appConfig = opts.appConfig;
     this.serverConfig = {
       marketplace: {
-        extensionDir: path.join(os.homedir(), STORAGE_NAME, StoragePaths.MARKETPLACE_DIR),
+        extensionDir: path.join(os.homedir(), STORAGE_DIR, StoragePaths.MARKETPLACE_DIR),
       },
       logDir: opts.logDir,
       logLevel: opts.logLevel,
@@ -183,7 +183,8 @@ export class ServerApp implements IServerApp {
   }
 
   private async launch() {
-    this.rootFS = await initializeRootFileSystem();
+    const runtimeConfig: RuntimeConfig = this.injector.get(RuntimeConfig);
+    this.rootFS = await initializeRootFileSystem(runtimeConfig.scenario);
     // 启动发生的错误抛到全局处理，不启动应用
     for (const contribution of this.launchContributionsProvider.getContributions()) {
       if (contribution.launch) {
@@ -195,6 +196,8 @@ export class ServerApp implements IServerApp {
       fse.ensureDir(this.appConfig.workspaceDir || WORKSPACE_ROOT),
       fse.ensureDir(this.serverConfig.marketplace.extensionDir),
     ]);
+    // 工作空间文件系统及目录是在 launch 阶段初始化的，此时表示文件系统全部初始完毕，可安全使用 fs 去操作文件
+    filesystemDeferred.resolve();
   }
 
   private async initializeContribution() {

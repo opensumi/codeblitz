@@ -57,7 +57,8 @@ export class CodeContribution extends Disposable implements LaunchContribution {
 
       const { codeFileSystem, idbFileSystem, overlayFileSystem } = await configureFileSystem(
         this.codeModel,
-        this.codeAPI
+        this.codeAPI,
+        this.runtimeConfig.scenario
       );
       rootFS.mount(workspaceDir, overlayFileSystem);
       // 将只读文件系统挂载到 /code 上

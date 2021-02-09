@@ -6,8 +6,10 @@ import { CodeStaticResourceContribution } from './static-resource.contribution';
 import { CodeModelService } from './code-model.service';
 import { ICodeAPIService } from './types';
 
+export { ICodeAPIService, CodeModelService };
+
 @Injectable()
-export class GitFileSchemeModule extends BrowserModule {
+export class CodeServiceModule extends BrowserModule {
   providers: Provider[] = [
     {
       token: ICodeAPIService,

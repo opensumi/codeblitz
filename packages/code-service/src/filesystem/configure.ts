@@ -11,7 +11,11 @@ const stripSlash = (p: string) => {
 
 type Callback<T = any> = (err: Error | null, rv?: T) => void;
 
-const configureFileSystem = async (model: CodeModelService, api: ICodeAPIService) => {
+const configureFileSystem = async (
+  model: CodeModelService,
+  api: ICodeAPIService,
+  scenario?: string | null
+) => {
   const requestByMethod = (name: 'getTreeEntry' | 'getTree' | 'getBlob' | 'getBlobSize') => (
     p: string,
     cb: Callback<any>
@@ -32,7 +36,9 @@ const configureFileSystem = async (model: CodeModelService, api: ICodeAPIService
       requestFile: requestByMethod('getBlob'),
       requestFileSize: requestByMethod('getBlobSize'),
     }),
-    createFileSystem(IndexedDB, { storeName: WORKSPACE_IDB_NAME }),
+    createFileSystem(IndexedDB, {
+      storeName: `${WORKSPACE_IDB_NAME}${scenario ? `/${scenario}` : ''}`,
+    }),
   ]);
   const folderSystem = await createFileSystem(FolderAdapter, {
     wrapped: idbFileSystem,

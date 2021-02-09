@@ -15,7 +15,7 @@ export const CODE_ROOT = '/code';
 export const IDB_ROOT = '/idb';
 
 // 全局数据存储目录
-export const STORAGE_NAME = '.cloudide';
+export const STORAGE_DIR = '.cloudide';
 
 export const HOME_IDB_NAME = 'ALEX_HOME';
 

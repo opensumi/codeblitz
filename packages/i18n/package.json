@@ -1,6 +1,6 @@
 {
   "name": "@alipay/alex-i18n",
-  "version": "0.3.0",
+  "version": "0.3.1",
   "description": "@alipay/alex-i18n",
   "main": "lib/index.js",
   "typings": "lib/index.d.ts",
@@ -19,7 +19,7 @@
     "lockfile": "enable"
   },
   "dependencies": {
-    "@alipay/alex-core": "0.3.0",
-    "@alipay/alex-shared": "0.3.0"
+    "@alipay/alex-core": "0.3.1",
+    "@alipay/alex-shared": "0.3.1"
   }
 }

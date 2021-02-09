@@ -13,6 +13,7 @@ import { ExtensionServiceClientImpl, IExtensionNodeClientService } from '@alipay
 import { IExtensionMetadata } from '@alipay/alex-shared';
 import { IFileServiceClient } from '@ali/ide-file-service';
 import { KaitianExtFsProvider } from '@alipay/alex-core';
+import { CodeModelService } from '@alipay/alex-code-service';
 
 import {
   StaticResourceContribution,
@@ -72,6 +73,12 @@ class ExtensionServiceClient extends ExtensionServiceClientImpl {
 
 @Domain(CommandContribution)
 export class AlexAppContribution implements CommandContribution {
+  @Autowired()
+  codeModel: CodeModelService;
+
+  private ticket: number = 0;
+  private tickets: number[] = [];
+
   registerCommands(commands: CommandRegistry): void {
     // 保持和 api-server 一致
     commands.registerCommand(
@@ -91,9 +98,54 @@ export class AlexAppContribution implements CommandContribution {
     );
 
     commands.registerCommand(
-      { id: 'alex.command.env.language' },
+      { id: 'alex.env.language' },
       {
         execute: () => getLanguageId(),
+      }
+    );
+
+    commands.registerCommand(
+      { id: 'alex.languages.setTextDocumentLanguage' },
+      {
+        execute: (uri: string, languageId: string) => {
+          const modelService = (monaco as any).services.StaticServices.modelService.get();
+          const modeService = (monaco as any).services.StaticServices.modeService.get();
+          const model = modelService.getModel(uri);
+          if (!model) {
+            return Promise.reject(new Error('Invalid uri'));
+          }
+          const languageIdentifier = modeService.getLanguageIdentifier(languageId);
+          if (!languageIdentifier || languageIdentifier.language !== languageId) {
+            return Promise.reject(new Error(`Unknown language id: ${languageId}`));
+          }
+          modelService.setMode(model, modeService.create(languageId));
+          return Promise.resolve(undefined);
+        },
+      }
+    );
+
+    commands.registerCommand(
+      { id: 'alex.codeServiceProject' },
+      {
+        execute: () => {
+          return {
+            platform: this.codeModel.platform,
+            project: this.codeModel.project,
+            projectId: this.codeModel.projectId,
+            commit: this.codeModel.commit,
+          };
+        },
+      }
+    );
+
+    commands.registerCommand(
+      { id: 'alex.subscribe' },
+      {
+        execute: () => {
+          this.ticket++;
+          this.tickets.push(this.ticket);
+          return this.ticket;
+        },
       }
     );
   }

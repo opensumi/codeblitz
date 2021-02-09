@@ -1,9 +1,13 @@
-const vscode = require('vscode');
+const { commands } = require('vscode');
 
 const log = (...msg) => console.log('>>>[worker-example]', ...msg);
 
 exports.activate = async (context) => {
-  console.log(context);
-  // log('context.extensionUri', context.extensionUri.toString());
-  // log('context.extensionPath', context.extensionPath);
+  const data = await commands.executeCommand('alex.codeServiceProject');
+  log('>>>codeServiceProject', data);
+
+  const ticket = await commands.executeCommand('alex.subscribe');
+  commands.registerCommand(`alex.subscribe:${ticket}`, (type, data) => {
+    log('>>>subscribe', type, data);
+  });
 };

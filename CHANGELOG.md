@@ -1,3 +1,12 @@
+## [0.3.1](https://code.alipay.com/cloud-ide/crew-dragon/compare/v0.3.0...v0.3.1) (2021-02-01)
+
+
+### Bug Fixes
+
+* 修复 enum 定义错误 ([c15b756](https://code.alipay.com/cloud-ide/crew-dragon/commits/c15b756f036e14b4d6809f08bdea1d1cbf23e994))
+
+
+
 # [0.3.0](https://code.alipay.com/cloud-ide/crew-dragon/compare/v0.2.9...v0.3.0) (2021-02-01)
 
 
