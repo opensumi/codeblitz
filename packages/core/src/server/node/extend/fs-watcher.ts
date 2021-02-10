@@ -134,7 +134,7 @@ fs.open = (p: string, flag: string, mode: any, cb?: any) => {
     // 文件不存在且为写模式，那么会自动创建文件
     const willCreated = err && mayCreatedFile(flag);
     const _cb = typeof mode === 'function' ? mode : cb;
-    checkCb(cb);
+    checkCb(_cb);
     const newCb = (err: any, fd: any) => {
       fd2Path[fd] = p;
       const res = _cb(err, fd);
@@ -212,7 +212,7 @@ fs.writeFile = (filename: any, data: any, arg3?: any, cb?: any) => {
     // 文件不存在且为写模式，那么会自动创建文件
     const willCreated = err && mayCreatedFile(flag);
     const _cb = typeof arg3 === 'function' ? arg3 : cb;
-    checkCb(cb);
+    checkCb(_cb);
     const newCb: any = (err: any, fd: any) => {
       const res = _cb(err, fd);
       if (!err) {
