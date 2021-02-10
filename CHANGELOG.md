@@ -1,3 +1,12 @@
+## [0.5.2](https://code.alipay.com/cloud-ide/crew-dragon/compare/v0.5.1...v0.5.2) (2021-02-10)
+
+
+### Bug Fixes
+
+* 修复 fs-watcher checkCb 报错 ([463270f](https://code.alipay.com/cloud-ide/crew-dragon/commits/463270f5584efaea35384ed47dc0ec0ff3cf5129))
+
+
+
 ## [0.5.1](https://code.alipay.com/cloud-ide/crew-dragon/compare/v0.5.0...v0.5.1) (2021-02-10)
 
 
