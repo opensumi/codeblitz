@@ -27,7 +27,7 @@ import * as os from 'os';
 import { IDiskFileProvider } from './base';
 import { FCService } from '../../connection';
 import { FWFileSystemWatcherServer } from './file-service-watcher';
-import { fse, writeFileAtomic } from '../node';
+import { fsExtra as fse, writeFileAtomic } from '../node';
 import { decode, encode } from './encoding';
 
 const debugLog = new DebugLog();

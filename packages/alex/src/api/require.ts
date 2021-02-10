@@ -100,7 +100,7 @@ export function requireModule(module: '@ali/common-di'): typeof CommonDI;
 export function requireModule(module: '@alipay/alex-core'): typeof AlexCore;
 
 export function requireModule(module: 'fs'): typeof AlexCore.fs;
-export function requireModule(module: 'fs-extra'): typeof AlexCore.fse;
+export function requireModule(module: 'fs-extra'): typeof AlexCore.fsExtra;
 export function requireModule(module: 'os'): typeof os;
 export function requireModule(module: 'crypto'): typeof crypto;
 export function requireModule(module: 'buffer'): typeof buffer;
@@ -199,7 +199,7 @@ export function requireModule(module: string): any {
     case 'fs':
       return AlexCore.fs;
     case 'fs-extra':
-      return AlexCore.fse;
+      return AlexCore.fsExtra;
     case 'os':
       return os;
     case 'crypto':

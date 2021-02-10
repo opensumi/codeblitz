@@ -19,7 +19,7 @@ import { INodeLogger, NodeLogger } from './node-logger';
 import { FCServiceCenter, initFCService, ServerPort } from '../../connection';
 import { IServerApp } from '../../common';
 import { initializeRootFileSystem, filesystemDeferred } from './filesystem';
-import { fse } from '../node';
+import { fsExtra as fse } from '../node';
 import { WORKSPACE_ROOT, STORAGE_DIR } from '../../common/constant';
 import { RootFS, RuntimeConfig } from '../../common/types';
 import { isBackServicesInServer } from '../../common/util';

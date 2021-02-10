@@ -5,12 +5,10 @@ import path from 'path';
 
 import { fs } from '../bfs';
 
-const fse = fsExtraFactory({
+export const fsExtra = fsExtraFactory({
   fs,
   path,
   process,
   assert,
   buffer,
 });
-
-export default fse;

@@ -10,7 +10,7 @@ import debounce from 'lodash.debounce';
 import * as path from 'path';
 import { fs } from '../bfs';
 
-export const enum ActionType {
+const enum ActionType {
   CREATED = 0,
   DELETED = 1,
   MODIFIED = 2,
@@ -275,7 +275,7 @@ function call(cb: Function, args: any[]) {
   }
 }
 
-export interface FW {
+interface FW {
   start: () => void;
   stop: () => void;
 }
@@ -286,7 +286,6 @@ interface FWFunction {
     eventCallback: (events: Array<ChangeEvent>) => void,
     options?: Partial<Options>
   ): Promise<FW>;
-  actions: Record<keyof typeof ActionType, number>;
 }
 
 export const watch: FWFunction = (
@@ -381,7 +380,7 @@ export const watch: FWFunction = (
   });
 };
 
-watch.actions = {
+export const actions = {
   CREATED: ActionType.CREATED,
   DELETED: ActionType.DELETED,
   MODIFIED: ActionType.MODIFIED,

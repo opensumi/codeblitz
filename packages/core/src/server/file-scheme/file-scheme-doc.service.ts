@@ -10,7 +10,7 @@ import { IFileService } from '../file-service/base';
 import md5 from 'md5';
 import { ISavingContent, IContentChange } from '@ali/ide-file-scheme/lib/common';
 import { IFileSchemeDocNodeService } from './base';
-import { fse } from '../node';
+import { fsExtra as fse } from '../node';
 import { encode, decode } from '../file-service/encoding';
 
 @Injectable()

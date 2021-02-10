@@ -3,7 +3,7 @@
  * 目前不考虑多线程的情况，因此只根据 filename 加锁即可
  */
 
-import fse from './fs-extra';
+import { fsExtra as fse } from './fs-extra';
 import * as path from 'path';
 
 const mutex = {
@@ -36,7 +36,11 @@ const mutex = {
   },
 };
 
-const writeFileAtomic = async (filename: string, data: any, options?: any) => {
+const writeFileAtomic = async (
+  filename: string,
+  data: any,
+  options?: Record<string, any> | string
+) => {
   const absoluteName = path.resolve(filename);
   await mutex.lock(absoluteName);
   try {

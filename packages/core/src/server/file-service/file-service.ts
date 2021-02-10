@@ -28,7 +28,7 @@ import * as path from 'path';
 import * as os from 'os';
 import { IDiskFileProvider, IFileService } from './base';
 import { FCService } from '../../connection';
-import { fse } from '../node';
+import { fsExtra as fse } from '../node';
 import { ServerConfig } from '../core/app';
 import { INodeLogger } from '../core/node-logger';
 

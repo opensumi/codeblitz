@@ -12,8 +12,8 @@ import {
 import debounce from 'lodash.debounce';
 import path from 'path';
 import { FileChangeCollection } from './file-change-collection';
-import { fse, watch } from '../node';
-import { ChangeEvent, FW } from '../node/extend/fs-watch';
+import { fsWatcher, fsExtra as fse } from '../node';
+// import { ChangeEvent, FW } from '../node/extend/fs-watch';
 
 export interface WatcherOptions {
   excludesPattern: ParsedPattern[];
@@ -126,18 +126,19 @@ export class FWFileSystemWatcherServer implements FileSystemWatcherServer {
       ...rawOptions,
     };
 
-    let watcher: FW | undefined = await watch(basePath, (events: ChangeEvent[]) => {
+    const { watch, actions } = fsWatcher;
+    let watcher = await watch(basePath, (events) => {
       for (const event of events) {
-        if (event.action === watch.actions.CREATED) {
+        if (event.action === actions.CREATED) {
           this.pushAdded(watcherId, this.resolvePath(event.directory, event.file!));
         }
-        if (event.action === watch.actions.DELETED) {
+        if (event.action === actions.DELETED) {
           this.pushDeleted(watcherId, this.resolvePath(event.directory, event.file!));
         }
-        if (event.action === watch.actions.MODIFIED) {
+        if (event.action === actions.MODIFIED) {
           this.pushUpdated(watcherId, this.resolvePath(event.directory, event.file!));
         }
-        if (event.action === watch.actions.RENAMED) {
+        if (event.action === actions.RENAMED) {
           if (event.newDirectory) {
             this.pushDeleted(watcherId, this.resolvePath(event.directory, event.oldFile!));
             this.pushAdded(watcherId, this.resolvePath(event.newDirectory, event.newFile!));
@@ -153,7 +154,6 @@ export class FWFileSystemWatcherServer implements FileSystemWatcherServer {
     if (toDisposeWatcher.disposed) {
       this.debug('Stopping watching:', basePath);
       watcher.stop();
-      watcher = undefined;
       this.options.info('Stopped watching:', basePath);
       return;
     }
@@ -163,7 +163,6 @@ export class FWFileSystemWatcherServer implements FileSystemWatcherServer {
         if (watcher) {
           this.debug('Stopping watching:', basePath);
           watcher.stop();
-          watcher = undefined;
           this.options.info('Stopped watching:', basePath);
         }
       })
