@@ -1,9 +1,9 @@
 {
-  "name": "@alipay/alex-shared",
+  "name": "@alipay/alex-code-api",
   "version": "0.5.2",
-  "description": "@alipay/alex-shared",
+  "description": "@alipay/alex-code-api",
   "main": "lib/index.js",
-  "typing": "lib/index.d.ts",
+  "typings": "lib/index.d.ts",
   "files": [
     "lib"
   ],
@@ -17,5 +17,9 @@
   "tnpm": {
     "mode": "yarn",
     "lockfile": "enable"
+  },
+  "dependencies": {
+    "@alipay/alex-core": "0.5.2",
+    "@alipay/alex-shared": "0.5.2"
   }
 }

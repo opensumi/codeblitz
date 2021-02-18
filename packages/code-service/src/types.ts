@@ -1,30 +1,58 @@
-import { API } from './request';
+import { CodeHostType } from '@alipay/alex-core';
+
+export type TreeEntry = CodeHostType.TreeEntry;
+
+export type EntryFileType = CodeHostType.EntryFileType;
+
+export type EntryInfo = CodeHostType.EntryInfo;
+
+export type EntryParam = CodeHostType.EntryParam;
 
 export const ICodeAPIService = Symbol('ICodeAPIService');
 
 export interface ICodeAPIService {
   /**
-   * 获取仓库信息
+   * 初始化
    */
-  getProjectInfo(): Promise<API.ResponseGetProjectById>;
+  initialize(): Promise<void>;
   /**
    * 根据分支获取最新的 commit
    */
-  getCommit(ref: string): Promise<API.ResponseGetCommit>;
+  getCommit(ref: string): Promise<string>;
   /**
-   * 获取文件节点
+   * 获取 tree
    */
-  getTreeEntry(path: string): Promise<API.ResponseGetTreeEntry>;
+  getTree(path: string): Promise<TreeEntry[]>;
   /**
-   * 获取文件树
+   * 获取 blob
    */
-  getTree(path: string): Promise<API.ResponseGetTree>;
+  getBlob(entry: EntryParam): Promise<Buffer>;
   /**
-   * 根据 commit 和 path 获取 blob
+   * 获取 entry 相关信息
    */
-  getBlob(path: string): Promise<Buffer>;
+  getEntryInfo?(entry: EntryParam): Promise<EntryInfo>;
   /**
-   * HEAD 获取 blob size
+   * 静态资源路径
    */
-  getBlobSize(path: string): Promise<number>;
+  transformStaticResource(path: string): string;
+}
+
+export type State =
+  | 'Uninitialized'
+  | 'Failed' // 初始化失败
+  | 'Initialized' // HEAD 初始化，此时可基于 commit 获取数据
+  | 'FullInitialized'; // 完全初始化，此时可获取所有关于 repository 的信息，包括 branches 和 tags
+
+/**
+ * 无需 Remote
+ */
+export const enum RefType {
+  Head,
+  Tag,
+}
+
+export interface Ref {
+  readonly type: RefType;
+  readonly name: string;
+  readonly commit: string;
 }

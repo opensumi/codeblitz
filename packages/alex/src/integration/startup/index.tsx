@@ -1,11 +1,12 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-import { IAppInstance, AppRenderer, requireModule } from '../..';
+import { IAppInstance, AppRenderer, requireModule, layoutConfig, SlotLocation } from '../..';
 import { CodeServiceModule } from '@alipay/alex-code-service';
+import { AntCodeModule, GitHubModule, GitLabModule } from '@alipay/alex-code-api';
 import * as os from 'os';
 import * as path from 'path';
 import * as Alex from '../..';
-import { isFilesystemReady, STORAGE_DIR } from '@alipay/alex-core';
+import { isFilesystemReady, STORAGE_DIR, CodeServiceConfig } from '@alipay/alex-core';
 import { StartupModule } from './startup.module';
 import './languages';
 import SarifViewer from '../../../extensions/cloud-ide-ext.sarif-viewer';
@@ -35,7 +36,47 @@ const query = location.search
     return obj;
   }, {});
 
-const project = query.project || 'ide-s/TypeScript-Node-Starter';
+const platformConfig = {
+  antcode: {
+    module: AntCodeModule,
+    platform: 'antcode',
+    owner: 'kaitian',
+    name: 'ide-framework',
+    origin: 'https://code.alipay.com',
+    endpoint: '/code-service',
+  },
+  github: {
+    module: GitHubModule,
+    platform: 'github',
+    owner: 'microsoft',
+    name: 'vscode',
+    origin: 'https://code.alipay.com',
+    endpoint: 'https://api.github.com',
+  },
+  gitlab: {
+    module: GitLabModule,
+    platform: 'gitlab',
+    owner: 'kaitian',
+    name: 'ide-framework',
+    origin: 'https://code.alipay.com',
+  },
+};
+
+const platform = (Object.keys(platformConfig).includes(query.platform)
+  ? query.platform
+  : 'antcode') as CodeServiceConfig['platform'];
+const { module: CodeAPIModule, ...config } = platformConfig[platform];
+if (query.project) {
+  const [owner, name] = decodeURIComponent(query.project).split('/');
+  Object.assign(config, { owner, name });
+}
+delete query.platform;
+delete query.project;
+Object.assign(config, query);
+
+if (platform === 'github') {
+  layoutConfig[SlotLocation.left].modules.push('github');
+}
 
 ReactDOM.render(
   <AppRenderer
@@ -43,36 +84,13 @@ ReactDOM.render(
       window.app = app;
     }}
     appConfig={{
-      modules: [CodeServiceModule, StartupModule],
+      modules: [CodeServiceModule, CodeAPIModule, StartupModule],
       extensionMetadata: [css, html, json, markdown, typescript],
-      workspaceDir: project,
+      workspaceDir: `${platform}/${config.owner}/${config.name}`,
+      layoutConfig,
     }}
     runtimeConfig={{
-      codeService: {
-        platform: 'antcode',
-        baseURL: '/code-service',
-        project,
-        branch: query.branch,
-        commit: query.commit,
-        transformStaticResource({ baseURL, project, commit, path }) {
-          return `${baseURL}/${project}/raw/${commit}/${path}`;
-        },
-      },
-      // workspace: {
-      //   filesystem: {
-      //     fs: 'FileIndexSystem',
-      //     options: {
-      //       requestFileIndex() {
-      //         return Promise.resolve({
-      //           'main.html': '<div id="root"></div>',
-      //           'main.css': 'body {}',
-      //           'main.js': 'console.log("main")',
-      //           'package.json': '{\n  "name": "Riddle"\n}',
-      //         })
-      //       }
-      //     }
-      //   }
-      // }
+      codeService: config as CodeServiceConfig,
     }}
   />,
   document.getElementById('main')

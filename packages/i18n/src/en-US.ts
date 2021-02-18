@@ -3,6 +3,8 @@ export const localizationBundle = {
   languageName: 'english',
   localizedLanguageName: 'English',
   contents: {
+    'common.save': 'Save',
+    'common.reset': 'Reset',
     'menu.help.welcome': 'Welcome',
     'workspace.initialize.failed': 'failed to initialize workspace dir',
     'common.close': 'Close',
@@ -17,5 +19,17 @@ export const localizationBundle = {
       'Login to antcode is expired, please refresh page if you are logged in',
     'api.login.goto': 'Go to login',
     'error.unknown': 'Unknown Error',
+    'github.invalid-token': 'Invalid token',
+    'github.request-rate-limit': 'API rate limit exceeded',
+    'github.resource-not-found': 'Resource not found',
+    'github.rate-limiting-info': 'Rate Limiting Info',
+    'github.rate-limit-limit': 'Limit (X-RateLimit-Limit)',
+    'github.rate-limit-remaining': 'Remaining (X-RateLimit-Remaining)',
+    'github.rate-limit-reset': 'Reset (X-RateLimit-Reset)',
+    'github.auth-title': 'Setting OAuth Token',
+    'github.auth-tip':
+      'Setting OAuth Token，Increase the limit to 5000 of GitHub requests per hour',
+    'github.auth-goto': 'Go to generate',
+    'github.auth-input': 'Input',
   },
 };

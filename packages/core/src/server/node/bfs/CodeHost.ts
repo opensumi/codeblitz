@@ -13,13 +13,11 @@ import Stats, { FileType } from 'browserfs/dist/node/core/node_fs_stats';
 import { NoSyncFile } from 'browserfs/dist/node/generic/preload_file';
 import {
   FileIndex,
-  isFileInode,
-  isDirInode,
   FileInode,
   DirInode,
+  isFileInode,
+  isDirInode,
 } from 'browserfs/dist/node/generic/file_index';
-import OverlayFS from 'browserfs/dist/node/backend/OverlayFS';
-import { dirname } from 'path';
 
 /**
  * Try to convert the given buffer into a string, and pass it to the callback.
@@ -35,32 +33,67 @@ function tryToString(buff: Buffer, encoding: string, cb: BFSCallback<string>) {
   }
 }
 
-/**
- * Configuration options for a CodeHost file system.
- */
-export interface CodeHostOptions {
-  requestStat: AsyncRequestMethod<FileEntry>;
-  requestDir: AsyncRequestMethod<FileEntry[]>;
-  requestFile: AsyncRequestMethod<Buffer>;
-  requestFileSize: AsyncRequestMethod<number>;
+export namespace CodeHostType {
+  export type EntryFileType = 'commit' | 'tree' | 'blob';
+
+  export interface TreeEntry extends Partial<EntryInfo> {
+    /**
+     * file mode
+     */
+    mode: string;
+    /**
+     * file type
+     */
+    type: EntryFileType;
+    /**
+     * object id
+     */
+    id: string;
+    /**
+     * file name
+     */
+    name: string;
+    /**
+     * full path
+     */
+    path: string;
+  }
+
+  /**
+   * antcode, aone 用额外的请求获取 size 和 file type
+   */
+  export interface EntryInfo {
+    /**
+     * file size
+     */
+    size: number;
+    /**
+     * file type
+     */
+    fileType: 'binary' | 'text' | 'image';
+  }
+
+  export type EntryParam = Pick<TreeEntry, 'id' | 'path'>;
 }
 
-interface FileEntry {
-  id: string;
-  name: string;
+interface FileNodeExtend<T> extends FileInode<T> {
+  _defer: Promise<void>;
   path: string;
-  type: 'commit' | 'tree' | 'blob';
-  mode: string;
+  id: string;
+  fileType?: string;
+}
+
+interface DirNodeExtend<T> extends DirInode<T> {
+  path?: string;
+  id: string;
 }
 
 type Callback<T> = (e: Error | null | undefined, rv?: T) => any;
 
-interface AsyncRequestMethod<T = any> {
-  (p: string, cb: Callback<T>): void;
-}
-
-function cloneStats(s: Stats): Stats {
-  return new Stats(s.mode & 0xf000, s.size, s.mode & 0xfff, s.atime, s.mtime, s.ctime);
+export interface CodeHostOptions {
+  readEntryInfo?(entry: CodeHostType.EntryParam, cb: Callback<CodeHostType.EntryInfo>): void;
+  readTree(path: string, cb: Callback<CodeHostType.TreeEntry[]>): void;
+  readBlob(entry: CodeHostType.EntryParam, cb: Callback<Buffer>): void;
 }
 
 /**
@@ -71,21 +104,18 @@ export class CodeHost extends BaseFileSystem implements FileSystem {
   public static readonly Name = 'CodeHost';
 
   public static readonly Options: FileSystemOptions = {
-    requestStat: {
+    readEntry: {
       type: 'function',
-      description: 'API for get file stat',
+      description: 'API for get entry into, like size, type etc.',
+      optional: true,
     },
-    requestDir: {
+    readTree: {
       type: 'function',
       description: 'API for get dir',
     },
-    requestFile: {
+    readBlob: {
       type: 'function',
-      description: 'API for get file content',
-    },
-    requestFileSize: {
-      type: 'function',
-      description: 'API for get file content size',
+      description: 'API for get file',
     },
   };
 
@@ -110,18 +140,16 @@ export class CodeHost extends BaseFileSystem implements FileSystem {
 
   public readonly prefixUrl: string;
   private _index: FileIndex<{}>;
-  private _requestStat: AsyncRequestMethod<FileEntry>;
-  private _requestDir: AsyncRequestMethod<FileEntry[]>;
-  private _requestFile: AsyncRequestMethod<Buffer>;
-  private _requestFileSize: AsyncRequestMethod<number>;
+  private _readEntryInfo: CodeHostOptions['readEntryInfo'];
+  private _readTree: CodeHostOptions['readTree'];
+  private _readBlob: CodeHostOptions['readBlob'];
 
   public constructor(opts: CodeHostOptions) {
     super();
     this._index = new FileIndex();
-    this._requestStat = opts.requestStat;
-    this._requestDir = opts.requestDir;
-    this._requestFile = opts.requestFile;
-    this._requestFileSize = opts.requestFileSize;
+    this._readEntryInfo = opts.readEntryInfo;
+    this._readTree = opts.readTree;
+    this._readBlob = opts.readBlob;
   }
 
   public empty(): void {
@@ -179,8 +207,9 @@ export class CodeHost extends BaseFileSystem implements FileSystem {
   /**
    * 加载文件节点，会递归加载所有未加载的父节点
    * @param path 文件路径
+   * @param shouldLoadDir 是否需要加载目录，readdir 时需要
    */
-  private _loadEntry(path: string, shouldLoadDir: boolean, cb: BFSOneArgCallback): void {
+  public loadEntry(path: string, shouldLoadDir: boolean, cb: BFSOneArgCallback): void {
     let inode = this._index.getInode(path);
     if (inode) {
       if (shouldLoadDir) {
@@ -188,38 +217,6 @@ export class CodeHost extends BaseFileSystem implements FileSystem {
       }
       return cb();
     }
-    const statBeforeLoad = () => {
-      // 一级目录是预先加载的，所以如果一级目录不存在，那么 git 中标明无此文件
-      // 可以防止 .kaitian/ 等文件请求导致 404
-      const i = path.indexOf('/', 1);
-      if (i === -1) {
-        return cb();
-      }
-      const rootDir = path.slice(0, i);
-      inode = this._index.getInode(rootDir);
-      if (!inode) {
-        return cb();
-      }
-      // 请求远程是否有这个文件，有则递归加载父目录
-      this._requestStat(path, (e, entry) => {
-        if (e || !entry) {
-          return cb();
-        }
-        if (entry.type === 'tree') {
-          this._loadIndex(path, cb);
-        } else if (entry.type === 'blob') {
-          const dirpath = dirname(path);
-          this._loadIndex(dirpath, cb);
-        } else {
-          // type=commit 只存在根目录，当做文件处理
-          cb();
-        }
-      });
-    };
-    // TODO: 递归加载索引节点前是否需要先判断
-    // 对于正常情况，无需判断，因为文件存在还是需递归加载
-    // 对于文件不存在的情况，在路径较深的情况下，需递归加载父节点，因此此时 stat 会比较慢
-    // 先不预先 stat，实际观察如果长路径不存在情况较多，再加上判断
     return this._loadIndex(path, cb);
   }
 
@@ -260,16 +257,24 @@ export class CodeHost extends BaseFileSystem implements FileSystem {
     if (inode.getListing().length) {
       return cb(null, true);
     }
-    this._requestDir(path, (e, entryList) => {
+    this._readTree((inode as DirNodeExtend<null>).path || '', (e, entryList) => {
       if (e) {
         cb(new ApiError(ErrorCode.EINVAL, e.message));
       }
       entryList?.forEach((item) => {
-        // TODO: submodule type 为 commit，当做文件夹处理，是否需要更好的提示方式，antcode 中为外链
-        const node =
-          item.type === 'blob'
-            ? new FileInode(new Stats(FileType.FILE, -1, +item.mode))
-            : new DirInode();
+        const size = typeof item.size === 'number' && item.size >= 0 ? item.size : -1;
+        let node: FileNodeExtend<Stats> | DirNodeExtend<null>;
+        if (item.type === 'blob') {
+          node = new FileInode(new Stats(FileType.FILE, size, +item.mode)) as FileNodeExtend<Stats>;
+          node.path = item.path;
+          node.id = item.id;
+          node.fileType = item.fileType;
+        } else {
+          // TODO: submodule type 为 commit，当做文件夹处理，是否需要更好的展示方式
+          node = new DirInode() as DirNodeExtend<null>;
+          node.path = item.path;
+          node.id = item.id;
+        }
         let p = item.path;
         if (p[0] !== '/') {
           p = `/${p}`;
@@ -280,6 +285,29 @@ export class CodeHost extends BaseFileSystem implements FileSystem {
     });
   }
 
+  public async getFileType(path: string): Promise<string | undefined> {
+    if (!this._readEntryInfo) return;
+    const inode = this._index.getInode(path);
+    if (inode === null || isDirInode<null>(inode)) return;
+    const fileNode = inode as FileNodeExtend<Stats>;
+    if (!fileNode._defer) {
+      fileNode._defer = new Promise((resolve) => {
+        this._readEntryInfo!(
+          { id: fileNode.id, path: fileNode.path },
+          function (e: Error, data: CodeHostType.EntryInfo) {
+            if (!e) {
+              fileNode.fileType = data.fileType;
+              fileNode.getData().size = data.size;
+            }
+            resolve();
+          }
+        );
+      });
+    }
+    await fileNode._defer;
+    return fileNode.fileType;
+  }
+
   public stat(path: string, isLstat: boolean, cb: BFSCallback<Stats>): void {
     const inode = this._index.getInode(path);
     if (inode === null) {
@@ -288,20 +316,7 @@ export class CodeHost extends BaseFileSystem implements FileSystem {
     let stats: Stats;
     if (isFileInode<Stats>(inode)) {
       stats = inode.getData();
-      // At this point, a non-opened file will still have default stats from the listing.
-      if (stats.size < 0) {
-        // TODO: stat 时 size 重要吗，是否需要 HEAD Content-Length，必须的话再去掉注释
-        cb(null, cloneStats(stats));
-        // this._requestFileSize(path, function(e: Error, size?: number) {
-        //   if (e) {
-        //     return cb(new ApiError(ErrorCode.EINVAL, e.message));
-        //   }
-        //   stats.size = size!;
-        //   cb(null, cloneStats(stats));
-        // });
-      } else {
-        cb(null, cloneStats(stats));
-      }
+      cb(null, stats.clone());
     } else if (isDirInode(inode)) {
       stats = inode.getStats();
       cb(null, stats);
@@ -331,18 +346,22 @@ export class CodeHost extends BaseFileSystem implements FileSystem {
           // Use existing file contents.
           // XXX: Uh, this maintains the previously-used flag.
           if (stats.fileData) {
-            return cb(null, new NoSyncFile(self, path, flags, cloneStats(stats), stats.fileData));
+            return cb(null, new NoSyncFile(self, path, flags, stats.clone(), stats.fileData));
           }
           // @todo be lazier about actually requesting the file
-          this._requestFile(path, function (err: ApiError, buffer?: Buffer) {
-            if (err) {
-              return cb(err);
+          const fileNode = inode as FileNodeExtend<Stats>;
+          this._readBlob(
+            { id: fileNode.id, path: fileNode.path },
+            function (err: ApiError, buffer?: Buffer) {
+              if (err) {
+                return cb(err);
+              }
+              // we may don't initially have file sizes
+              stats.size = buffer!.length;
+              stats.fileData = buffer!;
+              return cb(null, new NoSyncFile(self, path, flags, stats.clone(), buffer));
             }
-            // we don't initially have file sizes
-            stats.size = buffer!.length;
-            stats.fileData = buffer!;
-            return cb(null, new NoSyncFile(self, path, flags, cloneStats(stats), buffer));
-          });
+          );
           break;
         default:
           return cb(new ApiError(ErrorCode.EINVAL, 'Invalid FileMode object.'));
@@ -404,35 +423,10 @@ export class CodeHost extends BaseFileSystem implements FileSystem {
 
 ['stat', 'open', 'readdir'].forEach((name: string) => {
   const _rawFn = CodeHost.prototype[name];
-  CodeHost.prototype[name] = function (this: any, path: string, ...args: any) {
+  CodeHost.prototype[name] = function (this: CodeHost, path: string, ...args: any) {
     const shouldLoadDir = name === 'readdir';
-    this._loadEntry(path, shouldLoadDir, () => {
+    this.loadEntry(path, shouldLoadDir, () => {
       _rawFn.call(this, path, ...args);
     });
   };
 });
-
-// /**
-//  * 使用 CodeHost 作为读，IndexDB 作为写的 overlay system
-//  */
-// export class CodeHostOverlay extends CodeHost implements FileSystem {
-//   public static readonly Name = 'CodeHost';
-
-//   public static Create(opts: CodeHostOptions, cb: BFSCallback<CodeHost>): void {
-//     CodeHost.Create(opts, (err, fs) => {
-//       if (err) {
-//         cb(err)
-//       } else {
-
-//       }
-//     })
-//     const fs = new CodeHost(opts);
-//     fs._loadDir('/', (e) => {
-//       if (e) {
-//         cb(e);
-//       } else {
-//         cb(null, fs);
-//       }
-//     });
-//   }
-// }
