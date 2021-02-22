@@ -58,7 +58,7 @@ const platformConfig = {
     platform: 'gitlab',
     owner: 'kaitian',
     name: 'ide-framework',
-    origin: 'https://code.alipay.com',
+    origin: 'http://gitlab.alibaba-inc.com',
   },
 };
 
@@ -74,8 +74,8 @@ delete query.platform;
 delete query.project;
 Object.assign(config, query);
 
-if (platform === 'github') {
-  layoutConfig[SlotLocation.left].modules.push('github');
+if (platform === 'github' || platform === 'gitlab') {
+  layoutConfig[SlotLocation.left].modules.push(platform);
 }
 
 ReactDOM.render(

@@ -1,10 +1,10 @@
 import { Injectable, Autowired } from '@ali/common-di';
-import { localize, IReporterService, formatLocalize } from '@ali/ide-core-common';
+import { localize, IReporterService } from '@ali/ide-core-common';
 import { REPORT_NAME } from '@alipay/alex-core';
-import { CodeModelService, ICodeAPIService, EntryParam } from '@alipay/alex-code-service';
+import { CodeModelService, ICodeAPIService } from '@alipay/alex-code-service';
+import type { EntryParam, RefsParam } from '@alipay/alex-code-service';
 import { IMessageService } from '@ali/ide-overlay';
-import { request, RequestOptions } from '@alipay/alex-shared';
-import { createUrl } from '../common/utils';
+import { request, RequestOptions, isResponseError } from '@alipay/alex-shared';
 import { API } from './types';
 
 @Injectable()
@@ -28,37 +28,39 @@ export class AntCodeService implements ICodeAPIService {
   }
 
   private async request<T>(path: string, options?: RequestOptions): Promise<T> {
-    const url = createUrl(this.codeModel.endpoint, path);
-
     try {
-      const data = await request(url, {
+      const data = await request(path, {
+        baseURL: this.codeModel.endpoint,
         credentials: 'include',
         responseType: 'json',
         ...options,
       });
       return data;
-    } catch (err: any) {
-      const status = err.response?.status;
-      this.reporter.point(REPORT_NAME.CODE_SERVICE_REQUEST_ERROR, err.message, {
-        url,
-        status,
-        platform: this.codeModel.platform,
-      });
-      if (status === 401) {
-        const goto = localize('api.login.goto');
-        this.messageService
-          .error(localize('api.response.no-login-antcode'), [goto])
-          .then((value) => {
-            if (value === goto) {
-              window.open(this.codeModel.origin);
-            }
-          });
-      } else if (status === 403) {
-        this.messageService.error(localize('api.response.project-no-access'));
-      } else if (status === 404) {
-        this.messageService.error(
-          formatLocalize('api.response.project-not-found', this.codeModel.project)
-        );
+    } catch (err: unknown) {
+      if (isResponseError(err)) {
+        const { status } = err.response;
+        this.reporter.point(REPORT_NAME.CODE_SERVICE_REQUEST_ERROR, err.message, {
+          path,
+          status,
+          platform: this.codeModel.platform,
+        });
+        if (status === 401) {
+          const goto = localize('api.login.goto');
+          this.messageService
+            .error(localize('api.response.no-login-antcode'), [goto])
+            .then((value) => {
+              if (value === goto) {
+                window.open(this.codeModel.origin);
+              }
+            });
+        } else if (status === 403) {
+          this.messageService.error(localize('api.response.project-no-access'));
+        } else if (status === 404) {
+          // TODO 更精细化的错误提示
+          this.messageService.error(localize('error.resource-not-found'));
+        } else {
+          this.messageService.error(`${status} - ${localize('error.request')}`);
+        }
       } else {
         this.messageService.error(localize('api.response.unknown-error'));
       }
@@ -75,7 +77,7 @@ export class AntCodeService implements ICodeAPIService {
   }
 
   async getTree(path: string) {
-    await this.codeModel.isInitialized;
+    await this.codeModel.headInitialized;
     return this.request<API.ResponseGetTree>(
       `/api/v3/projects/${this.codeModel.projectId}/repository/tree`,
       {
@@ -88,7 +90,7 @@ export class AntCodeService implements ICodeAPIService {
   }
 
   async getBlob(entry: EntryParam) {
-    await this.codeModel.isInitialized;
+    await this.codeModel.headInitialized;
     const buf = await this.request<ArrayBuffer>(
       `/api/v3/projects/${this.codeModel.projectId}/repository/blobs/${this.codeModel.HEAD}`,
       {
@@ -102,7 +104,7 @@ export class AntCodeService implements ICodeAPIService {
   }
 
   async getEntryInfo(entry: EntryParam) {
-    await this.codeModel.isInitialized;
+    await this.codeModel.headInitialized;
     const data = await this.request<API.ResponseGetEntry>(
       `/api/v3/projects/${this.codeModel.projectId}/repository/tree_entry`,
       {
@@ -116,5 +118,20 @@ export class AntCodeService implements ICodeAPIService {
       size: data.size,
       fileType: data.render === 'download' ? 'binary' : data.render,
     } as const;
+  }
+
+  async getRefs(): Promise<RefsParam> {
+    const [branches, tags] = await Promise.all([
+      this.request<API.ResponseGetRefs>(
+        `/api/v3/projects/${this.codeModel.projectId}/repository/branches`
+      ),
+      this.request<API.ResponseGetRefs>(
+        `/api/v3/projects/${this.codeModel.projectId}/repository/tags`
+      ),
+    ]);
+    return {
+      branches,
+      tags,
+    };
   }
 }

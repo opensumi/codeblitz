@@ -259,7 +259,7 @@ export class CodeHost extends BaseFileSystem implements FileSystem {
     }
     this._readTree((inode as DirNodeExtend<null>).path || '', (e, entryList) => {
       if (e) {
-        cb(new ApiError(ErrorCode.EINVAL, e.message));
+        return cb(new ApiError(ErrorCode.EINVAL, e.message));
       }
       entryList?.forEach((item) => {
         const size = typeof item.size === 'number' && item.size >= 0 ? item.size : -1;

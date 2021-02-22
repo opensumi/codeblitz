@@ -10,6 +10,18 @@ export type EntryParam = CodeHostType.EntryParam;
 
 export const ICodeAPIService = Symbol('ICodeAPIService');
 
+export interface BranchOrTag {
+  name: string;
+  commit: {
+    id: string;
+  };
+}
+
+export interface RefsParam {
+  branches: BranchOrTag[];
+  tags: BranchOrTag[];
+}
+
 export interface ICodeAPIService {
   /**
    * 初始化
@@ -32,6 +44,10 @@ export interface ICodeAPIService {
    */
   getEntryInfo?(entry: EntryParam): Promise<EntryInfo>;
   /**
+   * 获取所有分支和标签
+   */
+  getRefs(): Promise<{ branches: BranchOrTag[]; tags: BranchOrTag[] }>;
+  /**
    * 静态资源路径
    */
   transformStaticResource(path: string): string;
@@ -40,8 +56,7 @@ export interface ICodeAPIService {
 export type State =
   | 'Uninitialized'
   | 'Failed' // 初始化失败
-  | 'Initialized' // HEAD 初始化，此时可基于 commit 获取数据
-  | 'FullInitialized'; // 完全初始化，此时可获取所有关于 repository 的信息，包括 branches 和 tags
+  | 'Initialized'; // HEAD 初始化，此时可基于 commit 获取数据
 
 /**
  * 无需 Remote
@@ -55,4 +70,9 @@ export interface Ref {
   readonly type: RefType;
   readonly name: string;
   readonly commit: string;
+}
+
+export interface Refs {
+  readonly branches: Ref[];
+  readonly tags: Ref[];
 }

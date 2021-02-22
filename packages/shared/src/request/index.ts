@@ -1,11 +1,19 @@
 export type ResponseType = 'json' | 'text' | 'blob' | 'arrayBuffer' | 'formData';
 
+export const stripLeadingSlash = (path: string) => (path.charAt(0) === '/' ? path.substr(1) : path);
+
+export const stripTrailingSlash = (path: string) =>
+  path.charAt(path.length - 1) === '/' ? path.slice(0, -1) : path;
+
+export const createUrl = (origin: string, path: string) =>
+  `${stripTrailingSlash(origin)}/${stripLeadingSlash(path)}`;
+
 export interface RequestOptions extends RequestInit {
-  data?: any;
-  params?: Record<string, any> | URLSearchParams;
   baseURL?: string;
-  headers?: Record<string, string>;
+  params?: Record<string, any>;
+  data?: any;
   responseType?: ResponseType;
+  validateStatus?: (status: number) => boolean;
 }
 
 export interface Request {
@@ -19,60 +27,77 @@ export interface Request {
   options: Request;
 }
 
-export class RequestError extends Error {
-  constructor(name: string, message: string, public response: Response) {
+export class ResponseError extends Error {
+  constructor(
+    message: string,
+    public name: string,
+    public request: RequestOptions & { url: string },
+    public response: Response
+  ) {
     super(message);
-    this.name = name;
   }
 }
 
-const toString = Object.prototype.toString;
+export const isResponseError = (err: any): err is ResponseError => err instanceof ResponseError;
 
-const requestImpl: any = async (url: string, options: RequestOptions) => {
-  const { data, params, responseType, baseURL, ...requestInit } = options;
+const defaultValidateStatus = (status: number) => status >= 200 && status < 300;
 
-  requestInit.method = options.method ? options.method.toUpperCase() : 'GET';
-  requestInit.credentials = requestInit.credentials || 'same-origin';
+const requestImpl: any = async (url: string, options?: RequestOptions) => {
+  options = options || {};
+  const { data, params, responseType, baseURL, ...opts } = options;
 
-  const headers = requestInit.headers || {};
+  opts.method = options.method ? options.method.toUpperCase() : 'GET';
+  opts.credentials = opts.credentials || 'same-origin';
 
   if (baseURL) {
-    url = `${baseURL}${url}`;
+    url = createUrl(baseURL, url);
   }
+
+  const urlInstance = new URL(url, location.origin);
 
   if (params) {
-    const queryString = serialize(params);
-    if (queryString) {
-      url += (url.indexOf('?') === -1 ? '?' : '&') + queryString;
-    }
-  }
-
-  if (['post', 'put', 'patch', 'delete'].indexOf(requestInit.method.toLowerCase()) > -1 && data) {
-    if (toString.call(data) === '[object Object]') {
-      requestInit.body = JSON.stringify(data);
-      headers['Content-Type'] = 'application/json;charset=utf-8';
-    } else if (typeof data === 'string') {
-      requestInit.body = data;
-      headers['Content-Type'] = 'application/x-www-form-urlencoded;charset=utf-8';
-    }
-    requestInit.headers = headers;
-  }
-
-  const response = await fetch(url, requestInit);
-
-  if (response.status >= 200 && response.status < 300) {
-    try {
-      if (responseType) {
-        return response[responseType]();
-      } else {
-        return response as any;
+    Object.keys(params).forEach((key) => {
+      let value = params[key];
+      if (!Array.isArray(value)) {
+        value = [value];
       }
-    } catch (err) {
-      throw new RequestError('ParseError', String(err?.message || ''), response);
-    }
+      value.forEach((v) => {
+        urlInstance.searchParams.append(key, v);
+      });
+    });
   }
 
-  throw new RequestError('ResponseError', 'http error', response);
+  if (data && ['post', 'put', 'patch', 'delete'].indexOf(opts.method.toLowerCase()) > -1) {
+    const headers = new Headers(options.headers);
+
+    if (Object.prototype.toString.call(data) === '[object Object]') {
+      opts.body = JSON.stringify(data);
+      if (!headers.has('Content-Type')) {
+        headers.set('Content-Type', 'application/json;charset=utf-8');
+      }
+    } else if (typeof data === 'string') {
+      opts.body = data;
+      if (!headers.has('Content-Type')) {
+        headers.set('Content-Type', 'application/x-www-form-urlencoded;charset=utf-8');
+      }
+    }
+    opts.headers = headers;
+  }
+
+  const response = await fetch(urlInstance.toString(), opts);
+
+  const validateStatus = options.validateStatus || defaultValidateStatus;
+
+  if (!validateStatus(response.status)) {
+    throw new ResponseError(
+      response.statusText || 'Request Error',
+      'ResponseError',
+      { url: urlInstance.toString(), ...opts },
+      response
+    );
+  }
+
+  return responseType ? response[responseType]() : response;
 };
 
 const METHODS = ['get', 'post', 'delete', 'put', 'patch', 'head', 'options'];
@@ -82,28 +107,3 @@ METHODS.forEach((method) => {
 });
 
 export const request: Request = requestImpl;
-
-function serialize(obj: any) {
-  if (!obj || typeof obj !== 'object') return '';
-  const pairs: string[] = [];
-  Object.keys(obj).forEach(function (key) {
-    let val = obj[key];
-    if (val === null || typeof val === 'undefined') {
-      return;
-    }
-
-    if (toString.call(val) !== '[object Array]') {
-      val = [val];
-    }
-
-    val.forEach(function (v) {
-      if (toString.call(v) === '[object Date]') {
-        v = v.toISOString();
-      } else if (typeof v === 'object') {
-        v = JSON.stringify(v);
-      }
-      pairs.push(decodeURIComponent(key) + '=' + decodeURIComponent(v));
-    });
-  });
-  return pairs.join('&');
-}

@@ -1,7 +1,22 @@
-export const stripLeadingSlash = (path: string) => (path.charAt(0) === '/' ? path.substr(1) : path);
+export class RetryError extends Error {}
 
-export const stripTrailingSlash = (path: string) =>
-  path.charAt(path.length - 1) === '/' ? path.slice(0, -1) : path;
+export const retry = (target: any, key: string, descriptor: any) => {
+  const fn = descriptor.value;
+  descriptor.value = async function (...args: any[]) {
+    try {
+      return await fn.call(this, ...args);
+    } catch (err) {
+      if (err instanceof RetryError) {
+        return fn.call(this, ...args);
+      }
+      throw err;
+    }
+  };
+};
 
-export const createUrl = (origin: string, path: string) =>
-  `${stripTrailingSlash(origin)}/${stripLeadingSlash(path)}`;
+/**
+ * 解析代码托管平台 url，获取相关数据信息
+ */
+export const parseCodeHostURL = (href: string) => {
+  if (!href) return null;
+};

@@ -68,9 +68,10 @@ export class WelcomeContribution implements BrowserEditorContribution {
     const { defaultOpenFile } = this.runtimeConfig;
     if (defaultOpenFile) {
       const openFile = Array.isArray(defaultOpenFile) ? defaultOpenFile : [defaultOpenFile];
-      openFile.forEach((file) => {
+      openFile.forEach((file, i) => {
         this.editorService.open(URI.file(path.join(this.appConfig.workspaceDir, file)), {
           preview: false,
+          backend: i < openFile.length - 1,
         });
       });
     } else if (!this.editorService.getAllOpenedUris().length) {

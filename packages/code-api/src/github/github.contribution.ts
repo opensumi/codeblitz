@@ -1,11 +1,32 @@
-import { Injectable } from '@ali/common-di';
-import { ComponentContribution, ComponentRegistry, getIcon } from '@ali/ide-core-browser';
-import { Domain } from '@ali/ide-core-common';
-import { CODE_SERVICE_CONTAINER_ID } from '../common/constant';
+import { Autowired } from '@ali/common-di';
+import {
+  ComponentContribution,
+  ComponentRegistry,
+  getIcon,
+  CommandRegistry,
+  SlotLocation,
+  ClientAppContribution,
+} from '@ali/ide-core-browser';
+import { CommandContribution, Domain } from '@ali/ide-core-common';
+import { ICodeAPIService } from '@alipay/alex-code-service';
+import { IMainLayoutService } from '@ali/ide-main-layout';
+import { GITHUB_CONTAINER_ID } from '../common/constant';
 import { GitHubView } from './github.view';
+import { GitHubService } from './github.service';
+import { HelperService } from '../common/service';
 
-@Domain(ComponentContribution)
-export class GithubContribution implements ComponentContribution {
+@Domain(ComponentContribution, CommandContribution, ClientAppContribution)
+export class GithubContribution
+  implements ComponentContribution, CommandContribution, ClientAppContribution {
+  @Autowired(ICodeAPIService)
+  codeAPI: GitHubService;
+
+  @Autowired()
+  helper: HelperService;
+
+  @Autowired(IMainLayoutService)
+  layoutService: IMainLayoutService;
+
   registerComponent(registry: ComponentRegistry) {
     registry.register(
       'github',
@@ -15,10 +36,30 @@ export class GithubContribution implements ComponentContribution {
         name: 'GitHub',
       },
       {
-        containerId: CODE_SERVICE_CONTAINER_ID,
+        containerId: GITHUB_CONTAINER_ID,
         iconClass: getIcon('github-fill'),
         title: 'GitHub',
       }
     );
+  }
+
+  registerCommands(registry: CommandRegistry) {
+    registry.afterExecuteCommand(`workbench.view.${GITHUB_CONTAINER_ID}`, () => {
+      this.codeAPI.getRateLimit();
+    });
+  }
+
+  onDidStart() {
+    if (this.codeAPI.shouldShowView) {
+      this.helper.revealView(GITHUB_CONTAINER_ID);
+    }
+
+    this.layoutService
+      .getTabbarService(SlotLocation.left)
+      .onCurrentChange(({ currentId, previousId }) => {
+        if (previousId !== currentId && currentId === GITHUB_CONTAINER_ID) {
+          this.codeAPI.refresh();
+        }
+      });
   }
 }

@@ -1,54 +1,65 @@
 import { Injectable, Autowired } from '@ali/common-di';
-import { Emitter, Event, memoize, getDebugLogger } from '@ali/ide-core-common';
+import { Emitter, Deferred, getDebugLogger } from '@ali/ide-core-common';
 import { CodeServiceConfig } from '@alipay/alex-core';
-import { ICodeAPIService, Ref, State, RefType } from './types';
+import { ICodeAPIService, Refs, State, RefType } from './types';
+
+class StateDeferred<T = void> extends Deferred<T> {
+  private _isResolved = false;
+  private _isRejected = false;
+
+  get isResolved() {
+    return this._isResolved;
+  }
+
+  get isRejected() {
+    return this._isRejected;
+  }
+
+  constructor() {
+    super();
+    this.promise.then(
+      () => {
+        this._isResolved = true;
+      },
+      () => {
+        this._isRejected = true;
+      }
+    );
+  }
+}
 
 @Injectable()
 export class CodeModelService {
   @Autowired(ICodeAPIService)
-  codeAPI: ICodeAPIService;
+  readonly codeAPI: ICodeAPIService;
+
+  private readonly logger = getDebugLogger('code-service');
 
   private _config: CodeServiceConfig;
 
-  private _state: State = 'Uninitialized';
-  get state(): State {
-    return this._state;
+  initState = new StateDeferred();
+
+  headState = new StateDeferred();
+
+  refsState = new StateDeferred();
+
+  get initialized(): Promise<void> {
+    return this.initState.promise;
   }
 
-  private _onDidChangeState = new Emitter<State>();
-  readonly onDidChangeState = this._onDidChangeState.event;
+  get headInitialized(): Promise<void> {
+    return this.headState.promise;
+  }
 
-  private _onDidChangeHEAD = new Emitter<string>();
+  get refsInitialized(): Promise<void> {
+    return this.refsState.promise;
+  }
+
+  private _onDidChangeHEAD = new Emitter<void>();
   readonly onDidChangeHEAD = this._onDidChangeHEAD.event;
 
-  setState(state: State): void {
-    this._state = state;
-    this._onDidChangeState.fire(state);
-  }
-
-  @memoize
-  get isInitialized(): Promise<State> {
-    if (this._state === 'Initialized') {
-      return Promise.resolve(this._state);
-    }
-    return Event.toPromise(Event.filter(this.onDidChangeState, (s) => s === 'Initialized'));
-  }
-
-  @memoize
-  get isFailed(): Promise<State> {
-    if (this._state === 'Failed') {
-      return Promise.resolve(this._state);
-    }
-    return Event.toPromise(Event.filter(this.onDidChangeState, (s) => s === 'Failed'));
-  }
-
-  @memoize
-  get isFullInitialized(): Promise<State> {
-    if (this._state === 'FullInitialized') {
-      return Promise.resolve(this._state);
-    }
-    return Event.toPromise(Event.filter(this.onDidChangeState, (s) => s === 'FullInitialized'));
-  }
+  private _onDidChangeRefs = new Emitter<void>();
+  readonly onDidChangeRefs = this._onDidChangeRefs.event;
 
   /**
    * 平台，antcode | gitlab | github
@@ -77,7 +88,7 @@ export class CodeModelService {
   /**
    * refs 列表
    */
-  private _refs: Ref[];
+  private _refs: Refs = { branches: [], tags: [] };
 
   get platform() {
     return this._platform;
@@ -111,65 +122,165 @@ export class CodeModelService {
     return this._refs;
   }
 
+  set refs(refs: Refs) {
+    this._refs = refs;
+    this._onDidChangeRefs.fire();
+  }
+
   get HEAD() {
     return this._HEAD;
   }
 
   set HEAD(commit: string) {
-    this._HEAD = commit;
-    this._onDidChangeHEAD.fire(this._HEAD);
+    if (commit !== this._HEAD) {
+      this._HEAD = commit;
+      this._onDidChangeHEAD.fire();
+    }
   }
 
-  get headLabel() {
+  get headLabel(): string {
     const HEAD = this.HEAD;
     if (!HEAD) {
       return '';
     }
-    let tagName = '';
-    let branchName = '';
-    this.refs.forEach((iref) => {
-      if (iref.commit !== HEAD) return;
-      if (iref.type === RefType.Tag) {
-        tagName = iref.name;
-      } else {
-        branchName = iref.name;
-      }
-    });
-    return tagName || branchName || HEAD.substr(0, 8);
+    return (
+      this.refs.tags.find((tag) => tag.commit === this.HEAD)?.name ||
+      this.refs.branches.find((br) => br.commit === this.HEAD)?.name ||
+      HEAD.substr(0, 8)
+    );
   }
 
-  initialize(config: CodeServiceConfig) {
+  private _refWithPath: string[] = [];
+  // 初始需要展示的文件夹或文件
+  revealEntry = {
+    type: '', // tree | blob
+    filepath: '',
+  };
+
+  async initialize(config: CodeServiceConfig) {
     this._config = config;
-    this.initializeHEAD()
-      .then(() => this.initializeRepository())
-      .catch((err) => getDebugLogger().error(err));
-  }
-
-  private async initializeHEAD() {
-    const { _config: config } = this;
     this._platform = config.platform;
     this._origin = config.origin;
     this._endpoint = config.endpoint || config.origin;
-    this._owner = config.owner;
-    this._name = config.name;
+
+    if ('path' in config) {
+      const { path } = config;
+      const [owner, name, ...refWithPath] = path.split('/').filter(Boolean);
+      this._owner = owner;
+      this._name = name;
+      this._refWithPath = refWithPath;
+    } else {
+      this._owner = config.owner;
+      this._name = config.name;
+    }
 
     try {
       await this.codeAPI.initialize();
-
-      let commitSHA = config.commit;
-      if (!commitSHA) {
-        const ref = config.ref || config.branch || config.tag || 'HEAD';
-        commitSHA = await this.codeAPI.getCommit(ref);
-      }
-      this._HEAD = commitSHA;
-      this.setState('Initialized');
+      await this.reset();
     } catch (err) {
-      this.setState('Failed');
+      this.logger.error(err);
+    } finally {
+      this.initState.resolve();
     }
   }
 
-  //TODO: 获取其它数据信息
-  private async initializeRepository() {
-    this.setState('FullInitialized');
+  /**
+   * 无权限时需要再设置 token 后重新初始化
+   */
+  async reset() {
+    if (!this.headState.isResolved) {
+      await this.initHEAD();
+    }
+    if (!this.refsState.isResolved) {
+      this.initRefs();
+    }
+  }
+
+  private async initHEAD() {
+    const HEAD = 'HEAD';
+    try {
+      const { _config: config, _refWithPath } = this;
+      let head = '';
+      if ('path' in config) {
+        // 暂时只支持 tree 和 blob，其它如 commit 后续看情况支持
+        let maybeCommit = false;
+        if (!['tree', 'blob'].includes(_refWithPath[0])) {
+          head = HEAD;
+        } else {
+          head = _refWithPath[1];
+          if (head !== HEAD) {
+            const p = _refWithPath.slice(2).join('/');
+            await this.refsInitialized;
+            const matchedRef =
+              findRef(
+                this.refs.branches.map((item) => item.name),
+                p
+              ) ||
+              findRef(
+                this.refs.tags.map((item) => item.name),
+                p
+              );
+            console.log('matchedRef', matchedRef);
+            if (matchedRef) {
+              head = matchedRef;
+            }
+            maybeCommit = !matchedRef;
+          }
+        }
+        if (!maybeCommit) {
+          head = await this.codeAPI.getCommit(head);
+        }
+        this.revealEntry = {
+          type: _refWithPath[0],
+          filepath: _refWithPath.slice(1).join('/').slice(head.length),
+        };
+      } else {
+        if (config.commit) {
+          head = config.commit;
+        } else {
+          head = await this.codeAPI.getCommit(config.ref || config.branch || config.tag || HEAD);
+        }
+      }
+      this.HEAD = head;
+      this.headState.resolve();
+    } catch (err) {
+      this.headState.reject();
+      throw err;
+    }
+  }
+
+  async initRefs() {
+    try {
+      const { branches, tags } = await this.codeAPI.getRefs();
+      this.refs = {
+        branches: branches.map((item) => ({
+          type: RefType.Head,
+          name: item.name,
+          commit: item.commit.id,
+        })),
+        tags: tags.map((item) => ({
+          type: RefType.Tag,
+          name: item.name,
+          commit: item.commit.id,
+        })),
+      };
+      this.refsState.resolve();
+    } catch (err) {
+      this.refsState.reject();
+      this.logger.error(err);
+    }
   }
 }
+
+const findRef = (refs: string[], path: string): string => {
+  const addSlash = (str: string) => (str[str.length - 1] !== '/' ? `${str}/` : str);
+  const countSlash = (str: string) => (str.match(/\//g) || []).length;
+
+  path = addSlash(path);
+
+  const candidateRefs = refs.filter((ref) => path.startsWith(addSlash(ref)));
+  // 或许这里不需要，理论 ref 路径互不包含
+  candidateRefs.sort((a, b) => countSlash(a) - countSlash(b));
+
+  return candidateRefs[0] || '';
+};

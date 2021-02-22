@@ -17,4 +17,11 @@ export namespace API {
     size: number;
     render: 'download' | 'image' | 'text';
   }
+
+  export type ResponseGetRefs = Array<{
+    name: string;
+    commit: {
+      id: string;
+    };
+  }>;
 }
