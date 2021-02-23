@@ -65,6 +65,7 @@
     "@ali/ide-workspace-edit": "1.33.0",
     "@ali/kaitian-textmate-languages": "^2.2.0",
     "@alipay/alex-cli": "0.5.5",
+    "@alipay/alex-code-api": "0.5.5",
     "@alipay/alex-core": "0.5.5",
     "@alipay/alex-shared": "0.5.5",
     "@alipay/alex-code-service": "0.5.5",

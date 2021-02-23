@@ -1,4 +1,4 @@
-describe('code-hosting', () => {
+describe('code-api', () => {
   it('example', () => {
     expect(1 + 1).toBe(2);
   });

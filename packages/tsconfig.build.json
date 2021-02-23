@@ -13,14 +13,14 @@
       "path": "./code-service/tsconfig.build.json"
     },
     {
-      "path": "./alex/tsconfig.build.json"
-    },
-    {
       "path": "./i18n/tsconfig.build.json"
     },
     {
-      "path": "./code-hosting/tsconfig.build.json"
-    }
+      "path": "./code-api/tsconfig.build.json"
+    },
+    {
+      "path": "./alex/tsconfig.build.json"
+    },
   ],
   "files": [],
   "include": []
