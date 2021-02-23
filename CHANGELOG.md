@@ -1,3 +1,13 @@
+# [0.6.0](https://code.alipay.com/cloud-ide/crew-dragon/compare/v0.5.5...v0.6.0) (2021-02-23)
+
+
+### Features
+
+* 增加 gitlab 和 github api service ([9ac1533](https://code.alipay.com/cloud-ide/crew-dragon/commits/9ac1533b42dc9e7527bede6d06ad57a7e7549491))
+* 增加分支和标签接口 ([3a378dc](https://code.alipay.com/cloud-ide/crew-dragon/commits/3a378dcff229eccf2a60a58306d854778c8b5874))
+
+
+
 ## [0.5.5](https://code.alipay.com/cloud-ide/crew-dragon/compare/v0.5.3...v0.5.5) (2021-02-18)
 
 
