@@ -20,6 +20,18 @@ import { CodeHost, CodeHostOptions } from './CodeHost';
 import { FileIndexSystem, FileIndexSystemOptions } from './FileIndex';
 import { WORKSPACE_IDB_NAME } from '../../../common';
 
+export type {
+  MountableFileSystemOptions,
+  IndexedDBFileSystemOptions,
+  FolderAdapterOptions,
+  OverlayFSOptions,
+  CodeHostOptions,
+  FileIndexSystemOptions,
+};
+
+export type { FileIndex as FileIndexType } from './FileIndex';
+export type { CodeHostType } from './CodeHost';
+
 const Backends = {
   MountableFileSystem,
   IndexedDB,

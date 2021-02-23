@@ -147,27 +147,10 @@ export class ServerApp implements IServerApp {
       token: ServerConfig,
       useValue: this.serverConfig,
     });
-    injector.addProviders(
-      {
-        token: INodeLogger,
-        useClass: NodeLogger,
-      }
-      // TODO: 和 browser 共用一套就行
-      // {
-      //   token: IReporter,
-      //   useClass: DefaultReporter,
-      // },
-      // {
-      //   token: IReporterService,
-      //   useClass: ReporterService,
-      // },
-      // {
-      //   token: ReporterMetadata,
-      //   useValue: {
-      //     host: REPORT_HOST.NODE,
-      //   },
-      // }
-    );
+    injector.addProviders({
+      token: INodeLogger,
+      useClass: NodeLogger,
+    });
   }
 
   private async runContributionsPhase(phaseName: keyof ServerAppContribution, ...args: any[]) {
@@ -183,21 +166,26 @@ export class ServerApp implements IServerApp {
   }
 
   private async launch() {
-    const runtimeConfig: RuntimeConfig = this.injector.get(RuntimeConfig);
-    this.rootFS = await initializeRootFileSystem(runtimeConfig.scenario);
-    // 启动发生的错误抛到全局处理，不启动应用
-    for (const contribution of this.launchContributionsProvider.getContributions()) {
-      if (contribution.launch) {
-        await contribution.launch(this);
+    // 确保工作空间始终启动
+    try {
+      const runtimeConfig: RuntimeConfig = this.injector.get(RuntimeConfig);
+      this.rootFS = await initializeRootFileSystem(runtimeConfig.scenario);
+      for (const contribution of this.launchContributionsProvider.getContributions()) {
+        if (contribution.launch) {
+          await contribution.launch(this);
+        }
       }
+
+      // 初始化文件目录
+      await Promise.all([
+        fse.ensureDir(this.appConfig.workspaceDir || WORKSPACE_ROOT),
+        fse.ensureDir(this.serverConfig.marketplace.extensionDir),
+      ]);
+      // 工作空间文件系统及目录是在 launch 阶段初始化的，此时表示文件系统全部初始完毕，可安全使用 fs 去操作文件
+      filesystemDeferred.resolve();
+    } catch (err) {
+      this.logger.error('Launch Failed', err);
     }
-    // 初始化文件目录
-    await Promise.all([
-      fse.ensureDir(this.appConfig.workspaceDir || WORKSPACE_ROOT),
-      fse.ensureDir(this.serverConfig.marketplace.extensionDir),
-    ]);
-    // 工作空间文件系统及目录是在 launch 阶段初始化的，此时表示文件系统全部初始完毕，可安全使用 fs 去操作文件
-    filesystemDeferred.resolve();
   }
 
   private async initializeContribution() {

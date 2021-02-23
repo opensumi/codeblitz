@@ -2,7 +2,9 @@ import { BFSCallback, FileSystemOptions } from 'browserfs/dist/node/core/file_sy
 import { FileFlag } from 'browserfs/dist/node/core/file_flag';
 import InMemory from 'browserfs/dist/node/backend/InMemory';
 import { ApiError, ErrorCode } from 'browserfs/dist/node/core/api_error';
-import { FileIndex } from '../../../common/types';
+export interface FileIndex {
+  [key: string]: FileIndex | string;
+}
 
 export interface FileIndexSystemOptions {
   requestFileIndex: () => Promise<FileIndex>;

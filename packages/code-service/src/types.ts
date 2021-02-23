@@ -1,30 +1,78 @@
-import { API } from './request';
+import { CodeHostType } from '@alipay/alex-core';
+
+export type TreeEntry = CodeHostType.TreeEntry;
+
+export type EntryFileType = CodeHostType.EntryFileType;
+
+export type EntryInfo = CodeHostType.EntryInfo;
+
+export type EntryParam = CodeHostType.EntryParam;
 
 export const ICodeAPIService = Symbol('ICodeAPIService');
 
+export interface BranchOrTag {
+  name: string;
+  commit: {
+    id: string;
+  };
+}
+
+export interface RefsParam {
+  branches: BranchOrTag[];
+  tags: BranchOrTag[];
+}
+
 export interface ICodeAPIService {
   /**
-   * 获取仓库信息
+   * 初始化
    */
-  getProjectInfo(): Promise<API.ResponseGetProjectById>;
+  initialize(): Promise<void>;
   /**
    * 根据分支获取最新的 commit
    */
-  getCommit(ref: string): Promise<API.ResponseGetCommit>;
+  getCommit(ref: string): Promise<string>;
   /**
-   * 获取文件节点
+   * 获取 tree
    */
-  getTreeEntry(path: string): Promise<API.ResponseGetTreeEntry>;
+  getTree(path: string): Promise<TreeEntry[]>;
   /**
-   * 获取文件树
+   * 获取 blob
    */
-  getTree(path: string): Promise<API.ResponseGetTree>;
+  getBlob(entry: EntryParam): Promise<Buffer>;
   /**
-   * 根据 commit 和 path 获取 blob
+   * 获取 entry 相关信息
    */
-  getBlob(path: string): Promise<Buffer>;
+  getEntryInfo?(entry: EntryParam): Promise<EntryInfo>;
   /**
-   * HEAD 获取 blob size
+   * 获取所有分支和标签
    */
-  getBlobSize(path: string): Promise<number>;
+  getRefs(): Promise<{ branches: BranchOrTag[]; tags: BranchOrTag[] }>;
+  /**
+   * 静态资源路径
+   */
+  transformStaticResource(path: string): string;
+}
+
+export type State =
+  | 'Uninitialized'
+  | 'Failed' // 初始化失败
+  | 'Initialized'; // HEAD 初始化，此时可基于 commit 获取数据
+
+/**
+ * 无需 Remote
+ */
+export const enum RefType {
+  Head,
+  Tag,
+}
+
+export interface Ref {
+  readonly type: RefType;
+  readonly name: string;
+  readonly commit: string;
+}
+
+export interface Refs {
+  readonly branches: Ref[];
+  readonly tags: Ref[];
 }

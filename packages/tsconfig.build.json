@@ -17,6 +17,9 @@
     },
     {
       "path": "./i18n/tsconfig.build.json"
+    },
+    {
+      "path": "./code-hosting/tsconfig.build.json"
     }
   ],
   "files": [],

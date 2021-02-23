@@ -1,11 +1,14 @@
 import { Autowired } from '@ali/common-di';
+import { FILE_COMMANDS, ClientAppContribution } from '@ali/ide-core-browser';
 import {
   Domain,
-  localize,
-  formatLocalize,
   Disposable,
   IReporterService,
+  IDisposable,
+  Deferred,
   getDebugLogger,
+  URI,
+  CommandService,
 } from '@ali/ide-core-common';
 import {
   LaunchContribution,
@@ -15,21 +18,31 @@ import {
   IDB_ROOT,
   IServerApp,
   RuntimeConfig,
-  BrowserFS,
-  REPORT_NAME,
+  RootFS,
 } from '@alipay/alex-core';
+import { IFileTreeService } from '@ali/ide-file-tree-next';
+import { FileTreeService } from '@ali/ide-file-tree-next/lib/browser/file-tree.service';
+import { FileTreeModelService } from '@ali/ide-file-tree-next/lib/browser/services/file-tree-model.service';
 import { IMessageService } from '@ali/ide-overlay';
-import { ResponseError } from 'umi-request';
+import { BrowserEditorContribution, WorkbenchEditorService } from '@ali/ide-editor/lib/browser';
+import * as path from 'path';
 import configureFileSystem from './filesystem/configure';
-import { ICodeAPIService } from './types';
-import { request } from './request';
 import { CodeModelService } from './code-model.service';
+import { MainLayoutContribution } from '@ali/ide-main-layout';
 
-@Domain(LaunchContribution)
-export class CodeContribution extends Disposable implements LaunchContribution {
-  @Autowired(ICodeAPIService)
-  codeAPI: ICodeAPIService;
-
+@Domain(
+  LaunchContribution,
+  BrowserEditorContribution,
+  ClientAppContribution,
+  MainLayoutContribution
+)
+export class CodeContribution
+  extends Disposable
+  implements
+    LaunchContribution,
+    BrowserEditorContribution,
+    ClientAppContribution,
+    MainLayoutContribution {
   @Autowired()
   codeModel: CodeModelService;
 
@@ -45,79 +58,115 @@ export class CodeContribution extends Disposable implements LaunchContribution {
   @Autowired(IReporterService)
   reporter: IReporterService;
 
+  @Autowired(IFileTreeService)
+  fileTree: FileTreeService;
+
+  @Autowired(WorkbenchEditorService)
+  editorService: WorkbenchEditorService;
+
+  @Autowired(CommandService)
+  commandService: CommandService;
+
+  @Autowired(FileTreeModelService)
+  fileTreeModel: FileTreeModelService;
+
+  private _mountDisposer: IDisposable | null;
+
+  private _mounting = false;
+
   async launch({ rootFS }: IServerApp) {
     const codeConfig = this.runtimeConfig?.codeService;
     if (!codeConfig) return;
-    request.extendOptions({ prefix: codeConfig.baseURL });
+
+    let initDeferred: Deferred<void> | null = new Deferred();
+    this.codeModel.onDidChangeHEAD(() => {
+      this.mountFilesystem(rootFS).then(() => {
+        if (initDeferred) {
+          initDeferred.resolve();
+        } else {
+          this.commandService.tryExecuteCommand(FILE_COMMANDS.REFRESH_ALL.id);
+          this.fileTree.refresh();
+        }
+      });
+    });
+
+    this.codeModel.initialize(codeConfig);
+    // 首次初始化成功等待文件系统挂载，可恢复工作空间最近打开的文件
+    await this.codeModel.initialized;
+    if (this.codeModel.headState.isResolved) {
+      await initDeferred.promise;
+    }
+    initDeferred = null;
+  }
+
+  async mountFilesystem(rootFS: RootFS) {
+    if (this._mounting) return;
+    this._mounting = true;
 
     try {
-      await this.codeModel.initProject(codeConfig);
       const workspaceDir = makeWorkspaceDir(`${this.codeModel.platform}/${this.codeModel.project}`);
       this.appConfig.workspaceDir = workspaceDir;
 
       const { codeFileSystem, idbFileSystem, overlayFileSystem } = await configureFileSystem(
         this.codeModel,
-        this.codeAPI,
         this.runtimeConfig.scenario
       );
+
+      this._mountDisposer?.dispose();
+
       rootFS.mount(workspaceDir, overlayFileSystem);
       // 将只读文件系统挂载到 /code 上
       rootFS.mount(CODE_ROOT, codeFileSystem);
       // 将可写文件系统挂载到 /idb
       rootFS.mount(IDB_ROOT, idbFileSystem);
-      this.addDispose({
+
+      this._mountDisposer = this.addDispose({
         dispose: () => {
           rootFS.umount(workspaceDir);
           rootFS.umount(CODE_ROOT);
           rootFS.umount(IDB_ROOT);
         },
       });
-    } catch (err: any) {
-      getDebugLogger().error(err);
-
-      // 使用内存作为回退文件系统
-      rootFS.mount(
-        this.appConfig.workspaceDir,
-        await BrowserFS.createFileSystem(BrowserFS.FileSystem.InMemory, {})
-      );
-      this.addDispose({
-        dispose: () => {
-          rootFS.umount(this.appConfig.workspaceDir);
-        },
-      });
-
-      if (!isResponseError(err)) {
-        this.messageService.error(localize('workspace.initialize.failed'));
-        return;
-      }
-      if (err.name === 'RequestError') {
-        this.messageService.error(localize('api.request.error'));
-        return;
-      }
-      const status = err.response?.status;
-      this.reporter.point(REPORT_NAME.CODE_SERVICE_INIT_PROJECT_ERROR, String(status || 'Unknown'));
-      if (status === 401) {
-        const goto = localize('api.login.goto');
-        this.messageService
-          .error(localize('api.response.no-login-antcode'), [goto])
-          .then((value) => {
-            if (value === goto) {
-              window.open(codeConfig.baseURL);
-            }
-          });
-        return;
-      }
-      let message = '';
-      if (status === 403) {
-        message = localize('api.response.project-no-access');
-      } else if (status === 404) {
-        message = formatLocalize('api.response.project-not-found', this.codeModel.project);
-      }
-      this.messageService.error(message || localize('api.response.unknown-error'));
+    } catch (err) {
+      getDebugLogger().error('mount filesystem error', err);
+    } finally {
+      this._mounting = false;
     }
   }
-}
 
-function isResponseError(err: any): err is ResponseError {
-  return err && (err.name === 'RequestError' || err.name === 'ResponseError');
+  onDidRestoreState() {
+    const { revealEntry } = this.codeModel;
+    if (revealEntry.filepath) {
+      const uri = URI.file(path.join(this.appConfig.workspaceDir, revealEntry.filepath));
+      if (revealEntry.type === 'blob') {
+        this.editorService.open(uri, {
+          preview: false,
+          deletedPolicy: 'fail',
+        });
+      } else if (revealEntry.type === 'tree') {
+        this.fileTreeModel.whenReady.then(() => {
+          const uri = URI.file(path.join(this.appConfig.workspaceDir, revealEntry.filepath));
+          this.commandService.tryExecuteCommand(FILE_COMMANDS.LOCATION.id, uri);
+        });
+      }
+    }
+  }
+
+  onDidStart() {
+    // (window as any).a = () => {
+    //   const { revealEntry } = this.codeModel
+    //   if (revealEntry.filepath && revealEntry.type === 'tree') {
+    //     const uri = URI.file(path.join(this.appConfig.workspaceDir, revealEntry.filepath))
+    //     this.commandService.tryExecuteCommand(FILE_COMMANDS.LOCATION.id, uri);
+    //   }
+    // }
+  }
+
+  onDidRender() {
+    // const { revealEntry } = this.codeModel
+    // if (revealEntry.filepath && revealEntry.type === 'tree') {
+    //   const uri = URI.file(path.join(this.appConfig.workspaceDir, revealEntry.filepath))
+    //   this.commandService.tryExecuteCommand(FILE_COMMANDS.LOCATION.id, uri);
+    // }
+  }
 }

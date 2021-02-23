@@ -23,15 +23,23 @@ module.exports = createWebpackConfig({
       library: 'Alex',
       libraryTarget: 'umd',
     },
-    externals({ context, request }, callback) {
-      if (/^antd/.test(request) || request === 'react' || request === 'react-dom') {
-        // Externalize to a commonjs module using the request path
-        return callback(null, 'commonjs ' + request);
-      }
-
-      // Continue without externalizing the import
-      callback();
-    },
+    externals: [
+      {
+        react: {
+          root: 'React',
+          commonjs2: 'react',
+          commonjs: 'react',
+          amd: 'react',
+        },
+        'react-dom': {
+          root: 'ReactDOM',
+          commonjs2: 'react-dom',
+          commonjs: 'react-dom',
+          amd: 'react-dom',
+        },
+      },
+      /^antd/,
+    ],
     optimization: {
       minimize: false,
     },

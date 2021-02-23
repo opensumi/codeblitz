@@ -132,7 +132,7 @@ export class AlexAppContribution implements CommandContribution {
             platform: this.codeModel.platform,
             project: this.codeModel.project,
             projectId: this.codeModel.projectId,
-            commit: this.codeModel.commit,
+            commit: this.codeModel.HEAD,
           };
         },
       }

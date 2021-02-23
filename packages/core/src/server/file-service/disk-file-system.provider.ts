@@ -590,7 +590,9 @@ export class DiskFileSystemProvider extends FCService implements IDiskFileProvid
     }
   }
 
-  private _getFileType(ext) {
+  private _getFileType(ext: string) {
+    ext = (ext || '').toLowerCase();
+
     let type = 'text';
 
     if (['png', 'gif', 'jpg', 'jpeg', 'svg'].indexOf(ext) !== -1) {

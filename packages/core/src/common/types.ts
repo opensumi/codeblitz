@@ -13,24 +13,36 @@ export interface IServerApp {
 
 export const RuntimeConfig = Symbol('RuntimeConfig');
 
-export interface FileIndex {
-  [key: string]: FileIndex | string;
+interface CodeServicePlatform {
+  /** 平台 */
+  platform: 'antcode' | 'gitlab' | 'github';
+  /** location.origin */
+  origin: string;
+  /** 用于接口请求，不设置为 origin */
+  endpoint?: string;
 }
 
-interface CodeServiceConfig {
-  /** 平台 antcode | gitlab | github */
-  platform: string;
-  /** host */
-  baseURL: string;
-  /** 项目 ID */
-  projectId?: number | string;
-  /** 项目名称 group/repository */
-  project: string;
-  /** 分支 */
+interface CodeServiceProject extends CodeServicePlatform {
+  /** 群组或用户 */
+  owner: string;
+  /** 仓库名 */
+  name: string;
+  /** ref */
+  ref?: string;
+  /** tag */
+  tag?: string;
+  /** branch */
   branch?: string;
   /** commit sha */
   commit?: string;
 }
+
+interface CodeServiceHost extends CodeServicePlatform {
+  /** 从代码托管平台跳转过来的路径，解析出 ref，如 /microsoft/vscode/main/README.md  */
+  path: string;
+}
+
+export type CodeServiceConfig = CodeServiceProject | CodeServiceHost;
 
 /**
  * 运行时相关配置
@@ -49,11 +61,8 @@ export interface RuntimeConfig {
     onDidSaveTextDocument?: (data: { filepath: string; content: string }) => void;
   };
   /** 基于代码服务的配置 */
-  codeService?: CodeServiceConfig & {
-    /** 静态资源转换 */
-    transformStaticResource?(config: Required<CodeServiceConfig> & { path: string }): string;
-  };
-  /** 默认打开的文件 */
+  codeService?: CodeServiceConfig;
+  /** 默认打开的文件，多个文件时，会展示最右边的文件 */
   defaultOpenFile?: string | string[];
   /** 禁止文件树更改，此时无法新增、删除、重命名文件 */
   disableModifyFileTree?: boolean;

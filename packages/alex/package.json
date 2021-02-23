@@ -1,6 +1,6 @@
 {
   "name": "@alipay/alex",
-  "version": "0.5.2",
+  "version": "0.5.5",
   "description": "@alipay/alex",
   "main": "lib/index.js",
   "typing": "types/index.d.ts",
@@ -64,11 +64,12 @@
     "@ali/ide-workspace": "1.33.0",
     "@ali/ide-workspace-edit": "1.33.0",
     "@ali/kaitian-textmate-languages": "^2.2.0",
-    "@alipay/alex-cli": "0.5.2",
-    "@alipay/alex-core": "0.5.2",
-    "@alipay/alex-shared": "0.5.2",
-    "@alipay/alex-code-service": "0.5.2",
-    "@alipay/alex-i18n": "0.5.2"
+    "@alipay/alex-cli": "0.5.5",
+    "@alipay/alex-core": "0.5.5",
+    "@alipay/alex-shared": "0.5.5",
+    "@alipay/alex-code-service": "0.5.5",
+    "@alipay/alex-i18n": "0.5.5",
+    "antd": "^3.20.3"
   },
   "tnpm": {
     "mode": "yarn",
@@ -76,8 +77,9 @@
   },
   "devDependencies": {
     "@types/react": "^16.9.56",
-    "@types/react-dom": "^16.9.9",
-    "antd": "^3.20.3",
+    "@types/react-dom": "^16.9.9"
+  },
+  "peerDependencies": {
     "react": "^16.14.0",
     "react-dom": "^16.14.0"
   }
