@@ -27,6 +27,7 @@ export class StatusbarContribution implements ClientAppContribution {
       text: getRefText(),
       tooltip: localize('code-service.checkout'),
       alignment: StatusBarAlignment.LEFT,
+      command: 'code-service.checkout',
       priority: 0,
     });
 

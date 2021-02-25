@@ -153,7 +153,7 @@ export class GitLabService implements ICodeAPIService {
   async getCommit(ref: string) {
     return (
       await this.request<API.ResponseGetCommit>(
-        `/api/v3/projects/${this.id}/repository/commits/${ref}`
+        `/api/v3/projects/${this.id}/repository/commits/${encodeURIComponent(ref)}`
       )
     ).id;
   }

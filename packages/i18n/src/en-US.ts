@@ -25,7 +25,11 @@ export const localizationBundle = {
     'error.request': 'Request Error',
     'error.resource-not-found': 'Project or Resource not found',
 
+    'code-service.command.checkout': 'Checkout to...',
     'code-service.checkout': 'Checkout branch/tag...',
+    'code-service.select-ref-to-checkout': 'Select a ref to checkout',
+    'code-service.checkout-to': 'Checkout to {0}',
+    'code-service.checkout-to-same': 'Commit no change',
 
     'github.invalid-token': 'Invalid token',
     'github.request-rate-limit': 'API rate limit exceeded',

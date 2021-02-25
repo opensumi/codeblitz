@@ -71,7 +71,7 @@ export class AntCodeService implements ICodeAPIService {
   async getCommit(ref: string) {
     return (
       await this.request<API.ResponseGetCommit>(
-        `/api/v3/projects/${this.codeModel.projectId}/repository/commits/${ref}`
+        `/api/v3/projects/${this.codeModel.projectId}/repository/commits/${encodeURIComponent(ref)}`
       )
     ).id;
   }
