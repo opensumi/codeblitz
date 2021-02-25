@@ -11,7 +11,8 @@ import {
   formatLocalize,
   FileChangeType,
   WithEventBus,
-  OnEvent,
+  IDisposable,
+  IEventBus,
 } from '@ali/ide-core-common';
 import {
   LaunchContribution,
@@ -42,7 +43,6 @@ import { RefType } from './types';
 
 @Domain(LaunchContribution, BrowserEditorContribution, CommandContribution)
 export class CodeContribution
-  extends WithEventBus
   implements LaunchContribution, BrowserEditorContribution, CommandContribution {
   @Autowired()
   codeModel: CodeModelService;
@@ -77,17 +77,18 @@ export class CodeContribution
   @Autowired(IDiskFileProvider)
   diskFile: DiskFsProviderClient;
 
+  @Autowired(IEventBus)
+  protected eventBus: IEventBus;
+
   private _unmount: () => void | undefined;
 
   private _mounting = false;
 
+  private _disposables: IDisposable[] = [];
+
   async launch({ rootFS }: IServerApp) {
     const codeConfig = this.runtimeConfig?.codeService;
     if (!codeConfig) return;
-
-    this.codeModel.onDidChangeRefPath((path) => {
-      console.log('>>>>>>>path', path);
-    });
 
     let initDeferred: Deferred<void> | null = new Deferred();
     this.codeModel.onDidChangeHEAD(() => {
@@ -160,14 +161,22 @@ export class CodeContribution
     const { revealEntry } = this.codeModel;
     if (!revealEntry?.filepath) return;
     const uri = URI.file(path.join(this.appConfig.workspaceDir, revealEntry.filepath));
+    let wait: Promise<any> = Promise.resolve();
     if (revealEntry.type === 'blob') {
-      this.editorService.open(uri, {
+      wait = this.editorService.open(uri, {
         preview: false,
         deletedPolicy: 'fail',
       });
     } else if (revealEntry.type === 'tree') {
       this.commandService.tryExecuteCommand(FILE_COMMANDS.LOCATION.id, uri);
     }
+    wait.finally(() => {
+      this._disposables.push(
+        this.eventBus.on(EditorGroupChangeEvent, (event) => {
+          this.onEditorGroupChangeEvent(event);
+        })
+      );
+    });
   }
 
   registerCommands(commandRegistry: CommandRegistry) {
@@ -209,7 +218,6 @@ export class CodeContribution
     );
   }
 
-  @OnEvent(EditorGroupChangeEvent)
   onEditorGroupChangeEvent({ payload: { newOpenType, newResource } }: EditorGroupChangeEvent) {
     if (newOpenType?.type === 'code' && newResource && !newResource.deleted) {
       const fsPath = newResource.uri.codeUri.path;
@@ -226,5 +234,6 @@ export class CodeContribution
 
   dispose() {
     this._unmount?.();
+    this._disposables.forEach((disposer) => disposer.dispose());
   }
 }
