@@ -1,3 +1,12 @@
+## [0.6.3](https://code.alipay.com/cloud-ide/crew-dragon/compare/v0.6.2...v0.6.3) (2021-02-25)
+
+
+### Bug Fixes
+
+* 修复 tab 监听问题 ([ada4e1e](https://code.alipay.com/cloud-ide/crew-dragon/commits/ada4e1eebe61f54babf55e8b284e59c9aa457247))
+
+
+
 ## [0.6.2](https://code.alipay.com/cloud-ide/crew-dragon/compare/v0.6.1...v0.6.2) (2021-02-25)
 
 
