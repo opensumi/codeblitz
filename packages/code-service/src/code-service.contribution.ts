@@ -159,7 +159,10 @@ export class CodeContribution
 
   onDidRestoreState() {
     const { revealEntry } = this.codeModel;
-    if (!revealEntry?.filepath) return;
+    if (!revealEntry?.filepath) {
+      this.startOnEditorGroupChangeEvent();
+      return;
+    }
     const uri = URI.file(path.join(this.appConfig.workspaceDir, revealEntry.filepath));
     let wait: Promise<any> = Promise.resolve();
     if (revealEntry.type === 'blob') {
@@ -171,11 +174,7 @@ export class CodeContribution
       this.commandService.tryExecuteCommand(FILE_COMMANDS.LOCATION.id, uri);
     }
     wait.finally(() => {
-      this._disposables.push(
-        this.eventBus.on(EditorGroupChangeEvent, (event) => {
-          this.onEditorGroupChangeEvent(event);
-        })
-      );
+      this.startOnEditorGroupChangeEvent();
     });
   }
 
@@ -215,6 +214,14 @@ export class CodeContribution
           }
         },
       }
+    );
+  }
+
+  startOnEditorGroupChangeEvent() {
+    this._disposables.push(
+      this.eventBus.on(EditorGroupChangeEvent, (event) => {
+        this.onEditorGroupChangeEvent(event);
+      })
     );
   }
 
