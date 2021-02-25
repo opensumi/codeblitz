@@ -1,3 +1,12 @@
+## [0.6.1](https://code.alipay.com/cloud-ide/crew-dragon/compare/v0.6.0...v0.6.1) (2021-02-25)
+
+
+### Features
+
+* 增加分支切换逻辑 ([a9db895](https://code.alipay.com/cloud-ide/crew-dragon/commits/a9db89502120ba784a2f62c334d54529cc54c5ed))
+
+
+
 # [0.6.0](https://code.alipay.com/cloud-ide/crew-dragon/compare/v0.5.5...v0.6.0) (2021-02-23)
 
 
