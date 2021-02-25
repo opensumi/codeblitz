@@ -1,3 +1,12 @@
+## [0.6.2](https://code.alipay.com/cloud-ide/crew-dragon/compare/v0.6.1...v0.6.2) (2021-02-25)
+
+
+### Bug Fixes
+
+* 修复初始文件打开 url hash 问题 ([a39fed6](https://code.alipay.com/cloud-ide/crew-dragon/commits/a39fed6c5f93deae828bd5ad8dbeba7f2d868cc6))
+
+
+
 ## [0.6.1](https://code.alipay.com/cloud-ide/crew-dragon/compare/v0.6.0...v0.6.1) (2021-02-25)
 
 
