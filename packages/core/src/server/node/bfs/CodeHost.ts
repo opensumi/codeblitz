@@ -270,7 +270,7 @@ export class CodeHost extends BaseFileSystem implements FileSystem {
           node.id = item.id;
           node.fileType = item.fileType;
         } else {
-          // TODO: submodule type 为 commit，当做文件夹处理，是否需要更好的展示方式
+          // submodule type 为 commit，当做文件夹处理
           node = new DirInode() as DirNodeExtend<null>;
           node.path = item.path;
           node.id = item.id;

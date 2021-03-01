@@ -1,8 +1,8 @@
-import { BrowserFS, FileSystemConfiguration } from '../server/node';
+import { BrowserFS, FileSystemConfiguration, FileSystemInstance } from '../server/node';
 
 export { AppConfig } from '@ali/ide-core-browser';
 
-export type RootFS = InstanceType<typeof BrowserFS.FileSystem.MountableFileSystem>;
+export type RootFS = FileSystemInstance<'MountableFileSystem'>;
 
 export const IServerApp = Symbol('IServerApp');
 
@@ -58,4 +58,8 @@ export interface RuntimeConfig {
   defaultOpenFile?: string | string[];
   /** 禁止文件树更改，此时无法新增、删除、重命名文件 */
   disableModifyFileTree?: boolean;
+  /** 注销左下角 bar */
+  unregisterActivityBarExtra?: boolean;
+  /** 隐藏左侧 tabbar */
+  hideLeftTabBar?: boolean;
 }

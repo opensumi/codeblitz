@@ -33,6 +33,7 @@ module.exports = () => {
       new WebpackManifestPlugin({
         publicPath: '',
         seed: manifestSeed,
+        useEntryKeys: true,
       }),
       new webpack.ProvidePlugin({
         ...nodePolyfill.provider,

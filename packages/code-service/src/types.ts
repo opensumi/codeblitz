@@ -76,3 +76,9 @@ export interface Refs {
   readonly branches: Ref[];
   readonly tags: Ref[];
 }
+
+export interface Submodule {
+  name: string;
+  path: string;
+  url: string;
+}

@@ -21,9 +21,11 @@ module.exports = (option = {}) => {
       new WebpackManifestPlugin({
         publicPath: '',
         seed: manifestSeed,
+        useEntryKeys: true,
+        removeKeyHash: /\.[a-f0-9]{8}/gi,
       }),
       new HtmlWebpackPlugin({
-        filename: `[name]/index.html`,
+        filename: `[name].[contenthash:8]/index.html`,
         template: option.template || path.join(__dirname, '../public/webview.html'),
       }),
     ],

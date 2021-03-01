@@ -1,7 +1,10 @@
 import { Injectable, Autowired } from '@ali/common-di';
-import { Emitter, Deferred, getDebugLogger } from '@ali/ide-core-common';
-import { CodeServiceConfig } from '@alipay/alex-core';
-import { ICodeAPIService, Refs, RefType } from './types';
+import { Emitter, Deferred, getDebugLogger, URI } from '@ali/ide-core-common';
+import { CodeServiceConfig, AppConfig } from '@alipay/alex-core';
+import { IFileServiceClient } from '@ali/ide-file-service';
+import * as path from 'path';
+import { ICodeAPIService, Refs, RefType, Submodule } from './types';
+import { parseGitmodules } from './utils';
 
 const HEAD = 'HEAD';
 
@@ -34,6 +37,12 @@ class StateDeferred<T = void> extends Deferred<T> {
 export class CodeModelService {
   @Autowired(ICodeAPIService)
   readonly codeAPI: ICodeAPIService;
+
+  @Autowired(IFileServiceClient)
+  fileService: IFileServiceClient;
+
+  @Autowired(AppConfig)
+  appConfig: AppConfig;
 
   private readonly logger = getDebugLogger('code-service');
 
@@ -191,6 +200,30 @@ export class CodeModelService {
             }`
       );
     }
+  }
+
+  private _submodules: Promise<Submodule[]> | null = null;
+  get submodules(): Promise<Submodule[]> {
+    if (!this._submodules) {
+      const uri = URI.file(path.join(this.appConfig.workspaceDir, '.gitmodules')).toString();
+      this._submodules = this.fileService
+        .access(uri)
+        .then((bool) => {
+          if (!bool) return [];
+          return this.fileService
+            .resolveContent(uri, { encoding: 'utf8' })
+            .then(({ content }) => parseGitmodules(content))
+            .catch((err) => {
+              this.logger.error(err);
+              return [];
+            });
+        })
+        .catch((err) => {
+          this.logger.error(err);
+          return [];
+        });
+    }
+    return this._submodules!;
   }
 
   async initialize(config: CodeServiceConfig) {

@@ -1,6 +1,12 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-import { IAppInstance, AppRenderer, requireModule, layoutConfig, SlotLocation } from '../..';
+import {
+  IAppInstance,
+  AppRenderer,
+  requireModule,
+  getDefaultLayoutConfig,
+  SlotLocation,
+} from '../..';
 import { CodeServiceModule } from '@alipay/alex-code-service';
 import { AntCodeModule, GitHubModule, GitLabModule } from '@alipay/alex-code-api';
 import * as os from 'os';
@@ -62,6 +68,8 @@ const platformConfig = {
   },
 };
 
+const layoutConfig = getDefaultLayoutConfig();
+
 const platform = (Object.keys(platformConfig).includes(query.platform)
   ? query.platform
   : 'antcode') as CodeServiceConfig['platform'];
@@ -91,6 +99,8 @@ ReactDOM.render(
     }}
     runtimeConfig={{
       codeService: config as CodeServiceConfig,
+      // unregisterActivityBarExtra: true,
+      // hideLeftTabBar: true
     }}
   />,
   document.getElementById('main')

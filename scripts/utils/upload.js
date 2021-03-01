@@ -5,8 +5,8 @@ const path = require('path');
 const basement = new Basement({
   // 从 cloud-ide 获取 appId 和 masterKey:
   // https://basement.alipay.com/doc/detail/ziarab#da1386cd
-  appId: '5ffe6c675c2b90057b69a6b8',
-  masterKey: 'y7AFt54xQ2Z4PJuzF4kDF9Gj',
+  appId: '6039249f8ee5e40583902ff7',
+  masterKey: 'aaItsFwEiBDX_WgXM5DDmcA4',
   urllib,
   endpoint: 'https://basement-gzone.alipay.com',
 });
@@ -15,13 +15,7 @@ exports.uploadFile = async (filepath, filename) => {
   if (!filename) {
     filename = path.basename(filepath);
   }
-  const options = {};
-  if (path.extname(filename) === '.html') {
-    options.headers = {
-      cacheControl: 'max-age=0, s-maxage=120, must-revalidate',
-    };
-  }
-  const res = await basement.file.upload(filename, filepath, options);
+  const res = await basement.file.upload(filename, filepath);
   console.log('>>>>>>>>>> INTERNAL >>>>>>>>>>');
   console.log(res);
   console.log('<<<<<<<<<< INTERNAL <<<<<<<<<<');
