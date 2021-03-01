@@ -1,3 +1,30 @@
+## [0.6.3](https://code.alipay.com/cloud-ide/crew-dragon/compare/v0.6.2...v0.6.3) (2021-02-25)
+
+
+### Bug Fixes
+
+* 修复 tab 监听问题 ([ada4e1e](https://code.alipay.com/cloud-ide/crew-dragon/commits/ada4e1eebe61f54babf55e8b284e59c9aa457247))
+
+
+
+## [0.6.2](https://code.alipay.com/cloud-ide/crew-dragon/compare/v0.6.1...v0.6.2) (2021-02-25)
+
+
+### Bug Fixes
+
+* 修复初始文件打开 url hash 问题 ([a39fed6](https://code.alipay.com/cloud-ide/crew-dragon/commits/a39fed6c5f93deae828bd5ad8dbeba7f2d868cc6))
+
+
+
+## [0.6.1](https://code.alipay.com/cloud-ide/crew-dragon/compare/v0.6.0...v0.6.1) (2021-02-25)
+
+
+### Features
+
+* 增加分支切换逻辑 ([a9db895](https://code.alipay.com/cloud-ide/crew-dragon/commits/a9db89502120ba784a2f62c334d54529cc54c5ed))
+
+
+
 # [0.6.0](https://code.alipay.com/cloud-ide/crew-dragon/compare/v0.5.5...v0.6.0) (2021-02-23)
 
 

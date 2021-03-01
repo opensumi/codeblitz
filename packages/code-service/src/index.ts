@@ -5,6 +5,7 @@ import { CodeStaticResourceContribution } from './static-resource.contribution';
 import { CodeModelService } from './code-model.service';
 import { ICodeAPIService } from './types';
 import { StatusbarContribution } from './statusbar';
+import { DecorationProvider } from './decoration.provider';
 
 export { ICodeAPIService, CodeModelService };
 
@@ -19,5 +20,6 @@ export class CodeServiceModule extends BrowserModule {
     CodeModelService,
     CodeStaticResourceContribution,
     StatusbarContribution,
+    DecorationProvider,
   ];
 }

@@ -22,7 +22,7 @@ import * as os from 'os';
 import { modules } from '../core/modules';
 import { IconSlim, IDETheme } from '../core/extensions';
 import { mergeConfig, themeStorage } from '../core/utils';
-import { LayoutComponent, layoutConfig } from '../core/layout';
+import { LayoutComponent, getDefaultLayoutConfig } from '../core/layout';
 import { IConfig, IAppInstance } from './types';
 
 export { SlotLocation, SlotRenderer, BoxPanel, SplitPanel };
@@ -46,7 +46,7 @@ const getDefaultAppConfig = (): IAppOpts => ({
       '**/.deletedFiles.log': true,
     },
   },
-  layoutConfig,
+  layoutConfig: getDefaultLayoutConfig(),
   layoutComponent: LayoutComponent,
   extensionMetadata: [IconSlim, IDETheme],
   defaultPanels: {

@@ -1,3 +1,4 @@
+import React from 'react';
 import { Autowired } from '@ali/common-di';
 import { Domain } from '@ali/ide-core-common';
 import {
@@ -8,6 +9,10 @@ import {
   KeybindingRegistry,
   Command,
   AppConfig,
+  SlotRendererContribution,
+  SlotRendererRegistry,
+  ComponentRegistryInfo,
+  useInjectable,
 } from '@ali/ide-core-browser';
 import {
   MenuContribution,
@@ -16,14 +21,24 @@ import {
   IMenuItem,
 } from '@ali/ide-core-browser/lib/menu/next';
 import { WorkbenchEditorService } from '@ali/ide-editor/lib/browser';
+import { TabRendererBase } from '@ali/ide-main-layout/lib/browser/tabbar/renderer.view';
+import { LeftTabPanelRenderer } from '@ali/ide-main-layout/lib/browser/tabbar/panel.view';
+import {
+  TabbarServiceFactory,
+  TabbarService,
+} from '@ali/ide-main-layout/lib/browser/tabbar/tabbar.service';
 import { RuntimeConfig } from '../../common/types';
 
 /**
  * 禁用掉文件树的新增、删除、重命名等操作，用于纯编辑场景
  */
-@Domain(MenuContribution, CommandContribution, KeybindingContribution)
+@Domain(MenuContribution, CommandContribution, KeybindingContribution, SlotRendererContribution)
 export class FileTreeCustomContribution
-  implements MenuContribution, CommandContribution, KeybindingContribution {
+  implements
+    MenuContribution,
+    CommandContribution,
+    KeybindingContribution,
+    SlotRendererContribution {
   @Autowired(WorkbenchEditorService)
   workbenchEditorService: WorkbenchEditorService;
 
@@ -34,6 +49,10 @@ export class FileTreeCustomContribution
   appConfig: AppConfig;
 
   registerMenus(menuRegistry: IMenuRegistry) {
+    if (this.runtimeConfig.unregisterActivityBarExtra) {
+      menuRegistry.unregisterMenuId(MenuId.ActivityBarExtra);
+    }
+
     if (!this.runtimeConfig.disableModifyFileTree) return;
 
     const isDisabled = (commads: Command[], command: Command | string) => {
@@ -117,5 +136,32 @@ export class FileTreeCustomContribution
     keybinding.forEach((binding) => {
       bindings.unregisterKeybinding(binding);
     });
+  }
+
+  registerRenderer(registry: SlotRendererRegistry) {
+    if (!this.runtimeConfig.hideLeftTabBar) return;
+
+    const EmptyLeftTabbarRenderer: React.FC = () => {
+      const tabbarService: TabbarService = useInjectable(TabbarServiceFactory)('left');
+      tabbarService.barSize = 0;
+      return React.createElement('div', { style: { width: 0 } });
+    };
+
+    const LeftTabRenderer = ({
+      className,
+      components,
+    }: {
+      className: string;
+      components: ComponentRegistryInfo[];
+    }) =>
+      React.createElement(TabRendererBase, {
+        side: 'left',
+        direction: 'left-to-right',
+        className: `${className} left-slot`,
+        components,
+        TabbarView: EmptyLeftTabbarRenderer,
+        TabpanelView: LeftTabPanelRenderer,
+      });
+    registry.registerSlotRenderer('left', LeftTabRenderer);
   }
 }

@@ -4,6 +4,8 @@ import { LogServiceModule } from './logs-core';
 import { FileServiceModule } from './file-service';
 import { FileSchemeNodeModule } from './file-scheme';
 import { FileSearchModule } from './file-search';
+import { SearchModule } from './search';
+import { ExtensionManagerModule } from './extension-manager';
 
 export * from './core';
 export * from './kaitian-extension';
@@ -17,6 +19,8 @@ export {
   FileServiceModule,
   FileSchemeNodeModule,
   FileSearchModule,
+  SearchModule,
+  ExtensionManagerModule,
 };
 
 export const ServerModuleCollection = [
@@ -26,4 +30,6 @@ export const ServerModuleCollection = [
   FileServiceModule,
   FileSchemeNodeModule,
   FileSearchModule,
+  SearchModule,
+  ExtensionManagerModule,
 ];

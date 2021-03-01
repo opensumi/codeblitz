@@ -1,8 +1,8 @@
-import { BrowserFS, FileSystemConfiguration } from '../server/node';
+import { BrowserFS, FileSystemConfiguration, FileSystemInstance } from '../server/node';
 
 export { AppConfig } from '@ali/ide-core-browser';
 
-export type RootFS = InstanceType<typeof BrowserFS.FileSystem.MountableFileSystem>;
+export type RootFS = FileSystemInstance<'MountableFileSystem'>;
 
 export const IServerApp = Symbol('IServerApp');
 
@@ -13,20 +13,19 @@ export interface IServerApp {
 
 export const RuntimeConfig = Symbol('RuntimeConfig');
 
-interface CodeServicePlatform {
+export interface CodeServiceConfig {
   /** 平台 */
   platform: 'antcode' | 'gitlab' | 'github';
   /** location.origin */
   origin: string;
   /** 用于接口请求，不设置为 origin */
   endpoint?: string;
-}
-
-interface CodeServiceProject extends CodeServicePlatform {
   /** 群组或用户 */
   owner: string;
   /** 仓库名 */
   name: string;
+  /** 从代码托管平台跳转过来的路径，解析出 ref 和默认打开的文件，如 tree/master/README.md  */
+  refPath?: string;
   /** ref */
   ref?: string;
   /** tag */
@@ -36,13 +35,6 @@ interface CodeServiceProject extends CodeServicePlatform {
   /** commit sha */
   commit?: string;
 }
-
-interface CodeServiceHost extends CodeServicePlatform {
-  /** 从代码托管平台跳转过来的路径，解析出 ref，如 /microsoft/vscode/main/README.md  */
-  path: string;
-}
-
-export type CodeServiceConfig = CodeServiceProject | CodeServiceHost;
 
 /**
  * 运行时相关配置
@@ -66,4 +58,8 @@ export interface RuntimeConfig {
   defaultOpenFile?: string | string[];
   /** 禁止文件树更改，此时无法新增、删除、重命名文件 */
   disableModifyFileTree?: boolean;
+  /** 注销左下角 bar */
+  unregisterActivityBarExtra?: boolean;
+  /** 隐藏左侧 tabbar */
+  hideLeftTabBar?: boolean;
 }

@@ -18,7 +18,7 @@ export function LayoutComponent(): React.ReactElement {
   );
 }
 
-export const layoutConfig = {
+export const getDefaultLayoutConfig = () => ({
   [SlotLocation.top]: {
     modules: ['@ali/ide-menu-bar'],
   },
@@ -26,7 +26,7 @@ export const layoutConfig = {
     modules: [''],
   },
   [SlotLocation.left]: {
-    modules: ['@ali/ide-explorer'],
+    modules: ['@ali/ide-explorer', '@ali/ide-search'],
   },
   [SlotLocation.main]: {
     modules: ['@ali/ide-editor'],
@@ -40,4 +40,4 @@ export const layoutConfig = {
   [SlotLocation.extra]: {
     modules: ['breadcrumb-menu'],
   },
-};
+});

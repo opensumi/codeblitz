@@ -1,1 +1,1 @@
-export { layoutConfig } from '../core/layout';
+export { getDefaultLayoutConfig } from '../core/layout';

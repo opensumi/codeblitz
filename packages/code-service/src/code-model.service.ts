@@ -1,7 +1,12 @@
 import { Injectable, Autowired } from '@ali/common-di';
-import { Emitter, Deferred, getDebugLogger } from '@ali/ide-core-common';
-import { CodeServiceConfig } from '@alipay/alex-core';
-import { ICodeAPIService, Refs, State, RefType } from './types';
+import { Emitter, Deferred, getDebugLogger, URI } from '@ali/ide-core-common';
+import { CodeServiceConfig, AppConfig } from '@alipay/alex-core';
+import { IFileServiceClient } from '@ali/ide-file-service';
+import * as path from 'path';
+import { ICodeAPIService, Refs, RefType, Submodule } from './types';
+import { parseGitmodules } from './utils';
+
+const HEAD = 'HEAD';
 
 class StateDeferred<T = void> extends Deferred<T> {
   private _isResolved = false;
@@ -33,6 +38,12 @@ export class CodeModelService {
   @Autowired(ICodeAPIService)
   readonly codeAPI: ICodeAPIService;
 
+  @Autowired(IFileServiceClient)
+  fileService: IFileServiceClient;
+
+  @Autowired(AppConfig)
+  appConfig: AppConfig;
+
   private readonly logger = getDebugLogger('code-service');
 
   private _config: CodeServiceConfig;
@@ -61,76 +72,56 @@ export class CodeModelService {
   private _onDidChangeRefs = new Emitter<void>();
   readonly onDidChangeRefs = this._onDidChangeRefs.event;
 
+  private _onDidChangeRefPath = new Emitter<string>();
+  readonly onDidChangeRefPath = this._onDidChangeRefPath.event;
+
   /**
    * 平台，antcode | gitlab | github
    */
   private _platform: string;
-  /**
-   * origin
-   */
-  private _origin: string;
-  /**
-   * api endpoint
-   */
-  private _endpoint: string;
-  /**
-   * 仓库群组或用户
-   */
-  private _owner: string;
-  /**
-   * 仓库名
-   */
-  private _name: string;
-  /**
-   * git HEAD，指向 具体的 commit
-   */
-  private _HEAD: string;
-  /**
-   * refs 列表
-   */
-  private _refs: Refs = { branches: [], tags: [] };
-
   get platform() {
     return this._platform;
   }
 
+  /**
+   * origin
+   */
+  private _origin: string;
   get origin() {
     return this._origin;
   }
 
+  /**
+   * api endpoint
+   */
+  private _endpoint: string;
   get endpoint() {
     return this._endpoint;
   }
 
+  /**
+   * 仓库群组或用户
+   */
+  private _owner: string;
   get owner() {
     return this._owner;
   }
 
+  /**
+   * 仓库名
+   */
+  private _name: string;
   get name() {
     return this._name;
   }
 
-  get project() {
-    return `${this._owner}/${this._name}`;
-  }
-
-  get projectId() {
-    return `${this._owner}%2F${this._name}`;
-  }
-
-  get refs() {
-    return this._refs;
-  }
-
-  set refs(refs: Refs) {
-    this._refs = refs;
-    this._onDidChangeRefs.fire();
-  }
-
+  /**
+   * git HEAD，指向 具体的 commit
+   */
+  private _HEAD: string;
   get HEAD() {
     return this._HEAD;
   }
-
   set HEAD(commit: string) {
     if (commit !== this._HEAD) {
       this._HEAD = commit;
@@ -138,6 +129,9 @@ export class CodeModelService {
     }
   }
 
+  /**
+   * statusbar 显示文案
+   */
   get headLabel(): string {
     const HEAD = this.HEAD;
     if (!HEAD) {
@@ -150,36 +144,101 @@ export class CodeModelService {
     );
   }
 
-  private _refWithPath: string[] = [];
-  // 初始需要展示的文件夹或文件
-  revealEntry = {
-    type: '', // tree | blob
-    filepath: '',
-  };
+  /**
+   * refs 列表
+   */
+  private _refs: Refs = { branches: [], tags: [] };
+  get refs() {
+    return this._refs;
+  }
+  set refs(refs: Refs) {
+    this._refs = refs;
+    this._onDidChangeRefs.fire();
+  }
+
+  /**
+   * ref name，初始不指定时为 HEAD
+   */
+  private _refName: string;
+  get refName() {
+    return this._refName;
+  }
+  set refName(name: string) {
+    this._refName = name;
+    let suffix = '';
+    // TODO: 切换分支 tab 并未关闭，文件可能删除，目前状态不好判断，先不加
+    if (name === HEAD) {
+      suffix = '';
+    } else {
+      suffix = `/tree/${name}`;
+    }
+    this._onDidChangeRefPath.fire(`/${this.owner}/${this.name}${suffix}`);
+  }
+
+  get project() {
+    return `${this._owner}/${this._name}`;
+  }
+
+  get projectId() {
+    return `${this._owner}%2F${this._name}`;
+  }
+
+  /**
+   * url 上显示的文件
+   */
+  private _revealEntry: { type: string; filepath: string } | null = null;
+  get revealEntry() {
+    return this._revealEntry;
+  }
+  set revealEntry(entry: { type: string; filepath: string } | null) {
+    if (entry) {
+      this._onDidChangeRefPath.fire(
+        !entry.filepath && this.refName === HEAD
+          ? `/${this.owner}/${this.name}`
+          : `/${this.owner}/${this.name}/${entry.type}/${this.headLabel}${
+              entry.filepath ? `/${entry.filepath}` : ''
+            }`
+      );
+    }
+  }
+
+  private _submodules: Promise<Submodule[]> | null = null;
+  get submodules(): Promise<Submodule[]> {
+    if (!this._submodules) {
+      const uri = URI.file(path.join(this.appConfig.workspaceDir, '.gitmodules')).toString();
+      this._submodules = this.fileService
+        .access(uri)
+        .then((bool) => {
+          if (!bool) return [];
+          return this.fileService
+            .resolveContent(uri, { encoding: 'utf8' })
+            .then(({ content }) => parseGitmodules(content))
+            .catch((err) => {
+              this.logger.error(err);
+              return [];
+            });
+        })
+        .catch((err) => {
+          this.logger.error(err);
+          return [];
+        });
+    }
+    return this._submodules!;
+  }
 
   async initialize(config: CodeServiceConfig) {
     this._config = config;
     this._platform = config.platform;
     this._origin = config.origin;
     this._endpoint = config.endpoint || config.origin;
-
-    if ('path' in config) {
-      const { path } = config;
-      const [owner, name, ...refWithPath] = path.split('/').filter(Boolean);
-      this._owner = owner;
-      this._name = name;
-      this._refWithPath = refWithPath;
-    } else {
-      this._owner = config.owner;
-      this._name = config.name;
-    }
+    this._owner = config.owner;
+    this._name = config.name;
 
     try {
       await this.codeAPI.initialize();
-      await this.reset();
+      this.reset();
     } catch (err) {
       this.logger.error(err);
-    } finally {
       this.initState.resolve();
     }
   }
@@ -187,9 +246,9 @@ export class CodeModelService {
   /**
    * 无权限时需要再设置 token 后重新初始化
    */
-  async reset() {
+  reset() {
     if (!this.headState.isResolved) {
-      await this.initHEAD();
+      this.initHEAD();
     }
     if (!this.refsState.isResolved) {
       this.initRefs();
@@ -197,48 +256,46 @@ export class CodeModelService {
   }
 
   private async initHEAD() {
-    const HEAD = 'HEAD';
     try {
-      const { _config: config, _refWithPath } = this;
+      const { _config: config } = this;
       let head = '';
-      if ('path' in config) {
-        // 暂时只支持 tree 和 blob，其它如 commit 后续看情况支持
+      if (config.refPath) {
         let maybeCommit = false;
-        if (!['tree', 'blob'].includes(_refWithPath[0])) {
+        const segments = config.refPath.split('/').filter(Boolean);
+        // 暂时只支持 tree 和 blob，其它如 commit 后续看情况支持
+        if (!['tree', 'blob'].includes(segments[0]) || !segments[1] || segments[1] === HEAD) {
           head = HEAD;
         } else {
-          head = _refWithPath[1];
-          if (head !== HEAD) {
-            const p = _refWithPath.slice(2).join('/');
-            await this.refsInitialized;
-            const matchedRef =
-              findRef(
-                this.refs.branches.map((item) => item.name),
-                p
-              ) ||
-              findRef(
-                this.refs.tags.map((item) => item.name),
-                p
-              );
-            console.log('matchedRef', matchedRef);
-            if (matchedRef) {
-              head = matchedRef;
-            }
-            maybeCommit = !matchedRef;
+          head = segments[1];
+          const p = segments.slice(1).join('/');
+          await this.refsInitialized;
+          const matchedRef =
+            findRef(
+              this.refs.branches.map((item) => item.name),
+              p
+            ) ||
+            findRef(
+              this.refs.tags.map((item) => item.name),
+              p
+            );
+          if (matchedRef) {
+            head = matchedRef;
           }
+          maybeCommit = !matchedRef;
         }
+        this._refName = head;
+        this._revealEntry = {
+          type: segments[0],
+          filepath: segments.slice(1).join('/').slice(head.length),
+        };
         if (!maybeCommit) {
           head = await this.codeAPI.getCommit(head);
         }
-        this.revealEntry = {
-          type: _refWithPath[0],
-          filepath: _refWithPath.slice(1).join('/').slice(head.length),
-        };
       } else {
-        if (config.commit) {
-          head = config.commit;
-        } else {
-          head = await this.codeAPI.getCommit(config.ref || config.branch || config.tag || HEAD);
+        head = config.commit || config.branch || config.tag || config.ref || HEAD;
+        this._refName = head;
+        if (!config.commit) {
+          head = await this.codeAPI.getCommit(head);
         }
       }
       this.HEAD = head;
@@ -246,6 +303,10 @@ export class CodeModelService {
     } catch (err) {
       this.headState.reject();
       throw err;
+    } finally {
+      if (!this.initState.isResolved) {
+        this.initState.resolve();
+      }
     }
   }
 

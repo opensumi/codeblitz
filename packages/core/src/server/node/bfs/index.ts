@@ -18,6 +18,7 @@ import FolderAdapter, { FolderAdapterOptions } from 'browserfs/dist/node/backend
 import OverlayFS, { OverlayFSOptions } from 'browserfs/dist/node/backend/OverlayFS';
 import { CodeHost, CodeHostOptions } from './CodeHost';
 import { FileIndexSystem, FileIndexSystemOptions } from './FileIndex';
+import { LazyFS, LazyFSOptions } from './LazyFS';
 import { WORKSPACE_IDB_NAME } from '../../../common';
 
 export type {
@@ -31,6 +32,7 @@ export type {
 
 export type { FileIndex as FileIndexType } from './FileIndex';
 export type { CodeHostType } from './CodeHost';
+export type { LazyFSOptions } from './LazyFS';
 
 const Backends = {
   MountableFileSystem,
@@ -40,6 +42,7 @@ const Backends = {
   OverlayFS,
   CodeHost,
   FileIndexSystem,
+  LazyFS,
 };
 
 // Make sure all backends cast to FileSystemConstructor (for type checking)
@@ -84,8 +87,8 @@ export type FileSystemConfiguration =
   | { fs: 'InMemory'; options?: FileSystemOptions }
   | { fs: 'FolderAdapter'; options: { folder: string; wrapped: FileSystemConfiguration } }
   | { fs: 'CodeHost'; options: CodeHostOptions }
-  | { fs: 'CodeHostOverlay'; options: CodeHostOptions }
-  | { fs: 'FileIndexSystem'; options: FileIndexSystemOptions };
+  | { fs: 'FileIndexSystem'; options: FileIndexSystemOptions }
+  | { fs: 'LazyFS'; options: LazyFSOptions };
 
 async function configure(config: FileSystemConfiguration) {
   const fs = await getFileSystem(config);
@@ -164,3 +167,7 @@ export const BrowserFS = {
   getFileSystem,
   FileSystem: Backends,
 };
+
+export type SupportFileSystem = keyof typeof Backends;
+
+export type FileSystemInstance<T extends SupportFileSystem> = InstanceType<typeof Backends[T]>;

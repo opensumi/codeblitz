@@ -24,7 +24,11 @@ export const localizationBundle = {
     'error.request': '请求错误',
     'error.resource-not-found': '项目或资源不存在',
 
+    'code-service.command.checkout': '签出...',
     'code-service.checkout': '切换分支或标签...',
+    'code-service.select-ref-to-checkout': '选择签出的 ref',
+    'code-service.checkout-to': '签出 {0}',
+    'code-service.checkout-to-same': 'commit 无变化',
 
     'github.invalid-token': 'token 无效',
     'github.request-rate-limit': '超出 API 速率限制',

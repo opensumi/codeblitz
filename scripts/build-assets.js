@@ -32,7 +32,7 @@ invoke(async () => {
   const transformHttps = (str) => str.replace(/^http:/, 'https:');
   const env = {
     __WORKER_HOST__: {
-      key: 'worker-host.js',
+      key: 'worker-host',
       transform: transformHttps,
     },
     __WEBVIEW_ENDPOINT__: {
