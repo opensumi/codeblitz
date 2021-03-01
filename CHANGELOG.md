@@ -1,3 +1,12 @@
+# [0.7.0](https://code.alipay.com/cloud-ide/crew-dragon/compare/v0.6.3...v0.7.0) (2021-03-01)
+
+
+### Features
+
+* 增加 submodule 修饰, search, extension-manager 等功能 ([83925b5](https://code.alipay.com/cloud-ide/crew-dragon/commits/83925b5d721d604fa3bd5adb1a287aa9c0b34cc2))
+
+
+
 ## [0.6.3](https://code.alipay.com/cloud-ide/crew-dragon/compare/v0.6.2...v0.6.3) (2021-02-25)
 
 
