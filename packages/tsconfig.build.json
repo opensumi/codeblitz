@@ -20,7 +20,7 @@
     },
     {
       "path": "./alex/tsconfig.build.json"
-    },
+    }
   ],
   "files": [],
   "include": []
