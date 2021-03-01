@@ -6,6 +6,8 @@ const path = require('path');
 const https = require('https');
 const { StringDecoder } = require('string_decoder');
 
+const depsFileds = require('./deps-fileds');
+
 const pkg = '@ali/ide-core-common';
 
 invoke(async () => {
@@ -74,7 +76,7 @@ async function upgradeKaitianDeps(pkgPath, version, kaitianDepList) {
     pkgJSON.engines.kaitian = version;
     modified = true;
   }
-  ['dependencies', 'devDependencies'].forEach((field) => {
+  depsFileds.forEach((field) => {
     const obj = pkgJSON[field];
     if (!obj) return;
     Object.keys(obj).forEach((dep) => {
