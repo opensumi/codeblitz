@@ -12,6 +12,7 @@ const { SEMVER_INC, getNewVersion, isValidVersion, isVersionGreat } = require('.
 const currentVersion = require('../package.json').version;
 const signale = require('signale');
 const { generateAll } = require('./utils/generate-alias');
+const depsFileds = require('./deps-fileds');
 
 const packages = fse
   .readdirSync(path.resolve(__dirname, '../packages'), { withFileTypes: true })
@@ -162,7 +163,7 @@ async function updatePackage(pkgRoot, version) {
   const pkgPath = path.resolve(pkgRoot, 'package.json');
   const pkgJSON = await fse.readJSON(pkgPath);
   pkgJSON.version = version;
-  ['dependencies', 'devDependencies'].forEach((field) => {
+  depsFileds.forEach((field) => {
     const obj = pkgJSON[field];
     if (!obj) return;
     Object.keys(obj).forEach((dep) => {
