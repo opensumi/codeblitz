@@ -77,5 +77,3 @@ exports.generateAll = () => {
     exports.generateShims(),
   ]);
 };
-
-exports.generateAll();
