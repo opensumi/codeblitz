@@ -1,3 +1,17 @@
+## [0.7.1](https://code.alipay.com/cloud-ide/crew-dragon/compare/v0.7.0...v0.7.1) (2021-03-02)
+
+
+### Bug Fixes
+
+* deps fields ([7f0c510](https://code.alipay.com/cloud-ide/crew-dragon/commits/7f0c510caf0d8fc1d37aefcebf73f184377be208))
+
+
+### Features
+
+* 增加文档变更事件 ([1e04fdc](https://code.alipay.com/cloud-ide/crew-dragon/commits/1e04fdc8c67e5460d6b0579d0cfd8f2be6482909))
+
+
+
 # [0.7.0](https://code.alipay.com/cloud-ide/crew-dragon/compare/v0.6.3...v0.7.0) (2021-03-01)
 
 
