@@ -51,6 +51,7 @@ export interface RuntimeConfig {
   workspace?: {
     filesystem?: FileSystemConfiguration;
     onDidSaveTextDocument?: (data: { filepath: string; content: string }) => void;
+    onDidChangeTextDocument?: (data: { filepath: string; content: string }) => void;
   };
   /** 基于代码服务的配置 */
   codeService?: CodeServiceConfig;
