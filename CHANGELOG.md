@@ -1,3 +1,13 @@
+## [0.7.2](https://code.alipay.com/cloud-ide/crew-dragon/compare/v0.7.1...v0.7.2) (2021-03-05)
+
+
+### Features
+
+* biz 类型改为必需 ([521bb4b](https://code.alipay.com/cloud-ide/crew-dragon/commits/521bb4bbaac1824e7d9b54405b0b4f3abce5ba23))
+* 增加埋点配置 ([b5f8a42](https://code.alipay.com/cloud-ide/crew-dragon/commits/b5f8a42e5344b3842516b1ffd1c73db06f778ba0))
+
+
+
 ## [0.7.1](https://code.alipay.com/cloud-ide/crew-dragon/compare/v0.7.0...v0.7.1) (2021-03-02)
 
 
