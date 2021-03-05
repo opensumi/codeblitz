@@ -16,7 +16,7 @@ export interface IConfig {
   /**
    * 运行相关配置
    */
-  runtimeConfig?: RuntimeConfig;
+  runtimeConfig: RuntimeConfig;
 }
 
 export interface IAppInstance extends ClientApp {

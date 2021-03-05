@@ -99,6 +99,7 @@ ReactDOM.render(
     }}
     runtimeConfig={{
       codeService: config as CodeServiceConfig,
+      biz: 'alex',
       // unregisterActivityBarExtra: true,
       // hideLeftTabBar: true
     }}
