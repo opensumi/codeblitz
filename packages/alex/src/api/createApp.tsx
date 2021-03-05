@@ -107,12 +107,9 @@ export function createApp({ appConfig, runtimeConfig }: IConfig): IAppInstance {
     // IDE 销毁时，组件会触发 handleTreeBlur，但是 FileContextKey 实例尚未初始化，此时在 dispose 阶段，injector.get(FileContextKey) 会抛出错误
     app.injector.get(FileTreeModelService).handleTreeBlur();
 
-    if (runtimeConfig?.biz) {
-      const { biz } = runtimeConfig;
-      setTimeout(() => {
-        logPv(biz);
-      });
-    }
+    setTimeout(() => {
+      logPv(runtimeConfig.biz);
+    });
   };
 
   /**
@@ -147,7 +144,6 @@ export function createApp({ appConfig, runtimeConfig }: IConfig): IAppInstance {
     app.injector.disposeAll();
   };
 
-  runtimeConfig ??= {};
   // 基于场景的运行时数据
   app.injector.addProviders({
     token: RuntimeConfig,

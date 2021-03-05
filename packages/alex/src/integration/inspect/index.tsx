@@ -30,6 +30,9 @@ ReactDOM.render(
       workspaceDir: '/',
       modules: [InspectModule],
     }}
+    runtimeConfig={{
+      biz: 'inspect',
+    }}
   />,
   document.getElementById('main')
 );

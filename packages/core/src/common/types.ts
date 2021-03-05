@@ -41,14 +41,17 @@ export interface CodeServiceConfig {
  * 同时可作为应用的全局配置，可通过类型融合来扩展字段。(https://www.typescriptlang.org/docs/handbook/declaration-merging.html)
  */
 export interface RuntimeConfig {
+  /*
+   * 业务标识，用于内部埋点
+   */
+  biz: string;
+
   /**
    * 场景标识，目前用于 indexedDB store name 标识，暂不强制
    * 不填表示为默认场景，此时同一域名会共享 indexedDB
    * 如果指定为 null，表示不作为一个场景，此时不使用 indexedDB，也即不缓存工作空间及全局偏好设置等数据
    */
   scenario?: string | null;
-  /** 业务标识，用于内部埋点 */
-  biz?: string;
   /** 工作空间配置 */
   workspace?: {
     filesystem?: FileSystemConfiguration;
