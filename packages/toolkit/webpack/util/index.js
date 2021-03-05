@@ -13,6 +13,7 @@ exports.nodePolyfill = {
   alias: {
     assets: require.resolve('assert/'),
     buffer: require.resolve('buffer/'),
+    'iconv-lite-umd': resolvePolyfill('iconv-lite-umd'),
   },
   fallback: {
     net: false,

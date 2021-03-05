@@ -15,8 +15,8 @@ import { isMonacoLoaded, loadMonaco } from '@ali/ide-monaco/lib/browser/monaco-l
 import { IEditorDocumentModelService } from '@ali/ide-editor/lib/browser';
 import { EditorDocumentModelServiceImpl } from '@ali/ide-editor/lib/browser/doc-model/editor-document-model-service';
 import { EditorDocumentModel } from '@ali/ide-editor/lib/browser/doc-model/editor-document-model';
-import { FileTreeModelService } from '@ali/ide-file-tree-next/lib/browser/services/file-tree-model.service';
-import { WorkerExtensionService } from '@ali/ide-kaitian-extension/lib/browser/extension.worker.service';
+// import { FileTreeModelService } from '@ali/ide-file-tree-next/lib/browser/services/file-tree-model.service';
+// import { WorkerExtensionService } from '@ali/ide-kaitian-extension/lib/browser/extension.worker.service';
 import * as os from 'os';
 
 import { modules } from '../core/modules';
@@ -105,7 +105,7 @@ export function createApp({ appConfig, runtimeConfig }: IConfig): IAppInstance {
       themeStorage.set(e.type);
     });
     // IDE 销毁时，组件会触发 handleTreeBlur，但是 FileContextKey 实例尚未初始化，此时在 dispose 阶段，injector.get(FileContextKey) 会抛出错误
-    app.injector.get(FileTreeModelService).handleTreeBlur();
+    // app.injector.get(FileTreeModelService).handleTreeBlur();
 
     setTimeout(() => {
       logPv(runtimeConfig.biz);
@@ -138,9 +138,9 @@ export function createApp({ appConfig, runtimeConfig }: IConfig): IAppInstance {
     (monaco as any).services.StaticServices.modeService._value = null;
     // @ts-ignore
     // common-di 通过参数实例化无法自动 dispose
-    app.injector.get(WorkerExtensionService)?.protocol?._locals?.forEach((instance) => {
-      instance.dispose?.();
-    });
+    // app.injector.get(WorkerExtensionService)?.protocol?._locals?.forEach((instance) => {
+    //   instance.dispose?.();
+    // });
     app.injector.disposeAll();
   };
 

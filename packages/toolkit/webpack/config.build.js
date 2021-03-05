@@ -17,7 +17,7 @@ module.exports = createWebpackConfig({
   webpackConfig: {
     context: path.join(__dirname, '../../..'),
     entry: {
-      [config.appEntry]: './packages/alex/src/index',
+      [config.appEntry]: './packages/alex/src/integration/editor',
     },
     output: {
       library: 'Alex',

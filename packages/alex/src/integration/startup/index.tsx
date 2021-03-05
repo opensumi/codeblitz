@@ -3,7 +3,7 @@ import ReactDOM from 'react-dom';
 import {
   IAppInstance,
   AppRenderer,
-  requireModule,
+  // requireModule,
   getDefaultLayoutConfig,
   SlotLocation,
 } from '../..';
@@ -26,11 +26,11 @@ import typescript from '../../../extensions/alex.typescript-language-features-wo
 
 isFilesystemReady().then(async () => {
   console.log('filesystem ready');
-  console.log(
-    await requireModule('fs-extra').pathExists(
-      path.join(os.homedir(), `${STORAGE_DIR}/settings.json`)
-    )
-  );
+  // console.log(
+  //   await requireModule('fs-extra').pathExists(
+  //     path.join(os.homedir(), `${STORAGE_DIR}/settings.json`)
+  //   )
+  // );
 });
 
 const query = location.search

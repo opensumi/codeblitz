@@ -68,4 +68,12 @@ export interface RuntimeConfig {
   unregisterActivityBarExtra?: boolean;
   /** 隐藏左侧 tabbar */
   hideLeftTabBar?: boolean;
+  /**
+   * 启动时打开的 editor
+   * none 不打开任何 editor
+   * welcomePage 打开欢迎页
+   * 后续考虑支持 'readme', 'newUntitledFile', 'welcomePageInEmptyWorkbench', 'gettingStarted'
+   * @default welcomePage
+   */
+  startupEditor?: 'none' | 'welcomePage';
 }
