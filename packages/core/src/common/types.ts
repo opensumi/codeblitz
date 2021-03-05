@@ -47,6 +47,8 @@ export interface RuntimeConfig {
    * 如果指定为 null，表示不作为一个场景，此时不使用 indexedDB，也即不缓存工作空间及全局偏好设置等数据
    */
   scenario?: string | null;
+  /** 业务标识，用于内部埋点 */
+  biz?: string;
   /** 工作空间配置 */
   workspace?: {
     filesystem?: FileSystemConfiguration;
