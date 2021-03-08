@@ -41,3 +41,17 @@ export const getDefaultLayoutConfig = () => ({
     modules: ['breadcrumb-menu'],
   },
 });
+
+export function EditorLayoutComponent(): React.ReactElement {
+  return (
+    <BoxPanel direction="top-to-bottom">
+      <SlotRenderer flex={2} flexGrow={1} minResize={200} slot="main" />
+    </BoxPanel>
+  );
+}
+
+export const getEditorLayoutConfig = () => ({
+  [SlotLocation.main]: {
+    modules: ['@ali/ide-editor'],
+  },
+});

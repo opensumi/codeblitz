@@ -19,6 +19,7 @@ import OverlayFS, { OverlayFSOptions } from 'browserfs/dist/node/backend/Overlay
 import { CodeHost, CodeHostOptions } from './CodeHost';
 import { FileIndexSystem, FileIndexSystemOptions } from './FileIndex';
 import { LazyFS, LazyFSOptions } from './LazyFS';
+import { Editor, EditorOptions } from './Editor';
 import { WORKSPACE_IDB_NAME } from '../../../common';
 
 export type {
@@ -33,6 +34,7 @@ export type {
 export type { FileIndex as FileIndexType } from './FileIndex';
 export type { CodeHostType } from './CodeHost';
 export type { LazyFSOptions } from './LazyFS';
+export type { EditorOptions } from './Editor';
 
 const Backends = {
   MountableFileSystem,
@@ -43,6 +45,7 @@ const Backends = {
   CodeHost,
   FileIndexSystem,
   LazyFS,
+  Editor,
 };
 
 // Make sure all backends cast to FileSystemConstructor (for type checking)
@@ -88,7 +91,8 @@ export type FileSystemConfiguration =
   | { fs: 'FolderAdapter'; options: { folder: string; wrapped: FileSystemConfiguration } }
   | { fs: 'CodeHost'; options: CodeHostOptions }
   | { fs: 'FileIndexSystem'; options: FileIndexSystemOptions }
-  | { fs: 'LazyFS'; options: LazyFSOptions };
+  | { fs: 'LazyFS'; options: LazyFSOptions }
+  | { fs: 'Editor'; options: EditorOptions };
 
 async function configure(config: FileSystemConfiguration) {
   const fs = await getFileSystem(config);

@@ -88,9 +88,9 @@ export class AlexAppContribution implements CommandContribution {
           let val: string | undefined;
           try {
             const query = { taskId: '14417925' };
-            val = query[property];
+            val = property ? query[property] : query;
           } catch (e) {
-            return undefined;
+            return property ? undefined : {};
           }
           return val;
         },

@@ -14,7 +14,7 @@ export const Root: FC<RootProps> = (props) => {
   // TODO: 可以获取挂载元素的 Rect 来设置宽高
   return (
     <alex-root
-      class={`alex-root ${themeType ? `alex-${themeType}` : ''}`}
+      class={`alex-root ${themeType ? `alex-${themeType}` : ''} ${props.className ?? ''}`}
       style={{ width: '100%', height: '100%' }}
     >
       {(props.status === 'loading' || props.status === 'error') && <LandingComponent {...props} />}

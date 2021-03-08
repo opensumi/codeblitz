@@ -8,7 +8,7 @@
   "description": "Ant Codespaces for browser",
   "main": "index.js",
   "engines": {
-    "kaitian": "1.33.0"
+    "kaitian": "1.35.2"
   },
   "scripts": {
     "preinstall": "node scripts/preinstall",
@@ -16,6 +16,7 @@
     "start": "npm run dev",
     "ext": "alex ext",
     "inspect": "INTEGRATION=inspect npm run dev",
+    "editor": "INTEGRATION=editor npm run dev",
     "build": "node scripts/build",
     "bundle": "node scripts/bundle",
     "create": "node scripts/create",

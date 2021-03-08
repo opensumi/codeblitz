@@ -8,8 +8,6 @@ import {
 } from '@ali/ide-core-browser';
 import { BasicModule, isOSX, DisposableCollection } from '@ali/ide-core-common';
 import { WSChannelHandler } from '@ali/ide-connection';
-import { WorkerExtensionService } from '@ali/ide-kaitian-extension/lib/browser/extension.worker.service';
-import { WorkerExtensionServicePatch } from './patch/extension.worker.service';
 import { TextmateService } from '@ali/ide-monaco/lib/browser/textmate.service';
 import { TextmateServicePatch } from './patch/textmate.service';
 
@@ -51,10 +49,6 @@ export class ClientModule extends BrowserModule {
     EditorEmptyContribution,
     WelcomeContribution,
     MenuConfigContribution,
-    {
-      token: WorkerExtensionService,
-      useClass: WorkerExtensionServicePatch,
-    },
     {
       token: TextmateService,
       useClass: TextmateServicePatch,

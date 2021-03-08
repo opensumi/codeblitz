@@ -32,6 +32,7 @@ exports.nodePolyfill = {
 
 exports.config = {
   appEntry: 'alex',
+  editorEntry: 'alex.editor',
   workerEntry: 'worker-host',
   webviewEntry: 'webview',
 };

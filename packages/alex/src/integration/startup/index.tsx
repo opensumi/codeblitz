@@ -3,7 +3,7 @@ import ReactDOM from 'react-dom';
 import {
   IAppInstance,
   AppRenderer,
-  requireModule,
+  // requireModule,
   getDefaultLayoutConfig,
   SlotLocation,
 } from '../..';
@@ -26,11 +26,11 @@ import typescript from '../../../extensions/alex.typescript-language-features-wo
 
 isFilesystemReady().then(async () => {
   console.log('filesystem ready');
-  console.log(
-    await requireModule('fs-extra').pathExists(
-      path.join(os.homedir(), `${STORAGE_DIR}/settings.json`)
-    )
-  );
+  // console.log(
+  //   await requireModule('fs-extra').pathExists(
+  //     path.join(os.homedir(), `${STORAGE_DIR}/settings.json`)
+  //   )
+  // );
 });
 
 const query = location.search
@@ -96,6 +96,11 @@ ReactDOM.render(
       extensionMetadata: [css, html, json, markdown, typescript],
       workspaceDir: `${platform}/${config.owner}/${config.name}`,
       layoutConfig,
+      defaultPreferences: {
+        'editor.readonlyFiles': [
+          '/workspace/antcode/internal_release/ifcriskcloudus/app/plugin/tcomponent/src/main/java/com/alipay/fc/riskcloud/plugin/tcomponent/util/StrategyDrmParserUtil.java',
+        ],
+      },
     }}
     runtimeConfig={{
       codeService: config as CodeServiceConfig,

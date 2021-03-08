@@ -65,7 +65,8 @@ export class WelcomeContribution implements BrowserEditorContribution {
   }
 
   onDidRestoreState() {
-    const { defaultOpenFile } = this.runtimeConfig;
+    const { defaultOpenFile, startupEditor } = this.runtimeConfig;
+    if (startupEditor && startupEditor !== 'welcomePage') return;
     if (defaultOpenFile) {
       const openFile = Array.isArray(defaultOpenFile) ? defaultOpenFile : [defaultOpenFile];
       openFile.forEach((file, i) => {

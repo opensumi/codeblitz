@@ -25,7 +25,7 @@ module.exports = (option = {}) => {
         removeKeyHash: /\.[a-f0-9]{8}/gi,
       }),
       new HtmlWebpackPlugin({
-        filename: `[name].[contenthash:8]/index.html`,
+        filename: `[name]${isDev ? '' : '.[contenthash:8]'}/index.html`,
         template: option.template || path.join(__dirname, '../public/webview.html'),
       }),
     ],
