@@ -170,6 +170,7 @@ export class ServerApp implements IServerApp {
     try {
       const runtimeConfig: RuntimeConfig = this.injector.get(RuntimeConfig);
       this.rootFS = await initializeRootFileSystem(runtimeConfig.scenario);
+
       for (const contribution of this.launchContributionsProvider.getContributions()) {
         if (contribution.launch) {
           await contribution.launch(this);
@@ -177,9 +178,7 @@ export class ServerApp implements IServerApp {
       }
 
       // 初始化文件目录
-      await fse.ensureDir(this.appConfig.workspaceDir || WORKSPACE_ROOT),
-        // 工作空间文件系统及目录是在 launch 阶段初始化的，此时表示文件系统全部初始完毕，可安全使用 fs 去操作文件
-        filesystemDeferred.resolve();
+      await fse.ensureDir(this.appConfig.workspaceDir || WORKSPACE_ROOT);
     } catch (err) {
       this.logger.error('Launch Failed', err);
     }

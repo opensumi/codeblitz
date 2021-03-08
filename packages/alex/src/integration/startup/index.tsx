@@ -96,6 +96,11 @@ ReactDOM.render(
       extensionMetadata: [css, html, json, markdown, typescript],
       workspaceDir: `${platform}/${config.owner}/${config.name}`,
       layoutConfig,
+      defaultPreferences: {
+        'editor.readonlyFiles': [
+          '/workspace/antcode/internal_release/ifcriskcloudus/app/plugin/tcomponent/src/main/java/com/alipay/fc/riskcloud/plugin/tcomponent/util/StrategyDrmParserUtil.java',
+        ],
+      },
     }}
     runtimeConfig={{
       codeService: config as CodeServiceConfig,

@@ -13,7 +13,6 @@ exports.nodePolyfill = {
   alias: {
     assets: require.resolve('assert/'),
     buffer: require.resolve('buffer/'),
-    'iconv-lite-umd': resolvePolyfill('iconv-lite-umd'),
   },
   fallback: {
     net: false,
@@ -33,6 +32,7 @@ exports.nodePolyfill = {
 
 exports.config = {
   appEntry: 'alex',
+  editorEntry: 'alex.editor',
   workerEntry: 'worker-host',
   webviewEntry: 'webview',
 };

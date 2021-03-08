@@ -15,14 +15,12 @@ import { isMonacoLoaded, loadMonaco } from '@ali/ide-monaco/lib/browser/monaco-l
 import { IEditorDocumentModelService } from '@ali/ide-editor/lib/browser';
 import { EditorDocumentModelServiceImpl } from '@ali/ide-editor/lib/browser/doc-model/editor-document-model-service';
 import { EditorDocumentModel } from '@ali/ide-editor/lib/browser/doc-model/editor-document-model';
-import { FileTreeModelService } from '@ali/ide-file-tree-next/lib/browser/services/file-tree-model.service';
-import { WorkerExtensionService } from '@ali/ide-kaitian-extension/lib/browser/extension.worker.service';
 import * as os from 'os';
 
-import { modules } from '../core/modules';
-import { IconSlim, IDETheme } from '../core/extensions';
+import '../core/editor/style.module.less';
+import { modules } from '../core/editor/modules';
 import { mergeConfig, themeStorage } from '../core/utils';
-import { LayoutComponent, getDefaultLayoutConfig } from '../core/layout';
+import { EditorLayoutComponent, getEditorLayoutConfig } from '../core/layout';
 import { IConfig, IAppInstance } from './types';
 import { logPv } from '../core/tracert';
 
@@ -32,27 +30,19 @@ const getDefaultAppConfig = (): IAppOpts => ({
   modules,
   useCdnIcon: true,
   noExtHost: true,
-  extWorkerHost: __WORKER_HOST__,
-  webviewEndpoint: __WEBVIEW_ENDPOINT__,
   defaultPreferences: {
-    'general.theme': 'ide-dark',
-    'general.icon': 'vsicons-slim',
+    'general.theme': 'ide-light',
     'application.confirmExit': 'never',
-    'editor.quickSuggestionsDelay': 10,
-    'editor.quickSuggestionsMaxCount': 50,
-    'settings.userBeforeWorkspace': true,
+    'editor.autoSave': 'afterDelay',
+    'editor.autoSaveDelay': 1000, // one second
     'files.exclude': {
       ...FILES_DEFAULTS.filesExclude,
       // browserfs OverlayFS 用来记录删除的文件
       '**/.deletedFiles.log': true,
     },
   },
-  layoutConfig: getDefaultLayoutConfig(),
-  layoutComponent: LayoutComponent,
-  extensionMetadata: [IconSlim, IDETheme],
-  defaultPanels: {
-    bottom: '',
-  },
+  layoutConfig: getEditorLayoutConfig(),
+  layoutComponent: EditorLayoutComponent,
   logDir: `${os.homedir()}/${STORAGE_DIR}/logs/`,
   preferenceDirName: STORAGE_DIR,
   storageDirName: STORAGE_DIR,
@@ -61,8 +51,6 @@ const getDefaultAppConfig = (): IAppOpts => ({
   allowSetDocumentTitleFollowWorkspaceDir: false,
 });
 
-export const DEFAULT_APP_CONFIG = getDefaultAppConfig();
-
 // 提前加载 monaco 并提前缓存 codeEditorService
 loadMonaco();
 let codeEditorService: any = null;
@@ -70,7 +58,7 @@ isMonacoLoaded()?.then(() => {
   codeEditorService = (monaco as any).services.StaticServices.codeEditorService;
 });
 
-export function createApp({ appConfig, runtimeConfig }: IConfig): IAppInstance {
+export function createEditor({ appConfig, runtimeConfig }: IConfig): IAppInstance {
   const customConfig = typeof appConfig === 'function' ? appConfig() : appConfig;
   const opts = mergeConfig(getDefaultAppConfig(), customConfig);
 
@@ -104,9 +92,6 @@ export function createApp({ appConfig, runtimeConfig }: IConfig): IAppInstance {
     (app.injector.get(IThemeService) as IThemeService).onThemeChange((e) => {
       themeStorage.set(e.type);
     });
-    // IDE 销毁时，组件会触发 handleTreeBlur，但是 FileContextKey 实例尚未初始化，此时在 dispose 阶段，injector.get(FileContextKey) 会抛出错误
-    app.injector.get(FileTreeModelService).handleTreeBlur();
-
     setTimeout(() => {
       logPv(runtimeConfig.biz);
     });
@@ -136,11 +121,6 @@ export function createApp({ appConfig, runtimeConfig }: IConfig): IAppInstance {
       codeEditorService._value = null;
     }
     (monaco as any).services.StaticServices.modeService._value = null;
-    // @ts-ignore
-    // common-di 通过参数实例化无法自动 dispose
-    app.injector.get(WorkerExtensionService)?.protocol?._locals?.forEach((instance) => {
-      instance.dispose?.();
-    });
     app.injector.disposeAll();
   };
 

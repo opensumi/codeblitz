@@ -1,59 +1,129 @@
-import React from 'react';
+import React, { useState, useMemo } from 'react';
 import ReactDOM from 'react-dom';
-import { IAppInstance, AppRenderer, SlotLocation, BoxPanel, SlotRenderer } from '../..';
-// import * as os from 'os';
-// import * as path from 'path';
-import * as Alex from '../..';
-// import '../startup/languages';
-import { EditorOverrideModule } from './editor-override.module';
-import './style.module.less';
+import { IAppInstance, EditorRenderer } from '../../editor';
+import * as Alex from '../../editor';
+import '../startup/languages';
+
+import Button from 'antd/lib/button';
+import 'antd/lib/button/style/index.css';
+import Select from 'antd/lib/select';
+import 'antd/lib/select/style/index.css';
+import Spin from 'antd/lib/spin';
+import 'antd/lib/spin/style/index.css';
 
 (window as any).alex = Alex;
 
-ReactDOM.render(
-  <div style={{ width: '50%', height: '50%' }}>
-    <AppRenderer
-      onLoad={(app) => {
-        window.app = app;
-      }}
-      appConfig={{
-        modules: [EditorOverrideModule],
-        workspaceDir: 'editor',
-        layoutConfig: {
-          [SlotLocation.main]: {
-            modules: ['@ali/ide-editor'],
-          },
-        },
-        layoutComponent: () => (
-          <BoxPanel direction="top-to-bottom">
-            <SlotRenderer flex={2} flexGrow={1} minResize={200} slot="main" />
-          </BoxPanel>
-        ),
-        defaultPreferences: {
-          'general.theme': 'ide-light',
-          'editor.scrollBeyondLastLine': false,
-        },
-      }}
-      runtimeConfig={{
-        scenario: null,
-        defaultOpenFile: 'main.js',
-        workspace: {
-          filesystem: {
-            fs: 'FileIndexSystem',
-            options: {
-              requestFileIndex() {
-                return Promise.resolve({
-                  'main.js': 'console.log(123)',
-                });
-              },
+const project = encodeURIComponent('ide-s/TypeScript-Node-Starter');
+
+const App = () => {
+  const [ref, setRef] = useState('');
+  const [filepath, setFilePath] = useState('');
+  const [encoding, setEncoding] = useState<'utf8' | 'gbk' | undefined>('utf8');
+
+  const path = useMemo(() => (ref && filepath ? `${encodeURIComponent(ref)}/${filepath}` : ''), [
+    ref,
+    filepath,
+  ]);
+
+  const readFile = async (path: string) => {
+    const i = path.indexOf('/');
+    const res = await fetch(
+      `/code-service/api/v3/projects/${project}/repository/blobs/${path.slice(
+        0,
+        i
+      )}?filepath=${path.slice(i + 1)}`
+    );
+    if (res.status >= 200 && res.status < 300) {
+      return res.arrayBuffer();
+    }
+    throw new Error(`${res.status} - ${res.statusText}`);
+  };
+
+  return (
+    <div style={{ width: '100%', height: '100%', padding: 8 }}>
+      <div style={{ display: 'flex' }}>
+        <Select
+          value={ref || undefined}
+          onChange={setRef}
+          size="small"
+          style={{ width: 200, marginRight: 8 }}
+          placeholder="选择分支"
+        >
+          {['master', 'feat/123123'].map((path) => (
+            <Select.Option key={path} value={path}>
+              {path}
+            </Select.Option>
+          ))}
+        </Select>
+        <Select
+          value={filepath || undefined}
+          onChange={setFilePath}
+          size="small"
+          style={{ width: 200, marginRight: 8 }}
+          placeholder="选择文件"
+        >
+          {['package.json', 'src/app.ts', 'gbk.ts'].map((path) => (
+            <Select.Option key={path} value={path}>
+              {path}
+            </Select.Option>
+          ))}
+        </Select>
+        <Select
+          value={encoding}
+          onChange={setEncoding}
+          size="small"
+          style={{ width: 120, marginRight: 8 }}
+          placeholder="更改编码"
+        >
+          {['utf8', 'gbk'].map((encoding) => (
+            <Select.Option key={encoding} value={encoding}>
+              {encoding}
+            </Select.Option>
+          ))}
+        </Select>
+      </div>
+      <div style={{ width: '50%', height: 'calc(100% - 100px)' }}>
+        <EditorRenderer
+          onLoad={(app) => {
+            window.app = app;
+          }}
+          Landing={() => (
+            <div
+              style={{
+                width: '100%',
+                height: '100%',
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+              }}
+            >
+              <Spin />
+            </div>
+          )}
+          appConfig={{
+            workspaceDir: 'editor',
+            defaultPreferences: {
+              'general.theme': 'ide-light',
+              'editor.scrollBeyondLastLine': false,
             },
-          },
-        },
-      }}
-    />
-  </div>,
-  document.getElementById('main')
-);
+          }}
+          runtimeConfig={{
+            biz: 'editor',
+            scenario: null,
+            startupEditor: 'none',
+          }}
+          documentModel={{
+            filepath: path,
+            readFile,
+            encoding,
+          }}
+        />
+      </div>
+    </div>
+  );
+};
+
+ReactDOM.render(<App />, document.getElementById('main'));
 
 // for test
 window.destroy = () => {

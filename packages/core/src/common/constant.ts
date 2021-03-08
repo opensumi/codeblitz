@@ -10,6 +10,8 @@ export const TMP_ROOT = os.tmpdir();
 
 export const WORKSPACE_ROOT = '/workspace';
 
+export const SCM_ROOT = '/scm';
+
 export const CODE_ROOT = '/code';
 
 export const IDB_ROOT = '/idb';

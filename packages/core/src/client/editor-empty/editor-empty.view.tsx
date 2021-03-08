@@ -27,7 +27,7 @@ export const EditorEmptyComponent: React.FC = () => {
       name: localize('common.command.quickopen.command-terminal'),
       value: getKeybindingsForCommand('editor.action.quickCommand'),
     },
-  ];
+  ].filter((item) => item.value.length);
 
   return (
     <section className={styles.emptyContainer}>
