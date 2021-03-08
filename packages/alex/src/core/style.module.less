@@ -52,4 +52,14 @@ alex-root {
     object-fit: contain;
     width: auto !important;
   }
+  alex-root.alex-hide-editor-tab {
+    [class^='kt_editor_group_'] {
+      > [class^='editorGroupHeader_'] {
+        display: none !important;
+      }
+      > [class^='kt_editor_body_'] {
+        height: 100% !important;
+      }
+    }
+  }
 }

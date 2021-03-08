@@ -24,11 +24,14 @@ import {
   FileSystemInstance,
   SCM_ROOT,
 } from '@alipay/alex-core';
-import { WorkbenchEditorService, BrowserEditorContribution } from '@ali/ide-editor/lib/browser';
-import { FileServiceClient } from '@ali/ide-file-service/lib/browser/file-service-client';
-import { IFileServiceClient } from '@ali/ide-file-service/lib/common';
+import {
+  WorkbenchEditorService,
+  BrowserEditorContribution,
+  EditorPreferences,
+} from '@ali/ide-editor/lib/browser';
 import { IEditorDocumentModelService } from '@ali/ide-editor/lib/browser/doc-model/types';
-import { EditorPreferences } from '@ali/ide-editor/lib/browser';
+import { FileSchemeDocumentProvider } from '@ali/ide-file-scheme/lib/browser/file-doc';
+import { FILE_SCHEME } from '@ali/ide-file-scheme/lib/common';
 import * as path from 'path';
 import md5 from 'md5';
 import { IWorkspaceService } from '@ali/ide-workspace';
@@ -54,9 +57,13 @@ class BreadCrumbServiceImplOverride extends BreadCrumbServiceImpl {
 }
 
 @Injectable()
-class FileServiceClientOverride extends FileServiceClient {
-  getEncoding() {
-    return Promise.resolve(select((props) => props.documentModel.encoding) || 'utf8');
+class FileSchemeDocumentProviderOverride extends FileSchemeDocumentProvider {
+  async provideEncoding(uri: URI) {
+    const encoding = select((props) => props.documentModel.encoding);
+    if (uri.scheme === FILE_SCHEME && encoding) {
+      return encoding;
+    }
+    return super.provideEncoding(uri);
   }
 }
 
@@ -221,8 +228,8 @@ export class EditorSpecialModule extends BrowserModule {
       override: true,
     },
     {
-      token: IFileServiceClient,
-      useClass: FileServiceClientOverride,
+      token: FileSchemeDocumentProvider,
+      useClass: FileSchemeDocumentProviderOverride,
       override: true,
     },
     {

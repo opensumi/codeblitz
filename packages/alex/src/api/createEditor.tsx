@@ -17,7 +17,6 @@ import { EditorDocumentModelServiceImpl } from '@ali/ide-editor/lib/browser/doc-
 import { EditorDocumentModel } from '@ali/ide-editor/lib/browser/doc-model/editor-document-model';
 import * as os from 'os';
 
-import '../core/editor/style.module.less';
 import { modules } from '../core/editor/modules';
 import { mergeConfig, themeStorage } from '../core/utils';
 import { EditorLayoutComponent, getEditorLayoutConfig } from '../core/layout';

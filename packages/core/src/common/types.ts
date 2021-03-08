@@ -76,4 +76,8 @@ export interface RuntimeConfig {
    * @default welcomePage
    */
   startupEditor?: 'none' | 'welcomePage';
+  /**
+   * 隐藏编辑器区 tab
+   */
+  hideEditorTab?: boolean;
 }

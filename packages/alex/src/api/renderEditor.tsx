@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect, useRef, useMemo } from 'react';
 import ReactDOM from 'react-dom';
 import { IReporterService, localize, getDebugLogger } from '@ali/ide-core-common';
 import { REPORT_NAME } from '@alipay/alex-core';
@@ -10,6 +10,7 @@ import { useConstant } from '../core/hooks';
 import { IConfig, IAppInstance } from './types';
 import { EditorProps } from '../core/editor/types';
 import { Container } from '../core/editor/container';
+import { HIDE_EDITOR_TAB_CLASS_NAME } from '../core/constants';
 
 interface IRenderProps extends IConfig {
   onLoad?(app: IAppInstance): void;
@@ -28,7 +29,11 @@ export const renderEditor = (domElement: HTMLElement, props: IEditorRenderProps)
     .start((appElement) => {
       return new Promise((resolve) => {
         ReactDOM.render(
-          <Root status="success" theme={themeType}>
+          <Root
+            status="success"
+            theme={themeType}
+            className={opts.runtimeConfig.hideEditorTab ? HIDE_EDITOR_TAB_CLASS_NAME : ''}
+          >
             {appElement}
           </Root>,
           domElement,
@@ -100,9 +105,14 @@ export const EditorRenderer: React.FC<IEditorRenderProps> = ({ onLoad, Landing, 
     };
   }, []);
 
+  const rootClassName = useMemo(
+    () => (opts.runtimeConfig.hideEditorTab ? HIDE_EDITOR_TAB_CLASS_NAME : ''),
+    [opts.runtimeConfig.hideEditorTab]
+  );
+
   return (
     <Container value={{ documentModel: opts.documentModel }}>
-      <Root {...state} theme={themeType} Landing={Landing}>
+      <Root {...state} theme={themeType} Landing={Landing} className={rootClassName}>
         {appElementRef.current}
       </Root>
     </Container>

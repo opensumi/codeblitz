@@ -111,6 +111,7 @@ const App = () => {
             biz: 'editor',
             scenario: null,
             startupEditor: 'none',
+            hideEditorTab: true,
           }}
           documentModel={{
             filepath: path,

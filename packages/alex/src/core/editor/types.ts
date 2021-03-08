@@ -6,5 +6,4 @@ export interface DocumentModel {
 
 export interface EditorProps {
   documentModel: DocumentModel;
-  // workspaceDir: string
 }

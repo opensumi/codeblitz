@@ -5,6 +5,7 @@ export interface LandingProps {
   status: 'loading' | 'success' | 'error';
   error?: string;
   theme?: ThemeType;
+  className?: string;
 }
 
 export interface RootProps extends LandingProps {
