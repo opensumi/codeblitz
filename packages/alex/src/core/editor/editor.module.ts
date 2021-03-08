@@ -148,12 +148,6 @@ class EditorSpecialContribution
       readable: editorSystem,
       writable: folderSystem,
     });
-    // return {
-    //   codeFileSystem,
-    //   idbFileSystem,
-    //   folderSystem,
-    //   overlayFileSystem,
-    // };
     rootFS.mount(this.appConfig.workspaceDir, overlayFileSystem);
     rootFS.mount(SCM_ROOT, editorSystem);
     this.disposables.push({
@@ -165,10 +159,7 @@ class EditorSpecialContribution
   }
 
   initialize() {
-    // 切换分支需更改工作区
-    // onSelect(props => props.workspaceDir)(() => {
-    //   this.workspaceService.setWorkspace()
-    // })
+    // 提供写时 diff 视图
     this.scmService.registerSCMProvider({
       id: 'editor0',
       label: 'editor',
@@ -188,9 +179,7 @@ class EditorSpecialContribution
 
   onDidRestoreState() {
     const filepath = select((props) => props.documentModel.filepath);
-    // const readonly = select(props => props.documentModel.readonly)
     if (filepath) {
-      // const readonlyFiles = this.editorPreferences['editor.readonlyFiles'].s
       this.openEditor(filepath);
     }
 
