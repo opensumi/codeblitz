@@ -20,10 +20,10 @@ export const lsifPreferenceSchema: PreferenceSchema = {
       description: localize('lsif.enable', 'Lsif enablement'),
       default: true,
     },
-    'lsif.document.scheme': {
+    'lsif.documentScheme': {
       type: 'string',
-      description: localize('lsif.document.scheme', 'lsif支持的文件协议'),
-      default: 'git',
+      description: localize('lsif.documentScheme', 'lsif支持的文件协议'),
+      default: 'file',
     },
   },
 };

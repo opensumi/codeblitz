@@ -34,13 +34,13 @@ export class LsifContribution extends Disposable implements ClientAppContributio
   private get commitId() {
     // @ts-ignore
     // FIXME
-    return this.runtimeConfig.ref;
+    return this.runtimeConfig.ref || 'feat/123123';
   }
 
   private get repository() {
     // @ts-ignore
     // FIXME
-    return this.runtimeConfig.repoPath;
+    return this.runtimeConfig.repoPath || 'ide-s/TypeScript-Node-Starter';
   }
 
   // 标记 lsif 开启的 flag
@@ -60,15 +60,15 @@ export class LsifContribution extends Disposable implements ClientAppContributio
 
     this.lsifClient = new LsifClient(IS_TEST_ENV ? LSIF_TEST_API_HOST : LSIF_PROD_API_HOST);
     // 集成侧如果需要不一样的 preference name 则需要进行代理
-    this.lsIfEnabled = !!this.preferenceService.get<boolean>('lsif.enable');
-    this.lsifDocumentScheme = this.preferenceService.get<string>('lsif.document.scheme') || 'git';
+    this.lsIfEnabled = true; // !!this.preferenceService.get<boolean>('lsif.enable');
+    this.lsifDocumentScheme = 'file'; // this.preferenceService.get<string>('lsif.documentScheme') || 'git';
     this.addDispose(
       this.preferenceService.onPreferenceChanged((data: PreferenceChange) => {
         if (data.preferenceName === 'lsif.enable') {
           this.lsIfEnabled = data.newValue;
         }
 
-        if (data.preferenceName === 'lsif.document.scheme') {
+        if (data.preferenceName === 'lsif.documentScheme') {
           this.lsifDocumentScheme = data.newValue;
         }
       })

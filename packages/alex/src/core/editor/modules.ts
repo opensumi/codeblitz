@@ -24,6 +24,7 @@ import { WorkspaceModule } from '@ali/ide-workspace/lib/browser';
  * alex
  */
 import { ClientModule, ServerModuleCollection } from '@alipay/alex-core';
+import { LsifModule } from '@alipay/alex-lsif-service';
 
 /**
  * editor special
@@ -54,6 +55,7 @@ export const modules: ModuleConstructor[] = [
 
   // Alex
   ClientModule,
+  LsifModule,
   ...ServerModuleCollection,
 
   // Editor Special
