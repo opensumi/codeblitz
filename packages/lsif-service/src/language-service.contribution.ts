@@ -1,9 +1,13 @@
 import { Autowired } from '@ali/common-di';
-import { Disposable, Domain, URI } from '@ali/ide-core-common';
+import { Disposable, Domain, URI, Uri } from '@ali/ide-core-common';
 import { ClientAppContribution, PreferenceService, PreferenceChange } from '@ali/ide-core-browser';
+import { Position, Range, Location } from '@ali/ide-kaitian-extension/lib/common/vscode/ext-types';
+import { IWorkspaceService } from '@ali/ide-workspace';
+import * as paths from '@ali/ide-core-common/lib/path';
+
 import * as vscode from 'vscode';
 import { LSIF_PROD_API_HOST, LSIF_TEST_API_HOST, LsifClient } from '@alipay/lsif-client';
-import { Position, Range, Location } from '@ali/ide-kaitian-extension/lib/common/vscode/ext-types';
+import { RuntimeConfig } from '@alipay/alex-core';
 
 import { SimpleLanguageService } from './language-client';
 
@@ -21,10 +25,35 @@ export class LsifContribution extends Disposable implements ClientAppContributio
   @Autowired(PreferenceService)
   private readonly preferenceService: PreferenceService;
 
+  @Autowired(IWorkspaceService)
+  private readonly workspaceService: IWorkspaceService;
+
+  @Autowired(RuntimeConfig)
+  private readonly runtimeConfig: RuntimeConfig;
+
+  private get commitId() {
+    // @ts-ignore
+    // FIXME
+    return this.runtimeConfig.ref;
+  }
+
+  private get repository() {
+    // @ts-ignore
+    // FIXME
+    return this.runtimeConfig.repoPath;
+  }
+
   // 标记 lsif 开启的 flag
   private lsIfEnabled: boolean;
+  // 支持 lsif 的 scheme
+  private lsifDocumentScheme: string;
   // lsif 客户端
   private lsifClient: LsifClient;
+
+  private async getWorkspaceRoot(): Promise<URI | undefined> {
+    const [root] = await this.workspaceService.roots;
+    return root ? new URI(root.uri) : undefined;
+  }
 
   constructor() {
     super();
@@ -32,29 +61,24 @@ export class LsifContribution extends Disposable implements ClientAppContributio
     this.lsifClient = new LsifClient(IS_TEST_ENV ? LSIF_TEST_API_HOST : LSIF_PROD_API_HOST);
     // 集成侧如果需要不一样的 preference name 则需要进行代理
     this.lsIfEnabled = !!this.preferenceService.get<boolean>('lsif.enable');
+    this.lsifDocumentScheme = this.preferenceService.get<string>('lsif.document.scheme') || 'git';
     this.addDispose(
       this.preferenceService.onPreferenceChanged((data: PreferenceChange) => {
         if (data.preferenceName === 'lsif.enable') {
           this.lsIfEnabled = data.newValue;
         }
+
+        if (data.preferenceName === 'lsif.document.scheme') {
+          this.lsifDocumentScheme = data.newValue;
+        }
       })
     );
   }
 
-  private _repoPath: string;
-  public get repository() {
-    return this._repoPath;
-  }
-  public set repository(repo: string) {
-    this._repoPath = repo;
-  }
-
-  private _ref: string;
-  public get ref() {
-    return this._ref;
-  }
-  public set ref(ref: string) {
-    this._ref = ref;
+  private checkRepoInfo(uri: Uri) {
+    return (
+      this.lsIfEnabled && this.repository && this.commitId && uri.scheme === this.lsifDocumentScheme
+    );
   }
 
   async onDidStart() {
@@ -64,15 +88,19 @@ export class LsifContribution extends Disposable implements ClientAppContributio
         { pattern: '**/*.{js,jsx,ts,tsx,java}' },
         {
           provideHover: async (document: vscode.TextDocument, position: Position) => {
-            if (!this.lsIfEnabled) {
+            if (!this.checkRepoInfo(document.uri)) {
+              return;
+            }
+
+            const rootUri = await this.getWorkspaceRoot();
+            if (!rootUri) {
               return;
             }
 
             return await this.lsifClient.hover({
-              repository: this.repository,
-              commit: this.ref,
-              // FIXME: 需要一个转换规则 因为不知道 集成方 是如何定义 path/uri 的
-              path: document.uri.path.toString(),
+              repository: this.repository!,
+              commit: this.commitId!,
+              path: rootUri.relative(new URI(document.uri))!.toString(),
               position: {
                 character: position.character,
                 line: position.line,
@@ -88,15 +116,19 @@ export class LsifContribution extends Disposable implements ClientAppContributio
         { pattern: '**/*.{js,jsx,ts,tsx,java}' },
         {
           provideReferences: async (document: vscode.TextDocument, position: Position) => {
-            if (!this.lsIfEnabled) {
+            if (!this.checkRepoInfo(document.uri)) {
+              return;
+            }
+
+            const rootUri = await this.getWorkspaceRoot();
+            if (!rootUri) {
               return;
             }
 
             const ret = await this.lsifClient.reference({
-              repository: this.repository,
-              commit: this.ref,
-              // FIXME: 需要一个转换规则 因为不知道 集成方 是如何定义 path/uri 的
-              path: document.uri.path.toString(),
+              repository: this.repository!,
+              commit: this.commitId!,
+              path: rootUri.relative(new URI(document.uri))!.toString(),
               position: {
                 character: position.character,
                 line: position.line,
@@ -108,9 +140,11 @@ export class LsifContribution extends Disposable implements ClientAppContributio
             }
 
             return ret.map((locationDesc) => {
-              // 返回的 uri 中没有 commitId
-              // FIXME: 这里需要额外处理一下
-              const locationUri = new URI(locationDesc.uri).codeUri;
+              const path = paths.resolve(
+                rootUri.path.toString(),
+                new URI(locationDesc.uri).path.toString()
+              );
+              const locationUri = URI.file(path).codeUri;
               const start: Position = new Position(
                 locationDesc.range.start.line,
                 locationDesc.range.start.character
@@ -133,14 +167,19 @@ export class LsifContribution extends Disposable implements ClientAppContributio
         { pattern: '**/*.{js,jsx,ts,tsx,java}' },
         {
           provideDefinition: async (document: vscode.TextDocument, position: Position) => {
-            if (!this.lsIfEnabled) {
+            if (!this.checkRepoInfo(document.uri)) {
+              return;
+            }
+
+            const rootUri = await this.getWorkspaceRoot();
+            if (!rootUri) {
               return;
             }
 
             const ret = await this.lsifClient.definition({
-              repository: this.repository,
-              commit: this.ref,
-              path: document.uri.path.toString(),
+              repository: this.repository!,
+              commit: this.commitId!,
+              path: rootUri.relative(new URI(document.uri))!.toString(),
               position: {
                 character: position.character,
                 line: position.line,
@@ -152,7 +191,12 @@ export class LsifContribution extends Disposable implements ClientAppContributio
             }
 
             return ret.map((locationDesc) => {
-              const locationUri = new URI(locationDesc.uri).codeUri;
+              const path = paths.resolve(
+                rootUri.path.toString(),
+                new URI(locationDesc.uri).path.toString()
+              );
+              const locationUri = URI.file(path).codeUri;
+
               const start: Position = new Position(
                 locationDesc.range.start.line,
                 locationDesc.range.start.character

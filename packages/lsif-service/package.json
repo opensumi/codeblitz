@@ -24,7 +24,7 @@
     "@alipay/lsif-client": "^1.1.1"
   },
   "peerDependencies": {
-    "@ali/ide-core-common": "1.33.0",
-    "@ali/ide-kaitian-extension": "1.33.0"
+    "@ali/ide-core-common": "1.35.2",
+    "@ali/ide-kaitian-extension": "1.35.2"
   }
 }
