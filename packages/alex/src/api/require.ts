@@ -17,7 +17,7 @@ import * as FileScheme from '../modules/ali__ide-file-scheme';
 import * as FileSearch from '../modules/ali__ide-file-search';
 import * as FileService from '../modules/ali__ide-file-service';
 import * as FileTreeNext from '../modules/ali__ide-file-tree-next';
-// import * as KaitianExtension from '../modules/ali__ide-kaitian-extension';
+import * as KaitianExtension from '../modules/ali__ide-kaitian-extension';
 import * as Keymaps from '../modules/ali__ide-keymaps';
 import * as Logs from '../modules/ali__ide-logs';
 import * as MainLayout from '../modules/ali__ide-main-layout';
@@ -69,7 +69,7 @@ export function requireModule(module: '@ali/ide-file-search'): typeof FileSearch
 export function requireModule(module: '@ali/ide-file-service'): typeof FileService;
 export function requireModule(module: '@ali/ide-file-scheme'): typeof FileScheme;
 export function requireModule(module: '@ali/ide-file-tree-next'): typeof FileTreeNext;
-// export function requireModule(module: '@ali/ide-kaitian-extension'): typeof KaitianExtension;
+export function requireModule(module: '@ali/ide-kaitian-extension'): typeof KaitianExtension;
 export function requireModule(module: '@ali/ide-keymaps'): typeof Keymaps;
 export function requireModule(module: '@ali/ide-logs'): typeof Logs;
 export function requireModule(module: '@ali/ide-main-layout'): typeof MainLayout;
@@ -138,8 +138,8 @@ export function requireModule(module: string): any {
       return FileScheme;
     case '@ali/ide-file-tree-next':
       return FileTreeNext;
-    // case '@ali/ide-kaitian-extension':
-    //   return KaitianExtension;
+    case '@ali/ide-kaitian-extension':
+      return KaitianExtension;
     case '@ali/ide-keymaps':
       return Keymaps;
     case '@ali/ide-logs':
