@@ -1,5 +1,13 @@
 import { Autowired } from '@ali/common-di';
-import { Disposable, Domain, URI, Uri } from '@ali/ide-core-common';
+import {
+  Command,
+  CommandRegistry,
+  CommandService,
+  Disposable,
+  Domain,
+  URI,
+  Uri,
+} from '@ali/ide-core-common';
 import { ClientAppContribution, PreferenceService, PreferenceChange } from '@ali/ide-core-browser';
 import { Position, Range, Location } from '@ali/ide-kaitian-extension/lib/common/vscode/ext-types';
 import { IWorkspaceService } from '@ali/ide-workspace';
@@ -31,16 +39,11 @@ export class LsifContribution extends Disposable implements ClientAppContributio
   @Autowired(RuntimeConfig)
   private readonly runtimeConfig: RuntimeConfig;
 
-  private get commitId() {
-    // @ts-ignore
-    // FIXME
-    return this.runtimeConfig.ref || 'feat/123123';
-  }
+  @Autowired(CommandService)
+  private readonly commands: CommandService;
 
-  private get repository() {
-    // @ts-ignore
-    // FIXME
-    return this.runtimeConfig.repoPath || 'ide-s/TypeScript-Node-Starter';
+  private async getCodeServiceProject() {
+    return await this.commands.executeCommand('alex.codeServiceProject');
   }
 
   // 标记 lsif 开启的 flag
@@ -76,9 +79,7 @@ export class LsifContribution extends Disposable implements ClientAppContributio
   }
 
   private checkRepoInfo(uri: Uri) {
-    return (
-      this.lsIfEnabled && this.repository && this.commitId && uri.scheme === this.lsifDocumentScheme
-    );
+    return this.lsIfEnabled && uri.scheme === this.lsifDocumentScheme;
   }
 
   async onDidStart() {
@@ -97,9 +98,11 @@ export class LsifContribution extends Disposable implements ClientAppContributio
               return;
             }
 
+            const { commit, project } = (await this.getCodeServiceProject()) as any;
+
             return await this.lsifClient.hover({
-              repository: this.repository!,
-              commit: this.commitId!,
+              repository: project,
+              commit,
               path: rootUri.relative(new URI(document.uri))!.toString(),
               position: {
                 character: position.character,
@@ -125,9 +128,11 @@ export class LsifContribution extends Disposable implements ClientAppContributio
               return;
             }
 
+            const { commit, project } = (await this.getCodeServiceProject()) as any;
+
             const ret = await this.lsifClient.reference({
-              repository: this.repository!,
-              commit: this.commitId!,
+              repository: project,
+              commit,
               path: rootUri.relative(new URI(document.uri))!.toString(),
               position: {
                 character: position.character,
@@ -176,9 +181,11 @@ export class LsifContribution extends Disposable implements ClientAppContributio
               return;
             }
 
+            const { commit, project } = (await this.getCodeServiceProject()) as any;
+
             const ret = await this.lsifClient.definition({
-              repository: this.repository!,
-              commit: this.commitId!,
+              repository: project,
+              commit,
               path: rootUri.relative(new URI(document.uri))!.toString(),
               position: {
                 character: position.character,
