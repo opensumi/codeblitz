@@ -284,7 +284,7 @@ window.define = define;
     devServer: {
       port,
       disableHostCheck: true,
-      host: 'localhost',
+      host: '0.0.0.0',
       openPage: `http://localhost:${port}`,
       stats: 'errors-only',
       overlay: true,
