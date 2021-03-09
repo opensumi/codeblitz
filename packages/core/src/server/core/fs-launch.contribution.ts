@@ -1,5 +1,5 @@
 import { Autowired } from '@ali/common-di';
-import { Domain, ContributionProvider, localize } from '@ali/ide-core-common';
+import { Domain, ContributionProvider, localize, Disposable } from '@ali/ide-core-common';
 import { IMessageService } from '@ali/ide-overlay';
 import { IServerApp, RuntimeConfig, RootFS, AppConfig } from '../../common/types';
 import { LaunchContribution } from './app';
@@ -25,7 +25,7 @@ export class FileSystemLaunchContribution implements LaunchContribution {
 }
 
 @Domain(FileSystemContribution)
-export class FileSystemConfigContribution implements FileSystemContribution {
+export class FileSystemConfigContribution extends Disposable implements FileSystemContribution {
   @Autowired(AppConfig)
   appConfig: AppConfig;
 
@@ -50,5 +50,10 @@ export class FileSystemConfigContribution implements FileSystemContribution {
         await BrowserFS.createFileSystem(BrowserFS.FileSystem.InMemory, {})
       );
     }
+    this.addDispose({
+      dispose: () => {
+        rootFS.umount(workspaceDir);
+      },
+    });
   }
 }
