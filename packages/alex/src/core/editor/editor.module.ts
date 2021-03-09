@@ -39,6 +39,7 @@ import { SCMService } from '@ali/ide-scm';
 import { DirtyDiffWidget } from '@ali/ide-scm/lib/browser/dirty-diff/dirty-diff-widget';
 import { IDETheme } from '../../core/extensions';
 import { select, onSelect } from './container';
+import { isCodeDocumentModel, CodeDocumentModel } from './types';
 
 // TODO: 此处 diff 的 stage 和 revertChange 应该是 git 注册的，框架中直接添加了按钮，耦合，需要修复实现 scm/change/title
 // @ts-ignore
@@ -134,7 +135,10 @@ class EditorSpecialContribution
     } = BrowserFS;
     const [editorSystem, memSystem] = await Promise.all([
       createFileSystem(Editor, {
-        readFile: select((props) => props.documentModel.readFile),
+        readFile: (filepath: string) => {
+          const slashIndex = filepath.indexOf('/');
+          return select((props) => props.documentModel.readFile)(filepath.slice(slashIndex + 1));
+        },
       }),
       createFileSystem(InMemory, {}),
     ]);
@@ -185,15 +189,25 @@ class EditorSpecialContribution
   }
 
   onDidRestoreState() {
-    const filepath = select((props) => props.documentModel.filepath);
-    if (filepath) {
-      this.openEditor(filepath);
-    }
+    const documentModel = select((props) => props.documentModel);
 
-    // 监听 props 变化
-    onSelect((props) => props.documentModel.filepath)((newFilepath) => {
-      this.openEditor(newFilepath);
-    });
+    if (isCodeDocumentModel(documentModel)) {
+      this.openCodeEditor(documentModel.ref, documentModel.filepath);
+      // 监听 props 变化
+      onSelect(
+        (props) => props.documentModel,
+        (newModel: CodeDocumentModel, oldModel: CodeDocumentModel) =>
+          newModel.filepath === oldModel.filepath && newModel.ref === oldModel.ref
+      )((newModel: CodeDocumentModel) => {
+        this.openCodeEditor(newModel.ref, newModel.filepath);
+      });
+    } else {
+      this.openEditor(documentModel.filepath);
+      // 监听 props 变化
+      onSelect((props) => props.documentModel.filepath)((newFilepath) => {
+        this.openEditor(newFilepath);
+      });
+    }
 
     onSelect((props) => props.documentModel.encoding)((encoding) => {
       if (encoding) {
@@ -208,10 +222,16 @@ class EditorSpecialContribution
   }
 
   private openEditor(relativePath: string) {
+    if (!relativePath) return;
     const uri = URI.file(path.join(this.appConfig.workspaceDir, relativePath));
     this.editorService.open(uri, {
       preview: true,
     });
+  }
+
+  private openCodeEditor(ref: string, filepath: string) {
+    if (!ref || !filepath) return;
+    return this.openEditor(`${encodeURIComponent(ref)}/${filepath}`);
   }
 
   dispose() {

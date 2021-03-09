@@ -13,25 +13,20 @@ import 'antd/lib/spin/style/index.css';
 
 (window as any).alex = Alex;
 
-const project = encodeURIComponent('ide-s/TypeScript-Node-Starter');
+const owner = 'ide-s';
+const name = 'TypeScript-Node-Starter';
+const project = encodeURIComponent(`${owner}/${name}`);
 
 const App = () => {
   const [ref, setRef] = useState('');
   const [filepath, setFilePath] = useState('');
   const [encoding, setEncoding] = useState<'utf8' | 'gbk' | undefined>('utf8');
 
-  const path = useMemo(() => (ref && filepath ? `${encodeURIComponent(ref)}/${filepath}` : ''), [
-    ref,
-    filepath,
-  ]);
-
-  const readFile = async (path: string) => {
-    const i = path.indexOf('/');
+  const readFile = async (filepath: string) => {
     const res = await fetch(
-      `/code-service/api/v3/projects/${project}/repository/blobs/${path.slice(
-        0,
-        i
-      )}?filepath=${path.slice(i + 1)}`
+      `/code-service/api/v3/projects/${project}/repository/blobs/${encodeURIComponent(
+        ref
+      )}?filepath=${filepath}`
     );
     if (res.status >= 200 && res.status < 300) {
       return res.arrayBuffer();
@@ -112,10 +107,14 @@ const App = () => {
             biz: 'editor',
             scenario: null,
             startupEditor: 'none',
-            hideEditorTab: true,
+            // hideEditorTab: true,
           }}
           documentModel={{
-            filepath: path,
+            type: 'code',
+            ref,
+            owner,
+            name,
+            filepath,
             readFile,
             encoding,
           }}
