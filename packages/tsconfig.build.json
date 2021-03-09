@@ -13,6 +13,9 @@
       "path": "./code-service/tsconfig.build.json"
     },
     {
+      "path": "./lsif-service/tsconfig.build.json"
+    },
+    {
       "path": "./i18n/tsconfig.build.json"
     },
     {

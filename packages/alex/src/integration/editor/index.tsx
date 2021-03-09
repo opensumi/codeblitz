@@ -105,6 +105,7 @@ const App = () => {
             defaultPreferences: {
               'general.theme': 'ide-light',
               'editor.scrollBeyondLastLine': false,
+              'lsif.documentScheme': 'file',
             },
           }}
           runtimeConfig={{
