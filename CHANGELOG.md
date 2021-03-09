@@ -1,3 +1,21 @@
+## [0.8.1](https://code.alipay.com/cloud-ide/crew-dragon/compare/v0.7.2...v0.8.1) (2021-03-09)
+
+
+### Bug Fixes
+
+* unmout filesystem when dispose ([8f2fcfb](https://code.alipay.com/cloud-ide/crew-dragon/commits/8f2fcfbece5e1f7e20a617bb2e779c3871355b8d))
+
+
+### Features
+
+* [WIP] 增加 editor 入口, 精简体积 ([5e052b3](https://code.alipay.com/cloud-ide/crew-dragon/commits/5e052b3530abf0a7ad9276a6e9ca8ac62cd2f7df))
+* add code document model ([4566da5](https://code.alipay.com/cloud-ide/crew-dragon/commits/4566da5bcdea266e4289a81c4095a21b1fe9be2c))
+* add register languages for editor ([fe12094](https://code.alipay.com/cloud-ide/crew-dragon/commits/fe12094f01c42fef6e51b7597e4be96e4bf514a7))
+* 增加 editor 入口 ([0e7720e](https://code.alipay.com/cloud-ide/crew-dragon/commits/0e7720ed3bd098a49feaff68bbcbb6593b839b68))
+* 增加隐藏 tab 配置, 修复获取 providerEncoding ([59dedc2](https://code.alipay.com/cloud-ide/crew-dragon/commits/59dedc208f54d6730717cd22343d6bff16ee55cd))
+
+
+
 # [0.8.0](https://code.alipay.com/cloud-ide/crew-dragon/compare/v0.7.2...v0.8.0) (2021-03-09)
 
 
