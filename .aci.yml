@@ -26,8 +26,7 @@ node-12:
     - |
       export PATH=$PWD/node_modules/.bin:/root/.cli:$PATH
       chown -R admin:admin ./
-      tnpm i -g yarn
-      yarn
+      time tnpm i --install-node=12 --by=yarn --no-cache --internal-oss-cache
       node -e "console.log('%j, %j', process.versions, process.execPath)"
       time yarn build
   coverage: '(?<=Statements\s{1,10}:\s{1,10})\d{1,10}.\d{1,10}'
