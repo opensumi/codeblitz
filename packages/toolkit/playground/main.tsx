@@ -5,9 +5,19 @@ import Button from 'antd/lib/button';
 import 'antd/lib/button/style/index.css';
 import '@alipay/alex/bundle/alex.css';
 import '@alipay/alex/languages/html';
+import '@alipay/alex/languages/handlebars';
 import '@alipay/alex/languages/css';
+import '@alipay/alex/languages/less';
+import '@alipay/alex/languages/scss';
 import '@alipay/alex/languages/javascript';
+import '@alipay/alex/languages/typescript';
 import '@alipay/alex/languages/json';
+
+import ts from '@alipay/alex/extensions/alex.typescript-language-features-worker';
+import css from '@alipay/alex/extensions/alex.css-language-features-worker';
+import html from '@alipay/alex/extensions/alex.html-language-features-worker';
+import json from '@alipay/alex/extensions/alex.json-language-features-worker';
+import md from '@alipay/alex/extensions/alex.markdown-language-features-worker';
 
 export const layoutConfig = {
   [SlotLocation.action]: {
@@ -61,8 +71,10 @@ const App: React.FC = () => {
             panelSizes: {
               [SlotLocation.left]: 220,
             },
+            extensionMetadata: [ts, json, html, css, md],
           }}
           runtimeConfig={{
+            biz: 'test',
             disableModifyFileTree: true,
             defaultOpenFile: 'main.js',
             workspace: {
