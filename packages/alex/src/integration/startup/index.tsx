@@ -86,7 +86,7 @@ if (platform === 'github' || platform === 'gitlab') {
   layoutConfig[SlotLocation.left].modules.push(platform);
 }
 
-ReactDOM.render(
+const App = () => (
   <AppRenderer
     onLoad={(app) => {
       window.app = app;
@@ -108,18 +108,24 @@ ReactDOM.render(
       // unregisterActivityBarExtra: true,
       // hideLeftTabBar: true
     }}
-  />,
-  document.getElementById('main')
+  />
 );
+
+ReactDOM.render(<App key="1" />, document.getElementById('main'));
 
 // for test
 window.destroy = () => {
   ReactDOM.render(<div>destroyed</div>, document.getElementById('main'));
 };
 
+window.reset = () => {
+  ReactDOM.render(<App key="2" />, document.getElementById('main'));
+};
+
 declare global {
   interface Window {
     app: IAppInstance;
     destroy(): void;
+    reset(): void;
   }
 }

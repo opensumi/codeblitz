@@ -18,7 +18,7 @@ export const lsifPreferenceSchema: PreferenceSchema = {
     'lsif.enable': {
       type: 'boolean',
       description: localize('lsif.enable', 'Lsif enablement'),
-      default: true,
+      default: false,
     },
     'lsif.documentScheme': {
       type: 'string',
@@ -30,6 +30,7 @@ export const lsifPreferenceSchema: PreferenceSchema = {
 
 export interface LsifConfiguration {
   'lsif.enable': boolean;
+  'lsif.documentScheme': string;
 }
 
 export const LsifPreferences = Symbol('LsifPreferences');

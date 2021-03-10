@@ -1,6 +1,6 @@
 {
   "name": "@alipay/alex-core",
-  "version": "0.7.2",
+  "version": "0.8.1",
   "description": "core",
   "main": "lib/index.js",
   "typings": "lib/index.d.ts",
@@ -19,7 +19,7 @@
     "lockfile": "enable"
   },
   "dependencies": {
-    "@alipay/alex-shared": "0.7.2",
+    "@alipay/alex-shared": "0.8.1",
     "@ali/common-di": "^5.2.2",
     "@ali/ide-core-browser": "1.35.2",
     "@ali/ide-core-common": "1.35.2",

@@ -13,25 +13,28 @@ import 'antd/lib/spin/style/index.css';
 
 (window as any).alex = Alex;
 
-const project = encodeURIComponent('ide-s/TypeScript-Node-Starter');
+const owner = 'zhouang.za';
+const name = 'redcoast-cross-test';
+const project = encodeURIComponent(`${owner}/${name}`);
 
 const App = () => {
+  const [key, setKey] = useState(0);
   const [ref, setRef] = useState('');
   const [filepath, setFilePath] = useState('');
   const [encoding, setEncoding] = useState<'utf8' | 'gbk' | undefined>('utf8');
+  const [lineNumber, setLineNumber] = useState<number | undefined>();
 
-  const path = useMemo(() => (ref && filepath ? `${encodeURIComponent(ref)}/${filepath}` : ''), [
-    ref,
-    filepath,
-  ]);
+  const setContent = () => {
+    setRef('3977cf5ccb607beedce3824f6686fa97e2244506');
+    setFilePath('src/main/java/com/alipay/languagebase/service/lsif/impl/CommitServiceImpl.java');
+    setLineNumber(30);
+  };
 
-  const readFile = async (path: string) => {
-    const i = path.indexOf('/');
+  const readFile = async (filepath: string) => {
     const res = await fetch(
-      `/code-service/api/v3/projects/${project}/repository/blobs/${path.slice(
-        0,
-        i
-      )}?filepath=${path.slice(i + 1)}`
+      `/code-test/api/v3/projects/${project}/repository/blobs/${encodeURIComponent(
+        ref
+      )}?filepath=${filepath}`
     );
     if (res.status >= 200 && res.status < 300) {
       return res.arrayBuffer();
@@ -41,15 +44,15 @@ const App = () => {
 
   return (
     <div style={{ width: '100%', height: '100%', padding: 8 }}>
-      <div style={{ display: 'flex' }}>
+      <div style={{ display: 'flex', marginBottom: 8 }}>
         <Select
           value={ref || undefined}
           onChange={setRef}
           size="small"
-          style={{ width: 200, marginRight: 8 }}
+          style={{ width: 400, marginRight: 8 }}
           placeholder="选择分支"
         >
-          {['master', 'feat/123123'].map((path) => (
+          {['3977cf5ccb607beedce3824f6686fa97e2244506'].map((path) => (
             <Select.Option key={path} value={path}>
               {path}
             </Select.Option>
@@ -59,15 +62,26 @@ const App = () => {
           value={filepath || undefined}
           onChange={setFilePath}
           size="small"
-          style={{ width: 200, marginRight: 8 }}
+          style={{ width: 600, marginRight: 8 }}
           placeholder="选择文件"
         >
-          {['package.json', 'src/app.ts', 'gbk.ts'].map((path) => (
+          {[
+            'src/main/java/com/alipay/languagebase/service/lsif/impl/CommitServiceImpl.java',
+            'src/main/java/com/alipay/languagebase/service/lsif/CommitService.java',
+          ].map((path) => (
             <Select.Option key={path} value={path}>
               {path}
             </Select.Option>
           ))}
         </Select>
+      </div>
+      <div style={{ display: 'flex', marginBottom: 8 }}>
+        <Button size="small" onClick={() => setKey((k) => k + 1)} style={{ marginRight: 8 }}>
+          重置
+        </Button>
+        <Button size="small" onClick={() => setContent()} style={{ marginRight: 8 }}>
+          一键设置文件
+        </Button>
         <Select
           value={encoding}
           onChange={setEncoding}
@@ -81,45 +95,77 @@ const App = () => {
             </Select.Option>
           ))}
         </Select>
+        <Select
+          value={lineNumber}
+          onChange={setLineNumber}
+          size="small"
+          style={{ width: 120, marginRight: 8 }}
+          placeholder="更改选中行"
+        >
+          {[10, 30, 100].map((line) => (
+            <Select.Option key={line} value={line}>
+              {line}
+            </Select.Option>
+          ))}
+        </Select>
       </div>
-      <div style={{ width: '50%', height: 'calc(100% - 100px)' }}>
-        <EditorRenderer
-          onLoad={(app) => {
-            window.app = app;
-          }}
-          Landing={() => (
-            <div
-              style={{
-                width: '100%',
-                height: '100%',
-                display: 'flex',
-                alignItems: 'center',
-                justifyContent: 'center',
-              }}
-            >
-              <Spin />
-            </div>
-          )}
-          appConfig={{
-            workspaceDir: 'editor',
-            defaultPreferences: {
-              'general.theme': 'ide-light',
-              'editor.scrollBeyondLastLine': false,
-              'lsif.documentScheme': 'file',
-            },
-          }}
-          runtimeConfig={{
-            biz: 'editor',
-            scenario: null,
-            startupEditor: 'none',
-            hideEditorTab: true,
-          }}
-          documentModel={{
-            filepath: path,
-            readFile,
-            encoding,
-          }}
-        />
+      <div style={{ height: 'calc(100% - 100px)', display: 'flex' }}>
+        <div style={{ width: '50%', height: '100%' }}>
+          <EditorRenderer
+            key={key}
+            onLoad={(app) => {
+              window.app = app;
+            }}
+            Landing={() => (
+              <div
+                style={{
+                  width: '100%',
+                  height: '100%',
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                }}
+              >
+                <Spin />
+              </div>
+            )}
+            appConfig={{
+              workspaceDir: 'editor',
+              defaultPreferences: {
+                'general.theme': 'ide-light',
+                'editor.scrollBeyondLastLine': false,
+                'lsif.documentScheme': 'file',
+                'lsif.enable': true,
+              },
+            }}
+            runtimeConfig={{
+              biz: 'editor',
+              scenario: null,
+              startupEditor: 'none',
+              // hideEditorTab: true,
+            }}
+            documentModel={{
+              type: 'code',
+              ref,
+              owner,
+              name,
+              filepath,
+              onFilepathChange(newFilepath) {
+                setFilePath(newFilepath);
+                // 切换文件时行号清楚掉
+                if (newFilepath !== filepath) {
+                  setLineNumber(undefined);
+                }
+              },
+              readFile,
+              encoding,
+              lineNumber,
+              onLineNumberChange(num) {
+                setLineNumber(num);
+              },
+            }}
+          />
+        </div>
       </div>
     </div>
   );
