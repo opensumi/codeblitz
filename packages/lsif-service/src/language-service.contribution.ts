@@ -8,16 +8,23 @@ import {
   URI,
   Uri,
 } from '@ali/ide-core-common';
-import { ClientAppContribution, PreferenceService, PreferenceChange } from '@ali/ide-core-browser';
+import {
+  ClientAppContribution,
+  PreferenceService,
+  PreferenceChange,
+  PreferenceContribution,
+} from '@ali/ide-core-browser';
 import { Position, Range, Location } from '@ali/ide-kaitian-extension/lib/common/vscode/ext-types';
 import { IWorkspaceService } from '@ali/ide-workspace';
 import * as paths from '@ali/ide-core-common/lib/path';
+import { UriComponents } from 'vscode-uri';
 
 import * as vscode from 'vscode';
 import { LSIF_PROD_API_HOST, LSIF_TEST_API_HOST, LsifClient } from '@alipay/lsif-client';
 import { RuntimeConfig } from '@alipay/alex-core';
 
 import { SimpleLanguageService } from './language-client';
+import { LsifPreferences, lsifPreferenceSchema } from './lsif-preferences';
 
 const IS_TEST_ENV =
   process.env.NODE_ENV === 'development' ||
@@ -25,8 +32,10 @@ const IS_TEST_ENV =
   window.location.hostname === 'localhost' ||
   window.location.hostname === '127.0.0.1';
 
-@Domain(ClientAppContribution)
-export class LsifContribution extends Disposable implements ClientAppContribution {
+@Domain(ClientAppContribution, PreferenceContribution)
+export class LsifContribution
+  extends Disposable
+  implements ClientAppContribution, PreferenceContribution {
   @Autowired(SimpleLanguageService)
   private readonly simpleLanguageService: SimpleLanguageService;
 
@@ -42,7 +51,19 @@ export class LsifContribution extends Disposable implements ClientAppContributio
   @Autowired(CommandService)
   private readonly commands: CommandService;
 
-  private async getCodeServiceProject() {
+  @Autowired(LsifPreferences)
+  protected preferences: LsifPreferences;
+
+  readonly schema = lsifPreferenceSchema;
+
+  private async getCodeServiceProject(): Promise<
+    | {
+        project: string;
+        commit: string;
+        rootUri: UriComponents;
+      }
+    | undefined
+  > {
     return await this.commands.executeCommand('alex.codeServiceProject');
   }
 
@@ -58,13 +79,11 @@ export class LsifContribution extends Disposable implements ClientAppContributio
     return root ? new URI(root.uri) : undefined;
   }
 
-  constructor() {
-    super();
-
+  initialize() {
     this.lsifClient = new LsifClient(IS_TEST_ENV ? LSIF_TEST_API_HOST : LSIF_PROD_API_HOST);
     // 集成侧如果需要不一样的 preference name 则需要进行代理
-    this.lsIfEnabled = true; // !!this.preferenceService.get<boolean>('lsif.enable');
-    this.lsifDocumentScheme = 'file'; // this.preferenceService.get<string>('lsif.documentScheme') || 'git';
+    this.lsIfEnabled = this.preferences['lsif.enable'];
+    this.lsifDocumentScheme = this.preferences['lsif.documentScheme'];
     this.addDispose(
       this.preferenceService.onPreferenceChanged((data: PreferenceChange) => {
         if (data.preferenceName === 'lsif.enable') {
@@ -93,17 +112,17 @@ export class LsifContribution extends Disposable implements ClientAppContributio
               return;
             }
 
-            const rootUri = await this.getWorkspaceRoot();
-            if (!rootUri) {
-              return;
-            }
-
-            const { commit, project } = (await this.getCodeServiceProject()) as any;
+            // 挂载规则不确定，因此无法直接使用 workspaceRoots
+            // FIXME: 更好的方式
+            const projectInfo = await this.getCodeServiceProject();
+            if (!projectInfo) return;
+            const { commit, project, rootUri } = projectInfo;
+            const _rootUri = new URI(URI.revive(rootUri));
 
             return await this.lsifClient.hover({
               repository: project,
               commit,
-              path: rootUri.relative(new URI(document.uri))!.toString(),
+              path: _rootUri.relative(new URI(document.uri))!.toString(),
               position: {
                 character: position.character,
                 line: position.line,
@@ -123,17 +142,15 @@ export class LsifContribution extends Disposable implements ClientAppContributio
               return;
             }
 
-            const rootUri = await this.getWorkspaceRoot();
-            if (!rootUri) {
-              return;
-            }
-
-            const { commit, project } = (await this.getCodeServiceProject()) as any;
+            const projectInfo = await this.getCodeServiceProject();
+            if (!projectInfo) return;
+            const { commit, project, rootUri } = projectInfo;
+            const _rootUri = new URI(URI.revive(rootUri));
 
             const ret = await this.lsifClient.reference({
               repository: project,
               commit,
-              path: rootUri.relative(new URI(document.uri))!.toString(),
+              path: _rootUri.relative(new URI(document.uri))!.toString(),
               position: {
                 character: position.character,
                 line: position.line,
@@ -176,17 +193,15 @@ export class LsifContribution extends Disposable implements ClientAppContributio
               return;
             }
 
-            const rootUri = await this.getWorkspaceRoot();
-            if (!rootUri) {
-              return;
-            }
-
-            const { commit, project } = (await this.getCodeServiceProject()) as any;
+            const projectInfo = await this.getCodeServiceProject();
+            if (!projectInfo) return;
+            const { commit, project, rootUri } = projectInfo;
+            const _rootUri = new URI(URI.revive(rootUri));
 
             const ret = await this.lsifClient.definition({
               repository: project,
               commit,
-              path: rootUri.relative(new URI(document.uri))!.toString(),
+              path: _rootUri.relative(new URI(document.uri))!.toString(),
               position: {
                 character: position.character,
                 line: position.line,

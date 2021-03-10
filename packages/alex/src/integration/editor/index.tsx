@@ -13,18 +13,20 @@ import 'antd/lib/spin/style/index.css';
 
 (window as any).alex = Alex;
 
-const owner = 'ide-s';
-const name = 'TypeScript-Node-Starter';
+const owner = 'zhouang.za';
+const name = 'redcoast-cross-test';
 const project = encodeURIComponent(`${owner}/${name}`);
 
 const App = () => {
+  const [key, setKey] = useState(0);
   const [ref, setRef] = useState('');
   const [filepath, setFilePath] = useState('');
   const [encoding, setEncoding] = useState<'utf8' | 'gbk' | undefined>('utf8');
+  const [lineNumber, setLineNumber] = useState<number | undefined>();
 
   const readFile = async (filepath: string) => {
     const res = await fetch(
-      `/code-service/api/v3/projects/${project}/repository/blobs/${encodeURIComponent(
+      `/code-test/api/v3/projects/${project}/repository/blobs/${encodeURIComponent(
         ref
       )}?filepath=${filepath}`
     );
@@ -36,7 +38,10 @@ const App = () => {
 
   return (
     <div style={{ width: '100%', height: '100%', padding: 8 }}>
-      <div style={{ display: 'flex' }}>
+      <div style={{ display: 'flex', marginBottom: 8 }}>
+        <Button size="small" onClick={() => setKey((k) => k + 1)} style={{ marginRight: 8 }}>
+          重置
+        </Button>
         <Select
           value={ref || undefined}
           onChange={setRef}
@@ -44,7 +49,7 @@ const App = () => {
           style={{ width: 200, marginRight: 8 }}
           placeholder="选择分支"
         >
-          {['master', 'feat/123123'].map((path) => (
+          {['3977cf5ccb607beedce3824f6686fa97e2244506'].map((path) => (
             <Select.Option key={path} value={path}>
               {path}
             </Select.Option>
@@ -54,14 +59,16 @@ const App = () => {
           value={filepath || undefined}
           onChange={setFilePath}
           size="small"
-          style={{ width: 200, marginRight: 8 }}
+          style={{ width: 300, marginRight: 8 }}
           placeholder="选择文件"
         >
-          {['package.json', 'src/app.ts', 'gbk.ts'].map((path) => (
-            <Select.Option key={path} value={path}>
-              {path}
-            </Select.Option>
-          ))}
+          {['src/main/java/com/alipay/languagebase/service/lsif/impl/CommitServiceImpl.java'].map(
+            (path) => (
+              <Select.Option key={path} value={path}>
+                {path}
+              </Select.Option>
+            )
+          )}
         </Select>
         <Select
           value={encoding}
@@ -76,49 +83,70 @@ const App = () => {
             </Select.Option>
           ))}
         </Select>
+        <Select
+          value={lineNumber}
+          onChange={setLineNumber}
+          size="small"
+          style={{ width: 120, marginRight: 8 }}
+          placeholder="更改选中行"
+        >
+          {['10', '20', '30'].map((encoding) => (
+            <Select.Option key={encoding} value={encoding}>
+              {encoding}
+            </Select.Option>
+          ))}
+        </Select>
       </div>
-      <div style={{ width: '50%', height: 'calc(100% - 100px)' }}>
-        <EditorRenderer
-          onLoad={(app) => {
-            window.app = app;
-          }}
-          Landing={() => (
-            <div
-              style={{
-                width: '100%',
-                height: '100%',
-                display: 'flex',
-                alignItems: 'center',
-                justifyContent: 'center',
-              }}
-            >
-              <Spin />
-            </div>
-          )}
-          appConfig={{
-            workspaceDir: 'editor',
-            defaultPreferences: {
-              'general.theme': 'ide-light',
-              'editor.scrollBeyondLastLine': false,
-              'lsif.documentScheme': 'file',
-            },
-          }}
-          runtimeConfig={{
-            biz: 'editor',
-            scenario: null,
-            startupEditor: 'none',
-            // hideEditorTab: true,
-          }}
-          documentModel={{
-            type: 'code',
-            ref,
-            owner,
-            name,
-            filepath,
-            readFile,
-            encoding,
-          }}
-        />
+      <div style={{ height: 'calc(100% - 100px)', display: 'flex' }}>
+        <div style={{ width: '50%', height: '100%' }}>
+          <EditorRenderer
+            key={key}
+            onLoad={(app) => {
+              window.app = app;
+            }}
+            Landing={() => (
+              <div
+                style={{
+                  width: '100%',
+                  height: '100%',
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                }}
+              >
+                <Spin />
+              </div>
+            )}
+            appConfig={{
+              workspaceDir: 'editor',
+              defaultPreferences: {
+                'general.theme': 'ide-light',
+                'editor.scrollBeyondLastLine': false,
+                'lsif.documentScheme': 'file',
+                'lsif.enable': true,
+              },
+            }}
+            runtimeConfig={{
+              biz: 'editor',
+              scenario: null,
+              startupEditor: 'none',
+              // hideEditorTab: true,
+            }}
+            documentModel={{
+              type: 'code',
+              ref,
+              owner,
+              name,
+              filepath,
+              readFile,
+              encoding,
+              lineNumber,
+              onLineNumberChange(num) {
+                setLineNumber(num);
+              },
+            }}
+          />
+        </div>
       </div>
     </div>
   );

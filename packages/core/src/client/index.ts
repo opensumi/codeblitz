@@ -27,6 +27,7 @@ import {
 } from './custom';
 import { EditorEmptyContribution } from './editor-empty/editor-empty.contribution';
 import { WelcomeContribution } from './welcome/welcome.contributon';
+import { DocumentSymbolPatch, DocumentSymbolStore } from './patch/document-symbol';
 
 export * from './extension';
 
@@ -52,6 +53,11 @@ export class ClientModule extends BrowserModule {
     {
       token: TextmateService,
       useClass: TextmateServicePatch,
+    },
+    {
+      token: DocumentSymbolStore,
+      useClass: DocumentSymbolPatch,
+      override: true,
     },
   ];
   preferences = injectDebugPreferences;

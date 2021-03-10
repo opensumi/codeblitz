@@ -4,6 +4,8 @@ export interface DocumentModel {
   filepath: string;
   readFile(filepath: string): Uint8Array | Thenable<Uint8Array>;
   encoding?: 'gbk' | 'utf8';
+  lineNumber?: number;
+  onLineNumberChange?: (num: number) => void;
 }
 
 export interface FSDocumentModel extends DocumentModel {
