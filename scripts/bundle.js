@@ -26,6 +26,14 @@ export * from "../lib";
     `.trim() + '\n'
     );
 
+    // editor 类型文件
+    await fse.writeFile(
+      path.join(targetDir, 'alex.editor.d.ts'),
+      `
+export * from "../lib/editor";
+    `.trim() + '\n'
+    );
+
     signale.success('打包成功');
   } catch (err) {
     console.error(err);

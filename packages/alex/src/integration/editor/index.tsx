@@ -24,6 +24,12 @@ const App = () => {
   const [encoding, setEncoding] = useState<'utf8' | 'gbk' | undefined>('utf8');
   const [lineNumber, setLineNumber] = useState<number | undefined>();
 
+  const setContent = () => {
+    setRef('3977cf5ccb607beedce3824f6686fa97e2244506');
+    setFilePath('src/main/java/com/alipay/languagebase/service/lsif/impl/CommitServiceImpl.java');
+    setLineNumber(30);
+  };
+
   const readFile = async (filepath: string) => {
     const res = await fetch(
       `/code-test/api/v3/projects/${project}/repository/blobs/${encodeURIComponent(
@@ -39,14 +45,11 @@ const App = () => {
   return (
     <div style={{ width: '100%', height: '100%', padding: 8 }}>
       <div style={{ display: 'flex', marginBottom: 8 }}>
-        <Button size="small" onClick={() => setKey((k) => k + 1)} style={{ marginRight: 8 }}>
-          重置
-        </Button>
         <Select
           value={ref || undefined}
           onChange={setRef}
           size="small"
-          style={{ width: 200, marginRight: 8 }}
+          style={{ width: 400, marginRight: 8 }}
           placeholder="选择分支"
         >
           {['3977cf5ccb607beedce3824f6686fa97e2244506'].map((path) => (
@@ -59,17 +62,26 @@ const App = () => {
           value={filepath || undefined}
           onChange={setFilePath}
           size="small"
-          style={{ width: 300, marginRight: 8 }}
+          style={{ width: 600, marginRight: 8 }}
           placeholder="选择文件"
         >
-          {['src/main/java/com/alipay/languagebase/service/lsif/impl/CommitServiceImpl.java'].map(
-            (path) => (
-              <Select.Option key={path} value={path}>
-                {path}
-              </Select.Option>
-            )
-          )}
+          {[
+            'src/main/java/com/alipay/languagebase/service/lsif/impl/CommitServiceImpl.java',
+            'src/main/java/com/alipay/languagebase/service/lsif/CommitService.java',
+          ].map((path) => (
+            <Select.Option key={path} value={path}>
+              {path}
+            </Select.Option>
+          ))}
         </Select>
+      </div>
+      <div style={{ display: 'flex', marginBottom: 8 }}>
+        <Button size="small" onClick={() => setKey((k) => k + 1)} style={{ marginRight: 8 }}>
+          重置
+        </Button>
+        <Button size="small" onClick={() => setContent()} style={{ marginRight: 8 }}>
+          一键设置文件
+        </Button>
         <Select
           value={encoding}
           onChange={setEncoding}
@@ -90,9 +102,9 @@ const App = () => {
           style={{ width: 120, marginRight: 8 }}
           placeholder="更改选中行"
         >
-          {['10', '20', '30'].map((encoding) => (
-            <Select.Option key={encoding} value={encoding}>
-              {encoding}
+          {[10, 30, 100].map((line) => (
+            <Select.Option key={line} value={line}>
+              {line}
             </Select.Option>
           ))}
         </Select>
@@ -138,6 +150,13 @@ const App = () => {
               owner,
               name,
               filepath,
+              onFilepathChange(newFilepath) {
+                setFilePath(newFilepath);
+                // 切换文件时行号清楚掉
+                if (newFilepath !== filepath) {
+                  setLineNumber(undefined);
+                }
+              },
               readFile,
               encoding,
               lineNumber,

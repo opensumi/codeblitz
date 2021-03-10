@@ -267,17 +267,34 @@ class EditorSpecialContribution
         }
       })
     );
+
+    this.addDispose(
+      this.editorService.onActiveResourceChange((resource) => {
+        if (!resource) return;
+        const documentModel = select((props) => props.documentModel);
+        let rootPath = '';
+        if (isCodeDocumentModel(documentModel)) {
+          rootPath = path.join(this.appConfig.workspaceDir, documentModel.ref);
+        } else {
+          rootPath = this.appConfig.workspaceDir;
+        }
+        const relativePath = path.relative(rootPath, resource.uri.codeUri.path);
+        select((props) => props.documentModel.onFilepathChange)?.(relativePath);
+      })
+    );
   }
 
-  private openEditor(relativePath: string) {
+  private openEditor(relativePath?: string) {
     if (!relativePath) return;
     const uri = URI.file(path.join(this.appConfig.workspaceDir, relativePath));
     this.editorService.open(uri, {
       preview: true,
+      // 始终只显示一个，目前切换编码，preview 会消失，可能得在 kaitian 中修复下
+      replace: true,
     });
   }
 
-  private openCodeEditor(ref: string, filepath: string) {
+  private openCodeEditor(ref?: string, filepath?: string) {
     if (!ref || !filepath) return;
     return this.openEditor(`${encodeURIComponent(ref)}/${filepath}`);
   }
@@ -340,7 +357,12 @@ class EditorSpecialContribution
               },
             },
           ]);
+          // 延迟高亮，否则不居中
+          setTimeout(() => {
+            editor.monacoEditor.revealLineInCenter(Number(lineNumber));
+          }, 0);
         };
+
         disposer.addDispose(
           editor.monacoEditor.onMouseDown((event) => {
             const type = event?.target?.type;
@@ -357,10 +379,16 @@ class EditorSpecialContribution
             }
           })
         );
-        const initialLineNumber = select((props) => props.documentModel.lineNumber);
-        if (initialLineNumber) {
-          highlightLine(initialLineNumber);
-        }
+
+        disposer.addDispose(
+          editor.monacoEditor.onDidChangeModel(() => {
+            const initialLineNumber = select((props) => props.documentModel.lineNumber);
+            if (initialLineNumber) {
+              highlightLine(initialLineNumber);
+            }
+          })
+        );
+
         disposer.addDispose(
           onSelect((props) => props.documentModel.lineNumber)((newLineNumber) => {
             if (newLineNumber) {
