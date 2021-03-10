@@ -1,3 +1,26 @@
+# [0.9.0](https://code.alipay.com/cloud-ide/crew-dragon/compare/v0.7.2...v0.9.0) (2021-03-10)
+
+
+### Bug Fixes
+
+* unmout filesystem when dispose ([e188b77](https://code.alipay.com/cloud-ide/crew-dragon/commits/e188b7715c03461888e7535503be7b7696892dd1))
+
+
+### Features
+
+* [WIP] 增加 editor 入口, 精简体积 ([5e052b3](https://code.alipay.com/cloud-ide/crew-dragon/commits/5e052b3530abf0a7ad9276a6e9ca8ac62cd2f7df))
+* add code document model ([56186d8](https://code.alipay.com/cloud-ide/crew-dragon/commits/56186d80aee66ba72dd2c205cd9fe60cc3f70370))
+* add register languages for editor ([ebc5a4c](https://code.alipay.com/cloud-ide/crew-dragon/commits/ebc5a4c35fcab4ca75c1184962782e56d44ed401))
+* basic implements for lsif module ([49ca7dc](https://code.alipay.com/cloud-ide/crew-dragon/commits/49ca7dcc26b1800da370b70b647e33d49755a5d4))
+* lsif 对接,高亮行内容 ([c622f17](https://code.alipay.com/cloud-ide/crew-dragon/commits/c622f1762615f005c03f07a1413f29237638029b))
+* read commit/project from `alex.codeServiceProject` ([ec02c34](https://code.alipay.com/cloud-ide/crew-dragon/commits/ec02c34cae4807c6db8859118f775e208f1b7966))
+* resolve path as workspace fs does ([05454f0](https://code.alipay.com/cloud-ide/crew-dragon/commits/05454f047dfcf64d6e74104a0d3cbdb1a9556fc6))
+* 增加 editor 入口 ([0e7720e](https://code.alipay.com/cloud-ide/crew-dragon/commits/0e7720ed3bd098a49feaff68bbcbb6593b839b68))
+* 增加行居中 ([322cca3](https://code.alipay.com/cloud-ide/crew-dragon/commits/322cca3f26ad4b063defa22f4927a50b9a1f703c))
+* 增加隐藏 tab 配置, 修复获取 providerEncoding ([59dedc2](https://code.alipay.com/cloud-ide/crew-dragon/commits/59dedc208f54d6730717cd22343d6bff16ee55cd))
+
+
+
 ## [0.8.1](https://code.alipay.com/cloud-ide/crew-dragon/compare/v0.7.2...v0.8.1) (2021-03-09)
 
 
