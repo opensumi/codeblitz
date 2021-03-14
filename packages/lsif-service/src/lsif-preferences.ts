@@ -25,12 +25,17 @@ export const lsifPreferenceSchema: PreferenceSchema = {
       description: localize('lsif.documentScheme', 'lsif支持的文件协议'),
       default: 'file',
     },
+    'lsif.env': {
+      type: 'string',
+      description: localize('lsif.documentScheme', 'lsif环境'),
+    },
   },
 };
 
 export interface LsifConfiguration {
   'lsif.enable': boolean;
   'lsif.documentScheme': string;
+  'lsif.env': 'test' | 'prod';
 }
 
 export const LsifPreferences = Symbol('LsifPreferences');
