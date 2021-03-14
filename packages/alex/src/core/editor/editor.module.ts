@@ -160,11 +160,11 @@ class EditorHistoryServiceOverride extends EditorHistoryService {
       uri,
       position: { lineNumber },
     } = state;
-    // 非 file 协议外部无法处理，直接内部打开
+    const documentModel = select((props) => props.documentModel);
     if (uri.scheme !== 'file') {
+      documentModel.onFilepathChange?.('');
       return super.restoreState(state);
     }
-    const documentModel = select((props) => props.documentModel);
     const onLineNumberChange = () => {
       documentModel.onLineNumberChange?.(lineNumber || 1);
     };
@@ -502,11 +502,12 @@ class EditorSpecialContribution
     source?: monaco.editor.ICodeEditor,
     sideBySide?: boolean
   ) {
-    // 非 file 协议外部无法处理，直接内部打开
+    // 非 file 协议路径设置为空，以触发 props 变化
+    const documentModel = select((props) => props.documentModel);
     if (input.resource.scheme !== 'file') {
+      documentModel.onFilepathChange?.('');
       return raw();
     }
-    const documentModel = select((props) => props.documentModel);
     const onLineNumberChange = () => {
       if (input.options?.selection) {
         documentModel.onLineNumberChange?.(input.options?.selection.startLineNumber || 1);
