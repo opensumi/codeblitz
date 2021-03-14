@@ -5,12 +5,12 @@ import { REPORT_NAME } from '@alipay/alex-core';
 import { createEditor } from './createEditor';
 import { Root } from '../core/Root';
 import { RootProps, LandingProps } from '../core/types';
-import { themeStorage } from '../core/utils';
 import { useConstant } from '../core/hooks';
 import { IConfig, IAppInstance } from './types';
 import { EditorProps } from '../core/editor/types';
 import { Container } from '../core/editor/container';
 import { HIDE_EDITOR_TAB_CLASS_NAME } from '../core/constants';
+import styles from '../core/style.module.less';
 
 interface IRenderProps extends IConfig {
   onLoad?(app: IAppInstance): void;
@@ -22,18 +22,17 @@ export type IEditorRenderProps = IRenderProps & EditorProps;
 export const renderEditor = (domElement: HTMLElement, props: IEditorRenderProps) => {
   const { onLoad, Landing, ...opts } = props;
   const app = createEditor(opts);
-  const themeType = themeStorage.get();
-  ReactDOM.render(<Root status="loading" theme={themeType} Landing={Landing} />, domElement);
+  const className = `alex-editor ${
+    opts.runtimeConfig.hideEditorTab ? styles['hide-editor-tab'] : ''
+  }`;
+
+  ReactDOM.render(<Root status="loading" Landing={Landing} className={className} />, domElement);
 
   app
     .start((appElement) => {
       return new Promise((resolve) => {
         ReactDOM.render(
-          <Root
-            status="success"
-            theme={themeType}
-            className={opts.runtimeConfig.hideEditorTab ? HIDE_EDITOR_TAB_CLASS_NAME : ''}
-          >
+          <Root status="success" className={className}>
             {appElement}
           </Root>,
           domElement,
@@ -46,7 +45,11 @@ export const renderEditor = (domElement: HTMLElement, props: IEditorRenderProps)
     })
     .catch((err: Error) => {
       ReactDOM.render(
-        <Root status="error" error={err?.message || localize('error.unknown')} theme={themeType} />,
+        <Root
+          status="error"
+          error={err?.message || localize('error.unknown')}
+          className={className}
+        />,
         domElement
       );
 
@@ -66,7 +69,6 @@ export const renderEditor = (domElement: HTMLElement, props: IEditorRenderProps)
 
 export const EditorRenderer: React.FC<IEditorRenderProps> = ({ onLoad, Landing, ...opts }) => {
   const app = useConstant(() => createEditor(opts));
-  const themeType = useConstant(() => themeStorage.get());
   const appElementRef = useRef<React.ReactElement | null>(null);
 
   const [state, setState] = useState<{
@@ -106,13 +108,13 @@ export const EditorRenderer: React.FC<IEditorRenderProps> = ({ onLoad, Landing, 
   }, []);
 
   const rootClassName = useMemo(
-    () => (opts.runtimeConfig.hideEditorTab ? HIDE_EDITOR_TAB_CLASS_NAME : ''),
+    () => (opts.runtimeConfig.hideEditorTab ? styles['hide-editor-tab'] : ''),
     [opts.runtimeConfig.hideEditorTab]
   );
 
   return (
     <Container value={{ documentModel: opts.documentModel }}>
-      <Root {...state} theme={themeType} Landing={Landing} className={rootClassName}>
+      <Root {...state} Landing={Landing} className={`alex-editor ${rootClassName}`}>
         {appElementRef.current}
       </Root>
     </Container>

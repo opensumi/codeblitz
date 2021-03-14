@@ -4,13 +4,10 @@ import {
   BrowserModule,
   ClientAppContribution,
   URI,
-  Uri,
   Domain,
-  getPreferenceThemeId,
   CommandService,
   PreferenceProvider,
   PreferenceScope,
-  Emitter,
   CommandContribution,
   CommandRegistry,
   Disposable,
@@ -52,6 +49,7 @@ import { DirtyDiffWidget } from '@ali/ide-scm/lib/browser/dirty-diff/dirty-diff-
 import { IDETheme } from '../../core/extensions';
 import { select, onSelect } from './container';
 import { isCodeDocumentModel, CodeDocumentModel } from './types';
+import styles from '../style.module.less';
 
 // TODO: 此处 diff 的 stage 和 revertChange 应该是 git 注册的，框架中直接添加了按钮，耦合，需要修复实现 scm/change/title
 // @ts-ignore
@@ -395,8 +393,8 @@ class EditorSpecialContribution
                   {
                     range: new monaco.Range(lineNumber, 1, lineNumber, 1),
                     options: {
-                      className: 'alex-line-content',
-                      glyphMarginClassName: `alex-line-glyph-margin}`,
+                      className: styles['line-content'],
+                      glyphMarginClassName: styles['line-glyph-margin'],
                     },
                   },
                 ]);
@@ -410,13 +408,13 @@ class EditorSpecialContribution
         const highlightLine = (lineNumber: number) => {
           // 延迟高亮，否则不居中
           setTimeout(() => {
-            editor.monacoEditor.revealLineInCenter(Number(lineNumber));
+            editor.monacoEditor.revealLineInCenterIfOutsideViewport(Number(lineNumber));
             oldClickDecorations = editor.monacoEditor.deltaDecorations(oldClickDecorations, [
               {
                 range: new monaco.Range(lineNumber, 1, lineNumber, 1),
                 options: {
                   isWholeLine: true,
-                  className: 'alex-line-content',
+                  className: styles['line-content'],
                 },
               },
             ]);
