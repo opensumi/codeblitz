@@ -38,8 +38,14 @@ module.exports = createWebpackConfig({
           commonjs: 'react-dom',
           amd: 'react-dom',
         },
+        moment: {
+          root: 'moment',
+          commonjs2: 'moment',
+          commonjs: 'moment',
+          amd: 'moment',
+        },
       },
-      /^antd/,
+      /^@ant-design\/icons/,
     ],
     optimization: {
       minimize: false,
