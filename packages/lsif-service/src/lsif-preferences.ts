@@ -27,7 +27,7 @@ export const lsifPreferenceSchema: PreferenceSchema = {
     },
     'lsif.env': {
       type: 'string',
-      description: localize('lsif.documentScheme', 'lsif环境'),
+      description: localize('lsif.env', 'lsif环境'),
     },
   },
 };

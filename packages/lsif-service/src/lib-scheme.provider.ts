@@ -14,7 +14,6 @@ export class LibEditorDocumentModelProvider implements IEditorDocumentModelConte
   onDidChangeContent = new Emitter<URI>().event;
 
   handlesScheme(scheme: string) {
-    console.log('>>scheme', scheme);
     return scheme === ModelScheme.Jar;
   }
 
