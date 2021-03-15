@@ -4,20 +4,19 @@ import {
   BrowserModule,
   ClientAppContribution,
   URI,
-  Uri,
   Domain,
-  getPreferenceThemeId,
   CommandService,
   PreferenceProvider,
   PreferenceScope,
-  Emitter,
   CommandContribution,
   CommandRegistry,
   Disposable,
+  KeybindingContribution,
+  KeybindingRegistry,
+  MonacoContribution,
+  MonacoService,
+  ServiceNames,
 } from '@ali/ide-core-browser';
-import { Sequence } from '@ali/ide-core-common/lib/sequence';
-import { BreadCrumbServiceImpl } from '@ali/ide-editor/lib/browser/breadcrumb';
-import { IBreadCrumbService } from '@ali/ide-editor/lib/browser/types';
 import { IThemeService } from '@ali/ide-theme';
 import {
   getExtensionPath,
@@ -34,9 +33,14 @@ import {
   IEditorFeatureRegistry,
   IEditor,
 } from '@ali/ide-editor/lib/browser';
+import { BreadCrumbServiceImpl } from '@ali/ide-editor/lib/browser/breadcrumb';
+import { IBreadCrumbService } from '@ali/ide-editor/lib/browser/types';
+import { EditorHistoryService, EditorHistoryState } from '@ali/ide-editor/lib/browser/history';
 import { IEditorDocumentModelService } from '@ali/ide-editor/lib/browser/doc-model/types';
 import { FileSchemeDocumentProvider } from '@ali/ide-file-scheme/lib/browser/file-doc';
 import { FILE_SCHEME } from '@ali/ide-file-scheme/lib/common';
+import { quickCommand } from '@ali/ide-quick-open/lib/browser/quick-open.contribution';
+
 import * as path from 'path';
 import md5 from 'md5';
 import { IWorkspaceService } from '@ali/ide-workspace';
@@ -45,6 +49,7 @@ import { DirtyDiffWidget } from '@ali/ide-scm/lib/browser/dirty-diff/dirty-diff-
 import { IDETheme } from '../../core/extensions';
 import { select, onSelect } from './container';
 import { isCodeDocumentModel, CodeDocumentModel } from './types';
+import styles from '../style.module.less';
 
 // TODO: 此处 diff 的 stage 和 revertChange 应该是 git 注册的，框架中直接添加了按钮，耦合，需要修复实现 scm/change/title
 // @ts-ignore
@@ -135,11 +140,65 @@ class ThemeContribution extends Disposable implements ClientAppContribution {
   }
 }
 
+/**
+ * 获取 history 跳转时机，由外部控制
+ */
+@Injectable()
+class EditorHistoryServiceOverride extends EditorHistoryService {
+  @Autowired(AppConfig)
+  appConfig: AppConfig;
+
+  @Autowired(WorkbenchEditorService)
+  editorService: WorkbenchEditorService;
+
+  restoreState(state: EditorHistoryState) {
+    if (!state) return;
+
+    const {
+      uri,
+      position: { lineNumber },
+    } = state;
+    const documentModel = select((props) => props.documentModel);
+    if (uri.scheme !== 'file') {
+      documentModel.onFilepathChange?.('');
+      return super.restoreState(state);
+    }
+    const onLineNumberChange = () => {
+      documentModel.onLineNumberChange?.(lineNumber || 1);
+    };
+
+    if ('filepath' in documentModel) {
+      let rootPath = '';
+      if (isCodeDocumentModel(documentModel)) {
+        rootPath = path.join(this.appConfig.workspaceDir, encodeURIComponent(documentModel.ref));
+      } else {
+        rootPath = this.appConfig.workspaceDir;
+      }
+      const relativePath = path.relative(rootPath, uri.path.toString());
+      if (relativePath !== documentModel.filepath) {
+        documentModel.onFilepathChange?.(relativePath);
+        setTimeout(() => {
+          onLineNumberChange();
+        });
+      } else {
+        onLineNumberChange();
+      }
+    } else {
+      const res = super.restoreState(state);
+      // controlled
+      onLineNumberChange();
+      return res;
+    }
+  }
+}
+
 @Domain(
   FileSystemContribution,
   BrowserEditorContribution,
   ClientAppContribution,
-  CommandContribution
+  CommandContribution,
+  KeybindingContribution,
+  MonacoContribution
 )
 class EditorSpecialContribution
   extends Disposable
@@ -147,7 +206,9 @@ class EditorSpecialContribution
     FileSystemContribution,
     BrowserEditorContribution,
     ClientAppContribution,
-    CommandContribution {
+    CommandContribution,
+    KeybindingContribution,
+    MonacoContribution {
   @Autowired(WorkbenchEditorService)
   editorService: WorkbenchEditorService;
 
@@ -168,6 +229,9 @@ class EditorSpecialContribution
 
   @Autowired(SCMService)
   scmService: SCMService;
+
+  @Autowired()
+  monacoService: MonacoService;
 
   async mountFileSystem(rootFS: FileSystemInstance<'MountableFileSystem'>) {
     // TODO: 提供配置选择存储在内存中还是 indexedDB 中
@@ -213,28 +277,29 @@ class EditorSpecialContribution
 
   initialize() {
     // 提供写时 diff 视图
-    this.scmService.registerSCMProvider({
-      id: 'editor0',
-      label: 'editor',
-      contextValue: 'editor',
-      getOriginalResource: (uri: Uri) => {
-        return Promise.resolve(
-          uri.with({ path: `${SCM_ROOT}${uri.path.slice(this.appConfig.workspaceDir.length)}` })
-        );
-      },
-      groups: new Sequence(),
-      onDidChangeResources: new Emitter<void>().event,
-      onDidChange: new Emitter<void>().event,
-      toJSON: () => ({}),
-      dispose: () => {},
-    });
+    // TODO: 暂时只有读，先去掉，避免编码改变导致的问题
+    // this.scmService.registerSCMProvider({
+    //   id: 'editor0',
+    //   label: 'editor',
+    //   contextValue: 'editor',
+    //   getOriginalResource: (uri: Uri) => {
+    //     return Promise.resolve(
+    //       uri.with({ path: `${SCM_ROOT}${uri.path.slice(this.appConfig.workspaceDir.length)}` })
+    //     );
+    //   },
+    //   groups: new Sequence(),
+    //   onDidChangeResources: new Emitter<void>().event,
+    //   onDidChange: new Emitter<void>().event,
+    //   toJSON: () => ({}),
+    //   dispose: () => {},
+    // });
   }
 
   onDidRestoreState() {
     const documentModel = select((props) => props.documentModel);
 
     if (isCodeDocumentModel(documentModel)) {
-      this.openCodeEditor(documentModel.ref, documentModel.filepath);
+      this.openEditorForCode(documentModel.ref, documentModel.filepath);
       // 监听 props 变化
       this.addDispose(
         onSelect(
@@ -242,15 +307,15 @@ class EditorSpecialContribution
           (newModel: CodeDocumentModel, oldModel: CodeDocumentModel) =>
             newModel.filepath === oldModel.filepath && newModel.ref === oldModel.ref
         )((newModel: CodeDocumentModel) => {
-          this.openCodeEditor(newModel.ref, newModel.filepath);
+          this.openEditorForCode(newModel.ref, newModel.filepath);
         })
       );
     } else {
-      this.openEditor(documentModel.filepath);
+      this.openEditorForFs(documentModel.filepath);
       // 监听 props 变化
       this.addDispose(
         onSelect((props) => props.documentModel.filepath)((newFilepath) => {
-          this.openEditor(newFilepath);
+          this.openEditorForFs(newFilepath);
         })
       );
     }
@@ -267,36 +332,23 @@ class EditorSpecialContribution
         }
       })
     );
-
-    this.addDispose(
-      this.editorService.onActiveResourceChange((resource) => {
-        if (!resource) return;
-        const documentModel = select((props) => props.documentModel);
-        let rootPath = '';
-        if (isCodeDocumentModel(documentModel)) {
-          rootPath = path.join(this.appConfig.workspaceDir, documentModel.ref);
-        } else {
-          rootPath = this.appConfig.workspaceDir;
-        }
-        const relativePath = path.relative(rootPath, resource.uri.codeUri.path);
-        select((props) => props.documentModel.onFilepathChange)?.(relativePath);
-      })
-    );
   }
 
-  private openEditor(relativePath?: string) {
+  private openEditorForFs(relativePath?: string) {
     if (!relativePath) return;
     const uri = URI.file(path.join(this.appConfig.workspaceDir, relativePath));
     this.editorService.open(uri, {
       preview: true,
       // 始终只显示一个，目前切换编码，preview 会消失，可能得在 kaitian 中修复下
       replace: true,
+      // 禁用 file tree 跳转
+      disableNavigate: true,
     });
   }
 
-  private openCodeEditor(ref?: string, filepath?: string) {
+  private openEditorForCode(ref?: string, filepath?: string) {
     if (!ref || !filepath) return;
-    return this.openEditor(`${encodeURIComponent(ref)}/${filepath}`);
+    return this.openEditorForFs(`${encodeURIComponent(ref)}/${filepath}`);
   }
 
   registerCommands(registry: CommandRegistry) {
@@ -310,11 +362,17 @@ class EditorSpecialContribution
             platform: 'antcode',
             project: `${documentModel.owner}/${documentModel.name}`,
             commit: documentModel.ref,
-            rootUri: URI.file(this.appConfig.workspaceDir).resolve(documentModel.ref).codeUri,
+            rootUri: URI.file(this.appConfig.workspaceDir).resolve(
+              encodeURIComponent(documentModel.ref)
+            ).codeUri,
           };
         },
       }
     );
+
+    // 注销命令
+    registry.unregisterCommand(quickCommand.id);
+    registry.registerCommand(quickCommand);
   }
 
   registerEditorFeature(registry: IEditorFeatureRegistry) {
@@ -335,8 +393,8 @@ class EditorSpecialContribution
                   {
                     range: new monaco.Range(lineNumber, 1, lineNumber, 1),
                     options: {
-                      className: 'alex-line-content',
-                      glyphMarginClassName: `alex-line-glyph-margin}`,
+                      className: styles['line-content'],
+                      glyphMarginClassName: styles['line-glyph-margin'],
                     },
                   },
                 ]);
@@ -348,18 +406,18 @@ class EditorSpecialContribution
         );
         let oldClickDecorations: string[] = [];
         const highlightLine = (lineNumber: number) => {
-          oldClickDecorations = editor.monacoEditor.deltaDecorations(oldClickDecorations, [
-            {
-              range: new monaco.Range(lineNumber, 1, lineNumber, 1),
-              options: {
-                isWholeLine: true,
-                className: 'alex-line-content',
-              },
-            },
-          ]);
           // 延迟高亮，否则不居中
           setTimeout(() => {
-            editor.monacoEditor.revealLineInCenter(Number(lineNumber));
+            editor.monacoEditor.revealLineInCenterIfOutsideViewport(Number(lineNumber));
+            oldClickDecorations = editor.monacoEditor.deltaDecorations(oldClickDecorations, [
+              {
+                range: new monaco.Range(lineNumber, 1, lineNumber, 1),
+                options: {
+                  isWholeLine: true,
+                  className: styles['line-content'],
+                },
+              },
+            ]);
           }, 0);
         };
 
@@ -400,6 +458,83 @@ class EditorSpecialContribution
       },
     });
   }
+
+  registerKeybindings(keybindings: KeybindingRegistry) {
+    [
+      'ctrlcmd+,',
+      'ctrlcmd+shift+p',
+      'ctrlcmd+p',
+      'F1',
+      'alt+n',
+      'alt+shift+t',
+      'alt+shift+w',
+      'ctrlcmd+\\',
+    ].forEach((binding) => {
+      keybindings.unregisterKeybinding(binding);
+    });
+  }
+
+  onMonacoLoaded(monacoService: MonacoService) {
+    const codeEditorService = monacoService.getOverride(ServiceNames.CODE_EDITOR_SERVICE);
+    const _openCodeEditor = codeEditorService.openCodeEditor;
+    codeEditorService.openCodeEditor = (
+      input: monaco.editor.IResourceInput,
+      source?: monaco.editor.ICodeEditor,
+      sideBySide?: boolean
+    ) => {
+      return this.openCodeEditor(
+        () => _openCodeEditor.call(codeEditorService, input, source, sideBySide),
+        input,
+        source,
+        sideBySide
+      );
+    };
+  }
+
+  /**
+   * 获取内部跳转的时机
+   */
+  async openCodeEditor(
+    raw: Function,
+    input: monaco.editor.IResourceInput,
+    source?: monaco.editor.ICodeEditor,
+    sideBySide?: boolean
+  ) {
+    // 非 file 协议路径设置为空，以触发 props 变化
+    const documentModel = select((props) => props.documentModel);
+    if (input.resource.scheme !== 'file') {
+      documentModel.onFilepathChange?.('');
+      return raw();
+    }
+    const onLineNumberChange = () => {
+      if (input.options?.selection) {
+        documentModel.onLineNumberChange?.(input.options?.selection.startLineNumber || 1);
+      }
+    };
+
+    if ('filepath' in documentModel) {
+      let rootPath = '';
+      if (isCodeDocumentModel(documentModel)) {
+        rootPath = path.join(this.appConfig.workspaceDir, encodeURIComponent(documentModel.ref));
+      } else {
+        rootPath = this.appConfig.workspaceDir;
+      }
+      const relativePath = path.relative(rootPath, input.resource.path);
+      if (relativePath !== documentModel.filepath) {
+        documentModel.onFilepathChange?.(relativePath);
+        setTimeout(() => {
+          onLineNumberChange();
+        });
+      } else {
+        onLineNumberChange();
+      }
+    } else {
+      const res = await raw();
+      // controlled
+      onLineNumberChange();
+      return res;
+    }
+  }
 }
 
 @Injectable()
@@ -425,6 +560,11 @@ export class EditorSpecialModule extends BrowserModule {
       token: PreferenceProvider,
       useClass: FoldersPreferenceProvider,
       tag: PreferenceScope.Folder,
+      override: true,
+    },
+    {
+      token: EditorHistoryService,
+      useClass: EditorHistoryServiceOverride,
       override: true,
     },
     ThemeContribution,

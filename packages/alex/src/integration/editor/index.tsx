@@ -15,6 +15,8 @@ import 'antd/lib/spin/style/index.css';
 
 const owner = 'zhouang.za';
 const name = 'redcoast-cross-test';
+// const owner = 'ide-s';
+// const name = 'TypeScript-Node-Starter';
 const project = encodeURIComponent(`${owner}/${name}`);
 
 const App = () => {
@@ -29,6 +31,11 @@ const App = () => {
     setFilePath('src/main/java/com/alipay/languagebase/service/lsif/impl/CommitServiceImpl.java');
     setLineNumber(30);
   };
+  // const setContent = () => {
+  //   setRef('feat/123123');
+  //   setFilePath('gbk.ts');
+  //   // setLineNumber(30);
+  // };
 
   const readFile = async (filepath: string) => {
     const res = await fetch(
@@ -39,6 +46,7 @@ const App = () => {
     if (res.status >= 200 && res.status < 300) {
       return res.arrayBuffer();
     }
+    console.log('>>>>res', res);
     throw new Error(`${res.status} - ${res.statusText}`);
   };
 
@@ -116,19 +124,6 @@ const App = () => {
             onLoad={(app) => {
               window.app = app;
             }}
-            Landing={() => (
-              <div
-                style={{
-                  width: '100%',
-                  height: '100%',
-                  display: 'flex',
-                  alignItems: 'center',
-                  justifyContent: 'center',
-                }}
-              >
-                <Spin />
-              </div>
-            )}
             appConfig={{
               workspaceDir: 'editor',
               defaultPreferences: {
@@ -136,6 +131,8 @@ const App = () => {
                 'editor.scrollBeyondLastLine': false,
                 'lsif.documentScheme': 'file',
                 'lsif.enable': true,
+                // 'lsif.env': 'prod',
+                'editor.forceReadOnly': true,
               },
             }}
             runtimeConfig={{
@@ -152,10 +149,6 @@ const App = () => {
               filepath,
               onFilepathChange(newFilepath) {
                 setFilePath(newFilepath);
-                // 切换文件时行号清楚掉
-                if (newFilepath !== filepath) {
-                  setLineNumber(undefined);
-                }
               },
               readFile,
               encoding,

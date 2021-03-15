@@ -1,30 +1,30 @@
 import { Autowired } from '@ali/common-di';
-import {
-  Command,
-  CommandRegistry,
-  CommandService,
-  Disposable,
-  Domain,
-  URI,
-  Uri,
-} from '@ali/ide-core-common';
+import { CommandService, Disposable, Domain, URI, Uri } from '@ali/ide-core-common';
 import {
   ClientAppContribution,
   PreferenceService,
   PreferenceChange,
   PreferenceContribution,
+  LabelService,
 } from '@ali/ide-core-browser';
 import { Position, Range, Location } from '@ali/ide-kaitian-extension/lib/common/vscode/ext-types';
 import { IWorkspaceService } from '@ali/ide-workspace';
 import * as paths from '@ali/ide-core-common/lib/path';
 import { UriComponents } from 'vscode-uri';
+import { EditorComponentRegistry, ResourceService, IResource } from '@ali/ide-editor/lib/browser';
 
 import * as vscode from 'vscode';
 import { LSIF_PROD_API_HOST, LSIF_TEST_API_HOST, LsifClient } from '@alipay/lsif-client';
 import { RuntimeConfig } from '@alipay/alex-core';
+import {
+  BrowserEditorContribution,
+  IEditorDocumentModelContentRegistry,
+} from '@ali/ide-editor/lib/browser';
 
 import { SimpleLanguageService } from './language-client';
 import { LsifPreferences, lsifPreferenceSchema } from './lsif-preferences';
+import { OriginScheme, ModelScheme } from './constant';
+import { LibEditorDocumentModelProvider } from './lib-scheme.provider';
 
 const IS_TEST_ENV =
   process.env.NODE_ENV === 'development' ||
@@ -32,10 +32,10 @@ const IS_TEST_ENV =
   window.location.hostname === 'localhost' ||
   window.location.hostname === '127.0.0.1';
 
-@Domain(ClientAppContribution, PreferenceContribution)
+@Domain(ClientAppContribution, PreferenceContribution, BrowserEditorContribution)
 export class LsifContribution
   extends Disposable
-  implements ClientAppContribution, PreferenceContribution {
+  implements ClientAppContribution, PreferenceContribution, BrowserEditorContribution {
   @Autowired(SimpleLanguageService)
   private readonly simpleLanguageService: SimpleLanguageService;
 
@@ -54,6 +54,9 @@ export class LsifContribution
   @Autowired(LsifPreferences)
   protected preferences: LsifPreferences;
 
+  @Autowired()
+  labelService: LabelService;
+
   readonly schema = lsifPreferenceSchema;
 
   private async getCodeServiceProject(): Promise<
@@ -67,6 +70,8 @@ export class LsifContribution
     return await this.commands.executeCommand('alex.codeServiceProject');
   }
 
+  // 环境
+  private lsIfEnv: 'test' | 'prod';
   // 标记 lsif 开启的 flag
   private lsIfEnabled: boolean;
   // 支持 lsif 的 scheme
@@ -80,7 +85,14 @@ export class LsifContribution
   }
 
   initialize() {
-    this.lsifClient = new LsifClient(IS_TEST_ENV ? LSIF_TEST_API_HOST : LSIF_PROD_API_HOST);
+    this.lsIfEnv = this.preferences['lsif.env'];
+    let apiHost = '';
+    if (this.lsIfEnv) {
+      apiHost = this.lsIfEnv === 'prod' ? LSIF_PROD_API_HOST : LSIF_TEST_API_HOST;
+    } else {
+      apiHost = IS_TEST_ENV ? LSIF_TEST_API_HOST : LSIF_PROD_API_HOST;
+    }
+    this.lsifClient = new LsifClient(apiHost);
     // 集成侧如果需要不一样的 preference name 则需要进行代理
     this.lsIfEnabled = this.preferences['lsif.enable'];
     this.lsifDocumentScheme = this.preferences['lsif.documentScheme'];
@@ -118,11 +130,13 @@ export class LsifContribution
             if (!projectInfo) return;
             const { commit, project, rootUri } = projectInfo;
             const _rootUri = new URI(URI.revive(rootUri));
+            const path = _rootUri.relative(new URI(document.uri));
+            if (!path) return;
 
             return await this.lsifClient.hover({
               repository: project,
               commit,
-              path: _rootUri.relative(new URI(document.uri))!.toString(),
+              path: path.toString(),
               position: {
                 character: position.character,
                 line: position.line,
@@ -146,11 +160,13 @@ export class LsifContribution
             if (!projectInfo) return;
             const { commit, project, rootUri } = projectInfo;
             const _rootUri = new URI(URI.revive(rootUri));
+            const path = _rootUri.relative(new URI(document.uri));
+            if (!path) return;
 
             const ret = await this.lsifClient.reference({
               repository: project,
               commit,
-              path: _rootUri.relative(new URI(document.uri))!.toString(),
+              path: path.toString(),
               position: {
                 character: position.character,
                 line: position.line,
@@ -161,24 +177,41 @@ export class LsifContribution
               return;
             }
 
-            return ret.map((locationDesc) => {
-              const path = paths.resolve(
-                rootUri.path.toString(),
-                new URI(locationDesc.uri).path.toString()
-              );
-              const locationUri = URI.file(path).codeUri;
-              const start: Position = new Position(
-                locationDesc.range.start.line,
-                locationDesc.range.start.character
-              );
-              const end: Position = new Position(
-                locationDesc.range.end.line,
-                locationDesc.range.end.character
-              );
-              const range: Range = new Range(start, end);
-              const location = new Location(locationUri, range);
-              return location;
-            });
+            return ret
+              .map((locationDesc) => {
+                const { scheme, path } = Uri.parse(locationDesc.uri);
+
+                let locationUri: Uri;
+
+                // TODO 处理下 unpkg 协议
+                switch (scheme) {
+                  case OriginScheme.Jar:
+                    locationUri = Uri.from({
+                      scheme: ModelScheme.Jar,
+                      path,
+                    });
+                    break;
+                  case '':
+                    locationUri = Uri.file(paths.posix.join(_rootUri.path.toString(), path));
+                    break;
+                  // 无法处理的协议不处理
+                  default:
+                    return null;
+                }
+
+                const start: Position = new Position(
+                  locationDesc.range.start.line,
+                  locationDesc.range.start.character
+                );
+                const end: Position = new Position(
+                  locationDesc.range.end.line,
+                  locationDesc.range.end.character
+                );
+                const range: Range = new Range(start, end);
+                const location = new Location(locationUri, range);
+                return location;
+              })
+              .filter((v): v is Location => Boolean(v));
           },
         }
       )
@@ -197,11 +230,13 @@ export class LsifContribution
             if (!projectInfo) return;
             const { commit, project, rootUri } = projectInfo;
             const _rootUri = new URI(URI.revive(rootUri));
+            const path = _rootUri.relative(new URI(document.uri));
+            if (!path) return;
 
             const ret = await this.lsifClient.definition({
               repository: project,
               commit,
-              path: _rootUri.relative(new URI(document.uri))!.toString(),
+              path: path.toString(),
               position: {
                 character: position.character,
                 line: position.line,
@@ -212,28 +247,78 @@ export class LsifContribution
               return;
             }
 
-            return ret.map((locationDesc) => {
-              const path = paths.resolve(
-                rootUri.path.toString(),
-                new URI(locationDesc.uri).path.toString()
-              );
-              const locationUri = URI.file(path).codeUri;
+            return ret
+              .map((locationDesc) => {
+                const { scheme, path } = Uri.parse(locationDesc.uri);
 
-              const start: Position = new Position(
-                locationDesc.range.start.line,
-                locationDesc.range.start.character
-              );
-              const end: Position = new Position(
-                locationDesc.range.end.line,
-                locationDesc.range.end.character
-              );
-              const range: Range = new Range(start, end);
-              const location = new Location(locationUri, range);
-              return location;
-            });
+                let locationUri: Uri;
+
+                // TODO 处理下 unpkg 协议
+                switch (scheme) {
+                  case OriginScheme.Jar:
+                    locationUri = Uri.from({
+                      scheme: ModelScheme.Jar,
+                      path,
+                    });
+                    break;
+                  case '':
+                  case OriginScheme.File:
+                    locationUri = Uri.file(paths.posix.join(_rootUri.path.toString(), path));
+                    break;
+                  // 无法处理的协议不处理
+                  default:
+                    return null;
+                }
+
+                const start: Position = new Position(
+                  locationDesc.range.start.line,
+                  locationDesc.range.start.character
+                );
+                const end: Position = new Position(
+                  locationDesc.range.end.line,
+                  locationDesc.range.end.character
+                );
+                const range: Range = new Range(start, end);
+                const location = new Location(locationUri, range);
+                return location;
+              })
+              .filter((v): v is Location => Boolean(v));
           },
         }
       )
+    );
+  }
+
+  registerResource(service: ResourceService) {
+    service.registerResourceProvider({
+      scheme: ModelScheme.Jar,
+      provideResource: async (uri: URI): Promise<IResource> => {
+        return Promise.all([this.labelService.getName(uri), this.labelService.getIcon(uri)]).then(
+          ([name, icon]) => {
+            return {
+              name,
+              icon,
+              uri,
+              metadata: null,
+            };
+          }
+        );
+      },
+    });
+  }
+
+  registerEditorComponent(registry: EditorComponentRegistry) {
+    registry.registerEditorComponentResolver(ModelScheme.Jar, (_resource, results) => {
+      results.push({
+        type: 'code',
+        readonly: true,
+      });
+    });
+  }
+
+  registerEditorDocumentModelContentProvider(registry: IEditorDocumentModelContentRegistry) {
+    registry.registerEditorDocumentModelContentProvider(
+      new LibEditorDocumentModelProvider(this.lsifClient)
     );
   }
 }
