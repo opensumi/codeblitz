@@ -1,3 +1,18 @@
+## [0.9.2](https://code.alipay.com/cloud-ide/crew-dragon/compare/v0.9.1...v0.9.2) (2021-03-15)
+
+
+### Bug Fixes
+
+* 非 file 协议 onFilepathChange 传参为空 ([1ac1438](https://code.alipay.com/cloud-ide/crew-dragon/commits/1ac1438a38ecd4bdb794907542c39f02950b33e4))
+
+
+### Features
+
+* 优化 editor 交互,增加 lsif 跨库索引处理 ([de31b64](https://code.alipay.com/cloud-ide/crew-dragon/commits/de31b643b99b20ba85ea5454bda76f84a5f44ef8))
+* 优化样式 ([bd8da9c](https://code.alipay.com/cloud-ide/crew-dragon/commits/bd8da9ce19609223ce1ed915bf363347811888e9))
+
+
+
 ## [0.9.1](https://code.alipay.com/cloud-ide/crew-dragon/compare/v0.9.0...v0.9.1) (2021-03-11)
 
 
