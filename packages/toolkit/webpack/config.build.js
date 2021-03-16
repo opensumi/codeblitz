@@ -45,7 +45,7 @@ module.exports = createWebpackConfig({
           amd: 'moment',
         },
       },
-      /^@ant-design\/icons/,
+      '@ant-design/icons/lib/dist',
     ],
     optimization: {
       minimize: false,
