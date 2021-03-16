@@ -192,6 +192,7 @@ export class LsifContribution
                     });
                     break;
                   case '':
+                  case OriginScheme.File:
                     locationUri = Uri.file(paths.posix.join(_rootUri.path.toString(), path));
                     break;
                   // 无法处理的协议不处理

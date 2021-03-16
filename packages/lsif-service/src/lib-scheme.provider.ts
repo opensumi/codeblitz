@@ -35,7 +35,7 @@ export class LibEditorDocumentModelProvider implements IEditorDocumentModelConte
     return Promise.resolve('');
   }
 
-  async fetchJarContent(uri: URI) {
+  async fetchJarContent(uri: URI): Promise<string> {
     const path = uri.path.toString();
     const rex = /^\/?([^\/]+)\/([^\/]+)\/([^\/]+)\/(.+)$/;
 
@@ -44,15 +44,11 @@ export class LibEditorDocumentModelProvider implements IEditorDocumentModelConte
       throw new Error('uri string not match');
     }
 
-    const [_, scope, name, version, filepath] = match;
+    const [_, scope, name, version, filePath] = match;
 
-    const endpoint = `/api/lsif/jar-content?module=${scope}:${name}:${version}&filePath=${filepath}`;
-
-    // 放在 lsif-client
-    const ret = await axios.get(endpoint, {
-      // @ts-ignore
-      ...this.lsifClient.requestConfig,
+    return this.lsifClient.jarContent({
+      module: `${scope}:${name}:${version}`,
+      filePath,
     });
-    return (ret.data.success && ret.data.content) || '';
   }
 }
