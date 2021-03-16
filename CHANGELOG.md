@@ -1,3 +1,12 @@
+## [0.9.3](https://code.alipay.com/cloud-ide/crew-dragon/compare/v0.9.2...v0.9.3) (2021-03-16)
+
+
+### Features
+
+* bundle antd3, upgrade lsif ([2ed5937](https://code.alipay.com/cloud-ide/crew-dragon/commits/2ed59375fd72fa0105e5e129dc96a13f16086055))
+
+
+
 ## [0.9.2](https://code.alipay.com/cloud-ide/crew-dragon/compare/v0.9.1...v0.9.2) (2021-03-15)
 
 
