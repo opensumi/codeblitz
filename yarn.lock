@@ -5432,10 +5432,10 @@ fs-constants@^1.0.0:
   resolved "https://registry.npm.alibaba-inc.com/fs-constants/download/fs-constants-1.0.0.tgz#6be0de9be998ce16af8afc24497b9ee9b7ccd9ad"
   integrity sha1-a+Dem+mYzhavivwkSXue6bfM2a0=
 
-fs-extra-factory@^0.2.0:
-  version "0.2.0"
-  resolved "https://registry.npm.alibaba-inc.com/fs-extra-factory/download/fs-extra-factory-0.2.0.tgz#f448a8f38456797ffb3bdd8bdcd213ea36709a4d"
-  integrity sha1-9Eio84RWeX/7O92L3NIT6jZwmk0=
+fs-extra-factory@^0.2.1:
+  version "0.2.1"
+  resolved "https://registry.npm.alibaba-inc.com/fs-extra-factory/download/fs-extra-factory-0.2.1.tgz#59189ab771df4969ae9f281c0cfa5ab202c78a7d"
+  integrity sha1-WRiat3HfSWmunygcDPpasgLHin0=
   dependencies:
     universalify "^2.0.0"
 

@@ -10,7 +10,7 @@ declare var Tracert: {
 
 const CLOUD_IDE_SPM_A = 'a1654';
 
-export function logPv(spmBPos: string) {
+export function logPv(biz: string) {
   if (
     'Tracert' in window &&
     typeof Tracert.get === 'function' &&
@@ -22,7 +22,7 @@ export function logPv(spmBPos: string) {
 
     Tracert.set({
       spmAPos: CLOUD_IDE_SPM_A,
-      spmBPos,
+      spmBPos: biz === 'riddle' ? biz : `alex/sdk:${biz}`, // legacy: remain riddle
     });
 
     Tracert.call('logPv');

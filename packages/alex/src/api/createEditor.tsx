@@ -92,7 +92,7 @@ export function createEditor({ appConfig, runtimeConfig }: IConfig): IAppInstanc
       themeStorage.set(e.type);
     });
     setTimeout(() => {
-      logPv(runtimeConfig.biz);
+      logPv(runtimeConfig.biz || location.hostname);
     });
   };
 
