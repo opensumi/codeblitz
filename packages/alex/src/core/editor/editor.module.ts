@@ -46,7 +46,7 @@ import md5 from 'md5';
 import { IWorkspaceService } from '@ali/ide-workspace';
 import { SCMService } from '@ali/ide-scm';
 import { DirtyDiffWidget } from '@ali/ide-scm/lib/browser/dirty-diff/dirty-diff-widget';
-import { IDETheme } from '../../core/extensions';
+import { IDETheme, GeekTheme } from '../../core/extensions';
 import { select, onSelect } from './container';
 import { isCodeDocumentModel, CodeDocumentModel } from './types';
 import styles from '../style.module.less';
@@ -134,6 +134,10 @@ class ThemeContribution extends Disposable implements ClientAppContribution {
     this.themeService.registerThemes(
       IDETheme.packageJSON.contributes!.themes,
       URI.parse(getExtensionPath(IDETheme.extension))
+    );
+    this.themeService.registerThemes(
+      GeekTheme.packageJSON.contributes!.themes,
+      URI.parse(getExtensionPath(GeekTheme.extension))
     );
     // 强制用集成设置的默认主题
     await this.themeService.applyTheme(this.defaultPreferenceProvider.get('general.theme'));

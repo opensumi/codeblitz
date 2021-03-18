@@ -127,7 +127,7 @@ const App = () => {
             appConfig={{
               workspaceDir: 'editor',
               defaultPreferences: {
-                'general.theme': 'ide-light',
+                'general.theme': 'alipay-geek-light',
                 'editor.scrollBeyondLastLine': false,
                 'lsif.documentScheme': 'file',
                 'lsif.enable': true,

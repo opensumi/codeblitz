@@ -108,7 +108,7 @@ export function createApp({ appConfig, runtimeConfig }: IConfig): IAppInstance {
     app.injector.get(FileTreeModelService).handleTreeBlur();
 
     setTimeout(() => {
-      logPv(runtimeConfig.biz);
+      logPv(runtimeConfig.biz || location.hostname);
     });
   };
 
