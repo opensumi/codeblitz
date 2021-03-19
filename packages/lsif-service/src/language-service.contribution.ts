@@ -1,5 +1,12 @@
 import { Autowired } from '@ali/common-di';
-import { CommandService, Disposable, Domain, URI, Uri } from '@ali/ide-core-common';
+import {
+  CommandService,
+  Disposable,
+  Domain,
+  URI,
+  Uri,
+  IReporterService,
+} from '@ali/ide-core-common';
 import {
   ClientAppContribution,
   PreferenceService,
@@ -15,7 +22,7 @@ import { EditorComponentRegistry, ResourceService, IResource } from '@ali/ide-ed
 
 import * as vscode from 'vscode';
 import { LSIF_PROD_API_HOST, LSIF_TEST_API_HOST, LsifClient } from '@alipay/lsif-client';
-import { RuntimeConfig } from '@alipay/alex-core';
+import { RuntimeConfig, REPORT_NAME } from '@alipay/alex-core';
 import {
   BrowserEditorContribution,
   IEditorDocumentModelContentRegistry,
@@ -56,6 +63,9 @@ export class LsifContribution
 
   @Autowired()
   labelService: LabelService;
+
+  @Autowired(IReporterService)
+  reporterService: IReporterService;
 
   readonly schema = lsifPreferenceSchema;
 
@@ -133,7 +143,7 @@ export class LsifContribution
             const path = _rootUri.relative(new URI(document.uri));
             if (!path) return;
 
-            return await this.lsifClient.hover({
+            const params = {
               repository: project,
               commit,
               path: path.toString(),
@@ -141,7 +151,18 @@ export class LsifContribution
                 character: position.character,
                 line: position.line,
               },
+            };
+
+            const ret = await this.lsifClient.hover(params);
+
+            setTimeout(() => {
+              this.reporterService.point(REPORT_NAME.LSIF_LANGUAGE_SERVICE, 'provideHover', {
+                params,
+                response: ret,
+              });
             });
+
+            return ret;
           },
         }
       )
@@ -163,7 +184,7 @@ export class LsifContribution
             const path = _rootUri.relative(new URI(document.uri));
             if (!path) return;
 
-            const ret = await this.lsifClient.reference({
+            const params = {
               repository: project,
               commit,
               path: path.toString(),
@@ -171,6 +192,15 @@ export class LsifContribution
                 character: position.character,
                 line: position.line,
               },
+            };
+
+            const ret = await this.lsifClient.reference(params);
+
+            setTimeout(() => {
+              this.reporterService.point(REPORT_NAME.LSIF_LANGUAGE_SERVICE, 'provideReferences', {
+                params,
+                response: ret,
+              });
             });
 
             if (!ret) {
@@ -234,7 +264,7 @@ export class LsifContribution
             const path = _rootUri.relative(new URI(document.uri));
             if (!path) return;
 
-            const ret = await this.lsifClient.definition({
+            const params = {
               repository: project,
               commit,
               path: path.toString(),
@@ -242,6 +272,15 @@ export class LsifContribution
                 character: position.character,
                 line: position.line,
               },
+            };
+
+            const ret = await this.lsifClient.definition(params);
+
+            setTimeout(() => {
+              this.reporterService.point(REPORT_NAME.LSIF_LANGUAGE_SERVICE, 'provideDefinition', {
+                params,
+                response: ret,
+              });
             });
 
             if (!ret) {
