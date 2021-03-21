@@ -24,4 +24,13 @@ export namespace API {
       id: string;
     };
   }>;
+
+  export type ResponseContentSearch = Array<{
+    lines: Array<{
+      content: string;
+      number: number;
+    }>;
+    path: string;
+    ref: string;
+  }>;
 }

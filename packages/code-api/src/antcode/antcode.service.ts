@@ -1,7 +1,8 @@
 import { Injectable, Autowired } from '@ali/common-di';
 import { localize, IReporterService } from '@ali/ide-core-common';
+import { LRUCache } from '@ali/ide-core-common/lib/map';
 import { REPORT_NAME } from '@alipay/alex-core';
-import { CodeModelService, ICodeAPIService } from '@alipay/alex-code-service';
+import { CodeModelService, ICodeAPIService, ISearchResults } from '@alipay/alex-code-service';
 import type { EntryParam, RefsParam } from '@alipay/alex-code-service';
 import { IMessageService } from '@ali/ide-overlay';
 import { request, RequestOptions, isResponseError } from '@alipay/alex-shared';
@@ -17,6 +18,9 @@ export class AntCodeService implements ICodeAPIService {
 
   @Autowired(IMessageService)
   messageService: IMessageService;
+
+  // 只保留上一次的缓存，用于匹配过滤
+  private readonly searchContentLRU = new LRUCache<string, ISearchResults>(1);
 
   initialize() {
     return Promise.resolve();
@@ -133,5 +137,48 @@ export class AntCodeService implements ICodeAPIService {
       branches,
       tags,
     };
+  }
+
+  async searchContent(searchString: string, options: { limit: number }) {
+    let results = this.searchContentLRU.get(searchString);
+    if (results) {
+      return results;
+    }
+    const reqRes = await this.request<API.ResponseContentSearch>(
+      `/api/v3/projects/${this.codeModel.projectId}/repository/contents_search`,
+      {
+        params: {
+          ref_name: this.codeModel.HEAD,
+          limit: options.limit,
+          query: searchString,
+        },
+      }
+    );
+    const res = reqRes.reduce<ISearchResults>((list, item) => {
+      item.lines.forEach((line) => {
+        list.push({
+          path: item.path,
+          line: line.number,
+          content: line.content,
+        });
+      });
+      return list;
+    }, []);
+    this.searchContentLRU.set(searchString, res);
+    return res;
+  }
+
+  async searchFile(searchString: string, options: { limit: number }) {
+    const reqRes = await this.request<string[]>(
+      `/api/v3/projects/${this.codeModel.projectId}/repository/files_search`,
+      {
+        params: {
+          ref_name: this.codeModel.HEAD,
+          limit: options.limit,
+          query: searchString,
+        },
+      }
+    );
+    return reqRes;
   }
 }
