@@ -1,3 +1,12 @@
+## [0.9.7](https://code.alipay.com/cloud-ide/crew-dragon/compare/v0.9.6...v0.9.7) (2021-03-22)
+
+
+### Features
+
+* 增加 reporter 配置 ([bc6d210](https://code.alipay.com/cloud-ide/crew-dragon/commits/bc6d210290fc1b772c5929b0f0c25f5cb04b576d))
+
+
+
 ## [0.9.6](https://code.alipay.com/cloud-ide/crew-dragon/compare/v0.9.5...v0.9.6) (2021-03-18)
 
 
