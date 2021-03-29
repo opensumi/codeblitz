@@ -113,7 +113,7 @@ export const EditorRenderer: React.FC<IEditorRenderProps> = ({ onLoad, Landing, 
   );
 
   return (
-    <Container value={{ documentModel: opts.documentModel }}>
+    <Container value={{ documentModel: opts.documentModel, editorConfig: opts.editorConfig }}>
       <Root {...state} Landing={Landing} className={`alex-editor ${rootClassName}`}>
         {appElementRef.current}
       </Root>

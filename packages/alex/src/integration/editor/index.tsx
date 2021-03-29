@@ -10,13 +10,12 @@ import Select from 'antd/lib/select';
 import 'antd/lib/select/style/index.css';
 import Spin from 'antd/lib/spin';
 import 'antd/lib/spin/style/index.css';
+import './style.less';
 
 (window as any).alex = Alex;
 
-const owner = 'zhouang.za';
-const name = 'redcoast-cross-test';
-// const owner = 'ide-s';
-// const name = 'TypeScript-Node-Starter';
+const owner = 'kaitian';
+const name = 'ide-framework';
 const project = encodeURIComponent(`${owner}/${name}`);
 
 const App = () => {
@@ -24,34 +23,28 @@ const App = () => {
   const [ref, setRef] = useState('');
   const [filepath, setFilePath] = useState('');
   const [encoding, setEncoding] = useState<'utf8' | 'gbk' | undefined>('utf8');
-  const [lineNumber, setLineNumber] = useState<number | undefined>();
+  const [lineNumber, setLineNumber] = useState<number | [number, number] | undefined>();
 
   const setContent = () => {
-    setRef('3977cf5ccb607beedce3824f6686fa97e2244506');
-    setFilePath('src/main/java/com/alipay/languagebase/service/lsif/impl/CommitServiceImpl.java');
-    setLineNumber(30);
+    setRef('develop');
+    setFilePath('packages/addons/src/browser/file-drop.service.ts');
+    setLineNumber([30, 32]);
   };
-  // const setContent = () => {
-  //   setRef('feat/123123');
-  //   setFilePath('gbk.ts');
-  //   // setLineNumber(30);
-  // };
 
   const readFile = async (filepath: string) => {
     const res = await fetch(
-      `/code-test/api/v3/projects/${project}/repository/blobs/${encodeURIComponent(
+      `/code-service/api/v3/projects/${project}/repository/blobs/${encodeURIComponent(
         ref
       )}?filepath=${filepath}`
     );
     if (res.status >= 200 && res.status < 300) {
       return res.arrayBuffer();
     }
-    console.log('>>>>res', res);
     throw new Error(`${res.status} - ${res.statusText}`);
   };
 
   return (
-    <div style={{ width: '100%', height: '100%', padding: 8 }}>
+    <div style={{ padding: 8 }}>
       <div style={{ display: 'flex', marginBottom: 8 }}>
         <Select
           value={ref || undefined}
@@ -60,7 +53,7 @@ const App = () => {
           style={{ width: 400, marginRight: 8 }}
           placeholder="选择分支"
         >
-          {['3977cf5ccb607beedce3824f6686fa97e2244506'].map((path) => (
+          {['develop'].map((path) => (
             <Select.Option key={path} value={path}>
               {path}
             </Select.Option>
@@ -74,8 +67,9 @@ const App = () => {
           placeholder="选择文件"
         >
           {[
-            'src/main/java/com/alipay/languagebase/service/lsif/impl/CommitServiceImpl.java',
-            'src/main/java/com/alipay/languagebase/service/lsif/CommitService.java',
+            'packages/addons/src/browser/file-drop.service.ts',
+            'packages/addons/src/common/index.ts',
+            'OWNERS',
           ].map((path) => (
             <Select.Option key={path} value={path}>
               {path}
@@ -117,8 +111,8 @@ const App = () => {
           ))}
         </Select>
       </div>
-      <div style={{ height: 'calc(100% - 100px)', display: 'flex' }}>
-        <div style={{ width: '50%', height: '100%' }}>
+      <div style={{ display: 'flex' }}>
+        <div style={{ width: '50%', minHeight: 300 }}>
           <EditorRenderer
             key={key}
             onLoad={(app) => {
@@ -131,15 +125,20 @@ const App = () => {
                 'editor.scrollBeyondLastLine': false,
                 'lsif.documentScheme': 'file',
                 'lsif.enable': true,
-                // 'lsif.env': 'prod',
+                'lsif.env': 'prod',
                 'editor.forceReadOnly': true,
+                'editor.wordWrap': 'on',
               },
             }}
             runtimeConfig={{
               biz: 'editor',
               scenario: null,
               startupEditor: 'none',
-              // hideEditorTab: true,
+              hideEditorTab: true,
+            }}
+            editorConfig={{
+              disableEditorSearch: true,
+              stretchHeight: true,
             }}
             documentModel={{
               type: 'code',

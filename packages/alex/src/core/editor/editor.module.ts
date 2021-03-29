@@ -25,6 +25,7 @@ import {
   FileSystemContribution,
   FileSystemInstance,
   SCM_ROOT,
+  RuntimeConfig,
 } from '@alipay/alex-core';
 import {
   WorkbenchEditorService,
@@ -32,7 +33,9 @@ import {
   EditorPreferences,
   IEditorFeatureRegistry,
   IEditor,
+  EditorCollectionService,
 } from '@ali/ide-editor/lib/browser';
+import { ICodeEditor } from '@ali/ide-editor/lib/common';
 import { BreadCrumbServiceImpl } from '@ali/ide-editor/lib/browser/breadcrumb';
 import { IBreadCrumbService } from '@ali/ide-editor/lib/browser/types';
 import { EditorHistoryService, EditorHistoryState } from '@ali/ide-editor/lib/browser/history';
@@ -50,6 +53,7 @@ import { IDETheme, GeekTheme } from '../../core/extensions';
 import { select, onSelect } from './container';
 import { isCodeDocumentModel, CodeDocumentModel } from './types';
 import styles from '../style.module.less';
+import { EditorCollectionServiceImplOverride } from './editor-collection.service';
 
 // TODO: 此处 diff 的 stage 和 revertChange 应该是 git 注册的，框架中直接添加了按钮，耦合，需要修复实现 scm/change/title
 // @ts-ignore
@@ -237,6 +241,12 @@ class EditorSpecialContribution
   @Autowired()
   monacoService: MonacoService;
 
+  @Autowired(RuntimeConfig)
+  runtimeConfig: RuntimeConfig;
+
+  @Autowired(EditorCollectionService)
+  private editorCollection: EditorCollectionService;
+
   async mountFileSystem(rootFS: FileSystemInstance<'MountableFileSystem'>) {
     // TODO: 提供配置选择存储在内存中还是 indexedDB 中
     const {
@@ -297,6 +307,17 @@ class EditorSpecialContribution
     //   toJSON: () => ({}),
     //   dispose: () => {},
     // });
+  }
+
+  onStart() {
+    this.addDispose(
+      this.editorCollection.onCodeEditorCreate((codeEditor: ICodeEditor) => {
+        const disposer = this.contributeEditor(codeEditor);
+        codeEditor.onDispose(() => {
+          disposer.dispose();
+        });
+      })
+    );
   }
 
   onDidRestoreState() {
@@ -379,92 +400,178 @@ class EditorSpecialContribution
     registry.registerCommand(quickCommand);
   }
 
-  registerEditorFeature(registry: IEditorFeatureRegistry) {
-    registry.registerEditorFeatureContribution({
-      contribute: (editor: IEditor) => {
-        const disposer = new Disposable();
-        let oldHoverDecorations: string[] = [];
-        disposer.addDispose(
-          editor.monacoEditor.onMouseMove(
-            debounce((event) => {
-              const type = event?.target?.type;
-              if (
-                type === monaco.editor.MouseTargetType.GUTTER_LINE_NUMBERS ||
-                type === monaco.editor.MouseTargetType.GUTTER_GLYPH_MARGIN
-              ) {
-                const lineNumber = event.target.position!.lineNumber;
-                oldHoverDecorations = editor.monacoEditor.deltaDecorations(oldHoverDecorations, [
-                  {
-                    range: new monaco.Range(lineNumber, 1, lineNumber, 1),
-                    options: {
-                      className: styles['line-content'],
-                      glyphMarginClassName: styles['line-glyph-margin'],
-                    },
-                  },
-                ]);
-              } else {
-                oldHoverDecorations = editor.monacoEditor.deltaDecorations(oldHoverDecorations, []);
-              }
-            }, 10)
-          )
-        );
-        let oldClickDecorations: string[] = [];
-        const highlightLine = (lineNumber: number) => {
-          // 延迟高亮，否则不居中
-          setTimeout(() => {
-            editor.monacoEditor.revealLineInCenterIfOutsideViewport(Number(lineNumber));
-            oldClickDecorations = editor.monacoEditor.deltaDecorations(oldClickDecorations, [
+  /**
+   * 只 contribute code editor，diff editor 暂不需要
+   */
+  private contributeEditor(editor: IEditor) {
+    const disposer = new Disposable();
+    let oldHoverDecorations: string[] = [];
+    disposer.addDispose(
+      editor.monacoEditor.onMouseMove(
+        debounce((event) => {
+          const type = event?.target?.type;
+          if (
+            type === monaco.editor.MouseTargetType.GUTTER_LINE_NUMBERS ||
+            type === monaco.editor.MouseTargetType.GUTTER_GLYPH_MARGIN
+          ) {
+            const lineNumber = event.target.position!.lineNumber;
+            oldHoverDecorations = editor.monacoEditor.deltaDecorations(oldHoverDecorations, [
               {
                 range: new monaco.Range(lineNumber, 1, lineNumber, 1),
                 options: {
-                  isWholeLine: true,
                   className: styles['line-content'],
+                  glyphMarginClassName: styles['line-glyph-margin'],
                 },
               },
             ]);
-          }, 0);
-        };
+          } else {
+            oldHoverDecorations = editor.monacoEditor.deltaDecorations(oldHoverDecorations, []);
+          }
+        }, 10)
+      )
+    );
+    let oldClickDecorations: string[] = [];
+    const highlightLine = (lineNumber: number | [number, number]) => {
+      const startLineNumber = typeof lineNumber === 'number' ? lineNumber : lineNumber[0];
+      const endLineNumber = typeof lineNumber === 'number' ? lineNumber : lineNumber[1];
+      // 延迟高亮，否则不居中
+      oldClickDecorations = editor.monacoEditor.deltaDecorations(oldClickDecorations, [
+        {
+          range: new monaco.Range(startLineNumber, 1, endLineNumber, 1),
+          options: {
+            isWholeLine: true,
+            linesDecorationsClassName: styles['line-anchor'],
+            className: styles['line-content'],
+          },
+        },
+      ]);
+      setTimeout(() => {
+        if (select((props) => props.editorConfig?.stretchHeight)) {
+          const firstLine = document.querySelector(`.${styles['line-anchor']}`) as HTMLElement;
+          if (firstLine) {
+            firstLine.scrollIntoView({ block: 'center' });
+          }
+        } else {
+          editor.monacoEditor.revealLineInCenterIfOutsideViewport(startLineNumber);
+        }
+      }, 0);
+    };
 
-        disposer.addDispose(
-          editor.monacoEditor.onMouseDown((event) => {
-            const type = event?.target?.type;
-            if (
-              type === monaco.editor.MouseTargetType.GUTTER_LINE_NUMBERS ||
-              type === monaco.editor.MouseTargetType.GUTTER_GLYPH_MARGIN
-            ) {
-              const lineNumber = event.target.position!.lineNumber;
-              // 非受控
-              if (!('lineNumber' in select((props) => props.documentModel))) {
-                highlightLine(lineNumber);
-              }
-              select((props) => props.documentModel.onLineNumberChange)?.(lineNumber);
-            }
-          })
-        );
+    disposer.addDispose(
+      editor.monacoEditor.onMouseDown((event) => {
+        const type = event?.target?.type;
+        if (
+          type === monaco.editor.MouseTargetType.GUTTER_LINE_NUMBERS ||
+          type === monaco.editor.MouseTargetType.GUTTER_GLYPH_MARGIN
+        ) {
+          const lineNumber = event.target.position!.lineNumber;
+          // 非受控
+          if (!('lineNumber' in select((props) => props.documentModel))) {
+            highlightLine(lineNumber);
+          }
+          select((props) => props.documentModel.onLineNumberChange)?.(lineNumber);
+        }
+      })
+    );
 
-        disposer.addDispose(
-          editor.monacoEditor.onDidChangeModel(() => {
-            const initialLineNumber = select((props) => props.documentModel.lineNumber);
-            if (initialLineNumber) {
-              highlightLine(initialLineNumber);
-            }
-          })
-        );
+    disposer.addDispose(
+      editor.monacoEditor.onDidChangeModel(() => {
+        const initialLineNumber = select((props) => props.documentModel.lineNumber);
+        if (initialLineNumber) {
+          highlightLine(initialLineNumber);
+        }
+      })
+    );
 
-        disposer.addDispose(
-          onSelect((props) => props.documentModel.lineNumber)((newLineNumber) => {
-            if (newLineNumber) {
-              highlightLine(newLineNumber);
+    disposer.addDispose(
+      onSelect((props) => props.documentModel.lineNumber)((newLineNumber) => {
+        if (newLineNumber) {
+          highlightLine(newLineNumber);
+        }
+      })
+    );
+
+    if (select((props) => props.editorConfig?.stretchHeight)) {
+      const { monacoEditor } = editor;
+
+      (window as any).monacoEditor = monacoEditor;
+
+      let prevHeight = 0;
+
+      const updateRootHeight = () => {
+        const editorElement = monacoEditor.getDomNode();
+
+        if (!editorElement) {
+          return;
+        }
+
+        const options = monacoEditor.getConfiguration();
+        const { lineHeight, layoutInfo, viewInfo } = options;
+        const { contentWidth: width, height } = layoutInfo;
+        // monaco 0.20 提供 getContentHeight，暂时先调用 private method
+        const {
+          contentWidth,
+        } = (monacoEditor as any)._modelData.viewModel.viewLayout.scrollable.getScrollDimensions();
+        let result =
+          (monacoEditor as any)._modelData.viewModel.viewLayout._linesLayout.getLinesTotalHeight() +
+          lineHeight;
+        if (viewInfo.scrollBeyondLastLine) {
+          result += Math.max(0, height - lineHeight);
+        } else {
+          const getHorizontalScrollbarHeight = () => {
+            const { scrollbar } = options.viewInfo;
+            if (scrollbar.horizontal === 2 /** hidden */) {
+              // horizontal scrollbar not visible
+              return 0;
             }
-          })
-        );
-        return disposer;
-      },
-    });
+            if (width >= contentWidth) {
+              // horizontal scrollbar not visible
+              return 0;
+            }
+            return scrollbar.horizontalScrollbarSize;
+          };
+          result += getHorizontalScrollbarHeight();
+        }
+
+        if (prevHeight !== result) {
+          prevHeight = result;
+          const root = document.querySelector('.alex-root') as HTMLElement;
+          root.style.height = `${result}px`;
+          monacoEditor.layout();
+        }
+      };
+      disposer.addDispose(
+        monacoEditor.onDidChangeModelDecorations(() => {
+          requestAnimationFrame(updateRootHeight);
+        })
+      );
+    }
+
+    /**
+     * monaco 内部未提供注销命令的函数
+     * 使用 addDynamicKeybinding 需要在 monaco 加载后执行，否则因为缓存并不生效
+     * 先暂时使用 private 方法，后升级到 monaco 0.20 寻找更好的解法
+     * TODO: 更好的解法应该是 kaitian 中完全控制 monaco 的快捷键，需要技术改造
+     */
+    if (select((props) => props.editorConfig?.disableEditorSearch)) {
+      const monacoKeybindingsMap: Map<
+        string,
+        { command: string }[]
+      > = (editor.monacoEditor as any)._standaloneKeybindingService._getResolver()._map;
+      for (const [key, items] of monacoKeybindingsMap.entries()) {
+        if (items.find((item) => item.command === 'actions.find')) {
+          monacoKeybindingsMap.delete(key);
+          break;
+        }
+      }
+    }
+
+    return disposer;
   }
 
   registerKeybindings(keybindings: KeybindingRegistry) {
-    [
+    // editor 下默认注销的快捷键
+    const keybindingList = [
       'ctrlcmd+,',
       'ctrlcmd+shift+p',
       'ctrlcmd+p',
@@ -473,7 +580,20 @@ class EditorSpecialContribution
       'alt+shift+t',
       'alt+shift+w',
       'ctrlcmd+\\',
-    ].forEach((binding) => {
+    ];
+    for (let i = 1; i < 10; i++) {
+      keybindingList.push(`ctrlcmd+${i}`);
+    }
+    // 搜索快捷键
+    if (select((props) => props.editorConfig?.disableEditorSearch)) {
+      keybindingList.push('ctrlcmd+f');
+    }
+    // 自定义注销的快捷键
+    if (this.runtimeConfig.unregisterKeybindings) {
+      keybindingList.push(...this.runtimeConfig.unregisterKeybindings);
+    }
+
+    keybindingList.forEach((binding) => {
       keybindings.unregisterKeybinding(binding);
     });
   }
@@ -569,6 +689,11 @@ export class EditorSpecialModule extends BrowserModule {
     {
       token: EditorHistoryService,
       useClass: EditorHistoryServiceOverride,
+      override: true,
+    },
+    {
+      token: EditorCollectionService,
+      useClass: EditorCollectionServiceImplOverride,
       override: true,
     },
     ThemeContribution,

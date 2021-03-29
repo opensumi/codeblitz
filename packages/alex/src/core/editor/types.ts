@@ -20,9 +20,9 @@ export interface DocumentModel {
    */
   encoding?: 'gbk' | 'utf8';
   /**
-   * 展示文件行号
+   * 展示文件行号，如果传入数组，则表示多行
    */
-  lineNumber?: number;
+  lineNumber?: number | [number, number];
   /**
    * 行号变更事件
    */
@@ -52,7 +52,23 @@ export interface CodeDocumentModel extends DocumentModel {
   name: string;
 }
 
+export interface EditorConfig {
+  /**
+   * 编辑器是否自适应内容区高度，此时会完全展开 editor，内部不再有滚动条
+   * 代码行数过多时可能会有性能问题
+   */
+  stretchHeight?: boolean;
+  /**
+   * 禁用编辑器内搜索，此时会注销内部 ctrl/cmd + f 快捷键
+   */
+  disableEditorSearch?: boolean;
+}
+
 export interface EditorProps {
+  /**
+   * editor 组件专有配置
+   */
+  editorConfig?: EditorConfig;
   documentModel: FSDocumentModel | CodeDocumentModel;
 }
 
