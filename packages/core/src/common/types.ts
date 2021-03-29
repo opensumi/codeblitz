@@ -85,4 +85,8 @@ export interface RuntimeConfig {
    * reporter 服务，可获取内部上报的埋点相关数据
    */
   reporter?: IReporter;
+  /**
+   * 配置需注销的快捷键
+   */
+  unregisterKeybindings?: string[];
 }
