@@ -1,3 +1,12 @@
+# [0.10.0](https://code.alipay.com/cloud-ide/crew-dragon/compare/v0.9.7...v0.10.0) (2021-03-29)
+
+
+### Features
+
+* 支持编辑器完全展开及禁用搜索等配置 ([f3997ae](https://code.alipay.com/cloud-ide/crew-dragon/commits/f3997ae09797bda22c8d3d56c4845931449dc891))
+
+
+
 ## [0.9.7](https://code.alipay.com/cloud-ide/crew-dragon/compare/v0.9.6...v0.9.7) (2021-03-22)
 
 
