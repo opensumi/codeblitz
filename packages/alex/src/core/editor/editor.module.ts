@@ -494,8 +494,6 @@ class EditorSpecialContribution
     if (select((props) => props.editorConfig?.stretchHeight)) {
       const { monacoEditor } = editor;
 
-      (window as any).monacoEditor = monacoEditor;
-
       let prevHeight = 0;
 
       const updateRootHeight = () => {
@@ -542,6 +540,12 @@ class EditorSpecialContribution
       };
       disposer.addDispose(
         monacoEditor.onDidChangeModelDecorations(() => {
+          requestAnimationFrame(updateRootHeight);
+        })
+      );
+
+      disposer.addDispose(
+        monacoEditor.onDidChangeModel(() => {
           requestAnimationFrame(updateRootHeight);
         })
       );
