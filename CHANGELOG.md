@@ -1,3 +1,12 @@
+## [0.10.1](https://code.alipay.com/cloud-ide/crew-dragon/compare/v0.10.0...v0.10.1) (2021-03-30)
+
+
+### Bug Fixes
+
+* 更改 monaco cdn及修复折叠样式 ([f3663a4](https://code.alipay.com/cloud-ide/crew-dragon/commits/f3663a4c0a52d1172937383bd173a0888b072a2c))
+
+
+
 # [0.10.0](https://code.alipay.com/cloud-ide/crew-dragon/compare/v0.9.7...v0.10.0) (2021-03-29)
 
 
