@@ -57,7 +57,10 @@ const getDefaultAppConfig = (): IAppOpts => ({
 });
 
 // 提前加载 monaco 并提前缓存 codeEditorService
-loadMonaco();
+loadMonaco({
+  monacoCDNBase:
+    'https://gw.alipayobjects.com/os/lib/alipay/ame/0.17.0-patch.4/out-monaco-editor-core/min/',
+});
 let codeEditorService: any = null;
 isMonacoLoaded()?.then(() => {
   codeEditorService = (monaco as any).services.StaticServices.codeEditorService;

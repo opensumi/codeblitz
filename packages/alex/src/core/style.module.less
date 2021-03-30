@@ -84,6 +84,14 @@ alex-root {
     object-fit: contain;
     width: auto !important;
   }
+  // acr 中把折叠 icon 给 display:none 了，这里再覆盖下
+  .alex-root {
+    .monaco-editor .margin-view-overlays .folding.collapsed,
+    .monaco-editor .margin-view-overlays .folding.alwaysShowFoldIcons,
+    .monaco-editor .margin-view-overlays:hover .folding {
+      display: initial;
+    }
+  }
 }
 
 :global(.alex-editor) .landing {
