@@ -1,3 +1,13 @@
+## [0.10.3](https://code.alipay.com/cloud-ide/crew-dragon/compare/v0.10.1...v0.10.3) (2021-03-31)
+
+
+### Bug Fixes
+
+* 修复组件非首次加载变慢的问题 ([fce181b](https://code.alipay.com/cloud-ide/crew-dragon/commits/fce181b7747730cdeeed46b5febe0150e1bf550a))
+* 修复首次打开文件高度不展开的问题 ([e7be812](https://code.alipay.com/cloud-ide/crew-dragon/commits/e7be8125da3317bb1200a4f13830af75ff2373c6))
+
+
+
 ## [0.10.2](https://code.alipay.com/cloud-ide/crew-dragon/compare/v0.10.1...v0.10.2) (2021-03-30)
 
 
