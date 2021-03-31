@@ -144,7 +144,10 @@ export function createApp({ appConfig, runtimeConfig }: IConfig): IAppInstance {
     if (codeEditorService) {
       codeEditorService._value = null;
     }
-    (monaco as any).services.StaticServices.modeService._value = null;
+    const modeService = (monaco as any).services.StaticServices.modeService;
+    // 需要把 LanguageRegistry dispose，否则二次加载会重复触发事件，导致加载越来越慢
+    modeService._value._registry.dispose();
+    modeService._value = null;
     // @ts-ignore
     // common-di 通过参数实例化无法自动 dispose
     app.injector.get(WorkerExtensionService)?.protocol?._locals?.forEach((instance) => {
