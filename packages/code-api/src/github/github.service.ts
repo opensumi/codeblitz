@@ -1,6 +1,6 @@
 import { Injectable, Autowired } from '@ali/common-di';
 import { AppConfig } from '@ali/ide-core-browser';
-import { localize, CommandService } from '@ali/ide-core-common';
+import { localize, CommandService, memoize } from '@ali/ide-core-common';
 import { CodeModelService, ICodeAPIService } from '@alipay/alex-code-service';
 import type { TreeEntry, EntryParam, RefsParam } from '@alipay/alex-code-service';
 import { IMessageService } from '@ali/ide-overlay';
@@ -248,6 +248,19 @@ export class GitHubService implements ICodeAPIService {
       });
     },
 
+    getRecursiveTree: async () => {
+      const data = await this.requestByREST<API.ResponseGetTree>(
+        `/repos/${this.codeModel.project}/git/trees/${this.codeModel.HEAD}:`,
+        {
+          responseType: 'json',
+          params: {
+            recursive: 1,
+          },
+        }
+      );
+      return data.tree.filter((item) => item.type === 'blob').map((item) => item.path);
+    },
+
     getBlob: async (entry: EntryParam) => {
       const buf = await this.requestByREST<ArrayBuffer>(
         `/repos/${this.codeModel.project}/git/blobs/${entry.id}`,
@@ -482,5 +495,21 @@ export class GitHubService implements ICodeAPIService {
       return this.rest.getRefs();
     }
     return this.graphql.getRefs();
+  }
+
+  /**
+   * github 内容搜索只支持主分支，切返回内容不行内容，故不提供
+   * 后续可考虑在有后台支持情况下用 [sourcegraph](https://docs.sourcegraph.com/api/graphql) 接口
+   */
+  async searchContent() {
+    return [];
+  }
+
+  /**
+   * github 接口只支持默认分支，这里查询一次所有文件来过滤
+   */
+  @memoize
+  async searchFile() {
+    return this.rest.getRecursiveTree();
   }
 }

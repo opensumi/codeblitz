@@ -202,4 +202,15 @@ export class GitLabService implements ICodeAPIService {
       tags,
     };
   }
+
+  /**
+   * gitlab 接口不支持搜索
+   */
+  async searchContent() {
+    return [];
+  }
+
+  async searchFile() {
+    return [];
+  }
 }

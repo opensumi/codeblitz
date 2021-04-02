@@ -22,6 +22,12 @@ export interface RefsParam {
   tags: BranchOrTag[];
 }
 
+export type ISearchResults = Array<{
+  path: string;
+  line: number;
+  content: string;
+}>;
+
 export interface ICodeAPIService {
   /**
    * 初始化
@@ -51,6 +57,14 @@ export interface ICodeAPIService {
    * 静态资源路径
    */
   transformStaticResource(path: string): string;
+  /**
+   * 内容搜索
+   */
+  searchContent(searchString: string, options: { limit: number }): Promise<ISearchResults>;
+  /**
+   * 文件搜索
+   */
+  searchFile(searchString: string, options: { limit: number }): Promise<string[]>;
 }
 
 export type State =
