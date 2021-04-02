@@ -9,7 +9,7 @@ import {
   SEARCH_STATE,
   cutShortSearchResult,
   DEFAULT_SEARCH_IN_WORKSPACE_LIMIT,
-  anchorGlob
+  anchorGlob,
 } from '@ali/ide-search/lib/common';
 import { ContentSearchClientService } from '@ali/ide-search/lib/browser/search.service';
 import { ICodeAPIService } from '@alipay/alex-code-service';
@@ -146,20 +146,28 @@ export class ContentSearchService implements IContentSearchServer {
 
           const results: ContentSearchResult[] = [];
 
-          const includeMatcherList = opts?.include?.map((str: string) => parse(anchorGlob(str))) || [];
-          const excludeMatcherList = opts?.exclude?.map((str: string) => parse(anchorGlob(str))) || [];
+          const includeMatcherList =
+            opts?.include?.map((str: string) => parse(anchorGlob(str))) || [];
+          const excludeMatcherList =
+            opts?.exclude?.map((str: string) => parse(anchorGlob(str))) || [];
 
           requestResults.forEach(({ path, line, content }) => {
             const searchStringLen = searchString.length;
             const textLength = content.length;
-            const fileUri = URI.file(paths.join(this.appConfig.workspaceDir, path)).toString()
+            const fileUri = URI.file(paths.join(this.appConfig.workspaceDir, path)).toString();
 
-            if (includeMatcherList.length > 0 && !includeMatcherList.some(matcher => matcher(fileUri))) {
-              return
+            if (
+              includeMatcherList.length > 0 &&
+              !includeMatcherList.some((matcher) => matcher(fileUri))
+            ) {
+              return;
             }
 
-            if (excludeMatcherList.length > 0 && excludeMatcherList.some(matcher => matcher(fileUri))) {
-              return
+            if (
+              excludeMatcherList.length > 0 &&
+              excludeMatcherList.some((matcher) => matcher(fileUri))
+            ) {
+              return;
             }
 
             if (simpleSearch) {
