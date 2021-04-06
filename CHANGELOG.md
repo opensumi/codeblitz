@@ -1,3 +1,13 @@
+# [0.11.0](https://code.alipay.com/cloud-ide/crew-dragon/compare/v0.10.3...v0.11.0) (2021-04-06)
+
+
+### Features
+
+* 支持代码搜索文件匹配 ([a0d70e4](https://code.alipay.com/cloud-ide/crew-dragon/commits/a0d70e423c0b58cae3e676a3d7868511114d3e10))
+* **code-api:** 支持代码及文件搜索 ([f84886f](https://code.alipay.com/cloud-ide/crew-dragon/commits/f84886f918686c80cd52735e65abd27045efc78c))
+
+
+
 ## [0.10.3](https://code.alipay.com/cloud-ide/crew-dragon/compare/v0.10.1...v0.10.3) (2021-03-31)
 
 
