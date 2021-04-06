@@ -78,11 +78,13 @@ export const AppRenderer: React.FC<IRenderProps> = ({ onLoad, Landing, ...opts }
       .catch((err: Error) => {
         setState({ error: err?.message || localize('error.unknown'), status: 'error' });
 
-        (app.injector.get(
-          IReporterService
-        ) as IReporterService).point(REPORT_NAME.ALEX_APP_START_ERROR, err?.message, {
-          error: err,
-        });
+        (app.injector.get(IReporterService) as IReporterService).point(
+          REPORT_NAME.ALEX_APP_START_ERROR,
+          err?.message,
+          {
+            error: err,
+          }
+        );
         getDebugLogger().error(err);
         setTimeout(() => {
           throw err;

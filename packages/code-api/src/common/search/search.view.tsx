@@ -2,13 +2,45 @@ import * as React from 'react';
 import { observer } from 'mobx-react-lite';
 import { ConfigContext, localize, getIcon } from '@ali/ide-core-browser';
 import { ProgressBar } from '@ali/ide-core-browser/lib/components/progressbar';
-import { ValidateInput } from '@ali/ide-components';
+import { Input, ValidateInput, CheckBox, Popover, PopoverTriggerType } from '@ali/ide-components';
 import { ViewState } from '@ali/ide-core-browser';
 import * as cls from 'classnames';
 import * as styles from '@ali/ide-search/lib/browser/search.module.less';
 import { SEARCH_STATE } from '@ali/ide-search/lib/common';
 import { ContentSearchClientService } from '@ali/ide-search/lib/browser/search.service';
 import { SearchTree } from './search-tree.view';
+
+function getIncludeRuleContent() {
+  return (
+    <div className={cls(styles.include_rule_content)}>
+      <ul>
+        <li>, : {localize('search.help.concatRule')}</li>
+        <li>* : {localize('search.help.matchOneOrMoreRule')}</li>
+        <li>? : {localize('search.help.matchOne')}</li>
+        <li>** : {localize('search.help.matchAny')}</li>
+        <li>
+          {} : {localize('search.help.matchWithGroup')}
+        </li>
+        <li>[] : {localize('search.help.matchRange')}</li>
+      </ul>
+    </div>
+  );
+}
+
+function getExcludeRuleContent(excludeList: string[]) {
+  return (
+    <div className={cls(styles.exclude_rule_content)}>
+      <div>
+        {excludeList.map((exclude, index) => {
+          if (index === excludeList.length - 1) {
+            return exclude;
+          }
+          return `${exclude}, `;
+        })}
+      </div>
+    </div>
+  );
+}
 
 export const Search = observer(
   ({ viewState }: React.PropsWithChildren<{ viewState: ViewState }>) => {
@@ -52,7 +84,18 @@ export const Search = observer(
           <div className={styles.search_and_replace_container}>
             <div className={styles.search_and_replace_fields}>
               <div className={styles.search_field_container}>
-                <p className={styles.search_input_title}>{localize('search.input.title')}</p>
+                <p className={styles.search_input_title}>
+                  {localize('search.input.title')}
+                  <CheckBox
+                    insertClass={cls(styles.checkbox)}
+                    label={localize('search.input.checkbox')}
+                    checked={UIState.isDetailOpen}
+                    id="search-input"
+                    onChange={() => {
+                      updateUIState({ isDetailOpen: !UIState.isDetailOpen });
+                    }}
+                  />
+                </p>
                 <div
                   className={cls(styles.search_field, { [styles.focus]: UIState.isSearchFocus })}
                 >
@@ -76,7 +119,7 @@ export const Search = observer(
                         })}
                         title={localize('caseDescription')}
                         onClick={(e) => updateUIState({ isMatchCase: !UIState.isMatchCase }, e)}
-                      />,
+                      ></span>,
                       <span
                         key={localize('wordsDescription')}
                         className={cls(getIcon('abl'), styles['whole-word'], styles.option, {
@@ -84,13 +127,114 @@ export const Search = observer(
                         })}
                         title={localize('wordsDescription')}
                         onClick={(e) => updateUIState({ isWholeWord: !UIState.isWholeWord }, e)}
-                      />,
+                      ></span>,
                     ]}
                   />
                 </div>
+                {/* <div className='search-notification '>
+              <div>This is only a subset of all results. Use a more specific search term to narrow down the result list.</div>
+            </div> */}
               </div>
             </div>
           </div>
+
+          <div className={cls(styles.search_details)}>
+            {UIState.isDetailOpen ? (
+              <div className="glob_field-container">
+                <div className={cls(styles.glob_field)}>
+                  <div className={cls(styles.label)}>
+                    <span className={styles.limit}>{localize('search.includes')}</span>
+                    <span className={cls(styles.include_rule)}>
+                      <Popover
+                        id={'show_include_rule'}
+                        title={localize('search.help.supportRule')}
+                        content={getIncludeRuleContent()}
+                        trigger={PopoverTriggerType.hover}
+                        delay={500}
+                      >
+                        {localize('search.help.showIncludeRule')}
+                      </Popover>
+                    </span>
+                  </div>
+                  <Input
+                    value={searchBrowserService.includeValue}
+                    type="text"
+                    placeholder={localize('search.includes.description')}
+                    onKeyUp={searchBrowserService.search}
+                    onChange={searchBrowserService.onSearchIncludeChange}
+                  />
+                </div>
+                <div className={cls(styles.glob_field, styles.search_excludes)}>
+                  <div className={styles.label}>
+                    <span className={styles.limit}>{localize('search.excludes')}</span>
+                    <div className={styles.checkbox_wrap}>
+                      <CheckBox
+                        insertClass={cls(styles.checkbox)}
+                        label={localize('search.excludes.default.enable')}
+                        checked={!UIState.isIncludeIgnored}
+                        id="search-input-isIncludeIgnored"
+                        onChange={() => {
+                          updateUIState({ isIncludeIgnored: !UIState.isIncludeIgnored });
+                        }}
+                      />
+                      <Popover
+                        title={localize('search.help.excludeList')}
+                        insertClass={cls(styles.search_excludes_description)}
+                        id={'search_excludes'}
+                        action={localize('search.help.modify')}
+                        onClickAction={searchBrowserService.openPreference}
+                        content={getExcludeRuleContent(
+                          searchBrowserService.getPreferenceSearchExcludes()
+                        )}
+                        trigger={PopoverTriggerType.hover}
+                        delay={500}
+                      >
+                        <span className={cls(getIcon('question-circle'))}></span>
+                      </Popover>
+                    </div>
+                  </div>
+                  <Input
+                    type="text"
+                    value={searchBrowserService.excludeValue}
+                    placeholder={localize('search.includes.description')}
+                    onKeyUp={searchBrowserService.search}
+                    onChange={searchBrowserService.onSearchExcludeChange}
+                  />
+                </div>
+              </div>
+            ) : (
+              ''
+            )}
+          </div>
+
+          {/* <div className={styles.search_and_replace_container}>
+          <div className={styles.search_and_replace_fields}>
+            <p className={styles.search_input_title}>
+              {localize('search.replace.title')}
+              <span
+                className={styles.replace_all}
+                onClick={doReplaceAll}
+              >
+                {resultTotal.resultNum > 0 ? localize('search.replaceAll.label') : ''}
+              </span>
+            </p>
+            <div className={styles.replace_field}>
+              <Input
+                value={searchBrowserService.replaceValue}
+                id='replace-input-field'
+                title={localize('search.replace.label')}
+                type='text'
+                placeholder={localize('search.replace.label')}
+                onKeyUp={searchBrowserService.search}
+                onChange={searchBrowserService.onReplaceInputChange}
+                ref={searchBrowserService.replaceInputEl}
+              />
+              <div className={styles['replace-all-button_container']}>
+                <span title={localize('replaceAll.confirmation.title')} className={`${styles['replace-all-button']} ${styles.disabled}`}></span>
+              </div>
+            </div>
+          </div>
+        </div> */}
         </div>
         {searchResults && searchResults.size > 0 && !searchError ? (
           <SearchTree
