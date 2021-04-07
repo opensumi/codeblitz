@@ -137,9 +137,10 @@ export class CodeModelService {
     if (!HEAD) {
       return '';
     }
+    // 和 git extension 一致，优先展示 heads (branch)
     return (
-      this.refs.tags.find((tag) => tag.commit === this.HEAD)?.name ||
       this.refs.branches.find((br) => br.commit === this.HEAD)?.name ||
+      this.refs.tags.find((tag) => tag.commit === this.HEAD)?.name ||
       HEAD.substr(0, 8)
     );
   }
