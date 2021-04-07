@@ -95,7 +95,12 @@ export const GitHubView: React.FC = observer(() => {
           >
             {localize('common.save')}
           </Button>
-          <Button size="small" onClick={() => setTokenValue('')} loading={validating}>
+          <Button
+            size="small"
+            onClick={() => setTokenValue('')}
+            loading={validating}
+            type="default"
+          >
             {localize('common.reset')}
           </Button>
         </div>
