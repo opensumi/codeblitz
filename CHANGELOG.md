@@ -1,3 +1,12 @@
+## [0.11.1](https://code.alipay.com/cloud-ide/crew-dragon/compare/v0.11.0...v0.11.1) (2021-04-07)
+
+
+### Features
+
+* 增加埋点白名单 ([829f942](https://code.alipay.com/cloud-ide/crew-dragon/commits/829f94245bd10ccd4505b91f04ec0dfadb959cb8))
+
+
+
 # [0.11.0](https://code.alipay.com/cloud-ide/crew-dragon/compare/v0.10.3...v0.11.0) (2021-04-06)
 
 
