@@ -2,7 +2,7 @@ import { Autowired } from '@ali/common-di';
 import {
   ComponentContribution,
   ComponentRegistry,
-  getIcon,
+  getExternalIcon,
   CommandRegistry,
   SlotLocation,
   ClientAppContribution,
@@ -37,7 +37,7 @@ export class GithubContribution
       },
       {
         containerId: GITHUB_CONTAINER_ID,
-        iconClass: getIcon('github-fill'),
+        iconClass: getExternalIcon('github'),
         title: 'GitHub',
       }
     );

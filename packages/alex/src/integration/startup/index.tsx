@@ -56,7 +56,7 @@ const platformConfig = {
     platform: 'github',
     owner: 'microsoft',
     name: 'vscode',
-    origin: 'https://code.alipay.com',
+    origin: 'https://github.alipay.com',
     endpoint: 'https://api.github.com',
   },
   gitlab: {
