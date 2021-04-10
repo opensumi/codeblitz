@@ -763,10 +763,10 @@
     utility "^1.13.1"
     uuid "^3.2.1"
 
-"@alipay/lsif-client@^1.2.0":
-  version "1.2.0"
-  resolved "https://registry.npm.alibaba-inc.com/@alipay/lsif-client/download/@alipay/lsif-client-1.2.0.tgz#c3c0d4819ed7d22ec9d5e5586ea3f2f62b77d4a0"
-  integrity sha1-w8DUgZ7X0i7J1eVYbqPy9it31KA=
+"@alipay/lsif-client@^1.4.0":
+  version "1.4.0"
+  resolved "https://registry.npm.alibaba-inc.com/@alipay/lsif-client/download/@alipay/lsif-client-1.4.0.tgz#49292f0df2bbc00e69d07f2410ef76bd371fa6de"
+  integrity sha1-SSkvDfK7wA5p0H8kEO92vTcfpt4=
   dependencies:
     axios "^0.21.1"
 
