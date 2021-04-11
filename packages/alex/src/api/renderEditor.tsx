@@ -8,8 +8,7 @@ import { RootProps, LandingProps } from '../core/types';
 import { useConstant } from '../core/hooks';
 import { IConfig, IAppInstance } from './types';
 import { EditorProps } from '../core/editor/types';
-import { Container } from '../core/editor/container';
-import { HIDE_EDITOR_TAB_CLASS_NAME } from '../core/constants';
+import { PropsServiceImpl, IPropsService } from '../core/props.service';
 import styles from '../core/style.module.less';
 
 interface IRenderProps extends IConfig {
@@ -70,6 +69,9 @@ export const renderEditor = (domElement: HTMLElement, props: IEditorRenderProps)
 export const EditorRenderer: React.FC<IEditorRenderProps> = ({ onLoad, Landing, ...opts }) => {
   const app = useConstant(() => createEditor(opts));
   const appElementRef = useRef<React.ReactElement | null>(null);
+  const propsService = useConstant(() => new PropsServiceImpl<EditorProps>());
+
+  propsService.props = { documentModel: opts.documentModel, editorConfig: opts.editorConfig };
 
   const [state, setState] = useState<{
     status: RootProps['status'];
@@ -77,6 +79,11 @@ export const EditorRenderer: React.FC<IEditorRenderProps> = ({ onLoad, Landing, 
   }>(() => ({ status: 'loading' }));
 
   useEffect(() => {
+    app.injector.addProviders({
+      token: IPropsService,
+      useValue: propsService,
+    });
+
     app
       .start((appElement) => {
         appElementRef.current = appElement;
@@ -113,10 +120,8 @@ export const EditorRenderer: React.FC<IEditorRenderProps> = ({ onLoad, Landing, 
   );
 
   return (
-    <Container value={{ documentModel: opts.documentModel, editorConfig: opts.editorConfig }}>
-      <Root {...state} Landing={Landing} className={`alex-editor ${rootClassName}`}>
-        {appElementRef.current}
-      </Root>
-    </Container>
+    <Root {...state} Landing={Landing} className={`alex-editor ${rootClassName}`}>
+      {appElementRef.current}
+    </Root>
   );
 };

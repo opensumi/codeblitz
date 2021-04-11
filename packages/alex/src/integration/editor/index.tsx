@@ -11,66 +11,36 @@ import './style.less';
 
 (window as any).alex = Alex;
 
-const fileOptions = [
-  {
-    value: 'chaxuan.wh/qiankun-mirror',
-    label: 'chaxuan.wh/qiankun-mirror',
-    children: [
-      {
-        value: 'master',
-        label: 'master',
-        children: [
-          {
-            value: 'src/globalState.ts',
-            label: 'src/globalState.ts',
-          },
-        ],
-      },
+const fileOptions = (function transform(obj) {
+  return Object.keys(obj).map((key) => {
+    return {
+      value: key,
+      label: key,
+      children: Array.isArray(obj[key])
+        ? obj[key].map((v) => ({ value: v, label: v }))
+        : transform(obj[key]),
+    };
+  });
+})({
+  'chaxuan.wh/qiankun-mirror': {
+    master: ['src/globalState.ts'],
+  },
+  'wealth_release/finstrategy': {
+    f577528518c7c0279f8cdf3de59ae24a80a16607: [
+      'app/biz/service-impl/src/main/java/com/alipay/finstrategy/biz/service/impl/portfolio/msg/TradeMessageListener.java',
     ],
   },
-  {
-    value: 'wealth_release/finstrategy',
-    label: 'wealth_release/finstrategy',
-    children: [
-      {
-        value: 'f577528518c7c0279f8cdf3de59ae24a80a16607',
-        label: 'f577528518c7c0279f8cdf3de59ae24a80a16607',
-        children: [
-          {
-            value:
-              'app/biz/service-impl/src/main/java/com/alipay/finstrategy/biz/service/impl/portfolio/msg/TradeMessageListener.java',
-            label:
-              'app/biz/service-impl/src/main/java/com/alipay/finstrategy/biz/service/impl/portfolio/msg/TradeMessageListener.java',
-          },
-        ],
-      },
+  'kaitian/ide-framework': {
+    develop: [
+      'packages/addons/src/browser/file-drop.service.ts',
+      'packages/addons/src/common/index.ts',
+      'OWNERS',
     ],
   },
-  {
-    value: 'kaitian/ide-framework',
-    label: 'kaitian/ide-framework',
-    children: [
-      {
-        value: 'develop',
-        label: 'develop',
-        children: [
-          {
-            value: 'packages/addons/src/browser/file-drop.service.ts',
-            label: 'packages/addons/src/browser/file-drop.service.ts',
-          },
-          {
-            value: 'packages/addons/src/common/index.ts',
-            label: 'packages/addons/src/common/index.ts',
-          },
-          {
-            value: 'OWNERS',
-            label: 'OWNERS',
-          },
-        ],
-      },
-    ],
+  'ide-s/TypeScript-Node-Starter': {
+    'feat/123123': ['gbk.ts'],
   },
-];
+});
 
 const App = () => {
   const [project, setProject] = useState('');
@@ -96,7 +66,6 @@ const App = () => {
     setRef(ref);
     setFilePath(filepath);
   };
-  console.log(123);
 
   return (
     <div style={{ padding: 8 }}>
@@ -139,50 +108,52 @@ const App = () => {
       </div>
       <div style={{ display: 'flex' }}>
         <div style={{ width: '50%', minHeight: 300 }}>
-          <EditorRenderer
-            key={project}
-            onLoad={(app) => {
-              window.app = app;
-            }}
-            appConfig={{
-              workspaceDir: 'editor',
-              defaultPreferences: {
-                'general.theme': 'alipay-geek-light',
-                'editor.scrollBeyondLastLine': false,
-                'lsif.documentScheme': 'file',
-                'lsif.enable': true,
-                'lsif.env': 'prod',
-                'editor.forceReadOnly': true,
-                'editor.wordWrap': 'on',
-              },
-            }}
-            runtimeConfig={{
-              biz: 'editor',
-              scenario: null,
-              startupEditor: 'none',
-              hideEditorTab: true,
-            }}
-            editorConfig={{
-              disableEditorSearch: true,
-              // stretchHeight: true,
-            }}
-            documentModel={{
-              type: 'code',
-              ref,
-              owner: project.split('/')[0],
-              name: project.split('/')[1],
-              filepath,
-              onFilepathChange(newFilepath) {
-                setFilePath(newFilepath);
-              },
-              readFile,
-              encoding,
-              lineNumber,
-              onLineNumberChange(num) {
-                setLineNumber(num);
-              },
-            }}
-          />
+          {project ? (
+            <EditorRenderer
+              key={project}
+              onLoad={(app) => {
+                window.app = app;
+              }}
+              appConfig={{
+                workspaceDir: project,
+                defaultPreferences: {
+                  'general.theme': 'alipay-geek-light',
+                  'editor.scrollBeyondLastLine': false,
+                  'lsif.documentScheme': 'file',
+                  'lsif.enable': true,
+                  'lsif.env': 'prod',
+                  'editor.forceReadOnly': true,
+                  'editor.wordWrap': 'on',
+                },
+              }}
+              runtimeConfig={{
+                biz: 'editor',
+                scenario: null,
+                startupEditor: 'none',
+                // hideEditorTab: true,
+              }}
+              editorConfig={{
+                disableEditorSearch: true,
+                // stretchHeight: true,
+              }}
+              documentModel={{
+                type: 'code',
+                ref,
+                owner: project.split('/')[0],
+                name: project.split('/')[1],
+                filepath,
+                onFilepathChange(newFilepath) {
+                  setFilePath(newFilepath);
+                },
+                readFile,
+                encoding,
+                lineNumber,
+                onLineNumberChange(num) {
+                  setLineNumber(num);
+                },
+              }}
+            />
+          ) : null}
         </div>
       </div>
     </div>
