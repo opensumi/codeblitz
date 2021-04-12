@@ -33,14 +33,14 @@ isFilesystemReady().then(async () => {
   // );
 });
 
-const query = location.search
-  .slice(1)
-  .split('&')
-  .reduce<Record<string, string>>((obj, pair) => {
-    const [key, value] = pair.split('=');
-    obj[decodeURIComponent(key)] = decodeURIComponent(value || '');
-    return obj;
-  }, {});
+// const query = location.search
+//   .slice(1)
+//   .split('&')
+//   .reduce<Record<string, string>>((obj, pair) => {
+//     const [key, value] = pair.split('=');
+//     obj[decodeURIComponent(key)] = decodeURIComponent(value || '');
+//     return obj;
+//   }, {});
 
 const platformConfig = {
   antcode: {
@@ -70,17 +70,21 @@ const platformConfig = {
 
 const layoutConfig = getDefaultLayoutConfig();
 
-const platform = (Object.keys(platformConfig).includes(query.platform)
-  ? query.platform
-  : 'antcode') as CodeServiceConfig['platform'];
+let pathParts = location.pathname.split('/').filter(Boolean);
+
+const platform = pathParts[0] in platformConfig ? pathParts[0] : 'antcode';
+
+// const platform = (Object.keys(platformConfig).includes(query.platform)
+//   ? query.platform
+//   : 'antcode') as CodeServiceConfig['platform'];
 const { module: CodeAPIModule, ...config } = platformConfig[platform];
-if (query.project) {
-  const [owner, name] = decodeURIComponent(query.project).split('/');
-  Object.assign(config, { owner, name });
+if (pathParts[1]) {
+  config.owner = pathParts[1];
 }
-delete query.platform;
-delete query.project;
-Object.assign(config, query);
+if (pathParts[2]) {
+  config.name = pathParts[2];
+}
+config.refPath = pathParts.slice(3).join('/');
 
 if (platform === 'github' || platform === 'gitlab') {
   layoutConfig[SlotLocation.left].modules.push(platform);
@@ -96,11 +100,7 @@ const App = () => (
       extensionMetadata: [css, html, json, markdown, typescript],
       workspaceDir: `${platform}/${config.owner}/${config.name}`,
       layoutConfig,
-      defaultPreferences: {
-        'editor.readonlyFiles': [
-          '/workspace/antcode/internal_release/ifcriskcloudus/app/plugin/tcomponent/src/main/java/com/alipay/fc/riskcloud/plugin/tcomponent/util/StrategyDrmParserUtil.java',
-        ],
-      },
+      defaultPreferences: {},
     }}
     runtimeConfig={{
       codeService: config as CodeServiceConfig,

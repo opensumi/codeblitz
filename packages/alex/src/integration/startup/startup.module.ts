@@ -8,6 +8,8 @@ import {
   CommandContribution,
   CommandRegistry,
   getLanguageId,
+  ClientAppContribution,
+  Disposable,
 } from '@ali/ide-core-browser';
 import { ExtensionServiceClientImpl, IExtensionNodeClientService } from '@alipay/alex-core';
 import { IExtensionMetadata } from '@alipay/alex-shared';
@@ -71,13 +73,24 @@ class ExtensionServiceClient extends ExtensionServiceClientImpl {
   }
 }
 
-@Domain(CommandContribution)
-export class AlexAppContribution implements CommandContribution {
+@Domain(CommandContribution, ClientAppContribution)
+export class AlexAppContribution
+  extends Disposable
+  implements CommandContribution, ClientAppContribution {
   @Autowired()
   codeModel: CodeModelService;
 
   private ticket: number = 0;
   private tickets: number[] = [];
+
+  initialize() {
+    this.addDispose(
+      this.codeModel.onDidChangeRefPath((path) => {
+        const fullPath = `/${this.codeModel.platform}${path}`;
+        window.history.replaceState(null, '', fullPath);
+      })
+    );
+  }
 
   registerCommands(commands: CommandRegistry): void {
     // 保持和 api-server 一致
