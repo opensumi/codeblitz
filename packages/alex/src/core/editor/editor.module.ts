@@ -31,7 +31,6 @@ import {
   WorkbenchEditorService,
   BrowserEditorContribution,
   EditorPreferences,
-  IEditorFeatureRegistry,
   IEditor,
   EditorCollectionService,
 } from '@ali/ide-editor/lib/browser';
@@ -50,10 +49,10 @@ import { IWorkspaceService } from '@ali/ide-workspace';
 import { SCMService } from '@ali/ide-scm';
 import { DirtyDiffWidget } from '@ali/ide-scm/lib/browser/dirty-diff/dirty-diff-widget';
 import { IDETheme, GeekTheme } from '../../core/extensions';
-import { select, onSelect } from './container';
-import { isCodeDocumentModel, CodeDocumentModel } from './types';
+import { isCodeDocumentModel, CodeDocumentModel, EditorProps } from './types';
 import styles from '../style.module.less';
 import { EditorCollectionServiceImplOverride } from './editor-collection.service';
+import { IPropsService } from '../props.service';
 
 // TODO: 此处 diff 的 stage 和 revertChange 应该是 git 注册的，框架中直接添加了按钮，耦合，需要修复实现 scm/change/title
 // @ts-ignore
@@ -73,8 +72,11 @@ class BreadCrumbServiceImplOverride extends BreadCrumbServiceImpl {
 
 @Injectable()
 class FileSchemeDocumentProviderOverride extends FileSchemeDocumentProvider {
+  @Autowired(IPropsService)
+  propsService: IPropsService<EditorProps>;
+
   async provideEncoding(uri: URI) {
-    const encoding = select((props) => props.documentModel.encoding);
+    const encoding = this.propsService.props.documentModel.encoding;
     if (uri.scheme === FILE_SCHEME && encoding) {
       return encoding;
     }
@@ -159,6 +161,9 @@ class EditorHistoryServiceOverride extends EditorHistoryService {
   @Autowired(WorkbenchEditorService)
   editorService: WorkbenchEditorService;
 
+  @Autowired(IPropsService)
+  propsService: IPropsService<EditorProps>;
+
   restoreState(state: EditorHistoryState) {
     if (!state) return;
 
@@ -166,7 +171,7 @@ class EditorHistoryServiceOverride extends EditorHistoryService {
       uri,
       position: { lineNumber },
     } = state;
-    const documentModel = select((props) => props.documentModel);
+    const documentModel = this.propsService.props.documentModel;
     if (uri.scheme !== 'file') {
       documentModel.onFilepathChange?.('');
       return super.restoreState(state);
@@ -247,6 +252,9 @@ class EditorSpecialContribution
   @Autowired(EditorCollectionService)
   private editorCollection: EditorCollectionService;
 
+  @Autowired(IPropsService)
+  private propsService: IPropsService<EditorProps>;
+
   async mountFileSystem(rootFS: FileSystemInstance<'MountableFileSystem'>) {
     // TODO: 提供配置选择存储在内存中还是 indexedDB 中
     const {
@@ -257,7 +265,7 @@ class EditorSpecialContribution
       createFileSystem(Editor, {
         readFile: (filepath: string) => {
           const slashIndex = filepath.indexOf('/');
-          return select((props) => props.documentModel.readFile)(filepath.slice(slashIndex + 1));
+          return this.propsService.props.documentModel.readFile(filepath.slice(slashIndex + 1));
         },
       }),
       createFileSystem(InMemory, {}),
@@ -321,38 +329,43 @@ class EditorSpecialContribution
   }
 
   onDidRestoreState() {
-    const documentModel = select((props) => props.documentModel);
+    const documentModel = this.propsService.props.documentModel;
 
     if (isCodeDocumentModel(documentModel)) {
       this.openEditorForCode(documentModel.ref, documentModel.filepath);
       // 监听 props 变化
       this.addDispose(
-        onSelect(
-          (props) => props.documentModel,
-          (newModel: CodeDocumentModel, oldModel: CodeDocumentModel) =>
-            newModel.filepath === oldModel.filepath && newModel.ref === oldModel.ref
-        )((newModel: CodeDocumentModel) => {
-          this.openEditorForCode(newModel.ref, newModel.filepath);
+        this.propsService.onPropsChange(({ props, prevProps }) => {
+          const newModel = props.documentModel as CodeDocumentModel;
+          const oldModel = prevProps.documentModel as CodeDocumentModel;
+          if (newModel.filepath !== oldModel.filepath || newModel.ref !== oldModel.ref) {
+            this.openEditorForCode(newModel.ref, newModel.filepath);
+          }
         })
       );
     } else {
       this.openEditorForFs(documentModel.filepath);
       // 监听 props 变化
       this.addDispose(
-        onSelect((props) => props.documentModel.filepath)((newFilepath) => {
-          this.openEditorForFs(newFilepath);
+        this.propsService.onPropsChange((e) => {
+          if (e.affect('documentModel', 'filepath')) {
+            this.openEditorForFs(e.props.documentModel.filepath);
+          }
         })
       );
     }
 
     this.addDispose(
-      onSelect((props) => props.documentModel.encoding)((encoding) => {
-        if (encoding) {
-          const resource = this.editorService.currentResource;
-          if (resource) {
-            this.editorDocumentModelService.changeModelOptions(resource.uri, {
-              encoding,
-            });
+      this.propsService.onPropsChange((e) => {
+        if (e.affect('documentModel', 'encoding')) {
+          const encoding = e.props.documentModel.encoding;
+          if (encoding) {
+            const resource = this.editorService.currentResource;
+            if (resource) {
+              this.editorDocumentModelService.changeModelOptions(resource.uri, {
+                encoding,
+              });
+            }
           }
         }
       })
@@ -381,7 +394,7 @@ class EditorSpecialContribution
       { id: 'alex.codeServiceProject' },
       {
         execute: () => {
-          const documentModel = select((props) => props.documentModel);
+          const documentModel = this.propsService.props.documentModel;
           if (!isCodeDocumentModel(documentModel)) return;
           return {
             platform: 'antcode',
@@ -446,7 +459,7 @@ class EditorSpecialContribution
         },
       ]);
       setTimeout(() => {
-        if (select((props) => props.editorConfig?.stretchHeight)) {
+        if (this.propsService.props.editorConfig?.stretchHeight) {
           const firstLine = document.querySelector(`.${styles['line-anchor']}`) as HTMLElement;
           if (firstLine) {
             firstLine.scrollIntoView({ block: 'center' });
@@ -466,17 +479,17 @@ class EditorSpecialContribution
         ) {
           const lineNumber = event.target.position!.lineNumber;
           // 非受控
-          if (!('lineNumber' in select((props) => props.documentModel))) {
+          if (!('lineNumber' in this.propsService.props.documentModel)) {
             highlightLine(lineNumber);
           }
-          select((props) => props.documentModel.onLineNumberChange)?.(lineNumber);
+          this.propsService.props.documentModel.onLineNumberChange?.(lineNumber);
         }
       })
     );
 
     disposer.addDispose(
       editor.monacoEditor.onDidChangeModel(() => {
-        const initialLineNumber = select((props) => props.documentModel.lineNumber);
+        const initialLineNumber = this.propsService.props.documentModel.lineNumber;
         if (initialLineNumber) {
           highlightLine(initialLineNumber);
         }
@@ -484,14 +497,17 @@ class EditorSpecialContribution
     );
 
     disposer.addDispose(
-      onSelect((props) => props.documentModel.lineNumber)((newLineNumber) => {
-        if (newLineNumber) {
-          highlightLine(newLineNumber);
+      this.propsService.onPropsChange((e) => {
+        if (e.affect('documentModel', 'lineNumber')) {
+          const newLineNumber = e.props.documentModel.lineNumber;
+          if (newLineNumber) {
+            highlightLine(newLineNumber);
+          }
         }
       })
     );
 
-    if (select((props) => props.editorConfig?.stretchHeight)) {
+    if (this.propsService.props.editorConfig?.stretchHeight) {
       const { monacoEditor } = editor;
 
       let prevHeight = 0;
@@ -557,7 +573,7 @@ class EditorSpecialContribution
      * 先暂时使用 private 方法，后升级到 monaco 0.20 寻找更好的解法
      * TODO: 更好的解法应该是 kaitian 中完全控制 monaco 的快捷键，需要技术改造
      */
-    if (select((props) => props.editorConfig?.disableEditorSearch)) {
+    if (this.propsService.props.editorConfig?.disableEditorSearch) {
       const monacoKeybindingsMap: Map<
         string,
         { command: string }[]
@@ -589,7 +605,7 @@ class EditorSpecialContribution
       keybindingList.push(`ctrlcmd+${i}`);
     }
     // 搜索快捷键
-    if (select((props) => props.editorConfig?.disableEditorSearch)) {
+    if (this.propsService.props.editorConfig?.disableEditorSearch) {
       keybindingList.push('ctrlcmd+f');
     }
     // 自定义注销的快捷键
@@ -629,7 +645,7 @@ class EditorSpecialContribution
     sideBySide?: boolean
   ) {
     // 非 file 协议路径设置为空，以触发 props 变化
-    const documentModel = select((props) => props.documentModel);
+    const documentModel = this.propsService.props.documentModel;
     if (input.resource.scheme !== 'file') {
       documentModel.onFilepathChange?.('');
       return raw();

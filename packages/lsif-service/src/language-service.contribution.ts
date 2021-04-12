@@ -6,6 +6,7 @@ import {
   URI,
   Uri,
   IReporterService,
+  Emitter,
 } from '@ali/ide-core-common';
 import {
   ClientAppContribution,
@@ -21,7 +22,12 @@ import { UriComponents } from 'vscode-uri';
 import { EditorComponentRegistry, ResourceService, IResource } from '@ali/ide-editor/lib/browser';
 
 import * as vscode from 'vscode';
-import { LSIF_PROD_API_HOST, LSIF_TEST_API_HOST, LsifClient } from '@alipay/lsif-client';
+import {
+  LSIF_PROD_API_HOST,
+  LSIF_TEST_API_HOST,
+  LsifClient,
+  OriginScheme,
+} from '@alipay/lsif-client';
 import { RuntimeConfig, REPORT_NAME } from '@alipay/alex-core';
 import {
   BrowserEditorContribution,
@@ -30,14 +36,17 @@ import {
 
 import { SimpleLanguageService } from './language-client';
 import { LsifPreferences, lsifPreferenceSchema } from './lsif-preferences';
-import { OriginScheme, ModelScheme } from './constant';
-import { LibEditorDocumentModelProvider } from './lib-scheme.provider';
 
 const IS_TEST_ENV =
   process.env.NODE_ENV === 'development' ||
   window.location.pathname.indexOf('test') > -1 ||
   window.location.hostname === 'localhost' ||
   window.location.hostname === '127.0.0.1';
+
+const handleLsifScheme = (scheme: string) => {
+  const supportScheme: string[] = [OriginScheme.Jar, OriginScheme.Tnpm];
+  return supportScheme.includes(scheme) ? 10 : -1;
+};
 
 @Domain(ClientAppContribution, PreferenceContribution, BrowserEditorContribution)
 export class LsifContribution
@@ -102,7 +111,7 @@ export class LsifContribution
     } else {
       apiHost = IS_TEST_ENV ? LSIF_TEST_API_HOST : LSIF_PROD_API_HOST;
     }
-    this.lsifClient = new LsifClient(apiHost);
+    this.lsifClient = new LsifClient(apiHost, this.runtimeConfig.biz || window.location.hostname);
     // 集成侧如果需要不一样的 preference name 则需要进行代理
     this.lsIfEnabled = this.preferences['lsif.enable'];
     this.lsifDocumentScheme = this.preferences['lsif.documentScheme'];
@@ -213,18 +222,22 @@ export class LsifContribution
 
                 let locationUri: Uri;
 
-                // TODO 处理下 unpkg 协议
                 switch (scheme) {
+                  // 仓库内
+                  case '':
+                  case 'file':
+                    locationUri = Uri.file(paths.posix.join(_rootUri.path.toString(), path));
+                    break;
+
+                  // 跨库
                   case OriginScheme.Jar:
+                  case OriginScheme.Tnpm:
                     locationUri = Uri.from({
-                      scheme: ModelScheme.Jar,
+                      scheme,
                       path,
                     });
                     break;
-                  case '':
-                  case OriginScheme.File:
-                    locationUri = Uri.file(paths.posix.join(_rootUri.path.toString(), path));
-                    break;
+
                   // 无法处理的协议不处理
                   default:
                     return null;
@@ -293,18 +306,22 @@ export class LsifContribution
 
                 let locationUri: Uri;
 
-                // TODO 处理下 unpkg 协议
                 switch (scheme) {
+                  // 仓库内
+                  case '':
+                  case 'file':
+                    locationUri = Uri.file(paths.posix.join(_rootUri.path.toString(), path));
+                    break;
+
+                  // 跨库
                   case OriginScheme.Jar:
+                  case OriginScheme.Tnpm:
                     locationUri = Uri.from({
-                      scheme: ModelScheme.Jar,
+                      scheme,
                       path,
                     });
                     break;
-                  case '':
-                  case OriginScheme.File:
-                    locationUri = Uri.file(paths.posix.join(_rootUri.path.toString(), path));
-                    break;
+
                   // 无法处理的协议不处理
                   default:
                     return null;
@@ -331,7 +348,7 @@ export class LsifContribution
 
   registerResource(service: ResourceService) {
     service.registerResourceProvider({
-      scheme: ModelScheme.Jar,
+      handlesUri: (uri) => handleLsifScheme(uri.scheme),
       provideResource: async (uri: URI): Promise<IResource> => {
         return Promise.all([this.labelService.getName(uri), this.labelService.getIcon(uri)]).then(
           ([name, icon]) => {
@@ -348,7 +365,7 @@ export class LsifContribution
   }
 
   registerEditorComponent(registry: EditorComponentRegistry) {
-    registry.registerEditorComponentResolver(ModelScheme.Jar, (_resource, results) => {
+    registry.registerEditorComponentResolver(handleLsifScheme, (_resource, results) => {
       results.push({
         type: 'code',
         readonly: true,
@@ -357,8 +374,12 @@ export class LsifContribution
   }
 
   registerEditorDocumentModelContentProvider(registry: IEditorDocumentModelContentRegistry) {
-    registry.registerEditorDocumentModelContentProvider(
-      new LibEditorDocumentModelProvider(this.lsifClient)
-    );
+    registry.registerEditorDocumentModelContentProvider({
+      onDidChangeContent: new Emitter<URI>().event,
+      handlesScheme: (scheme) => handleLsifScheme(scheme) > 0,
+      isReadonly: () => true,
+      provideEditorDocumentModelContent: (uri: URI) =>
+        this.lsifClient.getFileContentFromUriString(uri.toString()),
+    });
   }
 }

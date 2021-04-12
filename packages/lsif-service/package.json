@@ -21,7 +21,7 @@
   "dependencies": {
     "@alipay/alex-core": "0.11.1",
     "@alipay/alex-shared": "0.11.1",
-    "@alipay/lsif-client": "^1.2.0"
+    "@alipay/lsif-client": "^1.4.0"
   },
   "peerDependencies": {
     "@ali/ide-core-common": "1.35.2",
