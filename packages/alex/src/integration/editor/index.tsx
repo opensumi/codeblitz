@@ -107,7 +107,7 @@ const App = () => {
         </Select>
       </div>
       <div style={{ display: 'flex' }}>
-        <div style={{ width: '50%', minHeight: 300 }}>
+        <div style={{ width: '50%', minHeight: 500 }}>
           {project ? (
             <EditorRenderer
               key={project}

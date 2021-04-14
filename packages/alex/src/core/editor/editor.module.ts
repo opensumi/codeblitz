@@ -478,11 +478,23 @@ class EditorSpecialContribution
           type === monaco.editor.MouseTargetType.GUTTER_GLYPH_MARGIN
         ) {
           const lineNumber = event.target.position!.lineNumber;
+          const lastLineNumber = this.propsService.props.documentModel.lineNumber;
+          let nextLineNumber: number | [number, number] = lineNumber;
+          if (event?.event?.shiftKey && lastLineNumber) {
+            let startLineNumber = Array.isArray(lastLineNumber)
+              ? lastLineNumber[0]
+              : lastLineNumber;
+            if (startLineNumber > nextLineNumber) {
+              nextLineNumber = [nextLineNumber, startLineNumber];
+            } else if (startLineNumber < nextLineNumber) {
+              nextLineNumber = [startLineNumber, nextLineNumber];
+            }
+          }
           // 非受控
           if (!('lineNumber' in this.propsService.props.documentModel)) {
-            highlightLine(lineNumber);
+            highlightLine(nextLineNumber);
           }
-          this.propsService.props.documentModel.onLineNumberChange?.(lineNumber);
+          this.propsService.props.documentModel.onLineNumberChange?.(nextLineNumber);
         }
       })
     );

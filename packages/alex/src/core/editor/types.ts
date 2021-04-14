@@ -26,7 +26,7 @@ export interface DocumentModel {
   /**
    * 行号变更事件
    */
-  onLineNumberChange?: (num: number) => void;
+  onLineNumberChange?: (num: number | [number, number]) => void;
 }
 
 export interface FSDocumentModel extends DocumentModel {
