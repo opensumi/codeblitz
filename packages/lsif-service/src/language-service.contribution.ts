@@ -39,7 +39,6 @@ import { LsifPreferences, lsifPreferenceSchema } from './lsif-preferences';
 
 const IS_TEST_ENV =
   process.env.NODE_ENV === 'development' ||
-  window.location.pathname.indexOf('test') > -1 ||
   window.location.hostname === 'localhost' ||
   window.location.hostname === '127.0.0.1';
 
