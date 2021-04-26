@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="UTF-8">
+    <title>KAITIAN IDE</title>
+    <style>
+      body {
+        margin: 0;
+        background-color: #2a2a2a;
+        user-select: none;
+      }
+
+      #main {
+        display: flex;
+        flex-direction: column;
+        width: 100vw;
+        height: 100vh;
+        margin: 0;
+        padding: 0;
+        overflow: hidden;
+        background-color: var(--background);
+      }
+
+      #loading {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100vw;
+        height: 100vh;
+        line-height: 100vh;
+        color: #fff;
+        text-align: center;
+        z-index: 100;
+        transition: opacity 500ms;
+        font-size: 32px;
+        background-color: #2a2a2a;
+        font-weight: 600;
+        font-family: sans-serif;
+      }
+
+      .loading-hidden {
+        opacity: 0;
+      }
+    </style>
+    <script src="https://gw-office.alipayobjects.com/bmw-prod/f8d166cf-e3fb-49e6-bad8-2b63630829b3.js"></script>
+  </head>
+  <body>
+    <div id="main"></div>
+    <div id="loading">KAITIAN</div>
+  </body>
+</html>

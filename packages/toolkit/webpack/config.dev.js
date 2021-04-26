@@ -8,6 +8,8 @@ require('dotenv').config({ path: path.join(__dirname, '../../../.env') });
 
 process.env.NODE_ENV = 'development';
 
+const antCodeSitHost = 'http://100.88.230.6:8090/';
+
 module.exports = () => {
   const integrationConfig = createWebpackConfig({
     tsconfigPath: path.join(__dirname, '../../../tsconfig.json'),
@@ -39,6 +41,21 @@ module.exports = () => {
             changeOrigin: true,
             pathRewrite: {
               '^/code-service': '',
+            },
+          },
+          // antcode-cr 场景专用
+          '/antcode/webapi': {
+            target: antCodeSitHost,
+            changeOrigin: true,
+            pathRewrite: {
+              '^/antcode': '',
+            },
+          },
+          '/antcode/api': {
+            target: antCodeSitHost,
+            changeOrigin: true,
+            pathRewrite: {
+              '^/antcode': '',
             },
           },
         },
