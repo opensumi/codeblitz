@@ -23,6 +23,8 @@ const { nodePolyfill } = require('./util');
 const { findPortSync } = require('./util/find-porter');
 const { config } = require('./util');
 
+const HOST = process.env.HOST || 'localhost';
+
 /** @type {ConfigFn} */
 module.exports = (option) => {
   const port = findPortSync(option.port || process.env.PORT || 9009);
@@ -30,7 +32,7 @@ module.exports = (option) => {
   const outputPath = option.outputPath || path.resolve(__dirname, '../dist');
   const mode = option.mode || 'development';
   const isDev = mode === 'development';
-  const baseURL = `http://localhost:${port}`;
+  const baseURL = `http://${HOST}:${port}`;
 
   const styleLoader = isDev ? require.resolve('style-loader') : MiniCssExtractPlugin.loader;
 
@@ -252,6 +254,7 @@ window.define = define;
             new HtmlWebpackPlugin({
               filename: 'index.html',
               template: option.template || path.join(__dirname, '../public/index.html'),
+              publicPath: '/',
             }),
             new FriendlyErrorsWebpackPlugin({
               compilationSuccessInfo: {
@@ -285,7 +288,7 @@ window.define = define;
       port,
       disableHostCheck: true,
       host: '0.0.0.0',
-      openPage: `http://localhost:${port}`,
+      openPage: `http://${HOST}:${port}`,
       stats: 'errors-only',
       overlay: true,
       open: process.env.OPEN === 'true',
