@@ -25,13 +25,19 @@ import { WorkspaceModule } from '@ali/ide-workspace/lib/browser';
  */
 import { ClientModule, ServerModuleCollection } from '@alipay/alex-core';
 import { LsifModule } from '@alipay/alex-lsif-service';
+import { PluginModule } from '@alipay/alex-plugin';
 
 /**
  * editor special
  */
 import { EditorSpecialModule } from './editor.module';
 
-export const modules: ModuleConstructor[] = [
+let extensionModules: ModuleConstructor[] = [];
+export const setExtensionModules = (modules: ModuleConstructor[]) => {
+  extensionModules = modules;
+};
+
+export const getModules: () => ModuleConstructor[] = () => [
   MainLayoutModule,
   OverlayModule,
   LogModule,
@@ -53,9 +59,12 @@ export const modules: ModuleConstructor[] = [
 
   MonacoEnhanceModule,
 
+  ...extensionModules,
+
   // Alex
   ClientModule,
   LsifModule,
+  PluginModule,
   ...ServerModuleCollection,
 
   // Editor Special

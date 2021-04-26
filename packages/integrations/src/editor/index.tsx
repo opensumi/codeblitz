@@ -1,13 +1,18 @@
-import React, { useState, useMemo } from 'react';
+import React, { useState } from 'react';
 import ReactDOM from 'react-dom';
 import { IAppInstance, EditorRenderer } from '@alipay/alex/lib/editor';
 import * as Alex from '@alipay/alex/lib/editor';
+// 引入 extension
+import '@alipay/alex/lib/editor.extension';
 import '../startup/languages';
 
 import 'antd/dist/antd.css';
 import Select from 'antd/lib/select';
 import Cascader from 'antd/lib/cascader';
+import Button from 'antd/lib/button';
 import './style.less';
+import * as EditorPlugin from './plugin';
+import { StartupModule } from './editor.module';
 
 (window as any).alex = Alex;
 
@@ -105,6 +110,17 @@ const App = () => {
             </Select.Option>
           ))}
         </Select>
+        <Button
+          onClick={() => {
+            const commands = EditorPlugin.api.commands;
+            if (commands) {
+              commands.executeCommand('plugin.command.test', 1, 2);
+            }
+          }}
+          size="small"
+        >
+          command test
+        </Button>
       </div>
       <div style={{ display: 'flex' }}>
         <div style={{ width: '50%', minHeight: 500 }}>
@@ -115,6 +131,8 @@ const App = () => {
                 window.app = app;
               }}
               appConfig={{
+                modules: [StartupModule],
+                plugins: [EditorPlugin],
                 workspaceDir: project,
                 defaultPreferences: {
                   'general.theme': 'alipay-geek-light',

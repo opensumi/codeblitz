@@ -1,5 +1,3 @@
-import { Thenable } from '../types';
-
 export interface DocumentModel {
   /**
    * 打开的文件路径

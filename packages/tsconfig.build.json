@@ -22,6 +22,9 @@
       "path": "./code-api/tsconfig.build.json"
     },
     {
+      "path": "./plugin/tsconfig.build.json"
+    },
+    {
       "path": "./alex/tsconfig.build.json"
     },
     {

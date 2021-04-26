@@ -11,14 +11,3 @@ export interface LandingProps {
 export interface RootProps extends LandingProps {
   Landing?: ComponentType<LandingProps>;
 }
-
-export interface Thenable<T> {
-  then<TResult>(
-    onfulfilled?: (value: T) => TResult | Thenable<TResult>,
-    onrejected?: (reason: any) => TResult | Thenable<TResult>
-  ): Thenable<TResult>;
-  then<TResult>(
-    onfulfilled?: (value: T) => TResult | Thenable<TResult>,
-    onrejected?: (reason: any) => void
-  ): Thenable<TResult>;
-}

@@ -19,6 +19,7 @@ module.exports = createWebpackConfig({
     entry: {
       [config.appEntry]: './packages/alex/src',
       [config.editorEntry]: './packages/alex/src/editor',
+      [config.editorAllEntry]: './packages/alex/src/editor.all',
     },
     output: {
       library: 'Alex',

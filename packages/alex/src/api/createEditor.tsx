@@ -22,8 +22,9 @@ import { IEditorDocumentModelService } from '@ali/ide-editor/lib/browser';
 import { EditorDocumentModelServiceImpl } from '@ali/ide-editor/lib/browser/doc-model/editor-document-model-service';
 import { EditorDocumentModel } from '@ali/ide-editor/lib/browser/doc-model/editor-document-model';
 import * as os from 'os';
+import { IPluginConfig } from '@alipay/alex-plugin';
 
-import { modules } from '../core/editor/modules';
+import { getModules } from '../core/editor/modules';
 import { mergeConfig, themeStorage } from '../core/utils';
 import { EditorLayoutComponent, getEditorLayoutConfig } from '../core/layout';
 import { IConfig, IAppInstance } from './types';
@@ -32,9 +33,11 @@ import { logPv } from '../core/tracert';
 export { SlotLocation, SlotRenderer, BoxPanel, SplitPanel };
 
 const getDefaultAppConfig = (): IAppOpts => ({
-  modules,
+  modules: getModules(),
   useCdnIcon: true,
   noExtHost: true,
+  extWorkerHost: __WORKER_HOST__,
+  webviewEndpoint: __WEBVIEW_ENDPOINT__,
   defaultPreferences: {
     'general.theme': 'ide-light',
     'application.confirmExit': 'never',
@@ -139,6 +142,11 @@ export function createEditor({ appConfig, runtimeConfig }: IConfig): IAppInstanc
   app.injector.addProviders({
     token: RuntimeConfig,
     useValue: runtimeConfig,
+  });
+
+  app.injector.addProviders({
+    token: IPluginConfig,
+    useValue: customConfig.plugins,
   });
 
   if (runtimeConfig.reporter) {
