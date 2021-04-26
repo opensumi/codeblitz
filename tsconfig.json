@@ -33,6 +33,7 @@
       "ES2017"
     ],
     "paths": {
+      "@alipay/alex": ["packages/alex/src"],
       "@alipay/alex-*": ["packages/*/src"]
     },
     "typeRoots": [

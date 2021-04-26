@@ -20,7 +20,7 @@ import { CodeModelService } from '@alipay/alex-code-service';
 import {
   StaticResourceContribution,
   StaticResourceService,
-} from '../../modules/ali__ide-static-resource';
+} from '@ali/ide-static-resource/lib/browser/static.definition';
 
 const KT_EXT_LOCAL_SCHEME = 'kt-ext-local';
 

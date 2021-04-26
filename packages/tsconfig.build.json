@@ -23,6 +23,9 @@
     },
     {
       "path": "./alex/tsconfig.build.json"
+    },
+    {
+      "path": "./integrations/tsconfig.build.json"
     }
   ],
   "files": [],

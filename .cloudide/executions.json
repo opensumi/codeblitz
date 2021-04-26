@@ -1,0 +1,13 @@
+[
+  {
+    "executionOpts": {
+      "port": 9009
+    },
+    "previousExecution": "None",
+    "id": "337b3737-cfe5-452b-acf3-4ecac0eac098",
+    "version": "2.0",
+    "templateId": "cloudide.preview",
+    "name": "start",
+    "command": "npm start"
+  }
+]

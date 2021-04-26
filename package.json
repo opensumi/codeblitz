@@ -11,6 +11,7 @@
     "kaitian": "1.35.2"
   },
   "scripts": {
+    "type-check": "tsc --noEmit",
     "preinstall": "node scripts/preinstall && npm run prepare:env",
     "prepare:env": "yum --version && sudo yum -y install unzip gcc-c++ libX11-devel libxkbfile-devel || echo 'no yum'",
     "init": "npm run clean && npm run build && npm run ext",

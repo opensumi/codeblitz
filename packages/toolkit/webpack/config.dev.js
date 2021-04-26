@@ -18,9 +18,7 @@ module.exports = () => {
     webpackConfig: {
       context: path.join(__dirname, '../../..'),
       entry: {
-        [config.appEntry]: `./packages/alex/src/integration/${
-          process.env.INTEGRATION || 'startup'
-        }`,
+        [config.appEntry]: `./packages/integrations/src/${process.env.INTEGRATION || 'startup'}`,
       },
       devtool: 'eval-cheap-module-source-map',
       devServer: {

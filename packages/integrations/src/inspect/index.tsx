@@ -1,6 +1,6 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-import { AppRenderer } from '../..';
+import { AppRenderer } from '@alipay/alex';
 import { Injectable, Provider, Autowired } from '@ali/common-di';
 import { BrowserModule, Domain } from '@ali/ide-core-browser';
 import { LaunchContribution, AppConfig } from '@alipay/alex-core';

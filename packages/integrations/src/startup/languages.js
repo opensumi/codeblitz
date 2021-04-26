@@ -1,4 +1,4 @@
-const { registerLanguage, registerGrammar } = require('../../api/register');
+const { registerLanguage, registerGrammar } = require('@alipay/alex/lib/api/register');
 
 require('@ali/kaitian-textmate-languages/lib/bat')(registerLanguage, registerGrammar);
 require('@ali/kaitian-textmate-languages/lib/clojure')(registerLanguage, registerGrammar);

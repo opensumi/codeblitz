@@ -1,7 +1,7 @@
 import React, { useState, useMemo } from 'react';
 import ReactDOM from 'react-dom';
-import { IAppInstance, EditorRenderer } from '../../editor';
-import * as Alex from '../../editor';
+import { IAppInstance, EditorRenderer } from '@alipay/alex/lib/editor';
+import * as Alex from '@alipay/alex/lib/editor';
 import '../startup/languages';
 
 import 'antd/dist/antd.css';

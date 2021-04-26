@@ -209,11 +209,11 @@ module.exports = (option) => {
         ...nodePolyfill.provider,
       }),
       ...(option.copy ? [new CopyPlugin(option.copy)] : []),
-      new ForkTsCheckerWebpackPlugin({
-        typescript: {
-          configFile: option.tsconfigPath,
-        },
-      }),
+      // new ForkTsCheckerWebpackPlugin({
+      //   typescript: {
+      //     configFile: option.tsconfigPath,
+      //   },
+      // }),
       new BannerPlugin({
         banner: async () => {
           const content = await new Promise((resolve, reject) => {
