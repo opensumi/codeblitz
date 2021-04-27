@@ -79,7 +79,7 @@ async function checkStatus(response: any, charsetName?: string) {
     window.open('http://code.test.alipay.net/');
     return;
   }
-  let data = null;
+  let data: any = null;
   const contentType = response.headers?.get('content-type');
   if (contentType?.includes('application/json')) {
     try {

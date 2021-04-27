@@ -27,7 +27,7 @@ invoke(async () => {
     }
     signale.success('复制成功');
   } catch (err) {
-    console.error(err);
-    signale.error('编译失败');
+    signale.error('编译失败', err);
+    throw err;
   }
 });

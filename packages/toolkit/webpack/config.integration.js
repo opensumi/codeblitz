@@ -209,11 +209,13 @@ module.exports = (option) => {
         ...nodePolyfill.provider,
       }),
       ...(option.copy ? [new CopyPlugin(option.copy)] : []),
-      // new ForkTsCheckerWebpackPlugin({
-      //   typescript: {
-      //     configFile: option.tsconfigPath,
-      //   },
-      // }),
+      !process.env.TS_NO_EMIT
+        ? new ForkTsCheckerWebpackPlugin({
+            typescript: {
+              configFile: option.tsconfigPath,
+            },
+          })
+        : null,
       new BannerPlugin({
         banner: async () => {
           const content = await new Promise((resolve, reject) => {
@@ -283,7 +285,7 @@ window.define = define;
             }),
             ...(process.env.ANALYZE === '1' ? [new BundleAnalyzerPlugin()] : []),
           ]),
-    ],
+    ].filter(Boolean),
     devServer: {
       port,
       disableHostCheck: true,

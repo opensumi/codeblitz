@@ -3,10 +3,9 @@ import { request } from '../antcode/fetch';
 import {
   FileAction,
   FileActionHeader,
-} from '../../src/modules/antcode-service/interfaces/file-action';
-import { AntcodeEncodingType } from '../../src/modules/antcode-service/base';
-
-import { LSIFRange } from '../../src/modules/antcode-service/interfaces/lsif';
+} from '@alipay/acr-ide/lib/modules/antcode-service/interfaces/file-action';
+// @ts-ignore
+import { LSIFRange } from '@alipay/acr-ide/lib/modules/antcode-service/interfaces/lsif';
 
 export const getFileContent = (projectId: number) => (filepath: string, ref: string) => {
   const params = {
