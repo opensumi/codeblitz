@@ -209,7 +209,7 @@ module.exports = (option) => {
         ...nodePolyfill.provider,
       }),
       ...(option.copy ? [new CopyPlugin(option.copy)] : []),
-      process.env.TS_NO_EMIT
+      !process.env.TS_NO_EMIT
         ? new ForkTsCheckerWebpackPlugin({
             typescript: {
               configFile: option.tsconfigPath,
