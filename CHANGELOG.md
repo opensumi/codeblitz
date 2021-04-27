@@ -1,3 +1,12 @@
+## [0.14.1](https://code.alipay.com/cloud-ide/crew-dragon/compare/v0.14.0...v0.14.1) (2021-04-27)
+
+
+### Bug Fixes
+
+* 修复 merge config 空错误 ([08977ce](https://code.alipay.com/cloud-ide/crew-dragon/commits/08977cee8c363289bb750108f46a9303483c0464))
+
+
+
 # [0.14.0](https://code.alipay.com/cloud-ide/crew-dragon/compare/v0.13.0...v0.14.0) (2021-04-27)
 
 
