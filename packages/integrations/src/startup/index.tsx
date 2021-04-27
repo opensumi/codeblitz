@@ -15,12 +15,7 @@ import * as Alex from '@alipay/alex';
 import { isFilesystemReady, STORAGE_DIR, CodeServiceConfig } from '@alipay/alex-core';
 import { StartupModule } from './startup.module';
 import './languages';
-import SarifViewer from '@alipay/alex/extensions/cloud-ide-ext.sarif-viewer';
-import css from '@alipay/alex/extensions/alex.css-language-features-worker';
-import html from '@alipay/alex/extensions/alex.html-language-features-worker';
-import json from '@alipay/alex/extensions/alex.json-language-features-worker';
-import markdown from '@alipay/alex/extensions/alex.markdown-language-features-worker';
-import typescript from '@alipay/alex/extensions/alex.typescript-language-features-worker';
+import { css, html, json, markdown, typescript } from './extension';
 
 (window as any).alex = Alex;
 
