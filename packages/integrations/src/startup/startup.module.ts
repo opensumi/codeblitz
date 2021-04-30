@@ -118,26 +118,6 @@ export class AlexAppContribution
     );
 
     commands.registerCommand(
-      { id: 'alex.languages.setTextDocumentLanguage' },
-      {
-        execute: (uri: string, languageId: string) => {
-          const modelService = (monaco as any).services.StaticServices.modelService.get();
-          const modeService = (monaco as any).services.StaticServices.modeService.get();
-          const model = modelService.getModel(uri);
-          if (!model) {
-            return Promise.reject(new Error('Invalid uri'));
-          }
-          const languageIdentifier = modeService.getLanguageIdentifier(languageId);
-          if (!languageIdentifier || languageIdentifier.language !== languageId) {
-            return Promise.reject(new Error(`Unknown language id: ${languageId}`));
-          }
-          modelService.setMode(model, modeService.create(languageId));
-          return Promise.resolve(undefined);
-        },
-      }
-    );
-
-    commands.registerCommand(
       { id: 'alex.codeServiceProject' },
       {
         execute: () => {

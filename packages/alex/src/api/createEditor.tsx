@@ -17,13 +17,10 @@ import {
 import { BoxPanel, SplitPanel } from '@ali/ide-core-browser/lib/components';
 import { IThemeService } from '@ali/ide-theme/lib/common';
 import '@ali/ide-core-browser/lib/style/index.less';
-import { isMonacoLoaded, loadMonaco } from '@ali/ide-monaco/lib/browser/monaco-loader';
-import { IEditorDocumentModelService } from '@ali/ide-editor/lib/browser';
-import { EditorDocumentModelServiceImpl } from '@ali/ide-editor/lib/browser/doc-model/editor-document-model-service';
-import { EditorDocumentModel } from '@ali/ide-editor/lib/browser/doc-model/editor-document-model';
 import * as os from 'os';
 import { IPluginConfig } from '@alipay/alex-plugin';
 
+import { disposeMode } from '../core/patch';
 import { getModules } from '../core/editor/modules';
 import { mergeConfig, themeStorage } from '../core/utils';
 import { EditorLayoutComponent, getEditorLayoutConfig } from '../core/layout';
@@ -43,6 +40,7 @@ const getDefaultAppConfig = (): IAppOpts => ({
     'application.confirmExit': 'never',
     'editor.autoSave': 'afterDelay',
     'editor.autoSaveDelay': 1000, // one second
+    'editor.fixedOverflowWidgets': true, // widget editor 默认改为 fixed
     'files.exclude': {
       ...FILES_DEFAULTS.filesExclude,
       // browserfs OverlayFS 用来记录删除的文件
@@ -57,16 +55,6 @@ const getDefaultAppConfig = (): IAppOpts => ({
   extensionStorageDirName: STORAGE_DIR,
   appName: 'ALEX',
   allowSetDocumentTitleFollowWorkspaceDir: false,
-});
-
-// 提前加载 monaco 并提前缓存 codeEditorService
-loadMonaco({
-  monacoCDNBase:
-    'https://gw.alipayobjects.com/os/lib/alipay/ame/0.17.0-patch.4/out-monaco-editor-core/min/',
-});
-let codeEditorService: any = null;
-isMonacoLoaded()?.then(() => {
-  codeEditorService = (monaco as any).services.StaticServices.codeEditorService;
 });
 
 export function createEditor({ appConfig, runtimeConfig }: IConfig): IAppInstance {
@@ -119,22 +107,7 @@ export function createEditor({ appConfig, runtimeConfig }: IConfig): IAppInstanc
       return;
     }
     destroyed = true;
-    // from acr
-    const editorDocModelService = app.injector.get(
-      IEditorDocumentModelService
-    ) as EditorDocumentModelServiceImpl;
-    for (const instance of Array.from(
-      editorDocModelService['_modelReferenceManager'].instances.values()
-    ) as EditorDocumentModel[]) {
-      instance['monacoModel'].dispose();
-    }
-    if (codeEditorService) {
-      codeEditorService._value = null;
-    }
-    const modeService = (monaco as any).services.StaticServices.modeService;
-    // 需要把 LanguageRegistry dispose，否则二次加载会重复触发事件，导致加载越来越慢
-    modeService._value._registry.dispose();
-    modeService._value = null;
+    disposeMode();
     app.injector.disposeAll();
   };
 

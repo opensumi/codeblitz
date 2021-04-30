@@ -15,7 +15,7 @@ import * as Alex from '@alipay/alex';
 import { isFilesystemReady, STORAGE_DIR, CodeServiceConfig } from '@alipay/alex-core';
 import { StartupModule } from './startup.module';
 import './languages';
-import { css, html, json, markdown, typescript } from './extension';
+import { css, html, json, markdown, typescript, lsif } from './extension';
 
 (window as any).alex = Alex;
 
@@ -92,7 +92,7 @@ const App = () => (
     }}
     appConfig={{
       modules: [CodeServiceModule, CodeAPIModule, StartupModule],
-      extensionMetadata: [css, html, json, markdown, typescript],
+      extensionMetadata: [css, html, json, markdown, typescript, lsif],
       workspaceDir: `${platform}/${config.owner}/${config.name}`,
       layoutConfig,
       defaultPreferences: {},
@@ -113,8 +113,9 @@ window.destroy = () => {
   ReactDOM.render(<div>destroyed</div>, document.getElementById('main'));
 };
 
+let key = 0;
 window.reset = () => {
-  ReactDOM.render(<App key="2" />, document.getElementById('main'));
+  ReactDOM.render(<App key={key++} />, document.getElementById('main'));
 };
 
 declare global {

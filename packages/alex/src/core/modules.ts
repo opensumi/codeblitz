@@ -46,12 +46,6 @@ import { WorkspaceEditModule } from '@ali/ide-workspace-edit/lib/browser';
 
 import { ClientModule, ServerModuleCollection } from '@alipay/alex-core';
 
-/**
- * special
- */
-
-import { WorkerPatchModule } from './worker/worker.module';
-
 // TODO: 部分模块需要注意顺序，否则会报错，待框架侧调整修复
 export const modules: ModuleConstructor[] = [
   MainLayoutModule,
@@ -104,7 +98,4 @@ export const modules: ModuleConstructor[] = [
   // Alex
   ClientModule,
   ...ServerModuleCollection,
-
-  // special
-  WorkerPatchModule,
 ];

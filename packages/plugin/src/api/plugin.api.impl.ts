@@ -4,9 +4,9 @@ import { PluginCommands } from './plugin.commands';
 import { IPluginModule, IPluginAPI } from '../types';
 
 export const createAPIFactory = (injector: Injector) => {
-  const pluginCommands: PluginCommands = injector.get(PluginCommands);
+  let pluginCommands: PluginCommands = injector.get(PluginCommands);
 
-  return (plugin: IPluginModule): IPluginAPI => {
+  const factory = (plugin: IPluginModule): IPluginAPI => {
     const commands: any = {
       registerCommand(
         id: string,
@@ -27,5 +27,14 @@ export const createAPIFactory = (injector: Injector) => {
       context: undefined!,
       commands,
     };
+  };
+
+  const dispose = () => {
+    pluginCommands = null!;
+  };
+
+  return {
+    factory,
+    dispose,
   };
 };

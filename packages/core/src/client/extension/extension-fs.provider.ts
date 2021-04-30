@@ -25,14 +25,15 @@ export class KaitianExtFsProvider implements FileSystemProvider {
     throw new Error('Method not implemented.');
   }
 
-  async readFile(uri: Uri): Promise<string> {
+  async readFile(uri: Uri): Promise<Uint8Array> {
     const requestUrl = uri.with({ scheme: location.protocol.slice(0, -1) });
 
-    return await fetch(requestUrl.toString(), {
+    const res = await fetch(requestUrl.toString(), {
       headers: {
         'Accept-Encoding': 'gzip, deflate',
       },
-    }).then((res) => res.text());
+    });
+    return new Uint8Array(await res.arrayBuffer());
   }
 
   writeFile(): void | Thenable<void | FileStat> {

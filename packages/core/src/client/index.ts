@@ -4,12 +4,9 @@ import {
   ClientApp as BasicClientApp,
   IAppRenderer,
   IClientAppOpts,
-  NO_KEYBINDING_NAME,
 } from '@ali/ide-core-browser';
-import { BasicModule, isOSX, DisposableCollection } from '@ali/ide-core-common';
+import { BasicModule } from '@ali/ide-core-common';
 import { WSChannelHandler } from '@ali/ide-connection';
-import { TextmateService } from '@ali/ide-monaco/lib/browser/textmate.service';
-import { TextmateServicePatch } from './patch/textmate.service';
 
 import { FCServiceCenter, ClientPort, initFCService } from '../connection';
 import { KaitianExtFsProvider, KtExtFsProviderContribution } from './extension';
@@ -27,7 +24,11 @@ import {
 } from './custom';
 import { EditorEmptyContribution } from './editor-empty/editor-empty.contribution';
 import { WelcomeContribution } from './welcome/welcome.contributon';
-import { DocumentSymbolPatch, DocumentSymbolStore } from './patch/document-symbol';
+import {
+  MonacoCodeService,
+  IMonacoCodeService,
+  codeServiceEditor,
+} from './override/codeEditorService';
 
 export * from './extension';
 
@@ -51,13 +52,12 @@ export class ClientModule extends BrowserModule {
     WelcomeContribution,
     MenuConfigContribution,
     {
-      token: TextmateService,
-      useClass: TextmateServicePatch,
+      token: MonacoCodeService,
+      useValue: codeServiceEditor,
     },
     {
-      token: DocumentSymbolStore,
-      useClass: DocumentSymbolPatch,
-      override: true,
+      token: IMonacoCodeService,
+      useClass: MonacoCodeService,
     },
   ];
   preferences = injectDebugPreferences;
@@ -68,11 +68,16 @@ export interface IAppOpts extends IClientAppOpts, IServerAppOpts {}
 export { IClientAppOpts };
 
 export class ClientApp extends BasicClientApp {
-  private disposeCollection = new DisposableCollection();
+  private clearInjector: () => void;
 
   constructor(opts: IAppOpts) {
     super(opts);
     this.initServer(opts);
+    this.initCodeServiceEditor();
+  }
+
+  initCodeServiceEditor() {
+    this.clearInjector = codeServiceEditor.setInjector(this.injector);
   }
 
   private initServer(opts: IAppOpts) {
@@ -104,78 +109,9 @@ export class ClientApp extends BasicClientApp {
     return super.start(container, type);
   }
 
-  /**
-   * 注册全局事件监听
-   * TODO: kaitian 中无 removeEventLister 逻辑，这里 override 下，待提 mr
-   */
-  protected registerEventListeners(): void {
-    const addEventListener = (
-      target: Window | HTMLElement,
-      type: string,
-      listener: (...args: any[]) => any,
-      ...extra: any
-    ) => {
-      target.addEventListener(type, listener, ...extra);
-      this.disposeCollection.push({
-        dispose() {
-          target.removeEventListener(type, listener, ...extra);
-        },
-      });
-    };
-
-    addEventListener(window, 'beforeunload', (event) => {
-      // 为了避免不必要的弹窗，如果页面并没有发生交互浏览器可能不会展示在 beforeunload 事件中引发的弹框，甚至可能即使发生交互了也直接不显示。
-      if (this.preventStop()) {
-        (event || window.event).returnValue = true;
-        return true;
-      }
-    });
-    addEventListener(window, 'unload', () => {
-      // 浏览器关闭事件
-      this.stateService.state = 'closing_window';
-      this.stopContributions();
-    });
-
-    addEventListener(window, 'resize', () => {
-      // 浏览器resize事件
-    });
-    // 处理中文输入回退时可能出现多个光标问题
-    // https://github.com/eclipse-theia/theia/pull/6673
-    let inComposition = false;
-    addEventListener(window, 'compositionstart', (event) => {
-      inComposition = true;
-    });
-    addEventListener(window, 'compositionend', (event) => {
-      inComposition = false;
-    });
-    addEventListener(
-      window,
-      'keydown',
-      (event: any) => {
-        if (event && event.target!.name !== NO_KEYBINDING_NAME && !inComposition) {
-          this.keybindingService.run(event);
-        }
-      },
-      true
-    );
-
-    if (isOSX) {
-      addEventListener(
-        document.body,
-        'wheel',
-        (event) => {
-          // 屏蔽在OSX系统浏览器中由于滚动导致的前进后退事件
-        },
-        { passive: false }
-      );
-    }
-  }
-
-  /**
-   * kaitian 中没有注销注册在 window 上的事件
-   */
   dispose() {
-    this.disposeCollection.dispose();
+    super.dispose();
+    this.clearInjector();
   }
 }
 

@@ -175,15 +175,10 @@ export class DiskFileSystemProvider extends FCService implements IDiskFileProvid
     throw FileSystemError.FileNotFound(uri.path, 'Error occurred while creating the directory.');
   }
 
-  async readFile(uri: UriComponents, encoding = 'utf8'): Promise<string> {
-    if (typeof encoding !== 'string') {
-      // cancellation token兼容
-      encoding = 'utf8';
-    }
-
+  async readFile(uri: UriComponents, encoding = 'utf8'): Promise<Uint8Array> {
     try {
       const buffer = await fse.readFile(uri.path);
-      return decode(buffer, encoding);
+      return buffer;
     } catch (error) {
       if (isErrnoException(error)) {
         if (error.code === 'ENOENT') {
@@ -211,7 +206,7 @@ export class DiskFileSystemProvider extends FCService implements IDiskFileProvid
 
   async writeFile(
     uri: UriComponents,
-    content: string,
+    content: Uint8Array,
     options: { create: boolean; overwrite: boolean; encoding?: string }
   ): Promise<void | FileStat> {
     const _uri = Uri.revive(uri);
@@ -222,7 +217,7 @@ export class DiskFileSystemProvider extends FCService implements IDiskFileProvid
     } else if (!exists && !options.create) {
       throw FileSystemError.FileNotFound(_uri.toString());
     }
-    const buffer = encode(content, options.encoding || 'utf8');
+    const buffer = Buffer.from(content);
 
     if (options.create) {
       return await this.createFile(uri, { content: buffer });

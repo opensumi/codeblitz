@@ -51,7 +51,7 @@ export class FileServerContribution implements StaticResourceContribution, FsPro
 class ExtensionServiceClient extends ExtensionServiceClientImpl {
   async getAllExtensions(...args: any[]) {
     const remoteExtensions = await super.getAllExtensions(args[0], args[1], args[2], args[3]);
-    const res = await fetch('getLocalExtensions');
+    const res = await fetch('/getLocalExtensions');
     const localExtensions: IExtensionMetadata[] = await res.json();
     // 转换类似纯前端下的 scheme path，保持和实际运行一致，否则对于本地资源和实际使用的 bfs 不一致
     localExtensions.forEach((ext) => {

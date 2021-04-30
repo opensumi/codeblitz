@@ -216,41 +216,6 @@ module.exports = (option) => {
             },
           })
         : null,
-      new BannerPlugin({
-        banner: async () => {
-          const content = await new Promise((resolve, reject) => {
-            https
-              .get(
-                'https://gw-office.alipayobjects.com/bmw-prod/f8d166cf-e3fb-49e6-bad8-2b63630829b3.js',
-                (res) => {
-                  res.setEncoding('utf8');
-                  let rawData = '';
-                  res.on('data', (chunk) => {
-                    rawData += chunk;
-                  });
-                  res.on('end', () => {
-                    resolve(rawData);
-                  });
-                }
-              )
-              .on('error', reject);
-          });
-          return `// global loader
-(function(){
-var module;
-var require;
-// ==================== LOADER SOURCE START ====================
-${content}
-// ==================== LOADER SOURCE END ====================
-window.amdLoader = amdLoader;
-window.AMDLoader = AMDLoader;
-window.define = define;
-}).call(window);
-`;
-        },
-        raw: true,
-        entryOnly: true,
-      }),
       ...(isDev
         ? [
             new HtmlWebpackPlugin({

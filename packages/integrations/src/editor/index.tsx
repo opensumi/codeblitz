@@ -141,7 +141,7 @@ const App = () => {
                   'lsif.enable': true,
                   'lsif.env': 'prod',
                   'editor.forceReadOnly': true,
-                  'editor.wordWrap': 'on',
+                  // 'editor.wordWrap': 'on',
                 },
               }}
               runtimeConfig={{

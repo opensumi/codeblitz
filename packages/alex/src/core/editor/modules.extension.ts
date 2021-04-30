@@ -10,7 +10,6 @@ import { WebviewModule } from '@ali/ide-webview/lib/browser';
 /**
  * editor special
  */
-import { WorkerPatchModule } from '../worker/worker.module';
 import { ExtensionActivateModule } from './editor.extension';
 
 import { setExtensionModules } from './modules';
@@ -21,6 +20,5 @@ setExtensionModules([
   WebviewModule,
   KaitianExtensionModule,
   CommentsModule,
-  WorkerPatchModule,
   ExtensionActivateModule,
 ]);

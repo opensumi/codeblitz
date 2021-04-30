@@ -23,7 +23,6 @@
     "registry": "https://registry.npm.alibaba-inc.com"
   },
   "dependencies": {
-    "@alipay/acr-ide": "^1.9.4",
     "@alipay/alex": "0.14.1",
     "@alipay/alex-cli": "0.14.1",
     "@alipay/alex-code-api": "0.14.1",
@@ -40,11 +39,11 @@
     "lockfile": "enable"
   },
   "devDependencies": {
-    "@alipay/acr-ide": "^1.9.4",
     "@alipay/yuyan-monitor-web": "^2.0.28",
     "@types/react": "^16.9.56",
     "@types/react-dom": "^16.9.9",
-    "js-cookie": "^2.2.1"
+    "js-cookie": "^2.2.1",
+    "query-string": "^7.0.0"
   },
   "peerDependencies": {
     "react": "^16.14.0",
