@@ -8,10 +8,10 @@
   "description": "Ant Codespaces for browser",
   "main": "index.js",
   "engines": {
-    "kaitian": "1.35.2"
+    "kaitian": "2.2.0"
   },
   "scripts": {
-    "type-check": "tsc --noEmit",
+    "type-check": "tsc --skipLibCheck --noEmit",
     "preinstall": "node scripts/preinstall && npm run prepare:env",
     "prepare:env": "yum --version && sudo yum -y install unzip gcc-c++ libX11-devel libxkbfile-devel || echo 'no yum'",
     "init": "npm run clean && npm run build && npm run ext",
@@ -95,7 +95,7 @@
     {
       "publisher": "alex",
       "name": "markdown-language-features-worker",
-      "version": "1.0.0-beta.1"
+      "version": "1.0.0-beta.2"
     },
     {
       "publisher": "alex",
@@ -115,7 +115,7 @@
     {
       "publisher": "cloud-ide",
       "name": "vscode-lsif",
-      "version": "0.1.2"
+      "version": "0.1.6"
     }
   ]
 }

@@ -17,13 +17,10 @@ import {
 import { BoxPanel, SplitPanel } from '@ali/ide-core-browser/lib/components';
 import { IThemeService } from '@ali/ide-theme/lib/common';
 import '@ali/ide-core-browser/lib/style/index.less';
-import { isMonacoLoaded, loadMonaco } from '@ali/ide-monaco/lib/browser/monaco-loader';
-import { IEditorDocumentModelService } from '@ali/ide-editor/lib/browser';
-import { EditorDocumentModelServiceImpl } from '@ali/ide-editor/lib/browser/doc-model/editor-document-model-service';
-import { EditorDocumentModel } from '@ali/ide-editor/lib/browser/doc-model/editor-document-model';
 import { FileTreeModelService } from '@ali/ide-file-tree-next/lib/browser/services/file-tree-model.service';
-import { WorkerExtensionService } from '@ali/ide-kaitian-extension/lib/browser/extension.worker.service';
 import * as os from 'os';
+
+import { disposeMode } from '../core/patch';
 
 import { modules } from '../core/modules';
 import { IconSlim, IDETheme } from '../core/extensions';
@@ -68,16 +65,6 @@ const getDefaultAppConfig = (): IAppOpts => ({
 });
 
 export const DEFAULT_APP_CONFIG = getDefaultAppConfig();
-
-// 提前加载 monaco 并提前缓存 codeEditorService
-loadMonaco({
-  monacoCDNBase:
-    'https://gw.alipayobjects.com/os/lib/alipay/ame/0.17.0-patch.4/out-monaco-editor-core/min/',
-});
-let codeEditorService: any = null;
-isMonacoLoaded()?.then(() => {
-  codeEditorService = (monaco as any).services.StaticServices.codeEditorService;
-});
 
 export function createApp({ appConfig, runtimeConfig }: IConfig): IAppInstance {
   const customConfig = typeof appConfig === 'function' ? appConfig() : appConfig;
@@ -132,27 +119,7 @@ export function createApp({ appConfig, runtimeConfig }: IConfig): IAppInstance {
       return;
     }
     destroyed = true;
-    // from acr
-    const editorDocModelService = app.injector.get(
-      IEditorDocumentModelService
-    ) as EditorDocumentModelServiceImpl;
-    for (const instance of Array.from(
-      editorDocModelService['_modelReferenceManager'].instances.values()
-    ) as EditorDocumentModel[]) {
-      instance['monacoModel'].dispose();
-    }
-    if (codeEditorService) {
-      codeEditorService._value = null;
-    }
-    const modeService = (monaco as any).services.StaticServices.modeService;
-    // 需要把 LanguageRegistry dispose，否则二次加载会重复触发事件，导致加载越来越慢
-    modeService._value._registry.dispose();
-    modeService._value = null;
-    // @ts-ignore
-    // common-di 通过参数实例化无法自动 dispose
-    app.injector.get(WorkerExtensionService)?.protocol?._locals?.forEach((instance) => {
-      instance.dispose?.();
-    });
+    disposeMode();
     app.injector.disposeAll();
   };
 

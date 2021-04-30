@@ -1,3 +1,4 @@
+import * as monaco from '@ali/monaco-editor-core/esm/vs/editor/editor.api';
 import { Autowired, Injectable, ConstructorOf } from '@ali/common-di';
 import * as vscode from 'vscode';
 import {
@@ -19,7 +20,6 @@ import {
   Location,
   FoldingContext,
   FoldingRange,
-  CodeLensSymbol,
 } from '@ali/ide-kaitian-extension/lib/common/vscode/model.api';
 import {
   ExtensionDocumentDataManager,
@@ -170,57 +170,6 @@ export class SimpleLanguageService implements Partial<IExtHostLanguages> {
   async getLanguages(): Promise<string[]> {
     return this.$getLanguages();
   }
-
-  // ### Folding begin
-  registerFoldingRangeProvider(
-    selector: DocumentSelector,
-    provider: FoldingRangeProvider
-  ): Disposable {
-    const callId = this.addNewAdapter(new FoldingProviderAdapter(this.documents, provider));
-    this.$registerFoldingProvider(callId, this.transformDocumentSelector(selector));
-    return this.createDisposable(callId);
-  }
-
-  $foldingRange(
-    handle: number,
-    model: monaco.editor.ITextModel,
-    context: FoldingContext,
-    token: CancellationToken
-  ): Promise<FoldingRange[] | undefined> {
-    return this.withAdapter(handle, FoldingProviderAdapter, (adapter) =>
-      adapter.provideFoldingRanges(model.uri, context, token)
-    );
-  }
-
-  $registerFoldingProvider(handle: number, selector: SerializedDocumentFilter[]): void {
-    const languageSelector = fromLanguageSelector(selector);
-    const foldingProvider = this.createFoldingProvider(handle, languageSelector);
-    const disposable = new DisposableCollection();
-    // FIXME: 如果这种方式存在性能问题，则将注册 pattern 的方式改为通过 language id 进行注册
-    for (const language of this.getUniqueLanguages()) {
-      disposable.push(monaco.languages.registerFoldingRangeProvider(language, foldingProvider));
-    }
-
-    this.disposables.set(handle, disposable);
-  }
-
-  protected createFoldingProvider(
-    handle: number,
-    selector?: LanguageSelector
-  ): monaco.languages.FoldingRangeProvider {
-    return {
-      provideFoldingRanges: (model, context, token) => {
-        if (!this.matchModel(selector, MonacoModelIdentifier.fromModel(model))) {
-          return undefined!;
-        }
-        if (!this.isLanguageFeatureEnabled(model)) {
-          return undefined!;
-        }
-        return this.$foldingRange(handle, model, context, token).then((v) => v!);
-      },
-    };
-  }
-  // ### Folding end
 
   // ### Hover begin
   registerHoverProvider(selector: DocumentSelector, provider: HoverProvider): Disposable {
@@ -436,78 +385,6 @@ export class SimpleLanguageService implements Partial<IExtHostLanguages> {
   }
   // ### Code Folding Provider end
 
-  // ### Code Codelens Provider start
-  private codeLensMockCommandsConverter: Pick<CommandsConverter, 'toInternal'> = {
-    toInternal: function (command: vscode.Command | undefined, disposables: DisposableStore) {
-      if (!command) {
-        return undefined;
-      }
-
-      const result: CommandDto = {
-        $ident: undefined,
-        id: command.command,
-        title: command.title,
-        tooltip: command.tooltip,
-        arguments: command.arguments,
-      };
-
-      return result;
-    },
-  };
-
-  registerCodeLensProvider(selector: DocumentSelector, provider: CodeLensProvider): Disposable {
-    const callId = this.addNewAdapter(
-      new CodeLensAdapter(
-        provider,
-        this.documents,
-        this.codeLensMockCommandsConverter as CommandsConverter
-      )
-    );
-    this.$registerCodeLensSupport(callId, this.transformDocumentSelector(selector), callId);
-    return this.createDisposable(callId);
-  }
-
-  $registerCodeLensSupport(
-    handle: number,
-    selector: SerializedDocumentFilter[],
-    eventHandle: number
-  ): void {
-    const languageSelector = fromLanguageSelector(selector);
-    const lensProvider = this.createCodeLensProvider(handle, languageSelector);
-
-    if (typeof eventHandle === 'number') {
-      const emitter = new Emitter<monaco.languages.CodeLensProvider>();
-      this.disposables.set(eventHandle, emitter);
-      lensProvider.onDidChange = emitter.event;
-    }
-
-    const disposable = new DisposableCollection();
-    for (const language of this.getUniqueLanguages()) {
-      disposable.push(monaco.languages.registerCodeLensProvider(language, lensProvider));
-    }
-    this.disposables.set(handle, disposable);
-  }
-
-  createCodeLensProvider(
-    handle: number,
-    selector: LanguageSelector | undefined
-  ): monaco.languages.CodeLensProvider {
-    return {
-      provideCodeLenses: (model, token) => {
-        if (!this.isLanguageFeatureEnabled(model)) {
-          return undefined!;
-        }
-        return this.$provideCodeLenses(handle, model.uri).then((v) => v!);
-      },
-      resolveCodeLens: (model, codeLens, token) => {
-        if (!this.isLanguageFeatureEnabled(model)) {
-          return undefined!;
-        }
-        return this.$resolveCodeLens(handle, model.uri, codeLens).then((v) => v!);
-      },
-    };
-  }
-
   // tslint:disable-next-line:no-any
   $emitCodeLensEvent(eventHandle: number, event?: any): void {
     const obj = this.disposables.get(eventHandle);
@@ -515,24 +392,6 @@ export class SimpleLanguageService implements Partial<IExtHostLanguages> {
       obj.fire(event);
     }
   }
-
-  $provideCodeLenses(handle: number, resource: Uri): Promise<CodeLensSymbol[] | undefined> {
-    return this.withAdapter(handle, CodeLensAdapter, (adapter) =>
-      adapter.provideCodeLenses(resource)
-    );
-  }
-
-  $resolveCodeLens(
-    handle: number,
-    resource: Uri,
-    symbol: CodeLensSymbol
-  ): Promise<CodeLensSymbol | undefined> {
-    return this.withAdapter(handle, CodeLensAdapter, (adapter) =>
-      adapter.resolveCodeLens(resource, symbol)
-    );
-  }
-
-  // ### Code Codelens Provider end
 
   protected getUniqueLanguages(): string[] {
     const languages: string[] = [];

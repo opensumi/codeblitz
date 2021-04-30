@@ -52,7 +52,7 @@ export interface CodeDocumentModel extends DocumentModel {
 
 export interface EditorConfig {
   /**
-   * 编辑器是否自适应内容区高度，此时会完全展开 editor，内部不再有滚动条
+   * 编辑器是否自适应内容区高度，此时会完全展开 editor，内部不再有滚动条。
    * 代码行数过多时可能会有性能问题
    */
   stretchHeight?: boolean;
@@ -60,6 +60,10 @@ export interface EditorConfig {
    * 禁用编辑器内搜索，此时会注销内部 ctrl/cmd + f 快捷键
    */
   disableEditorSearch?: boolean;
+  /**
+   * scrollbar 配置，参考 monaco 的 scrollbar 配置项，[文档链接](https://microsoft.github.io/monaco-editor/api/interfaces/monaco.editor.ieditorscrollbaroptions.html)
+   */
+  scrollbar?: Record<string, any>;
 }
 
 export interface EditorProps {

@@ -28,7 +28,7 @@ invoke(async () => {
   });
   await Promise.all(pkgPathList.map((pkgPath) => upgradeKaitianDeps(pkgPath, version, packages)));
   signale.await(`yarn 重装依赖`);
-  await exec('npx yarn --network-timeout 100000');
+  await exec('yarn --network-timeout 100000');
 });
 
 async function getOrCheckVersion(version) {

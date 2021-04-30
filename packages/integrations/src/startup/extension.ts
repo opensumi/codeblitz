@@ -7,3 +7,4 @@ export { default as html } from '@alipay/alex/extensions/alex.html-language-feat
 export { default as json } from '@alipay/alex/extensions/alex.json-language-features-worker';
 export { default as markdown } from '@alipay/alex/extensions/alex.markdown-language-features-worker';
 export { default as typescript } from '@alipay/alex/extensions/alex.typescript-language-features-worker';
+export { default as lsif } from '@alipay/alex/extensions/cloud-ide.vscode-lsif';

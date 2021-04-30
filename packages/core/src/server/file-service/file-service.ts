@@ -12,7 +12,7 @@ import {
 } from '@ali/ide-core-common';
 import { parse, ParsedPattern, match } from '@ali/ide-core-common/lib/utils/glob';
 import { FileChangeEvent } from '@ali/ide-core-common';
-import { decode, UTF8, getEncodingInfo } from './encoding';
+import { decode, encode, UTF8, getEncodingInfo } from './encoding';
 import {
   FileSystemError,
   FileStat,
@@ -160,8 +160,8 @@ export class FileService extends FCService implements IFileService {
       throw FileSystemError.FileIsDirectory(uri, 'Cannot resolve the content.');
     }
     const encoding = await this.doGetEncoding(options);
-    const content = await this.diskService.readFile(_uri.codeUri, encoding);
-    return { stat, content };
+    const buffer = await this.diskService.readFile(_uri.codeUri, encoding);
+    return { stat, content: decode(this.getNodeBuffer(buffer), encoding) };
   }
 
   async setContent(
@@ -182,7 +182,7 @@ export class FileService extends FCService implements IFileService {
       throw this.createOutOfSyncError(file, stat);
     }
     const encoding = await this.doGetEncoding(options);
-    await this.diskService.writeFile(_uri.codeUri, content, {
+    await this.diskService.writeFile(_uri.codeUri, encode(content, encoding), {
       create: false,
       overwrite: true,
       encoding,
@@ -217,7 +217,7 @@ export class FileService extends FCService implements IFileService {
     const buffer = this.getNodeBuffer(await this.diskService.readFile(_uri.codeUri));
     const content = decode(buffer, encoding);
     const newContent = this.applyContentChanges(content, contentChanges);
-    await this.diskService.writeFile(_uri.codeUri, newContent, {
+    await this.diskService.writeFile(_uri.codeUri, encode(newContent, encoding), {
       create: false,
       overwrite: true,
       encoding,
@@ -263,7 +263,7 @@ export class FileService extends FCService implements IFileService {
 
     const content = await this.doGetContent(options);
     const encoding = await this.doGetEncoding(options);
-    let newStat: any = await this.diskService.writeFile(_uri.codeUri, content, {
+    let newStat: any = await this.diskService.writeFile(_uri.codeUri, encode(content, encoding), {
       create: true,
       overwrite: options?.overwrite || false,
       encoding,

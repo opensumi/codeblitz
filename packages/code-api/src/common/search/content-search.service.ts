@@ -1,3 +1,5 @@
+import { getMapForWordSeparators } from '@ali/monaco-editor-core/esm/vs/editor/common/controller/wordCharacterClassifier';
+import { isValidMatch } from '@ali/monaco-editor-core/esm/vs/editor/common/model/textModelSearch';
 import { Injectable, Autowired } from '@ali/common-di';
 import { SupportLogNamespace, ILogService, URI } from '@ali/ide-core-common';
 import { parse } from '@ali/ide-core-common/lib/utils/glob';
@@ -118,113 +120,100 @@ export class ContentSearchService implements IContentSearchServer {
         return this.searchEnd(searchInfo.searchId);
       }
 
-      const vsRequire = (window as any).amdLoader.require;
-      vsRequire(
-        [
-          'vs/editor/common/controller/wordCharacterClassifier',
-          'vs/editor/common/model/textModelSearch',
-        ],
-        ({ getMapForWordSeparators }, { isValidMatch }) => {
-          const matchCase = !!opts?.matchCase;
-          const wordSeparators = opts?.matchWholeWord
-            ? getMapForWordSeparators('`~!@#$%^&*()-=+[{]}\\|;:\'",.<>/? \n')
-            : null;
+      const matchCase = !!opts?.matchCase;
+      const wordSeparators = opts?.matchWholeWord
+        ? getMapForWordSeparators('`~!@#$%^&*()-=+[{]}\\|;:\'",.<>/? \n')
+        : null;
 
-          const regex = this.createRegExp(searchString, false, {
-            matchCase: matchCase,
-            wholeWord: false,
-            multiline: false,
-            global: true,
-            unicode: true,
-          });
+      const regex = this.createRegExp(searchString, false, {
+        matchCase: matchCase,
+        wholeWord: false,
+        multiline: false,
+        global: true,
+        unicode: true,
+      });
 
-          let simpleSearch = true;
-          if (searchString.toLowerCase() !== searchString.toUpperCase()) {
-            // casing might make a difference
-            simpleSearch = matchCase;
-          }
+      let simpleSearch = true;
+      if (searchString.toLowerCase() !== searchString.toUpperCase()) {
+        // casing might make a difference
+        simpleSearch = matchCase;
+      }
 
-          const results: ContentSearchResult[] = [];
+      const results: ContentSearchResult[] = [];
 
-          const includeMatcherList =
-            opts?.include?.map((str: string) => parse(anchorGlob(str))) || [];
-          const excludeMatcherList =
-            opts?.exclude?.map((str: string) => parse(anchorGlob(str))) || [];
+      const includeMatcherList = opts?.include?.map((str: string) => parse(anchorGlob(str))) || [];
+      const excludeMatcherList = opts?.exclude?.map((str: string) => parse(anchorGlob(str))) || [];
 
-          requestResults.forEach(({ path, line, content }) => {
-            const searchStringLen = searchString.length;
-            const textLength = content.length;
-            const fileUri = URI.file(paths.join(this.appConfig.workspaceDir, path)).toString();
+      requestResults.forEach(({ path, line, content }) => {
+        const searchStringLen = searchString.length;
+        const textLength = content.length;
+        const fileUri = URI.file(paths.join(this.appConfig.workspaceDir, path)).toString();
 
-            if (
-              includeMatcherList.length > 0 &&
-              !includeMatcherList.some((matcher) => matcher(fileUri))
-            ) {
-              return;
-            }
-
-            if (
-              excludeMatcherList.length > 0 &&
-              excludeMatcherList.some((matcher) => matcher(fileUri))
-            ) {
-              return;
-            }
-
-            if (simpleSearch) {
-              let lastMatchIndex = -searchStringLen;
-              while (
-                (lastMatchIndex = content.indexOf(
-                  searchString,
-                  lastMatchIndex + searchStringLen
-                )) !== -1
-              ) {
-                if (
-                  !wordSeparators ||
-                  isValidMatch(wordSeparators, content, textLength, lastMatchIndex, searchStringLen)
-                ) {
-                  results.push(
-                    cutShortSearchResult({
-                      fileUri,
-                      line,
-                      matchStart: lastMatchIndex + 1,
-                      matchLength: searchStringLen,
-                      lineText: content.replace(/[\r\n]+$/, ''),
-                    })
-                  );
-                }
-              }
-            } else {
-              regex.lastIndex = 0;
-              let m: RegExpExecArray | null;
-              do {
-                m = regex.exec(content);
-                if (!m) {
-                  return;
-                }
-                const matchStartIndex = m.index;
-                const matchLength = m[0].length;
-                if (
-                  !wordSeparators ||
-                  isValidMatch(wordSeparators, content, textLength, matchStartIndex, matchLength)
-                ) {
-                  results.push(
-                    cutShortSearchResult({
-                      fileUri,
-                      line,
-                      matchStart: matchStartIndex + 1,
-                      matchLength: searchStringLen,
-                      lineText: content.replace(/[\r\n]+$/, ''),
-                    })
-                  );
-                }
-              } while (m);
-            }
-          });
-
-          this.sendResultToClient(results, searchInfo.searchId);
-          this.searchEnd(searchInfo.searchId);
+        if (
+          includeMatcherList.length > 0 &&
+          !includeMatcherList.some((matcher) => matcher(fileUri))
+        ) {
+          return;
         }
-      );
+
+        if (
+          excludeMatcherList.length > 0 &&
+          excludeMatcherList.some((matcher) => matcher(fileUri))
+        ) {
+          return;
+        }
+
+        if (simpleSearch) {
+          let lastMatchIndex = -searchStringLen;
+          while (
+            (lastMatchIndex = content.indexOf(searchString, lastMatchIndex + searchStringLen)) !==
+            -1
+          ) {
+            if (
+              !wordSeparators ||
+              isValidMatch(wordSeparators, content, textLength, lastMatchIndex, searchStringLen)
+            ) {
+              results.push(
+                cutShortSearchResult({
+                  fileUri,
+                  line,
+                  matchStart: lastMatchIndex + 1,
+                  matchLength: searchStringLen,
+                  lineText: content.replace(/[\r\n]+$/, ''),
+                })
+              );
+            }
+          }
+        } else {
+          regex.lastIndex = 0;
+          let m: RegExpExecArray | null;
+          do {
+            m = regex.exec(content);
+            if (!m) {
+              return;
+            }
+            const matchStartIndex = m.index;
+            const matchLength = m[0].length;
+            if (
+              !wordSeparators ||
+              isValidMatch(wordSeparators, content, textLength, matchStartIndex, matchLength)
+            ) {
+              results.push(
+                cutShortSearchResult({
+                  fileUri,
+                  line,
+                  matchStart: matchStartIndex + 1,
+                  matchLength: searchStringLen,
+                  lineText: content.replace(/[\r\n]+$/, ''),
+                })
+              );
+            }
+          } while (m);
+        }
+      });
+
+      this.sendResultToClient(results, searchInfo.searchId);
+      this.searchEnd(searchInfo.searchId);
     } catch (err) {
       this.logger.error(err);
       this.searchError(searchInfo.searchId, `search error ${err?.message || ''}`);
