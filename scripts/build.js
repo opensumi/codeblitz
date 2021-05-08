@@ -4,6 +4,7 @@ const args = require('minimist')(process.argv.slice(2));
 const glob = require('glob');
 const fse = require('fs-extra');
 const { invoke, exec } = require('./utils/utils');
+const { replaceWorkerAndWebviewAssets } = require('./utils/replace');
 
 invoke(async () => {
   const scope = args.scope || 'all';
@@ -15,6 +16,7 @@ invoke(async () => {
     const watch = args.w || args.watch ? '--watch' : '';
     await exec(`npx tsc --build packages/tsconfig.build.json ${watch}`);
     signale.success('编译成功');
+
     signale.pending('复制非 ts 资源');
     const cwd = path.join(__dirname, '../packages');
     const files = glob.sync('*/src/**/*.@(less)', { cwd, nodir: true });
@@ -26,6 +28,10 @@ invoke(async () => {
       await fse.copyFile(from, to);
     }
     signale.success('复制成功');
+
+    signale.pending('替换 extWorkerHost 和 webviewEndpoint cdn 资源');
+    await replaceWorkerAndWebviewAssets();
+    signale.success('替换成功');
   } catch (err) {
     signale.error('编译失败', err);
     throw err;

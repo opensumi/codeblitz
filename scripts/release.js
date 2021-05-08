@@ -108,24 +108,8 @@ invoke(async () => {
 
   step('构建所有 packages...'); // --no-build 跳过
   if (args.build !== false) {
-    const configPath = path.resolve(__dirname, '..', 'packages/toolkit/define.json');
-    if (!fse.existsSync(configPath)) {
-      throw new Error('请先运行 build-assets 构建资源');
-    }
     await exec('yarn build');
-
-    step('注入 cdn 资源');
-    const targetFile = path.resolve(__dirname, '..', 'packages/alex/lib/api/createApp.js');
-    const { code, result } = replace(
-      await fse.readFile(targetFile, 'utf8'),
-      await fse.readJSON(configPath)
-    );
-    if (result) {
-      await fse.writeFile(targetFile, code);
-      console.log('(DONE)');
-    } else {
-      console.log('(SKIP)');
-    }
+    console.log('(DONE)');
   } else {
     console.log('(SKIP)');
   }
@@ -177,25 +161,6 @@ async function updatePackage(pkgRoot, version) {
     });
   });
   await fse.writeJSON(pkgPath, pkgJSON, { spaces: 2 });
-}
-
-/**
- * @param {string} code
- * @param {object} replacement
- */
-function replace(code, replacement) {
-  const keys = Object.keys(replacement)
-    .sort((a, b) => b.length - a.length)
-    .map((str) => str.replace(/[-[\]/{}()*+?.\\^$|]/g, '\\$&'));
-  const pattern = new RegExp(`\\b(${keys.join('|')})\\b`, 'g');
-
-  let result = false;
-  code = code.replace(pattern, (match) => {
-    result = true;
-    return JSON.stringify(replacement[match]);
-  });
-
-  return { code, result };
 }
 
 async function publishPackage(pkgName, version) {
