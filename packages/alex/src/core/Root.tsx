@@ -16,6 +16,7 @@ export const Root: FC<RootProps> = (props) => {
     <alex-root
       class={`alex-root ${themeType ? `alex-${themeType}` : ''} ${props.className ?? ''}`}
       style={{ width: '100%', height: '100%' }}
+      data-meta-version={__VERSION__}
     >
       {(props.status === 'loading' || props.status === 'error') && <LandingComponent {...props} />}
       {props.children}

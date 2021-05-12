@@ -1,63 +1,38 @@
 import { Autowired } from '@ali/common-di';
-import { Disposable, Deferred, Emitter, Event, URI, Domain } from '@ali/ide-core-common';
+import { Disposable, URI, Domain } from '@ali/ide-core-common';
 import { TextmateService } from '@ali/ide-monaco/lib/browser/textmate.service';
 import { LanguagesContribution, GrammarsContribution } from '@ali/ide-monaco';
-
-const languageListCache: LanguagesContribution[] = [];
-const grammarListCache: GrammarsContribution[] = [];
-
-class SingleEventEmitter<T> extends Emitter<T> {
-  clear() {
-    this._listeners?.clear();
-  }
-}
+import { centerRegistry } from '@alipay/alex-registry';
+import { TextmateKey } from './base';
 
 @Domain()
 export class LanguageGrammarRegistrationService extends Disposable {
-  static languageEmitter = new SingleEventEmitter<LanguagesContribution>();
-  static grammarEmitter = new SingleEventEmitter<GrammarsContribution>();
-
   @Autowired(TextmateService)
   private readonly textMateService: TextmateService;
-
-  private languageDidRegisterDeferred = new Deferred<void>();
-  public get languageDidRegistered() {
-    return this.languageDidRegisterDeferred.promise;
-  }
 
   async initRegisterLanguageAndGrammar() {
     // 没啥作用，只是确保传参类型正确
     const uri = new URI();
-    languageListCache.forEach((contrib) => {
-      this.textMateService.registerLanguage(contrib, uri);
-    });
-    grammarListCache.forEach((contrib) => {
-      this.textMateService.registerGrammar(contrib, uri);
-    });
-    this.clear();
-    LanguageGrammarRegistrationService.languageEmitter.event((contrib) => {
-      this.textMateService.registerLanguage(contrib, uri);
-    });
-    LanguageGrammarRegistrationService.grammarEmitter.event((contrib) => {
-      this.textMateService.registerGrammar(contrib, uri);
-    });
-    this.languageDidRegisterDeferred.resolve();
-  }
 
-  clear() {
-    LanguageGrammarRegistrationService.languageEmitter.clear();
-    LanguageGrammarRegistrationService.grammarEmitter.clear();
-  }
+    this.addDispose(
+      centerRegistry.onRegister<LanguagesContribution>(TextmateKey.language, (contrib) => {
+        this.textMateService.registerLanguage(contrib, uri);
+      })
+    );
 
-  dispose() {
-    this.clear();
+    this.addDispose(
+      centerRegistry.onRegister<GrammarsContribution>(TextmateKey.grammar, (contrib) => {
+        this.textMateService.registerGrammar(contrib, uri);
+      })
+    );
+
+    const languageContrib =
+      centerRegistry.getData<LanguagesContribution>(TextmateKey.language) || [];
+    const grammarContrib = centerRegistry.getData<GrammarsContribution>(TextmateKey.grammar) || [];
+
+    return Promise.all([
+      ...languageContrib.map((contrib) => this.textMateService.registerLanguage(contrib, uri)),
+      ...grammarContrib.map((contrib) => this.textMateService.registerGrammar(contrib, uri)),
+    ]);
   }
 }
-
-LanguageGrammarRegistrationService.languageEmitter.event((e) => {
-  languageListCache.push(e);
-});
-
-LanguageGrammarRegistrationService.grammarEmitter.event((e) => {
-  grammarListCache.push(e);
-});

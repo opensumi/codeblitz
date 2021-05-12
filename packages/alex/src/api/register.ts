@@ -1,10 +1,24 @@
 import { LanguagesContribution, GrammarsContribution } from '@ali/ide-monaco';
-import { LanguageGrammarRegistrationService } from '@alipay/alex-core';
+import { centerRegistry } from '@alipay/alex-registry';
 
+export { centerRegistry };
+
+/**
+ * @deprecated please import language by path directly
+ *
+ * use `import "@alipay/alex/languages/<mode>"` to import specific language.
+ * use `import "@alipay/alex/languages"` to import all languages
+ */
 export const registerLanguage = (contrib: LanguagesContribution) => {
-  LanguageGrammarRegistrationService.languageEmitter.fire(contrib);
+  centerRegistry.register<LanguagesContribution>('language', contrib);
 };
 
+/**
+ * @deprecated please import language by path directly
+ *
+ * use `import "@alipay/alex/languages/<mode>"` to import specific language
+ * use `import "@alipay/alex/languages"` to import all languages
+ */
 export const registerGrammar = (contrib: GrammarsContribution) => {
-  LanguageGrammarRegistrationService.grammarEmitter.fire(contrib);
+  centerRegistry.register<GrammarsContribution>('grammar', contrib);
 };

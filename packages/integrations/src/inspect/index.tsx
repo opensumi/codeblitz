@@ -4,7 +4,7 @@ import { AppRenderer } from '@alipay/alex';
 import { Injectable, Provider, Autowired } from '@ali/common-di';
 import { BrowserModule, Domain } from '@ali/ide-core-browser';
 import { LaunchContribution, AppConfig } from '@alipay/alex-core';
-import '../startup/languages';
+import '../common/languages';
 
 @Domain(LaunchContribution)
 class InspectContributions implements LaunchContribution {

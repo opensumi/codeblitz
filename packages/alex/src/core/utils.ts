@@ -1,6 +1,8 @@
 import { ModuleConstructor } from '@ali/ide-core-browser';
 import { IAppOpts } from '@alipay/alex-core';
-import { ThemeType } from '@ali/ide-theme';
+import { getThemeId, getThemeType, ThemeContribution, BuiltinTheme } from '@ali/ide-theme';
+import { IExtensionBasicMetadata } from '@alipay/alex-shared';
+
 import { IAppConfig } from '../api/types';
 
 export const flatModules = (modules: Record<string, ModuleConstructor | ModuleConstructor[]>) => {
@@ -45,16 +47,22 @@ export const mergeConfig = (target: IAppOpts, source: IAppConfig) => {
   return target;
 };
 
-export const themeStorage = {
-  _key: 'alex:theme',
-  get(): ThemeType {
-    return localStorage.getItem(this._key) as ThemeType;
-  },
-  set(type: ThemeType) {
-    if (type) {
-      localStorage.setItem(this._key, type);
-    } else {
-      localStorage.removeItem(this._key);
+export const getThemeTypeByPreferenceThemeId = (
+  themeId: string,
+  extensionMetadata: IExtensionBasicMetadata[] | undefined
+) => {
+  let uiTheme: BuiltinTheme | undefined;
+  if (themeId && extensionMetadata) {
+    for (const ext of extensionMetadata) {
+      const theme: ThemeContribution | undefined = ext.packageJSON.contributes?.themes?.find(
+        (contrib: ThemeContribution) => contrib && getThemeId(contrib) === themeId
+      );
+
+      if (theme?.uiTheme) {
+        uiTheme = theme.uiTheme;
+        break;
+      }
     }
-  },
+  }
+  return getThemeType(uiTheme || 'vs-dark');
 };

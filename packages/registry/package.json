@@ -1,7 +1,7 @@
 {
-  "name": "@alipay/alex-code-api",
+  "name": "@alipay/alex-registry",
   "version": "0.14.2",
-  "description": "@alipay/alex-code-api",
+  "description": "@alipay/alex-registry",
   "main": "lib/index.js",
   "typings": "lib/index.d.ts",
   "files": [
@@ -10,17 +10,11 @@
   "keywords": [
     "kaitian AntCodespaces"
   ],
-  "scripts": {},
   "publishConfig": {
     "registry": "https://registry.npm.alibaba-inc.com"
   },
   "tnpm": {
     "mode": "yarn",
     "lockfile": "enable"
-  },
-  "dependencies": {
-    "@alipay/alex-core": "0.14.2",
-    "@alipay/alex-code-service": "0.14.2",
-    "@alipay/alex-shared": "0.14.2"
   }
 }

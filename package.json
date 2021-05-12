@@ -1,6 +1,6 @@
 {
   "name": "alex",
-  "version": "0.14.1",
+  "version": "0.14.2",
   "workspaces": [
     "packages/*"
   ],
@@ -14,10 +14,10 @@
     "type-check": "tsc --skipLibCheck --noEmit",
     "preinstall": "node scripts/preinstall && npm run prepare:env",
     "prepare:env": "yum --version && sudo yum -y install unzip gcc-c++ libX11-devel libxkbfile-devel || echo 'no yum'",
-    "init": "npm run clean && npm run build && npm run ext",
+    "init": "npm run clean && npm run generate && npm run build && npm run ext",
     "start": "npm run dev",
     "ext": "alex ext",
-    "inspect": "INTEGRATION=inspect npm run dev",
+    "generate": "node scripts/generate",
     "editor": "INTEGRATION=editor npm run dev",
     "build": "node scripts/build",
     "bundle": "node scripts/bundle",
@@ -68,6 +68,7 @@
     "husky": "^4.3.0",
     "inquirer": "^7.3.3",
     "jest": "^26.6.3",
+    "json5": "^2.2.0",
     "lint-staged": "^10.5.1",
     "minimist": "^1.2.5",
     "prettier": "^2.1.2",

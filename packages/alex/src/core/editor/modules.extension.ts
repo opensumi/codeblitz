@@ -13,6 +13,7 @@ import { WebviewModule } from '@ali/ide-webview/lib/browser';
 import { ExtensionActivateModule } from './editor.extension';
 
 import { setExtensionModules } from './modules';
+import '../extension.patch';
 
 setExtensionModules([
   StaticResourceModule,

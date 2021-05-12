@@ -13,18 +13,18 @@ import {
   IAppRenderer,
   FILES_DEFAULTS,
   IReporter,
+  getPreferenceThemeId,
 } from '@ali/ide-core-browser';
 import { BoxPanel, SplitPanel } from '@ali/ide-core-browser/lib/components';
-import { IThemeService } from '@ali/ide-theme/lib/common';
 import '@ali/ide-core-browser/lib/style/index.less';
-import { FileTreeModelService } from '@ali/ide-file-tree-next/lib/browser/services/file-tree-model.service';
 import * as os from 'os';
 
+import '../core/extension.patch';
 import { disposeMode } from '../core/patch';
 
 import { modules } from '../core/modules';
 import { IconSlim, IDETheme } from '../core/extensions';
-import { mergeConfig, themeStorage } from '../core/utils';
+import { mergeConfig, getThemeTypeByPreferenceThemeId } from '../core/utils';
 import { LayoutComponent, getDefaultLayoutConfig } from '../core/layout';
 import { IConfig, IAppInstance } from './types';
 import { logPv } from '../core/tracert';
@@ -77,31 +77,18 @@ export function createApp({ appConfig, runtimeConfig }: IConfig): IAppInstance {
   }
   opts.workspaceDir = makeWorkspaceDir(opts.workspaceDir);
 
-  let themeType = themeStorage.get();
-  if (!themeType) {
-    const defaultTheme = opts.defaultPreferences?.['general.theme'];
-    opts.extensionMetadata?.find((item) => {
-      const themeConfig = item.packageJSON.contributes?.themes?.find(
-        (item: any) => item.id === defaultTheme
-      );
-      if (themeConfig) {
-        themeType = !themeConfig.uiTheme || themeConfig.uiTheme === 'vs-dark' ? 'dark' : 'light';
-        themeStorage.set(themeType);
-      }
-    });
-  }
-
   const app = new ClientApp(opts) as IAppInstance;
+
+  Object.defineProperty(app, 'currentThemeType', {
+    get() {
+      const themeId = getPreferenceThemeId() || opts.defaultPreferences?.['general.theme'];
+      return getThemeTypeByPreferenceThemeId(themeId, opts.extensionMetadata);
+    },
+  });
 
   const _start = app.start;
   app.start = async (container: HTMLElement | IAppRenderer) => {
     await _start.call(app, container);
-    // 在 start 不能 injector.get，否则有的 service 立即初始化，此时 file-system 还没有初始化完成
-    (app.injector.get(IThemeService) as IThemeService).onThemeChange((e) => {
-      themeStorage.set(e.type);
-    });
-    // IDE 销毁时，组件会触发 handleTreeBlur，但是 FileContextKey 实例尚未初始化，此时在 dispose 阶段，injector.get(FileContextKey) 会抛出错误
-    app.injector.get(FileTreeModelService).handleTreeBlur();
 
     setTimeout(() => {
       logPv(runtimeConfig.biz || location.hostname);

@@ -11,6 +11,9 @@ exports.generateLanguages = async () => {
   const targetDir = path.join(__dirname, '../../packages/alex/languages');
   await fse.remove(targetDir);
   await fse.ensureDir(targetDir);
+
+  let langEntryContent = '';
+
   fse
     .readdirSync(languagesDir, { withFileTypes: true })
     .filter((dirent) => dirent.isDirectory())
@@ -19,12 +22,18 @@ exports.generateLanguages = async () => {
       fse.writeFileSync(
         path.join(targetDir, `${lang}.js`),
         `
-const { registerLanguage, registerGrammar } = ${lib};
+const { centerRegistry } = require('@alipay/alex-registry');
 const loadLanguage = require('@ali/kaitian-textmate-languages/lib/${lang}');
+const registerLanguage = (contrib) => centerRegistry.register('language', contrib);
+const registerGrammar = (contrib) => centerRegistry.register('grammar', contrib);
 loadLanguage(registerLanguage, registerGrammar);
         `.trim() + '\n'
       );
+
+      langEntryContent += `require('./${lang}')\n`;
     });
+
+  fse.writeFileSync(path.join(targetDir, 'index.js'), langEntryContent);
 };
 
 exports.generateModules = async () => {
@@ -68,12 +77,4 @@ module.exports = requireModule("${mod}");
     `.trim() + '\n'
     );
   });
-};
-
-exports.generateAll = () => {
-  return Promise.all([
-    exports.generateLanguages(),
-    exports.generateModules(),
-    exports.generateShims(),
-  ]);
 };

@@ -1,6 +1,7 @@
 const fs = require('fs');
 const path = require('path');
 const args = require('minimist')(process.argv.slice(2));
+const json5 = require('json5');
 const version = require('../package.json').version;
 const signale = require('signale');
 
@@ -79,7 +80,7 @@ describe('${name}', () => {
   await fsp.writeFile(resolve('tsconfig.build.json'), JSON.stringify(tsconfig, null, 2));
 
   const buildTSConfigPath = path.join(__dirname, '../packages/tsconfig.build.json');
-  const buildTSConfigJSON = require(buildTSConfigPath);
+  const buildTSConfigJSON = json5.parse(fs.readFileSync(buildTSConfigPath, 'utf-8'));
   buildTSConfigJSON.references.push({
     path: `./${name}/tsconfig.build.json`,
   });

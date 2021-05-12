@@ -4,20 +4,15 @@
 
 import { StaticServices } from '@ali/monaco-editor-core/esm/vs/editor/standalone/browser/standaloneServices';
 import { ModesRegistry } from '@ali/monaco-editor-core/esm/vs/editor/common/modes/modesRegistry';
-import { ExtensionServiceImpl } from '@ali/ide-kaitian-extension/lib/browser/extension.service';
 import { DirtyDiffWidget } from '@ali/ide-scm/lib/browser/dirty-diff/dirty-diff-widget';
-
-// TODO：待 kaitian 中去掉，临时覆盖掉实现，这样 loader 可移除了
-ExtensionServiceImpl.prototype.initCommonBrowserDependency = () => Promise.resolve();
-ExtensionServiceImpl.prototype.initKaitianBrowserAPIDependency = () => Promise.resolve();
 
 // TODO: 不使用 private 如何清除副作用
 export const disposeMode = () => {
-  const { modeService } = StaticServices;
+  const modeService: any = StaticServices.modeService;
 
   // 需要把 LanguageRegistry dispose，否则二次加载会重复触发事件，导致加载越来越慢
-  (<any>modeService)._value._registry.dispose();
-  (<any>modeService)._value = null;
+  modeService._value?._registry?.dispose?.();
+  modeService._value = null;
   (<any>ModesRegistry)._languages = [];
 };
 

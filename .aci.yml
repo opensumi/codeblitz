@@ -28,7 +28,8 @@ node-12:
       chown -R admin:admin ./
       time tnpm i -g yarn && tnpm i --install-node=12 --by=yarn --no-cache --internal-oss-cache
       node -e "console.log('%j, %j', process.versions, process.execPath)"
-      time yarn build
+      time tnpm run init
+      time tnpm run test
   coverage: '(?<=Statements\s{1,10}:\s{1,10})\d{1,10}.\d{1,10}'
   passrate: '(?<=PASS_RATE: )\d{1,10}.\d{1,10}'
   publisher:

@@ -22,7 +22,7 @@ import { IPluginConfig } from '@alipay/alex-plugin';
 
 import { disposeMode } from '../core/patch';
 import { getModules } from '../core/editor/modules';
-import { mergeConfig, themeStorage } from '../core/utils';
+import { mergeConfig } from '../core/utils';
 import { EditorLayoutComponent, getEditorLayoutConfig } from '../core/layout';
 import { IConfig, IAppInstance } from './types';
 import { logPv } from '../core/tracert';
@@ -68,29 +68,12 @@ export function createEditor({ appConfig, runtimeConfig }: IConfig): IAppInstanc
   }
   opts.workspaceDir = makeWorkspaceDir(opts.workspaceDir);
 
-  let themeType = themeStorage.get();
-  if (!themeType) {
-    const defaultTheme = opts.defaultPreferences?.['general.theme'];
-    opts.extensionMetadata?.find((item) => {
-      const themeConfig = item.packageJSON.contributes?.themes?.find(
-        (item: any) => item.id === defaultTheme
-      );
-      if (themeConfig) {
-        themeType = !themeConfig.uiTheme || themeConfig.uiTheme === 'vs-dark' ? 'dark' : 'light';
-        themeStorage.set(themeType);
-      }
-    });
-  }
-
   const app = new ClientApp(opts) as IAppInstance;
 
   const _start = app.start;
   app.start = async (container: HTMLElement | IAppRenderer) => {
     await _start.call(app, container);
-    // 在 start 不能 injector.get，否则有的 service 立即初始化，此时 file-system 还没有初始化完成
-    (app.injector.get(IThemeService) as IThemeService).onThemeChange((e) => {
-      themeStorage.set(e.type);
-    });
+
     setTimeout(() => {
       logPv(runtimeConfig.biz || location.hostname);
     });

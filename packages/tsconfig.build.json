@@ -7,6 +7,9 @@
       "path": "./cli/tsconfig.build.json"
     },
     {
+      "path": "./registry/tsconfig.build.json"
+    },
+    {
       "path": "./core/tsconfig.build.json"
     },
     {
@@ -29,7 +32,7 @@
     },
     {
       "path": "./integrations/tsconfig.build.json"
-    }
+    },
   ],
   "files": [],
   "include": []

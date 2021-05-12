@@ -22,6 +22,7 @@ const BannerPlugin = require('./util/banner-plugin');
 const { nodePolyfill } = require('./util');
 const { findPortSync } = require('./util/find-porter');
 const { config } = require('./util');
+const pkg = require('../../../package.json');
 
 const HOST = process.env.HOST || 'localhost';
 
@@ -43,6 +44,7 @@ module.exports = (option) => {
       path: outputPath,
       filename: '[name].js',
       chunkFilename: '[name].js',
+      publicPath: '/',
     },
     resolve: {
       extensions: ['.ts', '.tsx', '.js', '.json', '.less'],
@@ -182,6 +184,7 @@ module.exports = (option) => {
               options: {
                 name: '[name].[ext]',
                 esModule: false,
+                publicPath: './',
               },
             },
           ],
@@ -203,6 +206,7 @@ module.exports = (option) => {
         __WEBVIEW_ENDPOINT__: process.env.WEBVIEW_ENDPOINT
           ? JSON.stringify(`/assets/~${process.env.WEBVIEW_ENDPOINT}`)
           : JSON.stringify(`${baseURL}/${config.webviewEntry}`),
+        __VERSION__: JSON.stringify(pkg.version),
         ...option.define,
       }),
       new webpack.ProvidePlugin({

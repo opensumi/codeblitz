@@ -22,8 +22,8 @@ module.exports = createWebpackConfig({
       [config.editorAllEntry]: './packages/alex/src/editor.all',
     },
     output: {
-      library: 'Alex',
-      libraryTarget: 'umd',
+      // TODO: umd 的版本单独输出
+      libraryTarget: 'commonjs2',
     },
     externals: [
       {
@@ -47,6 +47,7 @@ module.exports = createWebpackConfig({
         },
       },
       '@ant-design/icons/lib/dist',
+      '@alipay/alex-registry',
     ],
     optimization: {
       minimize: false,

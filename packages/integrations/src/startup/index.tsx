@@ -14,8 +14,14 @@ import * as path from 'path';
 import * as Alex from '@alipay/alex';
 import { isFilesystemReady, STORAGE_DIR, CodeServiceConfig } from '@alipay/alex-core';
 import { StartupModule } from './startup.module';
-import './languages';
-import { css, html, json, markdown, typescript, lsif } from './extension';
+import '../common/languages';
+import SarifViewer from '@alipay/alex/extensions/cloud-ide-ext.sarif-viewer';
+import css from '@alipay/alex/extensions/alex.css-language-features-worker';
+import html from '@alipay/alex/extensions/alex.html-language-features-worker';
+import json from '@alipay/alex/extensions/alex.json-language-features-worker';
+import markdown from '@alipay/alex/extensions/alex.markdown-language-features-worker';
+import typescript from '@alipay/alex/extensions/alex.typescript-language-features-worker';
+import lsif from '@alipay/alex/extensions/cloud-ide.vscode-lsif';
 
 (window as any).alex = Alex;
 
@@ -95,7 +101,9 @@ const App = () => (
       extensionMetadata: [css, html, json, markdown, typescript, lsif],
       workspaceDir: `${platform}/${config.owner}/${config.name}`,
       layoutConfig,
-      defaultPreferences: {},
+      defaultPreferences: {
+        'general.theme': 'ide-dark',
+      },
     }}
     runtimeConfig={{
       codeService: config as CodeServiceConfig,

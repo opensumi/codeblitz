@@ -4,7 +4,7 @@ import { IAppInstance, EditorRenderer } from '@alipay/alex/lib/editor';
 import * as Alex from '@alipay/alex/lib/editor';
 // 引入 extension
 import '@alipay/alex/lib/editor.extension';
-import '../startup/languages';
+import '../common/languages';
 
 import 'antd/dist/antd.css';
 import Select from 'antd/lib/select';
@@ -48,6 +48,7 @@ const fileOptions = (function transform(obj) {
 });
 
 const App = () => {
+  const [key, setKey] = useState(0);
   const [project, setProject] = useState('');
   const [ref, setRef] = useState('');
   const [filepath, setFilePath] = useState('');
@@ -84,6 +85,9 @@ const App = () => {
         />
       </div>
       <div style={{ display: 'flex', marginBottom: 8 }}>
+        <Button onClick={() => setKey((k) => k + 1)} size="small" style={{ marginRight: 8 }}>
+          RESET
+        </Button>
         <Select
           value={encoding}
           onChange={setEncoding}
@@ -126,7 +130,7 @@ const App = () => {
         <div style={{ width: '50%', minHeight: 500 }}>
           {project ? (
             <EditorRenderer
-              key={project}
+              key={`${project}-${key}`}
               onLoad={(app) => {
                 window.app = app;
               }}
