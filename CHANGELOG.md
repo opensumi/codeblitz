@@ -1,3 +1,13 @@
+# [1.0.0-beta.1](https://code.alipay.com/cloud-ide/crew-dragon/compare/v0.14.1...v1.0.0-beta.1) (2021-05-20)
+
+
+### Features
+
+* worker-host 上传到公网 ([525909f](https://code.alipay.com/cloud-ide/crew-dragon/commits/525909f8fea2c5d17a6040c2a9254e154e5e6844))
+* 升级 kaitian 2.0 ([5e72e6d](https://code.alipay.com/cloud-ide/crew-dragon/commits/5e72e6db807cd1342c9914c24f83f6d8692b4a17))
+
+
+
 ## [0.14.2](https://code.alipay.com/cloud-ide/crew-dragon/compare/v0.14.1...v0.14.2) (2021-05-08)
 
 
