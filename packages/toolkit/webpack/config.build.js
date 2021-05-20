@@ -23,7 +23,8 @@ module.exports = createWebpackConfig({
     },
     output: {
       // TODO: umd 的版本单独输出
-      libraryTarget: 'commonjs2',
+      library: 'Alex',
+      libraryTarget: 'umd',
     },
     externals: [
       {
