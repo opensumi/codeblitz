@@ -20,8 +20,9 @@ export class StatusbarContribution implements ClientAppContribution {
   private disposables: IDisposable[] = [];
 
   initialize() {
+    const { rootRepository } = this.codeModel;
     const getRefText = () =>
-      this.codeModel.headLabel ? `$(git-branch) ${this.codeModel.headLabel}` : '';
+      rootRepository.headLabel ? `$(git-branch) ${rootRepository.headLabel}` : '';
 
     this.statusbarService.addElement('code-service', {
       text: getRefText(),
@@ -31,7 +32,7 @@ export class StatusbarContribution implements ClientAppContribution {
       priority: 0,
     });
 
-    Event.any(this.codeModel.onDidChangeHEAD, this.codeModel.onDidChangeRefs)(
+    Event.any(rootRepository.onDidChangeCommit, rootRepository.onDidChangeRefs)(
       () => {
         this.statusbarService.setElement('code-service', {
           text: getRefText(),

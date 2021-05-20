@@ -125,6 +125,18 @@ const App = () => {
         >
           command test
         </Button>
+        <Button
+          onClick={() => {
+            const commands = EditorPlugin.api.commands;
+            if (commands) {
+              commands.executeCommand('alex.settings');
+            }
+          }}
+          size="small"
+          style={{ marginLeft: 8 }}
+        >
+          更改偏好设置
+        </Button>
       </div>
       <div style={{ display: 'flex' }}>
         <div style={{ width: '50%', minHeight: 500 }}>
@@ -144,7 +156,7 @@ const App = () => {
                   'lsif.documentScheme': 'file',
                   'lsif.enable': true,
                   'lsif.env': 'prod',
-                  'editor.forceReadOnly': true,
+                  // 'editor.forceReadOnly': true,
                   // 'editor.wordWrap': 'on',
                 },
               }}

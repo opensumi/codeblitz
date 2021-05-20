@@ -14,29 +14,6 @@ export interface IServerApp {
 
 export const RuntimeConfig = Symbol('RuntimeConfig');
 
-export interface CodeServiceConfig {
-  /** 平台 */
-  platform: 'antcode' | 'gitlab' | 'github';
-  /** location.origin */
-  origin: string;
-  /** 用于接口请求，不设置为 origin */
-  endpoint?: string;
-  /** 群组或用户 */
-  owner: string;
-  /** 仓库名 */
-  name: string;
-  /** 从代码托管平台跳转过来的路径，解析出 ref 和默认打开的文件，如 tree/master/README.md  */
-  refPath?: string;
-  /** ref */
-  ref?: string;
-  /** tag */
-  tag?: string;
-  /** branch */
-  branch?: string;
-  /** commit sha */
-  commit?: string;
-}
-
 /**
  * 运行时相关配置
  * 同时可作为应用的全局配置，可通过类型融合来扩展字段。(https://www.typescriptlang.org/docs/handbook/declaration-merging.html)
@@ -59,8 +36,6 @@ export interface RuntimeConfig {
     onDidSaveTextDocument?: (data: { filepath: string; content: string }) => void;
     onDidChangeTextDocument?: (data: { filepath: string; content: string }) => void;
   };
-  /** 基于代码服务的配置 */
-  codeService?: CodeServiceConfig;
   /** 默认打开的文件，多个文件时，会展示最右边的文件 */
   defaultOpenFile?: string | string[];
   /** 禁止文件树更改，此时无法新增、删除、重命名文件 */

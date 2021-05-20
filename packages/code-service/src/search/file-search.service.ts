@@ -4,15 +4,15 @@ import { CancellationToken, CancellationTokenSource, URI } from '@ali/ide-core-c
 import { INodeLogger } from '@alipay/alex-core';
 import { IFileSearchService } from '@ali/ide-file-search/lib/common';
 import { AppConfig } from '@alipay/alex-core';
-import { ICodeAPIService } from '@alipay/alex-code-service';
+import { CodeModelService } from '../code-model.service';
 
 @Injectable()
 export class FileSearchService implements IFileSearchService {
   @Autowired(INodeLogger)
   logger: INodeLogger;
 
-  @Autowired(ICodeAPIService)
-  codeAPI: ICodeAPIService;
+  @Autowired()
+  codeModel: CodeModelService;
 
   @Autowired(AppConfig)
   appConfig: AppConfig;
@@ -37,7 +37,7 @@ export class FileSearchService implements IFileSearchService {
     return new Promise((resolve) => {
       setTimeout(async () => {
         if (!token.isCancellationRequested) {
-          const res = await this.codeAPI.searchFile(searchPattern, opts);
+          const res = await this.codeModel.rootRepository.request.searchFile(searchPattern, opts);
 
           if (token.isCancellationRequested) {
             return resolve([]);

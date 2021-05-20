@@ -264,15 +264,6 @@ class EditorSpecialContribution
       wrapped: memSystem,
       folder: `/${md5(this.appConfig.workspaceDir)}`,
     });
-    await new Promise<void>((resolve, reject) => {
-      (folderSystem as InstanceType<typeof FolderAdapter>).initialize((err) => {
-        if (err) {
-          reject(err);
-        } else {
-          resolve();
-        }
-      });
-    });
     const overlayFileSystem = await createFileSystem(OverlayFS, {
       readable: editorSystem,
       writable: folderSystem,

@@ -8,11 +8,9 @@ import {
   SlotLocation,
 } from '@alipay/alex';
 import { CodeServiceModule } from '@alipay/alex-code-service';
-import { AntCodeModule, GitHubModule, GitLabModule } from '@alipay/alex-code-api';
-import * as os from 'os';
-import * as path from 'path';
+import { CodeAPIModule } from '@alipay/alex-code-api';
 import * as Alex from '@alipay/alex';
-import { isFilesystemReady, STORAGE_DIR, CodeServiceConfig } from '@alipay/alex-core';
+import { isFilesystemReady } from '@alipay/alex-core';
 import { StartupModule } from './startup.module';
 import '../common/languages';
 import SarifViewer from '@alipay/alex/extensions/cloud-ide-ext.sarif-viewer';
@@ -34,38 +32,18 @@ isFilesystemReady().then(async () => {
   // );
 });
 
-// const query = location.search
-//   .slice(1)
-//   .split('&')
-//   .reduce<Record<string, string>>((obj, pair) => {
-//     const [key, value] = pair.split('=');
-//     obj[decodeURIComponent(key)] = decodeURIComponent(value || '');
-//     return obj;
-//   }, {});
-
 const platformConfig = {
   antcode: {
-    module: AntCodeModule,
-    platform: 'antcode',
     owner: 'kaitian',
     name: 'ide-framework',
-    origin: 'https://code.alipay.com',
-    endpoint: '/code-service',
   },
   github: {
-    module: GitHubModule,
-    platform: 'github',
     owner: 'microsoft',
     name: 'vscode',
-    origin: 'https://github.alipay.com',
-    endpoint: 'https://api.github.com',
   },
   gitlab: {
-    module: GitLabModule,
-    platform: 'gitlab',
     owner: 'kaitian',
     name: 'ide-framework',
-    origin: 'http://gitlab.alibaba-inc.com',
   },
 };
 
@@ -73,12 +51,9 @@ const layoutConfig = getDefaultLayoutConfig();
 
 let pathParts = location.pathname.split('/').filter(Boolean);
 
-const platform = pathParts[0] in platformConfig ? pathParts[0] : 'antcode';
+const platform: any = pathParts[0] in platformConfig ? pathParts[0] : 'antcode';
 
-// const platform = (Object.keys(platformConfig).includes(query.platform)
-//   ? query.platform
-//   : 'antcode') as CodeServiceConfig['platform'];
-const { module: CodeAPIModule, ...config } = platformConfig[platform];
+const config = platformConfig[platform];
 if (pathParts[1]) {
   config.owner = pathParts[1];
 }
@@ -87,18 +62,30 @@ if (pathParts[2]) {
 }
 config.refPath = pathParts.slice(3).join('/');
 
-if (platform === 'github' || platform === 'gitlab') {
-  layoutConfig[SlotLocation.left].modules.push(platform);
-}
-
 const App = () => (
   <AppRenderer
     onLoad={(app) => {
       window.app = app;
     }}
     appConfig={{
-      modules: [CodeServiceModule, CodeAPIModule, StartupModule],
-      extensionMetadata: [css, html, json, markdown, typescript, lsif],
+      modules: [
+        CodeServiceModule.Config({
+          platform,
+          owner: config.owner,
+          name: config.name,
+          refPath: config.refPath,
+          hash: location.hash,
+          antcode: {
+            endpoint: '/code-service',
+            // for test environment
+            // endpoint: '/code-test',
+            // origin: 'http://code.test.alipay.net:9009/code-test'
+          },
+        }),
+        CodeAPIModule,
+        StartupModule,
+      ],
+      extensionMetadata: [css, html, json, markdown, typescript],
       workspaceDir: `${platform}/${config.owner}/${config.name}`,
       layoutConfig,
       defaultPreferences: {
@@ -106,7 +93,6 @@ const App = () => (
       },
     }}
     runtimeConfig={{
-      codeService: config as CodeServiceConfig,
       biz: 'alex',
       // unregisterActivityBarExtra: true,
       // hideLeftTabBar: true

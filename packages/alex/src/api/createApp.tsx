@@ -18,6 +18,8 @@ import {
 import { BoxPanel, SplitPanel } from '@ali/ide-core-browser/lib/components';
 import '@ali/ide-core-browser/lib/style/index.less';
 import * as os from 'os';
+import { IPluginConfig } from '@alipay/alex-plugin';
+import { deletionLogPath } from '@alipay/alex-browserfs/lib/backend/OverlayFS';
 
 import '../core/extension.patch';
 import { disposeMode } from '../core/patch';
@@ -47,7 +49,7 @@ const getDefaultAppConfig = (): IAppOpts => ({
     'files.exclude': {
       ...FILES_DEFAULTS.filesExclude,
       // browserfs OverlayFS 用来记录删除的文件
-      '**/.deletedFiles.log': true,
+      [`**${deletionLogPath}`]: true,
     },
   },
   layoutConfig: getDefaultLayoutConfig(),
@@ -114,6 +116,11 @@ export function createApp({ appConfig, runtimeConfig }: IConfig): IAppInstance {
   app.injector.addProviders({
     token: RuntimeConfig,
     useValue: runtimeConfig,
+  });
+
+  app.injector.addProviders({
+    token: IPluginConfig,
+    useValue: customConfig.plugins,
   });
 
   if (runtimeConfig.reporter) {

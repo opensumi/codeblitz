@@ -15,7 +15,7 @@ invoke(async () => {
   try {
     const watch = args.w || args.watch ? '--watch' : '';
     await exec(
-      `npx tsc --build packages/${args.scope ? `${args.scope}/` : ''}tsconfig.build.json ${watch}`
+      `npx tsc --build packages/${scope === 'all' ? '' : `${scope}/`}tsconfig.build.json ${watch}`
     );
     signale.success('编译成功');
 

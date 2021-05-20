@@ -1,4 +1,6 @@
+import { Provider, ConstructorOf } from '@ali/common-di';
 import { BackService } from '@ali/ide-core-common';
+import { BrowserModule } from '@ali/ide-core-browser';
 import { IExtensionIdentity } from '@alipay/alex-shared';
 import * as paths from 'path';
 import { EXT_SCHEME, WORKSPACE_ROOT } from './constant';
@@ -53,4 +55,38 @@ export const isBackServicesInServer = (backService: BackService) => {
 
 export const isBackServicesInBrowser = (backService: BackService) => {
   return !isBackServicesInServer(backService);
+};
+
+/**
+ * 将配置分摊到各自模块中，在 modules 声明时可通过 Module.Config({}) 传入配置对象
+ * 静态方法 Config 通过 extendModule 扩充模块，eg.
+ * TODO: 在 kaitian 中弄个更通用的
+ *
+ * ```js
+ * static Config(config) {
+ *  return extendModule({
+ *    module: MyModule,
+ *    providers: [
+ *      {
+ *        useToken: IMyConfig,
+ *        useValue: config
+ *      }
+ *    ]
+ *  })
+ * }
+ * ```
+ */
+export const extendModule = ({
+  module,
+  providers,
+}: {
+  module: ConstructorOf<BrowserModule>;
+  providers: Provider[];
+}): ConstructorOf<BrowserModule> => {
+  return class ConfigBrowserModule extends module {
+    constructor() {
+      super();
+      this.providers = (this.providers || []).concat(...providers);
+    }
+  };
 };

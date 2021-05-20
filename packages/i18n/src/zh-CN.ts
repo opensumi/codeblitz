@@ -17,7 +17,7 @@ export const localizationBundle = {
     'api.request.error': '请求错误',
     'api.response.unknown-error': '未知错误',
     'api.response.project-not-found': '{0} 不存在',
-    'api.response.project-no-access': '无权限访问该项目',
+    'api.response.project-no-access': '无权限访问项目',
     'api.response.no-login-antcode': 'antcode 登录已失效，如已登录请刷新页面',
     'api.login.goto': '前往登录',
     'error.unknown': '未知错误',
@@ -29,6 +29,8 @@ export const localizationBundle = {
     'code-service.select-ref-to-checkout': '选择签出的 ref',
     'code-service.checkout-to': '签出 {0}',
     'code-service.checkout-to-same': 'commit 无变化',
+    'code-service.submodules-not-found': '未找到 {0} 的 submodules',
+    'code-service.submodules-parse-error': '解析 submodules {0} 失败',
 
     'github.invalid-token': 'token 无效',
     'github.request-rate-limit': '超出 API 速率限制',

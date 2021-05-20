@@ -30,6 +30,8 @@ export const localizationBundle = {
     'code-service.select-ref-to-checkout': 'Select a ref to checkout',
     'code-service.checkout-to': 'Checkout to {0}',
     'code-service.checkout-to-same': 'Commit no change',
+    'code-service.submodules-not-found': 'Not find submodules for {0}',
+    'code-service.submodules-parse-error': 'Failed to parse submodules for {0}',
 
     'github.invalid-token': 'Invalid token',
     'github.request-rate-limit': 'API rate limit exceeded',

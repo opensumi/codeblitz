@@ -36,4 +36,12 @@ export namespace API {
       sha: string;
     };
   }>;
+
+  export type ResponseMatchingRefs = Array<{
+    ref: string;
+    object: {
+      sha: string;
+      type: string;
+    };
+  }>;
 }

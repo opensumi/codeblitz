@@ -19,6 +19,7 @@ import { IThemeService } from '@ali/ide-theme/lib/common';
 import '@ali/ide-core-browser/lib/style/index.less';
 import * as os from 'os';
 import { IPluginConfig } from '@alipay/alex-plugin';
+import { deletionLogPath } from '@alipay/alex-browserfs/lib/backend/OverlayFS';
 
 import { disposeMode } from '../core/patch';
 import { getModules } from '../core/editor/modules';
@@ -44,7 +45,7 @@ const getDefaultAppConfig = (): IAppOpts => ({
     'files.exclude': {
       ...FILES_DEFAULTS.filesExclude,
       // browserfs OverlayFS 用来记录删除的文件
-      '**/.deletedFiles.log': true,
+      [`**${deletionLogPath}`]: true,
     },
   },
   layoutConfig: getEditorLayoutConfig(),

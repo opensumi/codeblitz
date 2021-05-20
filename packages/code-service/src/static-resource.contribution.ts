@@ -6,7 +6,7 @@ import {
 } from '@ali/ide-static-resource/lib/browser/static.definition';
 import { AppConfig, RuntimeConfig } from '@alipay/alex-core';
 import * as paths from 'path';
-import { ICodeAPIService } from './types';
+import { ICodeAPIProvider, CODE_PLATFORM_CONFIG, CodePlatform } from '@alipay/alex-code-api';
 import { CodeModelService } from './code-model.service';
 
 @Domain(StaticResourceContribution)
@@ -17,23 +17,30 @@ export class CodeStaticResourceContribution implements StaticResourceContributio
   @Autowired(RuntimeConfig)
   runtimeConfig: RuntimeConfig;
 
-  @Autowired(ICodeAPIService)
-  codeAPI: ICodeAPIService;
+  @Autowired(ICodeAPIProvider)
+  codeAPI: ICodeAPIProvider;
 
   @Autowired()
   codeModel: CodeModelService;
 
   registerStaticResolver(staticService: StaticResourceService) {
-    if (!this.runtimeConfig.codeService || !this.codeAPI.transformStaticResource) return;
     staticService.registerStaticResourceProvider({
       scheme: 'file',
       resolveStaticResource: (uri: URI) => {
         const fsPath = uri.codeUri.path;
-        const path = paths.relative(this.appConfig.workspaceDir, fsPath);
-        const url = this.codeAPI.transformStaticResource(path);
-        return new URI(url);
+        const repo = this.codeModel.getRepository(fsPath);
+        if (repo) {
+          const relativePath = paths.relative(repo.root, fsPath);
+          const url = repo.request.transformStaticResource(relativePath);
+          return new URI(url);
+        }
+        return uri;
       },
-      roots: [this.codeModel.origin],
+      roots: [
+        CODE_PLATFORM_CONFIG[CodePlatform.antcode].origin,
+        CODE_PLATFORM_CONFIG[CodePlatform.github].origin,
+        CODE_PLATFORM_CONFIG[CodePlatform.gitlab].origin,
+      ],
     });
   }
 }

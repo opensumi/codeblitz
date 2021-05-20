@@ -1,73 +1,59 @@
-import { CodeHostType } from '@alipay/alex-core';
+import type {
+  ICodePlatform,
+  RefsParam,
+  EntryInfo,
+  EntryParam,
+  TreeEntry,
+  IRepositoryModel,
+  EntryFileType,
+  ICodeAPIService,
+} from '@alipay/alex-code-api';
 
-export type TreeEntry = CodeHostType.TreeEntry;
+export type {
+  ICodePlatform,
+  RefsParam,
+  EntryInfo,
+  EntryParam,
+  TreeEntry,
+  EntryFileType,
+  IRepositoryModel,
+};
 
-export type EntryFileType = CodeHostType.EntryFileType;
+export { CodePlatform } from '@alipay/alex-code-api';
 
-export type EntryInfo = CodeHostType.EntryInfo;
+export const ICodeServiceConfig = Symbol('ICodeServiceConfig');
 
-export type EntryParam = CodeHostType.EntryParam;
-
-export const ICodeAPIService = Symbol('ICodeAPIService');
-
-export interface BranchOrTag {
+export type ICodeServiceConfig = {
+  /** 平台 */
+  platform: ICodePlatform;
+  /** 群组或用户 */
+  owner: string;
+  /** 仓库名 */
   name: string;
-  commit: {
-    id: string;
+  /** 从代码托管平台跳转过来的路径，解析出 ref 和默认打开的文件，如 blob/master/README.md  */
+  refPath?: string;
+  /** ref */
+  ref?: string;
+  /** tag */
+  tag?: string;
+  /** branch */
+  branch?: string;
+  /** commit sha */
+  commit?: string;
+  /** url hash */
+  hash?: string;
+} & {
+  /** submodules 多平台配置 */
+  [key in ICodePlatform]?: {
+    hostname?: string[];
+    /** location.origin */
+    origin?: string;
+    /** 用于接口请求，不设置为 origin */
+    endpoint?: string;
   };
-}
+};
 
-export interface RefsParam {
-  branches: BranchOrTag[];
-  tags: BranchOrTag[];
-}
-
-export type ISearchResults = Array<{
-  path: string;
-  line: number;
-  content: string;
-}>;
-
-export interface ICodeAPIService {
-  /**
-   * 初始化
-   */
-  initialize(): Promise<void>;
-  /**
-   * 根据分支获取最新的 commit
-   */
-  getCommit(ref: string): Promise<string>;
-  /**
-   * 获取 tree
-   */
-  getTree(path: string): Promise<TreeEntry[]>;
-  /**
-   * 获取 blob
-   */
-  getBlob(entry: EntryParam): Promise<Buffer>;
-  /**
-   * 获取 entry 相关信息
-   */
-  getEntryInfo?(entry: EntryParam): Promise<EntryInfo>;
-  /**
-   * 获取所有分支和标签
-   */
-  getRefs(): Promise<{ branches: BranchOrTag[]; tags: BranchOrTag[] }>;
-  /**
-   * 静态资源路径
-   */
-  transformStaticResource(path: string): string;
-  /**
-   * 内容搜索
-   */
-  searchContent(searchString: string, options: { limit: number }): Promise<ISearchResults>;
-  /**
-   * 文件搜索
-   */
-  searchFile(searchString: string, options: { limit: number }): Promise<string[]>;
-}
-
-export type State =
+export type InitializeState =
   | 'Uninitialized'
   | 'Failed' // 初始化失败
   | 'Initialized'; // HEAD 初始化，此时可基于 commit 获取数据
@@ -96,3 +82,19 @@ export interface Submodule {
   path: string;
   url: string;
 }
+
+export interface ProjectDesc {
+  platform: ICodePlatform;
+  owner: string;
+  name: string;
+}
+
+type Tail<T extends any[]> = T extends [IRepositoryModel, ...infer P] ? P : T;
+
+type Carry<F> = F extends (...args: any[]) => any
+  ? (...args: Tail<Parameters<F>>) => ReturnType<F>
+  : F;
+
+export type ICodeAPIProxy = {
+  [P in keyof ICodeAPIService]: Carry<ICodeAPIService[P]>;
+};

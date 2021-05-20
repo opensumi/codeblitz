@@ -1,348 +1,200 @@
-import { Injectable, Autowired } from '@ali/common-di';
-import { Emitter, Deferred, getDebugLogger, URI } from '@ali/ide-core-common';
-import { CodeServiceConfig, AppConfig } from '@alipay/alex-core';
-import { IFileServiceClient } from '@ali/ide-file-service';
+import { Injectable, Autowired, INJECTOR_TOKEN, Injector } from '@ali/common-di';
+import { Emitter, localize, CommandService } from '@ali/ide-core-common';
+import { AppConfig } from '@alipay/alex-core';
+import { IMessageService } from '@ali/ide-overlay';
 import * as path from 'path';
-import { ICodeAPIService, Refs, RefType, Submodule } from './types';
-import { parseGitmodules } from './utils';
-
-const HEAD = 'HEAD';
-
-class StateDeferred<T = void> extends Deferred<T> {
-  private _isResolved = false;
-  private _isRejected = false;
-
-  get isResolved() {
-    return this._isResolved;
-  }
-
-  get isRejected() {
-    return this._isRejected;
-  }
-
-  constructor() {
-    super();
-    this.promise.then(
-      () => {
-        this._isResolved = true;
-      },
-      () => {
-        this._isRejected = true;
-      }
-    );
-  }
-}
+import md5 from 'md5';
+import {
+  ICodeAPIProvider,
+  CODE_PLATFORM_CONFIG,
+  extendPlatformConfig,
+} from '@alipay/alex-code-api';
+import { ICodeServiceConfig, ICodePlatform, TreeEntry, InitializeState } from './types';
+import { parseSubmoduleUrl, isDescendant, logger, HEAD } from './utils';
+import { RootRepository, Repository } from './repository';
 
 @Injectable()
 export class CodeModelService {
-  @Autowired(ICodeAPIService)
-  readonly codeAPI: ICodeAPIService;
-
-  @Autowired(IFileServiceClient)
-  fileService: IFileServiceClient;
+  @Autowired(ICodeAPIProvider)
+  readonly codeAPI: ICodeAPIProvider;
 
   @Autowired(AppConfig)
-  appConfig: AppConfig;
+  private readonly appConfig: AppConfig;
 
-  private readonly logger = getDebugLogger('code-service');
+  @Autowired(ICodeServiceConfig)
+  private readonly codeServiceConfig: ICodeServiceConfig;
 
-  private _config: CodeServiceConfig;
+  @Autowired(IMessageService)
+  messageService: IMessageService;
 
-  initState = new StateDeferred();
+  @Autowired(CommandService)
+  commandService: CommandService;
 
-  headState = new StateDeferred();
+  @Autowired(INJECTOR_TOKEN)
+  injector: Injector;
 
-  refsState = new StateDeferred();
-
-  get initialized(): Promise<void> {
-    return this.initState.promise;
+  private _rootRepository: RootRepository;
+  get rootRepository() {
+    return this._rootRepository;
   }
 
-  get headInitialized(): Promise<void> {
-    return this.headState.promise;
+  public repositories: Repository[] = [];
+
+  private _onDidOpenRepository = new Emitter<Repository>();
+  readonly onDidOpenRepository = this._onDidOpenRepository.event;
+
+  constructor() {
+    const config = this.codeServiceConfig;
+
+    this._rootRepository = this.injector.get(RootRepository, [
+      {
+        root: this.appConfig.workspaceDir,
+        owner: config.owner,
+        name: config.name,
+        platform: config.platform,
+        commit: 'HEAD',
+      },
+    ]);
+
+    this.repositories.push(this._rootRepository);
+
+    this._onDidOpenRepository.fire(this._rootRepository);
+
+    Object.keys(CODE_PLATFORM_CONFIG).forEach((platform) => {
+      if (config[platform]) {
+        extendPlatformConfig(platform as ICodePlatform, config[platform]);
+      }
+    });
   }
 
-  get refsInitialized(): Promise<void> {
-    return this.refsState.promise;
-  }
-
-  private _onDidChangeHEAD = new Emitter<void>();
-  readonly onDidChangeHEAD = this._onDidChangeHEAD.event;
-
-  private _onDidChangeRefs = new Emitter<void>();
-  readonly onDidChangeRefs = this._onDidChangeRefs.event;
-
-  private _onDidChangeRefPath = new Emitter<string>();
-  readonly onDidChangeRefPath = this._onDidChangeRefPath.event;
-
-  /**
-   * 平台，antcode | gitlab | github
-   */
-  private _platform: string;
-  get platform() {
-    return this._platform;
-  }
-
-  /**
-   * origin
-   */
-  private _origin: string;
-  get origin() {
-    return this._origin;
-  }
-
-  /**
-   * api endpoint
-   */
-  private _endpoint: string;
-  get endpoint() {
-    return this._endpoint;
-  }
-
-  /**
-   * 仓库群组或用户
-   */
-  private _owner: string;
-  get owner() {
-    return this._owner;
-  }
-
-  /**
-   * 仓库名
-   */
-  private _name: string;
-  get name() {
-    return this._name;
-  }
-
-  /**
-   * git HEAD，指向 具体的 commit
-   */
-  private _HEAD: string;
-  get HEAD() {
-    return this._HEAD;
-  }
-  set HEAD(commit: string) {
-    if (commit !== this._HEAD) {
-      this._HEAD = commit;
-      this._onDidChangeHEAD.fire();
-    }
-  }
-
-  /**
-   * statusbar 显示文案
-   */
-  get headLabel(): string {
-    const HEAD = this.HEAD;
-    if (!HEAD) {
-      return '';
-    }
-    // 和 git extension 一致，优先展示 heads (branch)
-    return (
-      this.refs.branches.find((br) => br.commit === this.HEAD)?.name ||
-      this.refs.tags.find((tag) => tag.commit === this.HEAD)?.name ||
-      HEAD.substr(0, 8)
-    );
-  }
-
-  /**
-   * refs 列表
-   */
-  private _refs: Refs = { branches: [], tags: [] };
-  get refs() {
-    return this._refs;
-  }
-  set refs(refs: Refs) {
-    this._refs = refs;
-    this._onDidChangeRefs.fire();
-  }
-
-  /**
-   * ref name，初始不指定时为 HEAD
-   */
-  private _refName: string;
-  get refName() {
-    return this._refName;
-  }
-  set refName(name: string) {
-    this._refName = name;
-    let suffix = '';
-    // TODO: 切换分支 tab 并未关闭，文件可能删除，目前状态不好判断，先不加
-    if (name === HEAD) {
-      suffix = '';
-    } else {
-      suffix = `/tree/${name}`;
-    }
-    this._onDidChangeRefPath.fire(`/${this.owner}/${this.name}${suffix}`);
-  }
-
-  get project() {
-    return `${this._owner}/${this._name}`;
-  }
-
-  get projectId() {
-    return `${this._owner}%2F${this._name}`;
-  }
-
-  /**
-   * url 上显示的文件
-   */
-  private _revealEntry: { type: string; filepath: string } | null = null;
-  get revealEntry() {
-    return this._revealEntry;
-  }
-  set revealEntry(entry: { type: string; filepath: string } | null) {
-    if (entry) {
-      this._onDidChangeRefPath.fire(
-        !entry.filepath && this.refName === HEAD
-          ? `/${this.owner}/${this.name}`
-          : `/${this.owner}/${this.name}/${entry.type}/${this.headLabel}${
-              entry.filepath ? `/${entry.filepath}` : ''
-            }`
-      );
-    }
-  }
-
-  private _submodules: Promise<Submodule[]> | null = null;
-  get submodules(): Promise<Submodule[]> {
-    if (!this._submodules) {
-      const uri = URI.file(path.join(this.appConfig.workspaceDir, '.gitmodules')).toString();
-      this._submodules = this.fileService
-        .access(uri)
-        .then((bool) => {
-          if (!bool) return [];
-          return this.fileService
-            .resolveContent(uri, { encoding: 'utf8' })
-            .then(({ content }) => parseGitmodules(content))
-            .catch((err) => {
-              this.logger.error(err);
-              return [];
-            });
-        })
-        .catch((err) => {
-          this.logger.error(err);
-          return [];
-        });
-    }
-    return this._submodules!;
-  }
-
-  async initialize(config: CodeServiceConfig) {
-    this._config = config;
-    this._platform = config.platform;
-    this._origin = config.origin;
-    this._endpoint = config.endpoint || config.origin;
-    this._owner = config.owner;
-    this._name = config.name;
-
+  async initialize(): Promise<InitializeState> {
     try {
-      await this.codeAPI.initialize();
-      this.reset();
+      const isAvailable = await this.rootRepository.request.available();
+      if (!isAvailable) {
+        return 'Failed';
+      }
+      const { codeServiceConfig: config } = this;
+      await this.rootRepository.initHEAD({
+        commit: config.commit,
+        ref: config.branch || config.tag || config.ref,
+        refPath: config.refPath,
+      });
+      return 'Initialized';
     } catch (err) {
-      this.logger.error(err);
-      this.initState.resolve();
+      logger.error(err);
+      return 'Failed';
     }
   }
 
   /**
    * 无权限时需要再设置 token 后重新初始化
    */
-  reset() {
-    if (!this.headState.isResolved) {
-      this.initHEAD();
-    }
-    if (!this.refsState.isResolved) {
-      this.initRefs();
-    }
+  async reinitialize() {
+    const { codeServiceConfig: config } = this;
+    await this.rootRepository.initHEAD({
+      commit: config.commit,
+      ref: config.branch || config.tag || config.ref,
+      refPath: config.refPath,
+    });
   }
 
-  private async initHEAD() {
-    try {
-      const { _config: config } = this;
-      let head = '';
-      if (config.refPath) {
-        let maybeCommit = false;
-        const segments = config.refPath.split('/').filter(Boolean);
-        // 暂时只支持 tree 和 blob，其它如 commit 后续看情况支持
-        if (!['tree', 'blob'].includes(segments[0]) || !segments[1] || segments[1] === HEAD) {
-          head = HEAD;
-        } else {
-          head = segments[1];
-          const p = segments.slice(1).join('/');
-          await this.refsInitialized;
-          const matchedRef =
-            findRef(
-              this.refs.branches.map((item) => item.name),
-              p
-            ) ||
-            findRef(
-              this.refs.tags.map((item) => item.name),
-              p
-            );
-          if (matchedRef) {
-            head = matchedRef;
-          }
-          maybeCommit = !matchedRef;
-        }
-        this._refName = head;
-        this._revealEntry = {
-          type: segments[0],
-          filepath: segments.slice(1).join('/').slice(head.length),
-        };
-        if (!maybeCommit) {
-          head = await this.codeAPI.getCommit(head);
-        }
-      } else {
-        head = config.commit || config.branch || config.tag || config.ref || HEAD;
-        this._refName = head;
-        if (!config.commit) {
-          head = await this.codeAPI.getCommit(head);
-        }
-      }
-      this.HEAD = head;
-      this.headState.resolve();
-    } catch (err) {
-      this.headState.reject();
-      throw err;
-    } finally {
-      if (!this.initState.isResolved) {
-        this.initState.resolve();
-      }
-    }
+  getWritableFolder() {
+    return md5(path.join(this.appConfig.workspaceDir, this.rootRepository.commit));
   }
 
-  async initRefs() {
-    try {
-      const { branches, tags } = await this.codeAPI.getRefs();
-      this.refs = {
-        branches: branches.map((item) => ({
-          type: RefType.Head,
-          name: item.name,
-          commit: item.commit.id,
-        })),
-        tags: tags.map((item) => ({
-          type: RefType.Tag,
-          name: item.name,
-          commit: item.commit.id,
-        })),
-      };
-      this.refsState.resolve();
-    } catch (err) {
-      this.refsState.reject();
-      this.logger.error(err);
+  createRepository(parent: Repository, entry: TreeEntry) {
+    const submodule = parent.submodules.find(({ path }) => path === entry.path);
+    if (!submodule) {
+      this.messageService.error(localize('code-service.submodules-not-found', entry.path));
+      logger.error(`[Code Service] not submodule for ${path}`);
+      return;
+    }
+    const project = parseSubmoduleUrl(submodule.url);
+    if (!project) {
+      this.messageService.error(localize('code-service.submodules-parse-error', submodule.url));
+      logger.error(`[Code Service] not support ${submodule.url}`);
+      return;
+    }
+    const newRepo = this.injector.get(Repository, [
+      {
+        root: path.join(parent.root, entry.path),
+        platform: project.platform,
+        owner: project.owner,
+        name: project.name,
+        commit: entry.id,
+      },
+    ]);
+    this.repositories.push(newRepo);
+    this._onDidOpenRepository.fire(newRepo);
+    return newRepo;
+  }
+
+  getRepository(repository: Repository): Repository | undefined;
+  getRepository(p: string): Repository | undefined;
+  getRepository(hint: any): Repository | undefined {
+    if (!hint) {
+      return undefined;
+    }
+
+    if (hint instanceof Repository) {
+      return this.repositories.filter((r) => r === hint)[0];
+    }
+
+    const resourcePath: string = hint;
+
+    outer: for (const targetRepository of this.repositories.sort(
+      (a, b) => b.root.length - a.root.length
+    )) {
+      if (!isDescendant(targetRepository.root, resourcePath)) {
+        continue;
+      }
+
+      for (const submodule of targetRepository.submodules) {
+        const submoduleRoot = path.join(targetRepository.root, submodule.path);
+
+        if (isDescendant(submoduleRoot, resourcePath)) {
+          continue outer;
+        }
+      }
+
+      return targetRepository;
+    }
+
+    return undefined;
+  }
+
+  replaceBrowserUrl({ type, filepath }: { type: 'blob' | 'tree'; filepath?: string }) {
+    if (type !== 'blob' && type !== 'tree') {
+      return;
+    }
+    let urlPath = '';
+    const { rootRepository } = this;
+    const { refs, commit } = rootRepository;
+    if (!filepath && rootRepository.ref === HEAD) {
+      urlPath = `/${rootRepository.owner}/${rootRepository.name}`;
+    } else {
+      let ref: string = rootRepository.ref;
+      if (ref === HEAD) {
+        ref =
+          refs.branches.find((br) => br.commit === commit)?.name ||
+          refs.tags.find((tag) => tag.commit === commit)?.name ||
+          HEAD;
+      }
+      urlPath = `/${rootRepository.owner}/${rootRepository.name}/${type}/${ref}${
+        filepath ? `/${filepath}` : ''
+      }`;
+    }
+    this.commandService.tryExecuteCommand('code-service.replace-browser-url', urlPath);
+  }
+
+  replaceBrowserUrlLine(lineNumbers: [number, number]) {
+    const hash = CODE_PLATFORM_CONFIG[this.rootRepository.platform].line.format(lineNumbers);
+    this.commandService.tryExecuteCommand('code-service.replace-browser-url-hash', hash);
+  }
+
+  parseLineHash(hash: string) {
+    if (hash) {
+      return CODE_PLATFORM_CONFIG[this.rootRepository.platform].line.parse(hash);
     }
   }
 }
-
-const findRef = (refs: string[], path: string): string => {
-  const addSlash = (str: string) => (str[str.length - 1] !== '/' ? `${str}/` : str);
-  const countSlash = (str: string) => (str.match(/\//g) || []).length;
-
-  path = addSlash(path);
-
-  const candidateRefs = refs.filter((ref) => path.startsWith(addSlash(ref)));
-  // 或许这里不需要，理论 ref 路径互不包含
-  candidateRefs.sort((a, b) => countSlash(a) - countSlash(b));
-
-  return candidateRefs[0] || '';
-};

@@ -20,6 +20,7 @@
   },
   "dependencies": {
     "@alipay/alex-core": "0.14.2",
+    "@alipay/alex-code-api": "0.14.2",
     "umi-request": "^1.3.5"
   }
 }

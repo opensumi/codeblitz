@@ -1,4 +1,4 @@
-const { commands } = require('vscode');
+const { commands, workspace } = require('vscode');
 const log = (scope, ...msg) => console.log(`>>>[worker-example][${scope}]`, ...msg);
 
 /** @type {import('vscode').ExtensionContext} */
@@ -23,6 +23,12 @@ exports.activate = async (ctx) => {
 
   context.workspaceState.update('worker-example-workspace-state', 'alex is great');
   context.globalState.update('worker-example-global-state', 'alex is great');
+
+  commands.registerCommand('alex.settings', () => {
+    workspace.getConfiguration().update('editor.fontSize', 16, true);
+    workspace.getConfiguration().update('editor.tabSize', 8, true);
+    workspace.getConfiguration().update('general.theme', 'ide-dark', true);
+  });
 };
 
 async function lsif() {

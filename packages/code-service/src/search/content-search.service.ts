@@ -14,8 +14,8 @@ import {
   anchorGlob,
 } from '@ali/ide-search/lib/common';
 import { ContentSearchClientService } from '@ali/ide-search/lib/browser/search.service';
-import { ICodeAPIService } from '@alipay/alex-code-service';
 import * as paths from 'path';
+import { CodeModelService } from '../code-model.service';
 
 interface SearchInfo {
   searchId: number;
@@ -38,8 +38,8 @@ export class ContentSearchService implements IContentSearchServer {
   @Autowired(ILogServiceManager)
   loggerManager: ILogServiceManager;
 
-  @Autowired(ICodeAPIService)
-  codeAPI: ICodeAPIService;
+  @Autowired()
+  codeModel: CodeModelService;
 
   @Autowired(ContentSearchClientService)
   searchService: ContentSearchClientService;
@@ -112,9 +112,12 @@ export class ContentSearchService implements IContentSearchServer {
       return this.searchEnd(searchInfo.searchId);
     }
     try {
-      const requestResults = await this.codeAPI.searchContent(searchString, {
-        limit: opts?.maxResults || DEFAULT_SEARCH_IN_WORKSPACE_LIMIT,
-      });
+      const requestResults = await this.codeModel.rootRepository.request.searchContent(
+        searchString,
+        {
+          limit: opts?.maxResults || DEFAULT_SEARCH_IN_WORKSPACE_LIMIT,
+        }
+      );
 
       if (!requestResults.length) {
         return this.searchEnd(searchInfo.searchId);

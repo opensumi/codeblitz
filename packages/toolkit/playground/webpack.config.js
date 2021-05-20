@@ -49,4 +49,7 @@ module.exports = {
       template: path.join(__dirname, '../public/index.html'),
     }),
   ],
+  devServer: {
+    host: '0.0.0.0',
+  },
 };

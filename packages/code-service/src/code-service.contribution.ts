@@ -1,5 +1,10 @@
 import { Autowired } from '@ali/common-di';
-import { FILE_COMMANDS, CommandContribution, CommandRegistry } from '@ali/ide-core-browser';
+import {
+  FILE_COMMANDS,
+  CommandContribution,
+  CommandRegistry,
+  ClientAppContribution,
+} from '@ali/ide-core-browser';
 import {
   Domain,
   IReporterService,
@@ -39,7 +44,7 @@ import { IDiskFileProvider, FileAccess } from '@ali/ide-file-service';
 import { DiskFsProviderClient } from '@ali/ide-file-service/lib/browser/file-service-provider-client';
 import configureFileSystem from './filesystem/configure';
 import { CodeModelService } from './code-model.service';
-import { RefType } from './types';
+import { RefType, ICodeServiceConfig } from './types';
 
 @Domain(LaunchContribution, BrowserEditorContribution, CommandContribution)
 export class CodeContribution
@@ -80,6 +85,9 @@ export class CodeContribution
   @Autowired(IEventBus)
   protected eventBus: IEventBus;
 
+  @Autowired(ICodeServiceConfig)
+  codeServiceConfig: ICodeServiceConfig;
+
   private _unmount: () => void | undefined;
 
   private _mounting = false;
@@ -87,41 +95,61 @@ export class CodeContribution
   private _disposables: IDisposable[] = [];
 
   async launch({ rootFS }: IServerApp) {
-    const codeConfig = this.runtimeConfig?.codeService;
-    if (!codeConfig) return;
+    if (!this.codeServiceConfig) return;
 
-    let initDeferred: Deferred<void> | null = new Deferred();
-    this.codeModel.onDidChangeHEAD(() => {
+    let initMountDefer: Deferred<void> | null = new Deferred();
+    this.codeModel.rootRepository.onDidChangeCommit(() => {
       this.mountFilesystem(rootFS).then(() => {
-        if (initDeferred) {
-          initDeferred.resolve();
-        } else {
-          this.commandService.tryExecuteCommand(FILE_COMMANDS.REFRESH_ALL.id);
-          this.fileTree.refresh();
-          Promise.all(
-            this.editorService.getAllOpenedUris().map(async (uri) => {
-              const change = {
-                uri: uri.toString(),
-                type: (await this.diskFile.access(uri.codeUri, FileAccess.Constants.F_OK))
-                  ? FileChangeType.UPDATED
-                  : FileChangeType.DELETED,
-              };
-              return change;
-            })
-          ).then((changes) => {
-            this.diskFile.onDidFilesChanged({ changes });
-          });
+        if (initMountDefer) {
+          initMountDefer.resolve();
+          initMountDefer = null;
+          return;
         }
+        this.commandService.tryExecuteCommand(FILE_COMMANDS.REFRESH_ALL.id);
+        // this.fileTree.refresh();
+        const closes: URI[] = [];
+        const changes: { uri: string; type: FileChangeType }[] = [];
+        Promise.all(
+          this.editorService.getAllOpenedUris().map(async (uri) => {
+            const exists = await this.diskFile.access(uri.codeUri, FileAccess.Constants.F_OK);
+            if (exists) {
+              changes.push({
+                uri: uri.toString(),
+                type: FileChangeType.UPDATED,
+              });
+            } else {
+              closes.push(uri);
+            }
+          })
+        ).then(async () => {
+          this.diskFile.onDidFilesChanged({ changes });
+          for (const uri of closes) {
+            await this.editorService.close(uri);
+          }
+          const { currentResource } = this.editorService;
+          if (currentResource) {
+            this.codeModel.replaceBrowserUrl({
+              type: 'blob',
+              filepath: path.relative(
+                this.appConfig.workspaceDir,
+                currentResource.uri.codeUri.path
+              ),
+            });
+          } else {
+            this.codeModel.replaceBrowserUrl({
+              type: 'tree',
+              filepath: '',
+            });
+          }
+        });
       });
     });
 
-    this.codeModel.initialize(codeConfig);
-    // 首次初始化成功等待文件系统挂载，可恢复工作空间最近打开的文件
-    await this.codeModel.initialized;
-    if (this.codeModel.headState.isResolved) {
-      await initDeferred.promise;
+    if ((await this.codeModel.initialize()) === 'Failed') {
+      initMountDefer = null;
+      return;
     }
-    initDeferred = null;
+    await initMountDefer.promise;
   }
 
   async mountFilesystem(rootFS: RootFS) {
@@ -129,8 +157,9 @@ export class CodeContribution
     this._mounting = true;
 
     try {
-      const workspaceDir = makeWorkspaceDir(`${this.codeModel.platform}/${this.codeModel.project}`);
-      this.appConfig.workspaceDir = workspaceDir;
+      // const workspaceDir = makeWorkspaceDir(`${this.codeModel.platform}/${this.codeModel.project}`);
+      // this.appConfig.workspaceDir = workspaceDir;
+      const { workspaceDir } = this.appConfig;
 
       const { codeFileSystem, idbFileSystem, overlayFileSystem } = await configureFileSystem(
         this.codeModel,
@@ -139,7 +168,7 @@ export class CodeContribution
 
       this._unmount?.();
 
-      rootFS.mount(workspaceDir, overlayFileSystem);
+      rootFS.mount(workspaceDir, codeFileSystem);
       // 将只读文件系统挂载到 /code 上
       rootFS.mount(CODE_ROOT, codeFileSystem);
       // 将可写文件系统挂载到 /idb
@@ -158,7 +187,7 @@ export class CodeContribution
   }
 
   onDidRestoreState() {
-    const { revealEntry } = this.codeModel;
+    const { revealEntry } = this.codeModel.rootRepository;
     if (!revealEntry?.filepath) {
       this.startOnEditorGroupChangeEvent();
       return;
@@ -170,6 +199,12 @@ export class CodeContribution
         preview: false,
         deletedPolicy: 'fail',
       });
+      wait.then(() => {
+        const initHash = this.codeServiceConfig.hash;
+        if (initHash) {
+          this.commandService.executeCommand('code-service.set-line-hash', initHash);
+        }
+      });
     } else if (revealEntry.type === 'tree') {
       this.commandService.tryExecuteCommand(FILE_COMMANDS.LOCATION.id, uri);
     }
@@ -179,64 +214,74 @@ export class CodeContribution
   }
 
   registerCommands(commandRegistry: CommandRegistry) {
-    commandRegistry.registerCommand(
-      {
-        category: 'Code Service',
-        label: localize('code-service.command.checkout'),
-        id: 'code-service.checkout',
-      },
-      {
-        execute: async () => {
-          await this.codeModel.refsInitialized;
-          const getShortCommit = (commit: string) => (commit || '').substr(0, 8);
-          const refs = [...this.codeModel.refs.branches, ...this.codeModel.refs.tags];
-          const value = await this.quickPickService.show(
-            refs.map((ref, index) => ({
-              value: index,
-              label: ref.name,
-              description: `${ref.type === RefType.Tag ? 'Tag at ' : ''}${getShortCommit(
-                ref.commit
-              )}`,
-            })),
-            {
-              placeholder: localize('code-service.select-ref-to-checkout'),
-            }
-          );
-          if (typeof value === 'number') {
-            const target = refs[value];
-            if (target.commit === this.codeModel.HEAD) {
-              this.messageService.warning(localize('code-service.checkout-to-same'));
-              return;
-            }
-            this.messageService.info(formatLocalize('code-service.checkout-to', target.name));
-            this.codeModel.refName = target.name;
-            this.codeModel.HEAD = target.commit;
-          }
+    this._disposables.push(
+      commandRegistry.registerCommand(
+        {
+          category: 'Code Service',
+          label: localize('code-service.command.checkout'),
+          id: 'code-service.checkout',
         },
-      }
+        {
+          execute: async () => {
+            const { rootRepository: repo } = this.codeModel;
+            await repo.refsInitialized;
+            const getShortCommit = (commit: string) => (commit || '').substr(0, 8);
+            const refs = [...repo.refs.branches, ...repo.refs.tags];
+            const value = await this.quickPickService.show(
+              refs.map((ref, index) => ({
+                value: index,
+                label: ref.name,
+                description: `${ref.type === RefType.Tag ? 'Tag at ' : ''}${getShortCommit(
+                  ref.commit
+                )}`,
+              })),
+              {
+                placeholder: localize('code-service.select-ref-to-checkout'),
+              }
+            );
+            if (typeof value === 'number') {
+              const target = refs[value];
+              if (target.commit === repo.commit) {
+                this.messageService.warning(localize('code-service.checkout-to-same'));
+                return;
+              }
+              this.messageService.info(formatLocalize('code-service.checkout-to', target.name));
+              repo.ref = target.name;
+              repo.commit = target.commit;
+            }
+          },
+        }
+      ),
+
+      commandRegistry.registerCommand(
+        { id: 'code-service.reinitialize' },
+        {
+          execute: () => {
+            this.codeModel.reinitialize();
+          },
+        }
+      )
     );
   }
 
   startOnEditorGroupChangeEvent() {
     this._disposables.push(
-      this.eventBus.on(EditorGroupChangeEvent, (event) => {
-        this.onEditorGroupChangeEvent(event);
+      this.editorService.onActiveResourceChange((resource) => {
+        if (
+          resource &&
+          ['code', 'diff'].includes(
+            this.editorService.currentEditorGroup?.currentOpenType?.type ?? ''
+          )
+        ) {
+          this.codeModel.replaceBrowserUrl({
+            type: 'blob',
+            filepath: path.relative(this.appConfig.workspaceDir, resource.uri.codeUri.path),
+          });
+        } else {
+          this.codeModel.replaceBrowserUrl({ type: 'tree', filepath: '' });
+        }
       })
     );
-  }
-
-  onEditorGroupChangeEvent({ payload: { newOpenType, newResource } }: EditorGroupChangeEvent) {
-    if (newOpenType?.type === 'code' && newResource && !newResource.deleted) {
-      const fsPath = newResource.uri.codeUri.path;
-      if (fsPath.startsWith(this.appConfig.workspaceDir)) {
-        this.codeModel.revealEntry = {
-          type: 'blob',
-          filepath: path.relative(this.appConfig.workspaceDir, fsPath),
-        };
-        return;
-      }
-    }
-    this.codeModel.revealEntry = { type: 'tree', filepath: '' };
   }
 
   dispose() {
