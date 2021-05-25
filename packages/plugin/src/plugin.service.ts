@@ -64,7 +64,7 @@ export class PluginService {
 
   private activatePlugin(plugin: IPluginModule) {
     if (!plugin.PLUGIN_ID) {
-      throw new Error('Must provider `PLUGIN_ID` for plugin');
+      throw new Error('Must provide `PLUGIN_ID` for plugin');
     }
 
     if (plugin.activate) {

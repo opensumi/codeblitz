@@ -7,14 +7,19 @@ import { FileSystemProvider, FileStat, FileType, FileChangeEvent } from '@ali/id
  */
 @Injectable()
 export class KaitianExtFsProvider implements FileSystemProvider {
+  private readonly now = Date.now();
+
   onDidChangeFile: Event<FileChangeEvent>;
 
   watch(): number {
     throw new Error('Method not implemented.');
   }
 
-  stat(): Thenable<FileStat> {
-    throw new Error('Method not implemented.');
+  stat(uri: Uri): Thenable<FileStat> {
+    return Promise.resolve({
+      uri: uri.toString(),
+      lastModification: this.now,
+    });
   }
 
   readDirectory(): [string, FileType][] | Thenable<[string, FileType][]> {

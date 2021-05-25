@@ -28,6 +28,7 @@
   "dependencies": {
     "asserts": "^4.0.2",
     "buffer": "^6.0.3",
+    "os-browserify": "^0.3.0",
     "path-browserify": "^1.0.1",
     "react": "^16.14.0",
     "react-dom": "^16.14.0"

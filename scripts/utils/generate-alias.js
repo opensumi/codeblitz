@@ -13,6 +13,7 @@ exports.generateLanguages = async () => {
   await fse.ensureDir(targetDir);
 
   let langEntryContent = '';
+  let declarationContent = `declare module '@alipay/alex/languages' {}\n`;
 
   fse
     .readdirSync(languagesDir, { withFileTypes: true })
@@ -31,9 +32,12 @@ loadLanguage(registerLanguage, registerGrammar);
       );
 
       langEntryContent += `require('./${lang}')\n`;
+      declarationContent += `declare module '@alipay/alex/languages/${lang}' {}\n`;
     });
 
   fse.writeFileSync(path.join(targetDir, 'index.js'), langEntryContent);
+  const declarationFile = path.join(__dirname, '../../packages/alex/typings/languages.d.ts');
+  fse.writeFileSync(declarationFile, declarationContent);
 };
 
 exports.generateModules = async () => {
@@ -60,20 +64,16 @@ export * from "../lib/modules/${scope}__${name}";
 };
 
 exports.generateShims = async () => {
-  const polyfillsDir = path.join(__dirname, '../../packages/alex/polyfills');
-  await fse.remove(polyfillsDir);
-  await fse.ensureDir(polyfillsDir);
-  await fse.copy(path.join(__dirname, '../../packages/toolkit/polyfill'), polyfillsDir);
-
+  // 暴露内置的 shims，如引用 lib，可使用此文件夹下的 polyfill
   const shimsDir = path.join(__dirname, '../../packages/alex/shims');
   await fse.remove(shimsDir);
   await fse.ensureDir(shimsDir);
-  ['fs', 'fs-extra', 'os', 'crypto', 'buffer', 'process', 'assert', 'path'].forEach((mod) => {
+  ['fs', 'fs-extra', 'os', 'crypto', 'buffer', 'process', 'assert', 'path'].forEach((id) => {
     fse.writeFileSync(
-      path.join(shimsDir, `${mod}.js`),
+      path.join(shimsDir, `${id}.js`),
       `
 const { requireModule } = ${lib};
-module.exports = requireModule("${mod}");
+module.exports = requireModule("${id}");
     `.trim() + '\n'
     );
   });

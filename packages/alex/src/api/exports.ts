@@ -1,5 +1,7 @@
-import { REPORT_NAME } from '@alipay/alex-core';
+import { REPORT_NAME, BrowserFSFileType } from '@alipay/alex-core';
 
 export { getDefaultLayoutConfig } from '../core/layout';
 
-export { REPORT_NAME };
+export { REPORT_NAME, BrowserFSFileType };
+
+export * from '../core/env';

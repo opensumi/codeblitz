@@ -6,6 +6,7 @@ import {
   makeWorkspaceDir,
   IAppOpts,
   STORAGE_DIR,
+  HOME_ROOT,
 } from '@alipay/alex-core';
 import {
   SlotRenderer,
@@ -17,19 +18,19 @@ import {
 } from '@ali/ide-core-browser';
 import { BoxPanel, SplitPanel } from '@ali/ide-core-browser/lib/components';
 import '@ali/ide-core-browser/lib/style/index.less';
-import * as os from 'os';
 import { IPluginConfig } from '@alipay/alex-plugin';
 import { deletionLogPath } from '@alipay/alex-browserfs/lib/backend/OverlayFS';
 
-import '../core/extension.patch';
+import '../core/extension/extension.patch';
 import { disposeMode } from '../core/patch';
 
 import { modules } from '../core/modules';
-import { IconSlim, IDETheme } from '../core/extensions';
+import { IconSlim, IDETheme } from '../core/extension/metadata';
 import { mergeConfig, getThemeTypeByPreferenceThemeId } from '../core/utils';
 import { LayoutComponent, getDefaultLayoutConfig } from '../core/layout';
 import { IConfig, IAppInstance } from './types';
 import { logPv } from '../core/tracert';
+import { EXT_WORKER_HOST, WEBVIEW_ENDPOINT } from '../core/env';
 
 export { SlotLocation, SlotRenderer, BoxPanel, SplitPanel };
 
@@ -37,15 +38,15 @@ const getDefaultAppConfig = (): IAppOpts => ({
   modules,
   useCdnIcon: true,
   noExtHost: true,
-  extWorkerHost: __WORKER_HOST__,
-  webviewEndpoint: __WEBVIEW_ENDPOINT__,
+  extWorkerHost: EXT_WORKER_HOST,
+  webviewEndpoint: WEBVIEW_ENDPOINT,
   defaultPreferences: {
     'general.theme': 'ide-dark',
     'general.icon': 'vsicons-slim',
     'application.confirmExit': 'never',
     'editor.quickSuggestionsDelay': 10,
-    'editor.quickSuggestionsMaxCount': 50,
     'settings.userBeforeWorkspace': true,
+    'editor.fixedOverflowWidgets': true,
     'files.exclude': {
       ...FILES_DEFAULTS.filesExclude,
       // browserfs OverlayFS 用来记录删除的文件
@@ -58,7 +59,7 @@ const getDefaultAppConfig = (): IAppOpts => ({
   defaultPanels: {
     bottom: '',
   },
-  logDir: `${os.homedir()}/${STORAGE_DIR}/logs/`,
+  logDir: `${HOME_ROOT}/${STORAGE_DIR}/logs/`,
   preferenceDirName: STORAGE_DIR,
   storageDirName: STORAGE_DIR,
   extensionStorageDirName: STORAGE_DIR,
@@ -69,8 +70,7 @@ const getDefaultAppConfig = (): IAppOpts => ({
 export const DEFAULT_APP_CONFIG = getDefaultAppConfig();
 
 export function createApp({ appConfig, runtimeConfig }: IConfig): IAppInstance {
-  const customConfig = typeof appConfig === 'function' ? appConfig() : appConfig;
-  const opts = mergeConfig(getDefaultAppConfig(), customConfig);
+  const opts = mergeConfig(getDefaultAppConfig(), appConfig);
 
   if (!opts.workspaceDir) {
     throw new Error(
@@ -97,11 +97,6 @@ export function createApp({ appConfig, runtimeConfig }: IConfig): IAppInstance {
     });
   };
 
-  /**
-   * 目前整个应用有太多的副作用，尤其是注册到 monaco 的事件，如 DocumentSymbolProviderRegistry.onChange
-   * 在 monaco 上的事件无法注销，除非重新全局实例化一个 monaco，目前 kaitian 并未暴露，暂时不可行
-   * 因此这里的 destroy 仍然可能有不少副作用无法清除，暂时清理已知的，避免报错
-   */
   let destroyed = false;
   app.destroy = () => {
     if (destroyed) {
@@ -120,7 +115,7 @@ export function createApp({ appConfig, runtimeConfig }: IConfig): IAppInstance {
 
   app.injector.addProviders({
     token: IPluginConfig,
-    useValue: customConfig.plugins,
+    useValue: appConfig.plugins,
   });
 
   if (runtimeConfig.reporter) {
@@ -130,8 +125,6 @@ export function createApp({ appConfig, runtimeConfig }: IConfig): IAppInstance {
       override: true,
     });
   }
-
-  (window as any)[RuntimeConfig] = runtimeConfig;
 
   return app;
 }

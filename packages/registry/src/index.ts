@@ -2,7 +2,14 @@ import { IDisposable, Listener } from './types';
 
 const noop = () => {};
 
+const ok = (value?: unknown, message?: string) => {
+  if (!value) {
+    throw new Error(message ? `Assertion failed (${message})` : 'Assertion Failed');
+  }
+};
+
 class CenterRegistry {
+  private readonly instanceMap = new Map<string, any>();
   private readonly dataMap = new Map<string, any[]>();
   private readonly eventsMap = new Map<string, Listener<any>[]>();
 
@@ -62,6 +69,24 @@ class CenterRegistry {
 
   getData<T>(id: string): T[] | undefined {
     return this.dataMap.get(id);
+  }
+
+  /**
+   * 添加单实例
+   */
+  public add(id: string, data: any): void {
+    ok(typeof id === 'string');
+    ok(!this.instanceMap.has(id), 'There is already an extension with this id');
+
+    this.instanceMap.set(id, data);
+  }
+
+  public knows(id: string): boolean {
+    return this.instanceMap.has(id);
+  }
+
+  public as(id: string): any {
+    return this.instanceMap.get(id) || null;
   }
 }
 

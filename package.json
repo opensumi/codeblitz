@@ -76,7 +76,8 @@
     "signale": "^1.4.0",
     "ts-jest": "^26.4.4",
     "ts-node": "^9.0.0",
-    "typescript": "^4.0.5",
+    "tslib": "^2.2.0",
+    "typescript": "^4.2.3",
     "urllib": "^2.36.1"
   },
   "tnpm": {
@@ -112,7 +113,7 @@
     {
       "publisher": "alex",
       "name": "typescript-language-features-worker",
-      "version": "1.0.0-beta.2"
+      "version": "1.53.0-patch.1"
     },
     {
       "publisher": "cloud-ide",

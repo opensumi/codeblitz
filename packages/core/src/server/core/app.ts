@@ -12,12 +12,11 @@ import {
 import { AppConfig, BrowserModule } from '@ali/ide-core-browser';
 import { IExtensionBasicMetadata } from '@alipay/alex-shared';
 import * as path from 'path';
-import * as os from 'os';
 
 import { ILogServiceManager } from './base';
 import { INodeLogger, NodeLogger } from './node-logger';
 import { FCServiceCenter, initFCService, ServerPort } from '../../connection';
-import { IServerApp } from '../../common';
+import { IServerApp, HOME_ROOT } from '../../common';
 import { initializeRootFileSystem, filesystemDeferred } from './filesystem';
 import { fsExtra as fse } from '../node';
 import { WORKSPACE_ROOT, STORAGE_DIR } from '../../common/constant';
@@ -108,7 +107,7 @@ export class ServerApp implements IServerApp {
     this.appConfig = opts.appConfig;
     this.serverConfig = {
       marketplace: {
-        extensionDir: path.join(os.homedir(), STORAGE_DIR, StoragePaths.MARKETPLACE_DIR),
+        extensionDir: path.join(HOME_ROOT, STORAGE_DIR, StoragePaths.MARKETPLACE_DIR),
       },
       logDir: opts.logDir,
       logLevel: opts.logLevel,

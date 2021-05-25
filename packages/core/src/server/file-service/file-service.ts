@@ -25,7 +25,7 @@ import {
   FileCopyOptions,
 } from '@ali/ide-file-service/lib/common';
 import * as path from 'path';
-import * as os from 'os';
+import { HOME_ROOT } from '../../common';
 import { IDiskFileProvider, IFileService } from './base';
 import { FCService } from '../../connection';
 import { fsExtra as fse } from '../node';
@@ -333,7 +333,7 @@ export class FileService extends FCService implements IFileService {
   }
 
   async getCurrentUserHome(): Promise<FileStat | undefined> {
-    return this.getFileStat(Uri.file(os.homedir()).toString());
+    return this.getFileStat(Uri.file(HOME_ROOT).toString());
   }
 
   getDrives(): Promise<string[]> {

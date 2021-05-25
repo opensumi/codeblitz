@@ -1,12 +1,10 @@
-import * as os from 'os';
-
 export const EXT_SCHEME = 'kt-ext';
 
 export const ROOT = '/';
 
-export const HOME_ROOT = os.homedir();
+export const HOME_ROOT = '/home';
 
-export const TMP_ROOT = os.tmpdir();
+export const TMP_ROOT = '/tmp';
 
 export const WORKSPACE_ROOT = '/workspace';
 

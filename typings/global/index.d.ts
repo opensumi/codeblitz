@@ -34,3 +34,9 @@ declare module '@alipay/acr-ide/*' {
   export type FileActionHeader = any;
   export type User = any;
 }
+
+declare module '@alipay/alex/extensions/*' {
+  import { IExtensionBasicMetadata } from '@alipay/alex-shared';
+  const metadata: IExtensionBasicMetadata;
+  export = metadata;
+}

@@ -27,7 +27,10 @@ export class KtExtFsProviderContribution
         // kt-ext 协议统一走 scheme 头转换为 https
         return uri.withScheme('https');
       },
-      roots: ['https://alipay-rmsdeploy-image.cn-hangzhou.alipay.aliyun-inc.com'],
+      roots: [
+        'https://alipay-rmsdeploy-image.cn-hangzhou.alipay.aliyun-inc.com',
+        'https://gw.alipayobjects.com',
+      ],
     });
   }
 

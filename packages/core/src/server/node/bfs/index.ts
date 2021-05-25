@@ -26,6 +26,7 @@ import OverlayFS, {
 import DynamicRequest, {
   DynamicRequestOptions,
 } from '@alipay/alex-browserfs/lib/backend/DynamicRequest';
+import ZipFS, { ZipFSOptions } from '@alipay/alex-browserfs/lib/backend/ZipFS';
 import { FileIndexSystem, FileIndexSystemOptions } from './FileIndex';
 import { Editor, EditorOptions } from './Editor';
 import { WORKSPACE_IDB_NAME } from '../../../common';
@@ -54,6 +55,7 @@ const Backends = {
   FileIndexSystem,
   Editor,
   DynamicRequest,
+  ZipFS,
 };
 
 // Make sure all backends cast to FileSystemConstructor (for type checking)
@@ -98,7 +100,9 @@ export type FileSystemConfiguration =
   | { fs: 'InMemory'; options?: FileSystemOptions }
   | { fs: 'FolderAdapter'; options: { folder: string; wrapped: FileSystemConfiguration } }
   | { fs: 'FileIndexSystem'; options: FileIndexSystemOptions }
-  | { fs: 'Editor'; options: EditorOptions };
+  | { fs: 'Editor'; options: EditorOptions }
+  | { fs: 'DynamicRequest'; options: DynamicRequestOptions }
+  | { fs: 'ZipFS'; options: ZipFSOptions };
 
 async function configure(config: FileSystemConfiguration) {
   const fs = await getFileSystem(config);
@@ -180,7 +184,7 @@ export const BrowserFS = {
 
 export type SupportFileSystem = keyof typeof Backends;
 
-type InstanceType<T extends FileSystemConstructor> = T extends new (...args: any) => infer R
+type InstanceType<T> = T extends { Create(options: object, cb: BFSCallback<infer R>): void }
   ? R
   : any;
 

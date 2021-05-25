@@ -20,10 +20,10 @@ import {
   notEmpty,
   FileAccess,
 } from '@ali/ide-file-service/lib/common';
-import { Injectable, Autowired } from '@ali/common-di';
+import { Injectable } from '@ali/common-di';
 import { ParsedPattern, parse } from '@ali/ide-core-common/lib/utils/glob';
 import * as path from 'path';
-import * as os from 'os';
+import { HOME_ROOT } from '../../common';
 import { IDiskFileProvider } from './base';
 import { FCService } from '../../connection';
 import { FWFileSystemWatcherServer } from './file-service-watcher';
@@ -296,7 +296,7 @@ export class DiskFileSystemProvider extends FCService implements IDiskFileProvid
   }
 
   async getCurrentUserHome(): Promise<FileStat | undefined> {
-    return this.stat(Uri.file(os.homedir()));
+    return this.stat(Uri.file(HOME_ROOT));
   }
 
   setWatchFileExcludes(excludes: string[]) {

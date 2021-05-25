@@ -1,5 +1,5 @@
 import { IReporter } from '@ali/ide-core-common';
-import { BrowserFS, FileSystemConfiguration, FileSystemInstance } from '../server/node';
+import { FileSystemConfiguration, FileSystemInstance } from '../server/node';
 
 export { AppConfig } from '@ali/ide-core-browser';
 
@@ -32,7 +32,7 @@ export interface RuntimeConfig {
   scenario?: string | null;
   /** 工作空间配置 */
   workspace?: {
-    filesystem?: FileSystemConfiguration;
+    filesystem: FileSystemConfiguration;
     onDidSaveTextDocument?: (data: { filepath: string; content: string }) => void;
     onDidChangeTextDocument?: (data: { filepath: string; content: string }) => void;
   };
@@ -56,6 +56,10 @@ export interface RuntimeConfig {
    * 隐藏编辑器区 tab
    */
   hideEditorTab?: boolean;
+  /**
+   * 隐藏编辑器的面包屑导航
+   */
+  hideBreadcrumb?: boolean;
   /**
    * reporter 服务，可获取内部上报的埋点相关数据
    */

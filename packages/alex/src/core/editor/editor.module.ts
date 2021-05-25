@@ -48,7 +48,7 @@ import * as path from 'path';
 import md5 from 'md5';
 import { IWorkspaceService } from '@ali/ide-workspace';
 import { SCMService } from '@ali/ide-scm';
-import { IDETheme, GeekTheme } from '../../core/extensions';
+import { IDETheme, GeekTheme } from '../extension/metadata';
 import { isCodeDocumentModel, CodeDocumentModel, EditorProps } from './types';
 import styles from '../style.module.less';
 import { IPropsService } from '../props.service';

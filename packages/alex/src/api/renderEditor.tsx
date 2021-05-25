@@ -11,14 +11,12 @@ import { EditorProps } from '../core/editor/types';
 import { PropsServiceImpl, IPropsService } from '../core/props.service';
 import styles from '../core/style.module.less';
 
-interface IRenderProps extends IConfig {
+interface IEditorRendererProps extends IConfig, EditorProps {
   onLoad?(app: IAppInstance): void;
   Landing?: React.ComponentType<LandingProps>;
 }
 
-export type IEditorRenderProps = IRenderProps & EditorProps;
-
-export const renderEditor = (domElement: HTMLElement, props: IEditorRenderProps) => {
+export const renderEditor = (domElement: HTMLElement, props: IEditorRendererProps) => {
   const { onLoad, Landing, ...opts } = props;
   const app = createEditor(opts);
   const className = `alex-editor ${
@@ -66,7 +64,7 @@ export const renderEditor = (domElement: HTMLElement, props: IEditorRenderProps)
   };
 };
 
-export const EditorRenderer: React.FC<IEditorRenderProps> = ({ onLoad, Landing, ...opts }) => {
+export const EditorRenderer: React.FC<IEditorRendererProps> = ({ onLoad, Landing, ...opts }) => {
   const app = useConstant(() => createEditor(opts));
   const appElementRef = useRef<React.ReactElement | null>(null);
   const propsService = useConstant(() => new PropsServiceImpl<EditorProps>());

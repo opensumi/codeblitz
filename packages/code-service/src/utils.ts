@@ -125,3 +125,7 @@ export const findRef = (refs: string[], path: string): string => {
 
   return candidateRefs[0] || '';
 };
+
+export const decodeRefPath = (refPath: string) => decodeURIComponent(refPath);
+
+export const encodeRefPath = (refPath: string) => encodeURIComponent(refPath).replace(/%2f/gi, '/');

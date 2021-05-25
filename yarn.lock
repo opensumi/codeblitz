@@ -674,10 +674,10 @@
   dependencies:
     "@types/node" "^10.12.0"
 
-"@alipay/alex-browserfs@^2.0.2":
-  version "2.0.2"
-  resolved "https://registry.npm.alibaba-inc.com/@alipay/alex-browserfs/download/@alipay/alex-browserfs-2.0.2.tgz#3491e4083f73d3c38c67f64d6c25da36d7209ea8"
-  integrity sha1-NJHkCD9z08OMZ/ZNbCXaNtcgnqg=
+"@alipay/alex-browserfs@~2.1.0":
+  version "2.1.0"
+  resolved "https://registry.npm.alibaba-inc.com/@alipay/alex-browserfs/download/@alipay/alex-browserfs-2.1.0.tgz#85b8efd38a31ebe10349cc3fde30056092d18967"
+  integrity sha1-hbjv04ox6+EDScw/3jAFYJLRiWc=
   dependencies:
     async "~2.6.1"
     pako "~1.0.6"
@@ -8968,6 +8968,11 @@ original@^1.0.0:
   dependencies:
     url-parse "^1.4.3"
 
+os-browserify@^0.3.0:
+  version "0.3.0"
+  resolved "https://registry.npm.alibaba-inc.com/os-browserify/download/os-browserify-0.3.0.tgz#854373c7f5c2315914fc9bfc6bd8238fdda1ec27"
+  integrity sha1-hUNzx/XCMVkU/Jv8a9gjj92h7Cc=
+
 os-homedir@^1.0.0, os-homedir@^1.0.1:
   version "1.0.2"
   resolved "https://registry.npm.alibaba-inc.com/os-homedir/download/os-homedir-1.0.2.tgz#ffbc4988336e0e833de0c168c7ef152121aa7fb3"
@@ -9609,6 +9614,11 @@ process-nextick-args@^2.0.0, process-nextick-args@~2.0.0:
   version "2.0.1"
   resolved "https://registry.npm.alibaba-inc.com/process-nextick-args/download/process-nextick-args-2.0.1.tgz#7820d9b16120cc55ca9ae7792680ae7dba6d7fe2"
   integrity sha1-eCDZsWEgzFXKmud5JoCufbptf+I=
+
+process@^0.11.10:
+  version "0.11.10"
+  resolved "https://registry.npm.alibaba-inc.com/process/download/process-0.11.10.tgz#7332300e840161bda3e69a1d1d91a7d4bc16f182"
+  integrity sha1-czIwDoQBYb2j5podHZGn1LwW8YI=
 
 promise-inflight@^1.0.1:
   version "1.0.1"
@@ -12246,6 +12256,11 @@ tslib@^2.0.1, tslib@^2.0.3:
   resolved "https://registry.npm.alibaba-inc.com/tslib/download/tslib-2.0.3.tgz#8e0741ac45fc0c226e58a17bfc3e64b9bc6ca61c"
   integrity sha1-jgdBrEX8DCJuWKF7/D5kubxsphw=
 
+tslib@^2.2.0:
+  version "2.2.0"
+  resolved "https://registry.npm.alibaba-inc.com/tslib/download/tslib-2.2.0.tgz#fb2c475977e35e241311ede2693cee1ec6698f5c"
+  integrity sha1-+yxHWXfjXiQTEe3iaTzuHsZpj1w=
+
 tunnel-agent@^0.6.0:
   version "0.6.0"
   resolved "https://registry.npm.alibaba-inc.com/tunnel-agent/download/tunnel-agent-0.6.0.tgz#27a5dea06b36b04a0a9966774b290868f0fc40fd"
@@ -12325,10 +12340,10 @@ typedarray@^0.0.6:
   resolved "https://registry.npm.alibaba-inc.com/typedarray/download/typedarray-0.0.6.tgz#867ac74e3864187b1d3d47d996a78ec5c8830777"
   integrity sha1-hnrHTjhkGHsdPUfZlqeOxciDB3c=
 
-typescript@^4.0.5:
-  version "4.1.2"
-  resolved "https://registry.npm.alibaba-inc.com/typescript/download/typescript-4.1.2.tgz#6369ef22516fe5e10304aae5a5c4862db55380e9"
-  integrity sha1-Y2nvIlFv5eEDBKrlpcSGLbVTgOk=
+typescript@^4.2.3:
+  version "4.2.4"
+  resolved "https://registry.npm.alibaba-inc.com/typescript/download/typescript-4.2.4.tgz#8610b59747de028fda898a8aef0e103f156d0961"
+  integrity sha1-hhC1l0feAo/aiYqK7w4QPxVtCWE=
 
 typical@^5.0.0, typical@^5.2.0:
   version "5.2.0"
