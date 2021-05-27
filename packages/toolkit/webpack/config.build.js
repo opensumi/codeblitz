@@ -52,6 +52,7 @@ module.exports = createWebpackConfig({
     ],
     optimization: {
       minimize: false,
+      concatenateModules: false,
     },
   },
 });
