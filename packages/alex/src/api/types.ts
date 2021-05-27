@@ -13,6 +13,9 @@ export type IAppConfig = Partial<IAppOpts> & {
    */
   workspaceDir: string;
 } & {
+  /**
+   * 插件配置
+   */
   plugins?: IPluginConfig;
 };
 
@@ -20,7 +23,7 @@ export interface IConfig {
   /**
    * 应用相关配置
    */
-  appConfig: IAppConfig | (() => IAppConfig);
+  appConfig: IAppConfig;
   /**
    * 运行相关配置
    */

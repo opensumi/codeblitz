@@ -32,26 +32,20 @@ exports.replace = (files, replacement) => {
   );
 };
 
-const replaceWorkerAndWebviewAssets = async () => {
+exports.replaceEnv = async () => {
   const configPath = path.resolve(__dirname, '..', '..', 'packages/toolkit/define.json');
   if (!fse.existsSync(configPath)) {
     throw new Error('请先运行 build-assets 构建资源');
   }
 
-  const targetFiles = [resolveLibFile('api/createApp.js'), resolveLibFile('api/createEditor.js')];
-
+  const targetFiles = [resolveLibFile('core/env.js')];
   checkLibFiles(targetFiles);
 
-  return exports.replace(targetFiles, await fse.readJSON(configPath));
+  return exports.replace(targetFiles, {
+    ...(await fse.readJSON(configPath)),
+    __VERSION__: pkg.version,
+  });
 };
-
-const replaceVersion = async () => {
-  const targetFiles = [resolveLibFile('core/Root.js')];
-  checkLibFiles(targetFiles);
-  return exports.replace(targetFiles, { __VERSION__: pkg.version });
-};
-
-exports.replaceEnv = () => Promise.all([replaceWorkerAndWebviewAssets(), replaceVersion()]);
 
 function resolveLibFile(p) {
   return path.join(__dirname, '../../packages/alex/lib', p);

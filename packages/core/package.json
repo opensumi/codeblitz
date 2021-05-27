@@ -27,7 +27,7 @@
     "@ali/ide-file-service": "2.2.0",
     "@ali/ide-kaitian-extension": "2.2.0",
     "@ali/ide-logs": "2.2.0",
-    "@alipay/alex-browserfs": "^2.0.2",
+    "@alipay/alex-browserfs": "~2.1.0",
     "@alipay/alex-registry": "1.0.0-beta.2",
     "@alipay/alex-shared": "1.0.0-beta.2",
     "assert": "^2.0.0",

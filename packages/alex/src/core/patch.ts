@@ -5,6 +5,7 @@
 import { StaticServices } from '@ali/monaco-editor-core/esm/vs/editor/standalone/browser/standaloneServices';
 import { ModesRegistry } from '@ali/monaco-editor-core/esm/vs/editor/common/modes/modesRegistry';
 import { DirtyDiffWidget } from '@ali/ide-scm/lib/browser/dirty-diff/dirty-diff-widget';
+import { AbstractResourcePreferenceProvider } from '@ali/ide-preferences/lib/browser/abstract-resource-preference-provider';
 
 // TODO: 不使用 private 如何清除副作用
 export const disposeMode = () => {
@@ -22,3 +23,10 @@ const _addAction = (<any>DirtyDiffWidget).prototype._addAction;
   if (icon === 'plus' || icon === 'rollback') return;
   _addAction.call(this, icon, type);
 };
+
+// TODO: 目前 preference 在 dispose 时会重置，而这个时机目前是在 dispose 所有实例时才会触发，此时 reset 无意义，
+// 还会导致因 reset 触发事件获取 injector 实例发生错误（因为一些实例可能早已销毁）
+Object.defineProperty(AbstractResourcePreferenceProvider.prototype, 'reset', {
+  value: () => {},
+  configurable: true,
+});

@@ -22,7 +22,7 @@ exports.nodePolyfill = {
     https: false,
     fs: false,
     path: require.resolve('path-browserify'),
-    os: resolvePolyfill('os'),
+    os: require.resolve('os-browserify/browser'),
     crypto: resolvePolyfill('crypto'),
   },
   provider: {

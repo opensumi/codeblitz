@@ -10,7 +10,7 @@ import {
   extendPlatformConfig,
 } from '@alipay/alex-code-api';
 import { ICodeServiceConfig, ICodePlatform, TreeEntry, InitializeState } from './types';
-import { parseSubmoduleUrl, isDescendant, logger, HEAD } from './utils';
+import { parseSubmoduleUrl, isDescendant, logger, HEAD, encodeRefPath } from './utils';
 import { RootRepository, Repository } from './repository';
 
 @Injectable()
@@ -184,7 +184,10 @@ export class CodeModelService {
         filepath ? `/${filepath}` : ''
       }`;
     }
-    this.commandService.tryExecuteCommand('code-service.replace-browser-url', urlPath);
+    this.commandService.tryExecuteCommand(
+      'code-service.replace-browser-url',
+      encodeRefPath(urlPath)
+    );
   }
 
   replaceBrowserUrlLine(lineNumbers: [number, number]) {

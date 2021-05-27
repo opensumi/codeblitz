@@ -46,6 +46,7 @@ import { WorkspaceEditModule } from '@ali/ide-workspace-edit/lib/browser';
 
 import { ClientModule, ServerModuleCollection } from '@alipay/alex-core';
 import { PluginModule } from '@alipay/alex-plugin';
+import { AlexModule } from './alex.module';
 
 // TODO: 部分模块需要注意顺序，否则会报错，待框架侧调整修复
 export const modules: ModuleConstructor[] = [
@@ -100,4 +101,5 @@ export const modules: ModuleConstructor[] = [
   ClientModule,
   PluginModule,
   ...ServerModuleCollection,
+  AlexModule,
 ];

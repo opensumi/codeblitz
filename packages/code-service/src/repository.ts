@@ -3,7 +3,7 @@ import { Injectable, Autowired } from '@ali/common-di';
 import { memoize, Emitter, Deferred } from '@ali/ide-core-common';
 import { BranchOrTag, ICodeAPIProvider } from '@alipay/alex-code-api';
 import { ICodePlatform, Submodule, IRepositoryModel, Refs, RefType, ICodeAPIProxy } from './types';
-import { parseGitmodules, logger, findRef, HEAD } from './utils';
+import { parseGitmodules, logger, findRef, HEAD, decodeRefPath } from './utils';
 
 @Injectable({ multiple: true })
 export class Repository implements IRepositoryModel {
@@ -194,7 +194,7 @@ export class RootRepository extends Repository {
       return;
     }
     if (refPath) {
-      const segments = refPath.split('/').filter(Boolean);
+      const segments = decodeRefPath(refPath).split('/').filter(Boolean);
       // 暂时只支持 tree 和 blob，其它如 commit 后续看情况支持
       if (!['tree', 'blob'].includes(segments[0]) || !segments[1] || segments[1] === HEAD) {
         this.ref = HEAD;

@@ -10,13 +10,13 @@ import {
   IBaseLogService,
 } from '@ali/ide-logs/lib/common';
 import * as path from 'path';
-import * as os from 'os';
 
 import { ILogServiceForClient } from './base';
 import { ILogServiceManager } from '../core/base';
 import { FCService } from '../../connection';
+import { HOME_ROOT } from '../../common';
 
-export const DEFAULT_LOG_FOLDER = path.join(os.homedir(), `.kaitian/logs/`);
+export const DEFAULT_LOG_FOLDER = path.join(HOME_ROOT, `.kaitian/logs/`);
 
 export const LogLevelMessageMap = {
   [LogLevel.Verbose]: 'VERBOSE',

@@ -168,7 +168,7 @@ export class CodeContribution
 
       this._unmount?.();
 
-      rootFS.mount(workspaceDir, codeFileSystem);
+      rootFS.mount(workspaceDir, overlayFileSystem);
       // 将只读文件系统挂载到 /code 上
       rootFS.mount(CODE_ROOT, codeFileSystem);
       // 将可写文件系统挂载到 /idb
@@ -269,6 +269,7 @@ export class CodeContribution
       this.editorService.onActiveResourceChange((resource) => {
         if (
           resource &&
+          resource.uri.scheme === 'file' &&
           ['code', 'diff'].includes(
             this.editorService.currentEditorGroup?.currentOpenType?.type ?? ''
           )

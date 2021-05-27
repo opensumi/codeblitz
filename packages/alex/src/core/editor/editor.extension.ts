@@ -3,6 +3,7 @@ import { BrowserModule } from '@ali/ide-core-browser';
 import { ExtensionServiceImpl } from '@ali/ide-kaitian-extension/lib/browser/extension.service';
 import { IPluginService } from '@alipay/alex-plugin';
 import { ExtensionService } from '@ali/ide-kaitian-extension/lib/common';
+import { ExtensionActivateContribution } from '../extension/extension.contribution';
 
 @Injectable()
 class ExtensionServiceImplOverride extends ExtensionServiceImpl {
@@ -23,7 +24,6 @@ class ExtensionServiceImplOverride extends ExtensionServiceImpl {
     this.extensionMetaDataArr = await this.getAllExtensions();
     await this.initExtension();
     await this.enableAvailableExtensions();
-    await this.pluginService.whenReady.promise;
     this.doActivate();
   }
 }
@@ -36,5 +36,6 @@ export class ExtensionActivateModule extends BrowserModule {
       useClass: ExtensionServiceImplOverride,
       override: true,
     },
+    ExtensionActivateContribution,
   ];
 }

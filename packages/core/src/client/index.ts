@@ -4,6 +4,9 @@ import {
   ClientApp as BasicClientApp,
   IAppRenderer,
   IClientAppOpts,
+  PreferenceProviderProvider,
+  PreferenceScope,
+  PreferenceProvider,
 } from '@ali/ide-core-browser';
 import { BasicModule } from '@ali/ide-core-common';
 import { WSChannelHandler } from '@ali/ide-connection';
@@ -14,7 +17,7 @@ import { TextmateLanguageGrammarContribution } from './textmate-language-grammar
 import { ILanguageGrammarRegistrationService } from './textmate-language-grammar/base';
 import { LanguageGrammarRegistrationService } from './textmate-language-grammar/language-grammar.service';
 import { injectDebugPreferences } from './debug';
-import { IServerApp } from '../common';
+import { IServerApp, RootFS } from '../common';
 import { IServerAppOpts, ServerApp } from '../server/core/app';
 import { isBackServicesInBrowser } from '../common/util';
 import {
@@ -29,6 +32,7 @@ import {
   IMonacoCodeService,
   codeServiceEditor,
 } from './override/codeEditorService';
+import { BreadCrumbServiceImplOverride, IBreadCrumbService } from './override/breadcrumb.service';
 
 export * from './extension';
 
@@ -58,6 +62,11 @@ export class ClientModule extends BrowserModule {
     {
       token: IMonacoCodeService,
       useClass: MonacoCodeService,
+    },
+    {
+      token: IBreadCrumbService,
+      useClass: BreadCrumbServiceImplOverride,
+      override: true,
     },
   ];
   preferences = injectDebugPreferences;
@@ -99,7 +108,10 @@ export class ClientApp extends BasicClientApp {
 
   public async start(container: HTMLElement | IAppRenderer, type?: string): Promise<void> {
     // 先启动 server 进行必要的初始化，应用的权限等也在 server 中处理
-    await (this.injector.get(IServerApp) as IServerApp).start();
+    const serverApp: IServerApp = this.injector.get(IServerApp);
+    await serverApp.start();
+    this.setWorkspaceReadOnly(serverApp.rootFS);
+
     bindConnectionService(this.injector, this.modules);
     // 避免 KaitianExtensionClientAppContribution.onStop 报错
     this.injector.addProviders({
@@ -107,6 +119,23 @@ export class ClientApp extends BasicClientApp {
       useValue: { clientId: 'alex' },
     });
     return super.start(container, type);
+  }
+
+  /**
+   * 根据文件系统来设置空间是否只读
+   */
+  private setWorkspaceReadOnly(rootFS: RootFS) {
+    const workspaceFS = rootFS._getFs(this.config.workspaceDir);
+    if (workspaceFS.fs.isReadOnly()) {
+      const providerFactory: PreferenceProviderProvider = this.injector.get(
+        PreferenceProviderProvider
+      );
+      const defaultPreference: PreferenceProvider = providerFactory(PreferenceScope.Default);
+      defaultPreference.setPreference('editor.readonlyFiles', [
+        `${this.config.workspaceDir}/**`,
+        ...(defaultPreference.get<string[]>('editor.readonlyFiles') || []),
+      ]);
+    }
   }
 
   dispose() {
