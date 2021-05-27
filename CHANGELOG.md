@@ -1,3 +1,19 @@
+# [1.0.0-rc.1](https://code.alipay.com/cloud-ide/crew-dragon/compare/v1.0.0-beta.2...v1.0.0-rc.1) (2021-05-27)
+
+
+### Bug Fixes
+
+* 修复 dispose preference reset 问题 ([5f4ba9c](https://code.alipay.com/cloud-ide/crew-dragon/commits/5f4ba9cfad81eba5b03593edba12addfbabb80a2))
+* 增加 alex module ([d245c33](https://code.alipay.com/cloud-ide/crew-dragon/commits/d245c33f1a2043b12e6aae4e7efba905a12967e6))
+
+
+### Features
+
+* 内置更改默认偏好设置的命令 ([896c086](https://code.alipay.com/cloud-ide/crew-dragon/commits/896c08615e94a9d47ce8807c97bf322c8ff02013))
+* 增加 zipfs, 优化代码结构等 ([71bd8f8](https://code.alipay.com/cloud-ide/crew-dragon/commits/71bd8f8a6314905aebe0704047b67aae031b104b))
+
+
+
 # [1.0.0-beta.2](https://code.alipay.com/cloud-ide/crew-dragon/compare/v1.0.0-beta.1...v1.0.0-beta.2) (2021-05-20)
 
 
