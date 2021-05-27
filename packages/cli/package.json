@@ -26,7 +26,8 @@
     "lodash.pick": "^4.4.0",
     "rxjs": "^6.6.3",
     "semver": "^7.3.2",
-    "signale": "^1.4.0"
+    "signale": "^1.4.0",
+    "tslib": "^2.2.0"
   },
   "tnpm": {
     "mode": "yarn",

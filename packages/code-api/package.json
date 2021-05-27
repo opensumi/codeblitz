@@ -21,6 +21,7 @@
   "dependencies": {
     "@alipay/alex-core": "1.0.0-rc.1",
     "@alipay/alex-code-service": "1.0.0-rc.1",
-    "@alipay/alex-shared": "1.0.0-rc.1"
+    "@alipay/alex-shared": "1.0.0-rc.1",
+    "tslib": "^2.2.0"
   }
 }

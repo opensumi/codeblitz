@@ -37,7 +37,8 @@
     "lodash.debounce": "^4.0.8",
     "md5": "^2.3.0",
     "uuid": "^3.3.2",
-    "vscode-languageserver-types": "~3.14.0"
+    "vscode-languageserver-types": "~3.14.0",
+    "tslib": "^2.2.0"
   },
   "devDependencies": {
     "@types/fs-extra": "^9.0.4",

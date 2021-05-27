@@ -78,7 +78,8 @@
     "@alipay/alex-lsif-service": "1.0.0-rc.1",
     "@alipay/alex-plugin": "1.0.0-rc.1",
     "antd": "^3.20.3",
-    "@ant-design/icons": "~2.1.1"
+    "@ant-design/icons": "~2.1.1",
+    "tslib": "^2.2.0"
   },
   "tnpm": {
     "mode": "yarn",
