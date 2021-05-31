@@ -21,11 +21,13 @@
     "@ali/ide-extension-installer": "^2.0.0",
     "@ali/ide-kaitian-extension": "2.2.0",
     "@alipay/alex-shared": "1.0.0-rc.2",
-    "commander": "^6.2.0",
+    "commander": "^7.2.0",
     "fs-extra": "^9.0.1",
     "lodash.pick": "^4.4.0",
+    "portfinder": "^1.0.28",
     "rxjs": "^6.6.3",
     "semver": "^7.3.2",
+    "send": "^0.17.1",
     "signale": "^1.4.0",
     "tslib": "^2.2.0"
   },
@@ -38,6 +40,7 @@
     "@types/fs-extra": "^9.0.4",
     "@types/lodash.pick": "^4.4.6",
     "@types/semver": "^7.3.4",
+    "@types/send": "^0.14.7",
     "@types/signale": "^1.4.1"
   }
 }

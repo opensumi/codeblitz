@@ -49,6 +49,7 @@ module.exports = (option) => {
     resolve: {
       extensions: ['.ts', '.tsx', '.js', '.json', '.less'],
       plugins: [
+        // @ts-ignore
         new TsconfigPathsPlugin({
           configFile: option.tsconfigPath,
         }),

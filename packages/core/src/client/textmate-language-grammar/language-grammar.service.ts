@@ -2,7 +2,7 @@ import { Autowired } from '@ali/common-di';
 import { Disposable, URI, Domain } from '@ali/ide-core-common';
 import { TextmateService } from '@ali/ide-monaco/lib/browser/textmate.service';
 import { LanguagesContribution, GrammarsContribution } from '@ali/ide-monaco';
-import { centerRegistry } from '@alipay/alex-registry';
+import { Registry } from '@alipay/alex-registry';
 import { TextmateKey } from './base';
 
 @Domain()
@@ -15,20 +15,19 @@ export class LanguageGrammarRegistrationService extends Disposable {
     const uri = new URI();
 
     this.addDispose(
-      centerRegistry.onRegister<LanguagesContribution>(TextmateKey.language, (contrib) => {
+      Registry.onRegister<LanguagesContribution>(TextmateKey.language, (contrib) => {
         this.textMateService.registerLanguage(contrib, uri);
       })
     );
 
     this.addDispose(
-      centerRegistry.onRegister<GrammarsContribution>(TextmateKey.grammar, (contrib) => {
+      Registry.onRegister<GrammarsContribution>(TextmateKey.grammar, (contrib) => {
         this.textMateService.registerGrammar(contrib, uri);
       })
     );
 
-    const languageContrib =
-      centerRegistry.getData<LanguagesContribution>(TextmateKey.language) || [];
-    const grammarContrib = centerRegistry.getData<GrammarsContribution>(TextmateKey.grammar) || [];
+    const languageContrib = Registry.getData<LanguagesContribution>(TextmateKey.language) || [];
+    const grammarContrib = Registry.getData<GrammarsContribution>(TextmateKey.grammar) || [];
 
     return Promise.all([
       ...languageContrib.map((contrib) => this.textMateService.registerLanguage(contrib, uri)),

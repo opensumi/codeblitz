@@ -10,10 +10,13 @@ export interface NLSInfo {
   filename: string;
 }
 
+export type IExtensionMode = 'local' | 'internal' | 'public';
+
 export interface IExtensionIdentity {
   publisher: string;
   name: string;
   version: string;
+  mode?: IExtensionMode;
 }
 
 export type IExtensionDesc = Optional<IExtensionIdentity, 'version'>;
@@ -37,6 +40,9 @@ export interface IExtensionBasicMetadata {
   pkgNlsJSON: JSONType;
   nlsList: NLSInfo[];
   extendConfig: JSONType;
+  // 自定义 uri，用于本地研发模式
+  uri?: string;
+  mode?: IExtensionMode;
 }
 
 /**

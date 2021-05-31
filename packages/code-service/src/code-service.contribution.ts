@@ -1,10 +1,5 @@
 import { Autowired } from '@ali/common-di';
-import {
-  FILE_COMMANDS,
-  CommandContribution,
-  CommandRegistry,
-  ClientAppContribution,
-} from '@ali/ide-core-browser';
+import { FILE_COMMANDS, CommandContribution, CommandRegistry } from '@ali/ide-core-browser';
 import {
   Domain,
   IReporterService,
@@ -15,14 +10,12 @@ import {
   localize,
   formatLocalize,
   FileChangeType,
-  WithEventBus,
   IDisposable,
   IEventBus,
 } from '@ali/ide-core-common';
 import {
   LaunchContribution,
   AppConfig,
-  makeWorkspaceDir,
   CODE_ROOT,
   IDB_ROOT,
   IServerApp,
@@ -33,22 +26,23 @@ import { IFileTreeService } from '@ali/ide-file-tree-next';
 import { FileTreeService } from '@ali/ide-file-tree-next/lib/browser/file-tree.service';
 import { FileTreeModelService } from '@ali/ide-file-tree-next/lib/browser/services/file-tree-model.service';
 import { IMessageService } from '@ali/ide-overlay';
-import {
-  BrowserEditorContribution,
-  WorkbenchEditorService,
-  EditorGroupChangeEvent,
-} from '@ali/ide-editor/lib/browser';
+import { BrowserEditorContribution, WorkbenchEditorService } from '@ali/ide-editor/lib/browser';
 import * as path from 'path';
 import { QuickPickService } from '@ali/ide-quick-open';
 import { IDiskFileProvider, FileAccess } from '@ali/ide-file-service';
 import { DiskFsProviderClient } from '@ali/ide-file-service/lib/browser/file-service-provider-client';
+import { MainLayoutContribution } from '@ali/ide-main-layout';
 import configureFileSystem from './filesystem/configure';
 import { CodeModelService } from './code-model.service';
 import { RefType, ICodeServiceConfig } from './types';
 
-@Domain(LaunchContribution, BrowserEditorContribution, CommandContribution)
+@Domain(LaunchContribution, BrowserEditorContribution, CommandContribution, MainLayoutContribution)
 export class CodeContribution
-  implements LaunchContribution, BrowserEditorContribution, CommandContribution {
+  implements
+    LaunchContribution,
+    BrowserEditorContribution,
+    CommandContribution,
+    MainLayoutContribution {
   @Autowired()
   codeModel: CodeModelService;
 
@@ -93,6 +87,8 @@ export class CodeContribution
   private _mounting = false;
 
   private _disposables: IDisposable[] = [];
+
+  private renderDefer = new Deferred<void>();
 
   async launch({ rootFS }: IServerApp) {
     if (!this.codeServiceConfig) return;
@@ -157,8 +153,6 @@ export class CodeContribution
     this._mounting = true;
 
     try {
-      // const workspaceDir = makeWorkspaceDir(`${this.codeModel.platform}/${this.codeModel.project}`);
-      // this.appConfig.workspaceDir = workspaceDir;
       const { workspaceDir } = this.appConfig;
 
       const { codeFileSystem, idbFileSystem, overlayFileSystem } = await configureFileSystem(
@@ -206,7 +200,9 @@ export class CodeContribution
         }
       });
     } else if (revealEntry.type === 'tree') {
-      this.commandService.tryExecuteCommand(FILE_COMMANDS.LOCATION.id, uri);
+      this.renderDefer.promise.then(() => {
+        this.commandService.tryExecuteCommand(FILE_COMMANDS.LOCATION.id, uri);
+      });
     }
     wait.finally(() => {
       this.startOnEditorGroupChangeEvent();
@@ -267,12 +263,16 @@ export class CodeContribution
   startOnEditorGroupChangeEvent() {
     this._disposables.push(
       this.editorService.onActiveResourceChange((resource) => {
+        if (resource?.uri.scheme === 'welcome') {
+          return;
+        }
         if (
           resource &&
           resource.uri.scheme === 'file' &&
           ['code', 'diff'].includes(
             this.editorService.currentEditorGroup?.currentOpenType?.type ?? ''
-          )
+          ) &&
+          resource.uri.codeUri.path.startsWith(this.appConfig.workspaceDir)
         ) {
           this.codeModel.replaceBrowserUrl({
             type: 'blob',
@@ -283,6 +283,10 @@ export class CodeContribution
         }
       })
     );
+  }
+
+  onDidRender() {
+    this.renderDefer.resolve();
   }
 
   dispose() {

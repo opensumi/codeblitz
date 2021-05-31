@@ -1,5 +1,5 @@
-import program from 'commander';
-import { install, uninstall } from './extension';
+import program, { Option } from 'commander';
+import { install, uninstall, installLocalExtensions } from './extension';
 import { log } from './util/log';
 
 program.version(`alex ${require('../package').version}`).usage('<command> [options]');
@@ -33,11 +33,12 @@ version can be ignored, then will use latest version under current kaitian frame
 extensionProgram
   .command('install <extensions...>')
   .alias('i')
+  .addOption(new Option('-m, --mode [type]', 'extension env mode').choices(['internal', 'public']))
   .description(
     'install single or multiple extension, eg. kaitian.ide-dark-theme, kaitian.ide-dark-theme@2.0.0'
   )
-  .action((extensions: string[]) => {
-    install(extensions).catch((err) => console.error(err));
+  .action((extensions: string[], options) => {
+    install(extensions, options).catch((err) => console.error(err));
   });
 
 extensionProgram
@@ -45,6 +46,14 @@ extensionProgram
   .description('uninstall single or multiple extension, eg. kaitian.ide-dark-theme')
   .action((extensions) => {
     uninstall(extensions).catch((err) => console.error(err));
+  });
+
+extensionProgram
+  .command('link <extensionDirs...>')
+  .description('link local extension for dev')
+  .option('-h, --host', 'local extension static file service host, default: `localhost`')
+  .action((extensionDirs, options) => {
+    installLocalExtensions(extensionDirs, options).catch((err) => console.error(err));
   });
 
 program.parse(process.argv);

@@ -23,10 +23,10 @@ exports.generateLanguages = async () => {
       fse.writeFileSync(
         path.join(targetDir, `${lang}.js`),
         `
-const { centerRegistry } = require('@alipay/alex-registry');
+const { Registry } = require('@alipay/alex-registry');
 const loadLanguage = require('@ali/kaitian-textmate-languages/lib/${lang}');
-const registerLanguage = (contrib) => centerRegistry.register('language', contrib);
-const registerGrammar = (contrib) => centerRegistry.register('grammar', contrib);
+const registerLanguage = (contrib) => Registry.register('language', contrib);
+const registerGrammar = (contrib) => Registry.register('grammar', contrib);
 loadLanguage(registerLanguage, registerGrammar);
         `.trim() + '\n'
       );

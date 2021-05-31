@@ -68,7 +68,7 @@ class ExtensionServiceClient extends ExtensionServiceClientImpl {
 }
 
 @Injectable()
-export class StartupModule extends BrowserModule {
+export class LocalExtensionModule extends BrowserModule {
   providers: Provider[] = [
     FileServerContribution,
     {

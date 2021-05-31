@@ -1,6 +1,7 @@
 import * as path from 'path';
 import { Injectable, Autowired } from '@ali/common-di';
 import { memoize, Emitter, Deferred } from '@ali/ide-core-common';
+import { fsExtra } from '@alipay/alex-core';
 import { BranchOrTag, ICodeAPIProvider } from '@alipay/alex-code-api';
 import { ICodePlatform, Submodule, IRepositoryModel, Refs, RefType, ICodeAPIProxy } from './types';
 import { parseGitmodules, logger, findRef, HEAD, decodeRefPath } from './utils';
@@ -114,10 +115,7 @@ export class Repository implements IRepositoryModel {
     const gitmodulesPath = path.join(this.root, '.gitmodules');
 
     try {
-      // this.request.getBlob('')
-      const gitmodulesRaw = await (window as any).alex
-        .requireModule('fs-extra')
-        .readFile(gitmodulesPath, 'utf8');
+      const gitmodulesRaw = await fsExtra.readFile(gitmodulesPath, 'utf8');
       return parseGitmodules(gitmodulesRaw);
     } catch (err) {
       logger.error('parse submodules failed');

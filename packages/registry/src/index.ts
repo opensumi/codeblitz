@@ -8,7 +8,7 @@ const ok = (value?: unknown, message?: string) => {
   }
 };
 
-class CenterRegistry {
+class RegistryImpl {
   private readonly instanceMap = new Map<string, any>();
   private readonly dataMap = new Map<string, any[]>();
   private readonly eventsMap = new Map<string, Listener<any>[]>();
@@ -90,4 +90,4 @@ class CenterRegistry {
   }
 }
 
-export const centerRegistry = new CenterRegistry();
+export const Registry = new RegistryImpl();

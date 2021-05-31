@@ -34,7 +34,7 @@ import { EXT_WORKER_HOST, WEBVIEW_ENDPOINT } from '../core/env';
 
 export { SlotLocation, SlotRenderer, BoxPanel, SplitPanel };
 
-const getDefaultAppConfig = (): IAppOpts => ({
+export const getDefaultAppConfig = (): IAppOpts => ({
   modules,
   useCdnIcon: true,
   noExtHost: true,

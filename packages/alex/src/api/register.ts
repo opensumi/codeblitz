@@ -1,7 +1,7 @@
 import { LanguagesContribution, GrammarsContribution } from '@ali/ide-monaco';
-import { centerRegistry } from '@alipay/alex-registry';
+import { Registry } from '@alipay/alex-registry';
 
-export { centerRegistry };
+export { Registry };
 
 /**
  * @deprecated please import language by path directly
@@ -10,7 +10,7 @@ export { centerRegistry };
  * use `import "@alipay/alex/languages"` to import all languages
  */
 export const registerLanguage = (contrib: LanguagesContribution) => {
-  centerRegistry.register<LanguagesContribution>('language', contrib);
+  Registry.register<LanguagesContribution>('language', contrib);
 };
 
 /**
@@ -20,5 +20,5 @@ export const registerLanguage = (contrib: LanguagesContribution) => {
  * use `import "@alipay/alex/languages"` to import all languages
  */
 export const registerGrammar = (contrib: GrammarsContribution) => {
-  centerRegistry.register<GrammarsContribution>('grammar', contrib);
+  Registry.register<GrammarsContribution>('grammar', contrib);
 };

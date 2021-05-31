@@ -1,35 +1,26 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-import {
-  IAppInstance,
-  AppRenderer,
-  // requireModule,
-  getDefaultLayoutConfig,
-  SlotLocation,
-} from '@alipay/alex';
+import { IAppInstance, AppRenderer, getDefaultLayoutConfig } from '@alipay/alex';
+import * as Alex from '@alipay/alex';
+import '@alipay/alex/languages';
 import { CodeServiceModule } from '@alipay/alex-code-service';
 import { CodeAPIModule } from '@alipay/alex-code-api';
-import * as Alex from '@alipay/alex';
 import { isFilesystemReady } from '@alipay/alex-core';
 import { StartupModule } from './startup.module';
-import '../common/languages';
 import SarifViewer from '@alipay/alex/extensions/cloud-ide-ext.sarif-viewer';
 import css from '@alipay/alex/extensions/alex.css-language-features-worker';
 import html from '@alipay/alex/extensions/alex.html-language-features-worker';
 import json from '@alipay/alex/extensions/alex.json-language-features-worker';
 import markdown from '@alipay/alex/extensions/alex.markdown-language-features-worker';
-import typescript from '@alipay/alex/extensions/alex.typescript-language-features-worker';
+import typescript from '@alipay/alex/extensions/alitcode.typescript-language-features-worker';
 import lsif from '@alipay/alex/extensions/cloud-ide.vscode-lsif';
+
+import { LocalExtensionModule } from '../common/local-extension.module';
 
 (window as any).alex = Alex;
 
-isFilesystemReady().then(async () => {
+isFilesystemReady().then(() => {
   console.log('filesystem ready');
-  // console.log(
-  //   await requireModule('fs-extra').pathExists(
-  //     path.join(os.homedir(), `${STORAGE_DIR}/settings.json`)
-  //   )
-  // );
 });
 
 const platformConfig = {
@@ -83,13 +74,14 @@ const App = () => (
           },
         }),
         CodeAPIModule,
+        LocalExtensionModule,
         StartupModule,
       ],
       extensionMetadata: [css, html, json, markdown, typescript],
       workspaceDir: `${platform}/${config.owner}/${config.name}`,
       layoutConfig,
       defaultPreferences: {
-        'general.theme': 'ide-dark',
+        'general.theme': 'ide-light',
       },
     }}
     runtimeConfig={{
@@ -100,22 +92,16 @@ const App = () => (
   />
 );
 
-ReactDOM.render(<App key="1" />, document.getElementById('main'));
-
-// for test
-window.destroy = () => {
-  ReactDOM.render(<div>destroyed</div>, document.getElementById('main'));
-};
-
 let key = 0;
-window.reset = () => {
-  ReactDOM.render(<App key={key++} />, document.getElementById('main'));
-};
+const render = () => ReactDOM.render(<App key={key++} />, document.getElementById('main'));
+render();
+// for dispose test
+window.reset = (destroy = false) =>
+  destroy ? ReactDOM.render(<div>destroyed</div>, document.getElementById('main')) : render();
 
 declare global {
   interface Window {
     app: IAppInstance;
-    destroy(): void;
-    reset(): void;
+    reset(destroyed?: boolean): void;
   }
 }

@@ -4,7 +4,7 @@ import { IAppInstance, EditorRenderer } from '@alipay/alex/lib/editor';
 import * as Alex from '@alipay/alex/lib/editor';
 // 引入 extension
 import '@alipay/alex/lib/editor.extension';
-import '../common/languages';
+import '@alipay/alex/languages';
 
 import 'antd/dist/antd.css';
 import Select from 'antd/lib/select';
@@ -12,7 +12,7 @@ import Cascader from 'antd/lib/cascader';
 import Button from 'antd/lib/button';
 import './style.less';
 import * as EditorPlugin from './plugin';
-import { StartupModule } from './editor.module';
+import { LocalExtensionModule } from '../common/local-extension.module';
 
 (window as any).alex = Alex;
 
@@ -147,7 +147,7 @@ const App = () => {
                 window.app = app;
               }}
               appConfig={{
-                modules: [StartupModule],
+                modules: [LocalExtensionModule],
                 plugins: [EditorPlugin],
                 workspaceDir: project,
                 defaultPreferences: {

@@ -1,1 +1,0 @@
-import '@alipay/alex/languages';

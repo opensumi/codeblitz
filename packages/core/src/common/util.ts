@@ -1,9 +1,9 @@
 import { Provider, ConstructorOf } from '@ali/common-di';
 import { BackService } from '@ali/ide-core-common';
 import { BrowserModule } from '@ali/ide-core-browser';
-import { IExtensionIdentity } from '@alipay/alex-shared';
+import { IExtensionIdentity, IExtensionMode } from '@alipay/alex-shared';
 import * as paths from 'path';
-import { EXT_SCHEME, WORKSPACE_ROOT } from './constant';
+import { EXT_SCHEME, WORKSPACE_ROOT, OSSBucket } from './constant';
 
 /**
  * 获取对象上所有函数的 property
@@ -33,10 +33,12 @@ export const getFunctionProps = (obj: Record<string, any>): string[] => {
   }
 };
 
-export const getExtensionPath = (ext: IExtensionIdentity) => {
+export const getExtensionPath = (ext: IExtensionIdentity, mode?: IExtensionMode) => {
   return [
     EXT_SCHEME,
-    '://alipay-rmsdeploy-image.cn-hangzhou.alipay.aliyun-inc.com/marketplace/assets/',
+    '://',
+    mode == 'public' ? OSSBucket.public : OSSBucket.internal,
+    '/marketplace/assets/',
     `${ext.publisher}.${ext.name}/v${ext.version}/extension`,
   ].join('');
 };

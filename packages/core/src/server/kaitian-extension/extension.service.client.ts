@@ -62,8 +62,8 @@ export class ExtensionServiceClientImpl implements IExtensionNodeClientService {
 }
 
 async function getExtension(ext: IExtensionBasicMetadata, localization: string) {
-  // package.json 的 name 和 插件的 name 不是一回事
-  const extensionPath = getExtensionPath(ext.extension);
+  const extensionPath =
+    ext.mode === 'local' && ext.uri ? ext.uri : getExtensionPath(ext.extension, ext.mode);
   const extensionUri = Uri.parse(extensionPath);
 
   let pkgNlsJSON: { [key: string]: string } | undefined;
