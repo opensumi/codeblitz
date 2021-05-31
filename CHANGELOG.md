@@ -1,3 +1,13 @@
+# [1.0.0-rc.3](https://code.alipay.com/cloud-ide/crew-dragon/compare/v1.0.0-rc.2...v1.0.0-rc.3) (2021-05-31)
+
+
+### Features
+
+* **alex:** 支持动态调整搜索组件的顶部位置 ([c889481](https://code.alipay.com/cloud-ide/crew-dragon/commits/c889481ab6afaf1abd94b0383e19b1b5cd9a745e))
+* **cli:** 支持加载公网和本地调试扩展 ([82772cb](https://code.alipay.com/cloud-ide/crew-dragon/commits/82772cb8fd3afed323be38fa5294ef61f2f30f24))
+
+
+
 # [1.0.0-rc.2](https://code.alipay.com/cloud-ide/crew-dragon/compare/v1.0.0-rc.1...v1.0.0-rc.2) (2021-05-27)
 
 
