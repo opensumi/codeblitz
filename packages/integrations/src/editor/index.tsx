@@ -167,7 +167,8 @@ const App = () => {
                 // hideEditorTab: true,
               }}
               editorConfig={{
-                disableEditorSearch: true,
+                adjustFindWidgetTop: true,
+                // disableEditorSearch: true,
                 // stretchHeight: true,
               }}
               documentModel={{

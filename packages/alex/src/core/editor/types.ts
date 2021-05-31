@@ -57,6 +57,13 @@ export interface EditorConfig {
    */
   stretchHeight?: boolean;
   /**
+   * 自适应 editor search 部件的绝对定位的 top 值
+   * 在 editor 滚出 browser 时可保证 widget 可见
+   * adjustFindWidgetTop=true 时则相对窗口顶部偏移
+   * 如顶部有 fixed 元素，则可通过 number 来自行设置顶部偏移量
+   */
+  adjustFindWidgetTop?: boolean | number;
+  /**
    * 禁用编辑器内搜索，此时会注销内部 ctrl/cmd + f 快捷键
    */
   disableEditorSearch?: boolean;
@@ -71,6 +78,9 @@ export interface EditorProps {
    * editor 组件专有配置
    */
   editorConfig?: EditorConfig;
+  /**
+   * 文档模型，控制 editor 打开的文件
+   */
   documentModel: FSDocumentModel | CodeDocumentModel;
 }
 

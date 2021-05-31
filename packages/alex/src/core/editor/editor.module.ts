@@ -1,4 +1,9 @@
 import * as monaco from '@ali/monaco-editor-core/esm/vs/editor/editor.api';
+import { FindController } from '@ali/monaco-editor-core/esm/vs/editor/contrib/find/findController';
+import { FindWidget } from '@ali/monaco-editor-core/esm/vs/editor/contrib/find/findWidget';
+import * as monacoKeybindings from '@ali/monaco-editor-core/esm/vs/platform/keybinding/common/keybindingsRegistry';
+import { ContextKeyDefinedExpr } from '@ali/monaco-editor-core/esm/vs/platform/contextkey/common/contextkey';
+
 import { Provider, Injectable, Autowired } from '@ali/common-di';
 import debounce from 'lodash.debounce';
 import {
@@ -12,13 +17,18 @@ import {
   CommandContribution,
   CommandRegistry,
   Disposable,
+  IDisposable,
   KeybindingContribution,
   KeybindingRegistry,
   MonacoContribution,
   MonacoService,
   ServiceNames,
+  IContextKeyService,
+  KeybindingRegistryImpl,
 } from '@ali/ide-core-browser';
-import { IThemeService } from '@ali/ide-theme';
+import { RawContextKey } from '@ali/ide-core-browser/lib/raw-context-key';
+import { uuid } from '@ali/ide-core-common';
+import { IThemeService, ICSSStyleService } from '@ali/ide-theme';
 import {
   getExtensionPath,
   AppConfig,
@@ -53,6 +63,9 @@ import { isCodeDocumentModel, CodeDocumentModel, EditorProps } from './types';
 import styles from '../style.module.less';
 import { IPropsService } from '../props.service';
 import { AlexCommandContribution } from '../commands';
+
+const ContextTrue = new RawContextKey('alex.context.true', undefined);
+const ContextFalse = new RawContextKey('alex.context.false', undefined);
 
 @Injectable()
 class BreadCrumbServiceImplOverride extends BreadCrumbServiceImpl {
@@ -246,6 +259,12 @@ class EditorSpecialContribution
   @Autowired(IPropsService)
   private propsService: IPropsService<EditorProps>;
 
+  @Autowired(ICSSStyleService)
+  cssStyleService: ICSSStyleService;
+
+  @Autowired(IContextKeyService)
+  private readonly globalContextKeyService: IContextKeyService;
+
   async mountFileSystem(rootFS: FileSystemInstance<'MountableFileSystem'>) {
     // TODO: 提供配置选择存储在内存中还是 indexedDB 中
     const {
@@ -280,6 +299,10 @@ class EditorSpecialContribution
   }
 
   initialize() {
+    // 恒为 true/false 的 contextKey
+    ContextTrue.bind(this.globalContextKeyService);
+    ContextFalse.bind(this.globalContextKeyService);
+
     // 提供写时 diff 视图
     // TODO: 暂时只有读，先去掉，避免编码改变导致的问题
     // this.scmService.registerSCMProvider({
@@ -524,26 +547,45 @@ class EditorSpecialContribution
       updateRootHeight();
     }
 
-    /**
-     * monaco 内部未提供注销命令的函数
-     * 使用 addDynamicKeybinding 需要在 monaco 加载后执行，否则因为缓存并不生效
-     * 先暂时使用 private 方法，后升级到 monaco 0.20 寻找更好的解法
-     * TODO: 更好的解法应该是 kaitian 中完全控制 monaco 的快捷键，需要技术改造
-     */
-    if (this.propsService.props.editorConfig?.disableEditorSearch) {
-      const monacoKeybindingsMap: Map<
-        string,
-        { command: string }[]
-      > = (editor.monacoEditor as any)._standaloneKeybindingService._getResolver()._map;
-      for (const [key, items] of monacoKeybindingsMap.entries()) {
-        if (items.find((item) => item.command === 'actions.find')) {
-          monacoKeybindingsMap.delete(key);
-          break;
-        }
-      }
-    }
+    this.adjustFindWidgetPosition(editor, disposer);
 
     return disposer;
+  }
+
+  private adjustFindWidgetPosition(editor: IEditor, disposer: Disposable) {
+    const adjustFindWidgetTop = this.propsService.props.editorConfig?.adjustFindWidgetTop;
+    if (typeof adjustFindWidgetTop === 'undefined') {
+      return;
+    }
+    const findController: FindController = editor.monacoEditor.getContribution(FindController.ID);
+    const findState = findController.getState();
+
+    let styleDisposer: IDisposable | null = null;
+    disposer.addDispose(
+      findState.onFindReplaceStateChange((e) => {
+        if (!e.isRevealed) return;
+        try {
+          if (findState.isRevealed) {
+            const widget: FindWidget = (findController as any)._widget;
+            const dom = widget.getDomNode();
+            const { top } = dom.parentElement!.getBoundingClientRect();
+            const offsetTop =
+              typeof adjustFindWidgetTop === 'number' ? top - adjustFindWidgetTop : top;
+            const className = `find-widget-top-${uuid()}`;
+            dom.classList.add(className);
+            if (offsetTop < 0) {
+              styleDisposer = this.cssStyleService.addClass(className, {
+                top: `${-offsetTop}px !important;`,
+              });
+            }
+          } else {
+            styleDisposer?.dispose();
+          }
+        } catch (err) {
+          console.error(err);
+        }
+      })
+    );
   }
 
   registerKeybindings(keybindings: KeybindingRegistry) {
@@ -573,6 +615,25 @@ class EditorSpecialContribution
     keybindingList.forEach((binding) => {
       keybindings.unregisterKeybinding(binding);
     });
+
+    // 通过设置 when 为 false 来禁用快捷键
+    if (this.propsService.props.editorConfig?.disableEditorSearch) {
+      const findCommand = monacoKeybindings.KeybindingsRegistry.getDefaultKeybindings().find(
+        (item) => item.command === 'actions.find'
+      );
+      if (findCommand) {
+        findCommand.when = ContextKeyDefinedExpr.create('alex.context.false');
+      }
+    } else {
+      // 设置为 passthrough，则忽略快捷键的处理，从而使事件冒泡，触发浏览器默认行为
+      this.addDispose(
+        keybindings.registerKeybinding({
+          command: KeybindingRegistryImpl.PASSTHROUGH_PSEUDO_COMMAND,
+          keybinding: 'ctrlcmd+f',
+          when: '!editorFocus',
+        })
+      );
+    }
   }
 
   onMonacoLoaded(monacoService: MonacoService) {
