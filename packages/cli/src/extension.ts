@@ -71,7 +71,10 @@ export const install = async (
     )
     .subscribe(
       (ext) => {
-        installedExtensions.push(ext);
+        if (options?.mode === 'public') {
+          ext.mode = 'public';
+        }
+        installedExtensions.push({ ...ext });
         log.info(`${formatExtension(ext)} 安装完成`);
       },
       (err) => {

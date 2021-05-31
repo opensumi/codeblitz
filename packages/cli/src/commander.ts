@@ -20,8 +20,8 @@ install kaitian extensions, you should config in package.json firstly, example:
 version can be ignored, then will use latest version under current kaitian framework version
 `
   )
-  .action((cmd, ...args) => {
-    if (args.length) {
+  .action((__, command) => {
+    if (command.args.length) {
       log.warn(
         'You provided more than one argument. if you want to install extensions, you should use install command'
       );
