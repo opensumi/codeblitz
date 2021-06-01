@@ -33,7 +33,7 @@ export const IDETheme: IExtensionBasicMetadata = {
   extension: {
     publisher: 'kaitian',
     name: 'ide-dark-theme',
-    version: '2.3.2',
+    version: '2.4.0',
   },
   packageJSON: {
     name: 'ide-dark-theme',

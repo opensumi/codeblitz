@@ -12,7 +12,7 @@ import css from '@alipay/alex/extensions/alex.css-language-features-worker';
 import html from '@alipay/alex/extensions/alex.html-language-features-worker';
 import json from '@alipay/alex/extensions/alex.json-language-features-worker';
 import markdown from '@alipay/alex/extensions/alex.markdown-language-features-worker';
-import typescript from '@alipay/alex/extensions/alitcode.typescript-language-features-worker';
+import typescript from '@alipay/alex/extensions/alex.typescript-language-features-worker';
 import lsif from '@alipay/alex/extensions/cloud-ide.vscode-lsif';
 
 import { LocalExtensionModule } from '../common/local-extension.module';

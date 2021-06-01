@@ -5,10 +5,10 @@ const { generateLanguages, generateModules, generateShims } = require('./utils/g
 invoke(async () => {
   await Promise.all([generateLanguages(), generateModules(), generateShims()]);
 
-  // try {
-  //   await exec('yarn workspace @alipay/alex-toolkit build:languages');
-  // } catch (err) {
-  //   signale.error('build languages 失败')
-  //   throw err
-  // }
+  try {
+    await exec('yarn workspace @alipay/alex-toolkit build:languages');
+  } catch (err) {
+    signale.error('build languages 失败');
+    throw err;
+  }
 });

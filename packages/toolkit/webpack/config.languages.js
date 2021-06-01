@@ -6,13 +6,13 @@ module.exports = () => {
   return {
     context: path.join(__dirname, '../../..'),
     entry: {
-      [config.languageUmdEntry]: './packages/alex/languages/index.js',
-      [config.languageUmdMinEntry]: './packages/alex/languages/index.js',
+      [config.languageGlobalEntry]: './packages/alex/languages/index.js',
+      [config.languageGlobalMinEntry]: './packages/alex/languages/index.js',
     },
     output: {
       path: path.resolve(__dirname, '../../alex/languages'),
       library: 'AlexLanguages',
-      libraryTarget: 'umd',
+      libraryTarget: 'global',
     },
     devtool: false,
     mode: 'production',
@@ -20,12 +20,7 @@ module.exports = () => {
       extensions: ['.js', '.json'],
     },
     externals: {
-      '@alipay/alex-registry': {
-        root: ['Alex', 'Registry'],
-        commonjs2: ['@alipay/alex/bundle/alex.umd', 'Registry'],
-        commonjs: ['@alipay/alex/bundle/alex.umd', 'Registry'],
-        amd: ['@alipay/alex/bundle/alex.umd', 'Registry'],
-      },
+      '@alipay/alex-registry': ['Alex', 'Registry'],
     },
     optimization: {
       minimize: true,

@@ -59,7 +59,7 @@ const libBundle = createWebpackConfig({
   },
 });
 
-const umdBundle = createWebpackConfig({
+const globalBundle = createWebpackConfig({
   mode: 'production',
   tsconfigPath: path.join(__dirname, '../../../tsconfig.json'),
   outputPath: path.join(__dirname, '../../alex/bundle'),
@@ -70,34 +70,19 @@ const umdBundle = createWebpackConfig({
   webpackConfig: {
     context: path.join(__dirname, '../../..'),
     entry: {
-      [config.appUmdEntry]: './packages/alex/src',
-      [config.appUmdMinEntry]: './packages/alex/src',
+      [config.appGlobalEntry]: './packages/alex/src',
+      [config.appGlobalMinEntry]: './packages/alex/src',
     },
     // 此处 bundle 的包仅作为 commonjs 使用，但因为 external 原因会导致 webpack4 加载 bundle 出错，因此还是使用 umd
     output: {
       library: 'Alex',
-      libraryTarget: 'umd',
+      libraryTarget: 'global',
     },
     externals: [
       {
-        react: {
-          root: 'React',
-          commonjs2: 'react',
-          commonjs: 'react',
-          amd: 'react',
-        },
-        'react-dom': {
-          root: 'ReactDOM',
-          commonjs2: 'react-dom',
-          commonjs: 'react-dom',
-          amd: 'react-dom',
-        },
-        moment: {
-          root: 'moment',
-          commonjs2: 'moment',
-          commonjs: 'moment',
-          amd: 'moment',
-        },
+        react: 'react',
+        'react-dom': 'ReactDOM',
+        moment: 'moment',
       },
     ],
     optimization: {
@@ -116,4 +101,4 @@ const umdBundle = createWebpackConfig({
   },
 });
 
-module.exports = libBundle;
+module.exports = [libBundle, globalBundle];

@@ -33,14 +33,14 @@ exports.nodePolyfill = {
 
 exports.config = {
   appEntry: 'alex',
-  appUmdEntry: 'alex.umd',
-  appUmdMinEntry: 'alex.umd.min',
+  appGlobalEntry: 'alex.global',
+  appGlobalMinEntry: 'alex.global.min',
   editorEntry: 'alex.editor',
   editorAllEntry: 'alex.editor.all',
   workerEntry: 'worker-host',
   webviewEntry: 'webview',
-  languageUmdEntry: 'languages.umd',
-  languageUmdMinEntry: 'languages.umd.min',
+  languageGlobalEntry: 'languages.global',
+  languageGlobalMinEntry: 'languages.global.min',
 };
 
 // just for shared

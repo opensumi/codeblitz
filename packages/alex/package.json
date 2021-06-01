@@ -4,6 +4,7 @@
   "description": "@alipay/alex",
   "main": "lib/index.js",
   "typings": "lib/index.d.ts",
+  "unpkg": "bundle/alex.global.js",
   "files": [
     "lib",
     "bin",

@@ -29,7 +29,7 @@ export const createServer = async (dirs: string[], uri: Uri) => {
     }
     const filepath = pathname.slice(`${uri.path}${targetDir}`.length);
     send(req, filepath, {
-      cacheControl: false,
+      maxAge: 0,
       root: targetDir,
     })
       .on('headers', (res: http.ServerResponse) => {
