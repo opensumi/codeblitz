@@ -1,3 +1,12 @@
+# [1.0.0-rc.4](https://code.alipay.com/cloud-ide/crew-dragon/compare/v1.0.0-rc.3...v1.0.0-rc.4) (2021-06-01)
+
+
+### Bug Fixes
+
+* **cli:** 修复扩展安装 mode 写入问题 ([1e98173](https://code.alipay.com/cloud-ide/crew-dragon/commits/1e98173ae3837c96c3467591f42e54a2d5185cd8))
+
+
+
 # [1.0.0-rc.3](https://code.alipay.com/cloud-ide/crew-dragon/compare/v1.0.0-rc.2...v1.0.0-rc.3) (2021-05-31)
 
 
