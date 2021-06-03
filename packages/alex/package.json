@@ -13,7 +13,6 @@
     "modules",
     "languages",
     "shims",
-    "polyfills",
     "bundle",
     "typings"
   ],
