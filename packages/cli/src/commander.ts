@@ -51,7 +51,7 @@ extensionProgram
 extensionProgram
   .command('link <extensionDirs...>')
   .description('link local extension for dev')
-  .option('-h, --host', 'local extension static file service host, default: `localhost`')
+  .option('-h, --host [value]', 'local extension static file service host, default: `localhost`')
   .action((extensionDirs, options) => {
     installLocalExtensions(extensionDirs, options).catch((err) => console.error(err));
   });

@@ -12,10 +12,13 @@ const libBundle = createWebpackConfig({
   mode: 'production',
   tsconfigPath: path.join(__dirname, '../../../tsconfig.json'),
   outputPath: path.join(__dirname, '../../alex/bundle'),
-  define: Object.keys(define).reduce((obj, key) => {
-    obj[key] = JSON.stringify(define[key]);
-    return obj;
-  }, {}),
+  define: {
+    ...Object.keys(define).reduce((obj, key) => {
+      obj[key] = JSON.stringify(define[key]);
+      return obj;
+    }, {}),
+    __non_webpack_require__: '() => {}',
+  },
   webpackConfig: {
     context: path.join(__dirname, '../../..'),
     entry: {
