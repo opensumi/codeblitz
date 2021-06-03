@@ -1,3 +1,17 @@
+# [1.0.0](https://code.alipay.com/cloud-ide/crew-dragon/compare/v1.0.0-rc.4...v1.0.0) (2021-06-03)
+
+
+### Bug Fixes
+
+* **cli:** 修复 link 时 host options 定义问题 ([a2ebf7c](https://code.alipay.com/cloud-ide/crew-dragon/commits/a2ebf7c7ce8ee7ada7d6aba2e519d6041eff563c))
+
+
+### Features
+
+* 导出 Uri 和 Emitter ([7e0020e](https://code.alipay.com/cloud-ide/crew-dragon/commits/7e0020eff1057ca52e602d910a141944fa5a0547))
+
+
+
 # [1.0.0-rc.4](https://code.alipay.com/cloud-ide/crew-dragon/compare/v1.0.0-rc.3...v1.0.0-rc.4) (2021-06-01)
 
 
