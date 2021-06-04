@@ -1,3 +1,12 @@
+## [1.0.1](https://code.alipay.com/cloud-ide/crew-dragon/compare/v1.0.0...v1.0.1) (2021-06-04)
+
+
+### Bug Fixes
+
+* **alex:** 修复 polyfills 导出问题 ([ea6be97](https://code.alipay.com/cloud-ide/crew-dragon/commits/ea6be97508cf786155946472d6e5de0891d642d5))
+
+
+
 # [1.0.0](https://code.alipay.com/cloud-ide/crew-dragon/compare/v1.0.0-rc.4...v1.0.0) (2021-06-03)
 
 
