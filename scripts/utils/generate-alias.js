@@ -64,7 +64,11 @@ export * from "../lib/modules/${scope}__${name}";
 };
 
 exports.generateShims = async () => {
-  // 暴露内置的 shims，如引用 lib，可使用此文件夹下的 polyfill
+  const polyfillsDir = path.join(__dirname, '../../packages/alex/polyfills');
+  await fse.remove(polyfillsDir);
+  await fse.ensureDir(polyfillsDir);
+  await fse.copy(path.join(__dirname, '../../packages/toolkit/polyfill'), polyfillsDir);
+
   const shimsDir = path.join(__dirname, '../../packages/alex/shims');
   await fse.remove(shimsDir);
   await fse.ensureDir(shimsDir);
