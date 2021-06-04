@@ -1,3 +1,12 @@
+## [1.0.2](https://code.alipay.com/cloud-ide/crew-dragon/compare/v1.0.1...v1.0.2) (2021-06-04)
+
+
+### Bug Fixes
+
+* **core:** logo 替换为公网地址 ([7b8a8ed](https://code.alipay.com/cloud-ide/crew-dragon/commits/7b8a8ed2562c775363d615846c52158ea6c419cf))
+
+
+
 ## [1.0.1](https://code.alipay.com/cloud-ide/crew-dragon/compare/v1.0.0...v1.0.1) (2021-06-04)
 
 
