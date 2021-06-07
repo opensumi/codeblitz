@@ -1,4 +1,5 @@
-import { Domain, URI, localize } from '@ali/ide-core-browser';
+import { coalesce } from '@ali/ide-core-common/lib/arrays';
+import { Domain, URI, localize, CommandService } from '@ali/ide-core-browser';
 import {
   BrowserEditorContribution,
   EditorComponentRegistry,
@@ -9,6 +10,7 @@ import { ResourceService, IResource, WorkbenchEditorService } from '@ali/ide-edi
 import { IIconService, IconType } from '@ali/ide-theme';
 import { Autowired } from '@ali/common-di';
 import { IWorkspaceService } from '@ali/ide-workspace';
+import { IFileServiceClient } from '@ali/ide-file-service/lib/common';
 import { RuntimeConfig, AppConfig } from '../../common';
 import { EditorWelcomeComponent } from './welcome.view';
 import { CommonConfig } from '../../common/config';
@@ -34,6 +36,12 @@ export class WelcomeContribution implements BrowserEditorContribution {
 
   @Autowired(AppConfig)
   appConfig: AppConfig;
+
+  @Autowired(IFileServiceClient)
+  fileServiceClient: IFileServiceClient;
+
+  @Autowired(CommandService)
+  commandService: CommandService;
 
   registerEditorComponent(registry: EditorComponentRegistry) {
     registry.registerEditorComponent({
@@ -66,7 +74,14 @@ export class WelcomeContribution implements BrowserEditorContribution {
 
   onDidRestoreState() {
     const { defaultOpenFile, startupEditor } = this.runtimeConfig;
-    if (startupEditor && startupEditor !== 'welcomePage') return;
+    if (!this.editorService.getAllOpenedUris().length && startupEditor) {
+      if (startupEditor === 'readme') {
+        this.openReadme();
+      } else if (startupEditor === 'welcomePage') {
+        this.openWelcome();
+      }
+      return;
+    }
     if (defaultOpenFile) {
       const openFile = Array.isArray(defaultOpenFile) ? defaultOpenFile : [defaultOpenFile];
       openFile.forEach((file, i) => {
@@ -76,9 +91,58 @@ export class WelcomeContribution implements BrowserEditorContribution {
         });
       });
     } else if (!this.editorService.getAllOpenedUris().length) {
-      this.editorService.open(new URI('welcome://'), {
-        preview: false,
-      });
+      this.openWelcome();
     }
+  }
+
+  async openReadme() {
+    const roots = await this.workspaceService.roots;
+    const readmes = coalesce(
+      await Promise.all(
+        roots.map(async (root) => {
+          const folderStat = await this.fileServiceClient
+            .getFileStat(root.uri)
+            .catch(() => undefined);
+          const files = folderStat?.children
+            ? folderStat.children
+                .map((child) => {
+                  const uri = new URI(child.uri);
+                  return {
+                    uri,
+                    name: uri.displayName,
+                  };
+                })
+                .sort((x, y) => x.name.localeCompare(y.name))
+            : [];
+          const file =
+            files.find((file) => file.name.toLowerCase() === 'readme.md') ||
+            files.find((file) => file.name.toLowerCase().startsWith('readme'));
+          if (file) {
+            return file.uri;
+          }
+        })
+      )
+    );
+
+    if (readmes.length) {
+      const isMarkDown = (readme: URI) => readme.codeUri.path.toLowerCase().endsWith('.md');
+      await Promise.all([
+        this.commandService.executeCommand(
+          'markdown.showPreview',
+          null,
+          readmes.filter(isMarkDown),
+          { locked: true }
+        ),
+        this.editorService.openUris(readmes.filter((readme) => !isMarkDown(readme))),
+      ]);
+    } else {
+      this.openWelcome();
+    }
+  }
+
+  openWelcome() {
+    this.editorService.open(new URI('welcome://'), {
+      preview: false,
+    });
   }
 }
