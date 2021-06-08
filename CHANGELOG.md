@@ -1,3 +1,12 @@
+# [1.1.0](https://code.alipay.com/cloud-ide/crew-dragon/compare/v1.0.2...v1.1.0) (2021-06-08)
+
+
+### Features
+
+* 支持 startupEditor 打开并预览 readme ([c5be084](https://code.alipay.com/cloud-ide/crew-dragon/commits/c5be084ec7cf40dbd570e4e5227780efc71ead5d))
+
+
+
 ## [1.0.2](https://code.alipay.com/cloud-ide/crew-dragon/compare/v1.0.1...v1.0.2) (2021-06-04)
 
 
