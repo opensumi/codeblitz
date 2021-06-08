@@ -48,10 +48,10 @@ export interface RuntimeConfig {
    * 启动时打开的 editor
    * none 不打开任何 editor
    * welcomePage 打开欢迎页
-   * 后续考虑支持 'readme', 'newUntitledFile', 'welcomePageInEmptyWorkbench', 'gettingStarted'
+   * 后续考虑支持 'newUntitledFile', 'welcomePageInEmptyWorkbench', 'gettingStarted'
    * @default welcomePage
    */
-  startupEditor?: 'none' | 'welcomePage';
+  startupEditor?: 'none' | 'welcomePage' | 'readme';
   /**
    * 隐藏编辑器区 tab
    */
