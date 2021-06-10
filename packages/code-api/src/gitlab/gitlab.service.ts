@@ -236,4 +236,7 @@ export class GitLabAPIService implements ICodeAPIService {
   async searchFile() {
     return [];
   }
+
+  // 不支持
+  async getFileBlame() {}
 }

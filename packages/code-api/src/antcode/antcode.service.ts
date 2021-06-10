@@ -210,4 +210,17 @@ export class AntCodeAPIService implements ICodeAPIService {
     );
     return reqRes;
   }
+
+  async getFileBlame(repo: IRepositoryModel, path: string) {
+    return new Uint8Array(
+      await this.request(
+        `/api/v3/projects/${this.getProjectId(repo)}/repository/blame?sha=${
+          repo.commit
+        }&file_path=${path}`,
+        {
+          responseType: 'arrayBuffer',
+        }
+      )
+    );
+  }
 }

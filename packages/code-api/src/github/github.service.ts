@@ -540,4 +540,7 @@ export class GitHubAPIService implements ICodeAPIService {
     }
     return this.recursiveTreeMap.get(key)!;
   }
+
+  // TODO: graphql 下才支持
+  async getFileBlame() {}
 }

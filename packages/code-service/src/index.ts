@@ -14,6 +14,7 @@ import { ICodeServiceConfig } from './types';
 import { StatusbarContribution } from './statusbar';
 import { DecorationProvider } from './decoration.provider';
 import { LineDecorationContribution } from './line-decoration.contribution';
+import { CommandsContribution } from './commands.contribution';
 
 export { CodeModelService };
 
@@ -43,6 +44,7 @@ export class CodeServiceModule extends BrowserModule {
     DecorationProvider,
     SearchContribution,
     LineDecorationContribution,
+    CommandsContribution,
     {
       token: ContentSearchServerPath,
       useClass: ContentSearchService,

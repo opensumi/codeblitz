@@ -122,6 +122,10 @@ export class Repository implements IRepositoryModel {
       return [];
     }
   }
+
+  asRelativePath(absolutePath: string) {
+    return path.relative(this.root, absolutePath);
+  }
 }
 
 @Injectable({ multiple: true })
