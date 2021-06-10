@@ -133,6 +133,10 @@ export interface ICodeAPIService {
     searchString: string,
     options: { limit: number }
   ): Promise<string[]>;
+  /**
+   * file blame
+   */
+  getFileBlame(repo: IRepositoryModel, filepath: string): Promise<Uint8Array | void>;
 }
 
 export interface ICodeAPIServiceProvider extends ICodeAPIService {
