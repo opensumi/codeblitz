@@ -1,3 +1,12 @@
+# [1.2.0](https://code.alipay.com/cloud-ide/crew-dragon/compare/v1.1.0...v1.2.0) (2021-06-10)
+
+
+### Features
+
+* **code-service:** 增加内置 blame 和 link 命令 ([0c80a28](https://code.alipay.com/cloud-ide/crew-dragon/commits/0c80a281695030ce60b84d145df45baea9c21035))
+
+
+
 # [1.1.0](https://code.alipay.com/cloud-ide/crew-dragon/compare/v1.0.2...v1.1.0) (2021-06-08)
 
 
