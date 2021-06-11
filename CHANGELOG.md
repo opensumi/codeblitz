@@ -1,3 +1,12 @@
+## [1.2.1](https://code.alipay.com/cloud-ide/crew-dragon/compare/v1.2.0...v1.2.1) (2021-06-11)
+
+
+### Bug Fixes
+
+* 修复 global 打包的问题 ([8d37fdd](https://code.alipay.com/cloud-ide/crew-dragon/commits/8d37fddd9828ffa4e64b80a3500ca1d6bc86e127))
+
+
+
 # [1.2.0](https://code.alipay.com/cloud-ide/crew-dragon/compare/v1.1.0...v1.2.0) (2021-06-10)
 
 
