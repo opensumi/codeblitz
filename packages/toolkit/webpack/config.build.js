@@ -83,7 +83,7 @@ const globalBundle = createWebpackConfig({
     },
     externals: [
       {
-        react: 'react',
+        react: 'React',
         'react-dom': 'ReactDOM',
         moment: 'moment',
       },

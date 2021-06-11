@@ -20,7 +20,7 @@ module.exports = () => {
       extensions: ['.js', '.json'],
     },
     externals: {
-      '@alipay/alex-registry': ['Alex', 'Registry'],
+      '@alipay/alex-registry': 'Alex',
     },
     optimization: {
       minimize: true,
