@@ -17,7 +17,7 @@ import { ILogServiceManager } from './base';
 import { INodeLogger, NodeLogger } from './node-logger';
 import { FCServiceCenter, initFCService, ServerPort } from '../../connection';
 import { IServerApp, HOME_ROOT } from '../../common';
-import { initializeRootFileSystem, filesystemDeferred } from './filesystem';
+import { initializeRootFileSystem, initializeHomeFileSystem } from './filesystem';
 import { fsExtra as fse } from '../node';
 import { WORKSPACE_ROOT, STORAGE_DIR } from '../../common/constant';
 import { RootFS, RuntimeConfig } from '../../common/types';
@@ -168,7 +168,10 @@ export class ServerApp implements IServerApp {
     // 确保工作空间始终启动
     try {
       const runtimeConfig: RuntimeConfig = this.injector.get(RuntimeConfig);
-      this.rootFS = await initializeRootFileSystem(runtimeConfig.scenario);
+      this.rootFS = await initializeRootFileSystem();
+      this.disposeCollection.push(
+        await initializeHomeFileSystem(this.rootFS, runtimeConfig.scenario)
+      );
 
       for (const contribution of this.launchContributionsProvider.getContributions()) {
         if (contribution.launch) {
