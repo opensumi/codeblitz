@@ -10,8 +10,31 @@ import type {
   ICodeAPIService,
   IRepositoryModel,
   BranchOrTag,
+  CommitParams,
 } from '../common/types';
-import { CodePlatform } from '../common/types';
+import { CodePlatform, CommitFileStatus } from '../common/types';
+
+const toType = (d: API.ResponseCommitFileChange) => {
+  if (d.new_file) return CommitFileStatus.Added;
+  else if (d.deleted_file) return CommitFileStatus.Deleted;
+  else if (d.renamed_file) return CommitFileStatus.Renamed;
+  return CommitFileStatus.Modified;
+};
+const toChangeLines = (diff: string) => {
+  const diffLines = diff ? diff.split('\n') : [];
+  return diffLines.reduce(
+    (obj, line) => {
+      // +++,--- 在首行为文件名
+      if (line.startsWith('+') && !line.startsWith('+++')) {
+        obj.additions += 1;
+      } else if (line.startsWith('-') && !line.startsWith('---')) {
+        obj.deletions += 1;
+      }
+      return obj;
+    },
+    { additions: 0, deletions: 0 }
+  );
+};
 
 /**
  * 目前 aone 不支持通过 private token 跨域调用，需要后台转发
@@ -214,6 +237,19 @@ export class GitLabAPIService implements ICodeAPIService {
     return Buffer.from(buf);
   }
 
+  async getBlobByCommitPath(repo: IRepositoryModel, commit: string, path: string) {
+    const buf = await this.request<ArrayBuffer>(
+      `/api/v3/projects/${await this.getProjectId(repo)}/repository/blobs/${commit}`,
+      {
+        responseType: 'arrayBuffer',
+        params: {
+          filepath: path,
+        },
+      }
+    );
+    return Buffer.from(buf);
+  }
+
   async getBranches(repo: IRepositoryModel): Promise<BranchOrTag[]> {
     return this.request<API.ResponseGetRefs>(
       `/api/v3/projects/${await this.getProjectId(repo)}/repository/branches`
@@ -238,5 +274,62 @@ export class GitLabAPIService implements ICodeAPIService {
   }
 
   // 不支持
-  async getFileBlame() {}
+  async getFileBlame() {
+    return Uint8Array.from([]);
+  }
+
+  async getCommits(repo: IRepositoryModel, params: CommitParams) {
+    const data = await this.request<API.ResponseCommit[]>(
+      `/api/v3/projects/${await this.getProjectId(repo)}/repository/commits`,
+      {
+        params: {
+          ref_name: params.ref,
+          path: params.path,
+          page: params.page,
+          per_page: params.pageSize,
+        },
+      }
+    );
+    return data.map((c) => ({
+      id: c.id,
+      parents: [],
+      author: c.author_name,
+      authorEmail: c.author_email,
+      authorDate: c.created_at,
+      committer: c.author_name,
+      committerEmail: c.author_email,
+      committerDate: c.created_at,
+      message: c.message,
+      title: c.title,
+    }));
+  }
+
+  async getCommitDiff(repo: IRepositoryModel, sha: string) {
+    const data = await this.request<API.ResponseCommitFileChange[]>(
+      `/api/v3/projects/${this.getProjectId(repo)}/repository/commits/${sha}/diff`
+    );
+
+    return data.map((d) => ({
+      oldFilePath: d.old_path,
+      newFilePath: d.new_path,
+      type: toType(d),
+      ...toChangeLines(d.diff),
+    }));
+  }
+
+  async getCommitCompare(repo: IRepositoryModel, from: string, to: string) {
+    const data = await this.request<API.ResponseCommitFileChange[]>(
+      `/api/v3/projects/${this.getProjectId(repo)}/repository/compare`,
+      {
+        params: { from, to },
+      }
+    );
+
+    return data.map((d) => ({
+      oldFilePath: d.old_path,
+      newFilePath: d.new_path,
+      type: toType(d),
+      ...toChangeLines(d.diff),
+    }));
+  }
 }

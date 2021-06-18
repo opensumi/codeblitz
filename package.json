@@ -119,6 +119,11 @@
       "publisher": "cloud-ide",
       "name": "vscode-lsif",
       "version": "0.1.6"
+    },
+    {
+      "publisher": "alex",
+      "name": "gitlens",
+      "version": "10.2.3"
     }
   ]
 }

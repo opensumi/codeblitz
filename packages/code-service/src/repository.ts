@@ -3,7 +3,15 @@ import { Injectable, Autowired } from '@ali/common-di';
 import { memoize, Emitter, Deferred } from '@ali/ide-core-common';
 import { fsExtra } from '@alipay/alex-core';
 import { BranchOrTag, ICodeAPIProvider } from '@alipay/alex-code-api';
-import { ICodePlatform, Submodule, IRepositoryModel, Refs, RefType, ICodeAPIProxy } from './types';
+import {
+  ICodePlatform,
+  Submodule,
+  IRepositoryModel,
+  Refs,
+  HeadRef,
+  RefType,
+  ICodeAPIProxy,
+} from './types';
 import { parseGitmodules, logger, findRef, HEAD, decodeRefPath } from './utils';
 
 @Injectable({ multiple: true })
@@ -143,6 +151,12 @@ export class RootRepository extends Repository {
     return this._refs;
   }
 
+  // 和 git HEAD 一致，指向具体分支或 commit id
+  private _HEAD: HeadRef | undefined;
+  get HEAD(): HeadRef | undefined {
+    return this._HEAD;
+  }
+
   private _ref: string = HEAD;
   get ref() {
     return this._ref;
@@ -165,8 +179,13 @@ export class RootRepository extends Repository {
     return this._revealEntry;
   }
 
-  private async initCommit(ref: string = HEAD) {
+  private async initCommit(ref: string = HEAD, branchName?: string) {
     this.commit = await this.request.getCommit(ref);
+    this._HEAD = {
+      type: RefType.Head,
+      name: branchName,
+      commit: this.commit,
+    };
   }
 
   /**
@@ -204,18 +223,19 @@ export class RootRepository extends Repository {
       }
       const p = segments.slice(1).join('/');
       await this.getRefs();
+      const branchName = findRef(
+        this.refs.branches.map((item) => item.name),
+        p
+      );
       const matchedRef =
-        findRef(
-          this.refs.branches.map((item) => item.name),
-          p
-        ) ||
+        branchName ||
         findRef(
           this.refs.tags.map((item) => item.name),
           p
         );
       if (matchedRef) {
         this.ref = matchedRef;
-        await this.initCommit(matchedRef);
+        await this.initCommit(matchedRef, branchName);
       } else {
         // 此时可能是 commit
         // TODO: 正则进一步判断

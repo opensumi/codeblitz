@@ -72,6 +72,12 @@ export interface Ref {
   readonly commit: string;
 }
 
+export interface HeadRef {
+  readonly type: RefType;
+  readonly name?: string;
+  readonly commit?: string;
+}
+
 export interface Refs {
   readonly branches: Ref[];
   readonly tags: Ref[];

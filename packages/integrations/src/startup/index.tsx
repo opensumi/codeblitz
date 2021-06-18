@@ -14,6 +14,7 @@ import json from '@alipay/alex/extensions/alex.json-language-features-worker';
 import markdown from '@alipay/alex/extensions/alex.markdown-language-features-worker';
 import typescript from '@alipay/alex/extensions/alex.typescript-language-features-worker';
 import lsif from '@alipay/alex/extensions/cloud-ide.vscode-lsif';
+import gitlens from '@alipay/alex/extensions/alex.gitlens';
 
 import { LocalExtensionModule } from '../common/local-extension.module';
 
@@ -77,7 +78,7 @@ const App = () => (
         LocalExtensionModule,
         StartupModule,
       ],
-      extensionMetadata: [css, html, json, markdown, typescript],
+      extensionMetadata: [css, html, json, markdown, typescript, gitlens],
       workspaceDir: `${platform}/${config.owner}/${config.name}`,
       layoutConfig,
       defaultPreferences: {

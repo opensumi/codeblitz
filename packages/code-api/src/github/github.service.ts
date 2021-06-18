@@ -12,9 +12,26 @@ import type {
   EntryParam,
   IRepositoryModel,
   BranchOrTag,
+  CommitParams,
+  CommitFileChange,
 } from '../common/types';
-import { CodePlatform } from '../common/types';
+import { CodePlatform, CommitFileStatus } from '../common/types';
 import { CODE_PLATFORM_CONFIG } from '../common/config';
+
+const toType = (status: string) => {
+  switch (status) {
+    case 'added':
+      return CommitFileStatus.Added;
+    case 'deleted':
+      return CommitFileStatus.Deleted;
+    case 'renamed':
+      return CommitFileStatus.Renamed;
+    case 'modified':
+      return CommitFileStatus.Modified;
+    default:
+      return CommitFileStatus.Modified;
+  }
+};
 
 @Injectable()
 export class GitHubAPIService implements ICodeAPIService {
@@ -297,6 +314,23 @@ export class GitHubAPIService implements ICodeAPIService {
       return Buffer.from(buf);
     },
 
+    getBlobByCommitPath: async (
+      repo: IRepositoryModel,
+      commit: string,
+      path: string
+    ): Promise<Uint8Array> => {
+      const data = await this.requestByREST<API.ResponseBlobCommitPath>(
+        `/repos/${this.getProjectPath(repo)}/contents/${path}?ref=${commit}`,
+        {
+          headers: {
+            Accept: 'application/vnd.github.v3.json',
+          },
+          responseType: 'json',
+        }
+      );
+      return Buffer.from(data.content, data.encoding);
+    },
+
     getBranches: async (repo: IRepositoryModel): Promise<BranchOrTag[]> => {
       let data = await this.requestByREST<API.ResponseMatchingRefs>(
         `/repos/${this.getProjectPath(repo)}/git/matching-refs/heads`,
@@ -343,6 +377,70 @@ export class GitHubAPIService implements ICodeAPIService {
         commit: {
           id: item.commit.sha,
         },
+      }));
+    },
+
+    getCommits: async (repo: IRepositoryModel, params: CommitParams) => {
+      const data = await this.requestByREST<API.ResponseCommit[]>(
+        `/repos/${this.getProjectPath(repo)}/commits`,
+        {
+          responseType: 'json',
+          params: {
+            sha: params.ref,
+            path: params.path,
+            page: params.page,
+            per_page: params.pageSize,
+          },
+        }
+      );
+      return data.map((c) => ({
+        id: c.sha,
+        parents: c.parents.map((p) => p.sha),
+        author: c.commit.author.name,
+        authorEmail: c.commit.author.email,
+        authorDate: c.commit.author.date,
+        committer: c.commit.committer.name,
+        committerEmail: c.commit.committer.name,
+        committerDate: c.commit.committer.name,
+        message: c.commit.message,
+      }));
+    },
+
+    getCommitDiff: async (repo: IRepositoryModel, sha: string): Promise<CommitFileChange[]> => {
+      const data = await this.requestByREST<API.ResponseCommitDetail>(
+        `/repos/${this.getProjectPath(repo)}/commits/${sha}`,
+        {
+          responseType: 'json',
+        }
+      );
+
+      return data.files.map((f) => ({
+        oldFilePath: f.previous_filename || f.filename,
+        newFilePath: f.filename,
+        type: toType(f.status),
+        additions: f.additions,
+        deletions: f.deletions,
+      }));
+    },
+
+    getCommitCompare: async (
+      repo: IRepositoryModel,
+      from: string,
+      to: string
+    ): Promise<CommitFileChange[]> => {
+      const data = await this.requestByREST<API.ResponseCommitDetail>(
+        `/repos/${this.getProjectPath(repo)}/compare/${from}...${to}`,
+        {
+          responseType: 'json',
+        }
+      );
+
+      return data.files.map((f) => ({
+        oldFilePath: f.previous_filename || f.filename,
+        newFilePath: f.filename,
+        type: toType(f.status),
+        additions: f.additions,
+        deletions: f.deletions,
       }));
     },
   };
@@ -502,12 +600,16 @@ export class GitHubAPIService implements ICodeAPIService {
     return this.graphql.getBlob(repo, entry);
   }
 
+  async getBlobByCommitPath(repo: IRepositoryModel, commit: string, path: string) {
+    return this.rest.getBlobByCommitPath(repo, commit, path);
+  }
+
   @retry
   async getBranches(repo: IRepositoryModel): Promise<BranchOrTag[]> {
     if (this._requestType === 'rest') {
       return this.rest.getBranches(repo);
     }
-    return this.graphql.getTags(repo);
+    return this.graphql.getBranches(repo);
   }
 
   @retry
@@ -542,5 +644,22 @@ export class GitHubAPIService implements ICodeAPIService {
   }
 
   // TODO: graphql 下才支持
-  async getFileBlame() {}
+  async getFileBlame() {
+    return Uint8Array.from([]);
+  }
+
+  // TODO: graphql
+  getCommits(repo: IRepositoryModel, params: CommitParams) {
+    return this.rest.getCommits(repo, params);
+  }
+
+  // TODO: graphql
+  getCommitDiff(repo: IRepositoryModel, sha: string) {
+    return this.rest.getCommitDiff(repo, sha);
+  }
+
+  // TODO: graphql
+  async getCommitCompare(repo: IRepositoryModel, from: string, to: string) {
+    return this.rest.getCommitCompare(repo, from, to);
+  }
 }

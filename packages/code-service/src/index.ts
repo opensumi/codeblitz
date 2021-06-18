@@ -4,6 +4,7 @@ import { extendModule, ModuleConstructor } from '@alipay/alex-core';
 import { ContentSearchServerPath } from '@ali/ide-search/lib/common';
 import { FileSearchServicePath } from '@ali/ide-file-search/lib/common';
 
+import './colors';
 import { SearchContribution } from './search/search.contributon';
 import { ContentSearchService } from './search/content-search.service';
 import { FileSearchService } from './search/file-search.service';
