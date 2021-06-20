@@ -1,9 +1,11 @@
 import { Injectable, Autowired } from '@ali/common-di';
 import { Uri } from '@ali/ide-core-common';
+import { posix } from '@ali/ide-core-common/lib/path';
 import { IExtensionBasicMetadata } from '@alipay/alex-shared';
 import { IExtensionNodeClientService, IExtensionMetadata, ExtraMetadata } from './base';
 import { ServerConfig } from '../core/app';
 import { getExtensionPath } from '../../common/util';
+import { EXT_SCHEME } from '../../common/constant';
 
 @Injectable()
 export class ExtensionServiceClientImpl implements IExtensionNodeClientService {
@@ -38,9 +40,14 @@ export class ExtensionServiceClientImpl implements IExtensionNodeClientService {
     if (!extensionMetadata?.length) {
       return Promise.resolve(undefined);
     }
-    const ext = extensionMetadata.find((ext) => getExtensionPath(ext.extension) === extensionPath);
+
+    const ext = extensionMetadata.find((ext) =>
+      ext.mode === 'local' && ext.uri
+        ? ext.uri
+        : getExtensionPath(ext.extension, ext.mode) === extensionPath
+    );
     if (ext) {
-      return getExtension(ext, localization);
+      return getExtension(ext, localization, extraMetaData);
     }
     return Promise.resolve(undefined);
   }
@@ -61,7 +68,63 @@ export class ExtensionServiceClientImpl implements IExtensionNodeClientService {
   }
 }
 
-async function getExtension(ext: IExtensionBasicMetadata, localization: string) {
+async function getExtraMetaData(
+  webAssets: string[],
+  extensionUri: Uri,
+  localization: string,
+  extraMetaData?: ExtraMetadata
+) {
+  if (!extraMetaData) {
+    return {};
+  }
+  const assetsMap = webAssets.reduce<Record<string, string>>((obj, field) => {
+    obj[field.toLowerCase()] = field;
+    return obj;
+  }, {});
+  const extensionExtraMetaData: Record<string, string | null> = {};
+  for (const extraField of Object.keys(extraMetaData)) {
+    try {
+      const basename = posix.basename(extraMetaData[extraField]);
+      const suffix = posix.extname(extraMetaData[extraField]).toLowerCase();
+      const prefix = basename.substr(0, basename.length - suffix.length).toLowerCase();
+      const candidatePath = [
+        `${prefix}.${localization}${suffix}`,
+        `${prefix}.${localization.split('-')[0]}${suffix}`,
+        `${prefix}${suffix}`,
+      ];
+      let targetPath = '';
+      for (const p of candidatePath) {
+        if (assetsMap[p]) {
+          targetPath = assetsMap[p];
+          break;
+        }
+      }
+      if (targetPath) {
+        const url = extensionUri
+          .with({
+            scheme: extensionUri.scheme === EXT_SCHEME ? 'https' : extensionUri.scheme,
+            path: posix.join(extensionUri.path, targetPath),
+          })
+          .toString();
+        const res = await fetch(url);
+        if (res.status >= 200 && res.status < 300) {
+          extensionExtraMetaData[extraField] = await res.text();
+          continue;
+        }
+      }
+    } catch (e) {
+      console.error(e);
+    }
+    extensionExtraMetaData[extraField] = null;
+  }
+  return extensionExtraMetaData;
+}
+
+async function getExtension(
+  ext: IExtensionBasicMetadata,
+  localization: string,
+  extraMetaData?: ExtraMetadata
+) {
   const extensionPath =
     ext.mode === 'local' && ext.uri ? ext.uri : getExtensionPath(ext.extension, ext.mode);
   const extensionUri = Uri.parse(extensionPath);
@@ -91,18 +154,25 @@ async function getExtension(ext: IExtensionBasicMetadata, localization: string) 
     }
   }
 
+  const extraMetadata = await getExtraMetaData(
+    ext.webAssets,
+    extensionUri,
+    localization,
+    extraMetaData
+  );
+
   return {
     id: `${ext.extension.publisher}.${ext.packageJSON.name}`,
     extensionId: `${ext.extension.publisher}.${ext.extension.name}`,
     packageJSON: ext.packageJSON,
     defaultPkgNlsJSON: ext.defaultPkgNlsJSON,
     packageNlsJSON: pkgNlsJSON,
-    extraMetadata: {}, // 这个看框架代码，用的地方很少，应该用不到
+    extraMetadata,
     path: extensionPath,
     realPath: extensionPath,
     extendConfig: ext.extendConfig,
     isBuiltin: true,
-    isDevelopment: false,
+    isDevelopment: ext.mode === 'local',
     uri: extensionUri,
   };
 }

@@ -12,7 +12,11 @@ export const IconSlim: IExtensionBasicMetadata = {
     version: '1.0.5',
   },
   packageJSON: {
+    publisher: 'kaitian',
     name: 'vsicons-slim',
+    version: '1.0.5',
+    displayName: 'vsicons-slim',
+    description: 'Icons for Visual Studio Code',
     activationEvents: ['*'],
     contributes: {
       iconThemes: [
@@ -27,6 +31,7 @@ export const IconSlim: IExtensionBasicMetadata = {
   pkgNlsJSON: {},
   nlsList: [],
   extendConfig: {},
+  webAssets: [],
 };
 
 export const IDETheme: IExtensionBasicMetadata = {
@@ -36,7 +41,11 @@ export const IDETheme: IExtensionBasicMetadata = {
     version: '2.4.0',
   },
   packageJSON: {
+    publisher: 'kaitian',
     name: 'ide-dark-theme',
+    version: '2.4.0',
+    displayName: 'IDE UI Theme',
+    description: 'IDE UI Theme',
     contributes: {
       themes: [
         {
@@ -57,6 +66,7 @@ export const IDETheme: IExtensionBasicMetadata = {
   pkgNlsJSON: {},
   nlsList: [],
   extendConfig: {},
+  webAssets: [],
 };
 
 export const GeekTheme: IExtensionBasicMetadata = {
@@ -66,7 +76,11 @@ export const GeekTheme: IExtensionBasicMetadata = {
     version: '1.8.0',
   },
   packageJSON: {
+    publisher: 'cloudide',
     name: '@alipay/geek-theme',
+    version: '1.8.0',
+    displayName: 'Geek IDE UI Theme',
+    description: 'Geek IDE UI Theme',
     contributes: {
       themes: [
         {
@@ -87,4 +101,5 @@ export const GeekTheme: IExtensionBasicMetadata = {
   pkgNlsJSON: {},
   nlsList: [],
   extendConfig: {},
+  webAssets: [],
 };

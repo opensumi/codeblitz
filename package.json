@@ -93,27 +93,27 @@
     {
       "publisher": "alex",
       "name": "css-language-features-worker",
-      "version": "1.0.0-beta.1"
+      "version": "1.53.0-patch.1"
     },
     {
       "publisher": "alex",
       "name": "markdown-language-features-worker",
-      "version": "1.0.0-beta.2"
+      "version": "1.53.0-patch.1"
     },
     {
       "publisher": "alex",
       "name": "html-language-features-worker",
-      "version": "1.0.0-beta.1"
+      "version": "1.53.0-patch.1"
     },
     {
       "publisher": "alex",
       "name": "json-language-features-worker",
-      "version": "1.0.0-beta.1"
+      "version": "1.53.0-patch.1"
     },
     {
       "publisher": "alex",
       "name": "typescript-language-features-worker",
-      "version": "1.53.0-patch.1"
+      "version": "1.53.0-patch.2"
     },
     {
       "publisher": "cloud-ide",

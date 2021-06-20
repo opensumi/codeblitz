@@ -34,6 +34,8 @@ import {
 } from './override/codeEditorService';
 import { BreadCrumbServiceImplOverride, IBreadCrumbService } from './override/breadcrumb.service';
 
+export { ExtensionManagerModule as ExtensionClientManagerModule } from './extension-manager';
+
 export * from './extension';
 
 export { TextmateLanguageGrammarContribution, LanguageGrammarRegistrationService };

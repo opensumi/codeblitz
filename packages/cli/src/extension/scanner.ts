@@ -94,6 +94,18 @@ export async function getExtension(
 
   const nlsList = await getAllLocalized(extensionPath, 'package.nls', '.json');
 
+  const metaPath = path.join(extensionPath, 'kaitian-meta.json');
+  let webAssets: string[] = [];
+  if (await fse.pathExists(metaPath)) {
+    try {
+      const meta = await fse.readJSON(metaPath);
+      webAssets = meta?.['web-assets'] || [];
+    } catch (e) {
+      console.error(e);
+      webAssets = [];
+    }
+  }
+
   // merge for `kaitianContributes` and `contributes`
   packageJSON.contributes = mergeContributes(
     packageJSON.kaitianContributes,
@@ -118,6 +130,12 @@ export async function getExtension(
     },
     packageJSON: pick(packageJSON, [
       'name',
+      'publisher',
+      'version',
+      'repository',
+      'displayName',
+      'description',
+      'icon',
       'activationEvents',
       'kaitianContributes',
       'contributes',
@@ -126,6 +144,7 @@ export async function getExtension(
     pkgNlsJSON,
     nlsList,
     extendConfig,
+    webAssets,
     mode,
     uri,
   };

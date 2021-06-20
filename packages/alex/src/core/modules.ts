@@ -44,7 +44,11 @@ import { WorkspaceEditModule } from '@ali/ide-workspace-edit/lib/browser';
  * alex
  */
 
-import { ClientModule, ServerModuleCollection } from '@alipay/alex-core';
+import {
+  ClientModule,
+  ServerModuleCollection,
+  ExtensionClientManagerModule,
+} from '@alipay/alex-core';
 import { PluginModule } from '@alipay/alex-plugin';
 import { AlexModule } from './alex.module';
 
@@ -89,7 +93,7 @@ export const modules: ModuleConstructor[] = [
   // Extension Modules
   KaitianExtensionModule,
   // FeatureExtensionModule,
-  // ExtensionManagerModule,
+  ExtensionClientManagerModule,
   MonacoEnhanceModule,
 
   // addons
