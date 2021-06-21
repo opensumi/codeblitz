@@ -41,10 +41,10 @@ export class ExtensionServiceClientImpl implements IExtensionNodeClientService {
       return Promise.resolve(undefined);
     }
 
-    const ext = extensionMetadata.find((ext) =>
-      ext.mode === 'local' && ext.uri
-        ? ext.uri
-        : getExtensionPath(ext.extension, ext.mode) === extensionPath
+    const ext = extensionMetadata.find(
+      (ext) =>
+        (ext.mode === 'local' && ext.uri ? ext.uri : getExtensionPath(ext.extension, ext.mode)) ===
+        extensionPath
     );
     if (ext) {
       return getExtension(ext, localization, extraMetaData);
