@@ -1,3 +1,19 @@
+# [1.3.0](https://code.alipay.com/cloud-ide/crew-dragon/compare/v1.2.1...v1.3.0) (2021-06-21)
+
+
+### Bug Fixes
+
+* dispose 时 unmount home 文件系统 ([1ab75b7](https://code.alipay.com/cloud-ide/crew-dragon/commits/1ab75b734e489ec5bcb81f6861b6185bb96d5803))
+* 非 file 不更改 browser url ([90bb2ed](https://code.alipay.com/cloud-ide/crew-dragon/commits/90bb2edac382eaa020396bc6e610f2165ebaefc0))
+
+
+### Features
+
+* **code-service:** 增加 commit 等 api 和 command ([80558fd](https://code.alipay.com/cloud-ide/crew-dragon/commits/80558fd8f87d52076315ddc33eb633f4998f0cc9))
+* 增加 extension-manager 模块, 可展示已内置的扩展 ([b61906a](https://code.alipay.com/cloud-ide/crew-dragon/commits/b61906aed35ef45d74c16cd5e0c9b20c0ce0a744))
+
+
+
 ## [1.2.1](https://code.alipay.com/cloud-ide/crew-dragon/compare/v1.2.0...v1.2.1) (2021-06-11)
 
 

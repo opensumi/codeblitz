@@ -1,6 +1,6 @@
 {
   "name": "@alipay/alex-integrations",
-  "version": "1.2.1",
+  "version": "1.3.0",
   "description": "@alipay/alex-integrations",
   "main": "lib/index.js",
   "typing": "types/index.d.ts",
@@ -15,7 +15,7 @@
     "registry": "https://registry.npm.alibaba-inc.com"
   },
   "dependencies": {
-    "@alipay/alex": "1.2.1",
+    "@alipay/alex": "1.3.0",
     "@ant-design/icons": "~2.1.1",
     "antd": "^3.20.3",
     "tslib": "^2.2.0"
