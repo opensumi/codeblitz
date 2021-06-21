@@ -278,30 +278,32 @@ export class GitLabAPIService implements ICodeAPIService {
     return Uint8Array.from([]);
   }
 
+  // TODO: 接口数据略有问题，先返回空
   async getCommits(repo: IRepositoryModel, params: CommitParams) {
-    const data = await this.request<API.ResponseCommit[]>(
-      `/api/v3/projects/${await this.getProjectId(repo)}/repository/commits`,
-      {
-        params: {
-          ref_name: params.ref,
-          path: params.path,
-          page: params.page,
-          per_page: params.pageSize,
-        },
-      }
-    );
-    return data.map((c) => ({
-      id: c.id,
-      parents: [],
-      author: c.author_name,
-      authorEmail: c.author_email,
-      authorDate: c.created_at,
-      committer: c.author_name,
-      committerEmail: c.author_email,
-      committerDate: c.created_at,
-      message: c.message,
-      title: c.title,
-    }));
+    // const data = await this.request<API.ResponseCommit[]>(
+    //   `/api/v3/projects/${await this.getProjectId(repo)}/repository/commits`,
+    //   {
+    //     params: {
+    //       ref_name: params.ref,
+    //       path: params.path,
+    //       page: params.page,
+    //       per_page: params.pageSize,
+    //     },
+    //   }
+    // );
+    // return data.map((c) => ({
+    //   id: c.id,
+    //   parents: [],
+    //   author: c.author_name,
+    //   authorEmail: c.author_email,
+    //   authorDate: c.created_at,
+    //   committer: c.author_name,
+    //   committerEmail: c.author_email,
+    //   committerDate: c.created_at,
+    //   message: c.message,
+    //   title: c.title,
+    // }));
+    return [];
   }
 
   async getCommitDiff(repo: IRepositoryModel, sha: string) {

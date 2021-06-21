@@ -107,6 +107,7 @@ export class CodeContribution
         const changes: { uri: string; type: FileChangeType }[] = [];
         Promise.all(
           this.editorService.getAllOpenedUris().map(async (uri) => {
+            if (uri.scheme !== 'file') return;
             const exists = await this.diskFile.access(uri.codeUri, FileAccess.Constants.F_OK);
             if (exists) {
               changes.push({
@@ -123,7 +124,7 @@ export class CodeContribution
             await this.editorService.close(uri);
           }
           const { currentResource } = this.editorService;
-          if (currentResource) {
+          if (currentResource && currentResource.uri.scheme === 'file') {
             this.codeModel.replaceBrowserUrl({
               type: 'blob',
               filepath: path.relative(

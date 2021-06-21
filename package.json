@@ -123,7 +123,17 @@
     {
       "publisher": "alex",
       "name": "gitlens",
-      "version": "10.2.3"
+      "version": "10.2.3-1"
+    },
+    {
+      "publisher": "alex",
+      "name": "code-service",
+      "version": "0.0.1"
+    },
+    {
+      "publisher": "alex",
+      "name": "git-graph",
+      "version": "1.30.0-2"
     }
   ]
 }
