@@ -1,6 +1,6 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-import { IAppInstance, AppRenderer, getDefaultLayoutConfig } from '@alipay/alex';
+import { IAppInstance, AppRenderer, getDefaultLayoutConfig, SlotLocation } from '@alipay/alex';
 import * as Alex from '@alipay/alex';
 import '@alipay/alex/languages';
 import { CodeServiceModule } from '@alipay/alex-code-service';
@@ -14,6 +14,9 @@ import json from '@alipay/alex/extensions/alex.json-language-features-worker';
 import markdown from '@alipay/alex/extensions/alex.markdown-language-features-worker';
 import typescript from '@alipay/alex/extensions/alex.typescript-language-features-worker';
 import lsif from '@alipay/alex/extensions/cloud-ide.vscode-lsif';
+import gitlens from '@alipay/alex/extensions/alex.gitlens';
+import graph from '@alipay/alex/extensions/alex.git-graph';
+import codeservice from '@alipay/alex/extensions/alex.code-service';
 
 import { LocalExtensionModule } from '../common/local-extension.module';
 
@@ -39,6 +42,7 @@ const platformConfig = {
 };
 
 const layoutConfig = getDefaultLayoutConfig();
+layoutConfig[SlotLocation.left].modules.push('@ali/ide-extension-manager');
 
 let pathParts = location.pathname.split('/').filter(Boolean);
 
@@ -77,7 +81,7 @@ const App = () => (
         LocalExtensionModule,
         StartupModule,
       ],
-      extensionMetadata: [css, html, json, markdown, typescript],
+      extensionMetadata: [css, html, json, markdown, typescript, codeservice, gitlens, graph],
       workspaceDir: `${platform}/${config.owner}/${config.name}`,
       layoutConfig,
       defaultPreferences: {

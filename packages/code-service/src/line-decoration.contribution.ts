@@ -1,7 +1,7 @@
 import * as monaco from '@ali/monaco-editor-core/esm/vs/editor/editor.api';
 import { Autowired } from '@ali/common-di';
 import { Domain, Disposable, CommandContribution, CommandRegistry } from '@ali/ide-core-common';
-import { IEditor } from '@ali/ide-editor/lib/common';
+import { IEditor, EditorType } from '@ali/ide-editor/lib/common';
 import { WorkbenchEditorService } from '@ali/ide-editor/lib/browser';
 import {
   BrowserEditorContribution,
@@ -31,6 +31,7 @@ export class LineDecorationContribution implements BrowserEditorContribution, Co
     registry.registerEditorFeatureContribution({
       contribute: (editor: IEditor) => {
         const disposer = new Disposable();
+        if (editor.getType() !== EditorType.CODE) return disposer;
         let oldHoverDecorations: string[] = [];
         disposer.addDispose(
           editor.monacoEditor.onMouseMove(

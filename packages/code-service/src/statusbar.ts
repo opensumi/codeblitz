@@ -29,7 +29,7 @@ export class StatusbarContribution implements ClientAppContribution {
       tooltip: localize('code-service.checkout'),
       alignment: StatusBarAlignment.LEFT,
       command: 'code-service.checkout',
-      priority: 0,
+      priority: 10000,
     });
 
     Event.any(rootRepository.onDidChangeCommit, rootRepository.onDidChangeRefs)(

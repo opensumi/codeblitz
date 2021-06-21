@@ -28,4 +28,32 @@ export namespace API {
       id: string;
     };
   }>;
+
+  export interface ResponseCommit {
+    author_email: string;
+    author_name: string;
+    created_at: string;
+    id: string;
+    message: string;
+    short_id: string;
+    title: string;
+  }
+
+  export interface ResponseCommitFileChange {
+    a_mode: string;
+    b_mode: string;
+    deleted_file: boolean;
+    diff: string;
+    new_file: boolean;
+    new_path: string;
+    old_path: string;
+    renamed_file: boolean;
+  }
+
+  export interface ResponseCommitCompare extends ResponseCommit {
+    commits: ResponseCommit[];
+    diffs: ResponseCommitFileChange[];
+    compare_overflow: boolean;
+    compare_same_ref: boolean;
+  }
 }

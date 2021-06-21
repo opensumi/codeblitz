@@ -11,9 +11,33 @@ import {
   CodePlatform,
   IRepositoryModel,
   BranchOrTag,
+  CommitParams,
+  CommitFileStatus,
 } from '../common/types';
 import { CODE_PLATFORM_CONFIG } from '../common/config';
 import { HelperService } from '../common/service';
+
+const toType = (d: API.ResponseCommitFileChange) => {
+  if (d.new_file) return CommitFileStatus.Added;
+  else if (d.deleted_file) return CommitFileStatus.Deleted;
+  else if (d.renamed_file) return CommitFileStatus.Renamed;
+  return CommitFileStatus.Modified;
+};
+
+const toChangeLines = (diff: string) => {
+  const diffLines = diff ? diff.split('\n') : [];
+  return diffLines.reduce(
+    (obj, line) => {
+      if (line.startsWith('+')) {
+        obj.additions += 1;
+      } else if (line.startsWith('-')) {
+        obj.deletions += 1;
+      }
+      return obj;
+    },
+    { additions: 0, deletions: 0 }
+  );
+};
 
 @Injectable()
 export class AntCodeAPIService implements ICodeAPIService {
@@ -140,6 +164,19 @@ export class AntCodeAPIService implements ICodeAPIService {
     return new Uint8Array(buf);
   }
 
+  async getBlobByCommitPath(repo: IRepositoryModel, commit: string, path: string) {
+    const buf = await this.request<ArrayBuffer>(
+      `/api/v3/projects/${this.getProjectId(repo)}/repository/blobs/${commit}`,
+      {
+        responseType: 'arrayBuffer',
+        params: {
+          filepath: path,
+        },
+      }
+    );
+    return new Uint8Array(buf);
+  }
+
   async getEntryInfo(repo: IRepositoryModel, entry: EntryParam) {
     const data = await this.request<API.ResponseGetEntry>(
       `/api/v3/projects/${this.getProjectId(repo)}/repository/tree_entry`,
@@ -159,6 +196,12 @@ export class AntCodeAPIService implements ICodeAPIService {
   async getBranches(repo: IRepositoryModel): Promise<BranchOrTag[]> {
     return this.request<API.ResponseGetRefs>(
       `/api/v3/projects/${this.getProjectId(repo)}/repository/branches`
+    );
+  }
+
+  async getBranchNames(repo: IRepositoryModel): Promise<string[]> {
+    return this.request<string[]>(
+      `/api/v3/projects/${this.getProjectId(repo)}/repository/branches_names`
     );
   }
 
@@ -222,5 +265,58 @@ export class AntCodeAPIService implements ICodeAPIService {
         }
       )
     );
+  }
+
+  async getCommits(repo: IRepositoryModel, params: CommitParams) {
+    const data = await this.request<API.ResponseCommit[]>(
+      `/api/v3/projects/${this.getProjectId(repo)}/repository/commits`,
+      {
+        params: {
+          ref_name: params.ref,
+          path: params.path,
+          page: params.page,
+          per_page: params.pageSize,
+        },
+      }
+    );
+    return data.map((c) => ({
+      id: c.id,
+      parents: c.parent_ids,
+      author: c.author_name,
+      authorEmail: c.author_email,
+      authorDate: c.authored_date,
+      committer: c.committer_name,
+      committerEmail: c.committer_email,
+      committerDate: c.committed_date,
+      message: c.message,
+      title: c.title,
+    }));
+  }
+
+  async getCommitDiff(repo: IRepositoryModel, sha: string) {
+    const data = await this.request<API.ResponseCommitFileChange[]>(
+      `/api/v3/projects/${this.getProjectId(repo)}/repository/commits/${sha}/diff`
+    );
+    return data.map((d) => ({
+      oldFilePath: d.old_path,
+      newFilePath: d.new_path,
+      type: toType(d),
+      ...toChangeLines(d.diff),
+    }));
+  }
+
+  async getCommitCompare(repo: IRepositoryModel, from: string, to: string) {
+    const data = await this.request<API.ResponseCommitCompare>(
+      `/api/v3/projects/${this.getProjectId(repo)}/repository/compare`,
+      {
+        params: { from, to },
+      }
+    );
+    return (data.diffs || []).map((d) => ({
+      oldFilePath: d.old_path,
+      newFilePath: d.new_path,
+      type: toType(d),
+      ...toChangeLines(d.diff),
+    }));
   }
 }

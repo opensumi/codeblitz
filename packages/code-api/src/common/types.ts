@@ -74,6 +74,42 @@ export interface IRepositoryModel {
   commit: string;
 }
 
+export interface CommitParams {
+  ref?: string;
+  path?: string;
+  page: number;
+  pageSize: number;
+}
+
+export interface CommitRecord {
+  id: string;
+  parents: ReadonlyArray<string>;
+  author: string;
+  authorEmail: string;
+  authorDate: string;
+  committer: string;
+  committerEmail: string;
+  committerDate: string;
+  // signature: null; // GPA 签名
+  message: string;
+  title?: string;
+}
+
+export interface CommitFileChange {
+  oldFilePath: string;
+  newFilePath: string;
+  type: CommitFileStatus;
+  additions: number | null;
+  deletions: number | null;
+}
+
+export const enum CommitFileStatus {
+  Added = 'A',
+  Modified = 'M',
+  Deleted = 'D',
+  Renamed = 'R',
+}
+
 export const ICodeAPIProvider = Symbol('ICodeAPIProvider');
 
 export interface ICodeAPIProvider {
@@ -102,15 +138,23 @@ export interface ICodeAPIService {
    */
   getBlob(repo: IRepositoryModel, entry: EntryParam): Promise<Uint8Array>;
   /**
+   * 获取 blob
+   */
+  getBlobByCommitPath(repo: IRepositoryModel, commit: string, path: string): Promise<Uint8Array>;
+  /**
    * 获取 entry 相关信息
    */
   getEntryInfo?(repo: IRepositoryModel, entry: EntryParam): Promise<EntryInfo>;
   /**
-   * 获取所有分支和标签
+   * 获取所有分支
    */
   getBranches(repo: IRepositoryModel): Promise<BranchOrTag[]>;
   /**
-   * 获取所有分支和标签
+   * 获取所有分支
+   */
+  getBranchNames?(repo: IRepositoryModel): Promise<string[]>;
+  /**
+   * 获取所有标签
    */
   getTags(repo: IRepositoryModel): Promise<BranchOrTag[]>;
   /**
@@ -136,7 +180,19 @@ export interface ICodeAPIService {
   /**
    * file blame
    */
-  getFileBlame(repo: IRepositoryModel, filepath: string): Promise<Uint8Array | void>;
+  getFileBlame(repo: IRepositoryModel, filepath: string): Promise<Uint8Array>;
+  /**
+   * commits list
+   */
+  getCommits(repo: IRepositoryModel, params: CommitParams): Promise<CommitRecord[]>;
+  /**
+   * commit diff
+   */
+  getCommitDiff(repo: IRepositoryModel, sha: string): Promise<CommitFileChange[]>;
+  /**
+   * compare commit
+   */
+  getCommitCompare(repo: IRepositoryModel, from: string, to: string): Promise<CommitFileChange[]>;
 }
 
 export interface ICodeAPIServiceProvider extends ICodeAPIService {

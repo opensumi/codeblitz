@@ -61,15 +61,5 @@ export class DecorationProvider extends Disposable implements ClientAppContribut
     this.addDispose(this.decorationService.registerDecorationsProvider(provider));
   }
 
-  onDidStart() {
-    this.themeService.registerColor({
-      id: 'gitDecoration.submoduleResourceForeground',
-      description: 'colors.submodule',
-      defaults: {
-        light: '#1258a7',
-        dark: '#8db9e2',
-        highContrast: '#8db9e2',
-      },
-    });
-  }
+  initialize() {}
 }
