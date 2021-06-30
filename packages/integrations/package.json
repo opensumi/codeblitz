@@ -1,19 +1,11 @@
 {
   "name": "@alipay/alex-integrations",
-  "version": "0.14.2",
+  "version": "1.3.0",
   "description": "@alipay/alex-integrations",
   "main": "lib/index.js",
   "typing": "types/index.d.ts",
   "files": [
-    "lib",
-    "bin",
-    "scripts",
-    "!scripts/.no-postinstall",
-    "modules",
-    "languages",
-    "shims",
-    "polyfills",
-    "bundle"
+    "lib"
   ],
   "keywords": [
     "kaitian AntCodespaces"
@@ -23,28 +15,21 @@
     "registry": "https://registry.npm.alibaba-inc.com"
   },
   "dependencies": {
-    "@alipay/acr-ide": "^1.9.4",
-    "@alipay/alex": "0.14.2",
-    "@alipay/alex-cli": "0.14.2",
-    "@alipay/alex-code-api": "0.14.2",
-    "@alipay/alex-code-service": "0.14.2",
-    "@alipay/alex-core": "0.14.2",
-    "@alipay/alex-i18n": "0.14.2",
-    "@alipay/alex-lsif-service": "0.14.2",
-    "@alipay/alex-shared": "0.14.2",
+    "@alipay/alex": "1.3.0",
     "@ant-design/icons": "~2.1.1",
-    "antd": "^3.20.3"
+    "antd": "^3.20.3",
+    "tslib": "^2.2.0"
   },
   "tnpm": {
     "mode": "yarn",
     "lockfile": "enable"
   },
   "devDependencies": {
-    "@alipay/acr-ide": "^1.9.4",
     "@alipay/yuyan-monitor-web": "^2.0.28",
     "@types/react": "^16.9.56",
     "@types/react-dom": "^16.9.9",
-    "js-cookie": "^2.2.1"
+    "js-cookie": "^2.2.1",
+    "query-string": "^7.0.0"
   },
   "peerDependencies": {
     "react": "^16.14.0",

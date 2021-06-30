@@ -20,18 +20,19 @@ export class StatusbarContribution implements ClientAppContribution {
   private disposables: IDisposable[] = [];
 
   initialize() {
+    const { rootRepository } = this.codeModel;
     const getRefText = () =>
-      this.codeModel.headLabel ? `$(git-branch) ${this.codeModel.headLabel}` : '';
+      rootRepository.headLabel ? `$(git-branch) ${rootRepository.headLabel}` : '';
 
     this.statusbarService.addElement('code-service', {
       text: getRefText(),
       tooltip: localize('code-service.checkout'),
       alignment: StatusBarAlignment.LEFT,
       command: 'code-service.checkout',
-      priority: 0,
+      priority: 10000,
     });
 
-    Event.any(this.codeModel.onDidChangeHEAD, this.codeModel.onDidChangeRefs)(
+    Event.any(rootRepository.onDidChangeCommit, rootRepository.onDidChangeRefs)(
       () => {
         this.statusbarService.setElement('code-service', {
           text: getRefText(),

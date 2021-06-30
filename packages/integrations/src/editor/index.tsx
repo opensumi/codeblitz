@@ -4,7 +4,7 @@ import { IAppInstance, EditorRenderer } from '@alipay/alex/lib/editor';
 import * as Alex from '@alipay/alex/lib/editor';
 // 引入 extension
 import '@alipay/alex/lib/editor.extension';
-import '../startup/languages';
+import '@alipay/alex/languages';
 
 import 'antd/dist/antd.css';
 import Select from 'antd/lib/select';
@@ -12,7 +12,7 @@ import Cascader from 'antd/lib/cascader';
 import Button from 'antd/lib/button';
 import './style.less';
 import * as EditorPlugin from './plugin';
-import { StartupModule } from './editor.module';
+import { LocalExtensionModule } from '../common/local-extension.module';
 
 (window as any).alex = Alex;
 
@@ -48,6 +48,7 @@ const fileOptions = (function transform(obj) {
 });
 
 const App = () => {
+  const [key, setKey] = useState(0);
   const [project, setProject] = useState('');
   const [ref, setRef] = useState('');
   const [filepath, setFilePath] = useState('');
@@ -84,6 +85,9 @@ const App = () => {
         />
       </div>
       <div style={{ display: 'flex', marginBottom: 8 }}>
+        <Button onClick={() => setKey((k) => k + 1)} size="small" style={{ marginRight: 8 }}>
+          RESET
+        </Button>
         <Select
           value={encoding}
           onChange={setEncoding}
@@ -121,17 +125,29 @@ const App = () => {
         >
           command test
         </Button>
+        <Button
+          onClick={() => {
+            const commands = EditorPlugin.api.commands;
+            if (commands) {
+              commands.executeCommand('alex.settings');
+            }
+          }}
+          size="small"
+          style={{ marginLeft: 8 }}
+        >
+          更改偏好设置
+        </Button>
       </div>
       <div style={{ display: 'flex' }}>
         <div style={{ width: '50%', minHeight: 500 }}>
           {project ? (
             <EditorRenderer
-              key={project}
+              key={`${project}-${key}`}
               onLoad={(app) => {
                 window.app = app;
               }}
               appConfig={{
-                modules: [StartupModule],
+                modules: [LocalExtensionModule],
                 plugins: [EditorPlugin],
                 workspaceDir: project,
                 defaultPreferences: {
@@ -140,8 +156,8 @@ const App = () => {
                   'lsif.documentScheme': 'file',
                   'lsif.enable': true,
                   'lsif.env': 'prod',
-                  'editor.forceReadOnly': true,
-                  'editor.wordWrap': 'on',
+                  // 'editor.forceReadOnly': true,
+                  // 'editor.wordWrap': 'on',
                 },
               }}
               runtimeConfig={{
@@ -151,7 +167,8 @@ const App = () => {
                 // hideEditorTab: true,
               }}
               editorConfig={{
-                disableEditorSearch: true,
+                adjustFindWidgetTop: true,
+                // disableEditorSearch: true,
                 // stretchHeight: true,
               }}
               documentModel={{

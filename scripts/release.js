@@ -11,7 +11,6 @@ const args = require('minimist')(process.argv.slice(2));
 const { SEMVER_INC, getNewVersion, isValidVersion, isVersionGreat } = require('./utils/version');
 const currentVersion = require('../package.json').version;
 const signale = require('signale');
-const { generateAll } = require('./utils/generate-alias');
 const depsFileds = require('./deps-fileds');
 
 const packages = fse
@@ -104,7 +103,7 @@ invoke(async () => {
   }
 
   step('生成 languages, modules, shims 资源路径');
-  await generateAll();
+  await exec('node scripts/generate');
 
   step('构建所有 packages...'); // --no-build 跳过
   if (args.build !== false) {

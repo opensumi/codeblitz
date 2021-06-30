@@ -1,7 +1,9 @@
+import { Provider, ConstructorOf } from '@ali/common-di';
 import { BackService } from '@ali/ide-core-common';
-import { IExtensionIdentity } from '@alipay/alex-shared';
+import { BrowserModule } from '@ali/ide-core-browser';
+import { IExtensionIdentity, IExtensionMode } from '@alipay/alex-shared';
 import * as paths from 'path';
-import { EXT_SCHEME, WORKSPACE_ROOT } from './constant';
+import { EXT_SCHEME, WORKSPACE_ROOT, OSSBucket } from './constant';
 
 /**
  * 获取对象上所有函数的 property
@@ -31,10 +33,12 @@ export const getFunctionProps = (obj: Record<string, any>): string[] => {
   }
 };
 
-export const getExtensionPath = (ext: IExtensionIdentity) => {
+export const getExtensionPath = (ext: IExtensionIdentity, mode?: IExtensionMode) => {
   return [
     EXT_SCHEME,
-    '://alipay-rmsdeploy-image.cn-hangzhou.alipay.aliyun-inc.com/marketplace/assets/',
+    '://',
+    mode == 'public' ? OSSBucket.public : OSSBucket.internal,
+    '/marketplace/assets/',
     `${ext.publisher}.${ext.name}/v${ext.version}/extension`,
   ].join('');
 };
@@ -53,4 +57,38 @@ export const isBackServicesInServer = (backService: BackService) => {
 
 export const isBackServicesInBrowser = (backService: BackService) => {
   return !isBackServicesInServer(backService);
+};
+
+/**
+ * 将配置分摊到各自模块中，在 modules 声明时可通过 Module.Config({}) 传入配置对象
+ * 静态方法 Config 通过 extendModule 扩充模块，eg.
+ * TODO: 在 kaitian 中弄个更通用的
+ *
+ * ```js
+ * static Config(config) {
+ *  return extendModule({
+ *    module: MyModule,
+ *    providers: [
+ *      {
+ *        useToken: IMyConfig,
+ *        useValue: config
+ *      }
+ *    ]
+ *  })
+ * }
+ * ```
+ */
+export const extendModule = ({
+  module,
+  providers,
+}: {
+  module: ConstructorOf<BrowserModule>;
+  providers: Provider[];
+}): ConstructorOf<BrowserModule> => {
+  return class ConfigBrowserModule extends module {
+    constructor() {
+      super();
+      this.providers = (this.providers || []).concat(...providers);
+    }
+  };
 };

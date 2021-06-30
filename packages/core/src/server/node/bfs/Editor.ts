@@ -3,20 +3,19 @@ import {
   FileSystem,
   BFSCallback,
   FileSystemOptions,
-  BFSOneArgCallback,
-} from 'browserfs/dist/node/core/file_system';
-import { ApiError, ErrorCode } from 'browserfs/dist/node/core/api_error';
-import { FileFlag, ActionType } from 'browserfs/dist/node/core/file_flag';
-import { copyingSlice } from 'browserfs/dist/node/core/util';
-import { File } from 'browserfs/dist/node/core/file';
-import Stats, { FileType } from 'browserfs/dist/node/core/node_fs_stats';
-import { NoSyncFile } from 'browserfs/dist/node/generic/preload_file';
+} from '@alipay/alex-browserfs/lib/core/file_system';
+import { ApiError, ErrorCode } from '@alipay/alex-browserfs/lib/core/api_error';
+import { FileFlag, ActionType } from '@alipay/alex-browserfs/lib/core/file_flag';
+import { copyingSlice } from '@alipay/alex-browserfs/lib/core/util';
+import { File } from '@alipay/alex-browserfs/lib/core/file';
+import Stats, { FileType } from '@alipay/alex-browserfs/lib/core/node_fs_stats';
+import { NoSyncFile } from '@alipay/alex-browserfs/lib/generic/preload_file';
 import {
   FileIndex,
   FileInode,
   isFileInode,
   isDirInode,
-} from 'browserfs/dist/node/generic/file_index';
+} from '@alipay/alex-browserfs/lib/generic/file_index';
 
 /**
  * Try to convert the given buffer into a string, and pass it to the callback.
@@ -150,7 +149,7 @@ export class Editor extends BaseFileSystem implements FileSystem {
     let stats: Stats;
     if (isFileInode<Stats>(inode)) {
       stats = inode.getData();
-      cb(null, stats.clone());
+      cb(null, Stats.clone(stats));
     } else if (isDirInode(inode)) {
       stats = inode.getStats();
       cb(null, stats);
@@ -179,14 +178,14 @@ export class Editor extends BaseFileSystem implements FileSystem {
           return cb(ApiError.EEXIST(path));
         case ActionType.NOP:
           if (stats.fileData) {
-            return cb(null, new NoSyncFile(self, path, flags, stats.clone(), stats.fileData));
+            return cb(null, new NoSyncFile(self, path, flags, Stats.clone(stats), stats.fileData));
           }
           asPromise(this._readFile(stripLeadingSlash(path)))
             .then((content) => {
               const buf = Buffer.from(content);
               stats.size = buf!.length;
               stats.fileData = buf!;
-              return cb(null, new NoSyncFile(self, path, flags, stats.clone(), buf));
+              return cb(null, new NoSyncFile(self, path, flags, Stats.clone(stats), buf));
             })
             .catch((err) => {
               return cb(new ApiError(ErrorCode.EINVAL, err?.message || ''));

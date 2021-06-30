@@ -62,7 +62,9 @@ const requestImpl: any = async (url: string, options?: RequestOptions) => {
         value = [value];
       }
       value.forEach((v) => {
-        urlInstance.searchParams.append(key, v);
+        if (v != null) {
+          urlInstance.searchParams.append(key, v);
+        }
       });
     });
   }

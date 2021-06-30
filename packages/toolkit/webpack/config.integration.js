@@ -22,6 +22,7 @@ const BannerPlugin = require('./util/banner-plugin');
 const { nodePolyfill } = require('./util');
 const { findPortSync } = require('./util/find-porter');
 const { config } = require('./util');
+const pkg = require('../../../package.json');
 
 const HOST = process.env.HOST || 'localhost';
 
@@ -43,10 +44,12 @@ module.exports = (option) => {
       path: outputPath,
       filename: '[name].js',
       chunkFilename: '[name].js',
+      publicPath: '/',
     },
     resolve: {
       extensions: ['.ts', '.tsx', '.js', '.json', '.less'],
       plugins: [
+        // @ts-ignore
         new TsconfigPathsPlugin({
           configFile: option.tsconfigPath,
         }),
@@ -182,6 +185,7 @@ module.exports = (option) => {
               options: {
                 name: '[name].[ext]',
                 esModule: false,
+                publicPath: './',
               },
             },
           ],
@@ -203,6 +207,7 @@ module.exports = (option) => {
         __WEBVIEW_ENDPOINT__: process.env.WEBVIEW_ENDPOINT
           ? JSON.stringify(`/assets/~${process.env.WEBVIEW_ENDPOINT}`)
           : JSON.stringify(`${baseURL}/${config.webviewEntry}`),
+        __VERSION__: JSON.stringify(pkg.version),
         ...option.define,
       }),
       new webpack.ProvidePlugin({
@@ -216,41 +221,6 @@ module.exports = (option) => {
             },
           })
         : null,
-      new BannerPlugin({
-        banner: async () => {
-          const content = await new Promise((resolve, reject) => {
-            https
-              .get(
-                'https://gw-office.alipayobjects.com/bmw-prod/f8d166cf-e3fb-49e6-bad8-2b63630829b3.js',
-                (res) => {
-                  res.setEncoding('utf8');
-                  let rawData = '';
-                  res.on('data', (chunk) => {
-                    rawData += chunk;
-                  });
-                  res.on('end', () => {
-                    resolve(rawData);
-                  });
-                }
-              )
-              .on('error', reject);
-          });
-          return `// global loader
-(function(){
-var module;
-var require;
-// ==================== LOADER SOURCE START ====================
-${content}
-// ==================== LOADER SOURCE END ====================
-window.amdLoader = amdLoader;
-window.AMDLoader = AMDLoader;
-window.define = define;
-}).call(window);
-`;
-        },
-        raw: true,
-        entryOnly: true,
-      }),
       ...(isDev
         ? [
             new HtmlWebpackPlugin({

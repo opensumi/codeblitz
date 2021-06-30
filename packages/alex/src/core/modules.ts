@@ -44,13 +44,13 @@ import { WorkspaceEditModule } from '@ali/ide-workspace-edit/lib/browser';
  * alex
  */
 
-import { ClientModule, ServerModuleCollection } from '@alipay/alex-core';
-
-/**
- * special
- */
-
-import { WorkerPatchModule } from './worker/worker.module';
+import {
+  ClientModule,
+  ServerModuleCollection,
+  ExtensionClientManagerModule,
+} from '@alipay/alex-core';
+import { PluginModule } from '@alipay/alex-plugin';
+import { AlexModule } from './alex.module';
 
 // TODO: 部分模块需要注意顺序，否则会报错，待框架侧调整修复
 export const modules: ModuleConstructor[] = [
@@ -93,7 +93,7 @@ export const modules: ModuleConstructor[] = [
   // Extension Modules
   KaitianExtensionModule,
   // FeatureExtensionModule,
-  // ExtensionManagerModule,
+  ExtensionClientManagerModule,
   MonacoEnhanceModule,
 
   // addons
@@ -103,8 +103,7 @@ export const modules: ModuleConstructor[] = [
 
   // Alex
   ClientModule,
+  PluginModule,
   ...ServerModuleCollection,
-
-  // special
-  WorkerPatchModule,
+  AlexModule,
 ];

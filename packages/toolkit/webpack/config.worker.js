@@ -21,8 +21,6 @@ module.exports = () => {
     mode: isDev ? 'development' : 'production',
     resolve: {
       alias: {
-        '@ali/ide-connection$': '@ali/ide-connection/lib/common/rpcProtocol.js',
-        '@ali/vscode-jsonrpc$': '@ali/vscode-jsonrpc/lib/cancellation.js',
         ...nodePolyfill.alias,
       },
       fallback: {

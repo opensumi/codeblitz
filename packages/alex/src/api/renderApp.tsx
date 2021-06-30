@@ -1,30 +1,35 @@
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect, useRef, useMemo } from 'react';
 import ReactDOM from 'react-dom';
 import { IReporterService, localize, getDebugLogger } from '@ali/ide-core-common';
 import { REPORT_NAME } from '@alipay/alex-core';
 import { createApp } from './createApp';
 import { Root } from '../core/Root';
 import { RootProps, LandingProps } from '../core/types';
-import { themeStorage } from '../core/utils';
 import { useConstant } from '../core/hooks';
 import { IConfig, IAppInstance } from './types';
+import styles from '../core/style.module.less';
 
-export interface IRenderProps extends IConfig {
+export interface IAppRendererProps extends IConfig {
   onLoad?(app: IAppInstance): void;
   Landing?: React.ComponentType<LandingProps>;
 }
 
-export const renderApp = (domElement: HTMLElement, props: IRenderProps) => {
+export const renderApp = (domElement: HTMLElement, props: IAppRendererProps) => {
   const { onLoad, Landing, ...opts } = props;
   const app = createApp(opts);
-  const themeType = themeStorage.get();
-  ReactDOM.render(<Root status="loading" theme={themeType} Landing={Landing} />, domElement);
+  const themeType = app.currentThemeType;
+  const className = opts.runtimeConfig.hideEditorTab ? styles['hide-editor-tab'] : '';
+
+  ReactDOM.render(
+    <Root status="loading" theme={themeType} Landing={Landing} className={className} />,
+    domElement
+  );
 
   app
     .start((appElement) => {
       return new Promise((resolve) => {
         ReactDOM.render(
-          <Root status="success" theme={themeType}>
+          <Root status="success" theme={themeType} className={className}>
             {appElement}
           </Root>,
           domElement,
@@ -55,9 +60,9 @@ export const renderApp = (domElement: HTMLElement, props: IRenderProps) => {
   };
 };
 
-export const AppRenderer: React.FC<IRenderProps> = ({ onLoad, Landing, ...opts }) => {
+export const AppRenderer: React.FC<IAppRendererProps> = ({ onLoad, Landing, ...opts }) => {
   const app = useConstant(() => createApp(opts));
-  const themeType = useConstant(() => themeStorage.get());
+  const themeType = useConstant(() => app.currentThemeType);
   const appElementRef = useRef<React.ReactElement | null>(null);
 
   const [state, setState] = useState<{
@@ -96,8 +101,13 @@ export const AppRenderer: React.FC<IRenderProps> = ({ onLoad, Landing, ...opts }
     };
   }, []);
 
+  const rootClassName = useMemo(
+    () => (opts.runtimeConfig.hideEditorTab ? styles['hide-editor-tab'] : ''),
+    [opts.runtimeConfig.hideEditorTab]
+  );
+
   return (
-    <Root {...state} theme={themeType} Landing={Landing}>
+    <Root {...state} theme={themeType} Landing={Landing} className={rootClassName}>
       {appElementRef.current}
     </Root>
   );

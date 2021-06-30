@@ -4,12 +4,12 @@ import {
   ClientApp as BasicClientApp,
   IAppRenderer,
   IClientAppOpts,
-  NO_KEYBINDING_NAME,
+  PreferenceProviderProvider,
+  PreferenceScope,
+  PreferenceProvider,
 } from '@ali/ide-core-browser';
-import { BasicModule, isOSX, DisposableCollection } from '@ali/ide-core-common';
+import { BasicModule } from '@ali/ide-core-common';
 import { WSChannelHandler } from '@ali/ide-connection';
-import { TextmateService } from '@ali/ide-monaco/lib/browser/textmate.service';
-import { TextmateServicePatch } from './patch/textmate.service';
 
 import { FCServiceCenter, ClientPort, initFCService } from '../connection';
 import { KaitianExtFsProvider, KtExtFsProviderContribution } from './extension';
@@ -17,7 +17,7 @@ import { TextmateLanguageGrammarContribution } from './textmate-language-grammar
 import { ILanguageGrammarRegistrationService } from './textmate-language-grammar/base';
 import { LanguageGrammarRegistrationService } from './textmate-language-grammar/language-grammar.service';
 import { injectDebugPreferences } from './debug';
-import { IServerApp } from '../common';
+import { IServerApp, RootFS } from '../common';
 import { IServerAppOpts, ServerApp } from '../server/core/app';
 import { isBackServicesInBrowser } from '../common/util';
 import {
@@ -27,7 +27,14 @@ import {
 } from './custom';
 import { EditorEmptyContribution } from './editor-empty/editor-empty.contribution';
 import { WelcomeContribution } from './welcome/welcome.contributon';
-import { DocumentSymbolPatch, DocumentSymbolStore } from './patch/document-symbol';
+import {
+  MonacoCodeService,
+  IMonacoCodeService,
+  codeServiceEditor,
+} from './override/codeEditorService';
+import { BreadCrumbServiceImplOverride, IBreadCrumbService } from './override/breadcrumb.service';
+
+export { ExtensionManagerModule as ExtensionClientManagerModule } from './extension-manager';
 
 export * from './extension';
 
@@ -51,12 +58,16 @@ export class ClientModule extends BrowserModule {
     WelcomeContribution,
     MenuConfigContribution,
     {
-      token: TextmateService,
-      useClass: TextmateServicePatch,
+      token: MonacoCodeService,
+      useValue: codeServiceEditor,
     },
     {
-      token: DocumentSymbolStore,
-      useClass: DocumentSymbolPatch,
+      token: IMonacoCodeService,
+      useClass: MonacoCodeService,
+    },
+    {
+      token: IBreadCrumbService,
+      useClass: BreadCrumbServiceImplOverride,
       override: true,
     },
   ];
@@ -68,11 +79,16 @@ export interface IAppOpts extends IClientAppOpts, IServerAppOpts {}
 export { IClientAppOpts };
 
 export class ClientApp extends BasicClientApp {
-  private disposeCollection = new DisposableCollection();
+  private clearInjector: () => void;
 
   constructor(opts: IAppOpts) {
     super(opts);
     this.initServer(opts);
+    this.initCodeServiceEditor();
+  }
+
+  initCodeServiceEditor() {
+    this.clearInjector = codeServiceEditor.setInjector(this.injector);
   }
 
   private initServer(opts: IAppOpts) {
@@ -94,7 +110,10 @@ export class ClientApp extends BasicClientApp {
 
   public async start(container: HTMLElement | IAppRenderer, type?: string): Promise<void> {
     // 先启动 server 进行必要的初始化，应用的权限等也在 server 中处理
-    await (this.injector.get(IServerApp) as IServerApp).start();
+    const serverApp: IServerApp = this.injector.get(IServerApp);
+    await serverApp.start();
+    this.setWorkspaceReadOnly(serverApp.rootFS);
+
     bindConnectionService(this.injector, this.modules);
     // 避免 KaitianExtensionClientAppContribution.onStop 报错
     this.injector.addProviders({
@@ -105,77 +124,25 @@ export class ClientApp extends BasicClientApp {
   }
 
   /**
-   * 注册全局事件监听
-   * TODO: kaitian 中无 removeEventLister 逻辑，这里 override 下，待提 mr
+   * 根据文件系统来设置空间是否只读
    */
-  protected registerEventListeners(): void {
-    const addEventListener = (
-      target: Window | HTMLElement,
-      type: string,
-      listener: (...args: any[]) => any,
-      ...extra: any
-    ) => {
-      target.addEventListener(type, listener, ...extra);
-      this.disposeCollection.push({
-        dispose() {
-          target.removeEventListener(type, listener, ...extra);
-        },
-      });
-    };
-
-    addEventListener(window, 'beforeunload', (event) => {
-      // 为了避免不必要的弹窗，如果页面并没有发生交互浏览器可能不会展示在 beforeunload 事件中引发的弹框，甚至可能即使发生交互了也直接不显示。
-      if (this.preventStop()) {
-        (event || window.event).returnValue = true;
-        return true;
-      }
-    });
-    addEventListener(window, 'unload', () => {
-      // 浏览器关闭事件
-      this.stateService.state = 'closing_window';
-      this.stopContributions();
-    });
-
-    addEventListener(window, 'resize', () => {
-      // 浏览器resize事件
-    });
-    // 处理中文输入回退时可能出现多个光标问题
-    // https://github.com/eclipse-theia/theia/pull/6673
-    let inComposition = false;
-    addEventListener(window, 'compositionstart', (event) => {
-      inComposition = true;
-    });
-    addEventListener(window, 'compositionend', (event) => {
-      inComposition = false;
-    });
-    addEventListener(
-      window,
-      'keydown',
-      (event: any) => {
-        if (event && event.target!.name !== NO_KEYBINDING_NAME && !inComposition) {
-          this.keybindingService.run(event);
-        }
-      },
-      true
-    );
-
-    if (isOSX) {
-      addEventListener(
-        document.body,
-        'wheel',
-        (event) => {
-          // 屏蔽在OSX系统浏览器中由于滚动导致的前进后退事件
-        },
-        { passive: false }
+  private setWorkspaceReadOnly(rootFS: RootFS) {
+    const workspaceFS = rootFS._getFs(this.config.workspaceDir);
+    if (workspaceFS.fs.isReadOnly()) {
+      const providerFactory: PreferenceProviderProvider = this.injector.get(
+        PreferenceProviderProvider
       );
+      const defaultPreference: PreferenceProvider = providerFactory(PreferenceScope.Default);
+      defaultPreference.setPreference('editor.readonlyFiles', [
+        `${this.config.workspaceDir}/**`,
+        ...(defaultPreference.get<string[]>('editor.readonlyFiles') || []),
+      ]);
     }
   }
 
-  /**
-   * kaitian 中没有注销注册在 window 上的事件
-   */
   dispose() {
-    this.disposeCollection.dispose();
+    super.dispose();
+    this.clearInjector();
   }
 }
 

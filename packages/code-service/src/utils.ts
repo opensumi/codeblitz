@@ -1,4 +1,9 @@
-import { Submodule } from './types';
+import { Uri, getDebugLogger } from '@ali/ide-core-common';
+import { CODE_PLATFORM_CONFIG } from '@alipay/alex-code-api';
+import { sep } from 'path';
+import { ICodePlatform, Submodule, ProjectDesc } from './types';
+
+export const HEAD = 'HEAD';
 
 // copy from git extension
 export function parseGitmodules(raw: string): Submodule[] {
@@ -60,3 +65,67 @@ export function parseGitmodules(raw: string): Submodule[] {
 
   return result;
 }
+
+export const parseSubmoduleUrl = (url: string): ProjectDesc | null => {
+  let authority = '';
+  let path = '';
+  if (url.startsWith('git@')) {
+    const colonIndex = url.indexOf(':');
+    authority = url.slice(0, colonIndex);
+    path = url.slice(colonIndex + 1);
+  } else {
+    const submoduleUri = Uri.parse(url);
+    authority = submoduleUri.authority;
+    path = submoduleUri.path;
+  }
+  const targetPlatform = Object.keys(CODE_PLATFORM_CONFIG).find((platform: ICodePlatform) => {
+    const config = CODE_PLATFORM_CONFIG[platform];
+    return config.hostname.some((item) => new RegExp(`\\b${item}$`).test(authority));
+  });
+  if (!targetPlatform) {
+    return null;
+  }
+  if (path.endsWith('.git')) {
+    path = path.slice(0, -4);
+  }
+  const [owner, name] = path.split('/').filter(Boolean);
+
+  return {
+    platform: targetPlatform as ICodePlatform,
+    owner,
+    name,
+  };
+};
+
+export const stripLeadingSlash = (path: string) => (path.charAt(0) === '/' ? path.substr(1) : path);
+
+export const logger = getDebugLogger('code-service');
+
+export function isDescendant(parent: string, descendant: string): boolean {
+  if (parent === descendant) {
+    return true;
+  }
+
+  if (parent.charAt(parent.length - 1) !== sep) {
+    parent += sep;
+  }
+
+  return descendant.startsWith(parent);
+}
+
+export const findRef = (refs: string[], path: string): string => {
+  const addSlash = (str: string) => (str[str.length - 1] !== '/' ? `${str}/` : str);
+  const countSlash = (str: string) => (str.match(/\//g) || []).length;
+
+  path = addSlash(path);
+
+  const candidateRefs = refs.filter((ref) => path.startsWith(addSlash(ref)));
+  // 或许这里不需要，理论 ref 路径互不包含
+  candidateRefs.sort((a, b) => countSlash(a) - countSlash(b));
+
+  return candidateRefs[0] || '';
+};
+
+export const decodeRefPath = (refPath: string) => decodeURIComponent(refPath);
+
+export const encodeRefPath = (refPath: string) => encodeURIComponent(refPath).replace(/%2f/gi, '/');

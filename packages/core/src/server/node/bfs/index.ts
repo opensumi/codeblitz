@@ -1,24 +1,33 @@
-import './patch';
-import fs from 'browserfs/dist/node/core/node_fs';
-import { checkOptions } from 'browserfs/dist/node/core/util';
+import fs from '@alipay/alex-browserfs/lib/core/node_fs';
+import { checkOptions } from '@alipay/alex-browserfs/lib/core/util';
 import {
   FileSystem,
   FileSystemConstructor,
   BFSCallback,
   FileSystemOptions,
-} from 'browserfs/dist/node/core/file_system';
-import * as Errors from 'browserfs/dist/node/core/api_error';
+} from '@alipay/alex-browserfs/lib/core/file_system';
+import * as Errors from '@alipay/alex-browserfs/lib/core/api_error';
+import { FileType } from '@alipay/alex-browserfs/lib/core/node_fs_stats';
 
 import MountableFileSystem, {
   MountableFileSystemOptions,
-} from 'browserfs/dist/node/backend/MountableFileSystem';
-import IndexedDB, { IndexedDBFileSystemOptions } from 'browserfs/dist/node/backend/IndexedDB';
-import InMemory from 'browserfs/dist/node/backend/InMemory';
-import FolderAdapter, { FolderAdapterOptions } from 'browserfs/dist/node/backend/FolderAdapter';
-import OverlayFS, { OverlayFSOptions } from 'browserfs/dist/node/backend/OverlayFS';
-import { CodeHost, CodeHostOptions } from './CodeHost';
+} from '@alipay/alex-browserfs/lib/backend/MountableFileSystem';
+import IndexedDB, {
+  IndexedDBFileSystemOptions,
+} from '@alipay/alex-browserfs/lib/backend/IndexedDB';
+import InMemory from '@alipay/alex-browserfs/lib/backend/InMemory';
+import FolderAdapter, {
+  FolderAdapterOptions,
+} from '@alipay/alex-browserfs/lib/backend/FolderAdapter';
+import OverlayFS, {
+  OverlayFSOptions,
+  deletionLogPath,
+} from '@alipay/alex-browserfs/lib/backend/OverlayFS';
+import DynamicRequest, {
+  DynamicRequestOptions,
+} from '@alipay/alex-browserfs/lib/backend/DynamicRequest';
+import ZipFS, { ZipFSOptions } from '@alipay/alex-browserfs/lib/backend/ZipFS';
 import { FileIndexSystem, FileIndexSystemOptions } from './FileIndex';
-import { LazyFS, LazyFSOptions } from './LazyFS';
 import { Editor, EditorOptions } from './Editor';
 import { WORKSPACE_IDB_NAME } from '../../../common';
 
@@ -27,13 +36,14 @@ export type {
   IndexedDBFileSystemOptions,
   FolderAdapterOptions,
   OverlayFSOptions,
-  CodeHostOptions,
   FileIndexSystemOptions,
+  DynamicRequestOptions,
+  deletionLogPath as browserfsDeletionLogPath,
 };
 
+export { FileType as BrowserFSFileType };
+
 export type { FileIndex as FileIndexType } from './FileIndex';
-export type { CodeHostType } from './CodeHost';
-export type { LazyFSOptions } from './LazyFS';
 export type { EditorOptions } from './Editor';
 
 const Backends = {
@@ -42,10 +52,10 @@ const Backends = {
   InMemory,
   FolderAdapter,
   OverlayFS,
-  CodeHost,
   FileIndexSystem,
-  LazyFS,
   Editor,
+  DynamicRequest,
+  ZipFS,
 };
 
 // Make sure all backends cast to FileSystemConstructor (for type checking)
@@ -89,10 +99,10 @@ export type FileSystemConfiguration =
   | { fs: 'IndexedDB'; options?: IndexedDBFileSystemOptions }
   | { fs: 'InMemory'; options?: FileSystemOptions }
   | { fs: 'FolderAdapter'; options: { folder: string; wrapped: FileSystemConfiguration } }
-  | { fs: 'CodeHost'; options: CodeHostOptions }
   | { fs: 'FileIndexSystem'; options: FileIndexSystemOptions }
-  | { fs: 'LazyFS'; options: LazyFSOptions }
-  | { fs: 'Editor'; options: EditorOptions };
+  | { fs: 'Editor'; options: EditorOptions }
+  | { fs: 'DynamicRequest'; options: DynamicRequestOptions }
+  | { fs: 'ZipFS'; options: ZipFSOptions };
 
 async function configure(config: FileSystemConfiguration) {
   const fs = await getFileSystem(config);
@@ -173,5 +183,9 @@ export const BrowserFS = {
 };
 
 export type SupportFileSystem = keyof typeof Backends;
+
+type InstanceType<T> = T extends { Create(options: object, cb: BFSCallback<infer R>): void }
+  ? R
+  : any;
 
 export type FileSystemInstance<T extends SupportFileSystem> = InstanceType<typeof Backends[T]>;

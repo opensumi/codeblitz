@@ -1,3 +1,9 @@
+import * as monaco from '@ali/monaco-editor-core/esm/vs/editor/editor.api';
+import { FindController } from '@ali/monaco-editor-core/esm/vs/editor/contrib/find/findController';
+import { FindWidget } from '@ali/monaco-editor-core/esm/vs/editor/contrib/find/findWidget';
+import * as monacoKeybindings from '@ali/monaco-editor-core/esm/vs/platform/keybinding/common/keybindingsRegistry';
+import { ContextKeyDefinedExpr } from '@ali/monaco-editor-core/esm/vs/platform/contextkey/common/contextkey';
+
 import { Provider, Injectable, Autowired } from '@ali/common-di';
 import debounce from 'lodash.debounce';
 import {
@@ -11,13 +17,18 @@ import {
   CommandContribution,
   CommandRegistry,
   Disposable,
+  IDisposable,
   KeybindingContribution,
   KeybindingRegistry,
   MonacoContribution,
   MonacoService,
   ServiceNames,
+  IContextKeyService,
+  KeybindingRegistryImpl,
 } from '@ali/ide-core-browser';
-import { IThemeService } from '@ali/ide-theme';
+import { RawContextKey } from '@ali/ide-core-browser/lib/raw-context-key';
+import { uuid } from '@ali/ide-core-common';
+import { IThemeService, ICSSStyleService } from '@ali/ide-theme';
 import {
   getExtensionPath,
   AppConfig,
@@ -41,27 +52,20 @@ import { EditorHistoryService, EditorHistoryState } from '@ali/ide-editor/lib/br
 import { IEditorDocumentModelService } from '@ali/ide-editor/lib/browser/doc-model/types';
 import { FileSchemeDocumentProvider } from '@ali/ide-file-scheme/lib/browser/file-doc';
 import { FILE_SCHEME } from '@ali/ide-file-scheme/lib/common';
-import { quickCommand } from '@ali/ide-quick-open/lib/browser/quick-open.contribution';
+import { QUICK_OPEN_COMMANDS } from '@ali/ide-quick-open/lib/common';
 
 import * as path from 'path';
 import md5 from 'md5';
 import { IWorkspaceService } from '@ali/ide-workspace';
 import { SCMService } from '@ali/ide-scm';
-import { DirtyDiffWidget } from '@ali/ide-scm/lib/browser/dirty-diff/dirty-diff-widget';
-import { IDETheme, GeekTheme } from '../../core/extensions';
+import { IDETheme, GeekTheme } from '../extension/metadata';
 import { isCodeDocumentModel, CodeDocumentModel, EditorProps } from './types';
 import styles from '../style.module.less';
-import { EditorCollectionServiceImplOverride } from './editor-collection.service';
 import { IPropsService } from '../props.service';
+import { AlexCommandContribution } from '../commands';
 
-// TODO: 此处 diff 的 stage 和 revertChange 应该是 git 注册的，框架中直接添加了按钮，耦合，需要修复实现 scm/change/title
-// @ts-ignore
-const _addAction = DirtyDiffWidget.prototype._addAction;
-// @ts-ignore
-DirtyDiffWidget.prototype._addAction = function (icon: string, type: any) {
-  if (icon === 'plus' || icon === 'rollback') return;
-  _addAction.call(this, icon, type);
-};
+const ContextTrue = new RawContextKey('alex.context.true', undefined);
+const ContextFalse = new RawContextKey('alex.context.false', undefined);
 
 @Injectable()
 class BreadCrumbServiceImplOverride extends BreadCrumbServiceImpl {
@@ -255,6 +259,12 @@ class EditorSpecialContribution
   @Autowired(IPropsService)
   private propsService: IPropsService<EditorProps>;
 
+  @Autowired(ICSSStyleService)
+  cssStyleService: ICSSStyleService;
+
+  @Autowired(IContextKeyService)
+  private readonly globalContextKeyService: IContextKeyService;
+
   async mountFileSystem(rootFS: FileSystemInstance<'MountableFileSystem'>) {
     // TODO: 提供配置选择存储在内存中还是 indexedDB 中
     const {
@@ -274,15 +284,6 @@ class EditorSpecialContribution
       wrapped: memSystem,
       folder: `/${md5(this.appConfig.workspaceDir)}`,
     });
-    await new Promise<void>((resolve, reject) => {
-      (folderSystem as InstanceType<typeof FolderAdapter>).initialize((err) => {
-        if (err) {
-          reject(err);
-        } else {
-          resolve();
-        }
-      });
-    });
     const overlayFileSystem = await createFileSystem(OverlayFS, {
       readable: editorSystem,
       writable: folderSystem,
@@ -298,6 +299,10 @@ class EditorSpecialContribution
   }
 
   initialize() {
+    // 恒为 true/false 的 contextKey
+    ContextTrue.bind(this.globalContextKeyService);
+    ContextFalse.bind(this.globalContextKeyService);
+
     // 提供写时 diff 视图
     // TODO: 暂时只有读，先去掉，避免编码改变导致的问题
     // this.scmService.registerSCMProvider({
@@ -409,14 +414,22 @@ class EditorSpecialContribution
     );
 
     // 注销命令
-    registry.unregisterCommand(quickCommand.id);
-    registry.registerCommand(quickCommand);
+    registry.unregisterCommand(QUICK_OPEN_COMMANDS.OPEN.id);
+    registry.registerCommand(QUICK_OPEN_COMMANDS.OPEN);
   }
 
   /**
    * 只 contribute code editor，diff editor 暂不需要
    */
   private contributeEditor(editor: IEditor) {
+    // scrollbar 不支持偏好设置
+    editor.monacoEditor.updateOptions({
+      scrollbar: {
+        alwaysConsumeMouseWheel: false,
+        ...this.propsService.props.editorConfig?.scrollbar,
+      },
+    });
+
     const disposer = new Disposable();
     let oldHoverDecorations: string[] = [];
     disposer.addDispose(
@@ -522,83 +535,57 @@ class EditorSpecialContribution
     if (this.propsService.props.editorConfig?.stretchHeight) {
       const { monacoEditor } = editor;
 
-      let prevHeight = 0;
-
       const updateRootHeight = () => {
-        const editorElement = monacoEditor.getDomNode();
-
-        if (!editorElement) {
-          return;
-        }
-
-        const options = monacoEditor.getConfiguration();
-        const { lineHeight, layoutInfo, viewInfo } = options;
-        const { contentWidth: width, height } = layoutInfo;
-        // monaco 0.20 提供 getContentHeight，暂时先调用 private method
-        const {
-          contentWidth,
-        } = (monacoEditor as any)._modelData.viewModel.viewLayout.scrollable.getScrollDimensions();
-        let result =
-          (monacoEditor as any)._modelData.viewModel.viewLayout._linesLayout.getLinesTotalHeight() +
-          lineHeight;
-        if (viewInfo.scrollBeyondLastLine) {
-          result += Math.max(0, height - lineHeight);
-        } else {
-          const getHorizontalScrollbarHeight = () => {
-            const { scrollbar } = options.viewInfo;
-            if (scrollbar.horizontal === 2 /** hidden */) {
-              // horizontal scrollbar not visible
-              return 0;
-            }
-            if (width >= contentWidth) {
-              // horizontal scrollbar not visible
-              return 0;
-            }
-            return scrollbar.horizontalScrollbarSize;
-          };
-          result += getHorizontalScrollbarHeight();
-        }
-
-        if (prevHeight !== result) {
-          prevHeight = result;
-          const root = document.querySelector('.alex-root') as HTMLElement;
-          root.style.height = `${result}px`;
-          monacoEditor.layout();
-        }
+        const contentHeight = monacoEditor.getContentHeight();
+        const tabHeight = this.runtimeConfig.hideEditorTab ? 0 : 28;
+        const root = document.querySelector('.alex-root') as HTMLElement;
+        root.style.height = `${contentHeight + tabHeight}px`;
+        monacoEditor.layout();
       };
-      disposer.addDispose(
-        monacoEditor.onDidChangeModelDecorations(() => {
-          requestAnimationFrame(updateRootHeight);
-        })
-      );
 
-      disposer.addDispose(
-        monacoEditor.onDidChangeModel(() => {
-          requestAnimationFrame(updateRootHeight);
-        })
-      );
+      disposer.addDispose(monacoEditor.onDidContentSizeChange(updateRootHeight));
+      updateRootHeight();
     }
 
-    /**
-     * monaco 内部未提供注销命令的函数
-     * 使用 addDynamicKeybinding 需要在 monaco 加载后执行，否则因为缓存并不生效
-     * 先暂时使用 private 方法，后升级到 monaco 0.20 寻找更好的解法
-     * TODO: 更好的解法应该是 kaitian 中完全控制 monaco 的快捷键，需要技术改造
-     */
-    if (this.propsService.props.editorConfig?.disableEditorSearch) {
-      const monacoKeybindingsMap: Map<
-        string,
-        { command: string }[]
-      > = (editor.monacoEditor as any)._standaloneKeybindingService._getResolver()._map;
-      for (const [key, items] of monacoKeybindingsMap.entries()) {
-        if (items.find((item) => item.command === 'actions.find')) {
-          monacoKeybindingsMap.delete(key);
-          break;
-        }
-      }
-    }
+    this.adjustFindWidgetPosition(editor, disposer);
 
     return disposer;
+  }
+
+  private adjustFindWidgetPosition(editor: IEditor, disposer: Disposable) {
+    const adjustFindWidgetTop = this.propsService.props.editorConfig?.adjustFindWidgetTop;
+    if (typeof adjustFindWidgetTop === 'undefined') {
+      return;
+    }
+    const findController: FindController = editor.monacoEditor.getContribution(FindController.ID);
+    const findState = findController.getState();
+
+    let styleDisposer: IDisposable | null = null;
+    disposer.addDispose(
+      findState.onFindReplaceStateChange((e) => {
+        if (!e.isRevealed) return;
+        try {
+          if (findState.isRevealed) {
+            const widget: FindWidget = (findController as any)._widget;
+            const dom = widget.getDomNode();
+            const { top } = dom.parentElement!.getBoundingClientRect();
+            const offsetTop =
+              typeof adjustFindWidgetTop === 'number' ? top - adjustFindWidgetTop : top;
+            const className = `find-widget-top-${uuid()}`;
+            dom.classList.add(className);
+            if (offsetTop < 0) {
+              styleDisposer = this.cssStyleService.addClass(className, {
+                top: `${-offsetTop}px !important;`,
+              });
+            }
+          } else {
+            styleDisposer?.dispose();
+          }
+        } catch (err) {
+          console.error(err);
+        }
+      })
+    );
   }
 
   registerKeybindings(keybindings: KeybindingRegistry) {
@@ -628,13 +615,32 @@ class EditorSpecialContribution
     keybindingList.forEach((binding) => {
       keybindings.unregisterKeybinding(binding);
     });
+
+    // 通过设置 when 为 false 来禁用快捷键
+    if (this.propsService.props.editorConfig?.disableEditorSearch) {
+      const findCommand = monacoKeybindings.KeybindingsRegistry.getDefaultKeybindings().find(
+        (item) => item.command === 'actions.find'
+      );
+      if (findCommand) {
+        findCommand.when = ContextKeyDefinedExpr.create('alex.context.false');
+      }
+    } else {
+      // 设置为 passthrough，则忽略快捷键的处理，从而使事件冒泡，触发浏览器默认行为
+      this.addDispose(
+        keybindings.registerKeybinding({
+          command: KeybindingRegistryImpl.PASSTHROUGH_PSEUDO_COMMAND,
+          keybinding: 'ctrlcmd+f',
+          when: '!editorFocus',
+        })
+      );
+    }
   }
 
   onMonacoLoaded(monacoService: MonacoService) {
     const codeEditorService = monacoService.getOverride(ServiceNames.CODE_EDITOR_SERVICE);
     const _openCodeEditor = codeEditorService.openCodeEditor;
     codeEditorService.openCodeEditor = (
-      input: monaco.editor.IResourceInput,
+      input: any,
       source?: monaco.editor.ICodeEditor,
       sideBySide?: boolean
     ) => {
@@ -652,7 +658,7 @@ class EditorSpecialContribution
    */
   async openCodeEditor(
     raw: Function,
-    input: monaco.editor.IResourceInput,
+    input: any,
     source?: monaco.editor.ICodeEditor,
     sideBySide?: boolean
   ) {
@@ -723,12 +729,8 @@ export class EditorSpecialModule extends BrowserModule {
       useClass: EditorHistoryServiceOverride,
       override: true,
     },
-    {
-      token: EditorCollectionService,
-      useClass: EditorCollectionServiceImplOverride,
-      override: true,
-    },
     ThemeContribution,
     EditorSpecialContribution,
+    AlexCommandContribution,
   ];
 }

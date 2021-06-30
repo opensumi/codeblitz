@@ -52,14 +52,25 @@ export interface CodeDocumentModel extends DocumentModel {
 
 export interface EditorConfig {
   /**
-   * 编辑器是否自适应内容区高度，此时会完全展开 editor，内部不再有滚动条
+   * 编辑器是否自适应内容区高度，此时会完全展开 editor，内部不再有滚动条。
    * 代码行数过多时可能会有性能问题
    */
   stretchHeight?: boolean;
   /**
+   * 自适应 editor search 部件的绝对定位的 top 值
+   * 在 editor 滚出 browser 时可保证 widget 可见
+   * adjustFindWidgetTop=true 时则相对窗口顶部偏移
+   * 如顶部有 fixed 元素，则可通过 number 来自行设置顶部偏移量
+   */
+  adjustFindWidgetTop?: boolean | number;
+  /**
    * 禁用编辑器内搜索，此时会注销内部 ctrl/cmd + f 快捷键
    */
   disableEditorSearch?: boolean;
+  /**
+   * scrollbar 配置，参考 monaco 的 scrollbar 配置项，[文档链接](https://microsoft.github.io/monaco-editor/api/interfaces/monaco.editor.ieditorscrollbaroptions.html)
+   */
+  scrollbar?: Record<string, any>;
 }
 
 export interface EditorProps {
@@ -67,6 +78,9 @@ export interface EditorProps {
    * editor 组件专有配置
    */
   editorConfig?: EditorConfig;
+  /**
+   * 文档模型，控制 editor 打开的文件
+   */
   documentModel: FSDocumentModel | CodeDocumentModel;
 }
 

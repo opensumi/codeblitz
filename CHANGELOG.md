@@ -1,3 +1,131 @@
+# [1.3.0](https://code.alipay.com/cloud-ide/crew-dragon/compare/v1.2.1...v1.3.0) (2021-06-21)
+
+
+### Bug Fixes
+
+* dispose 时 unmount home 文件系统 ([1ab75b7](https://code.alipay.com/cloud-ide/crew-dragon/commits/1ab75b734e489ec5bcb81f6861b6185bb96d5803))
+* 非 file 不更改 browser url ([90bb2ed](https://code.alipay.com/cloud-ide/crew-dragon/commits/90bb2edac382eaa020396bc6e610f2165ebaefc0))
+
+
+### Features
+
+* **code-service:** 增加 commit 等 api 和 command ([80558fd](https://code.alipay.com/cloud-ide/crew-dragon/commits/80558fd8f87d52076315ddc33eb633f4998f0cc9))
+* 增加 extension-manager 模块, 可展示已内置的扩展 ([b61906a](https://code.alipay.com/cloud-ide/crew-dragon/commits/b61906aed35ef45d74c16cd5e0c9b20c0ce0a744))
+
+
+
+## [1.2.1](https://code.alipay.com/cloud-ide/crew-dragon/compare/v1.2.0...v1.2.1) (2021-06-11)
+
+
+### Bug Fixes
+
+* 修复 global 打包的问题 ([8d37fdd](https://code.alipay.com/cloud-ide/crew-dragon/commits/8d37fddd9828ffa4e64b80a3500ca1d6bc86e127))
+
+
+
+# [1.2.0](https://code.alipay.com/cloud-ide/crew-dragon/compare/v1.1.0...v1.2.0) (2021-06-10)
+
+
+### Features
+
+* **code-service:** 增加内置 blame 和 link 命令 ([0c80a28](https://code.alipay.com/cloud-ide/crew-dragon/commits/0c80a281695030ce60b84d145df45baea9c21035))
+
+
+
+# [1.1.0](https://code.alipay.com/cloud-ide/crew-dragon/compare/v1.0.2...v1.1.0) (2021-06-08)
+
+
+### Features
+
+* 支持 startupEditor 打开并预览 readme ([c5be084](https://code.alipay.com/cloud-ide/crew-dragon/commits/c5be084ec7cf40dbd570e4e5227780efc71ead5d))
+
+
+
+## [1.0.2](https://code.alipay.com/cloud-ide/crew-dragon/compare/v1.0.1...v1.0.2) (2021-06-04)
+
+
+### Bug Fixes
+
+* **core:** logo 替换为公网地址 ([7b8a8ed](https://code.alipay.com/cloud-ide/crew-dragon/commits/7b8a8ed2562c775363d615846c52158ea6c419cf))
+
+
+
+## [1.0.1](https://code.alipay.com/cloud-ide/crew-dragon/compare/v1.0.0...v1.0.1) (2021-06-04)
+
+
+### Bug Fixes
+
+* **alex:** 修复 polyfills 导出问题 ([ea6be97](https://code.alipay.com/cloud-ide/crew-dragon/commits/ea6be97508cf786155946472d6e5de0891d642d5))
+
+
+
+# [1.0.0](https://code.alipay.com/cloud-ide/crew-dragon/compare/v1.0.0-rc.4...v1.0.0) (2021-06-03)
+
+
+### Bug Fixes
+
+* **cli:** 修复 link 时 host options 定义问题 ([a2ebf7c](https://code.alipay.com/cloud-ide/crew-dragon/commits/a2ebf7c7ce8ee7ada7d6aba2e519d6041eff563c))
+
+
+### Features
+
+* 导出 Uri 和 Emitter ([7e0020e](https://code.alipay.com/cloud-ide/crew-dragon/commits/7e0020eff1057ca52e602d910a141944fa5a0547))
+
+
+
+# [1.0.0-rc.4](https://code.alipay.com/cloud-ide/crew-dragon/compare/v1.0.0-rc.3...v1.0.0-rc.4) (2021-06-01)
+
+
+### Bug Fixes
+
+* **cli:** 修复扩展安装 mode 写入问题 ([1e98173](https://code.alipay.com/cloud-ide/crew-dragon/commits/1e98173ae3837c96c3467591f42e54a2d5185cd8))
+
+
+
+# [1.0.0-rc.3](https://code.alipay.com/cloud-ide/crew-dragon/compare/v1.0.0-rc.2...v1.0.0-rc.3) (2021-05-31)
+
+
+### Features
+
+* **alex:** 支持动态调整搜索组件的顶部位置 ([c889481](https://code.alipay.com/cloud-ide/crew-dragon/commits/c889481ab6afaf1abd94b0383e19b1b5cd9a745e))
+* **cli:** 支持加载公网和本地调试扩展 ([82772cb](https://code.alipay.com/cloud-ide/crew-dragon/commits/82772cb8fd3afed323be38fa5294ef61f2f30f24))
+
+
+
+# [1.0.0-rc.2](https://code.alipay.com/cloud-ide/crew-dragon/compare/v1.0.0-rc.1...v1.0.0-rc.2) (2021-05-27)
+
+
+
+# [1.0.0-rc.1](https://code.alipay.com/cloud-ide/crew-dragon/compare/v1.0.0-beta.2...v1.0.0-rc.1) (2021-05-27)
+
+
+### Bug Fixes
+
+* 修复 dispose preference reset 问题 ([5f4ba9c](https://code.alipay.com/cloud-ide/crew-dragon/commits/5f4ba9cfad81eba5b03593edba12addfbabb80a2))
+* 增加 alex module ([d245c33](https://code.alipay.com/cloud-ide/crew-dragon/commits/d245c33f1a2043b12e6aae4e7efba905a12967e6))
+
+
+### Features
+
+* 内置更改默认偏好设置的命令 ([896c086](https://code.alipay.com/cloud-ide/crew-dragon/commits/896c08615e94a9d47ce8807c97bf322c8ff02013))
+* 增加 zipfs, 优化代码结构等 ([71bd8f8](https://code.alipay.com/cloud-ide/crew-dragon/commits/71bd8f8a6314905aebe0704047b67aae031b104b))
+
+
+
+# [1.0.0-beta.2](https://code.alipay.com/cloud-ide/crew-dragon/compare/v1.0.0-beta.1...v1.0.0-beta.2) (2021-05-20)
+
+
+
+# [1.0.0-beta.1](https://code.alipay.com/cloud-ide/crew-dragon/compare/v0.14.1...v1.0.0-beta.1) (2021-05-20)
+
+
+### Features
+
+* worker-host 上传到公网 ([525909f](https://code.alipay.com/cloud-ide/crew-dragon/commits/525909f8fea2c5d17a6040c2a9254e154e5e6844))
+* 升级 kaitian 2.0 ([5e72e6d](https://code.alipay.com/cloud-ide/crew-dragon/commits/5e72e6db807cd1342c9914c24f83f6d8692b4a17))
+
+
+
 ## [0.14.2](https://code.alipay.com/cloud-ide/crew-dragon/compare/v0.14.1...v0.14.2) (2021-05-08)
 
 

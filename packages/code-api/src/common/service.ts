@@ -6,8 +6,14 @@ import {
   URI,
   Deferred,
   CommandService,
+  MessageType,
+  localize,
 } from '@ali/ide-core-common';
+import { ClientAppStateService } from '@ali/ide-core-browser';
+import { IMessageService } from '@ali/ide-overlay';
 import { GITHUB_OAUTH_TOKEN, GITLAB_PRIVATE_TOKEN } from './constant';
+import { ICodePlatform } from './types';
+import { CODE_PLATFORM_CONFIG } from './config';
 
 /**
  * 使用 localStorage 存储 token 够用了
@@ -21,6 +27,12 @@ export class HelperService {
 
   @Autowired(CommandService)
   private readonly commandService: CommandService;
+
+  @Autowired(IMessageService)
+  messageService: IMessageService;
+
+  @Autowired(ClientAppStateService)
+  stateService: ClientAppStateService;
 
   private _storageDeferred: Deferred<IStorage>;
 
@@ -71,7 +83,29 @@ export class HelperService {
     }
   }
 
-  revealView(id: string) {
+  async revealView(id: string) {
+    await this.stateService.reachedState('ready');
     this.commandService.executeCommand(`workbench.view.${id}`);
+  }
+
+  reinitializeCodeService() {
+    this.commandService.executeCommand('code-service.reinitialize');
+  }
+
+  showMessage(
+    platform: ICodePlatform,
+    msg: { type: MessageType; status?: number; symbol?: string; args?: any[]; message?: string },
+    config?: { buttons?: string[]; closable?: boolean }
+  ) {
+    const message = `${status ? `${status} - ` : ''}${
+      msg.symbol ? localize(msg.symbol, ...(msg.args || [])) : msg.message
+    }`;
+    return this.messageService.open(
+      message,
+      msg.type,
+      config?.buttons,
+      config?.closable,
+      CODE_PLATFORM_CONFIG[platform].brand
+    );
   }
 }

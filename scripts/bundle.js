@@ -1,6 +1,5 @@
 const path = require('path');
 const signale = require('signale');
-const args = require('minimist')(process.argv.slice(2));
 const fse = require('fs-extra');
 const { invoke, exec } = require('./utils/utils');
 
@@ -44,7 +43,7 @@ export * from "../lib/editor.all";
 
     signale.success('打包成功');
   } catch (err) {
-    console.error(err);
     signale.error('打包失败');
+    throw err;
   }
 });

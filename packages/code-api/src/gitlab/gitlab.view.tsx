@@ -1,10 +1,10 @@
 import React, { useState, useReducer } from 'react';
 import { localize } from '@ali/ide-core-common';
 import { useInjectable, getOctIcon } from '@ali/ide-core-browser';
-import { ICodeAPIService } from '@alipay/alex-code-service';
 import { Input, Button } from '@ali/ide-components';
 import { observer } from 'mobx-react-lite';
-import { GitLabService } from './gitlab.service';
+import { ICodeAPIProvider } from '../common/types';
+import type { CodeAPIProvider } from '../code-api.provider';
 import styles from './gitlab.module.less';
 
 const updateReducer = (num: number): number => (num + 1) % 1_000_000;
@@ -14,7 +14,7 @@ const useUpdate = () => {
 };
 
 export const GitLabView: React.FC = observer(() => {
-  const codeAPI = useInjectable<GitLabService>(ICodeAPIService);
+  const { gitlab } = useInjectable<CodeAPIProvider>(ICodeAPIProvider);
   const [tokenValue, setTokenValue] = useState('');
   const [validating, setValidating] = useState(false);
   const forceUpdate = useUpdate();
@@ -23,7 +23,7 @@ export const GitLabView: React.FC = observer(() => {
     if (!tokenValue) return;
     setValidating(true);
     try {
-      const valid = await codeAPI.validateToken(tokenValue);
+      const valid = await gitlab.validateToken(tokenValue);
       if (valid) {
         setTokenValue('');
       }
@@ -33,7 +33,7 @@ export const GitLabView: React.FC = observer(() => {
   };
 
   const clearToken = () => {
-    codeAPI.clearToken();
+    gitlab.clearToken();
     forceUpdate();
   };
 
@@ -82,7 +82,7 @@ export const GitLabView: React.FC = observer(() => {
   };
 
   const renderHasToken = () => {
-    const token = codeAPI.PRIVATE_TOKEN!;
+    const token = gitlab.PRIVATE_TOKEN!;
     return (
       <div>
         <div className={styles.title}>{localize('gitlab.auth-has-token-title')}</div>
@@ -102,7 +102,7 @@ export const GitLabView: React.FC = observer(() => {
 
   return (
     <div className={styles.container}>
-      {codeAPI.PRIVATE_TOKEN ? renderHasToken() : renderNoToken()}
+      {gitlab.PRIVATE_TOKEN ? renderHasToken() : renderNoToken()}
     </div>
   );
 });

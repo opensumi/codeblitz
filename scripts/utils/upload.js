@@ -23,10 +23,13 @@ exports.uploadFile = async (filepath, filename) => {
   if (!filename) {
     filename = path.basename(filepath);
   }
-  const res = await basement.file.upload(filename, filepath);
-  console.log('>>>>>>>>>> INTERNAL >>>>>>>>>>');
+  const res = await basement.file.upload(filename, filepath, {
+    mode: 'public',
+    keepPath: true,
+  });
+  console.log('>>>>>>>>>> PUBLIC >>>>>>>>>>');
   console.log(res);
-  console.log('<<<<<<<<<< INTERNAL <<<<<<<<<<');
+  console.log('<<<<<<<<<< PUBLIC <<<<<<<<<<');
   return res;
 };
 

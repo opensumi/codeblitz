@@ -1,83 +1,65 @@
-import { Autowired, Injectable } from '@ali/common-di';
-import { ClientAppContribution, Domain, AppConfig } from '@ali/ide-core-browser';
+import { Autowired } from '@ali/common-di';
+import { ClientAppContribution, Domain, Disposable } from '@ali/ide-core-browser';
 import { IDecorationsService, IDecorationsProvider, IDecorationData } from '@ali/ide-decoration';
 import { Uri, Emitter } from '@ali/ide-core-browser';
-import { FileTreeService } from '@ali/ide-file-tree-next/lib/browser/file-tree.service';
 import { IThemeService } from '@ali/ide-theme';
 import * as path from 'path';
 import { CodeModelService } from './code-model.service';
-import { Submodule } from './types';
+import { Repository } from './repository';
 
-@Injectable()
-export class GitDecorationsProvider implements IDecorationsProvider {
+export class GitDecorationProvider extends Disposable implements IDecorationsProvider {
+  private static SubmoduleDecorationData: IDecorationData = {
+    letter: 'S',
+    color: 'gitDecoration.submoduleResourceForeground',
+    tooltip: 'Submodules',
+  };
+
   readonly label = 'code-service';
 
-  readonly onDidChangeEmitter: Emitter<Uri[]> = new Emitter();
+  private decorations = new Map<string, IDecorationData>();
 
-  @Autowired(FileTreeService)
-  fileTreeService: FileTreeService;
+  private _onDidChange: Emitter<Uri[]> = new Emitter();
+  readonly onDidChange = this._onDidChange.event;
 
-  @Autowired(CodeModelService)
-  codeModel: CodeModelService;
-
-  @Autowired(AppConfig)
-  appConfig: AppConfig;
-
-  get onDidChange() {
-    return this.onDidChangeEmitter.event;
+  constructor(private repo: Repository) {
+    super();
+    this.addDispose(repo.onDidAddSubmodules(this.onDidAddSubmodules, this));
   }
 
-  private lastSubmodules: Submodule[] | null;
-  private _decorationsStatus: Record<string, true> = {};
-  get decorationStatus(): Promise<Record<string, true>> {
-    return this.codeModel.submodules
-      .then((submodules) => {
-        if (submodules !== this.lastSubmodules) {
-          this.lastSubmodules = submodules;
-          this._decorationsStatus = submodules.reduce((obj, item) => {
-            obj[Uri.file(path.join(this.appConfig.workspaceDir, item.path)).toString()] = true;
-            return obj;
-          }, {});
-        }
-        return this._decorationsStatus;
-      })
-      .catch(() => ({}));
+  private onDidAddSubmodules(submodulePath: string) {
+    this.decorations.set(
+      Uri.file(path.join(this.repo.root, submodulePath)).toString(),
+      GitDecorationProvider.SubmoduleDecorationData
+    );
+    this._onDidChange.fire([...this.decorations.keys()].map((value) => Uri.parse(value)));
   }
 
   async provideDecorations(resource: Uri): Promise<IDecorationData | undefined> {
-    const status = await this.decorationStatus;
-    return status[resource.toString()]
-      ? {
-          letter: 'S',
-          source: resource.toString(),
-          color: 'gitDecoration.submoduleResourceForeground',
-          tooltip: 'Submodules',
-        }
-      : undefined;
+    return this.decorations.get(resource.toString());
   }
 }
 
 @Domain(ClientAppContribution)
-export class DecorationProvider implements ClientAppContribution {
+export class DecorationProvider extends Disposable implements ClientAppContribution {
   @Autowired(IThemeService)
   themeService: IThemeService;
-
-  @Autowired(GitDecorationsProvider)
-  gitDecorationProvider: GitDecorationsProvider;
 
   @Autowired(IDecorationsService)
   decorationService: IDecorationsService;
 
-  onDidStart() {
-    this.themeService.registerColor({
-      id: 'gitDecoration.submoduleResourceForeground',
-      description: 'colors.submodule',
-      defaults: {
-        light: '#1258a7',
-        dark: '#8db9e2',
-        highContrast: '#8db9e2',
-      },
-    });
-    this.decorationService.registerDecorationsProvider(this.gitDecorationProvider);
+  @Autowired(CodeModelService)
+  codeModel: CodeModelService;
+
+  constructor() {
+    super();
+    this.addDispose(this.codeModel.onDidOpenRepository(this.onDidOpenRepository, this));
+    this.codeModel.repositories.forEach(this.onDidOpenRepository, this);
   }
+
+  onDidOpenRepository(repo: Repository) {
+    const provider = new GitDecorationProvider(repo);
+    this.addDispose(this.decorationService.registerDecorationsProvider(provider));
+  }
+
+  initialize() {}
 }

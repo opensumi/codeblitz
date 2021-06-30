@@ -12,13 +12,16 @@ interface ActivatorPlugin {
 export class PluginService {
   private plugins: IPluginModule[];
   private pluginAPIFactory: (plugin: IPluginModule) => IPluginAPI;
+  private pluginDispose: () => void;
   private pluginActivator = new Map<string, ActivatorPlugin>();
 
   @Autowired(INJECTOR_TOKEN)
   injector: Injector;
 
   constructor() {
-    this.pluginAPIFactory = createAPIFactory(this.injector);
+    const { factory, dispose } = createAPIFactory(this.injector);
+    this.pluginAPIFactory = factory;
+    this.pluginDispose = dispose;
   }
 
   readonly whenReady = new Deferred();
@@ -41,20 +44,27 @@ export class PluginService {
         return err;
       }
 
-      this.pluginActivator.get(plugin.PLUGIN_ID)?.subscriptions.forEach((disposable) => {
-        try {
-          disposable.dispose();
-        } catch (e) {
-          console.log('plugin deactivated error');
-          console.warn(e);
-        }
-      });
+      const subscriptions = this.pluginActivator.get(plugin.PLUGIN_ID)?.subscriptions;
+
+      if (subscriptions) {
+        subscriptions.forEach((disposable) => {
+          try {
+            disposable.dispose();
+          } catch (e) {
+            console.log('plugin deactivated error');
+            console.warn(e);
+          }
+        });
+        subscriptions.length = 0;
+      }
     });
+
+    this.pluginDispose();
   }
 
   private activatePlugin(plugin: IPluginModule) {
     if (!plugin.PLUGIN_ID) {
-      throw new Error('Must provider `PLUGIN_ID` for plugin');
+      throw new Error('Must provide `PLUGIN_ID` for plugin');
     }
 
     if (plugin.activate) {

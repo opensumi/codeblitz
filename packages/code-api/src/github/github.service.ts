@@ -1,29 +1,47 @@
 import { Injectable, Autowired } from '@ali/common-di';
 import { AppConfig } from '@ali/ide-core-browser';
-import { localize, CommandService, memoize } from '@ali/ide-core-common';
-import { CodeModelService, ICodeAPIService } from '@alipay/alex-code-service';
-import type { TreeEntry, EntryParam, RefsParam } from '@alipay/alex-code-service';
-import { IMessageService } from '@ali/ide-overlay';
+import { localize, MessageType } from '@ali/ide-core-common';
 import { request, isResponseError, RequestOptions } from '@alipay/alex-shared';
 import { observable } from 'mobx';
-import { GITHUB_OAUTH_TOKEN } from '../common/constant';
 import { API } from './types';
 import { HelperService } from '../common/service';
 import { retry, RetryError } from '../common/utils';
+import type {
+  ICodeAPIService,
+  TreeEntry,
+  EntryParam,
+  IRepositoryModel,
+  BranchOrTag,
+  CommitParams,
+  CommitFileChange,
+} from '../common/types';
+import { CodePlatform, CommitFileStatus } from '../common/types';
+import { CODE_PLATFORM_CONFIG } from '../common/config';
+
+const toType = (status: string) => {
+  switch (status) {
+    case 'added':
+      return CommitFileStatus.Added;
+    case 'deleted':
+      return CommitFileStatus.Deleted;
+    case 'renamed':
+      return CommitFileStatus.Renamed;
+    case 'modified':
+      return CommitFileStatus.Modified;
+    default:
+      return CommitFileStatus.Modified;
+  }
+};
 
 @Injectable()
-export class GitHubService implements ICodeAPIService {
-  @Autowired()
-  private readonly codeModel: CodeModelService;
-
-  @Autowired(IMessageService)
-  private readonly messageService: IMessageService;
-
+export class GitHubAPIService implements ICodeAPIService {
   @Autowired(HelperService)
   private readonly helper: HelperService;
 
   @Autowired(AppConfig)
   appConfig: AppConfig;
+
+  private config = CODE_PLATFORM_CONFIG[CodePlatform.github];
 
   /** 资源限制信息 */
   @observable
@@ -34,39 +52,48 @@ export class GitHubService implements ICodeAPIService {
     search: { limit: 0, remaining: 0, reset: 0, used: 0 },
   };
 
-  shouldShowView = false;
-
   private _requestType: 'rest' | 'graphql' = 'rest';
 
   private _OAUTH_TOKEN: string | null;
+
+  private recursiveTreeMap = new Map<string, Promise<string[]>>();
 
   get OAUTH_TOKEN() {
     return this._OAUTH_TOKEN;
   }
 
-  async initialize() {
-    // 首次校验 token，并根据 remain 确定用 rest 还是 graphql
-    const token = this.helper.GITHUB_TOKEN;
+  constructor() {
+    this._OAUTH_TOKEN = this.helper.GITHUB_TOKEN;
+  }
+
+  async available() {
+    const token = this._OAUTH_TOKEN;
     await this.getRateLimit(token);
     if (!this.canRequest) {
-      this.shouldShowView = true;
-      this.showErrorRequestMessage(403);
+      this.helper.revealView(CodePlatform.github);
+      this.showErrorRequestMessage(403, false);
+      return false;
     }
-    if (!token) return;
-    if (this.resources.core.remaining) {
-      this._requestType = 'rest';
-    } else if (this.resources.graphql.remaining) {
-      this._requestType = 'graphql';
+    if (token) {
+      if (this.resources.core.remaining) {
+        this._requestType = 'rest';
+      } else if (this.resources.graphql.remaining) {
+        this._requestType = 'graphql';
+      }
     }
-    this._OAUTH_TOKEN = token;
+    return true;
   }
 
   get canRequest() {
     return this.resources.core.remaining > 0 || this.resources.graphql.remaining > 0;
   }
 
-  transformStaticResource(path: string) {
-    return `https://raw.githubusercontent.com/${this.codeModel.project}/${this.codeModel.HEAD}/${path}`;
+  private getProjectPath(project: IRepositoryModel) {
+    return `${project.owner}/${project.name}`;
+  }
+
+  transformStaticResource(repo: IRepositoryModel, path: string) {
+    return `https://raw.githubusercontent.com/${this.getProjectPath(repo)}/${repo.commit}/${path}`;
   }
 
   private showErrorRequestMessage(status: number): never;
@@ -81,7 +108,8 @@ export class GitHubService implements ICodeAPIService {
       messageKey = 'github.resource-not-found';
     }
     const message = `${status ? `${status} - ` : ''}${localize(messageKey)}`;
-    this.messageService.error(message);
+    this.helper.showMessage(CodePlatform.github, { type: MessageType.Error, status, message });
+
     if (throwError !== false) {
       throw new Error(message);
     }
@@ -111,7 +139,7 @@ export class GitHubService implements ICodeAPIService {
     const { responseType, ...rest } = options || {};
     try {
       const response = await this.request(path, {
-        baseURL: this.codeModel.endpoint,
+        baseURL: this.config.endpoint,
         ...rest,
       });
       return responseType ? response[responseType]() : response;
@@ -120,7 +148,10 @@ export class GitHubService implements ICodeAPIService {
         // 403 时切换为 graphql
         const { status } = err.response;
         if (status === 403 && this.resources.graphql.remaining > 0) {
-          this.messageService.info(localize('github.toggle-graphql'));
+          this.helper.showMessage(CodePlatform.github, {
+            type: MessageType.Info,
+            symbol: 'github.toggle-graphql',
+          });
           this._requestType = 'graphql';
           throw new RetryError();
         }
@@ -148,7 +179,12 @@ export class GitHubService implements ICodeAPIService {
     }
   }
 
-  async requestObject(type: 'Commit' | 'Tree' | 'Blob', query: string, expression: string) {
+  async requestObject(
+    repo: IRepositoryModel,
+    type: 'Commit' | 'Tree' | 'Blob',
+    query: string,
+    expression: string
+  ) {
     const data = await this.requestGraphQL({
       data: {
         query: `
@@ -163,8 +199,8 @@ export class GitHubService implements ICodeAPIService {
           }
         `,
         variables: {
-          owner: this.codeModel.owner,
-          name: this.codeModel.name,
+          owner: repo.owner,
+          name: repo.name,
           expression,
         },
       },
@@ -175,7 +211,7 @@ export class GitHubService implements ICodeAPIService {
   async getRateLimit(token?: string | null) {
     try {
       const response = await this.request('/rate_limit', {
-        baseURL: this.codeModel.endpoint,
+        baseURL: this.config.endpoint,
         ...(token
           ? {
               headers: {
@@ -191,6 +227,7 @@ export class GitHubService implements ICodeAPIService {
     } catch (err: unknown) {
       if (isResponseError(err)) {
         if (err.response.status === 401) {
+          this._OAUTH_TOKEN = null;
           this.showErrorRequestMessage(401);
         }
       }
@@ -203,10 +240,13 @@ export class GitHubService implements ICodeAPIService {
     if (this.canRequest) {
       this._OAUTH_TOKEN = token;
       this.helper.GITHUB_TOKEN = token;
-      this.codeModel.reset();
+      this.helper.reinitializeCodeService();
       this.helper.revealView('explorer');
     } else {
-      this.messageService.error(localize('request-rate-limit-with-token'));
+      this.helper.showMessage(CodePlatform.github, {
+        type: MessageType.Error,
+        symbol: 'request-rate-limit-with-token',
+      });
     }
   }
 
@@ -221,8 +261,8 @@ export class GitHubService implements ICodeAPIService {
   }
 
   private rest = {
-    getCommit: async (ref: string) => {
-      return this.requestByREST<string>(`/repos/${this.codeModel.project}/commits/${ref}`, {
+    getCommit: async (repo: IRepositoryModel, ref: string) => {
+      return this.requestByREST<string>(`/repos/${this.getProjectPath(repo)}/commits/${ref}`, {
         headers: {
           Accept: 'application/vnd.github.v3.sha',
         },
@@ -230,9 +270,9 @@ export class GitHubService implements ICodeAPIService {
       });
     },
 
-    getTree: async (path: string) => {
+    getTree: async (repo: IRepositoryModel, path: string) => {
       const data = await this.requestByREST<API.ResponseGetTree>(
-        `/repos/${this.codeModel.project}/git/trees/${this.codeModel.HEAD}:${path}`,
+        `/repos/${this.getProjectPath(repo)}/git/trees/${repo.commit}:${path}`,
         {
           responseType: 'json',
         }
@@ -248,9 +288,9 @@ export class GitHubService implements ICodeAPIService {
       });
     },
 
-    getRecursiveTree: async () => {
+    getRecursiveTree: async (repo: IRepositoryModel) => {
       const data = await this.requestByREST<API.ResponseGetTree>(
-        `/repos/${this.codeModel.project}/git/trees/${this.codeModel.HEAD}:`,
+        `/repos/${this.getProjectPath(repo)}/git/trees/${repo.commit}:`,
         {
           responseType: 'json',
           params: {
@@ -261,9 +301,9 @@ export class GitHubService implements ICodeAPIService {
       return data.tree.filter((item) => item.type === 'blob').map((item) => item.path);
     },
 
-    getBlob: async (entry: EntryParam) => {
+    getBlob: async (repo: IRepositoryModel, entry: EntryParam) => {
       const buf = await this.requestByREST<ArrayBuffer>(
-        `/repos/${this.codeModel.project}/git/blobs/${entry.id}`,
+        `/repos/${this.getProjectPath(repo)}/git/blobs/${entry.id}`,
         {
           headers: {
             Accept: 'application/vnd.github.v3.raw',
@@ -274,55 +314,145 @@ export class GitHubService implements ICodeAPIService {
       return Buffer.from(buf);
     },
 
-    getRefs: async (): Promise<RefsParam> => {
+    getBlobByCommitPath: async (
+      repo: IRepositoryModel,
+      commit: string,
+      path: string
+    ): Promise<Uint8Array> => {
+      const data = await this.requestByREST<API.ResponseBlobCommitPath>(
+        `/repos/${this.getProjectPath(repo)}/contents/${path}?ref=${commit}`,
+        {
+          headers: {
+            Accept: 'application/vnd.github.v3.json',
+          },
+          responseType: 'json',
+        }
+      );
+      return Buffer.from(data.content, data.encoding);
+    },
+
+    getBranches: async (repo: IRepositoryModel): Promise<BranchOrTag[]> => {
+      let data = await this.requestByREST<API.ResponseMatchingRefs>(
+        `/repos/${this.getProjectPath(repo)}/git/matching-refs/heads`,
+        {
+          responseType: 'json',
+        }
+      );
+      return data.map((item) => ({
+        name: item.ref.slice(11),
+        commit: {
+          id: item.object.sha,
+        },
+      }));
+    },
+
+    getTags: async (repo: IRepositoryModel): Promise<BranchOrTag[]> => {
       // TODO: 只获取 200 条数据
-      const [branches, tags] = await Promise.all(
-        ['branches', 'tags'].map(async (type) => {
-          let data = await this.requestByREST<API.ResponseGetRefs>(
-            `/repos/${this.codeModel.project}/${type}`,
+      // 这里不用 matching ref 是因为 tags 返回的 sha 是 tag 本身的 sha，而不是 commit sha，和预期不符
+      let data = await this.requestByREST<API.ResponseGetRefs>(
+        `/repos/${this.getProjectPath(repo)}/tags`,
+        {
+          responseType: 'json',
+          params: {
+            per_page: 100,
+          },
+        }
+      );
+      if (data.length === 100) {
+        data = data.concat(
+          await this.requestByREST<API.ResponseGetRefs>(
+            `/repos/${this.getProjectPath(repo)}/tags`,
             {
               responseType: 'json',
               params: {
                 per_page: 100,
+                page: 2,
               },
             }
-          );
-          if (data.length === 100) {
-            data = data.concat(
-              await this.requestByREST<API.ResponseGetRefs>(
-                `/repos/${this.codeModel.project}/${type}`,
-                {
-                  responseType: 'json',
-                  params: {
-                    per_page: 100,
-                    page: 2,
-                  },
-                }
-              )
-            );
-          }
-          return data.map((item) => ({
-            name: item.name,
-            commit: {
-              id: item.commit.sha,
-            },
-          }));
-        })
+          )
+        );
+      }
+      return data.map((item) => ({
+        name: item.name,
+        commit: {
+          id: item.commit.sha,
+        },
+      }));
+    },
+
+    getCommits: async (repo: IRepositoryModel, params: CommitParams) => {
+      const data = await this.requestByREST<API.ResponseCommit[]>(
+        `/repos/${this.getProjectPath(repo)}/commits`,
+        {
+          responseType: 'json',
+          params: {
+            sha: params.ref,
+            path: params.path,
+            page: params.page,
+            per_page: params.pageSize,
+          },
+        }
       );
-      return {
-        branches,
-        tags,
-      };
+      return data.map((c) => ({
+        id: c.sha,
+        parents: c.parents.map((p) => p.sha),
+        author: c.commit.author.name,
+        authorEmail: c.commit.author.email,
+        authorDate: c.commit.author.date,
+        committer: c.commit.committer.name,
+        committerEmail: c.commit.committer.name,
+        committerDate: c.commit.committer.name,
+        message: c.commit.message,
+      }));
+    },
+
+    getCommitDiff: async (repo: IRepositoryModel, sha: string): Promise<CommitFileChange[]> => {
+      const data = await this.requestByREST<API.ResponseCommitDetail>(
+        `/repos/${this.getProjectPath(repo)}/commits/${sha}`,
+        {
+          responseType: 'json',
+        }
+      );
+
+      return data.files.map((f) => ({
+        oldFilePath: f.previous_filename || f.filename,
+        newFilePath: f.filename,
+        type: toType(f.status),
+        additions: f.additions,
+        deletions: f.deletions,
+      }));
+    },
+
+    getCommitCompare: async (
+      repo: IRepositoryModel,
+      from: string,
+      to: string
+    ): Promise<CommitFileChange[]> => {
+      const data = await this.requestByREST<API.ResponseCommitDetail>(
+        `/repos/${this.getProjectPath(repo)}/compare/${from}...${to}`,
+        {
+          responseType: 'json',
+        }
+      );
+
+      return data.files.map((f) => ({
+        oldFilePath: f.previous_filename || f.filename,
+        newFilePath: f.filename,
+        type: toType(f.status),
+        additions: f.additions,
+        deletions: f.deletions,
+      }));
     },
   };
 
   private graphql = {
-    getCommit: async (ref: string) => {
-      return (await this.requestObject('Commit', `oid`, ref)).oid;
+    getCommit: async (repo: IRepositoryModel, ref: string) => {
+      return (await this.requestObject(repo, 'Commit', `oid`, ref)).oid;
     },
 
-    getTree: async (path: string) => {
+    getTree: async (repo: IRepositoryModel, path: string) => {
       const data = await this.requestObject(
+        repo,
         'Tree',
         `
           entries {
@@ -339,7 +469,7 @@ export class GitHubService implements ICodeAPIService {
             }
           }
         `,
-        `${this.codeModel.HEAD}:${path}`
+        `${repo.commit}:${path}`
       );
       return data.entries.map((item: any) => {
         const entry: TreeEntry = {
@@ -355,21 +485,22 @@ export class GitHubService implements ICodeAPIService {
       });
     },
 
-    getBlob: async (entry: EntryParam) => {
+    getBlob: async (repo: IRepositoryModel, entry: EntryParam) => {
       const data = await this.requestObject(
+        repo,
         'Blob',
         `
           isBinary
           text
         `,
-        `${this.codeModel.HEAD}:${entry.path}`
+        `${repo.commit}:${entry.path}`
       );
       const text = data.text || '';
       return Buffer.from(text);
     },
 
-    getRefs: async (): Promise<RefsParam> => {
-      const genQuery = (type: 'branches' | 'tags', endCursor?: string) => {
+    getRefs: async (repo: IRepositoryModel, type: 'branches' | 'tags'): Promise<BranchOrTag[]> => {
+      const genQuery = (endCursor?: string) => {
         const map = {
           branches: {
             refPrefix: 'refs/heads/',
@@ -393,108 +524,100 @@ export class GitHubService implements ICodeAPIService {
           }
         `;
         return `
-          ${type}: refs(refPrefix: "${map[type].refPrefix}", first: 100, ${
+          refs(refPrefix: "${map[type].refPrefix}", first: 100, ${
           endCursor ? `after: "${endCursor}"` : ''
         }) {
             ${dataQuery}
           }
         `;
       };
-      const data = await this.requestGraphQL({
-        data: {
-          query: `
-            query($owner: String!, $name: String!) {
-              repository(name: $name, owner: $owner) {
-                ${genQuery('branches')}
-                ${genQuery('tags')}
-              }
-            }
-          `,
-          variables: {
-            owner: this.codeModel.owner,
-            name: this.codeModel.name,
-          },
-        },
-      });
-      let nextPageQuery = '';
-      if (data.repository.branches.pageInfo.hasNextPage) {
-        nextPageQuery += genQuery('branches', data.repository.branches.pageInfo.endCursor);
-      }
-      if (data.repository.tags.pageInfo.hasNextPage) {
-        nextPageQuery += genQuery('tags', data.repository.tags.pageInfo.endCursor);
-      }
-      if (nextPageQuery) {
-        const nextData = await this.requestGraphQL({
+      const req = async (refQuery: string) => {
+        return await this.requestGraphQL({
           data: {
             query: `
               query($owner: String!, $name: String!) {
                 repository(name: $name, owner: $owner) {
-                  ${nextPageQuery}
+                  ${refQuery}
                 }
               }
             `,
             variables: {
-              owner: this.codeModel.owner,
-              name: this.codeModel.name,
+              owner: repo.owner,
+              name: repo.name,
             },
           },
         });
-        if (nextData.repository.branches) {
-          data.repository.branches.edges = data.repository.branches.edges.concat(
-            nextData.repository.branches.edges
-          );
-        }
-        if (nextData.repository.tags) {
-          data.repository.tags.edges = data.repository.tags.edges.concat(
-            nextData.repository.tags.edges
-          );
-        }
-      }
-      return {
-        branches: data.repository.branches.edges.map((item) => ({
-          name: item.node.name,
-          commit: { id: item.node.target.oid },
-        })),
-        tags: data.repository.tags.edges.map((item) => ({
-          name: item.node.name,
-          commit: { id: item.node.target.oid },
-        })),
       };
+      const res: BranchOrTag[] = [];
+      const collect = (data: any) => {
+        data.repository.refs.edges.forEach((item) => {
+          res.push({
+            name: item.node.name,
+            commit: { id: item.node.target.oid },
+          });
+        });
+      };
+
+      const data = await req(genQuery());
+      collect(data);
+      if (data.repository.refs.pageInfo.hasNextPage) {
+        collect(await req(genQuery(data.repository.refs.pageInfo.endCursor)));
+      }
+
+      return res;
+    },
+
+    getBranches: async (repo: IRepositoryModel) => {
+      return this.graphql.getRefs(repo, 'branches');
+    },
+
+    getTags: async (repo: IRepositoryModel) => {
+      return this.graphql.getRefs(repo, 'tags');
     },
   };
 
   @retry
-  async getCommit(ref: string) {
+  async getCommit(repo: IRepositoryModel, ref: string) {
     if (this._requestType === 'rest') {
-      return this.rest.getCommit(ref);
+      return this.rest.getCommit(repo, ref);
     }
-    return this.graphql.getCommit(ref);
+    return this.graphql.getCommit(repo, ref);
   }
 
   @retry
-  async getTree(path: string) {
-    await this.codeModel.headInitialized;
+  async getTree(repo: IRepositoryModel, path: string) {
     if (this._requestType === 'rest') {
-      return this.rest.getTree(path);
+      return this.rest.getTree(repo, path);
     }
-    return this.graphql.getTree(path);
+    return this.graphql.getTree(repo, path);
   }
 
   @retry
-  async getBlob(entry: EntryParam) {
-    await this.codeModel.headInitialized;
+  async getBlob(repo: IRepositoryModel, entry: EntryParam) {
     if (this._requestType === 'rest') {
-      return this.rest.getBlob(entry);
+      return this.rest.getBlob(repo, entry);
     }
-    return this.graphql.getBlob(entry);
+    return this.graphql.getBlob(repo, entry);
+  }
+
+  async getBlobByCommitPath(repo: IRepositoryModel, commit: string, path: string) {
+    return this.rest.getBlobByCommitPath(repo, commit, path);
   }
 
   @retry
-  async getRefs(): Promise<RefsParam> {
+  async getBranches(repo: IRepositoryModel): Promise<BranchOrTag[]> {
     if (this._requestType === 'rest') {
-      return this.rest.getRefs();
+      return this.rest.getBranches(repo);
     }
-    return this.graphql.getRefs();
+    return this.graphql.getBranches(repo);
+  }
+
+  @retry
+  async getTags(repo: IRepositoryModel): Promise<BranchOrTag[]> {
+    if (this._requestType === 'rest') {
+      return this.rest.getTags(repo);
+    }
+    return this.graphql.getTags(repo);
   }
 
   /**
@@ -505,11 +628,38 @@ export class GitHubService implements ICodeAPIService {
     return [];
   }
 
+  async searchFile(repo: IRepositoryModel) {
+    return this.getAllFiles(repo);
+  }
+
   /**
    * github 接口只支持默认分支，这里查询一次所有文件来过滤
    */
-  @memoize
-  async searchFile() {
-    return this.rest.getRecursiveTree();
+  async getAllFiles(repo: IRepositoryModel) {
+    const key = `${repo.owner}-${repo.name}-${repo.commit}`;
+    if (!this.recursiveTreeMap.has(key)) {
+      this.recursiveTreeMap.set(key, this.rest.getRecursiveTree(repo));
+    }
+    return this.recursiveTreeMap.get(key)!;
+  }
+
+  // TODO: graphql 下才支持
+  async getFileBlame() {
+    return Uint8Array.from([]);
+  }
+
+  // TODO: graphql
+  getCommits(repo: IRepositoryModel, params: CommitParams) {
+    return this.rest.getCommits(repo, params);
+  }
+
+  // TODO: graphql
+  getCommitDiff(repo: IRepositoryModel, sha: string) {
+    return this.rest.getCommitDiff(repo, sha);
+  }
+
+  // TODO: graphql
+  async getCommitCompare(repo: IRepositoryModel, from: string, to: string) {
+    return this.rest.getCommitCompare(repo, from, to);
   }
 }

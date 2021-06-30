@@ -5,12 +5,15 @@
 import * as path from 'path';
 import * as fse from 'fs-extra';
 import { mergeContributes } from '@ali/ide-kaitian-extension/lib/node/merge-contributes';
+import { Uri } from '@ali/ide-core-common';
 import pick from 'lodash.pick';
 
-import { NLSInfo, IExtensionBasicMetadata } from './type';
+import { NLSInfo, IExtensionBasicMetadata, IExtensionMode } from './type';
 
 export async function getExtension(
-  extensionPath: string
+  extensionPath: string,
+  mode?: IExtensionMode,
+  localUri?: Uri
 ): Promise<IExtensionBasicMetadata | undefined> {
   if (!(await fse.pathExists(extensionPath))) {
     return undefined;
@@ -91,13 +94,33 @@ export async function getExtension(
 
   const nlsList = await getAllLocalized(extensionPath, 'package.nls', '.json');
 
+  const metaPath = path.join(extensionPath, 'kaitian-meta.json');
+  let webAssets: string[] = [];
+  if (await fse.pathExists(metaPath)) {
+    try {
+      const meta = await fse.readJSON(metaPath);
+      webAssets = meta?.['web-assets'] || [];
+    } catch (e) {
+      console.error(e);
+      webAssets = [];
+    }
+  }
+
   // merge for `kaitianContributes` and `contributes`
   packageJSON.contributes = mergeContributes(
     packageJSON.kaitianContributes,
     packageJSON.contributes
   );
 
-  const { publisher, name } = getExtensionIdByPath(extensionPath, packageJSON.version);
+  // 本地扩展的 publisher 和 name 从 package.json 获取，
+  // 远程扩展的 publisher 和 name 从目录名获取
+  const { publisher, name } =
+    mode === 'local' ? packageJSON : getExtensionIdByPath(extensionPath, packageJSON.version);
+
+  let uri: string | undefined;
+  if (mode === 'local' && localUri) {
+    uri = localUri.with({ path: path.join(localUri.path, extensionPath) }).toString();
+  }
 
   const metadata: IExtensionBasicMetadata = {
     extension: {
@@ -107,6 +130,12 @@ export async function getExtension(
     },
     packageJSON: pick(packageJSON, [
       'name',
+      'publisher',
+      'version',
+      'repository',
+      'displayName',
+      'description',
+      'icon',
       'activationEvents',
       'kaitianContributes',
       'contributes',
@@ -115,6 +144,9 @@ export async function getExtension(
     pkgNlsJSON,
     nlsList,
     extendConfig,
+    webAssets,
+    mode,
+    uri,
   };
   return metadata;
 }

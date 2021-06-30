@@ -1,20 +1,31 @@
 import * as path from 'path';
+import * as os from 'os';
 import { ExtensionInstaller, Extension } from '@ali/ide-extension-installer';
 import * as fse from 'fs-extra';
 import { from, of } from 'rxjs';
-import { mergeMap, filter } from 'rxjs/operators';
+import { mergeMap, filter, map } from 'rxjs/operators';
+import { IExtensionMode } from '@alipay/alex-shared';
 import { EXTENSION_DIR, EXTENSION_METADATA_DIR, EXTENSION_FIELD } from './util/constant';
 import { getExtension } from './extension/scanner';
-import { IExtensionBasicMetadata, IExtensionDesc, IExtensionIdentity } from './extension/type';
+import {
+  IExtensionBasicMetadata,
+  IExtensionDesc,
+  IExtensionIdentity,
+  IExtensionServerOptions,
+} from './extension/type';
 import { log, error } from './util/log';
 import checkFramework from './util/check-framework';
+import { createServer, getHttpUri } from './util/serve-file';
 import { formatExtension } from './util';
 import { createMetadataType } from './extension/metadata-type';
 
 let extensionInstaller: ExtensionInstaller;
 let shouldWriteConfig = false;
 
-export const install = async (extensionId?: string[], options?: { silent: boolean }) => {
+export const install = async (
+  extensionId?: string[],
+  options?: { silent: boolean; mode?: 'public' | 'internal' }
+) => {
   checkFramework();
 
   createInstaller();
@@ -22,7 +33,7 @@ export const install = async (extensionId?: string[], options?: { silent: boolea
   let extensions: IExtensionDesc[] = [];
 
   if (extensionId?.length) {
-    extensions = parseExtensionId(extensionId);
+    extensions = parseExtensionId(extensionId, options?.mode);
     shouldWriteConfig = true;
     await Promise.all(extensions.map((ext) => removeExtensionById(ext)));
   } else {
@@ -49,14 +60,21 @@ export const install = async (extensionId?: string[], options?: { silent: boolea
   from(extensions)
     .pipe(
       mergeMap(installExtension, 5), // 限制并发数 5
-      mergeMap((extPath) => (Array.isArray(extPath) ? from(extPath) : of(extPath))),
-      mergeMap(getExtension, 5),
+      mergeMap(([extPath, mode]) =>
+        Array.isArray(extPath)
+          ? from(extPath.map((p) => [p, mode] as const))
+          : of([extPath, mode] as const)
+      ),
+      mergeMap(([extPath, mode]) => getExtension(extPath, mode), 5),
       filter((data) => !!data),
       mergeMap(writeMetadata)
     )
     .subscribe(
       (ext) => {
-        installedExtensions.push(ext);
+        if (options?.mode === 'public') {
+          ext.mode = 'public';
+        }
+        installedExtensions.push({ ...ext });
         log.info(`${formatExtension(ext)} 安装完成`);
       },
       (err) => {
@@ -68,6 +86,53 @@ export const install = async (extensionId?: string[], options?: { silent: boolea
           modifyPkgJSON(installedExtensions);
         }
         log.success('扩展安装成功');
+      }
+    );
+};
+
+/**
+ * 从本地安装扩展
+ * @param dirs 扩展目录
+ */
+export const installLocalExtensions = async (dirs: string[], options?: IExtensionServerOptions) => {
+  checkFramework();
+
+  if (!dirs.length) {
+    return;
+  }
+
+  const absoluteDirs = dirs.map((dir) => path.resolve(dir));
+
+  log.start('开始安装本地扩展\n');
+  const homedir = os.homedir();
+  absoluteDirs.forEach((dir) => {
+    let readablePath = dir;
+    if (dir.startsWith(homedir)) {
+      readablePath = dir.replace(homedir, '~');
+    }
+    console.log(`  * ${readablePath}`);
+  });
+  console.log();
+
+  const httpUri = await getHttpUri(options);
+
+  from(absoluteDirs)
+    .pipe(
+      mergeMap((localExtPath) => getExtension(localExtPath, 'local', httpUri), 5),
+      filter((data) => !!data),
+      mergeMap(writeMetadata)
+    )
+    .subscribe(
+      (ext) => {
+        log.info(`${formatExtension(ext)} 安装完成`);
+      },
+      (err) => {
+        log.error('本地扩展安装失败，请重试');
+        console.error(err);
+      },
+      () => {
+        log.success('本地扩展安装成功');
+        createServer(absoluteDirs, httpUri);
       }
     );
 };
@@ -141,7 +206,7 @@ function checkExtensionConfig(extensions: Extension[]) {
   }
 }
 
-function parseExtensionId(extensionIds: string[]) {
+function parseExtensionId(extensionIds: string[], mode?: IExtensionMode) {
   const extensions: IExtensionDesc[] = [];
   for (const extId of extensionIds) {
     const reg = /^([a-zA-Z][0-9a-zA-Z_-]*)\.([a-zA-Z][0-9a-zA-Z_-]*)(?:@(\d+\.\d+\.\d+.*))?$/;
@@ -150,17 +215,18 @@ function parseExtensionId(extensionIds: string[]) {
       return error(`${extId} 格式不合法，请输入 publisher.name[@version] 的形式`);
     }
     const [, publisher, name, version] = matched;
-    extensions.push({ publisher, name, version });
+    extensions.push({ publisher, name, version, mode });
   }
   return extensions;
 }
 
 async function installExtension(extension: IExtensionDesc) {
-  return extensionInstaller.install({
+  const extensionPath = await extensionInstaller.install({
     publisher: extension.publisher,
     name: extension.name,
     version: extension.version,
   });
+  return [extensionPath, extension.mode] as const;
 }
 
 async function writeMetadata(metadata: IExtensionBasicMetadata) {

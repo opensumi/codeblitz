@@ -10,10 +10,13 @@ export interface NLSInfo {
   filename: string;
 }
 
+export type IExtensionMode = 'local' | 'internal' | 'public';
+
 export interface IExtensionIdentity {
   publisher: string;
   name: string;
   version: string;
+  mode?: IExtensionMode;
 }
 
 export type IExtensionDesc = Optional<IExtensionIdentity, 'version'>;
@@ -28,7 +31,13 @@ export interface ExtraMetadata {
 export interface IExtensionBasicMetadata {
   extension: IExtensionIdentity;
   packageJSON: {
+    publisher: string;
     name: string;
+    version: string;
+    icon?: string;
+    displayName?: string;
+    description?: string;
+    repository?: any;
     activationEvents?: string[];
     kaitianContributes?: JSONType;
     contributes?: JSONType;
@@ -37,6 +46,10 @@ export interface IExtensionBasicMetadata {
   pkgNlsJSON: JSONType;
   nlsList: NLSInfo[];
   extendConfig: JSONType;
+  webAssets: string[];
+  // 自定义 uri，用于本地研发模式
+  uri?: string;
+  mode?: IExtensionMode;
 }
 
 /**

@@ -4,6 +4,7 @@
 
 const fse = require('fs-extra');
 const path = require('path');
+const pkg = require('../../package.json');
 
 /**
  * @param {string[]} files
@@ -31,20 +32,27 @@ exports.replace = (files, replacement) => {
   );
 };
 
-exports.replaceWorkerAndWebviewAssets = async () => {
+exports.replaceEnv = async () => {
   const configPath = path.resolve(__dirname, '..', '..', 'packages/toolkit/define.json');
   if (!fse.existsSync(configPath)) {
     throw new Error('请先运行 build-assets 构建资源');
   }
 
-  const targetFiles = [
-    path.resolve(__dirname, '..', '..', 'packages/alex/lib/api/createApp.js'),
-    path.resolve(__dirname, '..', '..', 'packages/alex/lib/api/createEditor.js'),
-  ];
+  const targetFiles = [resolveLibFile('core/env.js')];
+  checkLibFiles(targetFiles);
 
-  if (!targetFiles.every((file) => fse.existsSync(file))) {
+  return exports.replace(targetFiles, {
+    ...(await fse.readJSON(configPath)),
+    __VERSION__: pkg.version,
+  });
+};
+
+function resolveLibFile(p) {
+  return path.join(__dirname, '../../packages/alex/lib', p);
+}
+
+function checkLibFiles(files) {
+  if (!files.every((file) => fse.existsSync(file))) {
     throw new Error('请先运行 build 构建 lib');
   }
-
-  return exports.replace(targetFiles, await fse.readJSON(configPath));
-};
+}

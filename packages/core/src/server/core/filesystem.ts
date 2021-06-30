@@ -12,28 +12,41 @@ export const isFilesystemReady = () => filesystemDeferred.promise;
 
 let mountfs: RootFS | null = null;
 
-export const initializeRootFileSystem = async (scenario?: string | null) => {
+export const initializeRootFileSystem = async () => {
   if (mountfs) return mountfs;
 
-  let homefs: FileSystem | null = null;
-  // scenario 为 null 时 或者 browser 隐身模式时无法使用 indexedDB 时，回退到 memory
-  // TODO: 寻找更好的解决方案
-  if (scenario !== null && FileSystem.IndexedDB.isAvailable()) {
-    try {
-      // 通过 scenario 隔离 indexedDB
-      homefs = await createFileSystem(FileSystem.IndexedDB, {
-        storeName: `${HOME_IDB_NAME}${scenario ? `/${scenario}` : ''}`,
-      });
-    } catch (err) {
-      getDebugLogger().error(`初始化 indexedDB 文件系统失败 ${err?.message || ''}`);
-      homefs = null;
-    }
-  }
-  mountfs = (await createFileSystem(
-    FileSystem.MountableFileSystem,
-    homefs ? { [HOME_ROOT]: homefs } : {}
-  )) as RootFS;
+  mountfs = (await createFileSystem(FileSystem.MountableFileSystem, {})) as RootFS;
   initialize(mountfs);
   filesystemDeferred.resolve();
   return mountfs;
+};
+
+export const initializeHomeFileSystem = async (rootFS: RootFS, scenario?: string | null) => {
+  try {
+    let homefs: FileSystem | null = null;
+    // scenario 为 null 时 或者 browser 隐身模式时无法使用 indexedDB 时，回退到 memory
+    // TODO: 寻找更好的解决方案
+    if (scenario !== null && FileSystem.IndexedDB.isAvailable()) {
+      try {
+        // 通过 scenario 隔离 indexedDB
+        homefs = await createFileSystem(FileSystem.IndexedDB, {
+          storeName: `${HOME_IDB_NAME}${scenario ? `/${scenario}` : ''}`,
+        });
+      } catch (err) {
+        getDebugLogger().error(`初始化 indexedDB 文件系统失败 ${err?.message || ''}`);
+        homefs = null;
+      }
+    }
+    if (!homefs) {
+      homefs = await createFileSystem(FileSystem.InMemory, {});
+    }
+    rootFS.mount(HOME_ROOT, homefs);
+  } catch (err) {
+    getDebugLogger().error(`初始化 home 目录失败 ${err?.message || ''}`);
+  }
+  return {
+    dispose() {
+      rootFS.umount(HOME_ROOT);
+    },
+  };
 };

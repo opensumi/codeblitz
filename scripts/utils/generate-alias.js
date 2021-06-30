@@ -11,6 +11,10 @@ exports.generateLanguages = async () => {
   const targetDir = path.join(__dirname, '../../packages/alex/languages');
   await fse.remove(targetDir);
   await fse.ensureDir(targetDir);
+
+  let langEntryContent = '';
+  let declarationContent = `declare module '@alipay/alex/languages' {}\n`;
+
   fse
     .readdirSync(languagesDir, { withFileTypes: true })
     .filter((dirent) => dirent.isDirectory())
@@ -19,12 +23,21 @@ exports.generateLanguages = async () => {
       fse.writeFileSync(
         path.join(targetDir, `${lang}.js`),
         `
-const { registerLanguage, registerGrammar } = ${lib};
+const { Registry } = require('@alipay/alex-registry');
 const loadLanguage = require('@ali/kaitian-textmate-languages/lib/${lang}');
+const registerLanguage = (contrib) => Registry.register('language', contrib);
+const registerGrammar = (contrib) => Registry.register('grammar', contrib);
 loadLanguage(registerLanguage, registerGrammar);
         `.trim() + '\n'
       );
+
+      langEntryContent += `require('./${lang}')\n`;
+      declarationContent += `declare module '@alipay/alex/languages/${lang}' {}\n`;
     });
+
+  fse.writeFileSync(path.join(targetDir, 'index.js'), langEntryContent);
+  const declarationFile = path.join(__dirname, '../../packages/alex/typings/languages.d.ts');
+  fse.writeFileSync(declarationFile, declarationContent);
 };
 
 exports.generateModules = async () => {
@@ -59,21 +72,13 @@ exports.generateShims = async () => {
   const shimsDir = path.join(__dirname, '../../packages/alex/shims');
   await fse.remove(shimsDir);
   await fse.ensureDir(shimsDir);
-  ['fs', 'fs-extra', 'os', 'crypto', 'buffer', 'process', 'assert', 'path'].forEach((mod) => {
+  ['fs', 'fs-extra', 'os', 'crypto', 'buffer', 'process', 'assert', 'path'].forEach((id) => {
     fse.writeFileSync(
-      path.join(shimsDir, `${mod}.js`),
+      path.join(shimsDir, `${id}.js`),
       `
 const { requireModule } = ${lib};
-module.exports = requireModule("${mod}");
+module.exports = requireModule("${id}");
     `.trim() + '\n'
     );
   });
-};
-
-exports.generateAll = () => {
-  return Promise.all([
-    exports.generateLanguages(),
-    exports.generateModules(),
-    exports.generateShims(),
-  ]);
 };

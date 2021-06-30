@@ -20,15 +20,14 @@ import {
   notEmpty,
   FileAccess,
 } from '@ali/ide-file-service/lib/common';
-import { Injectable, Autowired } from '@ali/common-di';
+import { Injectable } from '@ali/common-di';
 import { ParsedPattern, parse } from '@ali/ide-core-common/lib/utils/glob';
 import * as path from 'path';
-import * as os from 'os';
+import { HOME_ROOT } from '../../common';
 import { IDiskFileProvider } from './base';
 import { FCService } from '../../connection';
 import { FWFileSystemWatcherServer } from './file-service-watcher';
 import { fsExtra as fse, writeFileAtomic } from '../node';
-import { decode, encode } from './encoding';
 
 const debugLog = new DebugLog();
 
@@ -175,15 +174,10 @@ export class DiskFileSystemProvider extends FCService implements IDiskFileProvid
     throw FileSystemError.FileNotFound(uri.path, 'Error occurred while creating the directory.');
   }
 
-  async readFile(uri: UriComponents, encoding = 'utf8'): Promise<string> {
-    if (typeof encoding !== 'string') {
-      // cancellation token兼容
-      encoding = 'utf8';
-    }
-
+  async readFile(uri: UriComponents, encoding = 'utf8'): Promise<Uint8Array> {
     try {
       const buffer = await fse.readFile(uri.path);
-      return decode(buffer, encoding);
+      return buffer;
     } catch (error) {
       if (isErrnoException(error)) {
         if (error.code === 'ENOENT') {
@@ -211,7 +205,7 @@ export class DiskFileSystemProvider extends FCService implements IDiskFileProvid
 
   async writeFile(
     uri: UriComponents,
-    content: string,
+    content: Uint8Array,
     options: { create: boolean; overwrite: boolean; encoding?: string }
   ): Promise<void | FileStat> {
     const _uri = Uri.revive(uri);
@@ -222,7 +216,7 @@ export class DiskFileSystemProvider extends FCService implements IDiskFileProvid
     } else if (!exists && !options.create) {
       throw FileSystemError.FileNotFound(_uri.toString());
     }
-    const buffer = encode(content, options.encoding || 'utf8');
+    const buffer = Buffer.from(content);
 
     if (options.create) {
       return await this.createFile(uri, { content: buffer });
@@ -302,7 +296,7 @@ export class DiskFileSystemProvider extends FCService implements IDiskFileProvid
   }
 
   async getCurrentUserHome(): Promise<FileStat | undefined> {
-    return this.stat(Uri.file(os.homedir()));
+    return this.stat(Uri.file(HOME_ROOT));
   }
 
   setWatchFileExcludes(excludes: string[]) {

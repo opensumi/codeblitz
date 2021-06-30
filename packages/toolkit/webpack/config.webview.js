@@ -27,6 +27,12 @@ module.exports = (option = {}) => {
       new HtmlWebpackPlugin({
         filename: `[name]${isDev ? '' : '.[contenthash:8]'}/index.html`,
         template: option.template || path.join(__dirname, '../public/webview.html'),
+        inject: false,
+        ...(isDev
+          ? {}
+          : {
+              publicPath: 'https://gw.alipayobjects.com/os/alex-app',
+            }),
       }),
     ],
   };

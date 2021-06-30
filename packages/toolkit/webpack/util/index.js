@@ -13,6 +13,7 @@ exports.nodePolyfill = {
   alias: {
     assets: require.resolve('assert/'),
     buffer: require.resolve('buffer/'),
+    'iconv-lite': require.resolve('iconv-lite-umd'),
   },
   fallback: {
     net: false,
@@ -21,7 +22,7 @@ exports.nodePolyfill = {
     https: false,
     fs: false,
     path: require.resolve('path-browserify'),
-    os: resolvePolyfill('os'),
+    os: require.resolve('os-browserify/browser'),
     crypto: resolvePolyfill('crypto'),
   },
   provider: {
@@ -32,10 +33,14 @@ exports.nodePolyfill = {
 
 exports.config = {
   appEntry: 'alex',
+  appGlobalEntry: 'alex.global',
+  appGlobalMinEntry: 'alex.global.min',
   editorEntry: 'alex.editor',
   editorAllEntry: 'alex.editor.all',
   workerEntry: 'worker-host',
   webviewEntry: 'webview',
+  languageGlobalEntry: 'languages.global',
+  languageGlobalMinEntry: 'languages.global.min',
 };
 
 // just for shared

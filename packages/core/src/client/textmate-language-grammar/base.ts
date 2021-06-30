@@ -6,3 +6,8 @@ export interface ILanguageGrammarRegistrationService {
   registerLanguageAndGrammar: (languageId: string) => Promise<void>;
   registerByFilename: (filename: string) => Promise<void>;
 }
+
+export enum TextmateKey {
+  language = 'language',
+  grammar = 'grammar',
+}

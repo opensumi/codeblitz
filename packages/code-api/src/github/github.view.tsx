@@ -1,15 +1,15 @@
 import React, { useState, useEffect } from 'react';
 import { localize } from '@ali/ide-core-common';
 import { useInjectable, getOctIcon } from '@ali/ide-core-browser';
-import { ICodeAPIService } from '@alipay/alex-code-service';
 import { Input, Button } from '@ali/ide-components';
 import { observer } from 'mobx-react-lite';
-import { GitHubService } from './github.service';
+import { ICodeAPIProvider } from '../common/types';
+import type { CodeAPIProvider } from '../code-api.provider';
 import styles from './github.module.less';
 
 export const GitHubView: React.FC = observer(() => {
-  const codeAPI = useInjectable<GitHubService>(ICodeAPIService);
-  const { resources } = codeAPI;
+  const { github } = useInjectable<CodeAPIProvider>(ICodeAPIProvider);
+  const { resources } = github;
   const [tokenValue, setTokenValue] = useState('');
   const [validating, setValidating] = useState(false);
   const [syncing, setSyncing] = useState(false);
@@ -18,7 +18,8 @@ export const GitHubView: React.FC = observer(() => {
     if (!tokenValue) return;
     setValidating(true);
     try {
-      await codeAPI.validateToken(tokenValue);
+      await github.validateToken(tokenValue);
+      setTokenValue('');
     } finally {
       setValidating(false);
     }
@@ -27,7 +28,7 @@ export const GitHubView: React.FC = observer(() => {
   const refresh = async () => {
     setSyncing(true);
     try {
-      await codeAPI.refresh();
+      await github.refresh();
     } finally {
       setSyncing(false);
     }
@@ -109,7 +110,7 @@ export const GitHubView: React.FC = observer(() => {
   };
 
   const renderHasToken = () => {
-    const token = codeAPI.OAUTH_TOKEN!;
+    const token = github.OAUTH_TOKEN!;
     return (
       <div>
         <div className={styles.title}>{localize('github.auth-has-token-title')}</div>
@@ -119,7 +120,7 @@ export const GitHubView: React.FC = observer(() => {
           {token.slice(6).replace(/./g, '*')}
         </div>
         <div style={{ marginTop: 8 }}>
-          <Button onClick={() => codeAPI.clearToken()} type="default">
+          <Button onClick={() => github.clearToken()} type="default">
             {localize('common.clear')}
           </Button>
         </div>
@@ -143,7 +144,7 @@ export const GitHubView: React.FC = observer(() => {
         {renderRateLimit('core', 'Core')}
         {renderRateLimit('graphql', 'GraphQL')}
       </div>
-      {codeAPI.OAUTH_TOKEN ? renderHasToken() : renderNoToken()}
+      {github.OAUTH_TOKEN ? renderHasToken() : renderNoToken()}
     </div>
   );
 });

@@ -1,5 +1,5 @@
 import { IReporter } from '@ali/ide-core-common';
-import { BrowserFS, FileSystemConfiguration, FileSystemInstance } from '../server/node';
+import { FileSystemConfiguration, FileSystemInstance } from '../server/node';
 
 export { AppConfig } from '@ali/ide-core-browser';
 
@@ -13,29 +13,6 @@ export interface IServerApp {
 }
 
 export const RuntimeConfig = Symbol('RuntimeConfig');
-
-export interface CodeServiceConfig {
-  /** 平台 */
-  platform: 'antcode' | 'gitlab' | 'github';
-  /** location.origin */
-  origin: string;
-  /** 用于接口请求，不设置为 origin */
-  endpoint?: string;
-  /** 群组或用户 */
-  owner: string;
-  /** 仓库名 */
-  name: string;
-  /** 从代码托管平台跳转过来的路径，解析出 ref 和默认打开的文件，如 tree/master/README.md  */
-  refPath?: string;
-  /** ref */
-  ref?: string;
-  /** tag */
-  tag?: string;
-  /** branch */
-  branch?: string;
-  /** commit sha */
-  commit?: string;
-}
 
 /**
  * 运行时相关配置
@@ -55,12 +32,10 @@ export interface RuntimeConfig {
   scenario?: string | null;
   /** 工作空间配置 */
   workspace?: {
-    filesystem?: FileSystemConfiguration;
+    filesystem: FileSystemConfiguration;
     onDidSaveTextDocument?: (data: { filepath: string; content: string }) => void;
     onDidChangeTextDocument?: (data: { filepath: string; content: string }) => void;
   };
-  /** 基于代码服务的配置 */
-  codeService?: CodeServiceConfig;
   /** 默认打开的文件，多个文件时，会展示最右边的文件 */
   defaultOpenFile?: string | string[];
   /** 禁止文件树更改，此时无法新增、删除、重命名文件 */
@@ -73,14 +48,18 @@ export interface RuntimeConfig {
    * 启动时打开的 editor
    * none 不打开任何 editor
    * welcomePage 打开欢迎页
-   * 后续考虑支持 'readme', 'newUntitledFile', 'welcomePageInEmptyWorkbench', 'gettingStarted'
+   * 后续考虑支持 'newUntitledFile', 'welcomePageInEmptyWorkbench', 'gettingStarted'
    * @default welcomePage
    */
-  startupEditor?: 'none' | 'welcomePage';
+  startupEditor?: 'none' | 'welcomePage' | 'readme';
   /**
    * 隐藏编辑器区 tab
    */
   hideEditorTab?: boolean;
+  /**
+   * 隐藏编辑器的面包屑导航
+   */
+  hideBreadcrumb?: boolean;
   /**
    * reporter 服务，可获取内部上报的埋点相关数据
    */

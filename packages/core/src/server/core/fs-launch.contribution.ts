@@ -43,6 +43,7 @@ export class FileSystemConfigContribution extends Disposable implements FileSyst
       const workspaceFS = await BrowserFS.getFileSystem(fsConfig);
       rootFS.mount(workspaceDir, workspaceFS);
     } catch (err) {
+      console.error('[Alex ERROR]: ', err);
       this.messageService.error(localize('workspace.initialize.failed'));
       // 使用内存作为回退文件系统
       rootFS.mount(

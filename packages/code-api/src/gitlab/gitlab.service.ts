@@ -1,11 +1,40 @@
 import { Injectable, Autowired } from '@ali/common-di';
-import { localize, IReporterService, formatLocalize } from '@ali/ide-core-common';
-import { CodeModelService, ICodeAPIService } from '@alipay/alex-code-service';
-import type { TreeEntry, EntryParam, RefsParam } from '@alipay/alex-code-service';
-import { IMessageService } from '@ali/ide-overlay';
-import { isResponseError, request, RequestOptions } from '@alipay/alex-shared';
+import { localize, IReporterService, formatLocalize, MessageType } from '@ali/ide-core-common';
+import { request, RequestOptions } from '@alipay/alex-shared';
 import { API } from './types';
 import { HelperService } from '../common/service';
+import { CODE_PLATFORM_CONFIG } from '../common/config';
+import type {
+  TreeEntry,
+  EntryParam,
+  ICodeAPIService,
+  IRepositoryModel,
+  BranchOrTag,
+  CommitParams,
+} from '../common/types';
+import { CodePlatform, CommitFileStatus } from '../common/types';
+
+const toType = (d: API.ResponseCommitFileChange) => {
+  if (d.new_file) return CommitFileStatus.Added;
+  else if (d.deleted_file) return CommitFileStatus.Deleted;
+  else if (d.renamed_file) return CommitFileStatus.Renamed;
+  return CommitFileStatus.Modified;
+};
+const toChangeLines = (diff: string) => {
+  const diffLines = diff ? diff.split('\n') : [];
+  return diffLines.reduce(
+    (obj, line) => {
+      // +++,--- 在首行为文件名
+      if (line.startsWith('+') && !line.startsWith('+++')) {
+        obj.additions += 1;
+      } else if (line.startsWith('-') && !line.startsWith('---')) {
+        obj.deletions += 1;
+      }
+      return obj;
+    },
+    { additions: 0, deletions: 0 }
+  );
+};
 
 /**
  * 目前 aone 不支持通过 private token 跨域调用，需要后台转发
@@ -13,20 +42,14 @@ import { HelperService } from '../common/service';
  */
 
 @Injectable()
-export class GitLabService implements ICodeAPIService {
-  @Autowired()
-  codeModel: CodeModelService;
-
+export class GitLabAPIService implements ICodeAPIService {
   @Autowired(IReporterService)
   reporter: IReporterService;
-
-  @Autowired(IMessageService)
-  messageService: IMessageService;
 
   @Autowired()
   helper: HelperService;
 
-  private id: string;
+  private config = CODE_PLATFORM_CONFIG[CodePlatform.gitlab];
 
   private _PRIVATE_TOKEN: string | null;
 
@@ -36,34 +59,57 @@ export class GitLabService implements ICodeAPIService {
     return this._PRIVATE_TOKEN;
   }
 
-  async initialize() {
-    const token = this.helper.GITLAB_TOKEN;
+  constructor() {
+    this._PRIVATE_TOKEN = this.helper.GITLAB_TOKEN;
+  }
+
+  async available() {
+    const token = this._PRIVATE_TOKEN;
     if (!token) {
-      this.throwWhenInitializeFailed('gitlab.unauthorized');
+      this.showErrorMessage('gitlab.unauthorized');
+      this.helper.revealView(CodePlatform.gitlab);
+      return false;
     }
     const valid = await this.checkPrivateToken(token);
     if (!valid) {
-      this.throwWhenInitializeFailed('gitlab.invalid-token');
+      this.showErrorMessage('gitlab.invalid-token');
+      this._PRIVATE_TOKEN = null;
+      this.helper.revealView(CodePlatform.gitlab);
+      return false;
     }
-    this._PRIVATE_TOKEN = token;
-    await this.setProjectId();
+    return true;
   }
 
-  async setProjectId() {
-    const { id } = await this.getProject();
-    this.id = id;
+  private showErrorMessage(symbol: string, message?: string, status?: number) {
+    this.helper.showMessage(CodePlatform.gitlab, {
+      type: MessageType.Error,
+      status,
+      symbol,
+      message,
+    });
   }
 
-  throwWhenInitializeFailed(msgKey: string): never {
-    const message = localize(msgKey);
-    this.messageService.error(message);
-    this.shouldShowView = true;
-    throw new Error(message);
+  private projectIdMap = new Map<string, Promise<string>>();
+
+  async getProjectId(repo: IRepositoryModel) {
+    const projectPath = this.getProjectPath(repo);
+    if (!this.projectIdMap.has(projectPath)) {
+      this.projectIdMap.set(
+        projectPath,
+        this.getProject(repo).then(({ id }) => id)
+      );
+    }
+    return this.projectIdMap.get(projectPath)!;
   }
 
-  transformStaticResource(path: string) {
-    const { codeModel } = this;
-    return `${codeModel.origin}/${codeModel.project}/raw/${codeModel.HEAD}/${path}?private_token=${this.PRIVATE_TOKEN}`;
+  private getProjectPath(repo: IRepositoryModel) {
+    return `${repo.owner}/${repo.name}`;
+  }
+
+  transformStaticResource(repo: IRepositoryModel, path: string) {
+    return `${this.config.origin}/${this.getProjectPath(repo)}/raw/${
+      repo.commit
+    }/${path}?private_token=${this.PRIVATE_TOKEN}`;
   }
 
   async validateToken(token: string) {
@@ -71,11 +117,10 @@ export class GitLabService implements ICodeAPIService {
     if (valid) {
       this._PRIVATE_TOKEN = token;
       this.helper.GITLAB_TOKEN = token;
-      await this.setProjectId();
-      this.codeModel.reset();
+      this.helper.reinitializeCodeService();
       this.helper.revealView('explorer');
     } else {
-      this.messageService.error(localize('gitlab.invalid-token'));
+      this.showErrorMessage('gitlab.invalid-token');
     }
     return valid;
   }
@@ -90,7 +135,7 @@ export class GitLabService implements ICodeAPIService {
       const { headers, ...rest } = options || {};
       const privateToken = this.PRIVATE_TOKEN;
       return await request(path, {
-        baseURL: this.codeModel.endpoint,
+        baseURL: this.config.endpoint,
         responseType: 'json',
         headers: {
           ...(privateToken
@@ -110,7 +155,7 @@ export class GitLabService implements ICodeAPIService {
       } else if (status === 404) {
         messageKey = 'error.resource-not-found';
       }
-      this.messageService.error(`${status} - ${localize(messageKey)}`);
+      this.showErrorMessage(messageKey, status);
       throw err;
     }
   }
@@ -118,7 +163,7 @@ export class GitLabService implements ICodeAPIService {
   async checkPrivateToken(token: string) {
     try {
       const response = await request.head<Response>(`/api/v3/user`, {
-        baseURL: this.codeModel.endpoint,
+        baseURL: this.config.endpoint,
         headers: {
           'PRIVATE-TOKEN': token,
         },
@@ -133,38 +178,39 @@ export class GitLabService implements ICodeAPIService {
     return true;
   }
 
-  async getProject() {
+  async getProject(repo: IRepositoryModel) {
     const data = await this.request<API.ResponseGetProject>(
       `/api/v3/projects/find_with_namespace`,
       {
         params: {
-          path: this.codeModel.project,
+          path: this.getProjectPath(repo),
         },
       }
     );
     if (!data?.id) {
-      const message = formatLocalize('api.response.project-not-found', this.codeModel.project);
-      this.messageService.error(`404 - ${message}`);
+      const message = formatLocalize('api.response.project-not-found', this.getProjectPath(repo));
+      this.showErrorMessage('', message, 404);
       throw new Error(message);
     }
     return data;
   }
 
-  async getCommit(ref: string) {
+  async getCommit(repo: IRepositoryModel, ref: string) {
     return (
       await this.request<API.ResponseGetCommit>(
-        `/api/v3/projects/${this.id}/repository/commits/${encodeURIComponent(ref)}`
+        `/api/v3/projects/${await this.getProjectId(repo)}/repository/commits/${encodeURIComponent(
+          ref
+        )}`
       )
     ).id;
   }
 
-  async getTree(path: string) {
-    await this.codeModel.headInitialized;
+  async getTree(repo: IRepositoryModel, path: string) {
     const data = await this.request<API.ResponseGetTree>(
-      `/api/v3/projects/${this.id}/repository/tree`,
+      `/api/v3/projects/${await this.getProjectId(repo)}/repository/tree`,
       {
         params: {
-          ref_name: this.codeModel.HEAD,
+          ref_name: repo.commit,
           path,
         },
       }
@@ -178,10 +224,9 @@ export class GitLabService implements ICodeAPIService {
     });
   }
 
-  async getBlob(entry: EntryParam) {
-    await this.codeModel.headInitialized;
+  async getBlob(repo: IRepositoryModel, entry: EntryParam) {
     const buf = await this.request<ArrayBuffer>(
-      `/api/v3/projects/${this.id}/repository/blobs/${this.codeModel.HEAD}`,
+      `/api/v3/projects/${await this.getProjectId(repo)}/repository/blobs/${repo.commit}`,
       {
         responseType: 'arrayBuffer',
         params: {
@@ -192,15 +237,29 @@ export class GitLabService implements ICodeAPIService {
     return Buffer.from(buf);
   }
 
-  async getRefs(): Promise<RefsParam> {
-    const [branches, tags] = await Promise.all([
-      this.request<API.ResponseGetRefs>(`/api/v3/projects/${this.id}/repository/branches`),
-      this.request<API.ResponseGetRefs>(`/api/v3/projects/${this.id}/repository/tags`),
-    ]);
-    return {
-      branches,
-      tags,
-    };
+  async getBlobByCommitPath(repo: IRepositoryModel, commit: string, path: string) {
+    const buf = await this.request<ArrayBuffer>(
+      `/api/v3/projects/${await this.getProjectId(repo)}/repository/blobs/${commit}`,
+      {
+        responseType: 'arrayBuffer',
+        params: {
+          filepath: path,
+        },
+      }
+    );
+    return Buffer.from(buf);
+  }
+
+  async getBranches(repo: IRepositoryModel): Promise<BranchOrTag[]> {
+    return this.request<API.ResponseGetRefs>(
+      `/api/v3/projects/${await this.getProjectId(repo)}/repository/branches`
+    );
+  }
+
+  async getTags(repo: IRepositoryModel): Promise<BranchOrTag[]> {
+    return this.request<API.ResponseGetRefs>(
+      `/api/v3/projects/${await this.getProjectId(repo)}/repository/tags`
+    );
   }
 
   /**
@@ -212,5 +271,67 @@ export class GitLabService implements ICodeAPIService {
 
   async searchFile() {
     return [];
+  }
+
+  // 不支持
+  async getFileBlame() {
+    return Uint8Array.from([]);
+  }
+
+  // TODO: 接口数据略有问题，先返回空
+  async getCommits(repo: IRepositoryModel, params: CommitParams) {
+    // const data = await this.request<API.ResponseCommit[]>(
+    //   `/api/v3/projects/${await this.getProjectId(repo)}/repository/commits`,
+    //   {
+    //     params: {
+    //       ref_name: params.ref,
+    //       path: params.path,
+    //       page: params.page,
+    //       per_page: params.pageSize,
+    //     },
+    //   }
+    // );
+    // return data.map((c) => ({
+    //   id: c.id,
+    //   parents: [],
+    //   author: c.author_name,
+    //   authorEmail: c.author_email,
+    //   authorDate: c.created_at,
+    //   committer: c.author_name,
+    //   committerEmail: c.author_email,
+    //   committerDate: c.created_at,
+    //   message: c.message,
+    //   title: c.title,
+    // }));
+    return [];
+  }
+
+  async getCommitDiff(repo: IRepositoryModel, sha: string) {
+    const data = await this.request<API.ResponseCommitFileChange[]>(
+      `/api/v3/projects/${this.getProjectId(repo)}/repository/commits/${sha}/diff`
+    );
+
+    return data.map((d) => ({
+      oldFilePath: d.old_path,
+      newFilePath: d.new_path,
+      type: toType(d),
+      ...toChangeLines(d.diff),
+    }));
+  }
+
+  async getCommitCompare(repo: IRepositoryModel, from: string, to: string) {
+    const data = await this.request<API.ResponseCommitFileChange[]>(
+      `/api/v3/projects/${this.getProjectId(repo)}/repository/compare`,
+      {
+        params: { from, to },
+      }
+    );
+
+    return data.map((d) => ({
+      oldFilePath: d.old_path,
+      newFilePath: d.new_path,
+      type: toType(d),
+      ...toChangeLines(d.diff),
+    }));
   }
 }

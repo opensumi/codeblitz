@@ -78,7 +78,7 @@ export class PluginCommands {
     });
   }
 
-  async executeCommand<T>(id: string, ...args: any[]): Promise<T> {
+  async executeCommand<T>(id: string, ...args: any[]): Promise<T | undefined> {
     this.logger.log('PluginCommands#executeCommand', id, args);
 
     if (this.commands.has(id)) {
