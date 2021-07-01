@@ -2,7 +2,7 @@ import { Autowired, Injectable } from '@ali/common-di';
 import { Domain } from '@ali/ide-core-common';
 import { LRUMap, URI } from '@ali/ide-core-browser';
 import { getLanguageIdFromMonaco } from '@ali/ide-core-browser/lib/services';
-import { IResource } from '@ali/ide-editor/lib/common';
+import { IResource, IDiffResource } from '@ali/ide-editor/lib/common';
 import {
   EditorComponentRegistry,
   IEditorDocumentModelContentRegistry,
@@ -14,6 +14,7 @@ import { GitDocContentProvider } from './doc-content-provider/git';
 import { GitResourceProvider } from './resource-provider/git';
 import { BrowserFsProvider } from '../browser-fs-provider/fs-provider';
 import { IAntcodeService } from '../antcode-service/base';
+import { DiffView } from './diff.view';
 
 // kaitian 中这里组件只用在 file 上，这里相当于用同名 id，来渲染对应组件
 // TODO: kaitian 导出组件 id
@@ -67,6 +68,35 @@ export class GitSchemeContribution implements BrowserEditorContribution {
             type: 'code',
           });
         }
+      }
+    );
+
+    // 针对非 text 的 diff 视图，kaitian 中也未处理，这里先临时简单实现下
+    editorComponentRegistry.registerEditorComponentResolver(
+      'diff',
+      (resource: IDiffResource, results, resolve) => {
+        const { modified } = resource.metadata || {};
+        // diff 下 modified 和 original 和 type 一致，否则就是 deleted 和 added
+        if (modified && this.getFileType(modified) !== 'text') {
+          resolve([
+            {
+              type: 'component',
+              componentId: 'diff-view',
+            },
+          ]);
+        }
+      }
+    );
+
+    editorComponentRegistry.registerEditorComponent(
+      {
+        uid: 'diff-view',
+        component: DiffView,
+      },
+      {
+        getFileType: (resource: IDiffResource) => {
+          return this.getFileType(resource.metadata!.modified);
+        },
       }
     );
   }
