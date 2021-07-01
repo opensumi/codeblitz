@@ -59,6 +59,11 @@ export class OpenChangeFilesService extends Disposable {
     return this._currentOpenedChangeFileUri;
   }
 
+  private getFileName(uri: URI) {
+    // keep hash part
+    return basename(uri.withoutScheme().withoutQuery().toString(true));
+  }
+
   public openFile = async (change: IPullRequestChangeDiff, channel?: FileOpenMethod) => {
     const leftRef = this.antcodeService.leftRef;
     const rightRef = this.antcodeService.rightRef;
@@ -71,14 +76,14 @@ export class OpenChangeFilesService extends Disposable {
       // 默认打开在首个 tab 位置
       index: 0,
     };
-    const title = `${basename(right.codeUri.fsPath)}${desc && ` (${desc})`}`;
+    const title = `${this.getFileName(right)}${desc && ` (${desc})`}`;
     let targetUri: URI;
     if (!left) {
       targetUri = right;
       options.label = title;
     } else {
       if (status === 'renamed') {
-        options.label = `${basename(left.codeUri.fsPath)} -> ${basename(right.codeUri.fsPath)}${
+        options.label = `${this.getFileName(left)} -> ${this.getFileName(right)}${
           desc && ` (${desc})`
         }`;
         if (change.delLineNum === 0 && change.addLineNum === 0) {

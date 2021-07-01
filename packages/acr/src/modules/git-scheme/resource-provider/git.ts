@@ -17,8 +17,8 @@ export class GitResourceProvider implements IResourceProvider {
   provideResource(uri: URI) {
     return Promise.all([
       this.getFileStat(uri.toString()),
-      this.labelService.getName(uri),
-      this.labelService.getIcon(uri.withoutScheme().withoutQuery()),
+      uri.withoutScheme().toString(true),
+      this.labelService.getIcon(uri),
     ] as const).then(([stat, name, icon]) => {
       let fileName = stat ? name : name + localize('file.resource-deleted');
       if (uri.scheme === 'git') {
