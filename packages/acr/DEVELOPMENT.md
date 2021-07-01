@@ -87,6 +87,11 @@ npm run start
 * projectPath 中间的 `/` 转义为 `%2F`
 * prIid 为 antcode 侧单个项目中 pr 的自增序号 (网页 url 中可找到)
 
-#### 该 repo 中有离线索引
+#### Special Repos
+
+##### 该 pr 中有离线索引
 * http://code.test.alipay.net/yizhu.x/redcoast/pull_requests/36
 * http://code.test.alipay.net:9009/?projectId=39558&projectPath=yizhu.x%2Fredcoast&prIid=36
+
+##### 该 pr 中 path 带有 constructor 关键字
+* http://code.test.alipay.net:9009/?projectId=600133&projectPath=taian.lta%2Figlobalfundcontrol&prIid=1
