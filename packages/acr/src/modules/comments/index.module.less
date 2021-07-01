@@ -1,0 +1,29 @@
+.comment_openfile {
+  position: relative;
+  top: -2px;
+}
+
+.comment_glyph_icon {
+  // 覆盖原本样式
+  top: 2px !important;
+  width: 16px !important;
+  height: 16px !important;
+}
+
+.comment_fold {
+  &::before {
+    position: absolute;
+    width: 16px;
+    height: 16px;
+    font-size: 12px;
+    // 覆盖默认 comments 颜色
+    color: #fff !important;
+    text-align: center;
+    line-height: 1.5;
+    background: rgba(#687687, 45%) !important;
+  }
+}
+
+.comment_avatar {
+  background-size: cover !important;
+}

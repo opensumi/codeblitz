@@ -1,0 +1,24 @@
+// 默认变更树字号为 13 px
+.changes_tree_container {
+  font-size: 13px;
+}
+
+.changes_tree_empty_text {
+  display: block;
+  line-height: 36px;
+  text-align: center;
+  width: 100%;
+  user-select: none;
+}
+
+.dirty_icon {
+  &::before {
+    content: '';
+    display: block;
+    width: 8px;
+    height: 8px;
+    border-radius: 4px;
+    margin: 7px 5px;
+    background: var(--kt-dirtyDot-foreground);
+  }
+}

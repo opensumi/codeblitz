@@ -1,4 +1,4 @@
-import { AntcodeEncodingType } from '@alipay/acr-ide/lib/modules/antcode-service/base';
+import { AntcodeEncodingType } from '@alipay/alex-acr/lib/modules/antcode-service/base';
 
 export const defaultEncoding = AntcodeEncodingType.utf8;
 

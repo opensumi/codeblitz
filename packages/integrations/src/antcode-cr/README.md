@@ -35,7 +35,7 @@ import Helmet from 'react-helmet';
 <Helmet>
   <script
     // monaco-loader.js for `@alipay/acr-ide`
-    src={require('@alipay/acr-ide/loader')}
+    src={require('@alipay/alex-acr/loader')}
     type="text/javascript"
   />
 </Helmet>;

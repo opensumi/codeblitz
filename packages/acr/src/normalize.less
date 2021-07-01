@@ -1,0 +1,52 @@
+// 必要的 normalize 从 kaitian 中复制出来
+html {
+  margin: 0;
+  padding: 0;
+}
+
+#antcode-cr {
+  // 使用该字体获取与vscode一致的图标表现
+  // 仅mac下可用，windows待区分
+  // https://stackoverflow.com/questions/32660748/how-to-use-apples-new-san-francisco-font-on-a-webpage
+  font-family: -apple-system, BlinkMacSystemFont, sans-serif;
+  // 全局默认字体颜色
+  color: var(--foreground);
+  background-color: var(--editor-background);
+
+   // 全局设置滚动条样式
+   ::-webkit-scrollbar {
+    background: transparent;
+    height: var(--kt-scrollbar-width);
+    width: var(--kt-scrollbar-width);
+  }
+
+  ::-webkit-scrollbar:hover {
+    background: transparent;
+  }
+
+  ::-webkit-scrollbar-thumb {
+    background: var(--scrollbarSlider-background);
+  }
+
+  ::-webkit-scrollbar-thumb:hover {
+    background: var(--scrollbarSlider-hoverBackground);
+  }
+
+  ::-webkit-scrollbar-thumb:active {
+    background: var(--scrollbarSlider-activeBackground);
+  }
+
+  ::-webkit-scrollbar-corner {
+    background: transparent;
+  }
+}
+
+/* ---- 该样式主要用于让带 tabindex='-1' 的元素焦点态时拥有高亮边框，以便于实现如Tree，List组件焦点态时的自动高亮边框效果  ---- */
+[tabindex='-1'] {
+  &:focus {
+    outline-width: 1px;
+    outline-style: solid;
+    outline-offset: -1px;
+  }
+}
+/* -------- */

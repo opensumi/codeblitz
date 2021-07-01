@@ -1,4 +1,4 @@
-import { User } from '@alipay/acr-ide/lib/modules/antcode-service/interfaces/user';
+import { User } from '@alipay/alex-acr/lib/modules/antcode-service/interfaces/user';
 
 export const user = ({
   avatarUrl: 'https://via.placeholder.com/300/09f.png',

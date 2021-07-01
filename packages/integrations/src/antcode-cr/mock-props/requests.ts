@@ -3,9 +3,9 @@ import { request } from '../antcode/fetch';
 import {
   FileAction,
   FileActionHeader,
-} from '@alipay/acr-ide/lib/modules/antcode-service/interfaces/file-action';
+} from '@alipay/alex-acr/lib/modules/antcode-service/interfaces/file-action';
 // @ts-ignore
-import { LSIFRange } from '@alipay/acr-ide/lib/modules/antcode-service/interfaces/lsif';
+import { LSIFRange } from '@alipay/alex-acr/lib/modules/antcode-service/interfaces/lsif';
 
 export const getFileContent = (projectId: number) => (filepath: string, ref: string) => {
   const params = {

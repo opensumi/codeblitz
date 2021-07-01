@@ -1,6 +1,6 @@
 import * as React from 'react';
 
-import { IAntcodeCRProps } from '@alipay/acr-ide/lib/modules/antcode-service/base';
+import { IAntcodeCRProps } from '@alipay/alex-acr/lib/modules/antcode-service/base';
 
 import {
   getFileContent,

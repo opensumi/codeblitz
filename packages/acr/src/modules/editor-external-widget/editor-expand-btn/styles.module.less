@@ -1,0 +1,89 @@
+:global {
+  .kt-select-value {
+    border-width: 0 !important;
+    background-color: transparent !important;
+  }
+}
+
+.divider {
+  background-color: var(--kt-actionbar-separatorBackground);
+  width: 1px;
+  height: 14px;
+  margin-left: 8px;
+}
+
+:global(#workbench-editor) {
+  position: relative;
+}
+
+@expander-bg: rgba(104, 118, 135, 0.08);
+@expander-hover-bg: rgba(104, 118, 135, 0.16);
+
+.expander {
+  // 需要比编辑器视图高
+  z-index: 20;
+
+  position: absolute;
+  left: 0;
+  top: 50%;
+  transform: translate(0, -50%);
+
+  height: 46px;
+  width: 14px;
+
+  cursor: pointer;
+  background-color: @expander-bg;
+
+  &:hover {
+    background-color: @expander-hover-bg;
+
+    &::after {
+      border-color: @expander-hover-bg transparent transparent
+        @expander-hover-bg;
+    }
+
+    &::before {
+      border-color: transparent transparent @expander-hover-bg
+        @expander-hover-bg;
+    }
+  }
+
+  display: flex;
+  align-items: center;
+
+  &::before {
+    content: ' ';
+    height: 0;
+    position: absolute;
+    width: 0;
+    top: -10px;
+    border-color: transparent transparent @expander-bg @expander-bg;
+    border-style: solid;
+    border-width: 5px 7px;
+    left: 0;
+  }
+
+  &::after {
+    content: ' ';
+    height: 0;
+    position: absolute;
+    width: 0;
+    top: 46px;
+    border-color: @expander-bg transparent transparent @expander-bg;
+    border-style: solid;
+    border-width: 5px 7px;
+    left: 0;
+  }
+}
+
+.icon {
+  position: absolute;
+  top: 50%;
+  transform: translate(-50%, -50%);
+  left: 50%;
+  opacity: 0.25;
+
+  &:hover {
+    opacity: 1;
+  }
+}

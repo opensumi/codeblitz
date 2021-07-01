@@ -702,6 +702,11 @@
     utility "^1.13.1"
     uuid "^3.2.1"
 
+"@alipay/geek-theme@^1.6.0":
+  version "1.6.0"
+  resolved "https://registry.npm.alibaba-inc.com/@alipay/geek-theme/download/@alipay/geek-theme-1.6.0.tgz#7f6d6c89c0dbdb2a643b74e8bb7beb798465d1e1"
+  integrity sha1-f21sicDb2ypkO3Tou3vreYRl0eE=
+
 "@alipay/lsif-client@^2.0.0":
   version "2.0.0"
   resolved "https://registry.npm.alibaba-inc.com/@alipay/lsif-client/download/@alipay/lsif-client-2.0.0.tgz#80fcdcda90b3fd05234308638a7fe64b4b6b4efd"
@@ -1193,6 +1198,21 @@
   version "11.0.0"
   resolved "https://registry.npm.alibaba-inc.com/@commitlint/types/download/@commitlint/types-11.0.0.tgz#719cf05fcc1abb6533610a2e0f5dd1e61eac14fe"
   integrity sha1-cZzwX8wau2UzYQouD13R5h6sFP4=
+
+"@isomorphic-git/idb-keyval@3.3.2":
+  version "3.3.2"
+  resolved "https://registry.npm.alibaba-inc.com/@isomorphic-git/idb-keyval/download/@isomorphic-git/idb-keyval-3.3.2.tgz#c0509a6c5987d8a62efb3e47f2815bcc5eda2489"
+  integrity sha1-wFCabFmH2KYu+z5H8oFbzF7aJIk=
+
+"@isomorphic-git/lightning-fs@^4.3.0":
+  version "4.4.0"
+  resolved "https://registry.npm.alibaba-inc.com/@isomorphic-git/lightning-fs/download/@isomorphic-git/lightning-fs-4.4.0.tgz#98ba53fba8346b67974be7067d26468664e30542"
+  integrity sha1-mLpT+6g0a2eXS+cGfSZGhmTjBUI=
+  dependencies:
+    "@isomorphic-git/idb-keyval" "3.3.2"
+    isomorphic-textencoder "1.0.1"
+    just-debounce-it "1.1.0"
+    just-once "1.1.0"
 
 "@istanbuljs/load-nyc-config@^1.0.0":
   version "1.1.0"
@@ -3970,6 +3990,11 @@ crypt@0.0.2:
   resolved "https://registry.npm.alibaba-inc.com/crypt/download/crypt-0.0.2.tgz#88d7ff7ec0dfb86f713dc87bbb42d044d3e6c41b"
   integrity sha1-iNf/fsDfuG9xPch7u0LQRNPmxBs=
 
+crypto-js@^4.0.0:
+  version "4.0.0"
+  resolved "https://registry.npm.alibaba-inc.com/crypto-js/download/crypto-js-4.0.0.tgz#2904ab2677a9d042856a2ea2ef80de92e4a36dcc"
+  integrity sha1-KQSrJnep0EKFai6i74DekuSjbcw=
+
 css-animation@1.x, css-animation@^1.3.2, css-animation@^1.5.0:
   version "1.6.1"
   resolved "https://registry.npm.alibaba-inc.com/css-animation/download/css-animation-1.6.1.tgz#162064a3b0d51f958b7ff37b3d6d4de18e17039e"
@@ -4413,6 +4438,11 @@ detect-node@^2.0.4:
   version "2.0.4"
   resolved "https://registry.npm.alibaba-inc.com/detect-node/download/detect-node-2.0.4.tgz#014ee8f8f669c5c58023da64b8179c083a28c46c"
   integrity sha1-AU7o+PZpxcWAI9pkuBecCDooxGw=
+
+diff-match-patch@^1.0.5:
+  version "1.0.5"
+  resolved "https://registry.npm.alibaba-inc.com/diff-match-patch/download/diff-match-patch-1.0.5.tgz#abb584d5f10cd1196dfc55aa03701592ae3f7b37"
+  integrity sha1-q7WE1fEM0Rlt/FWqA3AVkq4/ezc=
 
 diff-sequences@^26.6.2:
   version "26.6.2"
@@ -5292,6 +5322,11 @@ fast-plist@^0.1.2:
   version "0.1.2"
   resolved "https://registry.npm.alibaba-inc.com/fast-plist/download/fast-plist-0.1.2.tgz#a45aff345196006d406ca6cdcd05f69051ef35b8"
   integrity sha1-pFr/NFGWAG1AbKbNzQX2kFHvNbg=
+
+fast-text-encoding@^1.0.0:
+  version "1.0.3"
+  resolved "https://registry.npm.alibaba-inc.com/fast-text-encoding/download/fast-text-encoding-1.0.3.tgz#ec02ac8e01ab8a319af182dae2681213cfe9ce53"
+  integrity sha1-7AKsjgGrijGa8YLa4mgSE8/pzlM=
 
 fastq@^1.6.0:
   version "1.9.0"
@@ -7167,6 +7202,13 @@ isomorphic-fetch@^2.1.1, isomorphic-fetch@^2.2.1:
     node-fetch "^1.0.1"
     whatwg-fetch ">=0.10.0"
 
+isomorphic-textencoder@1.0.1:
+  version "1.0.1"
+  resolved "https://registry.npm.alibaba-inc.com/isomorphic-textencoder/download/isomorphic-textencoder-1.0.1.tgz#38dcd3b4416d29cd33e274f64b99ae567cd15e83"
+  integrity sha1-ONzTtEFtKc0z4nT2S5muVnzRXoM=
+  dependencies:
+    fast-text-encoding "^1.0.0"
+
 isstream@~0.1.2:
   version "0.1.2"
   resolved "https://registry.npm.alibaba-inc.com/isstream/download/isstream-0.1.2.tgz#47e63f7af55afa6f92e1500e690eb8b8529c099a"
@@ -7791,10 +7833,20 @@ jsprim@^1.2.2:
     json-schema "0.2.3"
     verror "1.10.0"
 
+just-debounce-it@1.1.0:
+  version "1.1.0"
+  resolved "https://registry.npm.alibaba-inc.com/just-debounce-it/download/just-debounce-it-1.1.0.tgz#8e92578effc155358a44f458c52ffbee66983bef"
+  integrity sha1-jpJXjv/BVTWKRPRYxS/77maYO+8=
+
 just-debounce@^1.0.0:
   version "1.0.0"
   resolved "https://registry.npm.alibaba-inc.com/just-debounce/download/just-debounce-1.0.0.tgz#87fccfaeffc0b68cd19d55f6722943f929ea35ea"
   integrity sha1-h/zPrv/AtozRnVX2cilD+SnqNeo=
+
+just-once@1.1.0:
+  version "1.1.0"
+  resolved "https://registry.npm.alibaba-inc.com/just-once/download/just-once-1.1.0.tgz#fe81a185ebaeeb0947a7e705bf01cb6808db0ad8"
+  integrity sha1-/oGhheuu6wlHp+cFvwHLaAjbCtg=
 
 keycode@^2.2.0:
   version "2.2.0"
@@ -11958,6 +12010,11 @@ split-on-first@^1.0.0:
   version "1.1.0"
   resolved "https://registry.npm.alibaba-inc.com/split-on-first/download/split-on-first-1.1.0.tgz#f610afeee3b12bce1d0c30425e76398b78249a5f"
   integrity sha1-9hCv7uOxK84dDDBCXnY5i3gkml8=
+
+split-retain@^1.0.1:
+  version "1.0.1"
+  resolved "https://registry.npm.alibaba-inc.com/split-retain/download/split-retain-1.0.1.tgz#c7028b5bafd54ee53ae2c267e608da8f605eb2a6"
+  integrity sha1-xwKLW6/VTuU64sJn5gjaj2BesqY=
 
 split-string@^3.0.1, split-string@^3.0.2:
   version "3.1.0"

@@ -1,4 +1,4 @@
-import { Annotation, CheckSuite } from '@alipay/acr-ide/lib/common/antcode';
+import { Annotation, CheckSuite } from '@alipay/alex-acr/lib/common/antcode';
 
 export const annotations = [
   {

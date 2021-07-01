@@ -1,0 +1,26 @@
+export default {
+  'web-scm.title': 'Source Control',
+  'web-scm.changeGroup.title': 'Changes',
+  'web-scm.discardChanges': 'Discard Changes',
+  'web-scm.discardAllChanges': 'Discard All Changes',
+  'web-scm.save': 'Save file',
+  'web-scm.edit': 'Edit file',
+  'web-scm.downloadDiffs': 'Download diff files',
+  'web-scm.refresh': 'Refresh',
+  'web-scm.commitAndPush': 'Push',
+  'web-scm.push.success': 'Pushed successfully',
+  'web-scm.push.failed': 'Failed to push',
+  'web-scm.openFile': 'Open file',
+  'web-scm.confirm.discard': 'Are you sure you want to discard changes in {0}?',
+  'web-scm.confirm.discardAll':
+    'Are you sure you want to discard ALL changes in {0} files?\nThis is IRREVERSIBLE!\nYour current working set will be FOREVER LOST.',
+  'web-scm.commitMessage': 'Message (press {0} to commit)',
+  'web-scm.checkOutChanges': 'See what changed',
+  'web-scm.baseCommitOutdated.dialog.hint':
+    'Others have committed to current branch during your file editing',
+  'web-scm.baseCommitOutdated.dialog.ok': 'Create a new branch for this commit',
+  'web-scm.checkoutAndCommit.input.placeholder': 'Branch name',
+  'web-scm.checkoutAndCommit.input.hint': 'Please provide a branch name',
+  'web-scm.checkoutAndCommit.success': 'Pushed successfully to branch {0}',
+  'web-scm.new.pr': 'Create a pull request to source branch {0}',
+};

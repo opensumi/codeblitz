@@ -1,0 +1,69 @@
+.editorEmpty {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+  height: 100%;
+  color: var(--descriptionForeground);
+}
+
+.logo {
+  width: 92px;
+  display: block;
+}
+
+.title {
+  margin-top: 10px;
+  font-size: 20px;
+  color: var(--foreground);
+}
+
+.description {
+  margin: 16px 0;
+}
+
+.keybindings {
+  width: 100%;
+}
+
+.keybinding {
+  line-height: 2.5;
+  display: flex;
+
+  > * {
+    flex: 1;
+  }
+
+  .desc {
+    margin-right: 16px;
+    text-align: right;
+  }
+
+  .key {
+    text-align: left;
+  }
+}
+
+.separator,
+.icon {
+  margin-right: 6px;
+}
+
+.icon {
+  text-transform: capitalize;
+  font-style: normal;
+  background-color: var(--editorGroupHeader-tabsBackground);
+  color: var(--descriptionForeground);
+  border-radius: 4px;
+  text-align: center;
+  padding: 0 4px;
+  min-width: 22px;
+  display: inline-block;
+  height: 22px;
+  line-height: 22px;
+  box-shadow: 0 1px 0 0 rgba(0, 0, 0, .16);
+}
+
+.footer {
+  margin-top: 30px;
+}

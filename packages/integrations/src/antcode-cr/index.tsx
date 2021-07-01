@@ -3,10 +3,10 @@ import ReactDOM from 'react-dom';
 import jCookie from 'js-cookie';
 import qs from 'query-string';
 
-import AntcodeCR from '@alipay/acr-ide';
-import { getLocale } from '@alipay/acr-ide/lib/utils/locale';
-import { IAntcodeCRProps } from '@alipay/acr-ide/lib/modules/antcode-service/base';
-import { AntcodeEncodingType } from '@alipay/acr-ide/lib/modules/antcode-service/base';
+import AntcodeCR from '@alipay/alex-acr';
+import { getLocale } from '@alipay/alex-acr/lib/utils/locale';
+import { IAntcodeCRProps } from '@alipay/alex-acr/lib/modules/antcode-service/base';
+import { AntcodeEncodingType } from '@alipay/alex-acr/lib/modules/antcode-service/base';
 
 import { getProps } from './mock-props';
 import { getPrDetail, getPrChanges, getDiffById } from './mock-props/requests';

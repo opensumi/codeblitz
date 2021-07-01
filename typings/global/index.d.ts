@@ -1,3 +1,5 @@
+/// <reference path="./isomorphic-git.d.ts" />
+
 declare module '*.less';
 declare module '*.css';
 
@@ -40,3 +42,20 @@ declare module '@alipay/alex/extensions/*' {
   const metadata: IExtensionBasicMetadata;
   export = metadata;
 }
+
+declare module '@alipay/yuyan-monitor-web' {
+  const m: any;
+  export default m;
+}
+
+declare var Tracert: {
+  spmAPos: string;
+  spmBPos: string;
+  get: Function;
+  set: Function;
+  click: Function;
+  expo: Function;
+  call: Function;
+  before: Function;
+  chInfo: string;
+};

@@ -35,7 +35,9 @@
     "paths": {
       "@alipay/alex": ["packages/alex/src"],
       "@alipay/alex/lib/*": ["packages/alex/src/*"],
-      "@alipay/alex-*": ["packages/*/src"]
+      "@alipay/alex-*": ["packages/*/src"],
+      // special rule for `alex-acr`
+      "@alipay/alex-acr/lib/*": ["packages/acr/src/*"]
     },
     "typeRoots": [
       "./node_modules/@types",
@@ -43,9 +45,11 @@
     ]
   },
   "include": [
-    "packages"
+    "packages/**/src"
   ],
   "exclude": [
-    "packages/toolkit"
+    "packages/toolkit",
+    "node_modules",
+    "*.d.ts"
   ]
 }

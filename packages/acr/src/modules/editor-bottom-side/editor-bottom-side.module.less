@@ -1,0 +1,58 @@
+.container {
+  display: flex;
+  justify-content: space-between;
+  height: 44px;
+  padding: 0 16px;
+  align-items: center;
+  border-top: 1px solid var(--activityBar-border);
+}
+
+.item_desc {
+  color: var(--descriptionForeground);
+  font-size: 14px;
+  margin-right: 8px;
+}
+
+.btns {
+  margin-left: 8px;
+  color: var(--kt-primaryButton-background);
+  display: flex;
+  align-items: center;
+  :global(.kt-button) {
+    font-size: 14px;
+  }
+}
+
+.add_line_num,
+.del_line_num {
+  font-size: 14px;
+}
+
+.add_line_num {
+  color: var(--kt-decoration-addedResourceForeground);
+  margin-right: 10px;
+}
+
+.del_line_num {
+  color: var(--kt-decoration-deletedResourceForeground);
+}
+
+.right_container {
+  display: flex;
+  align-items: center;
+}
+
+.as_read {
+  display: flex;
+  align-items: center;
+  font-size: 14px;
+  line-height: 22px;
+}
+
+.annotation {
+  margin-right: 16px;
+}
+
+.annotation_icon {
+  color: var(--volcano-warning);
+}

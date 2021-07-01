@@ -1,0 +1,22 @@
+.summary {
+  padding: 0 10px;
+  line-height: 2;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.addLineNum {
+  color: var(--kt-decoration-addedResourceForeground);
+  margin-right: 5px;
+}
+
+.deleteLineNum {
+  color: var(--kt-decoration-deletedResourceForeground);
+  margin-right: 5px;
+}
+
+// 将自带的 title bar 给隐藏掉
+[data-viewlet-id='mr-explorer'] [class^='titlebar__'] {
+  display: none;
+}

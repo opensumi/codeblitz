@@ -1,0 +1,194 @@
+.container {
+  min-height: 100%;
+  height: 100%;
+  width: 100%;
+}
+
+// @import '~@ali/ide-core-browser/lib/style/index.less';
+@kt-html-selector: '#antcode-cr';
+@kt-body-selector: '#antcode-cr';
+
+// really really hard code for single theme `@alipay/geek-theme`
+@import '~@alipay/geek-theme/palette/dark.less';
+@import '~@alipay/geek-theme/palette/light.less';
+
+@import './normalize.less';
+
+@import '~@ali/ide-components/lib/style/mixins.less';
+
+:global {
+  // FIXME: 目前 contextmenu 在集成时存在错位问题, 后续在 kaitian 中修复
+  [data-menu-id="editor/title"] .kticon-ellipsis {
+    display: none;
+  }
+
+  // quick open 位置问题
+  .quick-open-overlay quick-open-container {
+    position: fixed !important;
+    top: 100px !important;
+  }
+
+  // quick-open description 字段增加省略符效果
+  .quick-open-entry-meta {
+    width: 100%;
+
+    .monaco-highlighted-label {
+      width: 100%;
+      display: inline-block;
+      .text-ellipsis();
+    }
+  }
+
+  // monaco editor override start
+  // 针对 comments-add 图标的图标
+  .monaco-editor .comments-decoration.comments-add::before {
+    background-color: white;
+  }
+
+  // 评论 icon 的颜色
+  .vs-dark .monaco-editor .comments-decoration.comments-add::before {
+    color: var(--kt-primaryButton-background);
+  }
+
+  // 评论 icon 的颜色
+  .vs .monaco-editor .comments-decoration.comments-add::before {
+    color: var(--kt-primaryButton-background);
+  }
+
+  // minimap 的背景颜色
+  .monaco-diff-editor.vs .diffOverview {
+    background: #fff !important;
+  }
+
+  // diffViewport 的颜色
+  .monaco-diff-editor .diffViewport {
+    // background: #fff !important;
+  }
+
+  // .monaco-diff-editor.vs-dark .diffViewport,
+  // .monaco-diff-editor.hc-black .diffViewport {
+  //   background: rgba(255, 255, 255, 0.10);
+  // }
+
+  // 由于 monaco editor 内部 editor overview ruler 使用 line-insert 相同颜色
+  // 而 editor overview ruler 使用 canvas 绘制无法通过 css override
+  // 且 monaco-editor 内部没有暴露对应 token 使用
+  // 因此这里在 `alipay-geek-theme` 设置了更深颜色
+  // 然后通过 css 去控制 line/char 的 insert/delete 颜色效果
+  // line-insert
+  .vs .monaco-diff-editor .line-insert {
+    background-color: fade(#d9f7be, 40%);
+  }
+
+  .vs-dark .monaco-diff-editor .line-insert {
+    background-color: fade(@dark-green-6, 15%);
+  }
+
+  // line-insert
+  .vs .monaco-diff-editor .line-delete {
+    background-color: fade(#ffd8bf, 40%);
+  }
+
+  .vs-dark .monaco-diff-editor .line-delete {
+    background-color: fade(@dark-volcano-6, 15%);
+  }
+
+  // char-insert
+  .vs .monaco-diff-editor .char-insert {
+    background-color: fade(@light-green-4, 50%);
+  }
+
+  .vs-dark .monaco-diff-editor .char-insert {
+    background-color: fade(@dark-green-6, 50%);
+  }
+
+  // char-insert
+  .vs .monaco-diff-editor .char-delete {
+    background-color: fade(@light-volcano-4, 50%);
+  }
+
+  .vs-dark .monaco-diff-editor .char-delete {
+    background-color: fade(@dark-volcano-6, 50%);
+  }
+
+  // monaco editor override end
+
+  // 强制使用 kaitian 的 input placeholder 颜色
+  .kt-input-box input::placeholder {
+    color: var(--input-placeholderForeground) !important;
+  }
+
+  // 隐藏 dirty-diff header 组件的 file-actions | 由于 web-scm 不支持局部提交
+  .dirty-diff-widget-header .file-actions {
+    width: auto;
+
+    .kticon-plus,
+    .kticon-rollback {
+      display: none;
+    }
+  }
+
+  // 解决 editor/title menu 处的 z-index 层级导致弹出层不展示的问题
+  #workbench-editor div[class*='editorGroupHeader'] {
+    z-index: 10;
+  }
+
+  // 解决 select 组件的宽度不能适应内容宽度的问题
+  .kt-select-options {
+    width: fit-content !important;
+  }
+
+  // 影响折叠的按钮 +/-
+  .monaco-editor .margin-view-overlays .folding.collapsed,
+  .monaco-editor .margin-view-overlays .folding.alwaysShowFoldIcons,
+  .monaco-editor .margin-view-overlays:hover .folding {
+    display: none;
+  }
+
+  .monaco-editor .inline-folded:after {
+    pointer-events: none;
+    content: ' ';
+  }
+
+  [class^='titleActions_'] {
+    // 将 icon 选中效果增加 border-radius
+    .kt-icon[class*='selected_'] {
+      border-radius: 2px;
+      color: var(--kt-actionbar-selectionBorder);
+    }
+
+    // 将 icon 的 disable 点击禁用掉
+    .kt-icon[class*='disabled_'] {
+      pointer-events: none;
+    }
+  }
+
+  // hack for empty bg image
+  [class^='kt_editor_background_'] {
+    background-size: 334px auto;
+  }
+
+  // fix image-preview style
+  [class^='kt_image_preview'] img {
+    max-width: 100%;
+    max-height: 100%;
+    object-fit: contain;
+    width: auto !important;
+  }
+
+
+  .monaco-quick-open-widget .quick-open-tree .results-group {
+    color: var(--descriptionForeground) !important;
+  }
+
+  // 替换 diff editor 里的阴影区域图片
+  .monaco-editor .diagonal-fill {
+    background-image: url('https://gw.alipayobjects.com/mdn/rms_3b03a3/afts/img/A*sAMnS4LbDR0AAAAAAAAAAAAAARQnAQ') !important;
+  }
+
+  // 修改编辑器里面每一行代码前面的那几条竖线  -> |||||| <- const hai = '666'
+  .monaco-editor .lines-content .cigr {
+    // 原样式: box-shadow: 1px 0 0 0 rgba(51, 51, 51, 0.2) inset
+    box-shadow: 1px 0 0 0 rgba(51, 51, 51, 0.1) inset !important;
+  }
+}
