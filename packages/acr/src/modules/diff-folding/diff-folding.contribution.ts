@@ -116,8 +116,6 @@ export class DiffFoldingContribution
 
     this.generateFolding(originReverse, modifiedReverse);
 
-    await sleep(10);
-
     this.generateZoneWidget(originReverse, modifiedReverse);
 
     this.foldingEditorAll(true);
