@@ -65,7 +65,9 @@ export function fromDiffUri(uri: URI): DiffUriParams {
 // FIXME: 不是所有的 git uri 都有 diff id
 export function toGitUri(uri: URI, ref: string, newPath?: string): URI {
   // const dirPath = appConfig.workspaceDir;
-  const path = uri.codeUri.path;
+  // 存在部分文件名包含 # 部分
+  const path = uri.withoutScheme().toString(true);
+
   const query = removeUndefined({
     // path: dirPath + '/' + uri.codeUri.fsPath,
     // 移除新版本 vscode-uri 导致的额外 `/`
@@ -75,7 +77,9 @@ export function toGitUri(uri: URI, ref: string, newPath?: string): URI {
     newPath,
   });
 
+  // 避免 fragment 部分被 override 掉
   return URI.from({
+    ...uri.codeUri,
     scheme: 'git',
     // path: dirPath + '/' + uri.codeUri.path,
     path,

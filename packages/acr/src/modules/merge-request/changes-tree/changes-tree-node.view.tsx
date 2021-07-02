@@ -96,7 +96,7 @@ export const ChangeTreeNode: React.FC<EditorNodeRenderedProps> = ({
       <div
         className={cls(styles.opened_editor_node_segment, styles.opened_editor_node_display_name)}
       >
-        {!ChangeDirectory.is(node) ? labelService.getName(node.uri) || node.name : node.name}
+        {node.name}
       </div>
     );
   };

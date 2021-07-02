@@ -48,12 +48,20 @@ export class ChangesTreeAPI {
     }));
   }
 
+  private _initPlainCounterObject(key: symbol, value: Array<any>) {
+    // 创建一个没有原型的对象
+    // 避免文件 path 中带有 constructor/toString 等对象原型方法的 key 导致出错
+    const obj = Object.create(null);
+    obj[key] = value;
+    return obj;
+  }
+
   private pathToTree(changes: IPullRequestChangeDiff[]) {
     // // https://stackoverflow.com/questions/54424774/how-to-convert-an-array-of-paths-into-tree-object
     const result: Array<TreeNode> = [];
     // helper 的对象
     const kResult = Symbol('result');
-    const accumulator = { [kResult]: result };
+    const accumulator = this._initPlainCounterObject(kResult, result);
 
     changes.forEach((change) => {
       const path = change.newPath;
@@ -62,7 +70,7 @@ export class ChangesTreeAPI {
         // 每次返回 path 对应的 desc 作为下一个 path 的 parent
         // 不存在 path 对应的 desc 则创建一个新的挂载到 acc 上
         if (!acc[cur]) {
-          acc[cur] = { [kResult]: [] };
+          acc[cur] = this._initPlainCounterObject(kResult, []);
           const element = {
             name: cur,
             children: acc[cur][kResult],

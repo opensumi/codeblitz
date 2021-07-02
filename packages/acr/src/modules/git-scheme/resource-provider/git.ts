@@ -15,10 +15,12 @@ export class GitResourceProvider implements IResourceProvider {
   labelService: LabelService;
 
   provideResource(uri: URI) {
+    const path = uri.withoutScheme().toString(true);
     return Promise.all([
       this.getFileStat(uri.toString()),
-      this.labelService.getName(uri),
-      this.labelService.getIcon(uri.withoutScheme().withoutQuery()),
+      // 移除特殊的 / 开头
+      path.startsWith('/') ? path.slice(1) : path,
+      this.labelService.getIcon(uri),
     ] as const).then(([stat, name, icon]) => {
       let fileName = stat ? name : name + localize('file.resource-deleted');
       if (uri.scheme === 'git') {

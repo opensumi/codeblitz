@@ -35,5 +35,9 @@ function getBadgeColor(change: IPullRequestChangeDiff) {
 export const ChangeBadge: React.FC<IPullRequestChangeDiff> = (props) => {
   const badgeText = getBadgeText(props);
   const badgeColor = getBadgeColor(props);
-  return <span style={{ color: badgeColor }}>{badgeText}</span>;
+  return (
+    <span className="cf-badge" style={{ color: badgeColor }}>
+      {badgeText}
+    </span>
+  );
 };
