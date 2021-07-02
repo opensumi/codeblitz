@@ -5,8 +5,8 @@ import { URI } from '@ali/ide-core-common';
 import { join } from '@ali/ide-core-common/lib/path';
 import { equals } from '@ali/ide-core-common/lib/arrays';
 import { RuntimeConfig } from '@alipay/alex-core';
-
-import { EditorDocumentModelServiceImpl } from '@ali/ide-editor/lib/browser/doc-model/editor-document-model-service';
+// internal patched
+import { disposeMode } from '@alipay/alex/lib/core/patch';
 
 import { ConfigProvider } from 'antd';
 
@@ -20,8 +20,6 @@ import { AntcodeService } from './modules/antcode-service';
 import { WorkspaceManagerService } from './modules/workspace/workspace-loader.service';
 
 import { getLocale } from './utils/locale';
-import { IEditorDocumentModelService } from '@ali/ide-editor/lib/browser';
-import { EditorDocumentModel } from '@ali/ide-editor/lib/browser/doc-model/editor-document-model';
 
 import styles from './styles.module.less';
 import { logPv } from './utils/tracert';
@@ -30,8 +28,6 @@ import { Portals } from './portal';
 import { reportUserAccess } from './utils/monitor';
 
 const { version } = require('../package.json');
-
-let codeEditorService: any = null;
 
 const AntcodeCR: React.FC<IAntcodeCRProps> = (props) => {
   const container$ = React.useRef<HTMLDivElement>(null);
@@ -101,25 +97,10 @@ const AntcodeCR: React.FC<IAntcodeCRProps> = (props) => {
     return () => {
       const realInjector = injector$.current;
       if (realInjector) {
-        // FIXME: 由于框架侧暂时没有实现 monaco model 的统一销毁，因此在集成侧处理掉
-        const editorDocModelService = realInjector.get(
-          IEditorDocumentModelService
-        ) as EditorDocumentModelServiceImpl;
-        for (const instance of Array.from(
-          editorDocModelService['_modelReferenceManager'].instances.values()
-        ) as EditorDocumentModel[]) {
-          instance['monacoModel'].dispose();
-        }
+        disposeMode();
         realInjector.disposeAll();
       }
       ReactDOM.unmountComponentAtNode(container$!.current!);
-
-      if (codeEditorService) {
-        // HACK: monaco StaticServices init 时会初始化一些服务，此处无法被 override
-        // 而 DynamicStandaloneServices 处有 ensure 能被 override，因此手动清除缓存，
-        // 避免 editor 再次 create 时引用的上一个 override 的服务
-        codeEditorService._value = null;
-      }
     };
   }, []);
 

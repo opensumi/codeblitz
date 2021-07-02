@@ -22,6 +22,7 @@
     "@alipay/yuyan-monitor-web": "^2.0.28"
   },
   "dependencies": {
+    "@alipay/alex": "1.3.0",
     "@alipay/alex-core": "1.3.0",
     "@alipay/alex-shared": "1.3.0",
     "@alipay/geek-theme": "^1.6.0",
