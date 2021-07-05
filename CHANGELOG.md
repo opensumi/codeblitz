@@ -1,3 +1,29 @@
+# [1.5.0-alpha.0](https://code.alipay.com/cloud-ide/crew-dragon/compare/v1.3.0...v1.5.0-alpha.0) (2021-07-05)
+
+
+### Bug Fixes
+
+* 修复 editor tab 的展示名 ([b9b1617](https://code.alipay.com/cloud-ide/crew-dragon/commits/b9b1617ed3b354d7cc7174bda8c601cae81a3dae))
+* 修复代码折叠失效的问题 ([3901047](https://code.alipay.com/cloud-ide/crew-dragon/commits/39010470ec77fa388a50aa1ef5749f4444ad2c62))
+
+
+### Features
+
+* https://code.alipay.com/cloud-ide/acr-ide/pull_requests/233 ([35d1b77](https://code.alipay.com/cloud-ide/crew-dragon/commits/35d1b77b0543364ffe261261342d4107b500a241))
+* pick https://code.alipay.com/cloud-ide/acr-ide/pull_requests/234 ([88ef5fd](https://code.alipay.com/cloud-ide/crew-dragon/commits/88ef5fd98653f6a045e904418bc0ac0f305c8308))
+* pick https://code.alipay.com/cloud-ide/acr-ide/pull_requests/235 ([1efb413](https://code.alipay.com/cloud-ide/crew-dragon/commits/1efb4139d4d5a956169f3ebfb10539235e2c3334))
+
+
+### Reverts
+
+* Revert "chore: tmp" ([43f1269](https://code.alipay.com/cloud-ide/crew-dragon/commits/43f1269afa20203fd892cbe11264e2207c5965d4))
+
+
+
+## [0.14.2](https://code.alipay.com/cloud-ide/crew-dragon/compare/v0.14.1...v0.14.2) (2021-05-08)
+
+
+
 # [1.3.0](https://code.alipay.com/cloud-ide/crew-dragon/compare/v1.2.1...v1.3.0) (2021-06-21)
 
 
