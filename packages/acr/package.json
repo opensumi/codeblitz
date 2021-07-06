@@ -4,9 +4,6 @@
   "description": "@alipay/alex-acr",
   "main": "lib/index.js",
   "typings": "lib/index.d.ts",
-  "files": [
-    "lib"
-  ],
   "keywords": [
     "kaitian AntCodespaces"
   ],
