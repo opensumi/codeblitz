@@ -102,60 +102,10 @@ export interface IAntcodeCRProps {
   // components
   PRMoreActionLinks: React.ComponentType<any>;
 
-  // jsx elements
-
-  // others
-  renderStart: number;
-
   getFileReadStatus(filePath: string): boolean;
 
   fileReadMarkChange$: {
     useSubscription: (callback: (filePath: string) => void) => void;
-  };
-
-  // lsif service
-  lsifService: {
-    lsifExists(projectId: number, sha: string): Promise<boolean | null>;
-    lsifHover(
-      projectId: number,
-      data: LSIFBaseParams
-    ): Promise<{
-      contents: {
-        kind: string;
-        value: string;
-      };
-      range: LSIFRange;
-    }>;
-    lsifDefinitions(
-      projectId: number,
-      data: LSIFBaseParams
-    ): Promise<{ uri: string; range: LSIFRange }[]>;
-    lsifReferences(
-      projectId: number,
-      data: LSIFBaseParams & {
-        pageNum: number;
-        pageSize: number;
-      }
-    ): Promise<{
-      fileCount: number;
-      refCount: number;
-      refList: {
-        uri: string;
-        referenceChunks: {
-          content: string;
-          position: LSIFPosition;
-        }[];
-      }[];
-    }>;
-    lsifReferencesV2(
-      projectId: number,
-      data: LSIFBaseParams
-    ): Promise<
-      {
-        range: Range;
-        uri: string;
-      }[]
-    >;
   };
 }
 
@@ -188,12 +138,12 @@ export interface IComment extends Required<INoteData> {
   noteId: number;
 }
 
-export const IAntcodeService = Symbol('IAntcodeService');
-
 export type TCommitFiles = (
   fileList: Array<Pick<FileAction, 'content' | 'filePath'>>,
   meta: Omit<FileActionHeader, 'authorEmail' | 'authorName'>
 ) => ReturnType<IAntcodeCRProps['bulkChangeFiles']>;
+
+export const IAntcodeService = Symbol('IAntcodeService');
 
 export interface IAntcodeService {
   /**
@@ -273,12 +223,10 @@ export interface IAntcodeService {
   PRMoreActionLinks: IAntcodeCRProps['PRMoreActionLinks'];
 
   // others
-  renderStart: IAntcodeCRProps['renderStart'];
+  renderStart: number;
 
   didViewChangeEmitter: Emitter<string>;
   onDidViewChange: Event<string>;
-
-  lsifService: IAntcodeCRProps['lsifService'];
 
   updateConfig(config: Partial<IAntcodeCRProps>): void;
   fireEncodingChange(v: AntcodeEncodingType): void;
