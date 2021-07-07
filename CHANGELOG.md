@@ -1,3 +1,12 @@
+# [1.5.0-alpha.2](https://code.alipay.com/cloud-ide/crew-dragon/compare/v1.5.0-alpha.1...v1.5.0-alpha.2) (2021-07-07)
+
+
+### Bug Fixes
+
+* remove files field in alex-acr pkg.json ([d2cc8a0](https://code.alipay.com/cloud-ide/crew-dragon/commits/d2cc8a022bae48f9c870bb29874cf74dce682af7))
+
+
+
 # [1.5.0-alpha.1](https://code.alipay.com/cloud-ide/crew-dragon/compare/v1.5.0-alpha.0...v1.5.0-alpha.1) (2021-07-06)
 
 
