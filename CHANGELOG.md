@@ -1,3 +1,12 @@
+# [1.5.0-alpha.3](https://code.alipay.com/cloud-ide/crew-dragon/compare/v1.5.0-alpha.2...v1.5.0-alpha.3) (2021-07-07)
+
+
+### Bug Fixes
+
+* remove useless props ([d814491](https://code.alipay.com/cloud-ide/crew-dragon/commits/d81449175541d7d4dfb2767b9d9a999156b65645))
+
+
+
 # [1.5.0-alpha.2](https://code.alipay.com/cloud-ide/crew-dragon/compare/v1.5.0-alpha.1...v1.5.0-alpha.2) (2021-07-07)
 
 
