@@ -75,12 +75,4 @@ export const getProps = (projectId: number): Partial<IAntcodeCRProps> => ({
       </div>
     </>
   ),
-  renderStart: performance.now(),
-  lsifService: {
-    lsifExists,
-    lsifHover,
-    lsifDefinitions,
-    lsifReferencesV2,
-    lsifReferences: () => Promise.resolve([] as any),
-  },
 });

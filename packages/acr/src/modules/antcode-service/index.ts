@@ -282,8 +282,6 @@ export class AntcodeService implements IAntcodeService {
     return this.config.getFileContent(path, sha, 2500000, charsetName);
   };
 
-  public lsifService: IAntcodeCRProps['lsifService'];
-
   private _isFullscreen: boolean;
   get isFullscreen(): boolean {
     return this._isFullscreen;
@@ -304,7 +302,12 @@ export class AntcodeService implements IAntcodeService {
     };
   }
 
-  constructor(@Optional() private config: IAntcodeCRProps) {
+  constructor(
+    @Optional()
+    private config: IAntcodeCRProps & {
+      renderStart: number;
+    }
+  ) {
     this.addLineNum = config.addLineNum;
     this.deleteLineNum = config.deleteLineNum;
     this.leftRef = config.prevSha;
@@ -340,8 +343,6 @@ export class AntcodeService implements IAntcodeService {
     this.PRMoreActionLinks = config.PRMoreActionLinks;
 
     this.renderStart = config.renderStart;
-
-    this.lsifService = config.lsifService;
 
     this.isFullscreen = config.isFullscreen;
   }
