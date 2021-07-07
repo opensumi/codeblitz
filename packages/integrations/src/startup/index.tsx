@@ -17,6 +17,7 @@ import lsif from '@alipay/alex/extensions/cloud-ide.vscode-lsif';
 import gitlens from '@alipay/alex/extensions/alex.gitlens';
 import graph from '@alipay/alex/extensions/alex.git-graph';
 import codeservice from '@alipay/alex/extensions/alex.code-service';
+import imagePreview from '@alipay/alex/extensions/vscode.image-preview';
 
 import { LocalExtensionModule } from '../common/local-extension.module';
 
@@ -81,7 +82,17 @@ const App = () => (
         LocalExtensionModule,
         StartupModule,
       ],
-      extensionMetadata: [css, html, json, markdown, typescript, codeservice, gitlens, graph],
+      extensionMetadata: [
+        css,
+        html,
+        json,
+        markdown,
+        typescript,
+        codeservice,
+        gitlens,
+        graph,
+        imagePreview,
+      ],
       workspaceDir: `${platform}/${config.owner}/${config.name}`,
       layoutConfig,
       defaultPreferences: {

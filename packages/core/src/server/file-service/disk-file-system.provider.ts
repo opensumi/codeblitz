@@ -1,4 +1,3 @@
-import { UriComponents } from 'vscode-uri';
 import {
   Event,
   IDisposable,
@@ -9,6 +8,7 @@ import {
   DisposableCollection,
   DidFilesChangedParams,
   Uri,
+  UriComponents,
 } from '@ali/ide-core-common';
 import {
   FileChangeEvent,

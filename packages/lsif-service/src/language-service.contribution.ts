@@ -5,6 +5,7 @@ import {
   Domain,
   URI,
   Uri,
+  UriComponents,
   IReporterService,
   Emitter,
 } from '@ali/ide-core-common';
@@ -18,7 +19,6 @@ import {
 import { Position, Range, Location } from '@ali/ide-kaitian-extension/lib/common/vscode/ext-types';
 import { IWorkspaceService } from '@ali/ide-workspace';
 import * as paths from '@ali/ide-core-common/lib/path';
-import { UriComponents } from 'vscode-uri';
 import { EditorComponentRegistry, ResourceService, IResource } from '@ali/ide-editor/lib/browser';
 
 import * as vscode from 'vscode';

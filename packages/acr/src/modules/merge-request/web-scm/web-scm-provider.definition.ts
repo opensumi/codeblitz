@@ -119,6 +119,8 @@ export class WebSCMResourceGroup implements ISCMResourceGroup {
 
 @Injectable({ multiple: true })
 export class WebSCMResource implements ISCMResource {
+  contextValue: undefined;
+  command: undefined;
   private _resourceGroup: ISCMResourceGroup;
   readonly sourceUri: Uri;
   readonly decorations = {

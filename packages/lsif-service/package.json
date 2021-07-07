@@ -25,7 +25,7 @@
     "tslib": "^2.2.0"
   },
   "peerDependencies": {
-    "@ali/ide-core-common": "2.2.0",
-    "@ali/ide-kaitian-extension": "2.2.0"
+    "@ali/ide-core-common": "2.5.5",
+    "@ali/ide-kaitian-extension": "2.5.5"
   }
 }
