@@ -80,15 +80,15 @@ export class ContentSearchService implements IContentSearchServer {
       resultLength: 0,
     };
 
-    if (!this.runtimeConfig.textSearch?.provideResults) {
-      this.searchEnd(searchInfo.searchId);
-    } else {
+    // 先把 searchId 发送到 client 再请求，否则可能状态不对
+    setTimeout(() => {
       this.searchStart(searchInfo.searchId);
-      // 先把 searchId 发送到 client 再请求
-      setTimeout(() => {
+      if (!this.runtimeConfig.textSearch?.provideResults) {
+        this.searchEnd(searchInfo.searchId);
+      } else {
         this.request(what, searchInfo, opts);
-      });
-    }
+      }
+    });
 
     return searchInfo.searchId;
   }

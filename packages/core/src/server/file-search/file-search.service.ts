@@ -3,8 +3,8 @@ import { Injectable, Autowired } from '@ali/common-di';
 import { CancellationToken, CancellationTokenSource, URI } from '@ali/ide-core-common';
 import { parse } from '@ali/ide-core-common/lib/utils/glob';
 import { IFileSearchService } from '@ali/ide-file-search/lib/common';
-import { AppConfig, RuntimeConfig } from '@alipay/alex-core';
 import { anchorGlob } from '@ali/ide-search/lib/common';
+import { AppConfig, RuntimeConfig } from '../../common';
 import { INodeLogger } from '../core/node-logger';
 
 @Injectable()
