@@ -136,6 +136,11 @@
       "publisher": "alex",
       "name": "git-graph",
       "version": "1.30.0-2"
+    },
+    {
+      "publisher": "alex",
+      "name": "image-preview",
+      "version": "1.53.0-patch.1"
     }
   ]
 }

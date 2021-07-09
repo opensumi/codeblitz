@@ -175,7 +175,7 @@ export interface ICodeAPIService {
   searchFile(
     repo: IRepositoryModel,
     searchString: string,
-    options: { limit: number }
+    options: { limit?: number }
   ): Promise<string[]>;
   /**
    * file blame

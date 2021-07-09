@@ -22,7 +22,7 @@ import { IPluginConfig } from '@alipay/alex-plugin';
 import { deletionLogPath } from '@alipay/alex-browserfs/lib/backend/OverlayFS';
 
 import '../core/extension/extension.patch';
-import { disposeMode } from '../core/patch';
+import { disposeMode, disposableCollection } from '../core/patch';
 
 import { modules } from '../core/modules';
 import { IconSlim, IDETheme } from '../core/extension/metadata';
@@ -104,6 +104,7 @@ export function createApp({ appConfig, runtimeConfig }: IConfig): IAppInstance {
     }
     destroyed = true;
     disposeMode();
+    disposableCollection.forEach((d) => d(app.injector));
     app.injector.disposeAll();
   };
 

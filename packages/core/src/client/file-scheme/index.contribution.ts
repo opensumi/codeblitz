@@ -20,7 +20,8 @@ export class FileSchemeContribution implements BrowserEditorContribution {
         return scheme === FILE_SCHEME || this.fileServiceClient.handlesScheme(scheme) ? 0 : -1;
       },
       (resource: IResource<any>, results: IEditorOpenType[]) => {
-        console.log('>>>1', results);
+        // 如果装了 image-preview 插件，把内置的图片组件去掉
+        // TODO: 暴露 static-resource 配置
         if (results.length > 1 && results[0].componentId === 'image-preview') {
           results.shift();
         }

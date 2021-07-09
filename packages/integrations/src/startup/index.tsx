@@ -17,9 +17,10 @@ import lsif from '@alipay/alex/extensions/cloud-ide.vscode-lsif';
 import gitlens from '@alipay/alex/extensions/alex.gitlens';
 import graph from '@alipay/alex/extensions/alex.git-graph';
 import codeservice from '@alipay/alex/extensions/alex.code-service';
-import imagePreview from '@alipay/alex/extensions/vscode.image-preview';
+import imagePreview from '@alipay/alex/extensions/alex.image-preview';
 
 import { LocalExtensionModule } from '../common/local-extension.module';
+import * as Plugin from '../editor/plugin';
 
 (window as any).alex = Alex;
 
@@ -62,8 +63,15 @@ const App = () => (
   <AppRenderer
     onLoad={(app) => {
       window.app = app;
+      window.testPlugin = () => {
+        const commands = Plugin.api.commands;
+        if (commands) {
+          commands.executeCommand('plugin.command.test', 1, 2);
+        }
+      };
     }}
     appConfig={{
+      plugins: [Plugin],
       modules: [
         CodeServiceModule.Config({
           platform,
@@ -118,5 +126,6 @@ declare global {
   interface Window {
     app: IAppInstance;
     reset(destroyed?: boolean): void;
+    testPlugin(): void;
   }
 }

@@ -68,4 +68,167 @@ export interface RuntimeConfig {
    * 配置需注销的快捷键
    */
   unregisterKeybindings?: string[];
+  /**
+   * 文本搜索相关的配置，用于开启了左侧搜索面板的配置选项
+   */
+  textSearch?: {
+    /**
+     * 搜索组件配置，默认均开启支持
+     * true 代码支持，false 代表不支持，不支持时界面相关 UI 会被隐藏
+     * 对于支持 local 的选项，代码支持本地过滤，开启此项配置代表本地会对返回的结果做进一步过滤
+     */
+    config?: {
+      /**
+       * 正则匹配
+       */
+      regexp?: Boolean;
+      /**
+       * 大小写匹配
+       */
+      caseSensitive?: SearchMode;
+      /**
+       * 单词匹配
+       */
+      wordMatch?: SearchMode;
+      /**
+       * 是否支持替换，对于只读系统该选项会自动设置为 false
+       */
+      replace?: Boolean;
+      /**
+       * 文件包含
+       */
+      include?: SearchMode;
+      /**
+       * 文件排除
+       */
+      exclude?: SearchMode;
+    };
+
+    /**
+     * 提供给定文本模式匹配的结果
+     * @param query 查询参数
+     * @param options 搜索选项
+     * @param progress 所有结果都必须调用的进度回调
+     */
+    provideResults(
+      query: TextSearchQuery,
+      options: TextSearchOptions,
+      progress: Progress<TextSearchResult>
+    ): ProviderResult<void>;
+  };
+
+  fileSearch?: {
+    /**
+     * 搜索模式配置
+     */
+    config?: {
+      /**
+       * 文件包含
+       */
+      include?: SearchMode;
+      /**
+       * 文件排除
+       */
+      exclude?: SearchMode;
+    };
+    /**
+     * 提供匹配特定文件路径模式的一组文件
+     * @param query 查询参数
+     * @param options 搜索选项
+     */
+    provideResults(
+      query: { pattern: string },
+      options: FileSearchOptions
+    ): ProviderResult<string[]>;
+  };
+}
+
+export type SearchMode = Boolean | 'local';
+
+export type ProviderResult<T> = T | undefined | null | Thenable<T | undefined | null>;
+
+// search 相关的类型
+export interface TextSearchQuery {
+  /**
+   * 搜索的文案
+   */
+  pattern: string;
+
+  /**
+   * `pattern` 是否应该被解释为正则表达式.
+   */
+  isRegExp?: boolean;
+
+  /**
+   * 搜索是否应该区分大小写
+   */
+  isCaseSensitive?: boolean;
+
+  /**
+   * 是否只搜索全词匹配。
+   */
+  isWordMatch?: boolean;
+}
+
+type GlobString = string;
+
+interface SearchOptions {
+  /**
+   * 与 `includes` glob 模式匹配的文件应包含在搜索中
+   */
+  includes: GlobString[];
+  /**
+   * 与 `excludes` glob 模式匹配的文件应排除在搜索中
+   */
+  excludes: GlobString[];
+}
+
+export interface TextSearchOptions extends SearchOptions {
+  /**
+   * 要返回的最大结果数。
+   */
+  maxResults: number;
+}
+
+export interface Progress<T> {
+  /**
+   * 报告进度更新
+   */
+  report(value: T): void;
+}
+
+export type TextSearchResult = TextSearchMatch;
+
+export interface TextSearchMatch {
+  /**
+   * 文件路径
+   */
+  path: string;
+
+  /**
+   * 行号
+   */
+  lineNumber: number;
+
+  /**
+   * 文本匹配的预览
+   */
+  preview: {
+    /**
+     * 匹配的文本行，或包含匹配项的匹配行的一部分。
+     */
+    text: string;
+
+    /**
+     * `text` 内与匹配文本对应的字符范围，索引从 0 开始
+     */
+    matches: [number, number][];
+  };
+}
+
+export interface FileSearchOptions extends SearchOptions {
+  /**
+   * 要返回的最大结果数
+   */
+  maxResults?: number;
 }

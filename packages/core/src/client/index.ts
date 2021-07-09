@@ -34,6 +34,7 @@ import {
   codeServiceEditor,
 } from './override/codeEditorService';
 import { BreadCrumbServiceImplOverride, IBreadCrumbService } from './override/breadcrumb.service';
+import { SearchContribution } from './search/index.contribution';
 
 export { ExtensionManagerModule as ExtensionClientManagerModule } from './extension-manager';
 
@@ -59,6 +60,7 @@ export class ClientModule extends BrowserModule {
     WelcomeContribution,
     MenuConfigContribution,
     FileSchemeContribution,
+    SearchContribution,
     {
       token: MonacoCodeService,
       useValue: codeServiceEditor,
