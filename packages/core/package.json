@@ -1,6 +1,6 @@
 {
   "name": "@alipay/alex-core",
-  "version": "1.5.0-alpha.3",
+  "version": "1.5.0",
   "description": "core",
   "main": "lib/index.js",
   "typings": "lib/index.d.ts",
@@ -28,8 +28,8 @@
     "@ali/ide-kaitian-extension": "2.5.5",
     "@ali/ide-logs": "2.5.5",
     "@alipay/alex-browserfs": "~2.1.0",
-    "@alipay/alex-registry": "1.5.0-alpha.3",
-    "@alipay/alex-shared": "1.5.0-alpha.3",
+    "@alipay/alex-registry": "1.5.0",
+    "@alipay/alex-shared": "1.5.0",
     "assert": "^2.0.0",
     "fs-extra-factory": "^0.2.1",
     "iconv-lite-umd": "^0.6.8",

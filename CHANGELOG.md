@@ -1,3 +1,13 @@
+# [1.5.0](https://code.alipay.com/cloud-ide/crew-dragon/compare/v1.5.0-alpha.3...v1.5.0) (2021-07-09)
+
+
+### Features
+
+* 升级 kaitian 2.5.0 以支持 custom editor ([fbf2e4f](https://code.alipay.com/cloud-ide/crew-dragon/commits/fbf2e4f219f50b108bbcc7a9cec7d77f0109f64c))
+* 支持文件和代码搜索配置 ([6350dff](https://code.alipay.com/cloud-ide/crew-dragon/commits/6350dff84ca29b8663bb4e4faa0095728941658d))
+
+
+
 # [1.5.0-alpha.3](https://code.alipay.com/cloud-ide/crew-dragon/compare/v1.5.0-alpha.2...v1.5.0-alpha.3) (2021-07-07)
 
 
