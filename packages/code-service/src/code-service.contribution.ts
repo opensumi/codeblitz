@@ -35,6 +35,7 @@ import { MainLayoutContribution } from '@ali/ide-main-layout';
 import configureFileSystem from './filesystem/configure';
 import { CodeModelService } from './code-model.service';
 import { RefType, ICodeServiceConfig } from './types';
+import { Configure } from './config.service';
 
 @Domain(LaunchContribution, BrowserEditorContribution, CommandContribution, MainLayoutContribution)
 export class CodeContribution
@@ -82,6 +83,9 @@ export class CodeContribution
   @Autowired(ICodeServiceConfig)
   codeServiceConfig: ICodeServiceConfig;
 
+  @Autowired(Configure)
+  configure: Configure;
+
   private _unmount: () => void | undefined;
 
   private _mounting = false;
@@ -92,6 +96,9 @@ export class CodeContribution
 
   async launch({ rootFS }: IServerApp) {
     if (!this.codeServiceConfig) return;
+
+    this.configure.configTextSearch();
+    this.configure.configFileSearch();
 
     let initMountDefer: Deferred<void> | null = new Deferred();
     this.codeModel.rootRepository.onDidChangeCommit(() => {

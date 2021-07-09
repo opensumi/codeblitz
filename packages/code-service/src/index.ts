@@ -1,12 +1,7 @@
 import { Injectable, Provider } from '@ali/common-di';
 import { BrowserModule } from '@ali/ide-core-browser';
 import { extendModule, ModuleConstructor } from '@alipay/alex-core';
-import { ContentSearchServerPath } from '@ali/ide-search/lib/common';
-import { FileSearchServicePath } from '@ali/ide-file-search/lib/common';
 
-import { SearchContribution } from './search/search.contributon';
-import { ContentSearchService } from './search/content-search.service';
-import { FileSearchService } from './search/file-search.service';
 import { CodeContribution } from './code-service.contribution';
 import { CodeStaticResourceContribution } from './static-resource.contribution';
 import { CodeModelService } from './code-model.service';
@@ -42,18 +37,7 @@ export class CodeServiceModule extends BrowserModule {
     CodeStaticResourceContribution,
     StatusbarContribution,
     DecorationProvider,
-    SearchContribution,
     LineDecorationContribution,
     CommandsContribution,
-    {
-      token: ContentSearchServerPath,
-      useClass: ContentSearchService,
-      override: true,
-    },
-    {
-      token: FileSearchServicePath,
-      useClass: FileSearchService,
-      override: true,
-    },
   ];
 }

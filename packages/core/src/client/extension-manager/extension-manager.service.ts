@@ -2,7 +2,11 @@ import { Injectable, Autowired } from '@ali/common-di';
 import { replaceLocalizePlaceholder, URI } from '@ali/ide-core-browser';
 import { posix } from '@ali/ide-core-common/lib/path';
 import { action, observable, computed, runInAction } from 'mobx';
-import { ExtensionService, IExtensionProps } from '@ali/ide-kaitian-extension/lib/common';
+import {
+  IExtensionProps,
+  AbstractExtensionManagementService,
+} from '@ali/ide-kaitian-extension/lib/common';
+import { AbstractExtInstanceManagementService } from '@ali/ide-kaitian-extension/lib/browser/types';
 import { StaticResourceService } from '@ali/ide-static-resource/lib/browser';
 import { EditorPreferences, WorkbenchEditorService } from '@ali/ide-editor/lib/browser';
 
@@ -17,8 +21,11 @@ import { EXT_SCHEME } from '../../common/constant';
 
 @Injectable()
 export class ExtensionManagerService {
-  @Autowired()
-  protected extensionService: ExtensionService;
+  @Autowired(AbstractExtInstanceManagementService)
+  private readonly extInstanceManagementService: AbstractExtInstanceManagementService;
+
+  @Autowired(AbstractExtensionManagementService)
+  private readonly extManagementService: AbstractExtensionManagementService;
 
   @Autowired()
   protected staticResourceService: StaticResourceService;
@@ -40,7 +47,9 @@ export class ExtensionManagerService {
     if (this.isInit) {
       return;
     }
-    const extensionProps = await this.extensionService.getAllExtensionJson();
+    const extensionProps = this.extInstanceManagementService
+      .getExtensionInstances()
+      .map((extension) => extension.toJSON());
     const extensions = await this.transformFromExtensionProp(extensionProps);
     // 是否要展示内置插件
     runInAction(() => {
@@ -151,7 +160,7 @@ export class ExtensionManagerService {
     if (!extension) {
       return;
     }
-    const extensionDetail = await this.extensionService.getExtensionProps(extension.path, {
+    const extensionDetail = await this.extManagementService.getExtensionProps(extension.path, {
       readme: './README.md',
       changelog: './CHANGELOG.md',
     });

@@ -8,7 +8,7 @@
   "description": "Ant Codespaces for browser",
   "main": "index.js",
   "engines": {
-    "kaitian": "2.2.0"
+    "kaitian": "2.5.5"
   },
   "scripts": {
     "type-check": "tsc --skipLibCheck --noEmit",
@@ -136,6 +136,11 @@
       "publisher": "alex",
       "name": "git-graph",
       "version": "1.30.0-2"
+    },
+    {
+      "publisher": "alex",
+      "name": "image-preview",
+      "version": "1.53.0-patch.1"
     }
   ]
 }

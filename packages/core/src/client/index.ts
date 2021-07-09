@@ -27,12 +27,14 @@ import {
 } from './custom';
 import { EditorEmptyContribution } from './editor-empty/editor-empty.contribution';
 import { WelcomeContribution } from './welcome/welcome.contributon';
+import { FileSchemeContribution } from './file-scheme/index.contribution';
 import {
   MonacoCodeService,
   IMonacoCodeService,
   codeServiceEditor,
 } from './override/codeEditorService';
 import { BreadCrumbServiceImplOverride, IBreadCrumbService } from './override/breadcrumb.service';
+import { SearchContribution } from './search/index.contribution';
 
 export { ExtensionManagerModule as ExtensionClientManagerModule } from './extension-manager';
 
@@ -57,6 +59,8 @@ export class ClientModule extends BrowserModule {
     EditorEmptyContribution,
     WelcomeContribution,
     MenuConfigContribution,
+    FileSchemeContribution,
+    SearchContribution,
     {
       token: MonacoCodeService,
       useValue: codeServiceEditor,

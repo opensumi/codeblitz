@@ -1,9 +1,7 @@
-import { ExtensionServiceImpl } from '@ali/ide-kaitian-extension/lib/browser/extension.service';
 import { MainThreadLanguages } from '@ali/ide-kaitian-extension/lib/browser/vscode/api/main.thread.language';
+import { AbstractExtInstanceManagementService } from '@ali/ide-kaitian-extension/lib/browser/types';
 
-// TODO：待 kaitian 中去掉，临时覆盖掉实现，这样 loader 可移除了
-ExtensionServiceImpl.prototype.initCommonBrowserDependency = () => Promise.resolve();
-ExtensionServiceImpl.prototype.initKaitianBrowserAPIDependency = () => Promise.resolve();
+import { disposableCollection } from '../patch';
 
 // TODO: PR to kaitian, monaco 内会 dispose，先临时 override
 // @ts-ignore
@@ -22,3 +20,9 @@ MainThreadLanguages.prototype.createSignatureHelpProvider = function (...args: a
   };
   return provider;
 };
+
+disposableCollection.push((injector) => {
+  (injector.get(
+    AbstractExtInstanceManagementService
+  ) as AbstractExtInstanceManagementService).dispose();
+});

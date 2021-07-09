@@ -20,10 +20,9 @@ class ExtensionServiceImplOverride extends ExtensionServiceImpl {
    * TODO: 目前使用私有属性，待升级后改造
    */
   async lazyActivate(this: any) {
-    await this.initBaseData();
-    this.extensionMetaDataArr = await this.getAllExtensions();
-    await this.initExtension();
-    await this.enableAvailableExtensions();
+    await this.initExtensionMetaData();
+    await this.initExtensionInstanceData();
+    await this.runExtensionContributes();
     this.doActivate();
   }
 }

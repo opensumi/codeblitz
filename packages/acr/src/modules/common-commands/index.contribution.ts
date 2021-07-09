@@ -8,7 +8,7 @@ import {
   URI,
 } from '@ali/ide-core-browser';
 
-import { VSCodeCommands } from '@ali/ide-kaitian-extension/lib/browser/vscode/commands';
+import { OPEN, DIFF } from '@ali/ide-kaitian-extension/lib/browser/vscode/builtin-commands';
 import { UriComponents } from '@ali/ide-kaitian-extension/lib/common/vscode/models';
 import { TextDocumentShowOptions, ViewColumn } from '@ali/ide-kaitian-extension/lib/common/vscode';
 import {
@@ -28,7 +28,7 @@ export class CommonCommandsContribution implements CommandContribution {
 
   registerCommands(commandRegistry: CommandRegistry) {
     // vscode.open
-    commandRegistry.registerCommand(VSCodeCommands.OPEN, {
+    commandRegistry.registerCommand(OPEN, {
       execute: (
         uriComponents: UriComponents,
         columnOrOptions?: ViewColumn | TextDocumentShowOptions,
@@ -58,7 +58,7 @@ export class CommonCommandsContribution implements CommandContribution {
     });
 
     // vscode.diff
-    commandRegistry.registerCommand(VSCodeCommands.DIFF, {
+    commandRegistry.registerCommand(DIFF, {
       execute: (left: UriComponents, right: UriComponents, title: string, options: any = {}) => {
         const openOptions: IResourceOpenOptions = {
           ...viewColumnToResourceOpenOptions(options.viewColumn),

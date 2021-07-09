@@ -20,7 +20,7 @@ import '@ali/ide-core-browser/lib/style/index.less';
 import { IPluginConfig } from '@alipay/alex-plugin';
 import { deletionLogPath } from '@alipay/alex-browserfs/lib/backend/OverlayFS';
 
-import { disposeMode } from '../core/patch';
+import { disposeMode, disposableCollection } from '../core/patch';
 import { getModules } from '../core/editor/modules';
 import { mergeConfig } from '../core/utils';
 import { EditorLayoutComponent, getEditorLayoutConfig } from '../core/layout';
@@ -86,6 +86,7 @@ export function createEditor({ appConfig, runtimeConfig }: IConfig): IAppInstanc
     }
     destroyed = true;
     disposeMode();
+    disposableCollection.forEach((d) => d(app.injector));
     app.injector.disposeAll();
   };
 

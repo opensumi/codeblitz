@@ -2,10 +2,13 @@
  * 收敛 kaitian 的 patch
  */
 
+import { Injector } from '@ali/common-di';
 import { StaticServices } from '@ali/monaco-editor-core/esm/vs/editor/standalone/browser/standaloneServices';
 import { ModesRegistry } from '@ali/monaco-editor-core/esm/vs/editor/common/modes/modesRegistry';
 import { DirtyDiffWidget } from '@ali/ide-scm/lib/browser/dirty-diff/dirty-diff-widget';
 import { AbstractResourcePreferenceProvider } from '@ali/ide-preferences/lib/browser/abstract-resource-preference-provider';
+
+export const disposableCollection: ((injector: Injector) => void)[] = [];
 
 // TODO: 不使用 private 如何清除副作用
 export const disposeMode = () => {
