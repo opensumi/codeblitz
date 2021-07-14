@@ -1,3 +1,12 @@
+## [1.5.1](https://code.alipay.com/cloud-ide/crew-dragon/compare/v1.5.0...v1.5.1) (2021-07-14)
+
+
+### Features
+
+* 升级 textmate-language, 以支持 kotlin, vue 等 ([0be5850](https://code.alipay.com/cloud-ide/crew-dragon/commits/0be5850096db6a3b72a218abcce68ddeca5d5d39))
+
+
+
 # [1.5.0](https://code.alipay.com/cloud-ide/crew-dragon/compare/v1.5.0-alpha.3...v1.5.0) (2021-07-09)
 
 
