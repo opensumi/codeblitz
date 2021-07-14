@@ -643,10 +643,12 @@
     "@ali/ide-file-service" "2.5.5"
     "@ali/ide-overlay" "2.5.5"
 
-"@ali/kaitian-textmate-languages@^2.2.0":
-  version "2.2.0"
-  resolved "https://registry.npm.alibaba-inc.com/@ali/kaitian-textmate-languages/download/@ali/kaitian-textmate-languages-2.2.0.tgz#da90b2e40332f7df9cfa0b78dfedbf00329a5dfc"
-  integrity sha1-2pCy5AMy99+c+gt43+2/ADKaXfw=
+"@ali/kaitian-textmate-languages@^2.4.0":
+  version "2.4.0"
+  resolved "https://registry.npm.alibaba-inc.com/@ali/kaitian-textmate-languages/download/@ali/kaitian-textmate-languages-2.4.0.tgz#941ccb5b9ffc2b6d0662fd27162c098210f9da95"
+  integrity sha1-lBzLW5/8K20GYv0nFiwJghD52pU=
+  dependencies:
+    plist "^3.0.1"
 
 "@ali/monaco-editor-core@0.20.1-patch.22":
   version "0.20.1-patch.22"
@@ -2731,7 +2733,7 @@ base64-arraybuffer@0.1.5:
   resolved "https://registry.npm.alibaba-inc.com/base64-arraybuffer/download/base64-arraybuffer-0.1.5.tgz#73926771923b5a19747ad666aa5cd4bf9c6e9ce8"
   integrity sha1-c5JncZI7Whl0etZmqlzUv5xunOg=
 
-base64-js@^1.3.1:
+base64-js@^1.3.1, base64-js@^1.5.1:
   version "1.5.1"
   resolved "https://registry.npm.alibaba-inc.com/base64-js/download/base64-js-1.5.1.tgz#1b1b440160a5bf7ad40b650f095963481903930a"
   integrity sha1-GxtEAWClv3rUC2UPCVljSBkDkwo=
@@ -9812,6 +9814,15 @@ please-upgrade-node@^3.2.0:
   dependencies:
     semver-compare "^1.0.0"
 
+plist@^3.0.1:
+  version "3.0.2"
+  resolved "https://registry.npm.alibaba-inc.com/plist/download/plist-3.0.2.tgz#74bbf011124b90421c22d15779cee60060ba95bc"
+  integrity sha1-dLvwERJLkEIcItFXec7mAGC6lbw=
+  dependencies:
+    base64-js "^1.5.1"
+    xmlbuilder "^9.0.7"
+    xmldom "^0.5.0"
+
 portfinder@^1.0.26, portfinder@^1.0.28:
   version "1.0.28"
   resolved "https://registry.npm.alibaba-inc.com/portfinder/download/portfinder-1.0.28.tgz#67c4622852bd5374dd1dd900f779f53462fac778"
@@ -13862,10 +13873,20 @@ xml-name-validator@^3.0.0:
   resolved "https://registry.npm.alibaba-inc.com/xml-name-validator/download/xml-name-validator-3.0.0.tgz#6ae73e06de4d8c6e47f9fb181f78d648ad457c6a"
   integrity sha1-auc+Bt5NjG5H+fsYH3jWSK1FfGo=
 
+xmlbuilder@^9.0.7:
+  version "9.0.7"
+  resolved "https://registry.npm.alibaba-inc.com/xmlbuilder/download/xmlbuilder-9.0.7.tgz#132ee63d2ec5565c557e20f4c22df9aca686b10d"
+  integrity sha1-Ey7mPS7FVlxVfiD0wi35rKaGsQ0=
+
 xmlchars@^2.2.0:
   version "2.2.0"
   resolved "https://registry.npm.alibaba-inc.com/xmlchars/download/xmlchars-2.2.0.tgz#060fe1bcb7f9c76fe2a17db86a9bc3ab894210cb"
   integrity sha1-Bg/hvLf5x2/ioX24apvDq4lCEMs=
+
+xmldom@^0.5.0:
+  version "0.5.0"
+  resolved "https://registry.npm.alibaba-inc.com/xmldom/download/xmldom-0.5.0.tgz#193cb96b84aa3486127ea6272c4596354cb4962e"
+  integrity sha1-GTy5a4SqNIYSfqYnLEWWNUy0li4=
 
 xmlhttprequest-ssl@~1.5.4:
   version "1.5.5"

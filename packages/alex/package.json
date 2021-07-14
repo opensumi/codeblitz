@@ -68,7 +68,7 @@
     "@ali/ide-webview": "2.5.5",
     "@ali/ide-workspace": "2.5.5",
     "@ali/ide-workspace-edit": "2.5.5",
-    "@ali/kaitian-textmate-languages": "^2.2.0",
+    "@ali/kaitian-textmate-languages": "^2.4.0",
     "@alipay/alex-cli": "1.5.0",
     "@alipay/alex-code-api": "1.5.0",
     "@alipay/alex-core": "1.5.0",

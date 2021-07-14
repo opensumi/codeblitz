@@ -1,4 +1,6 @@
 declare module '@alipay/alex/languages' {}
+declare module '@alipay/alex/languages/Kotlin' {}
+declare module '@alipay/alex/languages/acss' {}
 declare module '@alipay/alex/languages/bat' {}
 declare module '@alipay/alex/languages/clojure' {}
 declare module '@alipay/alex/languages/coffeescript' {}
@@ -30,6 +32,7 @@ declare module '@alipay/alex/languages/python' {}
 declare module '@alipay/alex/languages/razor' {}
 declare module '@alipay/alex/languages/ruby' {}
 declare module '@alipay/alex/languages/rust' {}
+declare module '@alipay/alex/languages/schema' {}
 declare module '@alipay/alex/languages/scss' {}
 declare module '@alipay/alex/languages/shaderlab' {}
 declare module '@alipay/alex/languages/shellscript' {}
@@ -37,5 +40,8 @@ declare module '@alipay/alex/languages/sql' {}
 declare module '@alipay/alex/languages/swift' {}
 declare module '@alipay/alex/languages/typescript' {}
 declare module '@alipay/alex/languages/vb' {}
+declare module '@alipay/alex/languages/velocity' {}
+declare module '@alipay/alex/languages/vscode-proto3' {}
+declare module '@alipay/alex/languages/vue' {}
 declare module '@alipay/alex/languages/xml' {}
 declare module '@alipay/alex/languages/yaml' {}
