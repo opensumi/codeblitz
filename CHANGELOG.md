@@ -1,3 +1,12 @@
+## [1.5.2-rc.1](https://code.alipay.com/cloud-ide/crew-dragon/compare/v1.5.1...v1.5.2-rc.1) (2021-07-22)
+
+
+### Bug Fixes
+
+* 优化 change 查找路径问题 ([90345a9](https://code.alipay.com/cloud-ide/crew-dragon/commits/90345a97be81d528d0d55ca696feb78a50f2ecae))
+
+
+
 ## [1.5.1](https://code.alipay.com/cloud-ide/crew-dragon/compare/v1.5.0...v1.5.1) (2021-07-14)
 
 
