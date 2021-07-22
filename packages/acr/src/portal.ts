@@ -9,6 +9,7 @@ import {
   ComponentProps,
   ReactElement,
   RefObject,
+  useLayoutEffect,
 } from 'react';
 import ReactDOM from 'react-dom';
 
@@ -177,16 +178,16 @@ export const createPortals = () => {
     });
 
     // 父组件渲染时直接驱动子组件渲染，保持 react 组件间行为一致，需要 memo 在原组件上进行即可
-    // FIXME: React >= 16.13 Cannot update a component from inside the function body of a different component
-    // 目前 antcode react 版本为 16.8 暂时这么写，避免组件渲染不同步问题，待框架层从根源解决后移除
-    emitter.fire({
-      portalId,
-      payload: {
-        effect,
-        component,
-        componentProps: componentProps as any,
-        containerRef,
-      },
+    useLayoutEffect(() => {
+      emitter.fire({
+        portalId,
+        payload: {
+          effect,
+          component,
+          componentProps: componentProps as any,
+          containerRef,
+        },
+      });
     });
 
     useEffect(

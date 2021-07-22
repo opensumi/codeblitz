@@ -16,7 +16,8 @@ import { QuickOpenGroupItem, QuickOpenModel } from '@ali/ide-quick-open';
 import { basename } from '@ali/ide-core-common/lib/path';
 import { OpenChangeFilesService } from './open-change-files';
 
-import { IPullRequestChangeDiff, IAntcodeService } from './antcode-service/base';
+import { IAntcodeService } from './antcode-service/base';
+import type { IPullRequestChangeDiff } from './antcode-service/base';
 
 @Injectable({ multiple: true })
 export class ChangeFileQuickOpenItem extends QuickOpenGroupItem {

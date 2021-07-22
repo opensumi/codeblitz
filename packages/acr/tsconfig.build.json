@@ -2,7 +2,10 @@
   "extends": "../tsconfig.base.json",
   "compilerOptions": {
     "rootDir": "./src",
-    "outDir": "./lib"
+    "outDir": "./lib",
+    // antcode 中类型有不少不一致，先和之前一样，不输出类型
+    "declaration": false,
+    "declarationMap": false,
   },
   "include": [
     "./src"
