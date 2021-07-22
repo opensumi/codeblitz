@@ -19,7 +19,8 @@ export const Commenting: React.FC<{
   const inputRef = React.useRef<HTMLTextAreaElement | null>(null);
 
   const path = React.useMemo(() => {
-    return thread.uri.path.toString();
+    const p = thread.uri.path.toString();
+    return p.startsWith('/') ? p.slice(1) : p;
   }, [thread]);
 
   const AntCodeCommenting = React.useMemo(() => {

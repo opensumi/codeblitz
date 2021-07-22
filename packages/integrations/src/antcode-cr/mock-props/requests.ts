@@ -26,7 +26,7 @@ export const getFileContent = (projectId: number) => (filepath: string, ref: str
 
 // antcode 测试环境目前尚不支持该接口
 export const getLanguages = (projectId: number) => (): Promise<string[]> => {
-  return request(`api/v4/projects/${projectId}/languages`, {
+  return request(`/antcode/api/v4/projects/${projectId}/languages`, {
     params: {
       order_by: 'count',
       agg_by: 'file_extension',
