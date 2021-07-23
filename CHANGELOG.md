@@ -1,3 +1,12 @@
+## [1.5.2-rc.2](https://code.alipay.com/cloud-ide/crew-dragon/compare/v1.5.2-rc.1...v1.5.2-rc.2) (2021-07-23)
+
+
+### Bug Fixes
+
+* **acr:** 修复 codeServiceEditor 等问题 ([08932d7](https://code.alipay.com/cloud-ide/crew-dragon/commits/08932d76a34ae58a52307bfaf0277737de81fa63))
+
+
+
 ## [1.5.2-rc.1](https://code.alipay.com/cloud-ide/crew-dragon/compare/v1.5.1...v1.5.2-rc.1) (2021-07-22)
 
 
