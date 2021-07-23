@@ -10,7 +10,7 @@ import { Markdown } from '@ali/ide-markdown';
 import { observer } from 'mobx-react-lite';
 import * as React from 'react';
 import { ExtensionDetail, IExtensionManagerService } from './base';
-import * as clx from 'classnames';
+import clx from 'classnames';
 import * as styles from './extension-detail.module.less';
 import * as commonStyles from './common.module.less';
 import { Tabs } from '@ali/ide-components';

@@ -1,6 +1,6 @@
 import * as React from 'react';
 import { localize } from '@ali/ide-core-browser';
-import * as clx from 'classnames';
+import clx from 'classnames';
 import { observer } from 'mobx-react-lite';
 import { RawExtension } from '../base';
 import * as commonStyles from '../common.module.less';

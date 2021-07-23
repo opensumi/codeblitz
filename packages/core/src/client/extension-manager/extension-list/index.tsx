@@ -1,5 +1,5 @@
 import * as React from 'react';
-import * as clx from 'classnames';
+import clx from 'classnames';
 import { ProgressBar } from '@ali/ide-core-browser/lib/components/progressbar';
 import { RawExtensionView } from '../raw-extension';
 import { RawExtension, IExtensionManagerService } from '../base';
@@ -21,9 +21,8 @@ export interface ExtensionListProps {
 export const ExtensionList: React.FC<ExtensionListProps> = observer(
   ({ height, loading = false, list, empty, onReachBottom, showExtraAction = true }) => {
     const [selectExtensionId, setSelectExtensionId] = React.useState('');
-    const extensionManagerService = useInjectable<ExtensionManagerService>(
-      IExtensionManagerService
-    );
+    const extensionManagerService =
+      useInjectable<ExtensionManagerService>(IExtensionManagerService);
 
     function select(extension: RawExtension, isDouble: boolean) {
       setSelectExtensionId(extension.extensionId);

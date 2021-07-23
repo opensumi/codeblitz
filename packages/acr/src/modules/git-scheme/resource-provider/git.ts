@@ -15,7 +15,7 @@ export class GitResourceProvider implements IResourceProvider {
   labelService: LabelService;
 
   provideResource(uri: URI) {
-    const path = uri.withoutScheme().toString(true);
+    const path = uri.withoutQuery().withoutScheme().toString(true);
     return Promise.all([
       this.getFileStat(uri.toString()),
       // 移除特殊的 / 开头

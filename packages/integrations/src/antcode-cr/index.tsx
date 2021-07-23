@@ -24,6 +24,7 @@ const STABLE_PROPS = getProps(projectId);
 
 const App = () => {
   const [visible, setVisible] = React.useState<boolean>(true);
+  const [count, setCount] = React.useState<number>(0);
   const [encoding, setEncoding] = React.useState<AntcodeEncodingType>(meta.defaultEncoding);
 
   const [lang] = React.useState<string>(() => getLocale());
@@ -83,9 +84,10 @@ const App = () => {
     <div style={{ height: '100%' }}>
       <div>
         <button onClick={() => setVisible((r) => !r)}>destroy by toggle</button>
+        <button onClick={() => setCount((v) => v + 1)}>reset</button>
         <button onClick={setLanguage}>toggle lang: current lang {lang}</button>
       </div>
-      <div className="ide">{visible && <AntcodeCR {...props} />}</div>
+      <div className="ide">{visible && <AntcodeCR {...props} key={count} />}</div>
     </div>
   );
 };

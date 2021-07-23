@@ -36,6 +36,8 @@ import {
 import { BreadCrumbServiceImplOverride, IBreadCrumbService } from './override/breadcrumb.service';
 import { SearchContribution } from './search/index.contribution';
 
+export * from './override/codeEditorService';
+
 export { ExtensionManagerModule as ExtensionClientManagerModule } from './extension-manager';
 
 export * from './extension';
