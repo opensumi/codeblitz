@@ -19,7 +19,7 @@
     "lockfile": "enable"
   },
   "dependencies": {
-    "@ali/common-di": "^5.2.2",
+    "@ali/common-di": "^5.3.1",
     "@ali/ide-core-browser": "2.5.5",
     "@ali/ide-core-common": "2.5.5",
     "@ali/ide-debug": "2.5.5",

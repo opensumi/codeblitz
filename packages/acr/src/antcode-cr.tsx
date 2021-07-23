@@ -4,7 +4,12 @@ import { Injector } from '@ali/common-di';
 import { URI } from '@ali/ide-core-common';
 import { join } from '@ali/ide-core-common/lib/path';
 import { equals } from '@ali/ide-core-common/lib/arrays';
-import { RuntimeConfig } from '@alipay/alex-core';
+import {
+  RuntimeConfig,
+  codeServiceEditor,
+  MonacoCodeService,
+  IMonacoCodeService,
+} from '@alipay/alex-core';
 // internal patched
 import { disposeMode } from '@alipay/alex/lib/core/patch';
 
@@ -26,6 +31,7 @@ import { logPv } from './utils/tracert';
 import { RootElementId } from './constant';
 import { Portals } from './portal';
 import { reportUserAccess } from './utils/monitor';
+import { CommentsZoneWidgetPatch, CommentsZoneWidget } from './overrides/comments-zone.view';
 
 const { version } = require('../package.json');
 
@@ -55,8 +61,22 @@ const AntcodeCR: React.FC<IAntcodeCRProps> = (props) => {
         {
           token: RuntimeConfig,
           useValue: {},
+        },
+        {
+          token: MonacoCodeService,
+          useValue: codeServiceEditor,
+        },
+        {
+          token: IMonacoCodeService,
+          useClass: MonacoCodeService,
+          override: true,
+        },
+        {
+          token: CommentsZoneWidget,
+          useClass: CommentsZoneWidgetPatch,
         }
       );
+
       render(
         injector,
         workspaceDir,
@@ -84,6 +104,9 @@ const AntcodeCR: React.FC<IAntcodeCRProps> = (props) => {
       );
     }
 
+    // 保持 codeServiceEditor 单例，且组件每次实例化重新赋值
+    const clearInjector = codeServiceEditor.setInjector(injector);
+
     // spm 曝光埋点
     logPv('a1654', 'b23008');
     // 记录用户访问信息，包括 pr 维度的 pv, uv
@@ -98,6 +121,7 @@ const AntcodeCR: React.FC<IAntcodeCRProps> = (props) => {
       const realInjector = injector$.current;
       if (realInjector) {
         disposeMode();
+        clearInjector();
         realInjector.disposeAll();
       }
       ReactDOM.unmountComponentAtNode(container$!.current!);

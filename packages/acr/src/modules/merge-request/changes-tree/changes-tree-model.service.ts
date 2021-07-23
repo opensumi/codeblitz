@@ -171,8 +171,11 @@ export class ChangesTreeModelService extends WithEventBus {
 
   private showProgress(promise: Promise<any>) {
     // 展示一个进度条
-    this.progressService.withProgress({ location: ChangesTreeViewId }, async () => {
-      return promise;
+    // 延迟更新，否则在组件中更新会引起 react warning
+    setTimeout(() => {
+      this.progressService.withProgress({ location: ChangesTreeViewId }, async () => {
+        return promise;
+      });
     });
   }
 
@@ -247,12 +250,8 @@ export class ChangesTreeModelService extends WithEventBus {
     const type = isTreeMode ? ChangesTreeTypes.Tree : ChangesTreeTypes.List;
     const preType = !isTreeMode ? ChangesTreeTypes.Tree : ChangesTreeTypes.List;
     if (this.changesTreeModelMap.has(type)) {
-      const {
-        treeModel,
-        decorations,
-        selectedDecoration,
-        focusedDecoration,
-      } = this.changesTreeModelMap.get(type)!;
+      const { treeModel, decorations, selectedDecoration, focusedDecoration } =
+        this.changesTreeModelMap.get(type)!;
       this._activeTreeModel = treeModel;
       this._activeDecorations = decorations;
       this._selectedDecoration = selectedDecoration;
@@ -388,10 +387,8 @@ export class ChangesTreeModelService extends WithEventBus {
   };
 
   private persistFileSelection(preType: ChangesTreeTypes) {
-    const {
-      selectedDecoration: preSelectedDecoration,
-      focusedDecoration: preFocusedDecoration,
-    } = this.changesTreeModelMap.get(preType)!;
+    const { selectedDecoration: preSelectedDecoration, focusedDecoration: preFocusedDecoration } =
+      this.changesTreeModelMap.get(preType)!;
 
     // 切换时需要同步decoration状态，默认只取第一个选中的文件
     const file = this.selectedFiles[0];
