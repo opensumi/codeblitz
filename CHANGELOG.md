@@ -1,3 +1,12 @@
+## [1.5.2](https://code.alipay.com/cloud-ide/crew-dragon/compare/v1.5.2-rc.2...v1.5.2) (2021-07-27)
+
+
+### Bug Fixes
+
+* 临时修复新建文件节点消失的问题 ([5b1bb2d](https://code.alipay.com/cloud-ide/crew-dragon/commits/5b1bb2dbc674f811ec758dac80d58c40e9ecdcfb))
+
+
+
 ## [1.5.2-rc.2](https://code.alipay.com/cloud-ide/crew-dragon/compare/v1.5.2-rc.1...v1.5.2-rc.2) (2021-07-23)
 
 

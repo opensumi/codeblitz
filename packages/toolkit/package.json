@@ -1,6 +1,6 @@
 {
   "name": "@alipay/alex-toolkit",
-  "version": "1.5.2-rc.2",
+  "version": "1.5.2",
   "description": "@alipay/alex-toolkit",
   "main": "index.js",
   "files": [
