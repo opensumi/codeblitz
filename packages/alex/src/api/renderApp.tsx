@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useRef, useMemo } from 'react';
 import ReactDOM from 'react-dom';
 import { IReporterService, localize, getDebugLogger } from '@ali/ide-core-common';
-import { REPORT_NAME } from '@alipay/alex-core';
+import { REPORT_NAME, RuntimeConfig } from '@alipay/alex-core';
 import { createApp } from './createApp';
 import { Root } from '../core/Root';
 import { RootProps, LandingProps } from '../core/types';
@@ -46,9 +46,11 @@ export const renderApp = (domElement: HTMLElement, props: IAppRendererProps) => 
         domElement
       );
 
-      (app.injector.get(
-        IReporterService
-      ) as IReporterService).point(REPORT_NAME.ALEX_APP_START_ERROR, err?.message, { error: err });
+      (app.injector.get(IReporterService) as IReporterService).point(
+        REPORT_NAME.ALEX_APP_START_ERROR,
+        err?.message,
+        { error: err }
+      );
       getDebugLogger().error(err);
       setTimeout(() => {
         throw err;
@@ -64,6 +66,11 @@ export const AppRenderer: React.FC<IAppRendererProps> = ({ onLoad, Landing, ...o
   const app = useConstant(() => createApp(opts));
   const themeType = useConstant(() => app.currentThemeType);
   const appElementRef = useRef<React.ReactElement | null>(null);
+
+  // 确保回调始终为最新
+  // TODO: 用 PropsService
+  const runtimeConfig: RuntimeConfig = app.injector.get(RuntimeConfig);
+  runtimeConfig.workspace = opts.runtimeConfig.workspace;
 
   const [state, setState] = useState<{
     status: RootProps['status'];
