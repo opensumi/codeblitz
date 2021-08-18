@@ -122,7 +122,26 @@ const App = () => {
     }
   }, [fsType]);
 
-  const workspace = filesystem ? { filesystem } : undefined;
+  const workspace = filesystem
+    ? {
+        filesystem,
+        onDidChangeTextDocument(e) {
+          console.log('>>>onDidChangeTextDocument', e);
+        },
+        onDidSaveTextDocument(e) {
+          console.log('>>>onDidSaveTextDocument', e);
+        },
+        onDidCreateFiles(e) {
+          console.log('>>>onDidCreateFiles', e);
+        },
+        onDidChangeFiles(e) {
+          console.log('>>>onDidChangeFiles', e);
+        },
+        onDidDeleteFiles(e) {
+          console.log('>>>onDidDeleteFiles', e);
+        },
+      }
+    : undefined;
 
   return (
     <div style={{ height: '100%' }}>

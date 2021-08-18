@@ -8,7 +8,7 @@ import {
   PreferenceScope,
   PreferenceProvider,
 } from '@ali/ide-core-browser';
-import { BasicModule } from '@ali/ide-core-common';
+import { BackService, BasicModule } from '@ali/ide-core-common';
 import { WSChannelHandler } from '@ali/ide-connection';
 
 import { FCServiceCenter, ClientPort, initFCService } from '../connection';
@@ -157,29 +157,33 @@ export async function bindConnectionService(injector: Injector, modules: ModuleC
 
   const { getFCService } = initFCService(clientCenter);
 
+  const backServiceList: BackService[] = [];
+
   for (const module of modules) {
     const moduleInstance = injector.get(module) as BasicModule;
-    if (!moduleInstance.backServices) {
-      continue;
+    if (moduleInstance.backServices) {
+      for (const backService of moduleInstance.backServices) {
+        if (isBackServicesInBrowser(backService)) {
+          backServiceList.push(backService);
+        }
+      }
     }
-    for (const backService of moduleInstance.backServices) {
-      if (!isBackServicesInBrowser(backService)) {
-        continue;
-      }
-      const { servicePath } = backService;
-      const fcService = getFCService(servicePath);
+  }
 
-      const injectService = {
-        token: servicePath,
-        useValue: fcService,
-      } as Provider;
+  for (const backService of backServiceList) {
+    const { servicePath } = backService;
+    const fcService = getFCService(servicePath);
 
-      injector.addProviders(injectService);
+    const injectService = {
+      token: servicePath,
+      useValue: fcService,
+    } as Provider;
 
-      if (backService.clientToken) {
-        const clientService = injector.get(backService.clientToken);
-        fcService.onRequestService(clientService);
-      }
+    injector.addProviders(injectService);
+
+    if (backService.clientToken) {
+      const clientService = injector.get(backService.clientToken);
+      fcService.onRequestService(clientService);
     }
   }
 }

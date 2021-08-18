@@ -32,9 +32,38 @@ export interface RuntimeConfig {
   scenario?: string | null;
   /** 工作空间配置 */
   workspace?: {
+    /**
+     * 文件系统配置
+     */
     filesystem: FileSystemConfiguration;
+    /**
+     * 文档保存事件
+     * @param data.filepath 文档相对工作空间路径
+     * @param data.content 文档内容
+     */
     onDidSaveTextDocument?: (data: { filepath: string; content: string }) => void;
+    /**
+     * 文档更改事件
+     * @param data.filepath 文档相对工作空间路径
+     * @param data.content 文档内容
+     */
     onDidChangeTextDocument?: (data: { filepath: string; content: string }) => void;
+    /**
+     * 文件创建事件
+     * @param files 相对工作空间文件路径
+     */
+    onDidCreateFiles?: (files: string[]) => void;
+    /**
+     * 文件删除事件
+     * @param files 相对工作空间文件路径
+     */
+    onDidDeleteFiles?: (files: string[]) => void;
+    /**
+     * 文件变更事件
+     * @param data.filepath 相对工作空间文件路径
+     * @param data.content 文件内容
+     */
+    onDidChangeFiles?: (data: { filepath: string; content: string }[]) => void;
   };
   /** 默认打开的文件，多个文件时，会展示最右边的文件 */
   defaultOpenFile?: string | string[];

@@ -68,7 +68,7 @@ export const CODE_PLATFORM_CONFIG: Record<ICodePlatform, ICodePlatformConfig> = 
   [CodePlatform.gitlab]: {
     platform: CodePlatform.gitlab,
     hostname: ['gitlab.alibaba-inc.com', 'code.aone.alibaba-inc.com'],
-    origin: 'https://code.alipay.com',
+    origin: 'https://gitlab.alibaba-inc.com',
     endpoint: 'https://gitlab.alibaba-inc.com',
     brand: 'GitLab',
     line: {

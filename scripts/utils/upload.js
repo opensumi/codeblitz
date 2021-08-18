@@ -6,8 +6,9 @@ const chalk = require('chalk');
 require('dotenv').config({ path: path.join(__dirname, '../../.env') });
 
 const options = {
-  // 从 cloud-ide 获取 appId 和 masterKey:
+  // 从 cloud-ide 获取 `alex-app` 的 appId 和 masterKey:
   // https://basement.alipay.com/doc/detail/ziarab#da1386cd
+  // https://yuyan.antfin-inc.com/cloud-ide/services/accesskey
   appId: process.env.APP_ID,
   masterKey: process.env.MASTER_KEY,
   urllib,

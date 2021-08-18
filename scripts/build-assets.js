@@ -7,6 +7,7 @@ const fs = require('fs');
 const signale = require('signale');
 const { invoke, exec } = require('./utils/utils');
 const { upload } = require('./utils/upload');
+const pkg = require('../package.json');
 
 invoke(async () => {
   signale.pending(`开始编译 worker-host 和 webview`);
@@ -39,14 +40,22 @@ invoke(async () => {
       key: 'webview/index.html',
       transform: (v) => transformHttps(v.slice(0, v.lastIndexOf('/'))),
     },
+    __WEBVIEW_SCRIPT__: {
+      key: 'webview',
+      transform: transformHttps,
+    },
   };
-  const config = Object.keys(env).reduce((obj, name) => {
-    const { key, transform } = env[name];
-    if (cdnResult[key]) {
-      obj[name] = transform(cdnResult[key]);
-    }
-    return obj;
-  }, {});
+  const config = Object.keys(env).reduce(
+    (obj, name) => {
+      const { key, transform } = env[name];
+      if (cdnResult[key]) {
+        obj[name] = transform(cdnResult[key]);
+      }
+      return obj;
+    },
+    { __KAITIAN_VERSION__: pkg.engines.kaitian }
+  );
+
   fs.writeFileSync(
     path.resolve(__dirname, '../packages/toolkit/define.json'),
     JSON.stringify(config, null, 2)
