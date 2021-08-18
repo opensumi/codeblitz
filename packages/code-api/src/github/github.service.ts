@@ -328,7 +328,8 @@ export class GitHubAPIService implements ICodeAPIService {
           responseType: 'json',
         }
       );
-      return Buffer.from(data.content, data.encoding);
+      // Buffer toJSON 为 { type: 'Buffer', data: [] }，通过 rpc 传输后无法自动恢复，ArrayBufferView 额外处理了，可以恢复
+      return new Uint8Array(Buffer.from(data.content, data.encoding));
     },
 
     getBranches: async (repo: IRepositoryModel): Promise<BranchOrTag[]> => {
