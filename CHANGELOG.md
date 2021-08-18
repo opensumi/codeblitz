@@ -1,3 +1,17 @@
+# [1.6.0](https://code.alipay.com/cloud-ide/crew-dragon/compare/v1.5.2...v1.6.0) (2021-08-18)
+
+
+### Bug Fixes
+
+* 修复 github diff 报错问题 ([9cc4d05](https://code.alipay.com/cloud-ide/crew-dragon/commits/9cc4d05a1510bcdee730be3e22f865c87ada7dbb))
+
+
+### Features
+
+* 增加文件事件回调等 ([19d51c7](https://code.alipay.com/cloud-ide/crew-dragon/commits/19d51c702b3c034de879556a1f2d57139f4c582e))
+
+
+
 ## [1.5.2](https://code.alipay.com/cloud-ide/crew-dragon/compare/v1.5.2-rc.2...v1.5.2) (2021-07-27)
 
 
