@@ -7,7 +7,7 @@ import { IExtensionBasicMetadata } from '@alipay/alex-shared';
 
 export const IconSlim: IExtensionBasicMetadata = {
   extension: {
-    publisher: 'kaitian',
+    publisher: 'alex-ext-public',
     name: 'vsicons-slim',
     version: '1.0.5',
   },
@@ -32,11 +32,12 @@ export const IconSlim: IExtensionBasicMetadata = {
   nlsList: [],
   extendConfig: {},
   webAssets: [],
+  mode: 'public',
 };
 
 export const IDETheme: IExtensionBasicMetadata = {
   extension: {
-    publisher: 'kaitian',
+    publisher: 'alex-ext-public',
     name: 'ide-dark-theme',
     version: '2.4.0',
   },
@@ -67,11 +68,12 @@ export const IDETheme: IExtensionBasicMetadata = {
   nlsList: [],
   extendConfig: {},
   webAssets: [],
+  mode: 'public',
 };
 
 export const GeekTheme: IExtensionBasicMetadata = {
   extension: {
-    publisher: 'cloud-ide',
+    publisher: 'alex-ext-public',
     name: 'alipay-geek-theme',
     version: '1.8.0',
   },
@@ -102,4 +104,5 @@ export const GeekTheme: IExtensionBasicMetadata = {
   nlsList: [],
   extendConfig: {},
   webAssets: [],
+  mode: 'public',
 };

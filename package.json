@@ -93,29 +93,34 @@
       "version": "0.0.9"
     },
     {
-      "publisher": "alex",
+      "publisher": "alex-ext-public",
       "name": "css-language-features-worker",
-      "version": "1.53.0-patch.1"
+      "version": "1.53.0-patch.1",
+      "mode": "public"
     },
     {
-      "publisher": "alex",
+      "publisher": "alex-ext-public",
       "name": "markdown-language-features-worker",
-      "version": "1.53.0-patch.1"
+      "version": "1.53.0-patch.1",
+      "mode": "public"
     },
     {
-      "publisher": "alex",
+      "publisher": "alex-ext-public",
       "name": "html-language-features-worker",
-      "version": "1.53.0-patch.1"
+      "version": "1.53.0-patch.1",
+      "mode": "public"
     },
     {
-      "publisher": "alex",
+      "publisher": "alex-ext-public",
       "name": "json-language-features-worker",
-      "version": "1.53.0-patch.1"
+      "version": "1.53.0-patch.1",
+      "mode": "public"
     },
     {
-      "publisher": "alex",
+      "publisher": "alex-ext-public",
       "name": "typescript-language-features-worker",
-      "version": "1.53.0-patch.2"
+      "version": "1.53.0-patch.3",
+      "mode": "public"
     },
     {
       "publisher": "cloud-ide",
