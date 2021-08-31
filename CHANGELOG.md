@@ -1,3 +1,12 @@
+# [1.7.0](https://code.alipay.com/cloud-ide/crew-dragon/compare/v1.6.0...v1.7.0) (2021-08-31)
+
+
+### Features
+
+* **alex:** 内置扩展使用公网的版本 ([b20704c](https://code.alipay.com/cloud-ide/crew-dragon/commits/b20704cef6cdf19321b2c1ed9cd135b6d33eb869))
+
+
+
 # [1.6.0](https://code.alipay.com/cloud-ide/crew-dragon/compare/v1.5.2...v1.6.0) (2021-08-18)
 
 
