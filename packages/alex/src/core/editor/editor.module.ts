@@ -143,11 +143,11 @@ class ThemeContribution extends Disposable implements ClientAppContribution {
   async initialize() {
     this.themeService.registerThemes(
       IDETheme.packageJSON.contributes!.themes,
-      URI.parse(getExtensionPath(IDETheme.extension))
+      URI.parse(getExtensionPath(IDETheme.extension, 'public'))
     );
     this.themeService.registerThemes(
       GeekTheme.packageJSON.contributes!.themes,
-      URI.parse(getExtensionPath(GeekTheme.extension))
+      URI.parse(getExtensionPath(GeekTheme.extension, 'public'))
     );
     // 强制用集成设置的默认主题
     await this.themeService.applyTheme(this.defaultPreferenceProvider.get('general.theme'));
@@ -225,7 +225,8 @@ class EditorSpecialContribution
     ClientAppContribution,
     CommandContribution,
     KeybindingContribution,
-    MonacoContribution {
+    MonacoContribution
+{
   @Autowired(WorkbenchEditorService)
   editorService: WorkbenchEditorService;
 

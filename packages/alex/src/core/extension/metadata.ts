@@ -75,12 +75,12 @@ export const GeekTheme: IExtensionBasicMetadata = {
   extension: {
     publisher: 'alex-ext-public',
     name: 'alipay-geek-theme',
-    version: '1.8.0',
+    version: '1.8.2',
   },
   packageJSON: {
     publisher: 'cloudide',
     name: '@alipay/geek-theme',
-    version: '1.8.0',
+    version: '1.8.2',
     displayName: 'Geek IDE UI Theme',
     description: 'Geek IDE UI Theme',
     contributes: {
