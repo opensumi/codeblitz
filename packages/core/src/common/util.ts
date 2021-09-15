@@ -79,13 +79,13 @@ export const isBackServicesInBrowser = (backService: BackService) => {
  * ```
  */
 export const extendModule = ({
-  module,
+  module: ParentModule,
   providers,
 }: {
   module: ConstructorOf<BrowserModule>;
   providers: Provider[];
 }): ConstructorOf<BrowserModule> => {
-  return class ConfigBrowserModule extends module {
+  return class ConfigBrowserModule extends ParentModule {
     constructor() {
       super();
       this.providers = (this.providers || []).concat(...providers);
