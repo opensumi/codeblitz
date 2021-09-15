@@ -1,6 +1,6 @@
 {
   "name": "@alipay/alex-shared",
-  "version": "1.7.0",
+  "version": "1.7.1",
   "description": "@alipay/alex-shared",
   "main": "lib/index.js",
   "typing": "lib/index.d.ts",

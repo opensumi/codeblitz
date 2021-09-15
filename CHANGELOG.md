@@ -1,3 +1,12 @@
+## [1.7.1](https://code.alipay.com/cloud-ide/crew-dragon/compare/v1.7.0...v1.7.1) (2021-09-15)
+
+
+### Bug Fixes
+
+* 修复 module block 语法问题 ([da4abae](https://code.alipay.com/cloud-ide/crew-dragon/commits/da4abaeb3e913a6418b85affcacc9a0ea1f916a4))
+
+
+
 # [1.7.0](https://code.alipay.com/cloud-ide/crew-dragon/compare/v1.6.0...v1.7.0) (2021-08-31)
 
 
