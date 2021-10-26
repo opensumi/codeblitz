@@ -14,10 +14,13 @@ html {
   background-color: var(--editor-background);
 
    // 全局设置滚动条样式
+   // scrollbar 重置为应用的值，react-custom-scrollbars 用的 body 滚动条宽度，mac 上为 15px，windows 上为 17px
+   // 这里如果设置为 kaitian 的 10px，会导致无法滚到到顶部，有 5~7px 的偏差
+   // issue 见 https://baiyan.alipay.com/task/122717?bqlKey=fc2b39b
    ::-webkit-scrollbar {
     background: transparent;
-    height: var(--kt-scrollbar-width);
-    width: var(--kt-scrollbar-width);
+    height: inherit;
+    width: inherit;
   }
 
   ::-webkit-scrollbar:hover {
