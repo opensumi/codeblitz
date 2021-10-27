@@ -2,6 +2,68 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [1.13.2](https://code.alipay.com/cloud-ide/acr-ide/compare/v1.13.1...v1.13.2) (2021-10-25)
+
+
+### Bug Fixes
+
+* css-loader getLocalIdent return value ([d1413b9](https://code.alipay.com/cloud-ide/acr-ide/commit/d1413b93af2026a8e03534cf92e15c3428c9050d))
+
+### [1.13.1](https://code.alipay.com/cloud-ide/acr-ide/compare/v1.13.0...v1.13.1) (2021-10-08)
+
+
+### Bug Fixes
+
+* getLocalIdent level in webpack config for umi3 ([bfe2f62](https://code.alipay.com/cloud-ide/acr-ide/commit/bfe2f62e9e1dfa6899f6addd6ded9fc190a2c49e))
+
+## [1.13.0](https://code.alipay.com/cloud-ide/acr-ide/compare/v1.12.1...v1.13.0) (2021-06-30)
+
+
+### Features
+
+* 增加非代码的 diff 组件视图 ([a6d2a8b](https://code.alipay.com/cloud-ide/acr-ide/commit/a6d2a8bb3eac1cb4eac52ff145af154917a6f35c))
+
+
+### Bug Fixes
+
+* 修复 tree 无法滚动到底部的问题 ([1091907](https://code.alipay.com/cloud-ide/acr-ide/commit/109190726085e9ab098b3909b4036f3739203b88))
+
+### [1.12.1](https://code.alipay.com/cloud-ide/acr-ide/compare/v1.11.1...v1.12.1) (2021-06-24)
+
+
+### Bug Fixes
+
+* handle acc error ([422642b](https://code.alipay.com/cloud-ide/acr-ide/commit/422642b0edcca59c9f9a2b571112e8c93fac4d42))
+
+### [1.11.1](https://code.alipay.com/cloud-ide/acr-ide/compare/v1.11.0...v1.11.1) (2021-05-26)
+
+## [1.11.0](https://code.alipay.com/cloud-ide/acr-ide/compare/v1.9.4...v1.11.0) (2021-05-26)
+
+
+### Features
+
+* add hash name file ([7767930](https://code.alipay.com/cloud-ide/acr-ide/commit/7767930227745bc1d99de7724737e9655a4af3a0))
+* support umi3 chain webpack config ([5d575bb](https://code.alipay.com/cloud-ide/acr-ide/commit/5d575bb882701281fb6973b1ea900dd4260cbe90))
+
+
+### Bug Fixes
+
+* set loose option for @babel/plugin-proposal-private-methods ([22a2b0c](https://code.alipay.com/cloud-ide/acr-ide/commit/22a2b0c7a15d85278e0002d5e269aa47d6b1ee3e))
+
+### [1.10.1](https://code.alipay.com/cloud-ide/acr-ide/compare/v1.10.0...v1.10.1) (2021-05-10)
+
+
+### Bug Fixes
+
+* set loose option for @babel/plugin-proposal-private-methods ([22a2b0c](https://code.alipay.com/cloud-ide/acr-ide/commit/22a2b0c7a15d85278e0002d5e269aa47d6b1ee3e))
+
+## [1.10.0](https://code.alipay.com/cloud-ide/acr-ide/compare/v1.9.4...v1.10.0) (2021-05-10)
+
+
+### Features
+
+* support umi3 chain webpack config ([5d575bb](https://code.alipay.com/cloud-ide/acr-ide/commit/5d575bb882701281fb6973b1ea900dd4260cbe90))
+
 ### [1.9.4](https://code.alipay.com/cloud-ide/acr-ide/compare/v1.9.3...v1.9.4) (2021-02-19)
 
 
