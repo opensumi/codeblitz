@@ -18,20 +18,16 @@ module.exports = (config) => {
   console.log('Modifying umi3 css-loader config for css-module in ide-framework');
 
   rule.use('css-loader').tap((options) => {
-    // https://github.com/webpack-contrib/css-loader#getlocalident
     return deepmerge(options, {
-      modules: {
-        ...(options.modules || {}),
-        getLocalIdent: (loaderContext, localIdentName, localName, options) => {
-          const resourcePath = String(loaderContext.resourcePath);
-          if (
-            (resourcePath.includes(pkg.name) || resourcePath.includes('@ali/ide')) &&
-            resourcePath.endsWith('.module.less')
-          ) {
-            return getLocalIdent(loaderContext, localIdentName, localName, options);
-          }
-          return null;
-        },
+      getLocalIdent: (loaderContext, localIdentName, localName, options) => {
+        const resourcePath = String(loaderContext.resourcePath);
+        if (
+          (resourcePath.includes(pkg.name) || resourcePath.includes('@ali/ide')) &&
+          resourcePath.endsWith('.module.less')
+        ) {
+          return getLocalIdent(loaderContext, localIdentName, localName, options);
+        }
+        return localName;
       },
     });
   });

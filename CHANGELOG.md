@@ -1,9 +1,3 @@
-## [1.7.2](https://code.alipay.com/cloud-ide/crew-dragon/compare/v1.7.1...v1.7.2) (2021-10-25)
-### Features
-* acr依赖同步更新([0ab8e5f](https://code.alipay.com/cloud-ide/crew-dragon/commits/0ab8e5f423e3227cbb8c26f1c208b453900fec13))
-### Bug Fixes
-* 修复引入 umi3 版本的配置时，按 v2 版本写会导致项目其他的 css 不生成带 hash 的 classname([5b12bb](https://code.alipay.com/cloud-ide/crew-dragon/commits/5b12bbb4f12e80c877c33ae9d7341564b7c003da))
-
 ## [1.7.1](https://code.alipay.com/cloud-ide/crew-dragon/compare/v1.7.0...v1.7.1) (2021-09-15)
 
 

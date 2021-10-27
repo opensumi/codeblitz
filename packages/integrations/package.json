@@ -1,6 +1,6 @@
 {
   "name": "@alipay/alex-integrations",
-  "version": "1.7.2",
+  "version": "1.7.1",
   "description": "@alipay/alex-integrations",
   "main": "lib/index.js",
   "typing": "types/index.d.ts",
@@ -15,15 +15,15 @@
     "registry": "https://registry.npm.alibaba-inc.com"
   },
   "dependencies": {
-    "@alipay/alex": "1.7.2",
-    "@alipay/alex-acr": "1.7.2",
-    "@alipay/alex-cli": "1.7.2",
-    "@alipay/alex-code-api": "1.7.2",
-    "@alipay/alex-code-service": "1.7.2",
-    "@alipay/alex-core": "1.7.2",
-    "@alipay/alex-i18n": "1.7.2",
-    "@alipay/alex-lsif-service": "1.7.2",
-    "@alipay/alex-shared": "1.7.2",
+    "@alipay/alex": "1.7.1",
+    "@alipay/alex-acr": "1.7.1",
+    "@alipay/alex-cli": "1.7.1",
+    "@alipay/alex-code-api": "1.7.1",
+    "@alipay/alex-code-service": "1.7.1",
+    "@alipay/alex-core": "1.7.1",
+    "@alipay/alex-i18n": "1.7.1",
+    "@alipay/alex-lsif-service": "1.7.1",
+    "@alipay/alex-shared": "1.7.1",
     "@ant-design/icons": "~2.1.1",
     "antd": "^3.20.3",
     "tslib": "^2.2.0"
