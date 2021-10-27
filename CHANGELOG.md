@@ -1,3 +1,12 @@
+## [1.7.2](https://code.alipay.com/cloud-ide/crew-dragon/compare/v1.7.1...v1.7.2) (2021-10-27)
+
+
+### Reverts
+
+* Revert "PullRequest: 66 chore: 更新acr" ([b99cfbb](https://code.alipay.com/cloud-ide/crew-dragon/commits/b99cfbbe72d8ead97f3901923cd6982537d9b082))
+
+
+
 ## [1.7.1](https://code.alipay.com/cloud-ide/crew-dragon/compare/v1.7.0...v1.7.1) (2021-09-15)
 
 
