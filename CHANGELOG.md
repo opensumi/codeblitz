@@ -1,3 +1,12 @@
+# [1.8.0](https://code.alipay.com/cloud-ide/crew-dragon/compare/v1.7.2...v1.8.0) (2021-11-22)
+
+
+### Features
+
+* webview 增加内部 url，code-api 支持预设 token ([c174447](https://code.alipay.com/cloud-ide/crew-dragon/commits/c1744474ceabb9c958dacf909a3c9ef82d72d133))
+
+
+
 ## [1.7.2](https://code.alipay.com/cloud-ide/crew-dragon/compare/v1.7.1...v1.7.2) (2021-10-27)
 
 
