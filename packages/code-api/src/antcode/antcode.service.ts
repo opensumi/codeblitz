@@ -49,8 +49,18 @@ export class AntCodeAPIService implements ICodeAPIService {
 
   private config = CODE_PLATFORM_CONFIG[CodePlatform.antcode];
 
+  private _PRIVATE_TOKEN: string | null;
+
+  get PRIVATE_TOKEN() {
+    return this._PRIVATE_TOKEN;
+  }
+
   // 只保留上一次的缓存，用于匹配过滤
   private readonly searchContentLRU = new LRUCache<string, ISearchResults>(1);
+
+  constructor() {
+    this._PRIVATE_TOKEN = this.config.token || null;
+  }
 
   available() {
     return Promise.resolve(true);
@@ -60,14 +70,24 @@ export class AntCodeAPIService implements ICodeAPIService {
     return `${this.config.origin}/${repo.owner}/${repo.name}/raw/${repo.commit}/${path}`;
   }
 
-  private async request<T>(path: string, options?: RequestOptions): Promise<T> {
+  protected async request<T>(path: string, options?: RequestOptions): Promise<T> {
     const { platform, origin, endpoint } = this.config;
+    const privateToken = this.PRIVATE_TOKEN;
+
     try {
       const data = await request(path, {
         baseURL: endpoint,
         credentials: 'include',
         responseType: 'json',
-        ...options,
+        ...(privateToken
+          ? {
+              ...options,
+              headers: {
+                'PRIVATE-TOKEN': privateToken,
+                ...options?.headers,
+              },
+            }
+          : options),
       });
       return data;
     } catch (err: unknown) {

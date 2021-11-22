@@ -15,7 +15,7 @@ const options = {
   endpoint: 'https://basement-gzone.alipay.com',
 };
 
-exports.uploadFile = async (filepath, filename) => {
+exports.uploadFile = async (filepath, filename, mode = 'public') => {
   if (!options.appId || !options.masterKey) {
     throw new Error(chalk.red('请配置文件服务 Access Key'));
   }
@@ -25,7 +25,7 @@ exports.uploadFile = async (filepath, filename) => {
     filename = path.basename(filepath);
   }
   const res = await basement.file.upload(filename, filepath, {
-    mode: 'public',
+    mode,
     keepPath: true,
   });
   console.log('>>>>>>>>>> PUBLIC >>>>>>>>>>');
@@ -37,8 +37,8 @@ exports.uploadFile = async (filepath, filename) => {
 exports.upload = async (manifest) => {
   const result = {};
   for (const key of Object.keys(manifest)) {
-    const { filepath, filename } = manifest[key];
-    const res = await this.uploadFile(filepath, filename);
+    const { filepath, filename, mode } = manifest[key];
+    const res = await this.uploadFile(filepath, filename, mode);
     result[key] = res.url;
   }
   return result;

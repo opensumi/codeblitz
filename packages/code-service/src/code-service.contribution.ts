@@ -43,7 +43,8 @@ export class CodeContribution
     LaunchContribution,
     BrowserEditorContribution,
     CommandContribution,
-    MainLayoutContribution {
+    MainLayoutContribution
+{
   @Autowired()
   codeModel: CodeModelService;
 
@@ -181,7 +182,7 @@ export class CodeContribution
         rootFS.umount(CODE_ROOT);
         rootFS.umount(IDB_ROOT);
       };
-    } catch (err) {
+    } catch (err: any) {
       getDebugLogger().error(`[mount filesystem error]: ${err?.message || ''}`, err);
     } finally {
       this._mounting = false;

@@ -14,7 +14,7 @@ async function pathExists(filepath: string) {
   try {
     await fs.promises.stat(filepath);
     return true;
-  } catch (err) {
+  } catch (err: any) {
     if (err.code === 'ENOENT' || err.code === 'ENOTDIR') {
       return false;
     } else {

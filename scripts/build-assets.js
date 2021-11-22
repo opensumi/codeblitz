@@ -9,6 +9,13 @@ const { invoke, exec } = require('./utils/utils');
 const { upload } = require('./utils/upload');
 const pkg = require('../package.json');
 
+const assetsKeyMap = {
+  __WORKER_HOST__: 'worker-host',
+  __WEBVIEW_ENDPOINT__: 'webview/index.html',
+  __WEBVIEW_ENDPOINT_INTERNAL__: 'internal/webview/index.html',
+  __WEBVIEW_SCRIPT__: 'webview',
+};
+
 invoke(async () => {
   signale.pending(`开始编译 worker-host 和 webview`);
 
@@ -26,6 +33,10 @@ invoke(async () => {
     };
     return obj;
   }, {});
+  fileJSON[assetsKeyMap.__WEBVIEW_ENDPOINT_INTERNAL__] = {
+    ...fileJSON[assetsKeyMap.__WEBVIEW_ENDPOINT__],
+    mode: 'internal',
+  };
   const cdnResult = await upload(fileJSON);
 
   signale.info('上传成功，生成 define.json');
@@ -33,15 +44,19 @@ invoke(async () => {
   const transformHttps = (str) => str.replace(/^http:/, 'https:');
   const env = {
     __WORKER_HOST__: {
-      key: 'worker-host',
+      key: assetsKeyMap.__WORKER_HOST__,
       transform: transformHttps,
     },
     __WEBVIEW_ENDPOINT__: {
-      key: 'webview/index.html',
+      key: assetsKeyMap.__WEBVIEW_ENDPOINT__,
       transform: (v) => transformHttps(v.slice(0, v.lastIndexOf('/'))),
     },
+    __WEBVIEW_ENDPOINT_INTERNAL__: {
+      key: assetsKeyMap.__WEBVIEW_ENDPOINT_INTERNAL__,
+      transform: (v) => v.slice(0, v.lastIndexOf('/')),
+    },
     __WEBVIEW_SCRIPT__: {
-      key: 'webview',
+      key: assetsKeyMap.__WEBVIEW_SCRIPT__,
       transform: transformHttps,
     },
   };

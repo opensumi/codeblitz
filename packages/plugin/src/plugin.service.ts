@@ -36,7 +36,7 @@ export class PluginService {
     this.plugins.forEach((plugin) => {
       try {
         plugin.deactivate?.();
-      } catch (err) {
+      } catch (err: any) {
         console.error(`
           [Alex Plugin]: deactivate plugin module error ${err.message} \n\n
           Stack: ${err.stack && err.stack}

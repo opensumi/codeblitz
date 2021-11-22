@@ -50,6 +50,8 @@ export type ICodeServiceConfig = {
     origin?: string;
     /** 用于接口请求，不设置为 origin */
     endpoint?: string;
+    /** api 请求 token，上层可预设 token */
+    token?: string;
   };
 };
 

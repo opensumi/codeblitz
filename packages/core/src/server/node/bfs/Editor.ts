@@ -26,7 +26,7 @@ import {
 function tryToString(buff: Buffer, encoding: string, cb: BFSCallback<string>) {
   try {
     cb(null, buff.toString(encoding as BufferEncoding));
-  } catch (e) {
+  } catch (e: any) {
     cb(e);
   }
 }
@@ -209,7 +209,7 @@ export class Editor extends BaseFileSystem implements FileSystem {
       } else {
         cb(ApiError.ENOTDIR(path));
       }
-    } catch (e) {
+    } catch (e: any) {
       cb(e);
     }
   }

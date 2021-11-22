@@ -57,7 +57,7 @@ export async function request(
   let response: any;
   try {
     response = await fetch(url + query, options);
-  } catch (e) {
+  } catch (e: any) {
     throw createApiError(e.message);
   }
 
@@ -84,7 +84,7 @@ async function checkStatus(response: any, charsetName?: string) {
   if (contentType?.includes('application/json')) {
     try {
       data = await response.json();
-    } catch (e) {
+    } catch (e: any) {
       throw createApiError(e.message, response);
     }
   } else {

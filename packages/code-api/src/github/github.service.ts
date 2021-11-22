@@ -63,7 +63,7 @@ export class GitHubAPIService implements ICodeAPIService {
   }
 
   constructor() {
-    this._OAUTH_TOKEN = this.helper.GITHUB_TOKEN;
+    this._OAUTH_TOKEN = this.config.token || this.helper.GITHUB_TOKEN;
   }
 
   async available() {
@@ -115,7 +115,7 @@ export class GitHubAPIService implements ICodeAPIService {
     }
   }
 
-  private async request(path: string, options?: RequestOptions): Promise<Response> {
+  protected async request(path: string, options?: RequestOptions): Promise<Response> {
     const { responseType, headers, ...rest } = options || {};
 
     const token = this.OAUTH_TOKEN;
@@ -173,7 +173,7 @@ export class GitHubAPIService implements ICodeAPIService {
         throw Error(`Graphql Error\n${data.errors.map((item) => item.message).join('\n')}`);
       }
       return data.data;
-    } catch (err) {
+    } catch (err: any) {
       this.showErrorRequestMessage(err?.response?.status, false);
       throw err;
     }

@@ -16,7 +16,8 @@ import {
 @Injectable()
 export class LanguageGrammarRegistrationService
   extends Disposable
-  implements ILanguageGrammarRegistrationService {
+  implements ILanguageGrammarRegistrationService
+{
   @Autowired(TextmateService)
   private readonly textMateService: TextmateService;
 
@@ -38,7 +39,7 @@ export class LanguageGrammarRegistrationService
     let extnameList: string[] = [];
     try {
       extnameList.push(...(await this.antcodeService.getLanguages()));
-    } catch (err) {
+    } catch (err: any) {
       this.logger.warn('getLanguages failed:' + err.toString());
     }
     if (!extnameList.length) {

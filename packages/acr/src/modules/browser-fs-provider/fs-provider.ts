@@ -345,7 +345,7 @@ export class BrowserFsProvider implements IDiskFileProvider {
       const fileStat = await this.doCreateFileStat(uri, lstat);
 
       return fileStat;
-    } catch (error) {
+    } catch (error: any) {
       if (
         error.code === 'ENOENT' ||
         error.code === 'EACCES' ||

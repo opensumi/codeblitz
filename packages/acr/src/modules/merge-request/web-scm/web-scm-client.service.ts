@@ -292,7 +292,7 @@ export class BrowserSCMClient extends Disposable {
           );
         }
       }
-    } catch (err) {
+    } catch (err: any) {
       reportWebSCMPush(
         this.antcodeService.projectPath,
         this.antcodeService.pullRequest?.iid,
