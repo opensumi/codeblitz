@@ -61,7 +61,7 @@ export class FileSchemeDocClientService implements IFileSchemeDocClient {
           errorMessage: 'useByContent',
         };
       }
-    } catch (e) {
+    } catch (e: any) {
       return {
         state: 'error',
         errorMessage: e.toString(),
@@ -99,7 +99,7 @@ export class FileSchemeDocClientService implements IFileSchemeDocClient {
           state: 'success',
         };
       }
-    } catch (e) {
+    } catch (e: any) {
       return {
         state: 'error',
         errorMessage: e.toString(),

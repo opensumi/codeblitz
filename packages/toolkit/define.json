@@ -1,4 +1,7 @@
 {
-  "__WORKER_HOST__": "https://gw.alipayobjects.com/os/alex-app/worker-host.02168076.js",
-  "__WEBVIEW_ENDPOINT__": "https://gw.alipayobjects.com/os/alex-app/webview.a8f22e50"
+  "__KAITIAN_VERSION__": "2.5.5",
+  "__WORKER_HOST__": "https://gw.alipayobjects.com/os/alex-app/worker-host.1d375ab6.js",
+  "__WEBVIEW_ENDPOINT__": "https://gw.alipayobjects.com/os/alex-app/webview.a8f22e50",
+  "__WEBVIEW_ENDPOINT_INTERNAL__": "http://alipay-rmsdeploy-image.cn-hangzhou.alipay.aliyun-inc.com/alex-app/webview.a8f22e50",
+  "__WEBVIEW_SCRIPT__": "https://gw.alipayobjects.com/os/alex-app/webview.e7d05ac4.js"
 }

@@ -10,6 +10,7 @@ const { invoke, exec } = require('./utils/utils');
 const args = require('minimist')(process.argv.slice(2));
 const { SEMVER_INC, getNewVersion, isValidVersion, isVersionGreat } = require('./utils/version');
 const currentVersion = require('../package.json').version;
+const kaitianVersion = require('../package.json').engines.kaitian;
 const signale = require('signale');
 const depsFileds = require('./deps-fileds');
 
@@ -25,6 +26,18 @@ const step = (message) => {
 };
 
 invoke(async () => {
+  step('前置校验');
+  const assetsDefine = await fse.readJson(
+    path.resolve(__dirname, '../packages/toolkit/define.json')
+  );
+  if (assetsDefine.__KAITIAN_VERSION__ !== kaitianVersion) {
+    signale.error(
+      `请先运行 node scripts/build-assets 构建发布 kaitian: ${kaitianVersion} 对应资源`
+    );
+    return;
+  }
+  console.log('(PASS)');
+
   step('确定发布版本');
   let { targetVersion } = await prompt({
     type: 'list',
@@ -72,21 +85,6 @@ invoke(async () => {
 
   if (!yes) {
     return;
-  }
-
-  step('运行测试...'); // --no-test 跳过
-  if (args.test !== false) {
-    await exec('npx jest --clearCache');
-    await exec('yarn test');
-  } else {
-    console.log('(SKIP)');
-  }
-
-  step('构建发布 worker-host 和 webview 资源'); // --no-assets 跳过
-  if (args.assets !== false) {
-    await exec('node scripts/build-assets');
-  } else {
-    console.log('(SKIP)');
   }
 
   step('更新全部 packages 依赖');

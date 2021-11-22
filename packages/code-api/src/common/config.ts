@@ -6,6 +6,7 @@ export interface ICodePlatformConfig {
   hostname: string[];
   endpoint: string;
   brand: string;
+  token?: string;
   // hash line
   line: {
     parse(hash: string): [number, number] | null;
@@ -93,9 +94,10 @@ export const CODE_PLATFORM_CONFIG: Record<ICodePlatform, ICodePlatformConfig> = 
 export const extendPlatformConfig = (
   platform: ICodePlatform,
   data: {
-    hostname: string[];
-    origin: string;
-    endpoint: string;
+    hostname?: string[];
+    origin?: string;
+    endpoint?: string;
+    token?: string;
   }
 ) => {
   const config = CODE_PLATFORM_CONFIG[platform];
@@ -110,5 +112,8 @@ export const extendPlatformConfig = (
   }
   if (data.endpoint) {
     config.endpoint = data.endpoint;
+  }
+  if (data.token) {
+    config.token = data.token;
   }
 };

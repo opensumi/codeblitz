@@ -53,7 +53,7 @@ export class FileSchemeDocNodeServiceImpl implements IFileSchemeDocNodeService {
         state: 'error',
         errorMessage: 'useByContent',
       };
-    } catch (e) {
+    } catch (e: any) {
       return {
         state: 'error',
         errorMessage: e.toString(),
@@ -87,7 +87,7 @@ export class FileSchemeDocNodeServiceImpl implements IFileSchemeDocNodeService {
       return {
         state: 'success',
       };
-    } catch (e) {
+    } catch (e: any) {
       return {
         state: 'error',
         errorMessage: e.toString(),

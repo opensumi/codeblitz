@@ -216,7 +216,7 @@ export class ContentSearchService implements IContentSearchServer {
 
       collector!.flush();
       this.searchEnd(searchInfo.searchId);
-    } catch (err) {
+    } catch (err: any) {
       this.logger.error(err);
       this.searchError(searchInfo.searchId, `search error ${err?.message || ''}`);
     }

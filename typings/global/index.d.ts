@@ -17,6 +17,7 @@ declare module 'process' {
 declare var __DEV__: string;
 declare var __WORKER_HOST__: string;
 declare var __WEBVIEW_ENDPOINT__: string;
+declare var __WEBVIEW_ENDPOINT_INTERNAL__: string;
 declare var __VERSION__: string;
 
 type Optional<T, K extends keyof T> = Omit<T, K> & Partial<T>;

@@ -1,4 +1,4 @@
-# ALEX (ali light editor extension)
+# ALEX (ant light editor extension)
 > Ant Codespaces 极速版，无容器环境
 
 
@@ -13,10 +13,11 @@
 ### 启动项目
 ```bash
 1. yarn
-2. npm run init
-3. npm start
+2. yarn run init
+3. yarn start
 ```
 终端打开输出的地址，默认端口 9009，如被占用，会从 9009 查找可用端口
+
 
 ## 项目研发
 ### 安装依赖
@@ -27,21 +28,26 @@
 1. 在 packages 新建文件夹，然后运行 node scripts/bootstrap 会自动为所有无 package.json 的项目初始化
 2. 通过命令 npm run create <package> 新建项目
 
-### 构建打包
+### 开发
+#### 升级 kaitian
+因为 kaitian 版本升级可能会引起 break change，因为手动升级，运行 `node scripts/upgrade-kaitian.js` 会自动拉去最新版本 kaitian，可以通过 `-v` 指定版本
+#### 构建 worker-host 和 webview 资源
+每个 kaitian 版本 worker-host 和 webview 可能会变更，需手动构建资源并发布到 cdn，cdn 地址由 git 管理并随 npm 包一起发布，每次发布前会检查当前 kaitian 版本资源是否已发布
+
+需要在 .env 配置 ak，从 https://yuyan.antfin-inc.com/cloud-ide/services/accesskey 获取 alex-app 的 ak
+#### 构建
 ```bash
 # 构建所有 packages
+# --scope 指定包
+# --watch 监听模式
 npm run build
-# 单独构建 package
-npm run build -- --scope <package>
-# 单独构建并监听
-npm run build -- --scope <package> --watch
-# 构建 worker 和 webview 资源并发布 cdn
-# 需要在 .env 配置 ak，从 https://yuyan.antfin-inc.com/cloud-ide/services/accesskey 获取 alex-app 的 ak
-node scripts/build-assets
 # bundle 成 umd 文件
 node scripts/bundle
-# 发布，此步骤会自动构建打包，运行测试等，可通过 --no 跳过一些步骤
-# --no-test 跳过测试
-# --no-assets 跳过 worker 和 webview 资源构建，在 kaitian 未升级的情况下跳过
+```
+
+### 发布版本
+```bash
+# 交互式选择版本发布，并更改 package.json 和 git push
+# 请确保有 tnpm 发包权限和仓库 master 权限
 node scripts/release
 ```

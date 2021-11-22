@@ -60,7 +60,7 @@ export class GitLabAPIService implements ICodeAPIService {
   }
 
   constructor() {
-    this._PRIVATE_TOKEN = this.helper.GITLAB_TOKEN;
+    this._PRIVATE_TOKEN = this.config.token || this.helper.GITLAB_TOKEN;
   }
 
   async available() {
@@ -130,7 +130,7 @@ export class GitLabAPIService implements ICodeAPIService {
     this.helper.GITLAB_TOKEN = null;
   }
 
-  private async request<T>(path: string, options?: RequestOptions): Promise<T> {
+  protected async request<T>(path: string, options?: RequestOptions): Promise<T> {
     try {
       const { headers, ...rest } = options || {};
       const privateToken = this.PRIVATE_TOKEN;
