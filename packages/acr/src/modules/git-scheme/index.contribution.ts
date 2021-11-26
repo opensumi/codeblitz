@@ -1,4 +1,4 @@
-import { Autowired, Injectable } from '@ali/common-di';
+import { Autowired } from '@ali/common-di';
 import { Domain } from '@ali/ide-core-common';
 import { LRUMap, URI } from '@ali/ide-core-browser';
 import { getLanguageIdFromMonaco } from '@ali/ide-core-browser/lib/services';
@@ -9,12 +9,11 @@ import {
   BrowserEditorContribution,
   ResourceService,
 } from '@ali/ide-editor/lib/browser';
-
 import { GitDocContentProvider } from './doc-content-provider/git';
 import { GitResourceProvider } from './resource-provider/git';
-import { BrowserFsProvider } from '../browser-fs-provider/fs-provider';
 import { IAntcodeService } from '../antcode-service/base';
 import { DiffView } from './diff.view';
+import { DiskFileSystemProvider } from '@alipay/alex-core/lib/server/file-service/disk-file-system.provider';
 
 // kaitian 中这里组件只用在 file 上，这里相当于用同名 id，来渲染对应组件
 // TODO: kaitian 导出组件 id
@@ -134,7 +133,7 @@ export class GitSchemeContribution implements BrowserEditorContribution {
     ext = ext.startsWith('.') ? ext.slice(1) : ext;
     if (['png', 'gif', 'jpg', 'jpeg', 'svg'].indexOf(ext) > -1) {
       type = 'image';
-    } else if (BrowserFsProvider.binaryExtList.indexOf(ext) > -1) {
+    } else if (DiskFileSystemProvider.BinaryExtList.indexOf(ext) > -1) {
       type = 'binary';
     }
     return type;

@@ -5,8 +5,6 @@ import { CommonServerPath } from '@ali/ide-core-common';
 import { CommonCommandsContribution } from '../common-commands/index.contribution';
 import { KtExtFsProviderContribution } from '../kt-ext-provider/index.contribution';
 import { LanguageServiceContribution } from '../language-service/index.contribution';
-import { TextmateLanguageGrammarContribution } from '../textmate-language-grammar/index.contribution';
-
 import { BrowserCommonServer } from '../../overrides/browser-common-server';
 
 // override
@@ -23,6 +21,5 @@ export class WebLiteModule extends BrowserModule {
     GitSchemeContribution,
     KtExtFsProviderContribution,
     LanguageServiceContribution,
-    TextmateLanguageGrammarContribution,
   ];
 }

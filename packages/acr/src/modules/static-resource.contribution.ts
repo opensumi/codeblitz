@@ -1,46 +1,45 @@
-import { Autowired } from '@ali/common-di';
+import { Autowired, Injectable } from '@ali/common-di';
+import { Domain, URI, AppConfig, MaybePromise } from '@ali/ide-core-browser';
 import {
-  Domain,
-  ResourceResolverContribution,
-  URI,
-  FsProviderContribution,
-  AppConfig,
-} from '@ali/ide-core-browser';
-import { FileResource } from '@ali/ide-file-service/lib/browser/file-service-contribution';
-import { IFileServiceClient } from '@ali/ide-file-service';
-import { FileServiceClient } from '@ali/ide-file-service/lib/browser/file-service-client';
-import {
-  StaticResourceContribution,
+  StaticResourceContribution as CoreStaticResourceContribution,
   StaticResourceService,
 } from '@ali/ide-static-resource/lib/browser/static.definition';
 import { IWorkspaceService } from '@ali/ide-workspace';
 import * as paths from '@ali/ide-core-common/lib/path';
-
-import { BrowserFsProvider } from './fs-provider';
-import { BrowserEditorContribution, ResourceService } from '@ali/ide-editor/lib/browser';
-import { ExtendedFileSystemResourceProvider } from './fs-resource-provider';
-import { fromSCMUri } from '../../utils/scm-uri';
-import { IAntcodeService } from '../antcode-service/base';
-import { BROWSER_FS_HOME_DIR } from '../../common/file-system';
+import { BrowserEditorContribution, ResourceService, IResource } from '@ali/ide-editor/lib/browser';
+import { fromSCMUri } from '../utils/scm-uri';
+import { FileSystemResourceProvider } from '@ali/ide-editor/lib/browser/fs-resource/fs-resource';
 
 const EXPRESS_SERVER_PATH = window.location.href;
 
-// file 文件资源 远程读取
-@Domain(
-  ResourceResolverContribution,
-  StaticResourceContribution,
-  BrowserEditorContribution,
-  FsProviderContribution
-)
-export class FileProviderContribution
-  implements
-    ResourceResolverContribution,
-    StaticResourceContribution,
-    BrowserEditorContribution,
-    FsProviderContribution {
-  @Autowired(IFileServiceClient)
-  private readonly fileSystem: FileServiceClient;
+@Injectable()
+class ExtendedFileSystemResourceProvider extends FileSystemResourceProvider {
+  constructor() {
+    super();
+  }
 
+  handlesUri(uri: URI) {
+    const weight = super.handlesUri(uri);
+    if (weight === 10) {
+      return 100 as any;
+    }
+    return weight;
+  }
+
+  provideResource(uri: URI): MaybePromise<IResource<any>> {
+    // 为了让 file 协议文件不要默认打开
+    return (super.provideResource(uri) as Promise<IResource<any>>).then((n) => ({
+      ...n,
+      supportsRevive: false,
+    }));
+  }
+}
+
+// file 文件资源 远程读取
+@Domain(CoreStaticResourceContribution)
+export class StaticResourceContribution
+  implements StaticResourceContribution, BrowserEditorContribution
+{
   @Autowired()
   private readonly fileSystemResourceProvider: ExtendedFileSystemResourceProvider;
 
@@ -49,23 +48,6 @@ export class FileProviderContribution
 
   @Autowired(IWorkspaceService)
   private readonly workspaceService: IWorkspaceService;
-
-  @Autowired(IAntcodeService)
-  private readonly antcodeService: IAntcodeService;
-
-  async resolve(uri: URI): Promise<FileResource | void> {
-    if (uri.scheme !== 'file') {
-      return;
-    }
-    const resource = new FileResource(uri, this.fileSystem);
-    await resource.init();
-    return resource;
-  }
-
-  registerProvider(registry: IFileServiceClient) {
-    // 处理 file 协议的文件部分
-    registry.registerProvider('file', new BrowserFsProvider({}));
-  }
 
   // FIXME: 获取图片等文件
   registerStaticResolver(service: StaticResourceService): void {
@@ -88,7 +70,7 @@ export class FileProviderContribution
         let relativePathStr = relativePath.toString();
         const [ref] = paths.Path.splitPath(
           // @ts-ignore
-          BROWSER_FS_HOME_DIR.relative(rootUri).toString()
+          rootUri.toString()
         ).reverse();
         // trim leading whitespace
         if (relativePathStr.startsWith(paths.Path.separator)) {

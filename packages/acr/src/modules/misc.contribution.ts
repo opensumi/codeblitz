@@ -31,7 +31,6 @@ import { IMenuRegistry, MenuId, MenuContribution } from '@ali/ide-core-browser/l
 import { fromDiffUri, fromGitUri } from './merge-request/changes-tree/util';
 import { antCodePreferenceSchema } from './preferences';
 import { WorkspaceManagerService } from './workspace/workspace-loader.service';
-import { ILanguageGrammarRegistrationService } from './textmate-language-grammar/base';
 import { IAntcodeService } from './antcode-service/base';
 import { reportDiffEditorInlineMode } from '../utils/monitor';
 import { ACR_IS_HIGHLIGHT, ACR_IS_FULLSCREEN } from '../constant';
@@ -63,7 +62,8 @@ export class MiscContribution
     MenuContribution,
     ClientAppContribution,
     PreferenceContribution,
-    KeybindingContribution {
+    KeybindingContribution
+{
   schema = antCodePreferenceSchema;
 
   @Autowired(IEditorDocumentModelService)
@@ -80,9 +80,6 @@ export class MiscContribution
 
   @Autowired()
   private readonly workspaceLoaderService: WorkspaceManagerService;
-
-  @Autowired(ILanguageGrammarRegistrationService)
-  private readonly languageGrammarService: ILanguageGrammarRegistrationService;
 
   @Autowired(IAntcodeService)
   private readonly antcodeService: IAntcodeService;
@@ -125,13 +122,6 @@ export class MiscContribution
 
     this.workspaceLoaderService.init();
 
-    this.registerLangByFilename();
-    this.addDispose(
-      this.antcodeService.onDidDiffsChange(() => {
-        this.registerLangByFilename();
-      })
-    );
-
     /**
      * 由于 zone-widget 跟 renderSideBySide#false(inline 模式) 存在渲染冲突
      * 目前将历史的 `diffEditor.renderSideBySide` 修正掉
@@ -154,15 +144,6 @@ export class MiscContribution
         prId: this.antcodeService.pullRequest?.iid,
       });
     }
-  }
-
-  private registerLangByFilename() {
-    const changeFilenames = Array.prototype.concat.apply(
-      [],
-      this.antcodeService.pullRequestChangeList.map((diff) => [diff.oldPath, diff.newPath])
-    );
-
-    this.languageGrammarService.registerByFilenames(changeFilenames);
   }
 
   registerMenus(menus: IMenuRegistry): void {

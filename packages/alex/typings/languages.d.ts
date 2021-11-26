@@ -29,6 +29,7 @@ declare module '@alipay/alex/languages/php' {}
 declare module '@alipay/alex/languages/powershell' {}
 declare module '@alipay/alex/languages/pug' {}
 declare module '@alipay/alex/languages/python' {}
+declare module '@alipay/alex/languages/r' {}
 declare module '@alipay/alex/languages/razor' {}
 declare module '@alipay/alex/languages/ruby' {}
 declare module '@alipay/alex/languages/rust' {}

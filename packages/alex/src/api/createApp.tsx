@@ -25,7 +25,7 @@ import '../core/extension/extension.patch';
 import { disposeMode, disposableCollection } from '../core/patch';
 
 import { modules } from '../core/modules';
-import { IconSlim, IDETheme } from '../core/extension/metadata';
+import { GeekTheme, IconSlim, IDETheme } from '../core/extension/metadata';
 import { mergeConfig, getThemeTypeByPreferenceThemeId } from '../core/utils';
 import { LayoutComponent, getDefaultLayoutConfig } from '../core/layout';
 import { IConfig, IAppInstance } from './types';
@@ -55,7 +55,7 @@ export const getDefaultAppConfig = (): IAppOpts => ({
   },
   layoutConfig: getDefaultLayoutConfig(),
   layoutComponent: LayoutComponent,
-  extensionMetadata: [IconSlim, IDETheme],
+  extensionMetadata: [IconSlim, IDETheme, GeekTheme],
   defaultPanels: {
     bottom: '',
   },

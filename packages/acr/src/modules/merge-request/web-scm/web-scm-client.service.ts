@@ -4,7 +4,6 @@ import {
   Disposable,
   Emitter,
   Event,
-  memoize,
   StorageProvider,
   STORAGE_SCHEMA,
   URI,
@@ -20,8 +19,6 @@ import { IAntcodeService, TCommitFiles } from '../../antcode-service/base';
 import { WorkspaceManagerService } from '../../workspace/workspace-loader.service';
 import { IDmpService, WebSCMViewId } from './common';
 import { WebSCMProvider, WebSCMResource, WebSCMResourceGroup } from './web-scm-provider.definition';
-
-import bfs, { BROWSER_FS_HOME_DIR } from '../../../common/file-system';
 import { reportWebSCMPush } from '../../../utils/monitor';
 
 const webSCMStorageId = new URI('web-scm').withScheme(STORAGE_SCHEMA.SCOPE);

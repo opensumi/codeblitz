@@ -1,5 +1,3 @@
-/// <reference path="./isomorphic-git.d.ts" />
-
 declare module '*.less';
 declare module '*.css';
 

@@ -4,12 +4,7 @@ import { Injector } from '@ali/common-di';
 import { URI } from '@ali/ide-core-common';
 import { join } from '@ali/ide-core-common/lib/path';
 import { equals } from '@ali/ide-core-common/lib/arrays';
-import {
-  RuntimeConfig,
-  codeServiceEditor,
-  MonacoCodeService,
-  IMonacoCodeService,
-} from '@alipay/alex-core';
+import { codeServiceEditor, MonacoCodeService, IMonacoCodeService } from '@alipay/alex-core';
 // internal patched
 import { disposeMode } from '@alipay/alex/lib/core/patch';
 
@@ -57,10 +52,6 @@ const AntcodeCR: React.FC<IAntcodeCRProps> = (props) => {
         {
           token: IAntcodeService,
           useValue: injector.get(AntcodeService, [{ ...props, renderStart }]),
-        },
-        {
-          token: RuntimeConfig,
-          useValue: {},
         },
         {
           token: MonacoCodeService,

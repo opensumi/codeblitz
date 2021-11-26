@@ -643,10 +643,10 @@
     "@ali/ide-file-service" "2.5.5"
     "@ali/ide-overlay" "2.5.5"
 
-"@ali/kaitian-textmate-languages@^2.4.0":
-  version "2.4.0"
-  resolved "https://registry.npm.alibaba-inc.com/@ali/kaitian-textmate-languages/download/@ali/kaitian-textmate-languages-2.4.0.tgz#941ccb5b9ffc2b6d0662fd27162c098210f9da95"
-  integrity sha1-lBzLW5/8K20GYv0nFiwJghD52pU=
+"@ali/kaitian-textmate-languages@^2.5.0":
+  version "2.5.1"
+  resolved "https://registry.npm.alibaba-inc.com/@ali/kaitian-textmate-languages/download/@ali/kaitian-textmate-languages-2.5.1.tgz#00e3132a482b4cd845193065f18985a83d95493f"
+  integrity sha512-IvuaWd9foPUi9AwKwyHoTTmIOiO5z3yrhnP44Xzocd/g3ztWRQZGaUhzxxh3toffcAQNm3AuXy63pgsKtUOCSg==
   dependencies:
     plist "^3.0.1"
 
@@ -1238,21 +1238,6 @@
   version "3.0.2"
   resolved "https://registry.npm.alibaba-inc.com/@hutson/parse-repository-url/download/@hutson/parse-repository-url-3.0.2.tgz#98c23c950a3d9b6c8f0daed06da6c3af06981340"
   integrity sha1-mMI8lQo9m2yPDa7QbabDrwaYE0A=
-
-"@isomorphic-git/idb-keyval@3.3.2":
-  version "3.3.2"
-  resolved "https://registry.npm.alibaba-inc.com/@isomorphic-git/idb-keyval/download/@isomorphic-git/idb-keyval-3.3.2.tgz#c0509a6c5987d8a62efb3e47f2815bcc5eda2489"
-  integrity sha1-wFCabFmH2KYu+z5H8oFbzF7aJIk=
-
-"@isomorphic-git/lightning-fs@^4.3.0":
-  version "4.4.0"
-  resolved "https://registry.npm.alibaba-inc.com/@isomorphic-git/lightning-fs/download/@isomorphic-git/lightning-fs-4.4.0.tgz#98ba53fba8346b67974be7067d26468664e30542"
-  integrity sha1-mLpT+6g0a2eXS+cGfSZGhmTjBUI=
-  dependencies:
-    "@isomorphic-git/idb-keyval" "3.3.2"
-    isomorphic-textencoder "1.0.1"
-    just-debounce-it "1.1.0"
-    just-once "1.1.0"
 
 "@istanbuljs/load-nyc-config@^1.0.0":
   version "1.1.0"
@@ -5263,11 +5248,6 @@ fast-plist@^0.1.2:
   resolved "https://registry.npm.alibaba-inc.com/fast-plist/download/fast-plist-0.1.2.tgz#a45aff345196006d406ca6cdcd05f69051ef35b8"
   integrity sha1-pFr/NFGWAG1AbKbNzQX2kFHvNbg=
 
-fast-text-encoding@^1.0.0:
-  version "1.0.3"
-  resolved "https://registry.npm.alibaba-inc.com/fast-text-encoding/download/fast-text-encoding-1.0.3.tgz#ec02ac8e01ab8a319af182dae2681213cfe9ce53"
-  integrity sha1-7AKsjgGrijGa8YLa4mgSE8/pzlM=
-
 fastest-levenshtein@^1.0.12:
   version "1.0.12"
   resolved "https://registry.npm.alibaba-inc.com/fastest-levenshtein/download/fastest-levenshtein-1.0.12.tgz#9990f7d3a88cc5a9ffd1f1745745251700d497e2"
@@ -7118,13 +7098,6 @@ isomorphic-fetch@^2.1.1, isomorphic-fetch@^2.2.1:
     node-fetch "^1.0.1"
     whatwg-fetch ">=0.10.0"
 
-isomorphic-textencoder@1.0.1:
-  version "1.0.1"
-  resolved "https://registry.npm.alibaba-inc.com/isomorphic-textencoder/download/isomorphic-textencoder-1.0.1.tgz#38dcd3b4416d29cd33e274f64b99ae567cd15e83"
-  integrity sha1-ONzTtEFtKc0z4nT2S5muVnzRXoM=
-  dependencies:
-    fast-text-encoding "^1.0.0"
-
 istanbul-lib-coverage@^3.0.0:
   version "3.0.0"
   resolved "https://registry.npm.alibaba-inc.com/istanbul-lib-coverage/download/istanbul-lib-coverage-3.0.0.tgz#f5944a37c70b550b02a78a5c3b2055b280cec8ec"
@@ -7688,20 +7661,10 @@ jsonparse@^1.2.0:
   resolved "https://registry.npm.alibaba-inc.com/jsonparse/download/jsonparse-1.3.1.tgz#3f4dae4a91fac315f71062f8521cc239f1366280"
   integrity sha1-P02uSpH6wxX3EGL4UhzCOfE2YoA=
 
-just-debounce-it@1.1.0:
-  version "1.1.0"
-  resolved "https://registry.npm.alibaba-inc.com/just-debounce-it/download/just-debounce-it-1.1.0.tgz#8e92578effc155358a44f458c52ffbee66983bef"
-  integrity sha1-jpJXjv/BVTWKRPRYxS/77maYO+8=
-
 just-debounce@^1.0.0:
   version "1.1.0"
   resolved "https://registry.npm.alibaba-inc.com/just-debounce/download/just-debounce-1.1.0.tgz#2f81a3ad4121a76bc7cb45dbf704c0d76a8e5ddf"
   integrity sha1-L4GjrUEhp2vHy0Xb9wTA12qOXd8=
-
-just-once@1.1.0:
-  version "1.1.0"
-  resolved "https://registry.npm.alibaba-inc.com/just-once/download/just-once-1.1.0.tgz#fe81a185ebaeeb0947a7e705bf01cb6808db0ad8"
-  integrity sha1-/oGhheuu6wlHp+cFvwHLaAjbCtg=
 
 keycode@^2.2.0:
   version "2.2.0"

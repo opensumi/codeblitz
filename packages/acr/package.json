@@ -24,7 +24,6 @@
     "@alipay/alex-shared": "1.8.0",
     "@alipay/geek-theme": "^1.6.0",
     "@alipay/lsif-client": "^2.0.0",
-    "@isomorphic-git/lightning-fs": "^4.3.0",
     "crypto-js": "^4.0.0",
     "diff-match-patch": "^1.0.5",
     "split-retain": "^1.0.1"

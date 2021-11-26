@@ -4,7 +4,7 @@ import { BrowserModule } from '@ali/ide-core-browser';
 import { CommentsContribution } from './comments/comments.contribution';
 import { MenubarContribution } from './menubar/menubar.contribution';
 import { MiscContribution } from './misc.contribution';
-import { FileProviderContribution } from './browser-fs-provider/fs-provider.contribution';
+import { StaticResourceContribution } from './static-resource.contribution';
 import { QuickChangeFileContribution } from './quickopen.contribution';
 import { bindAntCodePreference } from './preferences';
 import { DiffFoldingContribution } from './diff-folding/diff-folding.contribution';
@@ -14,9 +14,6 @@ import { EditorBottomSideContribution } from './editor-bottom-side/editor-bottom
 import { ChangesTreeLocationContribution } from './merge-request/changes-tree/changes-tree-location.contribution';
 import { CustomLeftSlotRenderContribution } from './view/slot-render.contribution';
 import { ChangeFileViewedContribution } from './change-file-viewed.contribution';
-
-import { ILanguageGrammarRegistrationService } from './textmate-language-grammar/base';
-import { LanguageGrammarRegistrationService } from './textmate-language-grammar/language-grammar.service';
 
 import { EditorEmptyContribution } from './edtior-empty/index.contribution';
 import { EditorExpandBtnContribution } from './editor-external-widget/editor-expand-btn/editor-expand-btn.contribution';
@@ -32,14 +29,10 @@ export class MiscModule extends BrowserModule {
       token: IAntcodeService,
       useClass: AntcodeService,
     },
-    {
-      token: ILanguageGrammarRegistrationService,
-      useClass: LanguageGrammarRegistrationService,
-    },
     CommentsContribution,
     MenubarContribution,
     MiscContribution,
-    FileProviderContribution,
+    StaticResourceContribution,
     QuickChangeFileContribution,
     /* --- editor related starts --- */
     EditorBottomSideContribution,
