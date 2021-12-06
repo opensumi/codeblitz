@@ -11,7 +11,7 @@ const extensionProgram = program
     `
 install kaitian extensions, you should config in package.json firstly, example:
 {
-  "kaitianExtensions": {
+  "cloudideExtensions": {
     "publisher": "kaitian",
     "name": "ide-dark-theme",
     "version": "2.0.0"
