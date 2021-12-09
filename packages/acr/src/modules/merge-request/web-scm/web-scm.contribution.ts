@@ -40,7 +40,8 @@ const ACR_CHANGE_FILE_EDITABLE = new RawContextKey<boolean>('acr.changeFileEdita
 @Domain(CommandContribution, MenuContribution, ClientAppContribution)
 export class WebSCMContribution
   extends WithEventBus
-  implements CommandContribution, MenuContribution, ClientAppContribution {
+  implements CommandContribution, MenuContribution, ClientAppContribution
+{
   @Autowired(CommandService)
   private readonly commandService: CommandService;
 
@@ -316,8 +317,8 @@ export class WebSCMContribution
         const gitUri = new URI(resource.sourceUri);
         const { ref, path } = fromGitUri(gitUri);
 
-        const [root] = await this.workspaceService.roots;
-        const targetFileUri = URI.file(paths.resolve(new URI(root.uri).codeUri.fsPath, path));
+        // const [root] = await this.workspaceService.roots;
+        // const targetFileUri = URI.file(paths.resolve(new URI(root.uri).codeUri.fsPath, path));
 
         // 操作行为数据上报
         reportEditOperation('scm-resource-inline-open-file', path.toString(), {
@@ -326,7 +327,7 @@ export class WebSCMContribution
           commitId: ref,
         });
 
-        await this.workbenchEditorService.open(targetFileUri);
+        await this.workbenchEditorService.open(gitUri);
       },
     });
 

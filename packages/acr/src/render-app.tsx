@@ -40,6 +40,15 @@ export async function renderApp(opts: IClientAppOpts, injector: Injector, custom
   const runtimeConfig: RuntimeConfig = {
     biz: 'acr',
     startupEditor: 'none',
+    workspace: {
+      // indexedDB 持久化缓存编辑文件
+      filesystem: {
+        fs: 'IndexedDB',
+        options: {
+          storeName: 'ALEX_ACR',
+        },
+      },
+    },
   };
 
   const app = createApp({
