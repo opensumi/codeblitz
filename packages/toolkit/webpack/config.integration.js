@@ -207,9 +207,8 @@ module.exports = (option) => {
         __WEBVIEW_ENDPOINT__: process.env.WEBVIEW_ENDPOINT
           ? JSON.stringify(`/assets/~${process.env.WEBVIEW_ENDPOINT}`)
           : JSON.stringify(`${baseURL}/${config.webviewEntry}`),
-        __WEBVIEW_ENDPOINT_INTERNAL__: process.env.WEBVIEW_ENDPOINT_INTERNAL
-          ? JSON.stringify(`/assets/~${process.env.WEBVIEW_ENDPOINT_INTERNAL}`)
-          : JSON.stringify(`${baseURL}/${config.webviewEntry}`),
+        __WEBVIEW_ENDPOINT_INTERNAL__: JSON.stringify(''),
+        __WEBVIEW_SCRIPT__: JSON.stringify(''),
         __VERSION__: JSON.stringify(pkg.version),
         ...option.define,
       }),
