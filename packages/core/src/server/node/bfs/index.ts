@@ -90,8 +90,6 @@ function initialize(rootfs: FileSystem) {
   return fs.initialize(rootfs);
 }
 
-(window as any).fs = fs;
-
 export type FileSystemConfiguration =
   | { fs: 'MountableFileSystem'; options: { [mountPoint: string]: FileSystemConfiguration } }
   | {
