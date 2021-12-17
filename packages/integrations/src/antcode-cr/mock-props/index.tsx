@@ -75,4 +75,14 @@ export const getProps = (projectId: number): Partial<IAntcodeCRProps> => ({
       </div>
     </>
   ),
+  // mock
+  addLineNum: 753,
+  deleteLineNum: 379,
+
+  // fileReadMarkChange$: EventEmitter {subscriptions: Set(1), emit: ƒ, useSubscription: ƒ}
+  // getFileReadStatus: ƒ ()
+  // lsifService: {lsifExists: ƒ, lsifHover: ƒ, lsifDefinitions: ƒ, lsifReferences: ƒ, lsifReferencesV2: ƒ}
+  // markFileAsRead: ƒ markFileAsRead(_x)
+  // markFileAsUnread: ƒ markFileAsUnread(_x2)
+  // toggleViewerType: () => {…}
 });
