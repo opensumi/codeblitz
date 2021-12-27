@@ -1,2 +1,2 @@
-// 默认 alex 的根目录为 /workspace，acr 场景再加一个 namespace
-export const ACR_WORKSPACE_NAMESPACE = 'acr';
+// 工作空间目录
+export const ACR_WORKSPACE_NAMESPACE = '/acr';

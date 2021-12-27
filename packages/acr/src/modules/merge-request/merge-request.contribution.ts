@@ -12,9 +12,7 @@ export class MergeRequestContribution implements ComponentContribution, MenuCont
   // MR Explorer
   registerComponent(registry: ComponentRegistry) {
     registry.register(MergeRequestExplorerId, [ChangeTreeView, WebSCMView], {
-      // 取消titleComponent 由AntCode内倒入
-      // titleComponent: MergeRequestSummary,
-      title: localize('changes.tree.title'),
+      titleComponent: MergeRequestSummary,
       iconClass: getIcon('PR'),
       priority: 1,
       containerId: MergeRequestExplorerId,
@@ -25,6 +23,6 @@ export class MergeRequestContribution implements ComponentContribution, MenuCont
     // 卸载左侧面板的右键菜单
     menus.unregisterMenuId(`accordion/${MergeRequestExplorerId}`);
     // 卸载配置菜单
-    // menus.unregisterMenuId(`activityBar/extra`)
+    menus.unregisterMenuId(`activityBar/extra`);
   }
 }

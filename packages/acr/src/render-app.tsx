@@ -1,19 +1,41 @@
 import { Injector } from '@ali/common-di';
-import { IClientAppOpts } from '@ali/ide-core-browser';
+import { registerExternalPreferenceProvider } from '@ali/ide-core-browser';
 import { IStatusBarService } from '@ali/ide-core-browser/lib/services';
 import { IDocPersistentCacheProvider } from '@ali/ide-editor';
 import { LocalStorageDocCacheImpl } from '@ali/ide-editor/lib/browser/doc-cache/local-storage-cache';
-import { RuntimeConfig } from '@alipay/alex-core';
+import { RuntimeConfig, ClientApp, HOME_IDB_NAME } from '@alipay/alex-core';
+import { getDefaultAppConfig, IAppConfig } from '@alipay/alex';
 import { EmptyStatusBarService } from './overrides/empty-statusbar.service';
-import { createApp, IAppConfig } from '@alipay/alex';
 import '@alipay/alex/languages';
+import { IPluginConfig } from '@alipay/alex-plugin';
+import md5 from 'md5';
+import { editorPreferenceSchema } from '@ali/ide-editor/lib/browser/preference/schema';
 
-export async function renderApp(opts: IClientAppOpts, injector: Injector, customRenderer) {
+export async function renderApp(opts: IAppConfig, injector: Injector, customRenderer) {
   injector = injector || new Injector();
   opts.injector = injector;
 
-  // FIXME: 这里有一个问题，injector 这个时候是拿不到 ide-fw 内部的 service 的
-  // FIXME: 应尽快去掉 mock 模块的使用
+  const runtimeConfig: RuntimeConfig = {
+    biz: 'acr',
+    startupEditor: 'none',
+    scenario: 'ACR',
+    workspace: {
+      filesystem: {
+        fs: 'FolderAdapter',
+        options: {
+          // 隔离空间存储数据
+          folder: `/${md5(opts.workspaceDir)}`,
+          wrapped: {
+            fs: 'IndexedDB', // indexedDB 持久化缓存编辑文件
+            options: {
+              storeName: 'ACR_WORKSPACE',
+            },
+          },
+        },
+      },
+    },
+  };
+
   injector.addProviders(
     // mock 掉不展示的 statusbar
     {
@@ -24,37 +46,48 @@ export async function renderApp(opts: IClientAppOpts, injector: Injector, custom
     {
       token: IDocPersistentCacheProvider,
       useClass: LocalStorageDocCacheImpl,
+    },
+    {
+      token: RuntimeConfig,
+      useValue: runtimeConfig,
+    },
+    {
+      token: IPluginConfig,
+      useValue: opts.plugins,
     }
   );
 
-  const appConfig: IAppConfig = {
+  const defaultConfig = getDefaultAppConfig();
+  const extensionMetadata = [
+    ...(defaultConfig.extensionMetadata ?? []),
+    ...(opts.extensionMetadata ?? []),
+  ];
+
+  const appOpts = {
+    ...defaultConfig,
     ...opts,
-    defaultPreferences: {
-      // acr theme
-      'general.theme': 'alipay-geek-light',
-    },
-    extensionMetadata: [],
-    workspaceDir: opts.workspaceDir!,
+    extensionMetadata,
   };
 
-  const runtimeConfig: RuntimeConfig = {
-    biz: 'acr',
-    startupEditor: 'none',
-    workspace: {
-      // indexedDB 持久化缓存编辑文件
-      filesystem: {
-        fs: 'IndexedDB',
-        options: {
-          storeName: 'ALEX_ACR',
-        },
-      },
+  // 强制的默认偏好设置主题
+  registerExternalPreferenceProvider('general.theme', {
+    get() {
+      return opts.defaultPreferences?.['general.theme'];
     },
-  };
-
-  const app = createApp({
-    appConfig,
-    runtimeConfig,
+    set() {
+      // 不支持设置
+    },
   });
+
+  // 支持配置 editor.scrollbar.alwaysConsumeMouseWheel，避免编辑器中滚动不冒泡
+  // kaitian 中未支持 editor.scrollbar 的 schema
+  editorPreferenceSchema.properties['editor.scrollbar.alwaysConsumeMouseWheel'] = {
+    type: 'boolean',
+    default: true,
+    description: 'Always consume mouse wheel events',
+  };
+
+  const app = new ClientApp(appOpts);
 
   await app.start(customRenderer);
   const loadingDom = document.getElementById('loading');

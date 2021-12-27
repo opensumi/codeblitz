@@ -1,16 +1,19 @@
 import { Event, IClientAppOpts, URI, Emitter } from '@ali/ide-core-browser';
+import { IPluginConfig } from '@alipay/alex-plugin';
+import { IExtensionBasicMetadata } from '@alipay/alex-shared';
 
 import {
   IPullRequestChange,
   IPullRequestChangeList,
   Annotation,
   CheckSuite,
-  Diff,
+  Note,
+  FileAction,
+  FileActionHeader,
+  FileActionResult,
 } from '../../common/antcode';
-import { FileAction, FileActionHeader, FileActionResult } from './interfaces/file-action';
 import { User } from './interfaces/user';
 import { PR } from './interfaces/pr';
-import { LSIFPosition, LSIFBaseParams, LSIFRange } from './interfaces/lsif';
 
 export interface IPullRequestChangeDiff extends Omit<IPullRequestChange, 'diff'> {
   // 如果是 Diff 则没有 id
@@ -67,7 +70,7 @@ export interface IAntcodeCRProps {
 
   // todo: 通过 flag 标记更新
   DiscussionItem: React.FC<{
-    noteId: string;
+    noteId: number;
   }>;
   AnnotationEntry: React.FC<IAnnotationData>;
   Commenting: React.FC<{
@@ -107,6 +110,14 @@ export interface IAntcodeCRProps {
   fileReadMarkChange$: {
     useSubscription: (callback: (filePath: string) => void) => void;
   };
+
+  // TODO: 暴露和 alex 一样的配置？
+  appConfig?: {
+    staticServicePath?: string;
+    // 支持 extension 和 plugin
+    plugins?: IPluginConfig;
+    extensionMetadata?: IExtensionBasicMetadata[];
+  };
 }
 
 export interface LsifLocation {
@@ -114,27 +125,14 @@ export interface LsifLocation {
   character: number;
 }
 
-export interface INoteData {
-  noteId: number;
-  author: {
-    avatarUrl: string;
-    name: string;
-  };
-  lineCode?: string;
-  stDiff?: Diff;
-  note: string;
-  type: 'Comment' | 'Problem';
-  state: 'opened' | 'resolved' | null;
-}
-
 // antcode 数据
-export type INoteIdToNote = Map<number, INoteData>;
+export type INoteIdToNote = Map<number, Note>;
 
 /**
  * 纯前端场景评论数据
  * lineCode 和 stDiff 肯定存在
  */
-export interface IComment extends Required<INoteData> {
+export interface IComment extends Note {
   noteId: number;
 }
 

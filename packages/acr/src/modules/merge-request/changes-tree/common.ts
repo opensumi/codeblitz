@@ -20,7 +20,6 @@ export class ChangesTreeCommands {
 
   static IgnoreSpace = {
     id: 'changes-tree.ignoreSpace',
-    iconClass: getIcon('ignore-space'),
   };
 
   static ExpandFile = {

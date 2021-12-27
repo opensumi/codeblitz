@@ -42,7 +42,6 @@ class MiscCommands {
 
   static ToggleHighlight = {
     id: 'misc.toggleHighlight',
-    iconClass: getIcon('alert'),
   };
 }
 

@@ -2,13 +2,14 @@ const path = require('path');
 const createWebpackConfig = require('./config.integration');
 const createWorkerConfig = require('./config.worker');
 const createWebviewConfig = require('./config.webview');
-const getLocalExtensions = require('./util/scan-extension');
+const { getLocalExtensions, getLocalExtensionsMetadata } = require('./util/scan-extension');
 const { config } = require('./util');
 require('dotenv').config({ path: path.join(__dirname, '../../../.env') });
 
 process.env.NODE_ENV = 'development';
 
-const antCodeSitHost = 'http://100.83.41.35:80';
+// const antCodeSitHost = 'http://100.83.41.35:80';
+const antCodeSitHost = 'http://code.test.alipay.net';
 
 module.exports = () => {
   const integrationConfig = createWebpackConfig({
@@ -43,19 +44,15 @@ module.exports = () => {
               '^/code-service': '',
             },
           },
-          // antcode-cr 场景专用
-          '/antcode/webapi': {
+          '/antcode': {
             target: antCodeSitHost,
             changeOrigin: true,
             pathRewrite: {
               '^/antcode': '',
             },
-          },
-          '/antcode/api': {
-            target: antCodeSitHost,
-            changeOrigin: true,
-            pathRewrite: {
-              '^/antcode': '',
+            // changeOrigin 只对 get 有效
+            onProxyReq: (request) => {
+              request.setHeader('origin', antCodeSitHost);
             },
           },
         },
@@ -66,12 +63,17 @@ module.exports = () => {
     },
   });
 
-  const before = integrationConfig.devServer.before;
+  const { before, openPage, contentBasePublicPath } = integrationConfig.devServer;
   integrationConfig.devServer.before = (...args) => {
     before && before(args[0], args[1], args[2]);
     const [app] = args;
     app.get('/getLocalExtensions', (req, res, next) => {
       getLocalExtensions().then(res.send.bind(res)).catch(next);
+    });
+    app.get('/getLocalExtensionsMetadata', (req, res, next) => {
+      getLocalExtensionsMetadata(openPage, contentBasePublicPath)
+        .then(res.send.bind(res))
+        .catch(next);
     });
   };
 

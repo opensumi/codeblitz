@@ -51,3 +51,11 @@ node scripts/bundle
 # 请确保有 tnpm 发包权限和仓库 master 权限
 node scripts/release
 ```
+
+### ACR 开发
+```bash
+npm run acr
+```
+接口使用的是 Ant Code 测试环境 http://code.test.alipay.net
+
+请使用 Ant Codespaces 开发，如使用本地，绑定 local.alipay.net 到本机，详细见 acr 包中 README.md

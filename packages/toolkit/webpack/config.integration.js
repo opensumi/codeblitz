@@ -24,7 +24,9 @@ const { findPortSync } = require('./util/find-porter');
 const { config } = require('./util');
 const pkg = require('../../../package.json');
 
-const HOST = process.env.HOST || 'localhost';
+// acr 需要请求 code 的 test 的环境
+const defaultHost = process.env.INTEGRATION === 'antcode-cr' ? 'local.alipay.net' : 'localhost';
+const HOST = process.env.HOST || defaultHost;
 
 /** @type {ConfigFn} */
 module.exports = (option) => {
@@ -229,6 +231,7 @@ module.exports = (option) => {
               filename: 'index.html',
               template: option.template || path.join(__dirname, '../public/index.html'),
               publicPath: '/',
+              integration: process.env.INTEGRATION,
             }),
             new FriendlyErrorsWebpackPlugin({
               compilationSuccessInfo: {

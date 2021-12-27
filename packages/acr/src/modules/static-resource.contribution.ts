@@ -36,9 +36,9 @@ class ExtendedFileSystemResourceProvider extends FileSystemResourceProvider {
 }
 
 // file 文件资源 远程读取
-@Domain(CoreStaticResourceContribution)
+@Domain(CoreStaticResourceContribution, BrowserEditorContribution)
 export class StaticResourceContribution
-  implements StaticResourceContribution, BrowserEditorContribution
+  implements CoreStaticResourceContribution, BrowserEditorContribution
 {
   @Autowired()
   private readonly fileSystemResourceProvider: ExtendedFileSystemResourceProvider;

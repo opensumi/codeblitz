@@ -34,6 +34,8 @@ import { fromDiffUri, fromGitUri, isChangeFileURI } from '../changes-tree/util';
 import { WebSCMController } from './web-scm.controller';
 import { IAntcodeService } from '../../antcode-service/base';
 import { reportSaveOperation, reportEditOperation } from '../../../utils/monitor';
+import { WorkspaceManagerService } from '../../workspace/workspace-loader.service';
+import { runInBackground } from '../../../utils';
 
 const ACR_CHANGE_FILE_EDITABLE = new RawContextKey<boolean>('acr.changeFileEditable', false);
 
@@ -65,6 +67,9 @@ export class WebSCMContribution
 
   @Autowired(IAntcodeService)
   private readonly antcodeService: IAntcodeService;
+
+  @Autowired(WorkspaceManagerService)
+  private readonly workspaceManagerService: WorkspaceManagerService;
 
   private readonly acrChangeFileEditable: IContextKey<boolean>;
 
@@ -314,20 +319,21 @@ export class WebSCMContribution
 
     commands.registerCommand(WebSCMCommands.OpenFile, {
       execute: async (resource: ISCMResource) => {
-        const gitUri = new URI(resource.sourceUri);
-        const { ref, path } = fromGitUri(gitUri);
+        const fileUri = new URI(resource.sourceUri);
 
-        // const [root] = await this.workspaceService.roots;
-        // const targetFileUri = URI.file(paths.resolve(new URI(root.uri).codeUri.fsPath, path));
+        runInBackground(async () => {
+          const { ref = '', path = '' } =
+            (await this.workspaceManagerService.getParsedUriParams(fileUri)) || {};
 
-        // 操作行为数据上报
-        reportEditOperation('scm-resource-inline-open-file', path.toString(), {
-          projectId: this.antcodeService.projectPath,
-          prId: this.antcodeService.pullRequest?.iid,
-          commitId: ref,
+          // 操作行为数据上报
+          reportEditOperation('scm-resource-inline-open-file', path, {
+            projectId: this.antcodeService.projectPath,
+            prId: this.antcodeService.pullRequest?.iid,
+            commitId: ref,
+          });
         });
 
-        await this.workbenchEditorService.open(gitUri);
+        await this.workbenchEditorService.open(fileUri);
       },
     });
 

@@ -32,7 +32,8 @@ import { isChangeFileURI } from '../merge-request/changes-tree/util';
 @Domain(CommandContribution, ClientAppContribution, MonacoContribution)
 export class DiffFoldingContribution
   extends WithEventBus
-  implements MonacoContribution, CommandContribution {
+  implements MonacoContribution, CommandContribution
+{
   @Autowired(IEventBus)
   public readonly eventBus: IEventBus;
 
@@ -102,10 +103,12 @@ export class DiffFoldingContribution
 
     const { diffEditor } = this.workbenchEditorService.currentEditorGroup;
 
+    if (!diffEditor.originalEditor.currentUri || !diffEditor.modifiedEditor.currentUri) return;
+
     const [oRanges, mRanges] = await this.antcodeDiffFoldingService.computeDiffToRange(
       // FIXME @倾一 清理掉 `!`
-      diffEditor.originalEditor.currentUri!.codeUri,
-      diffEditor.modifiedEditor.currentUri!.codeUri,
+      diffEditor.originalEditor.currentUri.codeUri,
+      diffEditor.modifiedEditor.currentUri.codeUri,
       !!this.preferenceService.get('diffEditor.ignoreTrimWhitespace')
     );
 

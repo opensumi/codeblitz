@@ -1,11 +1,17 @@
 import { ICommentsThread } from '@ali/ide-comments';
-import { INoteData } from '../antcode-service/base';
+import { IAnnotationData } from '../antcode-service/base';
 
-interface IExtendedNoteData extends INoteData {
+export interface ICommentsThreadData {
+  type: 'comment';
+  noteId: number;
   isProblem: boolean;
   isChangeLineRelated: boolean;
 }
 
+export interface IAnnotationThreadData extends IAnnotationData {
+  type: 'annotation';
+}
+
 export interface IAntcodeCommentThread extends ICommentsThread {
-  data: IExtendedNoteData;
+  data: ICommentsThreadData | IAnnotationThreadData;
 }

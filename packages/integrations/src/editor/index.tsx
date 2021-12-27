@@ -11,7 +11,7 @@ import Select from 'antd/lib/select';
 import Cascader from 'antd/lib/cascader';
 import Button from 'antd/lib/button';
 import './style.less';
-import * as EditorPlugin from './plugin';
+import editorPlugin from '../common/plugin';
 import { LocalExtensionModule } from '../common/local-extension.module';
 
 (window as any).alex = Alex;
@@ -116,7 +116,7 @@ const App = () => {
         </Select>
         <Button
           onClick={() => {
-            const commands = EditorPlugin.api.commands;
+            const commands = editorPlugin.commands;
             if (commands) {
               commands.executeCommand('plugin.command.test', 1, 2);
             }
@@ -127,7 +127,7 @@ const App = () => {
         </Button>
         <Button
           onClick={() => {
-            const commands = EditorPlugin.api.commands;
+            const commands = editorPlugin.commands;
             if (commands) {
               commands.executeCommand('alex.settings');
             }
@@ -148,7 +148,7 @@ const App = () => {
               }}
               appConfig={{
                 modules: [LocalExtensionModule],
-                plugins: [EditorPlugin],
+                plugins: [editorPlugin],
                 workspaceDir: project,
                 defaultPreferences: {
                   'general.theme': 'alipay-geek-light',

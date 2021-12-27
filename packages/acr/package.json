@@ -26,6 +26,8 @@
     "@alipay/lsif-client": "^2.0.0",
     "crypto-js": "^4.0.0",
     "diff-match-patch": "^1.0.5",
+    "lodash": "^4.17.21",
+    "md5": "^2.3.0",
     "split-retain": "^1.0.1"
   }
 }

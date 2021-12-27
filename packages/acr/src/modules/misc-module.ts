@@ -12,12 +12,12 @@ import { AntcodeService } from './antcode-service';
 import { IAntcodeService } from './antcode-service/base';
 import { EditorBottomSideContribution } from './editor-bottom-side/editor-bottom-side.contribution';
 import { ChangesTreeLocationContribution } from './merge-request/changes-tree/changes-tree-location.contribution';
-import { CustomLeftSlotRenderContribution } from './view/slot-render.contribution';
 import { ChangeFileViewedContribution } from './change-file-viewed.contribution';
 
 import { EditorEmptyContribution } from './edtior-empty/index.contribution';
 import { EditorExpandBtnContribution } from './editor-external-widget/editor-expand-btn/editor-expand-btn.contribution';
 import { EditorTitleMenuContribution } from './editor-external-widget/editor-title-menu/editor-title-menu.contribution';
+import { MigrateContribution } from './migrate.contribution';
 
 // 杂七杂八的 service/contribution 放到一起
 @Injectable()
@@ -40,10 +40,11 @@ export class MiscModule extends BrowserModule {
     EditorTitleMenuContribution,
     /* --- editor related ends --- */
     ChangesTreeLocationContribution,
-    CustomLeftSlotRenderContribution,
     ChangeFileViewedContribution,
     EditorEmptyContribution,
     // experimental
     DiffFoldingContribution,
+    // migrate
+    MigrateContribution,
   ];
 }

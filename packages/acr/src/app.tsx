@@ -1,5 +1,6 @@
 import { Injector } from '@ali/common-di';
-import { IClientAppOpts, IPreferences } from '@ali/ide-core-browser';
+import { IPreferences } from '@ali/ide-core-browser';
+import { IAppConfig, getDefaultAppConfig } from '@alipay/alex';
 
 import { renderApp } from './render-app';
 
@@ -13,7 +14,7 @@ export default function render(
   injector: Injector,
   workspaceDir: string,
   customRenderer,
-  options?: Partial<IClientAppOpts>,
+  options?: Partial<IAppConfig>,
   defaultPreferences?: IPreferences
 ) {
   renderApp(
@@ -22,11 +23,10 @@ export default function render(
       layoutConfig,
       layoutComponent: LayoutComponent,
       useCdnIcon: true,
-      // noExtHost: true,
-      // extWorkerHost: 'https://dev.g.alicdn.com/tao-ide/ide-lite/0.0.1/worker-host.js',
+      noExtHost: true,
       defaultPreferences: {
-        // 'general.theme': 'Default Dark+',
-        // 'general.icon': 'vscode-icons',
+        'general.theme': 'alipay-geek-light',
+        'general.icon': 'vsicons-slim',
         'application.confirmExit': process.env.NODE_ENV === 'production' ? 'ifRequired' : 'never',
         'editor.quickSuggestionsDelay': 100,
         'editor.quickSuggestionsMaxCount': 50,
@@ -36,6 +36,10 @@ export default function render(
         'diffEditor.renderIndicators': false,
         'lsif.enable': true,
         'lsif.documentScheme': 'git',
+        'workbench.colorCustomizations': {
+          'activityBar.background': '#FFF',
+        },
+        'editor.scrollbar.alwaysConsumeMouseWheel': false,
         ...defaultPreferences,
       },
       workspaceDir,

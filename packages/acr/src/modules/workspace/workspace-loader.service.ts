@@ -3,6 +3,7 @@ import { Disposable, URI, DefaultStorageProvider, STORAGE_SCHEMA } from '@ali/id
 import { IFileServiceClient } from '@ali/ide-file-service';
 import { IWorkspaceService } from '@ali/ide-workspace';
 import * as paths from '@ali/ide-core-common/lib/path';
+import { fsExtra } from '@alipay/alex-core';
 
 import { IAntcodeService } from '../antcode-service/base';
 import { fromGitUri } from '../merge-request/changes-tree/util';
@@ -63,10 +64,13 @@ export class WorkspaceManagerService extends Disposable {
     );
   }
 
-  public async getParsedUriParams(uri: URI): Promise<void | {
-    ref: string;
-    path: string;
-  }> {
+  public async getParsedUriParams(uri: URI): Promise<
+    | undefined
+    | {
+        ref: string;
+        path: string;
+      }
+  > {
     if (uri.scheme === 'git') {
       const { ref, path } = fromGitUri(uri);
       return {
@@ -115,7 +119,7 @@ export class WorkspaceManagerService extends Disposable {
     }
     const uriStr = workspaceUri.toString();
     // 确保 workspace 目录存在
-    await this.fileServiceClient.createFolder(workspaceUri.codeUri.fsPath);
+    await fsExtra.ensureDir(workspaceUri.codeUri.fsPath);
     const fileStat = await this.fileServiceClient.getFileStat(uriStr);
     await this.workspaceService.setWorkspace(fileStat);
   }

@@ -4,9 +4,8 @@ import { Injector } from '@ali/common-di';
 import { URI } from '@ali/ide-core-common';
 import { join } from '@ali/ide-core-common/lib/path';
 import { equals } from '@ali/ide-core-common/lib/arrays';
-import { codeServiceEditor, MonacoCodeService, IMonacoCodeService } from '@alipay/alex-core';
 // internal patched
-import { disposeMode } from '@alipay/alex/lib/core/patch';
+import { disposeMode, disposableCollection } from '@alipay/alex/lib/core/patch';
 
 import { ConfigProvider } from 'antd';
 
@@ -32,14 +31,13 @@ const { version } = require('../package.json');
 
 const AntcodeCR: React.FC<IAntcodeCRProps> = (props) => {
   const container$ = React.useRef<HTMLDivElement>(null);
-  const injector$ = React.useRef<Injector>(null);
+  const injector$ = React.useRef<Injector>();
 
   // 标记开始渲染的时间
   const renderStart = React.useMemo(() => performance.now(), []);
   React.useEffect(() => {
     const injector = new Injector();
 
-    // @ts-ignore
     injector$.current = injector;
     if (container$.current) {
       const workspaceDir = WorkspaceManagerService.getWorkspaceDir(
@@ -54,15 +52,6 @@ const AntcodeCR: React.FC<IAntcodeCRProps> = (props) => {
           useValue: injector.get(AntcodeService, [{ ...props, renderStart }]),
         },
         {
-          token: MonacoCodeService,
-          useValue: codeServiceEditor,
-        },
-        {
-          token: IMonacoCodeService,
-          useClass: MonacoCodeService,
-          override: true,
-        },
-        {
           token: CommentsZoneWidget,
           useClass: CommentsZoneWidgetPatch,
         }
@@ -71,21 +60,18 @@ const AntcodeCR: React.FC<IAntcodeCRProps> = (props) => {
       render(
         injector,
         workspaceDir,
-        (app: React.FC) => {
-          return new Promise((resolve) => {
-            ReactDOM.render(
-              // @ts-ignore
-              <ConfigProvider>{app}</ConfigProvider>,
-              container$.current,
-              resolve
-            );
+        (app: React.ReactElement) => {
+          return new Promise<void>((resolve) => {
+            ReactDOM.render(<ConfigProvider>{app}</ConfigProvider>, container$.current, resolve);
           });
         },
         {
           extraContextProvider: props.extraContextProvider,
-          staticServicePath: new URI(window.location.href)
-            .withPath(join(props.projectPath, 'raw'))
-            .toString(),
+          staticServicePath:
+            props.appConfig?.staticServicePath ??
+            new URI(window.location.href).withPath(join(props.projectPath, 'raw')).toString(),
+          plugins: props.appConfig?.plugins,
+          extensionMetadata: props.appConfig?.extensionMetadata,
         },
         {
           // 因为 clientApp 启动时会再次从 preference 读取并设置 language
@@ -94,9 +80,6 @@ const AntcodeCR: React.FC<IAntcodeCRProps> = (props) => {
         }
       );
     }
-
-    // 保持 codeServiceEditor 单例，且组件每次实例化重新赋值
-    const clearInjector = codeServiceEditor.setInjector(injector);
 
     // spm 曝光埋点
     logPv('a1654', 'b23008');
@@ -112,7 +95,7 @@ const AntcodeCR: React.FC<IAntcodeCRProps> = (props) => {
       const realInjector = injector$.current;
       if (realInjector) {
         disposeMode();
-        clearInjector();
+        disposableCollection.forEach((d) => d(realInjector));
         realInjector.disposeAll();
       }
       ReactDOM.unmountComponentAtNode(container$!.current!);
@@ -133,8 +116,7 @@ const AntcodeCR: React.FC<IAntcodeCRProps> = (props) => {
 
   // latest sha listener
   React.useEffect(() => {
-    // @ts-ignore
-    const antCodeService: IAntcodeService = injector$.current.get(IAntcodeService);
+    const antCodeService: IAntcodeService = injector$.current!.get(IAntcodeService);
     if (props.latestCommitSha !== antCodeService.latestCommitSha) {
       antCodeService.latestCommitSha = props.latestCommitSha;
     }
@@ -142,8 +124,7 @@ const AntcodeCR: React.FC<IAntcodeCRProps> = (props) => {
 
   // line_count listener
   React.useEffect(() => {
-    // @ts-ignore
-    const antCodeService: IAntcodeService = injector$.current.get(IAntcodeService);
+    const antCodeService: IAntcodeService = injector$.current!.get(IAntcodeService);
     if (props.addLineNum !== antCodeService.addLineNum) {
       antCodeService.addLineNum = props.addLineNum;
     }
@@ -155,72 +136,63 @@ const AntcodeCR: React.FC<IAntcodeCRProps> = (props) => {
 
   // diffs listener
   React.useEffect(() => {
-    // @ts-ignore
-    const antCodeService: IAntcodeService = injector$.current.get(IAntcodeService);
+    const antCodeService: IAntcodeService = injector$.current!.get(IAntcodeService);
     if (!equals(props.diffs as any, antCodeService.pullRequestChangeList as any)) {
       antCodeService.pullRequestChangeList = props.diffs as IPullRequestChangeDiff[];
     }
   }, [props.diffs]);
 
   React.useEffect(() => {
-    // @ts-ignore
-    const antCodeService: IAntcodeService = injector$.current.get(IAntcodeService);
+    const antCodeService: IAntcodeService = injector$.current!.get(IAntcodeService);
     antCodeService.noteIdToNote = props.noteIdToNote;
   }, [props.noteUpdateFlag]);
 
   // pullRequest listener
   React.useEffect(() => {
-    // @ts-ignore
-    const antCodeService: IAntcodeService = injector$.current.get(IAntcodeService);
+    const antCodeService: IAntcodeService = injector$.current!.get(IAntcodeService);
     antCodeService.pullRequest = props.pr;
   }, [props.pr]);
 
   React.useEffect(() => {
-    // @ts-ignore
-    const antCodeService: IAntcodeService = injector$.current.get(IAntcodeService);
+    const antCodeService: IAntcodeService = injector$.current!.get(IAntcodeService);
     antCodeService.updateConfig({ getFileContent: props.getFileContent });
   }, [props.getFileContent]);
 
   React.useEffect(() => {
-    // @ts-ignore
-    const antCodeService: IAntcodeService = injector$.current.get(IAntcodeService);
+    const antCodeService: IAntcodeService = injector$.current!.get(IAntcodeService);
     antCodeService.getDiffById = props.getDiffById;
   }, [props.getDiffById]);
 
   React.useEffect(() => {
-    // console.log(props.encoding)
-    // @ts-ignore
-    const antCodeService: IAntcodeService = injector$.current.get(IAntcodeService);
+    const antCodeService: IAntcodeService = injector$.current!.get(IAntcodeService);
     antCodeService.fireEncodingChange(props.encoding);
   }, [props.encoding]);
 
   const portalComponents = React.useMemo(
-    () => [
-      props.AnnotationEntry,
-      props.Commenting,
-      props.DiscussionItem,
-      props.Menubar,
-      props.PRMoreActionLinks,
-    ],
+    () =>
+      [
+        props.AnnotationEntry,
+        props.Commenting,
+        props.DiscussionItem,
+        props.Menubar,
+        props.PRMoreActionLinks,
+      ].filter(Boolean) as React.ComponentType[],
     []
   );
   // fileReadMarkChange listener
   props.fileReadMarkChange$.useSubscription((newPath: string) => {
-    // @ts-ignore
-    const antCodeService: IAntcodeService = injector$.current.get(IAntcodeService);
+    const antCodeService: IAntcodeService = injector$.current!.get(IAntcodeService);
     antCodeService.didViewChangeEmitter.fire(newPath);
   });
 
   // `isFullscreen` listener
   React.useEffect(() => {
-    // @ts-ignore
-    const antCodeService: IAntcodeService = injector$.current.get(IAntcodeService);
+    const antCodeService: IAntcodeService = injector$.current!.get(IAntcodeService);
     antCodeService.isFullscreen = props.isFullscreen;
   }, [props.isFullscreen]);
 
   // should listen to methods???
   return (
-    // @ts-ignore
     <Portals components={portalComponents}>
       <div
         className={styles.container}

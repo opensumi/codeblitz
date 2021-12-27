@@ -146,7 +146,7 @@ const App = () => {
   return (
     <div style={{ height: '100%' }}>
       <div style={{ height: 48, display: 'flex', alignItems: 'center' }}>
-        <Select<string> onChange={(e) => setFsType(e)} style={{ width: 200 }}>
+        <Select value={fsType} onChange={(e) => setFsType(e as string)} style={{ width: 200 }}>
           <Select.Option value="IndexedDB">IndexedDB</Select.Option>
           <Select.Option value="InMemory">InMemory</Select.Option>
           <Select.Option value="FileIndexSystem">FileIndexSystem</Select.Option>
