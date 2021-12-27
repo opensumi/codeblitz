@@ -1,26 +1,42 @@
 import { Injector } from '@ali/common-di';
-import { ClientApp, IClientAppOpts, LogServiceForClientPath } from '@ali/ide-core-browser';
-import { DEFAULT_USER_STORAGE_FOLDER } from '@ali/ide-preferences/lib/browser/userstorage/user-storage.service';
+import { registerExternalPreferenceProvider } from '@ali/ide-core-browser';
 import { IStatusBarService } from '@ali/ide-core-browser/lib/services';
 import { IDocPersistentCacheProvider } from '@ali/ide-editor';
 import { LocalStorageDocCacheImpl } from '@ali/ide-editor/lib/browser/doc-cache/local-storage-cache';
-
-import bfs, { BROWSER_FS_HOME_DIR } from './common/file-system';
-
-import { MockLogServiceForClient } from './overrides/mock-logger';
+import { RuntimeConfig, ClientApp, HOME_IDB_NAME } from '@alipay/alex-core';
+import { getDefaultAppConfig, IAppConfig } from '@alipay/alex';
 import { EmptyStatusBarService } from './overrides/empty-statusbar.service';
+import '@alipay/alex/languages';
+import { IPluginConfig } from '@alipay/alex-plugin';
+import md5 from 'md5';
+import { editorPreferenceSchema } from '@ali/ide-editor/lib/browser/preference/schema';
 
-export async function renderApp(opts: IClientAppOpts, injector: Injector, customRenderer) {
+export async function renderApp(opts: IAppConfig, injector: Injector, customRenderer) {
   injector = injector || new Injector();
   opts.injector = injector;
 
-  // FIXME: 这里有一个问题，injector 这个时候是拿不到 ide-fw 内部的 service 的
-  // FIXME: 应尽快去掉 mock 模块的使用
-  injector.addProviders(
-    {
-      token: LogServiceForClientPath,
-      useClass: MockLogServiceForClient,
+  const runtimeConfig: RuntimeConfig = {
+    biz: 'acr',
+    startupEditor: 'none',
+    scenario: 'ACR',
+    workspace: {
+      filesystem: {
+        fs: 'FolderAdapter',
+        options: {
+          // 隔离空间存储数据
+          folder: `/${md5(opts.workspaceDir)}`,
+          wrapped: {
+            fs: 'IndexedDB', // indexedDB 持久化缓存编辑文件
+            options: {
+              storeName: 'ACR_WORKSPACE',
+            },
+          },
+        },
+      },
     },
+  };
+
+  injector.addProviders(
     // mock 掉不展示的 statusbar
     {
       token: IStatusBarService,
@@ -30,30 +46,48 @@ export async function renderApp(opts: IClientAppOpts, injector: Injector, custom
     {
       token: IDocPersistentCacheProvider,
       useClass: LocalStorageDocCacheImpl,
+    },
+    {
+      token: RuntimeConfig,
+      useValue: runtimeConfig,
+    },
+    {
+      token: IPluginConfig,
+      useValue: opts.plugins,
     }
   );
 
-  // 跟后端通信部分配置，需要解耦
-  opts.extensionDir = opts.extensionDir || process.env.EXTENSION_DIR;
-  opts.wsPath = process.env.WS_PATH || 'ws://127.0.0.1:8000'; // 代理测试地址: ws://127.0.0.1:8001
-  opts.extWorkerHost = opts.extWorkerHost || process.env.EXTENSION_WORKER_HOST; // `http://127.0.0.1:8080/kaitian/ext/worker-host.js`; // 访问 Host
-  opts.webviewEndpoint = opts.webviewEndpoint || `http://localhost:50998`;
+  const defaultConfig = getDefaultAppConfig();
+  const extensionMetadata = [
+    ...(defaultConfig.extensionMetadata ?? []),
+    ...(opts.extensionMetadata ?? []),
+  ];
 
-  // 将 kaitian 存在另外一个 workspace 下面
-  // FIXME: 应该用单独的 browser fs 实例才更合适
-  await bfs.ensureDir(BROWSER_FS_HOME_DIR.codeUri.fsPath);
-  // workspaceDir 已经确保在 home 之下了
-  await bfs.ensureDir(opts.workspaceDir!);
-
-  // storage 相关
-  // ensure `.kaitian` 目录存在
-  await bfs.ensureDir(BROWSER_FS_HOME_DIR.resolve(DEFAULT_USER_STORAGE_FOLDER).codeUri.fsPath);
-
-  const app = new ClientApp(opts);
-
-  app.fireOnReload = (forcedReload: boolean) => {
-    window.location.reload(forcedReload);
+  const appOpts = {
+    ...defaultConfig,
+    ...opts,
+    extensionMetadata,
   };
+
+  // 强制的默认偏好设置主题
+  registerExternalPreferenceProvider('general.theme', {
+    get() {
+      return opts.defaultPreferences?.['general.theme'];
+    },
+    set() {
+      // 不支持设置
+    },
+  });
+
+  // 支持配置 editor.scrollbar.alwaysConsumeMouseWheel，避免编辑器中滚动不冒泡
+  // kaitian 中未支持 editor.scrollbar 的 schema
+  editorPreferenceSchema.properties['editor.scrollbar.alwaysConsumeMouseWheel'] = {
+    type: 'boolean',
+    default: true,
+    description: 'Always consume mouse wheel events',
+  };
+
+  const app = new ClientApp(appOpts);
 
   await app.start(customRenderer);
   const loadingDom = document.getElementById('loading');

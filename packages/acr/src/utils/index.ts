@@ -43,3 +43,11 @@ export const getPathExt = (path: string) => {
   const extIndex = path.lastIndexOf('.');
   return extIndex <= 0 ? '' : path.slice(extIndex + 1);
 };
+
+export const runInBackground = async (fn: Function) => {
+  try {
+    await fn();
+  } catch (err: any) {
+    console.error(`[ACR]: ${err?.message ?? ''}`);
+  }
+};

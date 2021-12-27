@@ -2,6 +2,14 @@
 # yarn lockfile v1
 
 
+"@ahooksjs/use-request@^2.8.14":
+  version "2.8.15"
+  resolved "https://registry.npm.alibaba-inc.com/@ahooksjs/use-request/download/@ahooksjs/use-request-2.8.15.tgz#daa32a8395ba75e8deb9f4fde4e221a4a8f525db"
+  integrity sha512-xhVaM4fyIiAMdVFuuU5i3CFUdFa/IblF+fvITVMFaUEO3w/V5tVCAF6WIA3T03n1/RPuzRkA7Ao1PFtSGtGelw==
+  dependencies:
+    lodash.debounce "^4.0.8"
+    lodash.throttle "^4.1.1"
+
 "@ali/anima-detect@^1.0.1":
   version "1.0.3"
   resolved "https://registry.npm.alibaba-inc.com/@ali/anima-detect/download/@ali/anima-detect-1.0.3.tgz#3662d1866c0e5f35b1a96104f4596a325a59dd2d"
@@ -644,9 +652,9 @@
     "@ali/ide-overlay" "2.5.5"
 
 "@ali/kaitian-textmate-languages@^2.4.0":
-  version "2.4.0"
-  resolved "https://registry.npm.alibaba-inc.com/@ali/kaitian-textmate-languages/download/@ali/kaitian-textmate-languages-2.4.0.tgz#941ccb5b9ffc2b6d0662fd27162c098210f9da95"
-  integrity sha1-lBzLW5/8K20GYv0nFiwJghD52pU=
+  version "2.6.0"
+  resolved "https://registry.npm.alibaba-inc.com/@ali/kaitian-textmate-languages/download/@ali/kaitian-textmate-languages-2.6.0.tgz#b2b51008067a33040ff890a1d9a488605b58473b"
+  integrity sha512-TliUBqN23x/QBgOkuJKnjzZVe5NBlx7kv1iAhJ5F2w/muYhOVMCf6M2IbMssKGuIfks6OIr/RN9OSegox1kjmQ==
   dependencies:
     plist "^3.0.1"
 
@@ -1239,21 +1247,6 @@
   resolved "https://registry.npm.alibaba-inc.com/@hutson/parse-repository-url/download/@hutson/parse-repository-url-3.0.2.tgz#98c23c950a3d9b6c8f0daed06da6c3af06981340"
   integrity sha1-mMI8lQo9m2yPDa7QbabDrwaYE0A=
 
-"@isomorphic-git/idb-keyval@3.3.2":
-  version "3.3.2"
-  resolved "https://registry.npm.alibaba-inc.com/@isomorphic-git/idb-keyval/download/@isomorphic-git/idb-keyval-3.3.2.tgz#c0509a6c5987d8a62efb3e47f2815bcc5eda2489"
-  integrity sha1-wFCabFmH2KYu+z5H8oFbzF7aJIk=
-
-"@isomorphic-git/lightning-fs@^4.3.0":
-  version "4.4.0"
-  resolved "https://registry.npm.alibaba-inc.com/@isomorphic-git/lightning-fs/download/@isomorphic-git/lightning-fs-4.4.0.tgz#98ba53fba8346b67974be7067d26468664e30542"
-  integrity sha1-mLpT+6g0a2eXS+cGfSZGhmTjBUI=
-  dependencies:
-    "@isomorphic-git/idb-keyval" "3.3.2"
-    isomorphic-textencoder "1.0.1"
-    just-debounce-it "1.1.0"
-    just-once "1.1.0"
-
 "@istanbuljs/load-nyc-config@^1.0.0":
   version "1.1.0"
   resolved "https://registry.npm.alibaba-inc.com/@istanbuljs/load-nyc-config/download/@istanbuljs/load-nyc-config-1.1.0.tgz#fd3db1d59ecf7cf121e80650bb86712f9b55eced"
@@ -1710,6 +1703,11 @@
   dependencies:
     jest-diff "^26.0.0"
     pretty-format "^26.0.0"
+
+"@types/js-cookie@^2.2.6":
+  version "2.2.7"
+  resolved "https://registry.npm.alibaba-inc.com/@types/js-cookie/download/@types/js-cookie-2.2.7.tgz#226a9e31680835a6188e887f3988e60c04d3f6a3"
+  integrity sha1-ImqeMWgINaYYjoh/OYjmDATT9qM=
 
 "@types/json-schema@*", "@types/json-schema@^7.0.4", "@types/json-schema@^7.0.5", "@types/json-schema@^7.0.8":
   version "7.0.8"
@@ -2216,6 +2214,22 @@ aggregate-error@^3.0.0:
   dependencies:
     clean-stack "^2.0.0"
     indent-string "^4.0.0"
+
+ahooks@2:
+  version "2.10.14"
+  resolved "https://registry.npm.alibaba-inc.com/ahooks/download/ahooks-2.10.14.tgz#e134a5846b610079775ba881192c9aacca9102a8"
+  integrity sha512-axWa7VoAgu7bxA56dDl0CXW4rvaQmDBiov/d3tAy0x1YNYywYMKokL8TdLgJ5zO/oXGiWmG7BxlGOQGkqE/zkQ==
+  dependencies:
+    "@ahooksjs/use-request" "^2.8.14"
+    "@types/js-cookie" "^2.2.6"
+    dayjs "^1.9.1"
+    intersection-observer "^0.7.0"
+    js-cookie "^2.2.1"
+    lodash.debounce "^4.0.8"
+    lodash.isequal "^4.5.0"
+    lodash.throttle "^4.1.1"
+    resize-observer-polyfill "^1.5.1"
+    screenfull "^5.0.0"
 
 ajv-errors@^1.0.0:
   version "1.0.1"
@@ -3229,7 +3243,7 @@ chardet@^0.7.0:
   resolved "https://registry.npm.alibaba-inc.com/chardet/download/chardet-0.7.0.tgz#90094849f0937f2eedc2425d0d28a9e5f0cbad9e"
   integrity sha1-kAlISfCTfy7twkJdDSip5fDLrZ4=
 
-charenc@0.0.2:
+charenc@0.0.2, "charenc@>= 0.0.1":
   version "0.0.2"
   resolved "https://registry.npm.alibaba-inc.com/charenc/download/charenc-0.0.2.tgz#c0a1d2f3a7092e03774bfa83f14c0fc5790a8667"
   integrity sha1-wKHS86cJLgN3S/qD8UwPxXkKhmc=
@@ -4022,7 +4036,7 @@ cross-spawn@^7.0.0, cross-spawn@^7.0.3:
     shebang-command "^2.0.0"
     which "^2.0.1"
 
-crypt@0.0.2:
+crypt@0.0.2, "crypt@>= 0.0.1":
   version "0.0.2"
   resolved "https://registry.npm.alibaba-inc.com/crypt/download/crypt-0.0.2.tgz#88d7ff7ec0dfb86f713dc87bbb42d044d3e6c41b"
   integrity sha1-iNf/fsDfuG9xPch7u0LQRNPmxBs=
@@ -4225,6 +4239,11 @@ dateformat@^3.0.0:
   version "3.0.3"
   resolved "https://registry.npm.alibaba-inc.com/dateformat/download/dateformat-3.0.3.tgz#a6e37499a4d9a9cf85ef5872044d62901c9889ae"
   integrity sha1-puN0maTZqc+F71hyBE1ikByYia4=
+
+dayjs@^1.9.1:
+  version "1.10.7"
+  resolved "https://registry.npm.alibaba-inc.com/dayjs/download/dayjs-1.10.7.tgz#2cf5f91add28116748440866a0a1d26f3a6ce468"
+  integrity sha1-LPX5Gt0oEWdIRAhmoKHSbzps5Gg=
 
 debug@2.6.9, debug@^2.2.0, debug@^2.3.3, debug@^2.6.9:
   version "2.6.9"
@@ -5262,11 +5281,6 @@ fast-plist@^0.1.2:
   version "0.1.2"
   resolved "https://registry.npm.alibaba-inc.com/fast-plist/download/fast-plist-0.1.2.tgz#a45aff345196006d406ca6cdcd05f69051ef35b8"
   integrity sha1-pFr/NFGWAG1AbKbNzQX2kFHvNbg=
-
-fast-text-encoding@^1.0.0:
-  version "1.0.3"
-  resolved "https://registry.npm.alibaba-inc.com/fast-text-encoding/download/fast-text-encoding-1.0.3.tgz#ec02ac8e01ab8a319af182dae2681213cfe9ce53"
-  integrity sha1-7AKsjgGrijGa8YLa4mgSE8/pzlM=
 
 fastest-levenshtein@^1.0.12:
   version "1.0.12"
@@ -6620,6 +6634,11 @@ interpret@^2.2.0:
   resolved "https://registry.npm.alibaba-inc.com/interpret/download/interpret-2.2.0.tgz#1a78a0b5965c40a5416d007ad6f50ad27c417df9"
   integrity sha1-GnigtZZcQKVBbQB61vUK0nxBffk=
 
+intersection-observer@^0.7.0:
+  version "0.7.0"
+  resolved "https://registry.npm.alibaba-inc.com/intersection-observer/download/intersection-observer-0.7.0.tgz#ee16bee978db53516ead2f0a8154b09b400bbdc9"
+  integrity sha1-7ha+6XjbU1FurS8KgVSwm0ALvck=
+
 invariant@^2.2.0, invariant@^2.2.4:
   version "2.2.4"
   resolved "https://registry.npm.alibaba-inc.com/invariant/download/invariant-2.2.4.tgz#610f3c92c9359ce1db616e538008d23ff35158e6"
@@ -7117,13 +7136,6 @@ isomorphic-fetch@^2.1.1, isomorphic-fetch@^2.2.1:
   dependencies:
     node-fetch "^1.0.1"
     whatwg-fetch ">=0.10.0"
-
-isomorphic-textencoder@1.0.1:
-  version "1.0.1"
-  resolved "https://registry.npm.alibaba-inc.com/isomorphic-textencoder/download/isomorphic-textencoder-1.0.1.tgz#38dcd3b4416d29cd33e274f64b99ae567cd15e83"
-  integrity sha1-ONzTtEFtKc0z4nT2S5muVnzRXoM=
-  dependencies:
-    fast-text-encoding "^1.0.0"
 
 istanbul-lib-coverage@^3.0.0:
   version "3.0.0"
@@ -7688,20 +7700,10 @@ jsonparse@^1.2.0:
   resolved "https://registry.npm.alibaba-inc.com/jsonparse/download/jsonparse-1.3.1.tgz#3f4dae4a91fac315f71062f8521cc239f1366280"
   integrity sha1-P02uSpH6wxX3EGL4UhzCOfE2YoA=
 
-just-debounce-it@1.1.0:
-  version "1.1.0"
-  resolved "https://registry.npm.alibaba-inc.com/just-debounce-it/download/just-debounce-it-1.1.0.tgz#8e92578effc155358a44f458c52ffbee66983bef"
-  integrity sha1-jpJXjv/BVTWKRPRYxS/77maYO+8=
-
 just-debounce@^1.0.0:
   version "1.1.0"
   resolved "https://registry.npm.alibaba-inc.com/just-debounce/download/just-debounce-1.1.0.tgz#2f81a3ad4121a76bc7cb45dbf704c0d76a8e5ddf"
   integrity sha1-L4GjrUEhp2vHy0Xb9wTA12qOXd8=
-
-just-once@1.1.0:
-  version "1.1.0"
-  resolved "https://registry.npm.alibaba-inc.com/just-once/download/just-once-1.1.0.tgz#fe81a185ebaeeb0947a7e705bf01cb6808db0ad8"
-  integrity sha1-/oGhheuu6wlHp+cFvwHLaAjbCtg=
 
 keycode@^2.2.0:
   version "2.2.0"
@@ -8022,6 +8024,11 @@ lodash.groupby@^4.6.0:
   version "4.6.0"
   resolved "https://registry.npm.alibaba-inc.com/lodash.groupby/download/lodash.groupby-4.6.0.tgz#0b08a1dcf68397c397855c3239783832df7403d1"
   integrity sha1-Cwih3PaDl8OXhVwyOXg4Mt90A9E=
+
+lodash.isequal@^4.5.0:
+  version "4.5.0"
+  resolved "https://registry.npm.alibaba-inc.com/lodash.isequal/download/lodash.isequal-4.5.0.tgz#415c4478f2bcc30120c22ce10ed3226f7d3e18e0"
+  integrity sha1-QVxEePK8wwEgwizhDtMib30+GOA=
 
 lodash.isinteger@^4.0.4:
   version "4.0.4"
@@ -11197,6 +11204,11 @@ schema-utils@^3.0.0, schema-utils@^3.1.0:
     ajv "^6.12.5"
     ajv-keywords "^3.5.2"
 
+screenfull@^5.0.0:
+  version "5.2.0"
+  resolved "https://registry.npm.alibaba-inc.com/screenfull/download/screenfull-5.2.0.tgz#6533d524d30621fc1283b9692146f3f13a93d1ba"
+  integrity sha1-ZTPVJNMGIfwSg7lpIUbz8TqT0bo=
+
 select-hose@^2.0.0:
   version "2.0.0"
   resolved "https://registry.npm.alibaba-inc.com/select-hose/download/select-hose-2.0.0.tgz#625d8658f865af43ec962bfc376a37359a4994ca"
@@ -11338,6 +11350,14 @@ setprototypeof@1.2.0:
   version "1.2.0"
   resolved "https://registry.npm.alibaba-inc.com/setprototypeof/download/setprototypeof-1.2.0.tgz#66c9a24a73f9fc28cbe66b09fed3d33dcaf1b424"
   integrity sha1-ZsmiSnP5/CjL5msJ/tPTPcrxtCQ=
+
+sha1@^1.1.1:
+  version "1.1.1"
+  resolved "https://registry.npm.alibaba-inc.com/sha1/download/sha1-1.1.1.tgz#addaa7a93168f393f19eb2b15091618e2700f848"
+  integrity sha1-rdqnqTFo85PxnrKxUJFhjicA+Eg=
+  dependencies:
+    charenc ">= 0.0.1"
+    crypt ">= 0.0.1"
 
 shallow-clone@^3.0.0:
   version "3.0.1"
@@ -12614,6 +12634,14 @@ umi-request@^1.3.5:
   version "1.3.9"
   resolved "https://registry.npm.alibaba-inc.com/umi-request/download/umi-request-1.3.9.tgz#e745edc22e1eb83e9e8d02334a6d1ebae20b025e"
   integrity sha1-50Xtwi4euD6ejQIzSm0euuILAl4=
+  dependencies:
+    isomorphic-fetch "^2.2.1"
+    qs "^6.9.1"
+
+umi-request@^1.4.0:
+  version "1.4.0"
+  resolved "https://registry.npm.alibaba-inc.com/umi-request/download/umi-request-1.4.0.tgz#ed0e54e47f043d2be06e691477f0890383f9dd8a"
+  integrity sha1-7Q5U5H8EPSvgbmkUd/CJA4P53Yo=
   dependencies:
     isomorphic-fetch "^2.2.1"
     qs "^6.9.1"

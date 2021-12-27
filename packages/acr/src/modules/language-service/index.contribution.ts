@@ -10,10 +10,10 @@ import { LSIF_PROD_API_HOST, LSIF_TEST_API_HOST, LsifClient } from '@alipay/lsif
 import { SimpleLanguageService } from './simple';
 import { IAntcodeService } from '../antcode-service/base';
 import { WorkspaceManagerService } from '../workspace/workspace-loader.service';
-import { ILanguageGrammarRegistrationService } from '../textmate-language-grammar/base';
 import { reportLsifBehavior } from '../../utils/monitor';
 import { toGitUri } from '../merge-request/changes-tree/util';
 import * as timer from '../../utils/timer';
+import { IFileServiceClient } from '@ali/ide-file-service';
 
 const IS_TEST_ENV =
   process.env.NODE_ENV === 'development' ||
@@ -24,9 +24,6 @@ const IS_TEST_ENV =
 export class LanguageServiceContribution extends Disposable implements ClientAppContribution {
   @Autowired(SimpleLanguageService)
   private readonly simpleLanguageService: SimpleLanguageService;
-
-  @Autowired(ILanguageGrammarRegistrationService)
-  private readonly languageGrammarService: ILanguageGrammarRegistrationService;
 
   @Autowired(IAntcodeService)
   private readonly antcodeService: IAntcodeService;
@@ -39,6 +36,9 @@ export class LanguageServiceContribution extends Disposable implements ClientApp
 
   @Autowired(PreferenceService)
   private readonly preferenceService: PreferenceService;
+
+  @Autowired(IFileServiceClient)
+  private fileServiceClient: IFileServiceClient;
 
   get workspaceUri() {
     return new URI(this.workspaceService.workspace!.uri);
@@ -75,9 +75,6 @@ export class LanguageServiceContribution extends Disposable implements ClientApp
   }
 
   async onDidStart() {
-    // lsif registration
-    // 确保 language 注册好了才能注册 lsif 以让 pattern 规则 work
-    await this.languageGrammarService.languageDidRegistered;
     this.addDispose(
       this.simpleLanguageService.registerHoverProvider(
         { pattern: '**/*.{js,jsx,ts,tsx,java}' },

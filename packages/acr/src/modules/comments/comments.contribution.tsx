@@ -32,7 +32,7 @@ import { MouseWheelBlock } from './components/MouseWheelBlock';
 import { AnnotationService } from './annotation.service';
 import * as styles from './index.module.less';
 import { Portal } from '../../portal';
-import { IAntcodeCommentThread } from './comment.interface';
+import { IAntcodeCommentThread, ICommentsThreadData } from './comment.interface';
 import { getChangeRangeByDiff } from './utils';
 
 @Domain(ClientAppContribution, CoreCommentsContribution)
@@ -243,6 +243,8 @@ export class CommentsContribution implements ClientAppContribution, CoreComments
           return false;
         }
 
+        const treadData = thread?.data as ICommentsThreadData;
+
         const { commentFilterType } = this.antcodeCommentsService;
         const isHideAll = commentFilterType === COMMENT_FILTER_TYPE.HIDE;
         const onlyShowProblem = commentFilterType === COMMENT_FILTER_TYPE.PROBLEM;
@@ -252,15 +254,15 @@ export class CommentsContribution implements ClientAppContribution, CoreComments
         // 隐藏全部评论 | 仅展示问题评论
         if (
           isHideAll ||
-          (onlyShowProblem && !thread.data?.isProblem) ||
-          (onlyShowChangeLineRelatedComment && !thread.data?.isChangeLineRelated)
+          (onlyShowProblem && !treadData?.isProblem) ||
+          (onlyShowChangeLineRelatedComment && !treadData?.isChangeLineRelated)
         ) {
           thread.hideAll();
         } else {
           thread.show();
         }
         // 只有在已有评论才出现用户头像
-        return !!thread?.data?.noteId;
+        return !!treadData?.noteId;
       },
     });
   }

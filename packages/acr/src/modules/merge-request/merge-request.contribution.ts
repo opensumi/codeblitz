@@ -11,10 +11,8 @@ import { MenuContribution, IMenuRegistry } from '@ali/ide-core-browser/lib/menu/
 export class MergeRequestContribution implements ComponentContribution, MenuContribution {
   // MR Explorer
   registerComponent(registry: ComponentRegistry) {
-    // FIXME: 恰好借用 title 为空时不渲染高度，然后用他 titleComponent 展示 mr-summary
     registry.register(MergeRequestExplorerId, [ChangeTreeView, WebSCMView], {
       titleComponent: MergeRequestSummary,
-      // title: 'Code review',
       iconClass: getIcon('PR'),
       priority: 1,
       containerId: MergeRequestExplorerId,
@@ -24,5 +22,7 @@ export class MergeRequestContribution implements ComponentContribution, MenuCont
   registerMenus(menus: IMenuRegistry) {
     // 卸载左侧面板的右键菜单
     menus.unregisterMenuId(`accordion/${MergeRequestExplorerId}`);
+    // 卸载配置菜单
+    menus.unregisterMenuId(`activityBar/extra`);
   }
 }

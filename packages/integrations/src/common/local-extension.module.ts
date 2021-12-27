@@ -1,3 +1,4 @@
+import { useState, useEffect } from 'react';
 import { Provider, Injectable, Autowired } from '@ali/common-di';
 import {
   Domain,
@@ -7,7 +8,7 @@ import {
   FsProviderContribution,
 } from '@ali/ide-core-browser';
 import { ExtensionServiceClientImpl, IExtensionNodeClientService } from '@alipay/alex-core';
-import { IExtensionMetadata } from '@alipay/alex-shared';
+import { IExtensionMetadata, IExtensionBasicMetadata } from '@alipay/alex-shared';
 import { IFileServiceClient } from '@ali/ide-file-service';
 import { KaitianExtFsProvider } from '@alipay/alex-core';
 
@@ -46,6 +47,7 @@ export class FileServerContribution implements StaticResourceContribution, FsPro
 
 /**
  * 加上本地调试用的插件
+ * dir toolkit/extensions, toolkit/fixtures
  */
 @Injectable()
 class ExtensionServiceClient extends ExtensionServiceClientImpl {
@@ -78,3 +80,15 @@ export class LocalExtensionModule extends BrowserModule {
     },
   ];
 }
+
+export const useLoadLocalExtensionMetadata = () => {
+  const [extensions, setExtensions] = useState<IExtensionBasicMetadata[] | null>(null);
+  useEffect(() => {
+    (async () => {
+      const res = await fetch('/getLocalExtensionsMetadata');
+      const localExtensions: IExtensionBasicMetadata[] = await res.json();
+      setExtensions(localExtensions);
+    })();
+  }, []);
+  return extensions;
+};

@@ -20,6 +20,12 @@ import { CommentsModule } from '@ali/ide-comments/lib/browser';
 import { WebviewModule } from '@ali/ide-webview/lib/browser';
 import { OutputModule } from '@ali/ide-output/lib/browser';
 import { EditorModule } from '@ali/ide-editor/lib/browser';
+import { KaitianExtensionModule } from '@ali/ide-kaitian-extension/lib/browser';
+
+// alex modules
+import { AlexModule } from '@alipay/alex/lib/core/alex.module';
+import { ClientModule, ServerModuleCollection } from '@alipay/alex-core';
+import { PluginModule } from '@alipay/alex-plugin';
 
 import { BrowserFileSchemeModule } from '../overrides/browser-file-scheme';
 
@@ -47,4 +53,12 @@ export const CommonBrowserModules: ConstructorOf<BrowserModule>[] = [
   OutputModule,
   // browser custom modules
   BrowserFileSchemeModule,
+
+  // extension
+  KaitianExtensionModule,
+  // Alex
+  ClientModule,
+  PluginModule,
+  ...ServerModuleCollection,
+  AlexModule,
 ];

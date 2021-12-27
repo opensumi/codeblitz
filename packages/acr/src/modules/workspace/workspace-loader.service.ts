@@ -3,16 +3,19 @@ import { Disposable, URI, DefaultStorageProvider, STORAGE_SCHEMA } from '@ali/id
 import { IFileServiceClient } from '@ali/ide-file-service';
 import { IWorkspaceService } from '@ali/ide-workspace';
 import * as paths from '@ali/ide-core-common/lib/path';
+import { fsExtra } from '@alipay/alex-core';
 
 import { IAntcodeService } from '../antcode-service/base';
-import bfs, { BROWSER_FS_HOME_DIR } from '../../common/file-system';
 import { fromGitUri } from '../merge-request/changes-tree/util';
+import { ACR_WORKSPACE_NAMESPACE } from '../../common/constant';
 
 @Injectable()
 export class WorkspaceManagerService extends Disposable {
   // 默认的 workspace 目录规则为 /home/{projectId}/{currentRef}
   static getWorkspaceDir(projectId: number, prId: number, currentRef: string): URI {
-    return BROWSER_FS_HOME_DIR.resolve(paths.join(projectId + '', prId + '', currentRef));
+    return new URI(ACR_WORKSPACE_NAMESPACE).resolve(
+      paths.join(projectId + '', prId + '', currentRef)
+    );
   }
 
   @Autowired(IAntcodeService)
@@ -61,12 +64,13 @@ export class WorkspaceManagerService extends Disposable {
     );
   }
 
-  public async getParsedUriParams(
-    uri: URI
-  ): Promise<void | {
-    ref: string;
-    path: string;
-  }> {
+  public async getParsedUriParams(uri: URI): Promise<
+    | undefined
+    | {
+        ref: string;
+        path: string;
+      }
+  > {
     if (uri.scheme === 'git') {
       const { ref, path } = fromGitUri(uri);
       return {
@@ -88,9 +92,7 @@ export class WorkspaceManagerService extends Disposable {
 
       let relativePathStr = relativePath.toString();
 
-      const [ref] = paths.Path.splitPath(
-        BROWSER_FS_HOME_DIR.relative(projectRootUri)!.toString()
-      ).reverse();
+      const [ref] = paths.Path.splitPath(projectRootUri.toString()).reverse();
       // trim leading whitespace
       if (relativePathStr.startsWith(paths.Path.separator)) {
         relativePathStr = relativePathStr.slice(1);
@@ -117,7 +119,7 @@ export class WorkspaceManagerService extends Disposable {
     }
     const uriStr = workspaceUri.toString();
     // 确保 workspace 目录存在
-    await bfs.ensureDir(workspaceUri.codeUri.fsPath);
+    await fsExtra.ensureDir(workspaceUri.codeUri.fsPath);
     const fileStat = await this.fileServiceClient.getFileStat(uriStr);
     await this.workspaceService.setWorkspace(fileStat);
   }

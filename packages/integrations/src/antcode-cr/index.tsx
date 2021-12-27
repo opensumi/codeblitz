@@ -1,95 +1,174 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-import jCookie from 'js-cookie';
-import qs from 'query-string';
+import { Button, Switch } from 'antd';
+import 'antd/dist/antd.css';
 
 import AntcodeCR from '@alipay/alex-acr';
-import { getLocale } from '@alipay/alex-acr/lib/utils/locale';
 import { IAntcodeCRProps } from '@alipay/alex-acr/lib/modules/antcode-service/base';
-import { AntcodeEncodingType } from '@alipay/alex-acr/lib/modules/antcode-service/base';
+import { Uri } from '@alipay/alex';
+import * as path from 'path';
+import { usePersistFn } from 'ahooks';
 
-import { getProps } from './mock-props';
-import { getPrDetail, getPrChanges, getDiffById } from './mock-props/requests';
-import * as meta from './mock-props/meta';
-
-import './styles.less';
-
-const query = qs.parse(window.location.search);
-
-const projectId = (query.projectId || meta.defaultProjectId) as number;
-const projectPath = (query.projectPath || meta.defaultProjectPath) as string;
-const prIid = (query.prIid || meta.defaultPrIid) as number;
-
-const STABLE_PROPS = getProps(projectId);
+import { Provider, useGlobal, useNote, useReadMark, useAcr, useSetting } from './model';
+import {
+  DiscussionItem,
+  Commenting,
+  Menubar,
+  AnnotationEntry,
+  PRMoreActionLinks,
+} from './antcode/components';
+import { projectService } from './antcode/project.service';
+import { lsifService } from './antcode/lsif.service';
+import { FileActionHeader, FileAction } from './antcode/types/file-action';
+import { useFileReadMarkChange$ } from './hooks';
+import { useLoadLocalExtensionMetadata } from '../common/local-extension.module';
+import acrPlugin from '../common/plugin';
+import './style.less';
 
 const App = () => {
   const [visible, setVisible] = React.useState<boolean>(true);
   const [count, setCount] = React.useState<number>(0);
-  const [encoding, setEncoding] = React.useState<AntcodeEncodingType>(meta.defaultEncoding);
+  const [isFullscreen, setFullscreen] = React.useState<boolean>(false);
 
-  const [lang] = React.useState<string>(() => getLocale());
-  const setLanguage = React.useCallback(() => {
-    jCookie.set('LOCALE', lang === 'en-US' ? 'zh_CN' : 'en_US');
-    window.location.reload();
-  }, [lang]);
+  const { project, pr, user } = useGlobal();
+  const { locale, setLocale, gbk, setGBK } = useSetting();
 
-  const [prData, setPrData] = React.useState({
-    prDetail: {} as any,
-    prChanges: [],
-    isReady: false,
-  });
+  const { commentPack } = useNote();
+  const {
+    getFileReadStatus: _getFileReadStatus,
+    markFileAsRead,
+    markFileAsUnread,
+    readMarks,
+  } = useReadMark();
+  const getFileReadStatus = usePersistFn(_getFileReadStatus);
 
-  // handle query
-  React.useEffect(() => {
-    getPrDetail(projectId, prIid).then((prDetail) => {
-      console.log(prDetail, 'prDetail');
-      setPrData((r) => ({
-        ...r,
-        isReady: true,
-        prDetail,
-      }));
-      getPrChanges(projectId, prDetail.id).then((prChanges) => {
-        setPrData((r) => ({
-          ...r,
-          prChanges,
-        }));
-      });
-    });
-  }, []);
+  const { diffsPack, getDiffById, getFileContent, IDEMode, toggleViewerType, annotationPacks } =
+    useAcr();
+  const fileReadMarkChange$ = useFileReadMarkChange$(diffsPack?.diffs ?? [], readMarks);
 
-  if (!prData.isReady) {
-    return null;
-  }
+  // extension
+  const extensionMetadata = useLoadLocalExtensionMetadata();
+  if (!extensionMetadata) return null;
 
-  console.log(encoding, 'encoding');
+  if (!diffsPack) return null;
 
   const props = {
-    ...STABLE_PROPS,
-    encoding,
-    setEncoding,
-    locale: lang,
-    pr: prData.prDetail,
-    diffs: prData.prChanges,
-    prevSha: prData.prDetail.diff.baseCommitSha,
-    nextSha: prData.prDetail.diff.headCommitSha,
-    latestCommitSha: prData.prDetail.diff.headCommitSha,
-    projectId,
-    projectPath,
-    getDiffById: (changeId: number) => {
-      return getDiffById(projectId, prData.prDetail.id, changeId);
+    addLineNum: diffsPack.addLineNum,
+    deleteLineNum: diffsPack.delLineNum,
+    prevSha: diffsPack.fromVersion?.headCommitSha ?? diffsPack.toVersion.baseCommitSha,
+    nextSha: diffsPack.toVersion.headCommitSha,
+    toggleViewerType,
+    DiscussionItem,
+    Commenting,
+    getFileContent,
+    lineToNoteIdSet: commentPack.lineToNoteIdSet,
+    noteIdToNote: commentPack.noteIdToNote,
+    noteUpdateFlag: commentPack.updateFlag,
+    getDiffById,
+    diffs: diffsPack.diffs,
+    latestCommitSha: pr.diff.headCommitSha,
+    projectId: project.id,
+    projectPath: project.pathWithNamespace,
+    pullRequestId: pr.id,
+    pr,
+    getLanguages: () =>
+      projectService
+        .getLanguages(project.id, {
+          aggBy: 'file_extension',
+          // 按照语言文件个数排序
+          orderBy: 'count',
+          size: 20,
+        })
+        .then((res) => res && Object.keys(res)),
+    getFileReadStatus,
+    fileReadMarkChange$,
+    markFileAsRead,
+    markFileAsUnread,
+    bulkChangeFiles: (actions: FileAction[], header: FileActionHeader) =>
+      projectService.bulkChangeFiles(project.id, actions, header),
+    Menubar: () => (
+      <Menubar
+        initialFullscreen={isFullscreen}
+        handleFullscreenChange={setFullscreen}
+        toggleViewerType={toggleViewerType}
+        logFullScreen={(bool) => console.log('>>>logFullScreen', bool)}
+      />
+    ),
+    user,
+    lsifService,
+    defaultEncoding: project.encoding,
+    encoding: gbk ? 'gbk' : 'utf-8',
+    setEncoding: (val: 'gbk' | 'utf-8') => {
+      setGBK(val === 'gbk');
+    },
+    locale,
+    // annotation related
+    annotations: annotationPacks,
+    AnnotationEntry,
+    PRMoreActionLinks,
+    // 全屏模式
+    isFullscreen,
+
+    appConfig: {
+      staticServicePath: Uri.parse(window.location.href)
+        .with({ path: path.join('/antcode', project.pathWithNamespace, 'raw') })
+        .toString(),
+      plugins: [acrPlugin],
+      extensionMetadata,
     },
   } as IAntcodeCRProps;
 
+  const IDEContainerStyle: React.CSSProperties = {
+    position: isFullscreen ? 'fixed' : 'static',
+    left: 0,
+    top: 0,
+    width: '100%',
+    height: isFullscreen ? '100vh' : 'calc(100vh - 72px)',
+    zIndex: 1000,
+  };
+
   return (
     <div style={{ height: '100%' }}>
-      <div>
-        <button onClick={() => setVisible((r) => !r)}>destroy by toggle</button>
-        <button onClick={() => setCount((v) => v + 1)}>reset</button>
-        <button onClick={setLanguage}>toggle lang: current lang {lang}</button>
+      <div className="controller">
+        <Button onClick={() => setVisible((r) => !r)}>destroy by toggle</Button>
+        <Button onClick={() => setCount((v) => v + 1)}>reset</Button>
+        <Button onClick={setLocale}>toggle locale: current locale {locale}</Button>
+        <Button
+          onClick={() => {
+            acrPlugin.commands?.executeCommand('plugin.command.test', 1, 2);
+          }}
+        >
+          plugin command test
+        </Button>
+        {!IDEMode && (
+          <>
+            IDE 模式: <Switch checked={IDEMode} onChange={toggleViewerType} />
+          </>
+        )}
       </div>
-      <div className="ide">{visible && <AntcodeCR {...props} key={count} />}</div>
+      <div className="pr-head">
+        <div>{pr.description}</div>
+        <div>
+          评审人：
+          {pr.review?.reviewers?.map((r) => (
+            <span style={{ marginRight: 4 }} key={r.id}>
+              {r.name}
+            </span>
+          ))}
+          <span style={{ marginRight: 24 }}></span>
+          合并人：{pr.assignee?.name}
+        </div>
+      </div>
+      {IDEMode && (
+        <div style={IDEContainerStyle}>{visible && <AntcodeCR {...props} key={count} />}</div>
+      )}
     </div>
   );
 };
 
-ReactDOM.render(<App />, document.getElementById('main')!);
+ReactDOM.render(
+  <Provider>
+    <App />
+  </Provider>,
+  document.getElementById('main')!
+);
