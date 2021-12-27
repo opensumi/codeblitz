@@ -37,6 +37,7 @@ declare module '@alipay/alex/languages/schema' {}
 declare module '@alipay/alex/languages/scss' {}
 declare module '@alipay/alex/languages/shaderlab' {}
 declare module '@alipay/alex/languages/shellscript' {}
+declare module '@alipay/alex/languages/solidity' {}
 declare module '@alipay/alex/languages/sql' {}
 declare module '@alipay/alex/languages/swift' {}
 declare module '@alipay/alex/languages/typescript' {}
