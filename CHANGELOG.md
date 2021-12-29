@@ -1,3 +1,17 @@
+# [1.9.0](https://code.alipay.com/cloud-ide/crew-dragon/compare/v1.8.1...v1.9.0) (2021-12-29)
+
+
+### Bug Fixes
+
+* 编辑数据持久化到 indexedDB ([abf30d2](https://code.alipay.com/cloud-ide/crew-dragon/commits/abf30d2ce1f25ee26e91d66cc74a48e8ad86dcb0))
+
+
+### Features
+
+* 改造 acr，并提供完整 demo 示例 ([a718f9c](https://code.alipay.com/cloud-ide/crew-dragon/commits/a718f9cc56f2a3234b18efc6e73eec9c11c046ed))
+
+
+
 ## [1.8.1](https://code.alipay.com/cloud-ide/crew-dragon/compare/v1.8.0...v1.8.1) (2021-12-06)
 
 
