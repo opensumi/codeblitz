@@ -28,10 +28,14 @@ module.exports = () => {
         proxy: {
           // 通过 cookie 请求测试平台
           '/code-test': {
-            target: 'http://100.88.230.6:8090',
+            target: antCodeSitHost,
             changeOrigin: true,
             pathRewrite: {
               '^/code-test': '',
+            },
+            // changeOrigin 只对 get 有效
+            onProxyReq: (request) => {
+              request.setHeader('origin', antCodeSitHost);
             },
           },
           '/code-service': {
@@ -42,17 +46,6 @@ module.exports = () => {
             changeOrigin: true,
             pathRewrite: {
               '^/code-service': '',
-            },
-          },
-          '/antcode': {
-            target: antCodeSitHost,
-            changeOrigin: true,
-            pathRewrite: {
-              '^/antcode': '',
-            },
-            // changeOrigin 只对 get 有效
-            onProxyReq: (request) => {
-              request.setHeader('origin', antCodeSitHost);
             },
           },
         },
