@@ -59,7 +59,7 @@ node scripts/bundle
 # 交互式选择版本发布，并更改 package.json 和 git push
 node scripts/release
 # 通过 --tag 添加自定义的 tag，默认不加为 latest
-node script/release --tag=<tag>
+node scripts/release --tag=<tag>
 ```
 
 ### ACR 开发
