@@ -1,3 +1,18 @@
+## [1.9.3](https://code.alipay.com/cloud-ide/crew-dragon/compare/v1.9.0...v1.9.3) (2022-01-07)
+
+
+### Bug Fixes
+
+* 修复评论不展示问题 ([6191ab8](https://code.alipay.com/cloud-ide/crew-dragon/commits/6191ab81cd0efe0bd55b5dad50f4509aa01523d5))
+* 修复逻辑修改 ([6d2f186](https://code.alipay.com/cloud-ide/crew-dragon/commits/6d2f186adff957bf71ee08f806f15e82ef916247))
+
+
+### Features
+
+* 升级 textmate-language，以支持 kconfig ([ec006db](https://code.alipay.com/cloud-ide/crew-dragon/commits/ec006db88005589ee11962c53e05af66cbb27ea2))
+
+
+
 ## [1.9.2](https://code.alipay.com/cloud-ide/crew-dragon/compare/v1.9.0...v1.9.2) (2022-01-07)
 
 
