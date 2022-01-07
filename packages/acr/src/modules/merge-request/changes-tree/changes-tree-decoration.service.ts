@@ -42,10 +42,11 @@ export class ChangesTreeDecorationService implements FileDecorationsProvider {
         label: 'change decotration',
         onDidChange: this._onDidChangeDecorationsEmitter.event,
         provideDecorations: (uri: Uri) => {
+          const path = uri.path.startsWith('/') ? uri.path.slice(1) : uri.path;
           const threads = this.commentsService.commentsThreads.filter(
             (thread) =>
               thread.data?.type === THREAD_TYPE.COMMENT &&
-              '/' + thread.uri.getParsedQuery().newPath === uri.path
+              thread.uri.getParsedQuery().newPath === path
           );
           return {
             tooltip: threads.length + '',
