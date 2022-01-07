@@ -651,10 +651,10 @@
     "@ali/ide-file-service" "2.5.5"
     "@ali/ide-overlay" "2.5.5"
 
-"@ali/kaitian-textmate-languages@^2.4.0":
-  version "2.6.0"
-  resolved "https://registry.npm.alibaba-inc.com/@ali/kaitian-textmate-languages/download/@ali/kaitian-textmate-languages-2.6.0.tgz#b2b51008067a33040ff890a1d9a488605b58473b"
-  integrity sha512-TliUBqN23x/QBgOkuJKnjzZVe5NBlx7kv1iAhJ5F2w/muYhOVMCf6M2IbMssKGuIfks6OIr/RN9OSegox1kjmQ==
+"@ali/kaitian-textmate-languages@^2.7.0":
+  version "2.7.0"
+  resolved "https://registry.npm.alibaba-inc.com/@ali/kaitian-textmate-languages/download/@ali/kaitian-textmate-languages-2.7.0.tgz#43810f35fa23424046618cff933fccb1ede5fb14"
+  integrity sha512-6P4+d/QKRXK4h50q2G+9d4yYETtuG3/v6DSmA3ZsClltMEYlXNuPU+X/Zaa2bzGj+n1L3VkpK2EI/kLloPP5MQ==
   dependencies:
     plist "^3.0.1"
 
