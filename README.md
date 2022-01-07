@@ -46,10 +46,20 @@ node scripts/bundle
 ```
 
 ### 发布版本
+
+***发包前请确认已 pull master 代码，并且本地依赖已更新***
+
+***发包前请再先确认是否有所有包的权限，并且 tnpm 已登录***
+
+***如果发包过程失败，请先用 git 清理掉被修改的文件，不要在此基础上继续发包，发包成功后会自动提交文件并推送到远程，请确保有 master 分支权限***
+
+***首次发包，可以先打个测试的 tag，避免发布错误的包到 latest 对业务造成影响***
+
 ```bash
 # 交互式选择版本发布，并更改 package.json 和 git push
-# 请确保有 tnpm 发包权限和仓库 master 权限
 node scripts/release
+# 通过 --tag 添加自定义的 tag，默认不加为 latest
+node scripts/release --tag=<tag>
 ```
 
 ### ACR 开发

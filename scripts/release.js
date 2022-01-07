@@ -114,6 +114,11 @@ invoke(async () => {
   step('生成 changelog');
   await exec('yarn changelog');
 
+  step('发布 packages');
+  for (const pkg of packages) {
+    await publishPackage(pkg, targetVersion);
+  }
+
   step('git commit');
   const { stdout } = await exec('git diff', { stdio: 'pipe' });
   if (stdout) {
@@ -121,11 +126,6 @@ invoke(async () => {
     await exec(`git commit -m release:\\ v${targetVersion}`);
   } else {
     console.log('无变更文件');
-  }
-
-  step('发布 packages');
-  for (const pkg of packages) {
-    await publishPackage(pkg, targetVersion);
   }
 
   step('提交到远程');
