@@ -7,6 +7,8 @@ const fetch = extend({
   parseResponse: false,
 });
 
+const BASE_URL = '/code-test';
+
 export interface RequestExtraOptions {
   disableBodyConvert?: boolean;
   disableResponseConvert?: boolean;
@@ -45,7 +47,7 @@ export async function request(
 
   let response: any;
   try {
-    response = await fetch('/antcode' + url + query, options);
+    response = await fetch(BASE_URL + url + query, options);
   } catch (e: any) {
     throw createApiError(e.message);
   }
