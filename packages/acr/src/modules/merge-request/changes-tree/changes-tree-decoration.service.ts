@@ -45,7 +45,7 @@ export class ChangesTreeDecorationService implements FileDecorationsProvider {
           const threads = this.commentsService.commentsThreads.filter(
             (thread) =>
               thread.data?.type === THREAD_TYPE.COMMENT &&
-              thread.uri.getParsedQuery().newPath === uri.path
+              '/' + thread.uri.getParsedQuery().newPath === uri.path
           );
           return {
             tooltip: threads.length + '',
