@@ -92,8 +92,8 @@ api.forEach(({ name, action }) => {
               }
             : {
                 oldFile: path.basename(p),
-                newDirectory: path.dirname(args[1]),
-                newFile: path.basename(args[1]),
+                newDirectory: path.dirname(args[0]),
+                newFile: path.basename(args[0]),
               }),
         } as FileChangeEvent);
       }
@@ -117,8 +117,8 @@ apiSync.forEach(({ name, action }) => {
           }
         : {
             oldFile: path.basename(p),
-            newDirectory: path.dirname(args[1]),
-            newFile: path.basename(args[1]),
+            newDirectory: path.dirname(args[0]),
+            newFile: path.basename(args[0]),
           }),
     } as FileChangeEvent);
     return res;
