@@ -1,3 +1,12 @@
+## [1.9.5](https://code.alipay.com/cloud-ide/crew-dragon/compare/v1.9.3...v1.9.5) (2022-01-13)
+
+
+### Bug Fixes
+
+* 修复 rename 参数取值问题 ([ac2de46](https://code.alipay.com/cloud-ide/crew-dragon/commits/ac2de4673932f66e31170c49226ba036a4d5da28))
+
+
+
 ## [1.9.3](https://code.alipay.com/cloud-ide/crew-dragon/compare/v1.9.0...v1.9.3) (2022-01-07)
 
 

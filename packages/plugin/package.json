@@ -1,6 +1,6 @@
 {
   "name": "@alipay/alex-plugin",
-  "version": "1.9.3",
+  "version": "1.9.5",
   "description": "@alipay/alex-plugin",
   "main": "lib/index.js",
   "typings": "lib/index.d.ts",
@@ -19,8 +19,8 @@
     "lockfile": "enable"
   },
   "dependencies": {
-    "@alipay/alex-core": "1.9.3",
-    "@alipay/alex-shared": "1.9.3",
+    "@alipay/alex-core": "1.9.5",
+    "@alipay/alex-shared": "1.9.5",
     "tslib": "^2.2.0"
   }
 }
