@@ -10,6 +10,7 @@ import {
   localize,
   TabBarToolbarContribution,
   ToolbarRegistry,
+  IRange,
 } from '@ali/ide-core-browser';
 import { IMenuRegistry, MenuId, MenuContribution } from '@ali/ide-core-browser/lib/menu/next';
 import { PreferenceScope } from '@ali/ide-core-common';
@@ -38,7 +39,8 @@ export class ChangesTreeContribution
     TabBarToolbarContribution,
     ClientAppContribution,
     BrowserEditorContribution,
-    MenuContribution {
+    MenuContribution
+{
   @Autowired()
   private readonly changesTreeModelService: ChangesTreeModelService;
 
@@ -137,6 +139,17 @@ export class ChangesTreeContribution
         return this.preferenceSettings.setPreference(settingField, !value, PreferenceScope.User);
       },
     });
+
+    commands.registerCommand(
+      {
+        id: ChangesTreeCommands.OpenFile.id,
+      },
+      {
+        execute: async (fileChange, range?: Partial<IRange> & { original?: boolean }) => {
+          this.openChangeFilesService.openFile(fileChange, 'changes-tree', range);
+        },
+      }
+    );
   }
 
   registerMenus(menus: IMenuRegistry): void {

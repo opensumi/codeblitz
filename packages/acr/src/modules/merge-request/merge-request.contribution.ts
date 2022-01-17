@@ -13,7 +13,7 @@ export class MergeRequestContribution implements ComponentContribution, MenuCont
   registerComponent(registry: ComponentRegistry) {
     registry.register(MergeRequestExplorerId, [ChangeTreeView, WebSCMView], {
       titleComponent: MergeRequestSummary,
-      iconClass: getIcon('PR'),
+      iconClass: getIcon('explorer'),
       priority: 1,
       containerId: MergeRequestExplorerId,
     });

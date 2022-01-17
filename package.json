@@ -146,6 +146,11 @@
       "publisher": "alex",
       "name": "image-preview",
       "version": "1.53.0-patch.1"
+    },
+    {
+      "publisher": "cloud-ide-ext",
+      "name": "antcode-scaning",
+      "version": "0.0.3"
     }
   ]
 }

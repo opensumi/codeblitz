@@ -56,8 +56,8 @@ export class AntcodeService implements IAntcodeService {
   }
 
   private _onDidEncodingChangeEmitter = new Emitter<AntcodeEncodingType>();
-  public readonly onDidEncodingChange: Event<AntcodeEncodingType> = this._onDidEncodingChangeEmitter
-    .event;
+  public readonly onDidEncodingChange: Event<AntcodeEncodingType> =
+    this._onDidEncodingChangeEmitter.event;
   /* encoding end */
 
   /* projectId */
@@ -184,6 +184,10 @@ export class AntcodeService implements IAntcodeService {
     return this._comments;
   }
 
+  get noteIdToReplyIdSet() {
+    return this.config.noteIdToReplyIdSet;
+  }
+
   get annotations() {
     return this._annotations || [];
   }
@@ -306,6 +310,7 @@ export class AntcodeService implements IAntcodeService {
     @Optional()
     private config: IAntcodeCRProps & {
       renderStart: number;
+      noteIdToReplyIdSet: Map<number | string, Set<number | string>>;
     }
   ) {
     this.addLineNum = config.addLineNum;

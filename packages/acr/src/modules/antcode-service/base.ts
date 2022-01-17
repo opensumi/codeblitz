@@ -118,6 +118,7 @@ export interface IAntcodeCRProps {
     plugins?: IPluginConfig;
     extensionMetadata?: IExtensionBasicMetadata[];
   };
+  noteIdToReplyIdSet: Map<number | string, Set<number | string>>;
 }
 
 export interface LsifLocation {
@@ -234,4 +235,5 @@ export interface IAntcodeService {
     prId: number;
     pullRequestId: number;
   };
+  noteIdToReplyIdSet: Map<number | string, Set<number | string>>;
 }
