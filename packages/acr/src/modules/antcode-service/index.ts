@@ -310,7 +310,6 @@ export class AntcodeService implements IAntcodeService {
     @Optional()
     private config: IAntcodeCRProps & {
       renderStart: number;
-      noteIdToReplyIdSet: Map<number | string, Set<number | string>>;
     }
   ) {
     this.addLineNum = config.addLineNum;

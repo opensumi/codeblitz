@@ -1,5 +1,5 @@
 import React from 'react';
-import { useCallback } from 'react';
+import { useEffect } from 'react';
 import ReactDOM from 'react-dom';
 import { Button, Switch } from 'antd';
 import 'antd/dist/antd.css';
@@ -49,7 +49,7 @@ const App = () => {
     useAcr();
   const fileReadMarkChange$ = useFileReadMarkChange$(diffsPack?.diffs ?? [], readMarks);
 
-  useCallback(() => {
+  useEffect(() => {
     // map 需要转译
     CodeScaningPlugin.commands?.executeCommand(
       'antcode-cr.plugin.update.comments',
@@ -58,20 +58,14 @@ const App = () => {
 
     let noteIdToReplyIdSet: [number, number[]][] = [];
     for (let [key, value] of commentPack.noteIdToReplyIdSet) {
-      let setArr: number[] = [];
-      if (value.size) {
-        for (let val of value) {
-          setArr.push(val);
-        }
-      }
-      noteIdToReplyIdSet.push([key, setArr]);
+      noteIdToReplyIdSet.push([key, [...value]]);
     }
     CodeScaningPlugin.commands?.executeCommand(
       'antcode-cr.plugin.update.replaySet',
       noteIdToReplyIdSet
     );
   }, [commentPack.updateFlag]);
-  useCallback(() => {
+  useEffect(() => {
     CodeScaningPlugin.commands?.executeCommand(
       'antcode-cr.plugin.update.annotations',
       annotationPacks
@@ -191,24 +185,6 @@ const App = () => {
                 id: 400003,
                 isAward: false,
                 labels: [],
-                latestStDiff: {
-                  aMode: '100644',
-                  addLineNum: 265,
-                  bMode: '100644',
-                  binaryFile: false,
-                  charsetName: 'UTF-8',
-                  commitSha: 'ab32441adfd6c3c381457717a42f19a7fdd6d59b',
-                  compareDiffId: 31918,
-                  delLineNum: 265,
-                  deletedFile: false,
-                  diff: '@@ -327,62 +327,62 @@ export const getForgot = (req: Request, res: Response) => {\n  * Create a random token, then the send user an email with a reset link.\n  */\n export const postForgot = async (req: Request, res: Response, next: NextFunction) => {\n-    await check("email", "Please enter a valid email address.").isEmail().run(req);\n-    // eslint-disable-next-line @typescript-eslint/camelcase\n-    await sanitize("email").normalizeEmail({ gmail_remove_dots: false }).run(req);\n-\n-    const errors = validationResult(req);\n-\n-    if (!errors.isEmpty()) {\n-        req.flash("errors", errors.array());\n-        return res.redirect("/forgot");\n-    }\n-\n-    async.waterfall([\n-        function createRandomToken(done: Function) {\n-            crypto.randomBytes(16, (err, buf) => {\n-                const token = buf.toString("hex");\n-                done(err, token);\n-            });\n-        },\n-        function setRandomToken(token: AuthToken, done: Function) {\n-            User.findOne({ email: req.body.email }, (err, user: any) => {\n-                if (err) { return done(err); }\n-                if (!user) {\n-                    req.flash("errors", { msg: "Account with that email address does not exist." });\n-                    return res.redirect("/forgot");\n-                }\n-                user.passwordResetToken = token;\n-                user.passwordResetExpires = Date.now() + 3600000; // 1 hour\n-                user.save((err: WriteError) => {\n-                    done(err, token, user);\n-                });\n-            });\n-        },\n-        function sendForgotPasswordEmail(token: AuthToken, user: UserDocument, done: Function) {\n-            const transporter = nodemailer.createTransport({\n-                service: "SendGrid",\n-                auth: {\n-                    user: process.env.SENDGRID_USER,\n-                    pass: process.env.SENDGRID_PASSWORD\n-                }\n-            });\n-            const mailOptions = {\n-                to: user.email,\n-                from: "hackathon@starter.com",\n-                subject: "Reset your password on Hackathon Starter",\n-                text: `You are receiving this email because you (or someone else) have requested the reset of the password for your account.\\n\\n\n+  await check("email", "Please enter a valid email address.").isEmail().run(req);\n+  // eslint-disable-next-line @typescript-eslint/camelcase\n+  await sanitize("email").normalizeEmail({ gmail_remove_dots: false }).run(req);\n+\n+  const errors = validationResult(req);\n+\n+  if (!errors.isEmpty()) {\n+    req.flash("errors", errors.array());\n+    return res.redirect("/forgot");\n+  }\n+\n+  async.waterfall([\n+    function createRandomToken(done: Function) {\n+      crypto.randomBytes(16, (err, buf) => {\n+        const token = buf.toString("hex");\n+        done(err, token);\n+      });\n+    },\n+    function setRandomToken(token: AuthToken, done: Function) {\n+      User.findOne({ email: req.body.email }, (err, user: any) => {\n+        if (err) { return done(err); }\n+        if (!user) {\n+          req.flash("errors", { msg: "Account with that email address does not exist." });\n+          return res.redirect("/forgot");\n+        }\n+        user.passwordResetToken = token;\n+        user.passwordResetExpires = Date.now() + 3600000; // 1 hour\n+        user.save((err: WriteError) => {\n+          done(err, token, user);\n+        });\n+      });\n+    },\n+    function sendForgotPasswordEmail(token: AuthToken, user: UserDocument, done: Function) {\n+      const transporter = nodemailer.createTransport({\n+        service: "SendGrid",\n+        auth: {\n+          user: process.env.SENDGRID_USER,\n+          pass: process.env.SENDGRID_PASSWORD\n+        }\n+      });\n+      const mailOptions = {\n+        to: user.email,\n+        from: "hackathon@starter.com",\n+        subject: "Reset your password on Hackathon Starter",\n+        text: `You are receiving this email because you (or someone else) have requested the reset of the password for your account.\\n\\n\n           Please click on the following link, or paste this into your browser to complete the process:\\n\\n\n           http://${req.headers.host}/reset/${token}\\n\\n\n           If you did not request this, please ignore this email and your password will remain unchanged.\\n`\n-            };\n-            transporter.sendMail(mailOptions, (err) => {\n-                req.flash("info", { msg: `An e-mail has been sent to ${user.email} with further instructions.` });\n-                done(err);\n-            });\n-        }\n-    ], (err) => {\n-        if (err) { return next(err); }\n-        res.redirect("/forgot");\n-    });\n+      };\n+      transporter.sendMail(mailOptions, (err) => {\n+        req.flash("info", { msg: `An e-mail has been sent to ${user.email} with further instructions.` });\n+        done(err);\n+      });\n+    }\n+  ], (err) => {\n+    if (err) { return next(err); }\n+    res.redirect("/forgot");\n+  });\n };\n',
-                  id: 1088,
-                  newFile: false,
-                  newPath: 'src/controllers/user.ts',
-                  oldPath: 'src/controllers/user.ts',
-                  renamedFile: false,
-                  tooLarge: false,
-                },
                 lineCode: 'c17950853d6b9677e9822cf07f2616db7ca02797_388_384',
                 lineType: 'old',
                 note: '111 \n\n\n![image.png](/ide-s/TypeScript-Node-Starter/uploads/cd8f399b2c994d01b4afe179c26e5a4f/image.png)\n',
@@ -244,7 +220,7 @@ const App = () => {
               };
               let noteIdToNote = Array.from(commentPack.noteIdToNote.entries());
               // @ts-ignore
-              noteIdToNote.push([123123123, mock]);
+              noteIdToNote.push([400003, mock]);
 
               CodeScaningPlugin.commands?.executeCommand(
                 'antcode-cr.plugin.update.comments',
