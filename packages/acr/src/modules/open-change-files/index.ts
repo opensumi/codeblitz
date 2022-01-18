@@ -68,7 +68,7 @@ export class OpenChangeFilesService extends Disposable {
   public openFile = async (
     change: IPullRequestChangeDiff,
     channel?: FileOpenMethod,
-    range?: Partial<IRange> & { origininal?: boolean }
+    range?: Partial<IRange> & { original?: boolean }
   ) => {
     const leftRef = this.antcodeService.leftRef;
     const rightRef = this.antcodeService.rightRef;
@@ -149,7 +149,7 @@ export class OpenChangeFilesService extends Disposable {
 
     if (range?.startLineNumber) {
       // modify 和 renamed 表示 diff编辑器
-      if ((status === 'modified' || status === 'renamed') && range.origininal) {
+      if ((status === 'modified' || status === 'renamed') && range.original) {
         options.originalRange = range;
       } else {
         options.range = range;
@@ -199,7 +199,7 @@ export class OpenChangeFilesService extends Disposable {
 
   private revealRangeInCenter(range) {
     if (range) {
-      if (range.origininal) {
+      if (range.original) {
         this.workbenchEditorService.currentEditorGroup?.diffEditor.originalEditor.monacoEditor.revealRangeInCenter(
           range as IRange
         );
