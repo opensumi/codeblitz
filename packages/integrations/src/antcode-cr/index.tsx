@@ -56,7 +56,8 @@ const App = () => {
     }
     // map 需要转译
     CodeScaningPlugin.commands?.executeCommand(
-      'antcode-cr.plugin.update.comments',
+      'antcode-cr.update',
+      'comments',
       Array.from(commentPack.noteIdToNote.entries())
     );
 
@@ -65,7 +66,8 @@ const App = () => {
       noteIdToReplyIdSet.push([key, [...value]]);
     }
     CodeScaningPlugin.commands?.executeCommand(
-      'antcode-cr.plugin.update.replyIdSet',
+      'antcode-cr.update',
+      'replyIdSet',
       noteIdToReplyIdSet
     );
   }, [commentPack.updateFlag]);
@@ -73,10 +75,7 @@ const App = () => {
     if (!CodeScaningPlugin.ready) {
       return;
     }
-    CodeScaningPlugin.commands?.executeCommand(
-      'antcode-cr.plugin.update.annotations',
-      annotationPacks
-    );
+    CodeScaningPlugin.commands?.executeCommand('antcode-cr.update', 'annotations', annotationPacks);
   }, [annotationPacks]);
 
   // const extensionMetadata = useLoadLocalExtensionMetadata()
@@ -183,7 +182,8 @@ const App = () => {
               // @ts-ignore
               noteIdToNote.push([400003, mock]);
               CodeScaningPlugin.commands?.executeCommand(
-                'antcode-cr.plugin.update.comments',
+                'antcode-cr.update',
+                'comments',
                 noteIdToNote
               );
             }}
@@ -193,10 +193,7 @@ const App = () => {
           <Button
             onClick={() => {
               let mock = mockService.getScaningProblem();
-              CodeScaningPlugin.commands?.executeCommand(
-                'antcode-cr.plugin.update.annotations',
-                mock
-              );
+              CodeScaningPlugin.commands?.executeCommand('antcode-cr.update', 'annotations', mock);
             }}
           >
             annotations
@@ -204,10 +201,7 @@ const App = () => {
           <Button
             onClick={() => {
               let mock = [[78, [86, 179, 178]]];
-              CodeScaningPlugin.commands?.executeCommand(
-                'antcode-cr.plugin.update.replyIdSet',
-                mock
-              );
+              CodeScaningPlugin.commands?.executeCommand('antcode-cr.update', 'replyIdSet', mock);
               commentPack.setUpdateFlag({});
             }}
           >

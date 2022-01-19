@@ -18,31 +18,10 @@ export class Plugin implements IPluginModule {
   async activate({ context, commands }: IPluginAPI) {
     this._commands = commands;
     context.subscriptions.push(
+      // 判断 extension 注册成功
       commands.registerCommand('antcode-cr.plugin.ready', async () => {
         this._ready = (await commands.executeCommand('antcode-cr.ready')) as boolean;
         return true;
-      }),
-
-      commands.registerCommand('antcode-cr.plugin.update.annotations', async (props) => {
-        try {
-          await commands.executeCommand('antcode-cr.update', 'annotations', props);
-        } catch (err) {
-          console.log('CODE_SCANING PLUGIN ERR', err);
-        }
-      }),
-      commands.registerCommand('antcode-cr.plugin.update.comments', async (props) => {
-        try {
-          await commands.executeCommand('antcode-cr.update', 'comments', props);
-        } catch (err) {
-          console.log('CODE_SCANING PLUGIN ERR', err);
-        }
-      }),
-      commands.registerCommand('antcode-cr.plugin.update.replyIdSet', async (props) => {
-        try {
-          await commands.executeCommand('antcode-cr.update', 'replyIdSet', props);
-        } catch (err) {
-          console.log('CODE_SCANING PLUGIN ERR', err);
-        }
       })
     );
   }
