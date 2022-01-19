@@ -145,6 +145,7 @@ const AntcodeCR: React.FC<IAntcodeCRProps> = (props) => {
   React.useEffect(() => {
     const antCodeService: IAntcodeService = injector$.current!.get(IAntcodeService);
     antCodeService.noteIdToNote = props.noteIdToNote;
+    antCodeService.noteIdToReplyIdSet = props.noteIdToReplyIdSet;
   }, [props.noteUpdateFlag]);
 
   // pullRequest listener

@@ -235,5 +235,5 @@ export interface IAntcodeService {
     prId: number;
     pullRequestId: number;
   };
-  noteIdToReplyIdSet: Map<number | string, Set<number | string>>;
+  noteIdToReplyIdSet: IAntcodeCRProps['noteIdToReplyIdSet'];
 }

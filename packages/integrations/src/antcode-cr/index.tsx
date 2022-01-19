@@ -51,6 +51,9 @@ const App = () => {
   const fileReadMarkChange$ = useFileReadMarkChange$(diffsPack?.diffs ?? [], readMarks);
 
   useEffect(() => {
+    if (!CodeScaningPlugin.ready) {
+      return;
+    }
     // map 需要转译
     CodeScaningPlugin.commands?.executeCommand(
       'antcode-cr.plugin.update.comments',
@@ -62,17 +65,22 @@ const App = () => {
       noteIdToReplyIdSet.push([key, [...value]]);
     }
     CodeScaningPlugin.commands?.executeCommand(
-      'antcode-cr.plugin.update.replaySet',
+      'antcode-cr.plugin.update.replyIdSet',
       noteIdToReplyIdSet
     );
   }, [commentPack.updateFlag]);
   useEffect(() => {
+    if (!CodeScaningPlugin.ready) {
+      return;
+    }
     CodeScaningPlugin.commands?.executeCommand(
       'antcode-cr.plugin.update.annotations',
       annotationPacks
     );
   }, [annotationPacks]);
 
+  // const extensionMetadata = useLoadLocalExtensionMetadata()
+  // if(!extensionMetadata) return null
   if (!diffsPack) return null;
 
   const props = {
@@ -139,6 +147,7 @@ const App = () => {
         .toString(),
       plugins: [acrPlugin, CodeScaningPlugin],
       extensionMetadata: [CodeScaning],
+      // extensionMetadata
     },
   } as IAntcodeCRProps;
 
@@ -199,6 +208,7 @@ const App = () => {
                 'antcode-cr.plugin.update.replyIdSet',
                 mock
               );
+              commentPack.setUpdateFlag({});
             }}
           >
             replyIdSet

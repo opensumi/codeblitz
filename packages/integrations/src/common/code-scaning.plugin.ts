@@ -9,28 +9,39 @@ export class Plugin implements IPluginModule {
     return this._commands;
   }
 
+  get ready() {
+    return this._ready;
+  }
+
+  private _ready: boolean = false;
+
   async activate({ context, commands }: IPluginAPI) {
     this._commands = commands;
     context.subscriptions.push(
+      commands.registerCommand('antcode-cr.plugin.ready', async () => {
+        this._ready = (await commands.executeCommand('antcode-cr.ready')) as boolean;
+        return true;
+      }),
+
       commands.registerCommand('antcode-cr.plugin.update.annotations', async (props) => {
         try {
           await commands.executeCommand('antcode-cr.update', 'annotations', props);
         } catch (err) {
-          console.log('CODE_SCANING PLUGIN ERR', JSON.stringify(err));
+          console.log('CODE_SCANING PLUGIN ERR', err);
         }
       }),
       commands.registerCommand('antcode-cr.plugin.update.comments', async (props) => {
         try {
           await commands.executeCommand('antcode-cr.update', 'comments', props);
         } catch (err) {
-          console.log('CODE_SCANING PLUGIN ERR', JSON.stringify(err));
+          console.log('CODE_SCANING PLUGIN ERR', err);
         }
       }),
       commands.registerCommand('antcode-cr.plugin.update.replyIdSet', async (props) => {
         try {
           await commands.executeCommand('antcode-cr.update', 'replyIdSet', props);
         } catch (err) {
-          console.log('CODE_SCANING PLUGIN ERR', JSON.stringify(err));
+          console.log('CODE_SCANING PLUGIN ERR', err);
         }
       })
     );
