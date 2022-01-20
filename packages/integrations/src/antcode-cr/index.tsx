@@ -78,8 +78,8 @@ const App = () => {
     CodeScaningPlugin.commands?.executeCommand('antcode-cr.update', 'annotations', annotationPacks);
   }, [annotationPacks]);
 
-  const extensionMetadata = useLoadLocalExtensionMetadata();
-  if (!extensionMetadata) return null;
+  // const extensionMetadata = useLoadLocalExtensionMetadata();
+  // if (!extensionMetadata) return null;
   if (!diffsPack) return null;
 
   CodeScaningPlugin.setProps({
@@ -157,8 +157,8 @@ const App = () => {
         .with({ path: path.join('/antcode', project.pathWithNamespace, 'raw') })
         .toString(),
       plugins: [acrPlugin, CodeScaningPlugin],
-      // extensionMetadata: [CodeScaning],
-      extensionMetadata,
+      extensionMetadata: [CodeScaning],
+      // extensionMetadata,
     },
   } as IAntcodeCRProps;
 
