@@ -85,25 +85,6 @@ export class CommonCommandsContribution implements CommandContribution {
       },
     });
 
-    // 注册命令 供外部调用props
-    commandRegistry.registerCommand(
-      {
-        id: 'antcode-cr.props',
-      },
-      {
-        execute: async () => {
-          const { comments, annotations, projectMeta, pullRequestChangeList, noteIdToReplyIdSet } =
-            this.antCodeService;
-          return {
-            comments,
-            annotations,
-            projectMeta,
-            pullRequestChangeList,
-            noteIdToReplyIdSet: noteIdToReplyIdSet,
-          };
-        },
-      }
-    );
     commandRegistry.registerCommand(
       {
         id: 'antcode-cr.setBadge',

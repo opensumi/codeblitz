@@ -5,6 +5,10 @@ export class Plugin implements IPluginModule {
 
   private _commands: IPluginAPI['commands'] | null = null;
 
+  private _ready: boolean = false;
+
+  private props: null = null;
+
   get commands() {
     return this._commands;
   }
@@ -13,15 +17,16 @@ export class Plugin implements IPluginModule {
     return this._ready;
   }
 
-  private _ready: boolean = false;
+  setProps(props) {
+    this.props = props;
+  }
 
   async activate({ context, commands }: IPluginAPI) {
     this._commands = commands;
     context.subscriptions.push(
-      // 判断 extension 注册成功
-      commands.registerCommand('antcode-cr.plugin.ready', async () => {
-        this._ready = (await commands.executeCommand('antcode-cr.ready')) as boolean;
-        return true;
+      commands.registerCommand('antcode-cr.plugin.props', async () => {
+        this._ready = true;
+        return this.props;
       })
     );
   }

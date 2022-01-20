@@ -1,5 +1,5 @@
 import React from 'react';
-import { useEffect } from 'react';
+import { useEffect, useRef } from 'react';
 import ReactDOM from 'react-dom';
 import { Button, Switch } from 'antd';
 import 'antd/dist/antd.css';
@@ -51,7 +51,7 @@ const App = () => {
   const fileReadMarkChange$ = useFileReadMarkChange$(diffsPack?.diffs ?? [], readMarks);
 
   useEffect(() => {
-    if (!CodeScaningPlugin.ready) {
+    if (!CodeScaningPlugin?.ready) {
       return;
     }
     // map 需要转译
@@ -72,15 +72,27 @@ const App = () => {
     );
   }, [commentPack.updateFlag]);
   useEffect(() => {
-    if (!CodeScaningPlugin.ready) {
+    if (!CodeScaningPlugin?.ready) {
       return;
     }
     CodeScaningPlugin.commands?.executeCommand('antcode-cr.update', 'annotations', annotationPacks);
   }, [annotationPacks]);
 
-  // const extensionMetadata = useLoadLocalExtensionMetadata()
-  // if(!extensionMetadata) return null
+  const extensionMetadata = useLoadLocalExtensionMetadata();
+  if (!extensionMetadata) return null;
   if (!diffsPack) return null;
+
+  CodeScaningPlugin.setProps({
+    noteIdToNote: commentPack.noteIdToNote,
+    annotations: annotationPacks,
+    projectMeta: {
+      projectId: project.pathWithNamespace,
+      prId: pr?.iid,
+      pullRequestId: pr?.id,
+    },
+    pullRequestChangeList: diffsPack?.diffs,
+    noteIdToReplyIdSet: commentPack.noteIdToReplyIdSet,
+  });
 
   const props = {
     noteIdToReplyIdSet: commentPack.noteIdToReplyIdSet,
@@ -145,8 +157,8 @@ const App = () => {
         .with({ path: path.join('/antcode', project.pathWithNamespace, 'raw') })
         .toString(),
       plugins: [acrPlugin, CodeScaningPlugin],
-      extensionMetadata: [CodeScaning],
-      // extensionMetadata
+      // extensionMetadata: [CodeScaning],
+      extensionMetadata,
     },
   } as IAntcodeCRProps;
 
