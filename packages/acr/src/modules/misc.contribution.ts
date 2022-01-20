@@ -276,5 +276,15 @@ export class MiscContribution
 
   registerKeybindings(keybindings: KeybindingRegistry) {
     keybindings.unregisterKeybinding('ctrlcmd+,');
+    keybindings.unregisterKeybinding('ctrlcmd+1');
+    keybindings.unregisterKeybinding('ctrlcmd+2');
+    keybindings.unregisterKeybinding('ctrlcmd+3');
+    keybindings.unregisterKeybinding('ctrlcmd+4');
+    keybindings.unregisterKeybinding('ctrlcmd+5');
+    keybindings.unregisterKeybinding('ctrlcmd+6');
+    keybindings.unregisterKeybinding('ctrlcmd+6');
+    keybindings.unregisterKeybinding('ctrlcmd+7');
+    keybindings.unregisterKeybinding('ctrlcmd+8');
+    keybindings.unregisterKeybinding('ctrlcmd+9');
   }
 }
