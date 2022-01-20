@@ -33,4 +33,8 @@ export class ChangesTreeCommands {
   static GotoNextChange = {
     id: 'codereview.change.next',
   };
+
+  static OpenFile = {
+    id: 'changes-tree.open',
+  };
 }

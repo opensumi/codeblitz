@@ -17,11 +17,19 @@ import {
   viewColumnToResourceOpenOptions,
 } from '@ali/ide-kaitian-extension/lib/common/vscode/converter';
 import { WorkbenchEditorService, IResourceOpenOptions } from '@ali/ide-editor';
+import { IAntcodeService } from '../antcode-service/base';
+import { IMainLayoutService } from '@ali/ide-main-layout';
 
 @Domain(CommandContribution)
 export class CommonCommandsContribution implements CommandContribution {
   @Autowired(CommandService)
   private readonly commandService: CommandService;
+
+  @Autowired(IAntcodeService)
+  private readonly antCodeService: IAntcodeService;
+
+  @Autowired(IMainLayoutService)
+  layoutService: IMainLayoutService;
 
   @Autowired(WorkbenchEditorService)
   private readonly workbenchEditorService: WorkbenchEditorService;
@@ -76,5 +84,19 @@ export class CommonCommandsContribution implements CommandContribution {
         );
       },
     });
+
+    commandRegistry.registerCommand(
+      {
+        id: 'antcode-cr.setBadge',
+      },
+      {
+        execute: async (containerId, str) => {
+          const handle = this.layoutService.getTabbarHandler(containerId);
+          if (handle) {
+            handle.setBadge(str);
+          }
+        },
+      }
+    );
   }
 }

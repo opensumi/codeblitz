@@ -268,6 +268,7 @@ const useCommentPack = (projectId: number, prId: number) => {
     editNote,
     updateFlag,
     pathShaToNoteCount,
+    setUpdateFlag,
   };
 };
 

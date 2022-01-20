@@ -5,6 +5,7 @@ import {
   URI,
   PreferenceService,
   PreferenceChange,
+  IRange,
 } from '@ali/ide-core-browser';
 import { basename } from '@ali/ide-core-common/lib/path';
 import { IResourceOpenOptions, WorkbenchEditorService } from '@ali/ide-editor';
@@ -64,7 +65,11 @@ export class OpenChangeFilesService extends Disposable {
     return basename(uri.withoutScheme().withoutQuery().toString(true));
   }
 
-  public openFile = async (change: IPullRequestChangeDiff, channel?: FileOpenMethod) => {
+  public openFile = async (
+    change: IPullRequestChangeDiff,
+    channel?: FileOpenMethod,
+    range?: Partial<IRange> & { original?: boolean }
+  ) => {
     const leftRef = this.antcodeService.leftRef;
     const rightRef = this.antcodeService.rightRef;
     const { uris, desc, status } = splitChangeToTwoUris(change, leftRef, rightRef);
@@ -120,6 +125,7 @@ export class OpenChangeFilesService extends Disposable {
     const { currentResource } = this.workbenchEditorService;
     // 打开已存在的 uri 则跳过
     if (currentResource?.uri.isEqual(targetUri)) {
+      this.revealRangeInCenter(range);
       this.reportOpenFile(targetUri, channel, true);
       return;
     }
@@ -129,8 +135,8 @@ export class OpenChangeFilesService extends Disposable {
      * 如果当前 editor tab index 为 0 的 uri 是 change file 则通过 replace 打开
      * 否则默认将成为新的 index 0
      */
-    const currentIndexZeroResourceUri = this.workbenchEditorService.editorGroups[0]?.resources[0]
-      ?.uri;
+    const currentIndexZeroResourceUri =
+      this.workbenchEditorService.editorGroups[0]?.resources[0]?.uri;
     options.replace = Boolean(
       currentIndexZeroResourceUri && isChangeFileURI(currentIndexZeroResourceUri)
     );
@@ -140,7 +146,17 @@ export class OpenChangeFilesService extends Disposable {
 
     // 标记为当前打开的文件
     this._currentOpenedChangeFileUri = targetUri;
+
+    if (range?.startLineNumber) {
+      // modify 和 renamed 表示 diff编辑器
+      if ((status === 'modified' || status === 'renamed') && range.original) {
+        options.originalRange = range;
+      } else {
+        options.range = range;
+      }
+    }
     await this.workbenchEditorService.open(targetUri, options);
+    this.revealRangeInCenter(range);
     this.reportOpenFile(targetUri, channel, false);
 
     // 将当前 targetUri 的 tab close-icon 隐藏掉
@@ -178,6 +194,24 @@ export class OpenChangeFilesService extends Disposable {
         prId: this.antcodeService.pullRequest?.iid,
         commitId: ref,
       });
+    }
+  }
+
+  private revealRangeInCenter(range) {
+    if (range) {
+      if (range.original) {
+        this.workbenchEditorService.currentEditorGroup?.diffEditor.originalEditor.monacoEditor.revealRangeInCenter(
+          range as IRange
+        );
+        this.workbenchEditorService.currentEditorGroup?.diffEditor.originalEditor.monacoEditor.setSelection(
+          range as IRange
+        );
+      } else {
+        this.workbenchEditorService.currentEditor?.monacoEditor.revealRangeInCenter(
+          range as IRange
+        );
+        this.workbenchEditorService.currentEditor?.monacoEditor.setSelection(range as IRange);
+      }
     }
   }
 

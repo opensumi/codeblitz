@@ -12,7 +12,6 @@ import { AntcodeService } from './antcode-service';
 import { IAntcodeService } from './antcode-service/base';
 import { EditorBottomSideContribution } from './editor-bottom-side/editor-bottom-side.contribution';
 import { ChangesTreeLocationContribution } from './merge-request/changes-tree/changes-tree-location.contribution';
-import { CustomLeftSlotRenderContribution } from './view/slot-render.contribution';
 import { ChangeFileViewedContribution } from './change-file-viewed.contribution';
 
 import { EditorEmptyContribution } from './edtior-empty/index.contribution';
@@ -42,11 +41,6 @@ export class MiscModule extends BrowserModule {
     /* --- editor related ends --- */
     ChangesTreeLocationContribution,
     ChangeFileViewedContribution,
-
-    //#region
-    // TODO: 目前只有 change-tree，先隐藏掉 tabbar，等有其它 view 再去掉
-    CustomLeftSlotRenderContribution,
-    //#endregion
 
     EditorEmptyContribution,
     // experimental

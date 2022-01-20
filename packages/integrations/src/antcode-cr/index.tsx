@@ -1,4 +1,5 @@
 import React from 'react';
+import { useEffect, useRef } from 'react';
 import ReactDOM from 'react-dom';
 import { Button, Switch } from 'antd';
 import 'antd/dist/antd.css';
@@ -23,6 +24,9 @@ import { FileActionHeader, FileAction } from './antcode/types/file-action';
 import { useFileReadMarkChange$ } from './hooks';
 import { useLoadLocalExtensionMetadata } from '../common/local-extension.module';
 import acrPlugin from '../common/plugin';
+import CodeScaningPlugin from '../common/code-scaning.plugin';
+import CodeScaning from '@alipay/alex/extensions/cloud-ide-ext.antcode-scaning';
+import { mockService } from './antcode/mock.service';
 import './style.less';
 
 const App = () => {
@@ -46,13 +50,52 @@ const App = () => {
     useAcr();
   const fileReadMarkChange$ = useFileReadMarkChange$(diffsPack?.diffs ?? [], readMarks);
 
-  // extension
-  const extensionMetadata = useLoadLocalExtensionMetadata();
-  if (!extensionMetadata) return null;
+  useEffect(() => {
+    if (!CodeScaningPlugin?.ready) {
+      return;
+    }
+    // map 需要转译
+    CodeScaningPlugin.commands?.executeCommand(
+      'antcode-cr.update',
+      'comments',
+      Array.from(commentPack.noteIdToNote.entries())
+    );
 
+    let noteIdToReplyIdSet: [number, number[]][] = [];
+    for (let [key, value] of commentPack.noteIdToReplyIdSet) {
+      noteIdToReplyIdSet.push([key, [...value]]);
+    }
+    CodeScaningPlugin.commands?.executeCommand(
+      'antcode-cr.update',
+      'replyIdSet',
+      noteIdToReplyIdSet
+    );
+  }, [commentPack.updateFlag]);
+  useEffect(() => {
+    if (!CodeScaningPlugin?.ready) {
+      return;
+    }
+    CodeScaningPlugin.commands?.executeCommand('antcode-cr.update', 'annotations', annotationPacks);
+  }, [annotationPacks]);
+
+  // const extensionMetadata = useLoadLocalExtensionMetadata();
+  // if (!extensionMetadata) return null;
   if (!diffsPack) return null;
 
+  CodeScaningPlugin.setProps({
+    noteIdToNote: commentPack.noteIdToNote,
+    annotations: annotationPacks,
+    projectMeta: {
+      projectId: project.pathWithNamespace,
+      prId: pr?.iid,
+      pullRequestId: pr?.id,
+    },
+    pullRequestChangeList: diffsPack?.diffs,
+    noteIdToReplyIdSet: commentPack.noteIdToReplyIdSet,
+  });
+
   const props = {
+    noteIdToReplyIdSet: commentPack.noteIdToReplyIdSet,
     addLineNum: diffsPack.addLineNum,
     deleteLineNum: diffsPack.delLineNum,
     prevSha: diffsPack.fromVersion?.headCommitSha ?? diffsPack.toVersion.baseCommitSha,
@@ -113,8 +156,9 @@ const App = () => {
       staticServicePath: Uri.parse(window.location.href)
         .with({ path: path.join('/antcode', project.pathWithNamespace, 'raw') })
         .toString(),
-      plugins: [acrPlugin],
-      extensionMetadata,
+      plugins: [acrPlugin, CodeScaningPlugin],
+      extensionMetadata: [CodeScaning],
+      // extensionMetadata,
     },
   } as IAntcodeCRProps;
 
@@ -140,6 +184,43 @@ const App = () => {
         >
           plugin command test
         </Button>
+
+        <div style={{ border: '1px solid #000', textAlign: 'center' }}>
+          <div>code scaning mock</div>
+          <Button
+            onClick={() => {
+              let mock = mockService.getOneComment();
+              let noteIdToNote = Array.from(commentPack.noteIdToNote.entries());
+              // @ts-ignore
+              noteIdToNote.push([400003, mock]);
+              CodeScaningPlugin.commands?.executeCommand(
+                'antcode-cr.update',
+                'comments',
+                noteIdToNote
+              );
+            }}
+          >
+            comments change
+          </Button>
+          <Button
+            onClick={() => {
+              let mock = mockService.getScaningProblem();
+              CodeScaningPlugin.commands?.executeCommand('antcode-cr.update', 'annotations', mock);
+            }}
+          >
+            annotations
+          </Button>
+          <Button
+            onClick={() => {
+              let mock = [[78, [86, 179, 178]]];
+              CodeScaningPlugin.commands?.executeCommand('antcode-cr.update', 'replyIdSet', mock);
+              commentPack.setUpdateFlag({});
+            }}
+          >
+            replyIdSet
+          </Button>
+        </div>
+
         {!IDEMode && (
           <>
             IDE 模式: <Switch checked={IDEMode} onChange={toggleViewerType} />

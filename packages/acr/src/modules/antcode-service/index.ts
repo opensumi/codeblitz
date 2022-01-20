@@ -56,8 +56,8 @@ export class AntcodeService implements IAntcodeService {
   }
 
   private _onDidEncodingChangeEmitter = new Emitter<AntcodeEncodingType>();
-  public readonly onDidEncodingChange: Event<AntcodeEncodingType> = this._onDidEncodingChangeEmitter
-    .event;
+  public readonly onDidEncodingChange: Event<AntcodeEncodingType> =
+    this._onDidEncodingChangeEmitter.event;
   /* encoding end */
 
   /* projectId */
@@ -170,6 +170,7 @@ export class AntcodeService implements IAntcodeService {
   readonly onDidCommentsChange = this._onDidCommentsChangeEmitter.event;
   private _comments: IComment[] = [];
   public _annotations: IAnnotationData[] = [];
+  private _noteIdToReplyIdSet: IAntcodeService['noteIdToReplyIdSet'];
   private _onDidCommentsCreate = new Emitter<IComment[]>();
   readonly onDidCommentsCreate = this._onDidCommentsCreate.event;
   private _onDidCommentsDelete = new Emitter<number[]>();
@@ -182,6 +183,14 @@ export class AntcodeService implements IAntcodeService {
 
   get comments() {
     return this._comments;
+  }
+
+  get noteIdToReplyIdSet() {
+    return this._noteIdToReplyIdSet;
+  }
+
+  set noteIdToReplyIdSet(noteIdToReplyIdSet: IAntcodeService['noteIdToReplyIdSet']) {
+    this._noteIdToReplyIdSet = noteIdToReplyIdSet;
   }
 
   get annotations() {
