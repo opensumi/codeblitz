@@ -275,6 +275,20 @@ export class MiscContribution
   }
 
   registerKeybindings(keybindings: KeybindingRegistry) {
-    keybindings.unregisterKeybinding('ctrlcmd+,');
+    const keys = [
+      'ctrlcmd+,',
+      'ctrlcmd+1',
+      'ctrlcmd+2',
+      'ctrlcmd+3',
+      'ctrlcmd+4',
+      'ctrlcmd+5',
+      'ctrlcmd+6',
+      'ctrlcmd+7',
+      'ctrlcmd+8',
+      'ctrlcmd+9',
+    ];
+    keys.forEach((key) => {
+      keybindings.unregisterKeybinding(key);
+    });
   }
 }
