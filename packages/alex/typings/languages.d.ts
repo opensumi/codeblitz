@@ -18,7 +18,6 @@ declare module '@alipay/alex/languages/ini' {}
 declare module '@alipay/alex/languages/java' {}
 declare module '@alipay/alex/languages/javascript' {}
 declare module '@alipay/alex/languages/json' {}
-declare module '@alipay/alex/languages/kcl-vscode-extension' {}
 declare module '@alipay/alex/languages/less' {}
 declare module '@alipay/alex/languages/log' {}
 declare module '@alipay/alex/languages/lua' {}

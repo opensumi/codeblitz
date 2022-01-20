@@ -1,3 +1,17 @@
+## [1.9.6-beta.1](https://code.alipay.com/cloud-ide/crew-dragon/compare/v1.9.5...v1.9.6-beta.1) (2022-01-20)
+
+
+### Bug Fixes
+
+* original ([63f291e](https://code.alipay.com/cloud-ide/crew-dragon/commits/63f291efb51ea596d3a94f076e20a9576a4d2537))
+
+
+### Features
+
+* 增加代码扫描插件 ([3d08955](https://code.alipay.com/cloud-ide/crew-dragon/commits/3d089554d6874a9b29ad062d27ce49df2079fb74))
+
+
+
 ## [1.9.5](https://code.alipay.com/cloud-ide/crew-dragon/compare/v1.9.3...v1.9.5) (2022-01-13)
 
 

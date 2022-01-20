@@ -1,6 +1,6 @@
 {
   "name": "@alipay/alex-lsif-service",
-  "version": "1.9.5",
+  "version": "1.9.6-beta.1",
   "description": "@alipay/alex-lsif-service",
   "main": "lib/index.js",
   "typings": "lib/index.d.ts",
@@ -19,8 +19,8 @@
     "lockfile": "enable"
   },
   "dependencies": {
-    "@alipay/alex-core": "1.9.5",
-    "@alipay/alex-shared": "1.9.5",
+    "@alipay/alex-core": "1.9.6-beta.1",
+    "@alipay/alex-shared": "1.9.6-beta.1",
     "@alipay/lsif-client": "^2.0.0",
     "tslib": "^2.2.0"
   },
