@@ -57,9 +57,11 @@ node scripts/bundle
 
 ```bash
 # 交互式选择版本发布，并更改 package.json 和 git push
-node scripts/release
+yarn release
 # 通过 --tag 添加自定义的 tag，默认不加为 latest
-node scripts/release --tag=<tag>
+yarn release --tag=<tag>
+# 快速发布 next 版本，如果发测试版请用这个
+yarn release:next
 ```
 
 ### ACR 开发
