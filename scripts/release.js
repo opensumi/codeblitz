@@ -36,7 +36,15 @@ invoke(async () => {
     );
     return;
   }
-  console.log('(PASS)');
+
+  // 更新依赖
+  await exec('yarn');
+  // 检查有无未提交的文件
+  const gitDiff = await exec('git diff HEAD', { stdio: 'pipe' });
+  if (gitDiff.stdout) {
+    signale.error('有未提交的文件');
+    return;
+  }
 
   step('确定发布版本');
   let { targetVersion } = await prompt({
@@ -80,7 +88,7 @@ invoke(async () => {
   const { yes } = await prompt({
     type: 'confirm',
     name: 'yes',
-    message: `确认发布 v${targetVersion} ${args.tag ? ` (tag: ${args.tag})` : '(tag: latest)'}`,
+    message: `确认发布 v${targetVersion} (tag: ${args.tag || 'latest'})}`,
   });
 
   if (!yes) {
