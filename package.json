@@ -157,7 +157,7 @@
     {
       "publisher": "cloud-ide-ext",
       "name": "acr-editor-blame",
-      "version": "0.0.1"
+      "version": "0.0.2"
     }
   ]
 }
