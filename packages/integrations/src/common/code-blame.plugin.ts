@@ -18,7 +18,7 @@ export default class IDEPlugin implements IPluginModule {
   /**
    * 插件 ID，用于唯一标识插件
    */
-  PLUGIN_ID = 'ACR_BLAME';
+  PLUGIN_ID = 'ACR_BLAME_PLUGIN';
 
   constructor(
     onActive: () => void,
