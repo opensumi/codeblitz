@@ -29,7 +29,7 @@ import acrPlugin from '../common/plugin';
 import CodeBlamePlugin, { ExtensionCommand } from '../common/code-blame.plugin';
 import CodeScaningPlugin from '../common/code-scaning.plugin';
 import CodeScaning from '@alipay/alex/extensions/cloud-ide-ext.antcode-scaning';
-import CodeBlame from '@alipay/alex/extensions/cloud-ide-ext.acr-editor-blame';
+import CodeBlame from '@alipay/alex/extensions/cloud-ide-ext.editor-plugin-blame';
 import { mockService } from './antcode/mock.service';
 import './style.less';
 

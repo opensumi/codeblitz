@@ -1,10 +1,9 @@
 import { IPluginModule, IPluginAPI } from '@alipay/alex/lib/editor';
 
 export enum ExtensionCommand {
-  toggleBlame = 'code.blame.toggleBlame',
+  acrToggleBlame = 'code.blame.acrToggleBlame',
   linkToCommit = 'code.blame.linktocommit',
   onActive = 'code.blame.extension.active',
-  setPerference = 'code.blame.setPerference',
   setProjectData = 'code.blame.setProjectData',
   getBlameData = 'code.blame.getBlameData',
 }
@@ -60,14 +59,4 @@ export default class IDEPlugin implements IPluginModule {
    * 注销插件，可在此时机清理副作用
    */
   deactivate() {}
-
-  /**
-   * 修改配置项
-   * @param name 配置项名称
-   * @param value 值
-   * @param global 是否全局生效
-   */
-  setPerference(name: string, value: string, global?: boolean) {
-    this.commands.executeCommand(ExtensionCommand.setPerference, name, value, !!global);
-  }
 }
