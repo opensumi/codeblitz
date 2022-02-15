@@ -1,6 +1,6 @@
 {
   "name": "@alipay/alex-registry",
-  "version": "1.9.6",
+  "version": "1.9.7",
   "description": "@alipay/alex-registry",
   "main": "lib/index.js",
   "typings": "lib/index.d.ts",
@@ -11,7 +11,7 @@
     "kaitian AntCodespaces"
   ],
   "publishConfig": {
-    "registry": "https://registry.antfin-inc.com"
+    "registry": "https://registry.npm.alibaba-inc.com"
   },
   "tnpm": {
     "mode": "yarn",

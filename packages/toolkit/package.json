@@ -1,6 +1,6 @@
 {
   "name": "@alipay/alex-toolkit",
-  "version": "1.9.6",
+  "version": "1.9.7",
   "description": "@alipay/alex-toolkit",
   "main": "index.js",
   "files": [
@@ -20,7 +20,7 @@
     "playground": "webpack serve --config playground/webpack.config.js"
   },
   "publishConfig": {
-    "registry": "https://registry.antfin-inc.com"
+    "registry": "https://registry.npm.alibaba-inc.com"
   },
   "tnpm": {
     "mode": "yarn",

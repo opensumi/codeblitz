@@ -1,3 +1,12 @@
+## [1.9.7](https://code.alipay.com/cloud-ide/crew-dragon/compare/v1.9.6...v1.9.7) (2022-02-15)
+
+
+### Bug Fixes
+
+* **cli:** 扩展安装设置 retry 为 3 ([2f658ba](https://code.alipay.com/cloud-ide/crew-dragon/commits/2f658ba6988e786c8c2bdb16552e9449502c0b6e))
+
+
+
 ## [1.9.6](https://code.alipay.com/cloud-ide/crew-dragon/compare/v1.9.6-beta.1...v1.9.6) (2022-01-26)
 
 
