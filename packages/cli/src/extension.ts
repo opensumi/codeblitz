@@ -145,6 +145,7 @@ async function createInstaller() {
     frameworkVersion: pkgJSON.engines.kaitian,
     dist: EXTENSION_DIR,
     ignoreIncreaseCount: true,
+    retry: 3, // 失败重试
   });
 }
 
