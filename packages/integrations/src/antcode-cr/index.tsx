@@ -1,5 +1,5 @@
 import React from 'react';
-import { useEffect, useRef, useState } from 'react';
+import { useEffect, useState, useMemo } from 'react';
 import ReactDOM from 'react-dom';
 import { Button, Switch } from 'antd';
 import 'antd/dist/antd.css';
@@ -84,15 +84,14 @@ const App = () => {
 
   // 插件
   const [pluginActivated, setPluginActivated] = useState(false);
-  const blamePlugin = useRef(
-    new CodeBlamePlugin(
+  const blamePlugin = useMemo(() => {
+    return new CodeBlamePlugin(
       () => setPluginActivated(true),
       (commitId: string) =>
         window.open(`/${project.namespace.path}/${project.path}/commit/${commitId}`),
       (projectId, commitId, path) => repoService.getCodeBlame(projectId, commitId, path)
-    )
-  );
-
+    );
+  }, []);
   useEffect(() => {
     if (!pluginActivated) {
       return;
@@ -102,7 +101,7 @@ const App = () => {
       prevSha: diffsPack.fromVersion?.headCommitSha ?? diffsPack.toVersion.baseCommitSha,
       nextSha: diffsPack.toVersion.headCommitSha,
     };
-    blamePlugin.current.commands?.executeCommand(ExtensionCommand.setProjectData, projectData);
+    blamePlugin.commands?.executeCommand(ExtensionCommand.setProjectData, projectData);
   }, [pluginActivated, diffsPack]);
 
   // const extensionMetadata = useLoadLocalExtensionMetadata();
@@ -183,7 +182,7 @@ const App = () => {
       staticServicePath: Uri.parse(window.location.href)
         .with({ path: path.join('/antcode', project.pathWithNamespace, 'raw') })
         .toString(),
-      plugins: [acrPlugin, CodeScaningPlugin, blamePlugin.current],
+      plugins: [acrPlugin, CodeScaningPlugin, blamePlugin],
       extensionMetadata: [CodeScaning, CodeBlame],
       // extensionMetadata,
     },
