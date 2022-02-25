@@ -9,7 +9,11 @@ export const LINE_NUMBER_PATTERN = /\.*@@\s*-(\d+).*\+(\d+).*\s*@@/;
 
 // @@ -362,14 +250,10 @@
 // 左边编辑器在 362 行变更，变更 14 行，右边编辑器在 250 行处变更，变更 10 行
-export const DIFF_CHANGE_LINE_PATTERN = /\.*@@\s*-(\d+),(\d+).*\+(\d+),(\d+).*\s*@@/;
+
+// 只触及第一行的文件改动的文件 格式会有变化
+// @@ -0,0 +1 @@  新增文件只增加第一行
+// @@ -1 +1 @@    修改只有一行的文件并只改动第一行
+export const DIFF_CHANGE_LINE_PATTERN = /\.*@@\s*-(\d+)(,(\d+))?.*\+(\d+)(,(\d+))?.*\s*@@/;
 
 export function isBlank(str: string | null): boolean {
   return str === null || str.trim() === '';
@@ -202,10 +206,10 @@ export function getChangeRangeByDiff(diff: string, isLeft: boolean) {
         let startLineNumber, endLineNumber;
         if (isLeft) {
           startLineNumber = parseInt(matcher[1], 10);
-          endLineNumber = startLineNumber + parseInt(matcher[2], 10) - 1;
+          endLineNumber = startLineNumber + parseInt(matcher[3] || '1', 10) - 1;
         } else {
-          startLineNumber = parseInt(matcher[3], 10);
-          endLineNumber = startLineNumber + parseInt(matcher[4], 10) - 1;
+          startLineNumber = parseInt(matcher[4], 10);
+          endLineNumber = startLineNumber + parseInt(matcher[6] || '1', 10) - 1;
         }
         // @ts-ignore
         ranges.push(toRange(startLineNumber, endLineNumber));

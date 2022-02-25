@@ -14,9 +14,6 @@ export interface DiffFoldingChangeData {
   unFoldNumber: number;
 }
 
-/* eslint-disable no-useless-escape */
-export const DIFF_CHANGE_LINE_PATTERN = /\.*\@\@\s*\-(\d+),(\d+).*\+(\d+),(\d+).*\s*\@\@/;
-
 export class MiscCommands {
   static ExpandFie = {
     id: 'misc.expandFile',
