@@ -216,7 +216,11 @@ export class MiscContribution
       QUICK_OPEN_COMMANDS.OPEN,
     ].forEach((command) => {
       commands.unregisterCommand(command);
-      commands.registerCommand(command);
+      commands.registerCommand(command, {
+        // 注册空执行防止antcode内报错
+        isEnabled: () => false,
+        execute: () => {},
+      });
     });
 
     /**
