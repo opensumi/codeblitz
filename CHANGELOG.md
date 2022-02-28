@@ -1,3 +1,19 @@
+## [1.9.8](https://code.alipay.com/cloud-ide/crew-dragon/compare/v1.9.7...v1.9.8) (2022-02-28)
+
+
+### Bug Fixes
+
+* 防止主题dispose后黑屏 ([d2998a8](https://code.alipay.com/cloud-ide/crew-dragon/commits/d2998a8c6cc9a3dbafc3d7cfe3f2fc3b9dbdcafe))
+* 修复调用命令面板时报错 ([795a235](https://code.alipay.com/cloud-ide/crew-dragon/commits/795a23541a26d191455f5ff691324e5c722df2f6))
+* 修复评论icon不展示问题 ([119a349](https://code.alipay.com/cloud-ide/crew-dragon/commits/119a349f9457f3091d99580546b3d033138b92c6))
+
+
+### Features
+
+* 增加blame插件 ([f1d9024](https://code.alipay.com/cloud-ide/crew-dragon/commits/f1d9024dc60fcab1467dcfa4cf70820fcae5bd8d))
+
+
+
 ## [1.9.7](https://code.alipay.com/cloud-ide/crew-dragon/compare/v1.9.6...v1.9.7) (2022-02-15)
 
 
