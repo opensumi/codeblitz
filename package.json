@@ -153,6 +153,11 @@
       "publisher": "cloud-ide-ext",
       "name": "antcode-scaning",
       "version": "0.0.8"
+    },
+    {
+      "publisher": "cloud-ide-ext",
+      "name": "editor-plugin-blame",
+      "version": "0.2.5"
     }
   ]
 }

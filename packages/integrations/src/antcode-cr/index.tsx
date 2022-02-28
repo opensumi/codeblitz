@@ -1,8 +1,9 @@
 import React from 'react';
-import { useEffect, useRef } from 'react';
+import { useEffect, useState, useMemo } from 'react';
 import ReactDOM from 'react-dom';
 import { Button, Switch } from 'antd';
 import 'antd/dist/antd.css';
+import type { CheckboxChangeEvent } from 'antd/lib/checkbox';
 
 import AntcodeCR from '@alipay/alex-acr';
 import { IAntcodeCRProps } from '@alipay/alex-acr/lib/modules/antcode-service/base';
@@ -20,12 +21,15 @@ import {
 } from './antcode/components';
 import { projectService } from './antcode/project.service';
 import { lsifService } from './antcode/lsif.service';
+import { repoService } from './antcode/repo.service';
 import { FileActionHeader, FileAction } from './antcode/types/file-action';
 import { useFileReadMarkChange$ } from './hooks';
 import { useLoadLocalExtensionMetadata } from '../common/local-extension.module';
 import acrPlugin from '../common/plugin';
+import CodeBlamePlugin, { ExtensionCommand } from '../common/code-blame.plugin';
 import CodeScaningPlugin from '../common/code-scaning.plugin';
 import CodeScaning from '@alipay/alex/extensions/cloud-ide-ext.antcode-scaning';
+import CodeBlame from '@alipay/alex/extensions/cloud-ide-ext.editor-plugin-blame';
 import { mockService } from './antcode/mock.service';
 import './style.less';
 
@@ -77,6 +81,28 @@ const App = () => {
     }
     CodeScaningPlugin.commands?.executeCommand('antcode-cr.update', 'annotations', annotationPacks);
   }, [annotationPacks]);
+
+  // 插件
+  const [pluginActivated, setPluginActivated] = useState(false);
+  const blamePlugin = useMemo(() => {
+    return new CodeBlamePlugin(
+      () => setPluginActivated(true),
+      (commitId: string) =>
+        window.open(`/${project.namespace.path}/${project.path}/commit/${commitId}`),
+      (projectId, commitId, path) => repoService.getCodeBlame(projectId, commitId, path)
+    );
+  }, []);
+  useEffect(() => {
+    if (!pluginActivated) {
+      return;
+    }
+    const projectData = {
+      projectId: project.id,
+      prevSha: diffsPack.fromVersion?.headCommitSha ?? diffsPack.toVersion.baseCommitSha,
+      nextSha: diffsPack.toVersion.headCommitSha,
+    };
+    blamePlugin.commands?.executeCommand(ExtensionCommand.setProjectData, projectData);
+  }, [pluginActivated, diffsPack]);
 
   // const extensionMetadata = useLoadLocalExtensionMetadata();
   // if (!extensionMetadata) return null;
@@ -156,8 +182,8 @@ const App = () => {
       staticServicePath: Uri.parse(window.location.href)
         .with({ path: path.join('/antcode', project.pathWithNamespace, 'raw') })
         .toString(),
-      plugins: [acrPlugin, CodeScaningPlugin],
-      extensionMetadata: [CodeScaning],
+      plugins: [acrPlugin, CodeScaningPlugin, blamePlugin],
+      extensionMetadata: [CodeScaning, CodeBlame],
       // extensionMetadata,
     },
   } as IAntcodeCRProps;
