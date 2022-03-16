@@ -35,6 +35,10 @@ import {
 } from './override/codeEditorService';
 import { BreadCrumbServiceImplOverride, IBreadCrumbService } from './override/breadcrumb.service';
 import { SearchContribution } from './search/index.contribution';
+import {
+  MonacoSnippetSuggestProviderOverride,
+  MonacoSnippetSuggestProvider,
+} from './override/snippet.service';
 
 export * from './override/codeEditorService';
 
@@ -74,6 +78,11 @@ export class ClientModule extends BrowserModule {
     {
       token: IBreadCrumbService,
       useClass: BreadCrumbServiceImplOverride,
+      override: true,
+    },
+    {
+      token: MonacoSnippetSuggestProvider,
+      useClass: MonacoSnippetSuggestProviderOverride,
       override: true,
     },
   ];
