@@ -35,6 +35,12 @@
         "fileMatch": "/my.yml",
         "url": "./package.schema.json"
       }
+    ],
+    "snippets": [
+      {
+        "language": "javascript",
+        "path": "./snippet.json"
+      }
     ]
   }
 }
