@@ -1,3 +1,12 @@
+## [1.9.9](https://code.alipay.com/cloud-ide/crew-dragon/compare/v1.9.8...v1.9.9) (2022-03-18)
+
+
+### Bug Fixes
+
+* 修复 snippet 路径协议问题 ([4a3ddf6](https://code.alipay.com/cloud-ide/crew-dragon/commits/4a3ddf6a5a9efb1fd2ac1a6b7025417da9f005ef))
+
+
+
 ## [1.9.8](https://code.alipay.com/cloud-ide/crew-dragon/compare/v1.9.7...v1.9.8) (2022-02-28)
 
 
