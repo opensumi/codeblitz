@@ -75,6 +75,8 @@ const globalBundle = createWebpackConfig({
     entry: {
       [config.appGlobalEntry]: './packages/alex/src',
       [config.appGlobalMinEntry]: './packages/alex/src',
+      [config.editorAllGlobalEntry]: './packages/alex/src/editor.all',
+      [config.editorAllGlobalMiniEntry]: './packages/alex/src/editor.all',
     },
     // 此处 bundle 的包仅作为 commonjs 使用，但因为 external 原因会导致 webpack4 加载 bundle 出错，因此还是使用 umd
     output: {
