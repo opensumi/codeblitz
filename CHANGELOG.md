@@ -1,3 +1,12 @@
+## [1.9.10](https://code.alipay.com/cloud-ide/crew-dragon/compare/v1.9.9...v1.9.10) (2022-04-24)
+
+
+### Features
+
+* 新增 editor 包用于 script 引入 ([2cf4953](https://code.alipay.com/cloud-ide/crew-dragon/commits/2cf4953f7676fa25ee73fa42543b0b3e0d3a2ac5))
+
+
+
 ## [1.9.9](https://code.alipay.com/cloud-ide/crew-dragon/compare/v1.9.8...v1.9.9) (2022-03-18)
 
 
