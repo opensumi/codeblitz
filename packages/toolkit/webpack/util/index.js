@@ -37,6 +37,8 @@ exports.config = {
   appGlobalMinEntry: 'alex.global.min',
   editorEntry: 'alex.editor',
   editorAllEntry: 'alex.editor.all',
+  editorAllGlobalEntry: 'alex.editor.all.global',
+  editorAllGlobalMiniEntry: 'alex.editor.all.global.min',
   workerEntry: 'worker-host',
   webviewEntry: 'webview',
   languageGlobalEntry: 'languages.global',
