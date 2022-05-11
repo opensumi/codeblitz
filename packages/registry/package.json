@@ -1,6 +1,6 @@
 {
   "name": "@alipay/alex-registry",
-  "version": "1.9.11-0",
+  "version": "1.9.11",
   "description": "@alipay/alex-registry",
   "main": "lib/index.js",
   "typings": "lib/index.d.ts",

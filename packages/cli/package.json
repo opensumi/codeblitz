@@ -1,6 +1,6 @@
 {
   "name": "@alipay/alex-cli",
-  "version": "1.9.11-0",
+  "version": "1.9.11",
   "description": "@alipay/alex-cli",
   "main": "lib/commander.js",
   "files": [
@@ -20,7 +20,7 @@
   "dependencies": {
     "@ali/ide-extension-installer": "^2.0.0",
     "@ali/ide-kaitian-extension": "2.5.5",
-    "@alipay/alex-shared": "1.9.11-0",
+    "@alipay/alex-shared": "1.9.11",
     "commander": "^7.2.0",
     "fs-extra": "^9.0.1",
     "lodash.pick": "^4.4.0",
