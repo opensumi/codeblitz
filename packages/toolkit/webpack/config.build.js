@@ -85,10 +85,8 @@ const globalBundle = createWebpackConfig({
     },
     externals: [
       {
-        // 先将 React 打包进去
-        // 以 alex.editor.all.global.min.js 举例不打包 React 7.48M，打包后 7.6M
-        // react: 'React',
-        // 'react-dom': 'ReactDOM',
+        react: 'React',
+        'react-dom': 'ReactDOM',
         moment: 'moment',
       },
     ],
