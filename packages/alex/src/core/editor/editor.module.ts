@@ -458,20 +458,46 @@ class EditorSpecialContribution
       )
     );
     let oldClickDecorations: string[] = [];
-    const highlightLine = (lineNumber: number | [number, number]) => {
-      const startLineNumber = typeof lineNumber === 'number' ? lineNumber : lineNumber[0];
-      const endLineNumber = typeof lineNumber === 'number' ? lineNumber : lineNumber[1];
-      // 延迟高亮，否则不居中
-      oldClickDecorations = editor.monacoEditor.deltaDecorations(oldClickDecorations, [
-        {
-          range: new monaco.Range(startLineNumber, 1, endLineNumber, 1),
-          options: {
-            isWholeLine: true,
-            linesDecorationsClassName: styles['line-anchor'],
-            className: styles['line-content'],
+    const highlightLine = (lineNumber: number | [number, number] | Array<[number, number]>) => {
+      let centerLine: number;
+      let newDecorations: monaco.editor.IModelDeltaDecoration[];
+      if (Array.isArray(lineNumber) && Array.isArray(lineNumber[0])) {
+        centerLine = lineNumber[0][0];
+        newDecorations = lineNumber.map((line) => {
+          return {
+            range: new monaco.Range(line[0], 1, line[1], 1),
+            options: {
+              description: 'line-anchor-description',
+              isWholeLine: true,
+              linesDecorationsClassName: styles['line-anchor'],
+              className: styles['line-content'],
+            },
+          };
+        });
+      } else {
+        const startLineNumber =
+          typeof lineNumber === 'number' ? lineNumber : (lineNumber[0] as number);
+        const endLineNumber =
+          typeof lineNumber === 'number' ? lineNumber : (lineNumber[1] as number);
+        centerLine = startLineNumber;
+        newDecorations = [
+          {
+            range: new monaco.Range(startLineNumber, 1, endLineNumber, 1),
+            options: {
+              // @ts-ignore
+              description: 'line-anchor-description',
+              isWholeLine: true,
+              linesDecorationsClassName: styles['line-anchor'],
+              className: styles['line-content'],
+            },
           },
-        },
-      ]);
+        ];
+      }
+      // 延迟高亮，否则不居中
+      oldClickDecorations = editor.monacoEditor.deltaDecorations(
+        oldClickDecorations,
+        newDecorations
+      );
       setTimeout(() => {
         if (this.propsService.props.editorConfig?.stretchHeight) {
           const firstLine = document.querySelector(`.${styles['line-anchor']}`) as HTMLElement;
@@ -479,7 +505,7 @@ class EditorSpecialContribution
             firstLine.scrollIntoView({ block: 'center' });
           }
         } else {
-          editor.monacoEditor.revealLineInCenterIfOutsideViewport(startLineNumber);
+          editor.monacoEditor.revealLineInCenterIfOutsideViewport(centerLine);
         }
       }, 0);
     };
@@ -496,7 +522,9 @@ class EditorSpecialContribution
           let nextLineNumber: number | [number, number] = lineNumber;
           if (event?.event?.shiftKey && lastLineNumber) {
             let startLineNumber = Array.isArray(lastLineNumber)
-              ? lastLineNumber[0]
+              ? Array.isArray(lastLineNumber[0])
+                ? lastLineNumber[0][0]
+                : lastLineNumber[0]
               : lastLineNumber;
             if (startLineNumber > nextLineNumber) {
               nextLineNumber = [nextLineNumber, startLineNumber];

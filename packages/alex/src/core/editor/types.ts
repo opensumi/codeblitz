@@ -20,7 +20,7 @@ export interface DocumentModel {
   /**
    * 展示文件行号，如果传入数组，则表示多行
    */
-  lineNumber?: number | [number, number];
+  lineNumber?: number | [number, number] | Array<[number, number]>;
   /**
    * 行号变更事件
    */

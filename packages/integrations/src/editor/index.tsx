@@ -53,7 +53,12 @@ const App = () => {
   const [ref, setRef] = useState('');
   const [filepath, setFilePath] = useState('');
   const [encoding, setEncoding] = useState<'utf8' | 'gbk' | undefined>('utf8');
-  const [lineNumber, setLineNumber] = useState<number | [number, number] | undefined>();
+  const [lineNumber, setLineNumber] = useState<
+    number | [number, number] | Array<[number, number]> | undefined
+  >([
+    [10, 20],
+    [30, 40],
+  ]);
 
   const readFile = async (filepath: string) => {
     const res = await fetch(
@@ -72,6 +77,12 @@ const App = () => {
     setRef(ref);
     setFilePath(filepath);
   };
+
+  function setLineNumberFn(value) {
+    console.log(value);
+
+    setLineNumber(JSON.parse(value));
+  }
 
   return (
     <div style={{ padding: 8 }}>
@@ -102,15 +113,25 @@ const App = () => {
           ))}
         </Select>
         <Select
-          value={lineNumber}
-          onChange={setLineNumber}
+          value={JSON.stringify(lineNumber)}
+          onChange={setLineNumberFn}
           size="small"
           style={{ width: 120, marginRight: 8 }}
           placeholder="更改选中行"
         >
-          {[10, 30, 100].map((line) => (
-            <Select.Option key={line} value={line}>
-              {line}
+          {[
+            10,
+            30,
+            100,
+            [10, 20],
+            [
+              [30, 35],
+              [40, 50],
+              [66, 77],
+            ],
+          ].map((line, index) => (
+            <Select.Option key={index} value={JSON.stringify(line)}>
+              {JSON.stringify(line)}
             </Select.Option>
           ))}
         </Select>
