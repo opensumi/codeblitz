@@ -78,12 +78,6 @@ const App = () => {
     setFilePath(filepath);
   };
 
-  function setLineNumberFn(value) {
-    console.log(value);
-
-    setLineNumber(JSON.parse(value));
-  }
-
   return (
     <div style={{ padding: 8 }}>
       <div style={{ display: 'flex', marginBottom: 8 }}>
@@ -114,7 +108,7 @@ const App = () => {
         </Select>
         <Select
           value={JSON.stringify(lineNumber)}
-          onChange={setLineNumberFn}
+          onChange={(value) => setLineNumber(JSON.parse(value))}
           size="small"
           style={{ width: 120, marginRight: 8 }}
           placeholder="更改选中行"
