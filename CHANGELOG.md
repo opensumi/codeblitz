@@ -1,3 +1,17 @@
+## [1.9.12-0](https://code.alipay.com/cloud-ide/crew-dragon/compare/v1.9.11...v1.9.12-0) (2022-05-13)
+
+
+### Features
+
+* add multi line decorations ([5c0c175](https://code.alipay.com/cloud-ide/crew-dragon/commits/5c0c175d9a93afd3c27249a4cb971c8e6b7c4364))
+
+
+### Reverts
+
+* Revert "chore: 将 React 打包到 Global 产物" ([d43be2a](https://code.alipay.com/cloud-ide/crew-dragon/commits/d43be2a0de205b824596c70f1218f968c1caec34))
+
+
+
 ## [1.9.11](https://code.alipay.com/cloud-ide/crew-dragon/compare/v1.9.11-0...v1.9.11) (2022-05-11)
 
 
