@@ -11,7 +11,7 @@ import Select from 'antd/lib/select';
 import Cascader from 'antd/lib/cascader';
 import Button from 'antd/lib/button';
 import './style.less';
-import editorPlugin from '../common/plugin';
+import * as editorPlugin from './plugin';
 import { LocalExtensionModule } from '../common/local-extension.module';
 
 (window as any).alex = Alex;
@@ -131,26 +131,14 @@ const App = () => {
         </Select>
         <Button
           onClick={() => {
-            const commands = editorPlugin.commands;
+            const commands = editorPlugin.api.commands;
             if (commands) {
-              commands.executeCommand('plugin.command.test', 1, 2);
+              commands.executeCommand('plugin.command.changeTheme', 'ide-dark');
             }
           }}
           size="small"
         >
           command test
-        </Button>
-        <Button
-          onClick={() => {
-            const commands = editorPlugin.commands;
-            if (commands) {
-              commands.executeCommand('alex.settings');
-            }
-          }}
-          size="small"
-          style={{ marginLeft: 8 }}
-        >
-          更改偏好设置
         </Button>
       </div>
       <div style={{ display: 'flex' }}>

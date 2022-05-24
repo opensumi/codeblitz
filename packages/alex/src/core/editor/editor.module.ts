@@ -149,6 +149,7 @@ class ThemeContribution extends Disposable implements ClientAppContribution {
       GeekTheme.packageJSON.contributes!.themes,
       URI.parse(getExtensionPath(GeekTheme.extension, 'public'))
     );
+    await this.themeService.applyTheme(undefined, true);
     // 强制用集成设置的默认主题
     await this.themeService.applyTheme(this.defaultPreferenceProvider.get('general.theme'));
   }
