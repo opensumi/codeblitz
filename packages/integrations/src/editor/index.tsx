@@ -133,12 +133,23 @@ const App = () => {
           onClick={() => {
             const commands = editorPlugin.api.commands;
             if (commands) {
-              commands.executeCommand('plugin.command.changeTheme', 'ide-dark');
+              commands.executeCommand('plugin.command.add', 1);
             }
           }}
           size="small"
         >
           command test
+        </Button>
+        <Button
+          onClick={() => {
+            const commands = editorPlugin.api.commands;
+            if (commands) {
+              commands.executeCommand('plugin.command.changeTheme', 'ide-dark');
+            }
+          }}
+          size="small"
+        >
+          theme change
         </Button>
       </div>
       <div style={{ display: 'flex' }}>
