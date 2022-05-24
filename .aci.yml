@@ -6,18 +6,19 @@ stages:
 environments:
   NODE_ENV: "test"
 
-beforeScript:
-  - |
-    export PATH=$PWD/node_modules/.bin:/root/.cli:$PATH
-    echo $PATH
-    time enclose install tnpm:tnpm
-    tnpm -v
+# beforeScript:
+#   - |
+#     export PATH=$PWD/node_modules/.bin:/root/.cli:$PATH
+#     echo $PATH
+#     time enclose install tnpm:tnpm
+#     tnpm -v
+
 node-12:
   stage: test
   aciTags: DOCKER
   agent:
     docker:
-      image: reg.docker.alibaba-inc.com/dockerlab/node-ci:3.7.11
+      image: reg.docker.alibaba-inc.com/dockerlab/node-ci:3.8.0
       resourceRequirements:
         cpu: 4
         memory: 12

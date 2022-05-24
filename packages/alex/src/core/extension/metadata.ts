@@ -87,13 +87,13 @@ export const GeekTheme: IExtensionBasicMetadata = {
       themes: [
         {
           id: 'alipay-geek-dark',
-          label: 'IDE Dark',
+          label: 'IDE Geek Dark',
           uiTheme: 'vs-dark',
           path: './themes/dark/plus.json',
         },
         {
           id: 'alipay-geek-light',
-          label: 'IDE Light',
+          label: 'IDE Geek Light',
           uiTheme: 'vs',
           path: './themes/light/plus.json',
         },

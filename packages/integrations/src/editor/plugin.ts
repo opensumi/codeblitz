@@ -13,9 +13,12 @@ export const api = {
 export const activate = ({ context, commands }: IPluginAPI) => {
   _commands = commands;
   context.subscriptions.push(
-    commands.registerCommand('plugin.command.add', (x: number) => {
+    commands.registerCommand('plugin.command.add', async (x: number) => {
       commands.executeCommand('plugin.command.say', 'alex is great');
       return x + x;
+    }),
+    commands.registerCommand('plugin.command.changeTheme', (value) => {
+      commands.executeCommand('alex.setDefaultPreference', 'general.theme', value, 1);
     })
   );
 };

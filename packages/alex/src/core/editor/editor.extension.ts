@@ -23,6 +23,7 @@ class ExtensionServiceImplOverride extends ExtensionServiceImpl {
     await this.initExtensionMetaData();
     await this.initExtensionInstanceData();
     await this.runExtensionContributes();
+    await this.initThemeAndColor();
     this.doActivate();
   }
 }
