@@ -1,6 +1,6 @@
 {
   "name": "@alipay/alex-acr",
-  "version": "1.9.12-0",
+  "version": "1.9.12",
   "description": "@alipay/alex-acr",
   "main": "lib/index.js",
   "typings": "lib/index.d.ts",
@@ -19,9 +19,9 @@
     "@alipay/yuyan-monitor-web": "^2.0.28"
   },
   "dependencies": {
-    "@alipay/alex": "1.9.12-0",
-    "@alipay/alex-core": "1.9.12-0",
-    "@alipay/alex-shared": "1.9.12-0",
+    "@alipay/alex": "1.9.12",
+    "@alipay/alex-core": "1.9.12",
+    "@alipay/alex-shared": "1.9.12",
     "@alipay/geek-theme": "^1.6.0",
     "@alipay/lsif-client": "^2.0.0",
     "crypto-js": "^4.0.0",

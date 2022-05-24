@@ -1,3 +1,13 @@
+## [1.9.12](https://code.alipay.com/cloud-ide/crew-dragon/compare/v1.9.12-0...v1.9.12) (2022-05-24)
+
+
+### Bug Fixes
+
+* 修复流水线问题 ([925ac9f](https://code.alipay.com/cloud-ide/crew-dragon/commits/925ac9fca307266b8ef9fe7b77e2bc04bb317bdd))
+* 修复editor主题初始化未注册fromExtension ([69a33ce](https://code.alipay.com/cloud-ide/crew-dragon/commits/69a33ce76fe502ab1ccce906460c393519296414))
+
+
+
 ## [1.9.12-0](https://code.alipay.com/cloud-ide/crew-dragon/compare/v1.9.11...v1.9.12-0) (2022-05-13)
 
 
