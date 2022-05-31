@@ -1,13 +1,13 @@
-import { Autowired, Injector, INJECTOR_TOKEN, ConstructorOf } from '@ali/common-di';
-import { Deferred } from '@ali/ide-core-common';
+import { Autowired, Injector, INJECTOR_TOKEN, ConstructorOf } from '@opensumi/di';
+import { Deferred } from '@opensumi/ide-core-common';
 import {
   SlotLocation,
   getIcon,
   Domain,
   ClientAppContribution,
   getExternalIcon,
-} from '@ali/ide-core-browser';
-import { IMainLayoutService } from '@ali/ide-main-layout';
+} from '@opensumi/ide-core-browser';
+import { IMainLayoutService } from '@opensumi/ide-main-layout';
 import { ICodePlatform, ICodeAPIProvider, ICodeAPIService, CodePlatform } from './common/types';
 import { AntCodeAPIService } from './antcode/antcode.service';
 import { GitHubAPIService } from './github/github.service';

@@ -1,4 +1,4 @@
-import { Autowired, Injectable } from '@ali/common-di';
+import { Autowired, Injectable } from '@opensumi/di';
 import {
   Disposable,
   IEventBus,
@@ -6,9 +6,9 @@ import {
   PreferenceService,
   PreferenceChange,
   IRange,
-} from '@ali/ide-core-browser';
-import { basename } from '@ali/ide-core-common/lib/path';
-import { IResourceOpenOptions, WorkbenchEditorService } from '@ali/ide-editor';
+} from '@opensumi/ide-core-browser';
+import { basename } from '@opensumi/ide-core-common/lib/path';
+import { IResourceOpenOptions, WorkbenchEditorService } from '@opensumi/ide-editor';
 
 import { FileOpenMethod, DiffChangeEvent, OpenDiffEditorEvent } from '../../common';
 import { reportOpenFileOperation } from '../../utils/monitor';
@@ -156,7 +156,11 @@ export class OpenChangeFilesService extends Disposable {
       }
     }
     await this.workbenchEditorService.open(targetUri, options);
-    this.revealRangeInCenter(range);
+    // 由于初始化打开 页面内评论 会异步撑开页面 导致revealRangeInCenter方法失效
+    setTimeout(() => {
+      this.revealRangeInCenter(range);
+    }, 150);
+
     this.reportOpenFile(targetUri, channel, false);
 
     // 将当前 targetUri 的 tab close-icon 隐藏掉

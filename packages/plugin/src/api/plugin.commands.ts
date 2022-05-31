@@ -1,12 +1,15 @@
-import { Injectable, Autowired } from '@ali/common-di';
+import { Injectable, Autowired } from '@opensumi/di';
 import {
   getDebugLogger,
   isFunction,
   CommandRegistry,
   Disposable,
   IDisposable,
-} from '@ali/ide-core-common';
-import { MonacoCommandService } from '@ali/ide-monaco/lib/browser/monaco.command.service';
+} from '@opensumi/ide-core-common';
+import {
+  ICommandServiceToken,
+  IMonacoCommandService,
+} from '@opensumi/ide-monaco/lib/browser/contrib/command';
 
 type Handler<T = any> = (...args: any[]) => T | Promise<T>;
 
@@ -26,8 +29,8 @@ export class PluginCommands {
   @Autowired(CommandRegistry)
   commandRegistry: CommandRegistry;
 
-  @Autowired()
-  monacoCommandService: MonacoCommandService;
+  @Autowired(ICommandServiceToken)
+  monacoCommandService: IMonacoCommandService;
 
   registerCommand(global: boolean, id: string, handler: Handler, thisArg?: any): IDisposable {
     this.logger.log('PluginCommands#registerCommand', id);

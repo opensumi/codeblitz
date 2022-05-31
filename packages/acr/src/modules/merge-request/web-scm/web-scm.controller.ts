@@ -1,7 +1,7 @@
-import { Autowired, Injectable, INJECTOR_TOKEN, Injector } from '@ali/common-di';
-import { Disposable, URI, FileStat, DisposableCollection } from '@ali/ide-core-common';
-import { IWorkspaceService } from '@ali/ide-workspace';
-import { IMainLayoutService } from '@ali/ide-main-layout';
+import { Autowired, Injectable, INJECTOR_TOKEN, Injector } from '@opensumi/di';
+import { Disposable, URI, FileStat, DisposableCollection } from '@opensumi/ide-core-common';
+import { IWorkspaceService } from '@opensumi/ide-workspace';
+import { IMainLayoutService } from '@opensumi/ide-main-layout';
 
 import { BrowserSCMClient } from './web-scm-client.service';
 import { MergeRequestExplorerId } from '../common';

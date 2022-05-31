@@ -1,13 +1,13 @@
-import { Autowired } from '@ali/common-di';
-import { Domain } from '@ali/ide-core-browser';
+import { Autowired } from '@opensumi/di';
+import { Domain } from '@opensumi/ide-core-browser';
 import {
   EditorComponentRegistry,
   BrowserEditorContribution,
   IEditorDocumentModelContentRegistry,
-} from '@ali/ide-editor/lib/browser';
-import { FILE_SCHEME } from '@ali/ide-file-scheme/lib/common';
-import { IFileServiceClient } from '@ali/ide-file-service/lib/common';
-import { ResourceService, IResource, IEditorOpenType } from '@ali/ide-editor';
+} from '@opensumi/ide-editor/lib/browser';
+import { FILE_SCHEME } from '@opensumi/ide-file-scheme/lib/common';
+import { IFileServiceClient } from '@opensumi/ide-file-service/lib/common';
+import { ResourceService, IResource, IEditorOpenType } from '@opensumi/ide-editor';
 
 @Domain(BrowserEditorContribution)
 export class FileSchemeContribution implements BrowserEditorContribution {

@@ -1,4 +1,4 @@
-import { IRange } from '@ali/ide-core-common';
+import { IRange } from '@opensumi/ide-core-common';
 import { TEditorType } from '.';
 
 export class RangeModel {

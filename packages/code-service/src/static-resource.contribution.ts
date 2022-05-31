@@ -1,9 +1,9 @@
-import { Autowired } from '@ali/common-di';
-import { Domain, URI } from '@ali/ide-core-browser';
+import { Autowired } from '@opensumi/di';
+import { Domain, URI } from '@opensumi/ide-core-browser';
 import {
   StaticResourceContribution,
   StaticResourceService,
-} from '@ali/ide-static-resource/lib/browser/static.definition';
+} from '@opensumi/ide-static-resource/lib/browser/static.definition';
 import { AppConfig, RuntimeConfig } from '@alipay/alex-core';
 import * as paths from 'path';
 import { ICodeAPIProvider, CODE_PLATFORM_CONFIG, CodePlatform } from '@alipay/alex-code-api';

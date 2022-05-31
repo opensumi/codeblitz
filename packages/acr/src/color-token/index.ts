@@ -1,4 +1,4 @@
-import { registerColor } from '@ali/ide-theme';
+import { registerColor } from '@opensumi/ide-theme';
 
 registerColor(
   'volcano.warning',

@@ -5,10 +5,10 @@
 
 // TODO: PR 到 kaitian 中
 
-import { Injector } from '@ali/common-di';
-import { MonacoCodeService } from '@ali/ide-editor/lib/browser/editor.override';
-import { CodeEditorServiceImpl } from '@ali/monaco-editor-core/esm/vs/editor/browser/services/codeEditorServiceImpl';
-import { StaticServices } from '@ali/monaco-editor-core/esm/vs/editor/standalone/browser/standaloneServices';
+import { Injector } from '@opensumi/di';
+import { MonacoCodeService } from '@opensumi/ide-editor/lib/browser/editor.override';
+import { CodeEditorServiceImpl } from '@opensumi/monaco-editor-core/esm/vs/editor/browser/services/codeEditorServiceImpl';
+import { StaticServices } from '@opensumi/monaco-editor-core/esm/vs/editor/standalone/browser/standaloneServices';
 
 export const IMonacoCodeService = Symbol('IMonacoCodeService');
 
@@ -19,7 +19,7 @@ class CodeEditorService extends CodeEditorServiceImpl {
   private uid = 0;
 
   constructor() {
-    super(StaticServices.standaloneThemeService.get());
+    super(null, StaticServices.standaloneThemeService.get());
   }
 
   setInjector(injector: Injector) {

@@ -1,8 +1,8 @@
-import { getMapForWordSeparators } from '@ali/monaco-editor-core/esm/vs/editor/common/controller/wordCharacterClassifier';
-import { isValidMatch } from '@ali/monaco-editor-core/esm/vs/editor/common/model/textModelSearch';
-import { Injectable, Autowired } from '@ali/common-di';
-import { SupportLogNamespace, ILogService, URI } from '@ali/ide-core-common';
-import { parse } from '@ali/ide-core-common/lib/utils/glob';
+import { getMapForWordSeparators } from '@opensumi/monaco-editor-core/esm/vs/editor/common/controller/wordCharacterClassifier';
+import { isValidMatch } from '@opensumi/monaco-editor-core/esm/vs/editor/common/model/textModelSearch';
+import { Injectable, Autowired } from '@opensumi/di';
+import { SupportLogNamespace, ILogService, URI } from '@opensumi/ide-core-common';
+import { parse } from '@opensumi/ide-core-common/lib/utils/glob';
 import {
   IContentSearchServer,
   ContentSearchOptions,
@@ -11,8 +11,8 @@ import {
   cutShortSearchResult,
   DEFAULT_SEARCH_IN_WORKSPACE_LIMIT,
   anchorGlob,
-} from '@ali/ide-search/lib/common';
-import { ContentSearchClientService } from '@ali/ide-search/lib/browser/search.service';
+} from '@opensumi/ide-search/lib/common';
+import { ContentSearchClientService } from '@opensumi/ide-search/lib/browser/search.service';
 import * as paths from 'path';
 import { AppConfig, RuntimeConfig } from '../../common';
 import { ILogServiceManager } from '../core/base';

@@ -1,4 +1,4 @@
-import { Provider, Injectable } from '@ali/common-di';
+import { Provider, Injectable } from '@opensumi/di';
 import { NodeModule } from '../core/app';
 import { IExtensionNodeClientService, ExtensionNodeServiceServerPath } from './base';
 import { ExtensionServiceClientImpl } from './extension.service.client';

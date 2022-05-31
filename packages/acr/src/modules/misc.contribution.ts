@@ -1,4 +1,4 @@
-import { Autowired } from '@ali/common-di';
+import { Autowired } from '@opensumi/di';
 import {
   Domain,
   getIcon,
@@ -17,17 +17,17 @@ import {
   PreferenceScope,
   KeybindingContribution,
   KeybindingRegistry,
-} from '@ali/ide-core-browser';
+} from '@opensumi/ide-core-browser';
 import {
   ILanguageService,
   IEditorDocumentModelService,
   EditorGroupChangeEvent,
-} from '@ali/ide-editor/lib/browser';
-import * as paths from '@ali/ide-core-common/lib/path';
-import { TOGGLE_DIFF_SIDE_BY_SIDE } from '@ali/ide-scm';
-import { QUICK_OPEN_COMMANDS } from '@ali/ide-quick-open';
+} from '@opensumi/ide-editor/lib/browser';
+import * as paths from '@opensumi/ide-core-common/lib/path';
+import { TOGGLE_DIFF_SIDE_BY_SIDE } from '@opensumi/ide-scm';
+import { QUICK_OPEN_COMMANDS } from '@opensumi/ide-quick-open';
 
-import { IMenuRegistry, MenuId, MenuContribution } from '@ali/ide-core-browser/lib/menu/next';
+import { IMenuRegistry, MenuId, MenuContribution } from '@opensumi/ide-core-browser/lib/menu/next';
 import { fromDiffUri, fromGitUri } from './merge-request/changes-tree/util';
 import { antCodePreferenceSchema } from './preferences';
 import { WorkspaceManagerService } from './workspace/workspace-loader.service';

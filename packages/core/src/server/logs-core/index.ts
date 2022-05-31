@@ -1,4 +1,4 @@
-import { Injectable } from '@ali/common-di';
+import { Injectable } from '@opensumi/di';
 import { LogServiceManager } from './log-manager';
 import { LogServiceForClientPath, ILogServiceForClient } from './base';
 import { ILogServiceManager } from '../core/base';

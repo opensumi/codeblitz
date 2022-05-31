@@ -50,14 +50,14 @@ export const IDETheme: IExtensionBasicMetadata = {
     contributes: {
       themes: [
         {
-          id: 'ide-dark',
-          label: 'IDE Dark',
+          id: 'opensumi-dark',
+          label: 'OpenSumi Dark',
           uiTheme: 'vs-dark',
           path: './themes/dark/plus.json',
         },
         {
-          id: 'ide-light',
-          label: 'IDE Light',
+          id: 'opensumi-light',
+          label: 'OpenSumi Light',
           uiTheme: 'vs',
           path: './themes/light/plus.json',
         },

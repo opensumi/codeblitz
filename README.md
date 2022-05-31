@@ -66,6 +66,10 @@ yarn release:next
 
 ### ACR 开发
 ```bash
+
+npx alex ext i cloud-ide-ext.antcode-scaning
+npx alex ext i cloud-ide-ext.editor-plugin-blame
+
 npm run acr
 ```
 接口使用的是 Ant Code 测试环境 http://code.test.alipay.net

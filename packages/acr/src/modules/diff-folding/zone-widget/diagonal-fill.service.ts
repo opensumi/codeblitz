@@ -1,10 +1,10 @@
 import { AntcodeDiffFoldingService } from './../diff-folding.service';
-import { Disposable } from '@ali/ide-core-common';
-import { Injectable, Autowired } from '@ali/common-di';
-import { ICommentsService } from '@ali/ide-comments';
-import { WorkbenchEditorService } from '@ali/ide-editor';
+import { Disposable } from '@opensumi/ide-core-common';
+import { Injectable, Autowired } from '@opensumi/di';
+import { ICommentsService } from '@opensumi/ide-comments';
+import { WorkbenchEditorService } from '@opensumi/ide-editor';
 import { IMyViewZone, IViewZoneChangeAccessor, TEditorType } from '..';
-import { ViewZoneDelegate } from '@ali/ide-monaco-enhance';
+import { ViewZoneDelegate } from '@opensumi/ide-monaco-enhance';
 
 /**
  * @deprecated
@@ -31,10 +31,8 @@ export class DiagonalFillWidgetService extends Disposable {
    * 仅找出评论行对应的 empty widget
    */
   private findCommentEmptyWidget(type: TEditorType): IMyViewZone[] {
-    const {
-      originalEditor,
-      modifiedEditor,
-    } = this.workbenchEditorService.currentEditorGroup.diffEditor;
+    const { originalEditor, modifiedEditor } =
+      this.workbenchEditorService.currentEditorGroup.diffEditor;
 
     const viewZones = this.getViewZones(this.slopeType(type));
     if (!(viewZones && viewZones._zones)) return [];

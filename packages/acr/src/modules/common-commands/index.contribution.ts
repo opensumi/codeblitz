@@ -1,4 +1,4 @@
-import { Autowired } from '@ali/common-di';
+import { Autowired } from '@opensumi/di';
 import {
   Domain,
   CommandService,
@@ -6,19 +6,19 @@ import {
   CommandRegistry,
   EDITOR_COMMANDS,
   URI,
-} from '@ali/ide-core-browser';
+} from '@opensumi/ide-core-browser';
 
-import { OPEN, DIFF } from '@ali/ide-kaitian-extension/lib/browser/vscode/builtin-commands';
-import { UriComponents } from '@ali/ide-kaitian-extension/lib/common/vscode/models';
-import { TextDocumentShowOptions, ViewColumn } from '@ali/ide-kaitian-extension/lib/common/vscode';
+import { OPEN, DIFF } from '@opensumi/ide-extension/lib/browser/vscode/builtin-commands';
+import { UriComponents } from '@opensumi/ide-extension/lib/common/vscode/models';
+import { TextDocumentShowOptions, ViewColumn } from '@opensumi/ide-extension/lib/common/vscode';
 import {
   isLikelyVscodeRange,
   fromRange,
   viewColumnToResourceOpenOptions,
-} from '@ali/ide-kaitian-extension/lib/common/vscode/converter';
-import { WorkbenchEditorService, IResourceOpenOptions } from '@ali/ide-editor';
+} from '@opensumi/ide-extension/lib/common/vscode/converter';
+import { WorkbenchEditorService, IResourceOpenOptions } from '@opensumi/ide-editor';
 import { IAntcodeService } from '../antcode-service/base';
-import { IMainLayoutService } from '@ali/ide-main-layout';
+import { IMainLayoutService } from '@opensumi/ide-main-layout';
 
 @Domain(CommandContribution)
 export class CommonCommandsContribution implements CommandContribution {

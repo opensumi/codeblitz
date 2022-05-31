@@ -1,8 +1,8 @@
-import { Injectable } from '@ali/common-di';
-import { Event } from '@ali/ide-core-common';
-import { CommentsZoneWidget } from '@ali/ide-comments/lib/browser/comments-zone.view';
-import type { ICommentsThread } from '@ali/ide-comments/lib/common';
-import { IEditor } from '@ali/ide-editor';
+import { Injectable } from '@opensumi/di';
+import { Event } from '@opensumi/ide-core-common';
+import { CommentsZoneWidget } from '@opensumi/ide-comments/lib/browser/comments-zone.view';
+import type { ICommentsThread } from '@opensumi/ide-comments/lib/common';
+import { IEditor } from '@opensumi/ide-editor';
 
 export { CommentsZoneWidget };
 

@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { localize } from '@ali/ide-core-browser';
+import { localize } from '@opensumi/ide-core-browser';
 import clx from 'classnames';
 import { observer } from 'mobx-react-lite';
 import { RawExtension } from '../base';

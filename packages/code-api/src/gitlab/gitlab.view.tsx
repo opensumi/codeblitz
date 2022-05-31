@@ -1,7 +1,7 @@
 import React, { useState, useReducer } from 'react';
-import { localize } from '@ali/ide-core-common';
-import { useInjectable, getOctIcon } from '@ali/ide-core-browser';
-import { Input, Button } from '@ali/ide-components';
+import { localize } from '@opensumi/ide-core-common';
+import { useInjectable, getOctIcon } from '@opensumi/ide-core-browser';
+import { Input, Button } from '@opensumi/ide-components';
 import { observer } from 'mobx-react-lite';
 import { ICodeAPIProvider } from '../common/types';
 import type { CodeAPIProvider } from '../code-api.provider';

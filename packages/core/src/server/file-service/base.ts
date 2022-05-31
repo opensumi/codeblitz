@@ -1,9 +1,9 @@
 import {
   IDiskFileProvider as _IDiskFileProvider,
   IFileService as _IFileService,
-} from '@ali/ide-file-service/lib/common';
+} from '@opensumi/ide-file-service/lib/common';
 
-export { DiskFileServicePath, FileServicePath } from '@ali/ide-file-service/lib/common';
+export { DiskFileServicePath, FileServicePath } from '@opensumi/ide-file-service/lib/common';
 
 export const IDiskFileProvider = Symbol('IDiskFileProvider');
 

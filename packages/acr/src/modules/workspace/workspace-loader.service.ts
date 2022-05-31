@@ -1,8 +1,8 @@
-import { Autowired, Injectable } from '@ali/common-di';
-import { Disposable, URI, DefaultStorageProvider, STORAGE_SCHEMA } from '@ali/ide-core-common';
-import { IFileServiceClient } from '@ali/ide-file-service';
-import { IWorkspaceService } from '@ali/ide-workspace';
-import * as paths from '@ali/ide-core-common/lib/path';
+import { Autowired, Injectable } from '@opensumi/di';
+import { Disposable, URI, DefaultStorageProvider, STORAGE_SCHEMA } from '@opensumi/ide-core-common';
+import { IFileServiceClient } from '@opensumi/ide-file-service';
+import { IWorkspaceService } from '@opensumi/ide-workspace';
+import * as paths from '@opensumi/ide-core-common/lib/path';
 import { fsExtra } from '@alipay/alex-core';
 
 import { IAntcodeService } from '../antcode-service/base';

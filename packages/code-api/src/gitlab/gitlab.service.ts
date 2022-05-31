@@ -1,5 +1,5 @@
-import { Injectable, Autowired } from '@ali/common-di';
-import { localize, IReporterService, formatLocalize, MessageType } from '@ali/ide-core-common';
+import { Injectable, Autowired } from '@opensumi/di';
+import { localize, IReporterService, formatLocalize, MessageType } from '@opensumi/ide-core-common';
 import { request, RequestOptions } from '@alipay/alex-shared';
 import { API } from './types';
 import { HelperService } from '../common/service';

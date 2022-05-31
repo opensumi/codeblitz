@@ -9,7 +9,7 @@ import {
   DidFilesChangedParams,
   Uri,
   UriComponents,
-} from '@ali/ide-core-common';
+} from '@opensumi/ide-core-common';
 import {
   FileChangeEvent,
   FileStat,
@@ -19,9 +19,10 @@ import {
   isErrnoException,
   notEmpty,
   FileAccess,
-} from '@ali/ide-file-service/lib/common';
-import { Injectable } from '@ali/common-di';
-import { ParsedPattern, parse } from '@ali/ide-core-common/lib/utils/glob';
+  FileSystemProviderCapabilities,
+} from '@opensumi/ide-file-service/lib/common';
+import { Injectable } from '@opensumi/di';
+import { ParsedPattern, parse } from '@opensumi/ide-core-common/lib/utils/glob';
 import * as path from 'path';
 import { HOME_ROOT } from '../../common';
 import { IDiskFileProvider } from './base';
@@ -34,6 +35,8 @@ const debugLog = new DebugLog();
 // FIXME: 暂时只用单例
 @Injectable()
 export class DiskFileSystemProvider extends FCService implements IDiskFileProvider {
+  readonly capabilities: FileSystemProviderCapabilities;
+  onDidChangeCapabilities = Event.None;
   private fileChangeEmitter = new Emitter<FileChangeEvent>();
   readonly onDidChangeFile: Event<FileChangeEvent> = this.fileChangeEmitter.event;
   protected toDispose = new DisposableCollection();
@@ -129,7 +132,7 @@ export class DiskFileSystemProvider extends FCService implements IDiskFileProvid
     disposable.dispose();
   }
 
-  stat(uri: UriComponents): Thenable<FileStat> {
+  stat(uri: UriComponents): Promise<FileStat | undefined> {
     const _uri = Uri.revive(uri);
     return new Promise(async (resolve) => {
       this.doGetStat(_uri, 1)

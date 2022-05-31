@@ -1,29 +1,28 @@
-import { Autowired, Injectable, INJECTOR_TOKEN, Injector } from '@ali/common-di';
+import { Autowired, Injectable, INJECTOR_TOKEN, Injector } from '@opensumi/di';
 import {
   localize,
   EDITOR_COMMANDS,
   QuickOpenItem,
   CommandService,
   QuickOpenItemOptions,
-  QuickOpenGroupItemOptions,
   QuickOpenMode,
   URI,
   formatLocalize,
-} from '@ali/ide-core-browser';
-import { LabelService } from '@ali/ide-core-browser/lib/services';
-import { QuickOpenHandler } from '@ali/ide-quick-open/lib/browser/prefix-quick-open.service';
-import { QuickOpenGroupItem, QuickOpenModel } from '@ali/ide-quick-open';
-import { basename } from '@ali/ide-core-common/lib/path';
+} from '@opensumi/ide-core-browser';
+import { LabelService } from '@opensumi/ide-core-browser/lib/services';
+import { QuickOpenHandler } from '@opensumi/ide-quick-open/lib/browser/prefix-quick-open.service';
+import { QuickOpenModel } from '@opensumi/ide-quick-open';
+import { basename } from '@opensumi/ide-core-common/lib/path';
 import { OpenChangeFilesService } from './open-change-files';
 
 import { IAntcodeService } from './antcode-service/base';
 import type { IPullRequestChangeDiff } from './antcode-service/base';
 
 @Injectable({ multiple: true })
-export class ChangeFileQuickOpenItem extends QuickOpenGroupItem {
+export class ChangeFileQuickOpenItem extends QuickOpenItem {
   constructor(
     protected readonly changeFile: IPullRequestChangeDiff,
-    readonly changeFileOpts?: QuickOpenGroupItemOptions
+    readonly changeFileOpts: QuickOpenItemOptions
   ) {
     super(changeFileOpts);
   }
@@ -89,7 +88,7 @@ export class QuickChangeFileHandler implements QuickOpenHandler {
   @Autowired(INJECTOR_TOKEN)
   private readonly injector: Injector;
 
-  private items: QuickOpenItem<QuickOpenItemOptions>[];
+  private items: QuickOpenItem[];
 
   // 每次打开命令面板后会触发一次
   async init() {
@@ -134,7 +133,7 @@ export class QuickChangeFileHandler implements QuickOpenHandler {
           {
             showBorder: false,
           },
-        ]);
+        ]) as unknown as QuickOpenItem;
       })
     );
 

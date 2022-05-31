@@ -1,4 +1,4 @@
-import { Autowired } from '@ali/common-di';
+import { Autowired } from '@opensumi/di';
 import {
   Domain,
   CommandRegistry,
@@ -13,20 +13,20 @@ import {
   OnEvent,
   IContextKeyService,
   IContextKey,
-} from '@ali/ide-core-browser';
-import { IFileServiceClient } from '@ali/ide-file-service/lib/common';
-import * as paths from '@ali/ide-core-common/lib/path';
-import { MenuContribution, IMenuRegistry, MenuId } from '@ali/ide-core-browser/lib/menu/next';
-import { ISCMResource, ISCMResourceGroup } from '@ali/ide-scm';
-import { WorkbenchEditorService } from '@ali/ide-editor';
-import { WorkbenchEditorServiceImpl } from '@ali/ide-editor/lib/browser/workbench-editor.service';
+} from '@opensumi/ide-core-browser';
+import { IFileServiceClient } from '@opensumi/ide-file-service/lib/common';
+import * as paths from '@opensumi/ide-core-common/lib/path';
+import { MenuContribution, IMenuRegistry, MenuId } from '@opensumi/ide-core-browser/lib/menu/next';
+import { ISCMResource, ISCMResourceGroup } from '@opensumi/ide-scm';
+import { WorkbenchEditorService } from '@opensumi/ide-editor';
+import { WorkbenchEditorServiceImpl } from '@opensumi/ide-editor/lib/browser/workbench-editor.service';
 import {
   IEditorDocumentModelService,
   EditorDocumentModelSavedEvent,
-} from '@ali/ide-editor/lib/browser/doc-model/types';
-import { IWorkspaceService } from '@ali/ide-workspace';
-import { EditorGroupOpenEvent } from '@ali/ide-editor/lib/browser';
-import { RawContextKey } from '@ali/ide-core-browser/lib/raw-context-key';
+} from '@opensumi/ide-editor/lib/browser/doc-model/types';
+import { IWorkspaceService } from '@opensumi/ide-workspace';
+import { EditorGroupOpenEvent } from '@opensumi/ide-editor/lib/browser';
+import { RawContextKey } from '@opensumi/ide-core-browser/lib/raw-context-key';
 
 import { WebSCMCommands, WebSCMViewId } from './common';
 import { fromDiffUri, fromGitUri, isChangeFileURI } from '../changes-tree/util';

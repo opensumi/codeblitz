@@ -1,12 +1,12 @@
-import { Autowired } from '@ali/common-di';
-import { ClientAppContribution } from '@ali/ide-core-browser';
-import { OnEvent, WithEventBus, BasicEvent, Domain, URI } from '@ali/ide-core-common';
+import { Autowired } from '@opensumi/di';
+import { ClientAppContribution } from '@opensumi/ide-core-browser';
+import { OnEvent, WithEventBus, BasicEvent, Domain, URI } from '@opensumi/ide-core-common';
 import {
   EditorDocumentModelSavedEvent,
   EditorDocumentModelContentChangedEvent,
   IEditorDocumentModelService,
-} from '@ali/ide-editor/lib/browser';
-import { IFileServiceClient, FileChangeType } from '@ali/ide-file-service/lib/common';
+} from '@opensumi/ide-editor/lib/browser';
+import { IFileServiceClient, FileChangeType } from '@opensumi/ide-file-service/lib/common';
 import { AppConfig, RuntimeConfig } from '../../common/types';
 import * as path from 'path';
 

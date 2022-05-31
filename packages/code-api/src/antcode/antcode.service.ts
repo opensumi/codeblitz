@@ -1,6 +1,6 @@
-import { Injectable, Autowired } from '@ali/common-di';
-import { localize, IReporterService, MessageType } from '@ali/ide-core-common';
-import { LRUCache } from '@ali/ide-core-common/lib/map';
+import { Injectable, Autowired } from '@opensumi/di';
+import { localize, IReporterService, MessageType } from '@opensumi/ide-core-common';
+import { LRUCache } from '@opensumi/ide-core-common/lib/map';
 import { REPORT_NAME } from '@alipay/alex-core';
 import { request, RequestOptions, isResponseError } from '@alipay/alex-shared';
 import { API } from './types';

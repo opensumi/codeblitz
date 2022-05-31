@@ -1,6 +1,6 @@
 // 确保语言包先加载
-import '@ali/ide-i18n/lib/browser';
-import { registerLocalizationBundle, setLanguageId } from '@ali/ide-core-common';
+import '@opensumi/ide-i18n/lib/browser';
+import { registerLocalizationBundle, setLanguageId } from '@opensumi/ide-core-common';
 
 import chinese from './zh-cn';
 import english from './en-us';

@@ -1,8 +1,12 @@
 import * as React from 'react';
 import { observer } from 'mobx-react-lite';
-import { Icon } from '@ali/ide-components';
-import { useInjectable, IPreferenceSettingsService, PreferenceScope } from '@ali/ide-core-browser';
-import { localize } from '@ali/ide-core-common';
+import { Icon } from '@opensumi/ide-components';
+import {
+  useInjectable,
+  IPreferenceSettingsService,
+  PreferenceScope,
+} from '@opensumi/ide-core-browser';
+import { localize } from '@opensumi/ide-core-common';
 
 import { Popover, Radio, Switch } from 'antd';
 

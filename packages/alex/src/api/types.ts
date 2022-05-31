@@ -1,9 +1,10 @@
 /// <reference path="../../typings/index.d.ts" />
 
 import { IAppOpts, RuntimeConfig, ClientApp } from '@alipay/alex-core';
-import { IAppRenderer } from '@ali/ide-core-browser';
+import { IAppRenderer } from '@opensumi/ide-core-browser';
 import { IPluginConfig } from '@alipay/alex-plugin';
-import { ThemeType } from '@ali/ide-theme';
+import { ThemeType } from '@opensumi/ide-theme';
+import { Injector } from '@opensumi/di';
 
 export type { IPluginAPI, IPluginModule } from '@alipay/alex-plugin';
 
@@ -46,4 +47,6 @@ export interface IAppInstance extends ClientApp {
    * 当前主题色, dark | light | hc
    */
   readonly currentThemeType: ThemeType;
+
+  injector: Injector;
 }

@@ -1,4 +1,4 @@
-import { Autowired } from '@ali/common-di';
+import { Autowired } from '@opensumi/di';
 import {
   Domain,
   CommandContribution,
@@ -6,7 +6,7 @@ import {
   Command,
   PreferenceScope,
   PreferenceProvider,
-} from '@ali/ide-core-browser';
+} from '@opensumi/ide-core-browser';
 
 /**
  * 内置一些 commands 来调用内部的 service

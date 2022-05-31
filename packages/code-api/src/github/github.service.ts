@@ -1,6 +1,6 @@
-import { Injectable, Autowired } from '@ali/common-di';
-import { AppConfig } from '@ali/ide-core-browser';
-import { localize, MessageType } from '@ali/ide-core-common';
+import { Injectable, Autowired } from '@opensumi/di';
+import { AppConfig } from '@opensumi/ide-core-browser';
+import { localize, MessageType } from '@opensumi/ide-core-common';
 import { request, isResponseError, RequestOptions } from '@alipay/alex-shared';
 import { observable } from 'mobx';
 import { API } from './types';

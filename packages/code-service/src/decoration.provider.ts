@@ -1,8 +1,12 @@
-import { Autowired } from '@ali/common-di';
-import { ClientAppContribution, Domain, Disposable } from '@ali/ide-core-browser';
-import { IDecorationsService, IDecorationsProvider, IDecorationData } from '@ali/ide-decoration';
-import { Uri, Emitter } from '@ali/ide-core-browser';
-import { IThemeService } from '@ali/ide-theme';
+import { Autowired } from '@opensumi/di';
+import { ClientAppContribution, Domain, Disposable } from '@opensumi/ide-core-browser';
+import {
+  IDecorationsService,
+  IDecorationsProvider,
+  IDecorationData,
+} from '@opensumi/ide-decoration';
+import { Uri, Emitter } from '@opensumi/ide-core-browser';
+import { IThemeService } from '@opensumi/ide-theme';
 import * as path from 'path';
 import { CodeModelService } from './code-model.service';
 import { Repository } from './repository';

@@ -1,9 +1,8 @@
-import { Provider, Injectable } from '@ali/common-di';
-import { BrowserModule } from '@ali/ide-core-browser';
-import { CommonServerPath } from '@ali/ide-core-common';
+import { Provider, Injectable } from '@opensumi/di';
+import { BrowserModule } from '@opensumi/ide-core-browser';
+import { CommonServerPath } from '@opensumi/ide-core-common';
 
 import { CommonCommandsContribution } from '../common-commands/index.contribution';
-import { KtExtFsProviderContribution } from '../kt-ext-provider/index.contribution';
 import { LanguageServiceContribution } from '../language-service/index.contribution';
 import { BrowserCommonServer } from '../../overrides/browser-common-server';
 
@@ -19,7 +18,6 @@ export class WebLiteModule extends BrowserModule {
     },
     CommonCommandsContribution,
     GitSchemeContribution,
-    KtExtFsProviderContribution,
     LanguageServiceContribution,
   ];
 }

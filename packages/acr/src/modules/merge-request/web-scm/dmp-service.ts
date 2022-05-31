@@ -1,5 +1,5 @@
-import { Injectable } from '@ali/common-di';
-import { memoize } from '@ali/ide-core-common';
+import { Injectable } from '@opensumi/di';
+import { memoize } from '@opensumi/ide-core-common';
 import { diff_match_patch as diffMatchPatch } from 'diff-match-patch';
 
 import { IDmpService } from './common';

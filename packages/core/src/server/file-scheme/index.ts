@@ -1,4 +1,4 @@
-import { Injectable } from '@ali/common-di';
+import { Injectable } from '@opensumi/di';
 import { IFileSchemeDocNodeService, FileSchemeDocNodeServicePath } from './base';
 import { NodeModule } from '../core/app';
 

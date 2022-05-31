@@ -1,10 +1,10 @@
-import { Autowired, Injectable } from '@ali/common-di';
-import { Emitter, Event, URI } from '@ali/ide-core-browser';
-import { ICommentsService, toRange } from '@ali/ide-comments';
+import { Autowired, Injectable } from '@opensumi/di';
+import { Emitter, Event, URI } from '@opensumi/ide-core-browser';
+import { ICommentsService, toRange } from '@opensumi/ide-comments';
 import { getSide, isProblem, isChangeLineRelated } from './utils';
 import { toGitUri } from '../merge-request/changes-tree/util';
 import { IAntcodeService, IComment } from '../antcode-service/base';
-import { ICommentsThread } from '@ali/ide-comments';
+import { ICommentsThread } from '@opensumi/ide-comments';
 import { COMMENT_FILTER_TYPE } from '.';
 
 @Injectable()

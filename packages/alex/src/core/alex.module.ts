@@ -1,10 +1,10 @@
-import { Injectable, Provider, Autowired } from '@ali/common-di';
+import { Injectable, Provider, Autowired } from '@opensumi/di';
 import {
   BrowserModule,
   KeybindingContribution,
   Domain,
   KeybindingRegistry,
-} from '@ali/ide-core-browser';
+} from '@opensumi/ide-core-browser';
 import { RuntimeConfig } from '@alipay/alex-core';
 import { ExtensionActivateContribution } from './extension/extension.contribution';
 import { AlexCommandContribution } from './commands';

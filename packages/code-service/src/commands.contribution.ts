@@ -1,12 +1,12 @@
-import { Autowired } from '@ali/common-di';
+import { Autowired } from '@opensumi/di';
 import {
   CommandContribution,
   Domain,
   CommandRegistry,
   Command,
   Disposable,
-} from '@ali/ide-core-common';
-import { IOpenerService, IClipboardService } from '@ali/ide-core-browser';
+} from '@opensumi/ide-core-common';
+import { IOpenerService, IClipboardService } from '@opensumi/ide-core-browser';
 import {
   CODE_PLATFORM_CONFIG,
   CodePlatform,
@@ -185,9 +185,7 @@ export class CommandsContribution extends Disposable implements CommandContribut
     };
   }
 
-  async refs(
-    repoPath: string
-  ): Promise<
+  async refs(repoPath: string): Promise<
     | {
         head: string | null;
         heads: { name: string; hash: string }[];
@@ -198,8 +196,8 @@ export class CommandsContribution extends Disposable implements CommandContribut
     const repo = this.codeModel.getRepository(repoPath);
     if (!repo) return;
     const [branches, tags] = await Promise.all([
-      repo.request.getBranches().catch<BranchOrTag[]>(() => []),
-      repo.request.getTags().catch<BranchOrTag[]>(() => []),
+      repo.request.getBranches().catch(() => []),
+      repo.request.getTags().catch(() => []),
     ]);
     return {
       head: repo.commit || null,

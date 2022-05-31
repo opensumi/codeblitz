@@ -1,4 +1,4 @@
-import { RawContextKey } from '@ali/ide-core-browser/lib/raw-context-key';
+import { RawContextKey } from '@opensumi/ide-core-browser/lib/raw-context-key';
 
 // 根元素 id
 export const RootElementId = 'antcode-cr';

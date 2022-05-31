@@ -1,6 +1,6 @@
 import * as React from 'react';
-import { SCMResourceView as OriginSCMResourceView } from '@ali/ide-scm/lib/browser/scm.view';
-import { ViewState } from '@ali/ide-core-browser';
+import { SCMResourcesViewWrapper } from '@opensumi/ide-scm/lib/browser/scm-view-container';
+import { ViewState } from '@opensumi/ide-core-browser';
 
 export const SCMResourceView: React.FC<{
   viewState: ViewState;
@@ -15,7 +15,7 @@ export const SCMResourceView: React.FC<{
   };
   return (
     <div style={{ paddingTop: 10 }}>
-      <OriginSCMResourceView {...passedProps} />
+      <SCMResourcesViewWrapper {...passedProps} />
     </div>
   );
 };

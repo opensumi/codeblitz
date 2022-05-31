@@ -1,6 +1,6 @@
-import * as monaco from '@ali/monaco-editor-core/esm/vs/editor/editor.api';
-import { IRange, URI } from '@ali/ide-core-common';
-import { IEditor } from '@ali/ide-editor';
+import * as monaco from '@opensumi/monaco-editor-core/esm/vs/editor/editor.api';
+import { IRange, URI } from '@opensumi/ide-core-common';
+import { IEditor } from '@opensumi/ide-editor';
 import { TextDocument } from 'vscode';
 import {
   CUSTOM_FOLDING_LINE_NUMBER,

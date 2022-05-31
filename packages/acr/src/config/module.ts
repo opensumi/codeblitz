@@ -1,4 +1,4 @@
-// import { StatusBarModule } from '@ali/ide-status-bar/lib/browser';
+// import { StatusBarModule } from '@opensumi/ide-status-bar/lib/browser';
 
 import { CommonBrowserModules } from '../modules/common-modules';
 import { CustomBrowserModules } from '../modules/custom-modules';

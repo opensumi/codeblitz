@@ -1,12 +1,12 @@
-import { Autowired } from '@ali/common-di';
-import { Domain, CommandRegistry } from '@ali/ide-core-common';
-import { WorkbenchEditorService, IResource } from '@ali/ide-editor/lib/browser';
+import { Autowired } from '@opensumi/di';
+import { Domain, CommandRegistry } from '@opensumi/ide-core-common';
+import { WorkbenchEditorService, IResource } from '@opensumi/ide-editor/lib/browser';
 import {
   KeybindingContribution,
   KeybindingRegistry,
   CommandContribution,
   IEventBus,
-} from '@ali/ide-core-browser';
+} from '@opensumi/ide-core-browser';
 import { IAntcodeService } from '../../antcode-service/base';
 import { OpenChangeFilesService } from '../../open-change-files';
 import { GOTO_PREVIOUS_CHANGE, GOTO_NEXT_CHANGE } from '../../merge-request/common';
@@ -14,7 +14,8 @@ import { ACR_IS_FULLSCREEN } from '../../../constant';
 
 @Domain(CommandContribution, KeybindingContribution)
 export class ChangesTreeLocationContribution
-  implements CommandContribution, KeybindingContribution {
+  implements CommandContribution, KeybindingContribution
+{
   @Autowired(IAntcodeService)
   private readonly antcodeService: IAntcodeService;
 

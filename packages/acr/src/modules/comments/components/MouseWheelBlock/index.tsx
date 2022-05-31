@@ -18,7 +18,7 @@ function getScrollableElement(_target: Element) {
 export const MouseWheelBlock = ({ children }) => {
   const ref = React.useRef<HTMLDivElement | null>(null);
 
-  function handleMouseWheel(event: MouseWheelEvent) {
+  function handleMouseWheel(event) {
     const target = getScrollableElement(event.target as Element);
     // 在评论输入框里滚动滚动条需要停止冒泡，否则会触发编辑器滚动
     if (target && target.scrollHeight > target.clientHeight) {

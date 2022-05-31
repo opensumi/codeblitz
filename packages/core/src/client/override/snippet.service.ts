@@ -1,18 +1,23 @@
-import { Injectable } from '@ali/common-di';
+import { Injectable } from '@opensumi/di';
 import {
   MonacoSnippetSuggestProvider,
   SnippetLoadOptions,
-} from '@ali/ide-monaco/lib/browser/monaco-snippet-suggest-provider';
-import { URI } from '@ali/ide-core-common';
+} from '@opensumi/ide-monaco/lib/browser/monaco-snippet-suggest-provider';
+import { URI, Disposable, IDisposable, DisposableCollection } from '@opensumi/ide-core-common';
 
 // kaitian 中对资源都默认是根据 file 协议处理，node 和 worker 协议不一样
 // 需要统一在 kaitian 中修复处理
 // 先临时修复发版
 @Injectable()
 export class MonacoSnippetSuggestProviderOverride extends MonacoSnippetSuggestProvider {
-  fromPath(path: string, options: SnippetLoadOptions): Promise<void> {
+  fromPath(path: string, options: SnippetLoadOptions): IDisposable {
+    const toDispose = new DisposableCollection(
+      Disposable.create(() => {
+        /* mark as not disposed */
+      })
+    );
     const snippetURI = URI.parse(options.extPath).resolve(path.replace(/^\.\//, ''));
-    const pending = this.loadURI(snippetURI.codeUri, options);
+    const pending = this.loadURI(snippetURI.codeUri, options, toDispose);
     const { language } = options;
     const scopes = Array.isArray(language) ? language : !!language ? [language] : ['*'];
     for (const scope of scopes) {
@@ -20,7 +25,7 @@ export class MonacoSnippetSuggestProviderOverride extends MonacoSnippetSuggestPr
       pendingSnippets.push(pending);
       this.pendingSnippets.set(scope, pendingSnippets);
     }
-    return pending;
+    return toDispose;
   }
 }
 

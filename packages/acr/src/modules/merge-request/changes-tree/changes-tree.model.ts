@@ -1,6 +1,6 @@
-import { TreeModel, TreeNodeEvent, CompositeTreeNode } from '@ali/ide-components';
-import { Injectable, Optional, Autowired } from '@ali/common-di';
-import { ThrottledDelayer, Emitter, Event } from '@ali/ide-core-browser';
+import { TreeModel, TreeNodeEvent, CompositeTreeNode } from '@opensumi/ide-components';
+import { Injectable, Optional, Autowired } from '@opensumi/di';
+import { ThrottledDelayer, Emitter, Event } from '@opensumi/ide-core-browser';
 
 import { ChangesTreeDecorationService } from './changes-tree-decoration.service';
 import { ChangeDirectory } from './changes-tree-node';

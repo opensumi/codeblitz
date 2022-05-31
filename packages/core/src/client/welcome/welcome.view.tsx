@@ -1,6 +1,6 @@
 import React from 'react';
-import { localize } from '@ali/ide-core-common';
-import { ReactEditorComponent } from '@ali/ide-editor/lib/browser';
+import { localize } from '@opensumi/ide-core-common';
+import { ReactEditorComponent } from '@opensumi/ide-editor/lib/browser';
 import styles from './welcome.module.less';
 import { CommonConfig } from '../../common/config';
 

@@ -2,7 +2,7 @@ import http from 'http';
 import url from 'url';
 import portfinder from 'portfinder';
 import send from 'send';
-import { Uri } from '@ali/ide-core-common';
+import { Uri } from '@opensumi/ide-core-common';
 import { log } from './log';
 import { IExtensionServerOptions } from '../extension/type';
 

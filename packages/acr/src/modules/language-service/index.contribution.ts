@@ -1,9 +1,13 @@
-import { Autowired } from '@ali/common-di';
-import { Deferred, Disposable, Domain, URI, Uri } from '@ali/ide-core-common';
-import { ClientAppContribution, PreferenceService, PreferenceChange } from '@ali/ide-core-browser';
+import { Autowired } from '@opensumi/di';
+import { Deferred, Disposable, Domain, URI, Uri } from '@opensumi/ide-core-common';
+import {
+  ClientAppContribution,
+  PreferenceService,
+  PreferenceChange,
+} from '@opensumi/ide-core-browser';
 import * as vscode from 'vscode';
-import { IWorkspaceService } from '@ali/ide-workspace';
-import { Position, Range, Location } from '@ali/ide-kaitian-extension/lib/common/vscode/ext-types';
+import { IWorkspaceService } from '@opensumi/ide-workspace';
+import { Position, Range, Location } from '@opensumi/ide-extension/lib/common/vscode/ext-types';
 
 import { LSIF_PROD_API_HOST, LSIF_TEST_API_HOST, LsifClient } from '@alipay/lsif-client';
 
@@ -13,7 +17,7 @@ import { WorkspaceManagerService } from '../workspace/workspace-loader.service';
 import { reportLsifBehavior } from '../../utils/monitor';
 import { toGitUri } from '../merge-request/changes-tree/util';
 import * as timer from '../../utils/timer';
-import { IFileServiceClient } from '@ali/ide-file-service';
+import { IFileServiceClient } from '@opensumi/ide-file-service';
 
 const IS_TEST_ENV =
   process.env.NODE_ENV === 'development' ||

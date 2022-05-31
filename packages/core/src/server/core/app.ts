@@ -1,4 +1,4 @@
-import { Injector, ConstructorOf } from '@ali/common-di';
+import { Injector, ConstructorOf } from '@opensumi/di';
 import {
   MaybePromise,
   ContributionProvider,
@@ -8,8 +8,8 @@ import {
   SupportLogNamespace,
   StoragePaths,
   DisposableCollection,
-} from '@ali/ide-core-common';
-import { AppConfig, BrowserModule } from '@ali/ide-core-browser';
+} from '@opensumi/ide-core-common';
+import { AppConfig, BrowserModule } from '@opensumi/ide-core-browser';
 import { IExtensionBasicMetadata } from '@alipay/alex-shared';
 import * as path from 'path';
 

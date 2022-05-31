@@ -1,5 +1,5 @@
-import { Autowired, Injectable, Injector, INJECTOR_TOKEN, Optional } from '@ali/common-di';
-import { IProgressService } from '@ali/ide-core-browser/lib/progress';
+import { Autowired, Injectable, Injector, INJECTOR_TOKEN, Optional } from '@opensumi/di';
+import { IProgressService } from '@opensumi/ide-core-browser/lib/progress';
 import {
   Disposable,
   Emitter,
@@ -8,12 +8,12 @@ import {
   STORAGE_SCHEMA,
   URI,
   formatLocalize,
-} from '@ali/ide-core-common';
-import * as paths from '@ali/ide-core-common/lib/path';
-import { IQuickInputService, localize } from '@ali/ide-core-browser';
-import { IFileServiceClient } from '@ali/ide-file-service';
-import { ISCMRepository, SCMService, ISCMResource, ISCMResourceGroup } from '@ali/ide-scm';
-import { IMessageService, IDialogService } from '@ali/ide-overlay';
+} from '@opensumi/ide-core-common';
+import * as paths from '@opensumi/ide-core-common/lib/path';
+import { IQuickInputService, localize } from '@opensumi/ide-core-browser';
+import { IFileServiceClient } from '@opensumi/ide-file-service';
+import { ISCMRepository, SCMService, ISCMResource, ISCMResourceGroup } from '@opensumi/ide-scm';
+import { IMessageService, IDialogService } from '@opensumi/ide-overlay';
 
 import { IAntcodeService, TCommitFiles } from '../../antcode-service/base';
 import { WorkspaceManagerService } from '../../workspace/workspace-loader.service';
@@ -100,6 +100,8 @@ export class BrowserSCMClient extends Disposable {
   constructor(@Optional() rootDir: URI) {
     super();
     this.projectRootDir = rootDir;
+    // TODO 暂时先注册scm_view 防止scm-tree-model内调用withProgress报错
+    this.progressService.registerProgressIndicator('scm_view');
     this.initProvider();
     this.hydrate();
   }

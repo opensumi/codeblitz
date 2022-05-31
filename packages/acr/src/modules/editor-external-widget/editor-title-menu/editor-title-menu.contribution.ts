@@ -1,5 +1,5 @@
-import { Domain } from '@ali/ide-core-browser';
-import { MenuContribution, IMenuRegistry, MenuId } from '@ali/ide-core-browser/lib/menu/next';
+import { Domain } from '@opensumi/ide-core-browser';
+import { MenuContribution, IMenuRegistry, MenuId } from '@opensumi/ide-core-browser/lib/menu/next';
 
 import { CommentFilter } from '../../comments/comment-filter.view';
 import { EncodingSelect } from '../../merge-request/changes-tree/components/encoding-select';

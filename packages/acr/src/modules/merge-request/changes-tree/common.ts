@@ -1,4 +1,4 @@
-import { getIcon } from '@ali/ide-core-browser';
+import { getIcon } from '@opensumi/ide-core-browser';
 
 export const ChangesTreeViewId = 'changes-tree';
 

@@ -1,13 +1,18 @@
-import * as monaco from '@ali/monaco-editor-core/esm/vs/editor/editor.api';
-import { Autowired } from '@ali/common-di';
-import { Domain, Disposable, CommandContribution, CommandRegistry } from '@ali/ide-core-common';
-import { IEditor, EditorType } from '@ali/ide-editor/lib/common';
-import { WorkbenchEditorService } from '@ali/ide-editor/lib/browser';
+import * as monaco from '@opensumi/monaco-editor-core/esm/vs/editor/editor.api';
+import { Autowired } from '@opensumi/di';
+import {
+  Domain,
+  Disposable,
+  CommandContribution,
+  CommandRegistry,
+} from '@opensumi/ide-core-common';
+import { IEditor, EditorType } from '@opensumi/ide-editor/lib/common';
+import { WorkbenchEditorService } from '@opensumi/ide-editor/lib/browser';
 import {
   BrowserEditorContribution,
   IEditorFeatureRegistry,
-} from '@ali/ide-editor/lib/browser/types';
-import { IThemeService } from '@ali/ide-theme';
+} from '@opensumi/ide-editor/lib/browser/types';
+import { IThemeService } from '@opensumi/ide-theme';
 import debounce from 'lodash.debounce';
 import { CodeModelService } from './code-model.service';
 import styles from './style.module.less';
@@ -50,6 +55,7 @@ export class LineDecorationContribution implements BrowserEditorContribution, Co
                   {
                     range: new monaco.Range(lineNumber, 1, lineNumber, 1),
                     options: {
+                      description: 'line-content-description',
                       className: styles['line-content'],
                       glyphMarginClassName: `${styles['line-glyph-margin']} ${
                         styles[`line-glyph-margin-${this.themeService.getCurrentThemeSync().type}`]
@@ -136,6 +142,7 @@ export class LineDecorationContribution implements BrowserEditorContribution, Co
       {
         range: new monaco.Range(startLineNumber, 1, endLineNumber, 1),
         options: {
+          description: 'line-anchor-description',
           isWholeLine: true,
           linesDecorationsClassName: styles['line-anchor'],
           className: styles['line-content'],

@@ -1,14 +1,14 @@
-import { Injectable, Autowired } from '@ali/common-di';
+import { Injectable, Autowired } from '@opensumi/di';
 import {
   IEditorDocumentModelSaveResult,
   URI,
   IEditorDocumentChange,
   BasicTextLines,
   isEditChange,
-} from '@ali/ide-core-common';
+} from '@opensumi/ide-core-common';
 import { IFileService } from '../file-service/base';
 import md5 from 'md5';
-import { ISavingContent, IContentChange } from '@ali/ide-file-scheme/lib/common';
+import { ISavingContent, IContentChange } from '@opensumi/ide-file-scheme/lib/common';
 import { IFileSchemeDocNodeService } from './base';
 import { fsExtra as fse } from '../node';
 import { encode, decode } from '../file-service/encoding';

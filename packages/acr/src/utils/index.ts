@@ -1,5 +1,5 @@
-import { URI } from '@ali/ide-core-common';
-import { Path } from '@ali/ide-core-common/lib/path';
+import { URI } from '@opensumi/ide-core-common';
+import { Path } from '@opensumi/ide-core-common/lib/path';
 
 export function base64ToUnicode(str: string) {
   return decodeURIComponent(

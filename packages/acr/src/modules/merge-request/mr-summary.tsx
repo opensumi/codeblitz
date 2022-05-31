@@ -1,6 +1,11 @@
 import * as React from 'react';
 import { observer } from 'mobx-react-lite';
-import { useInjectable, localize, formatLocalize, useUpdateOnEvent } from '@ali/ide-core-browser';
+import {
+  useInjectable,
+  localize,
+  formatLocalize,
+  useUpdateOnEvent,
+} from '@opensumi/ide-core-browser';
 import { IAntcodeService } from '../antcode-service/base';
 import * as styles from './styles.module.less';
 

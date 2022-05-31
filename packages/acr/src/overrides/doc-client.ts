@@ -1,11 +1,10 @@
-import { Injectable, Autowired } from '@ali/common-di';
-import { IFileSchemeDocClient, IContentChange, ISavingContent } from '@ali/ide-file-scheme';
+import { Injectable, Autowired } from '@opensumi/di';
+import { IFileSchemeDocClient, IContentChange, ISavingContent } from '@opensumi/ide-file-scheme';
 import {
   IEditorDocumentModelSaveResult,
   IEditorDocumentEditChange,
-  TextDocumentContentChangeEvent,
-} from '@ali/ide-core-browser';
-import { IFileServiceClient } from '@ali/ide-file-service';
+} from '@opensumi/ide-core-browser';
+import { IFileServiceClient, TextDocumentContentChangeEvent } from '@opensumi/ide-file-service';
 import { Range } from 'vscode-languageserver-types';
 import md5 from 'md5';
 

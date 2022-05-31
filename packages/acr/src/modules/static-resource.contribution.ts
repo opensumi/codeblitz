@@ -1,14 +1,18 @@
-import { Autowired, Injectable } from '@ali/common-di';
-import { Domain, URI, AppConfig, MaybePromise } from '@ali/ide-core-browser';
+import { Autowired, Injectable } from '@opensumi/di';
+import { Domain, URI, AppConfig, MaybePromise } from '@opensumi/ide-core-browser';
 import {
   StaticResourceContribution as CoreStaticResourceContribution,
   StaticResourceService,
-} from '@ali/ide-static-resource/lib/browser/static.definition';
-import { IWorkspaceService } from '@ali/ide-workspace';
-import * as paths from '@ali/ide-core-common/lib/path';
-import { BrowserEditorContribution, ResourceService, IResource } from '@ali/ide-editor/lib/browser';
+} from '@opensumi/ide-static-resource/lib/browser/static.definition';
+import { IWorkspaceService } from '@opensumi/ide-workspace';
+import * as paths from '@opensumi/ide-core-common/lib/path';
+import {
+  BrowserEditorContribution,
+  ResourceService,
+  IResource,
+} from '@opensumi/ide-editor/lib/browser';
 import { fromSCMUri } from '../utils/scm-uri';
-import { FileSystemResourceProvider } from '@ali/ide-editor/lib/browser/fs-resource/fs-resource';
+import { FileSystemResourceProvider } from '@opensumi/ide-editor/lib/browser/fs-resource/fs-resource';
 
 const EXPRESS_SERVER_PATH = window.location.href;
 

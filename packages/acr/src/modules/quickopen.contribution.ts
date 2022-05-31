@@ -1,4 +1,4 @@
-import { Autowired } from '@ali/common-di';
+import { Autowired } from '@opensumi/di';
 import {
   Domain,
   CommandRegistry,
@@ -6,11 +6,11 @@ import {
   KeybindingContribution,
   KeybindingRegistry,
   PrefixQuickOpenService,
-} from '@ali/ide-core-browser';
+} from '@opensumi/ide-core-browser';
 import {
   QuickOpenContribution,
   QuickOpenHandlerRegistry,
-} from '@ali/ide-quick-open/lib/browser/prefix-quick-open.service';
+} from '@opensumi/ide-quick-open/lib/browser/prefix-quick-open.service';
 
 import { QuickChangeFileHandler } from './change-file.quick-open';
 import { RootElementId } from '../constant';
@@ -19,7 +19,8 @@ const QUICK_OPEN_OPEN_DIFF_FILES = 'commands.quick-open.change-files';
 
 @Domain(CommandContribution, KeybindingContribution, QuickOpenContribution)
 export class QuickChangeFileContribution
-  implements CommandContribution, KeybindingContribution, QuickOpenContribution {
+  implements CommandContribution, KeybindingContribution, QuickOpenContribution
+{
   @Autowired()
   private readonly quickChangeFileHandler: QuickChangeFileHandler;
 

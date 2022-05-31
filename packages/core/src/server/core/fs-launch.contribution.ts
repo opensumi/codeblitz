@@ -1,6 +1,6 @@
-import { Autowired } from '@ali/common-di';
-import { Domain, ContributionProvider, localize, Disposable } from '@ali/ide-core-common';
-import { IMessageService } from '@ali/ide-overlay';
+import { Autowired } from '@opensumi/di';
+import { Domain, ContributionProvider, localize, Disposable } from '@opensumi/ide-core-common';
+import { IMessageService } from '@opensumi/ide-overlay';
 import { IServerApp, RuntimeConfig, RootFS, AppConfig } from '../../common/types';
 import { LaunchContribution } from './app';
 import { FileSystemContribution } from './base';

@@ -1,7 +1,7 @@
 import * as React from 'react';
-import { useInjectable } from '@ali/ide-core-browser/lib/react-hooks';
+import { useInjectable } from '@opensumi/ide-core-browser/lib/react-hooks';
 import { observer } from 'mobx-react-lite';
-import { ViewState, localize } from '@ali/ide-core-browser';
+import { ViewState, localize } from '@opensumi/ide-core-browser';
 import {
   RecycleTree,
   RecycleTreeFilterDecorator,
@@ -9,7 +9,7 @@ import {
   INodeRendererWrapProps,
   TreeNodeType,
   TreeModel,
-} from '@ali/ide-components';
+} from '@opensumi/ide-components';
 
 import { ChangeFile, ChangeDirectory } from './changes-tree-node';
 import { ChangesTreeModelService } from './changes-tree-model.service';
@@ -32,13 +32,8 @@ export const ChangesTreeView = observer(
     const wrapperRef: React.RefObject<HTMLDivElement> = React.createRef();
 
     const changesTreeModelService = useInjectable<ChangesTreeModelService>(ChangesTreeModelService);
-    const {
-      decorationService,
-      labelService,
-      commandService,
-      indent,
-      baseIndent,
-    } = changesTreeModelService;
+    const { decorationService, labelService, commandService, indent, baseIndent } =
+      changesTreeModelService;
 
     const handleTreeReady = (handle: IRecycleTreeHandle) => {
       changesTreeModelService.handleTreeHandler({

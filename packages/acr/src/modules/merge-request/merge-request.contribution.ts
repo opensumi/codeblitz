@@ -1,11 +1,11 @@
-import { Domain, getIcon, localize } from '@ali/ide-core-browser';
-import { ComponentContribution, ComponentRegistry } from '@ali/ide-core-browser/lib/layout';
+import { Domain, getIcon, localize } from '@opensumi/ide-core-browser';
+import { ComponentContribution, ComponentRegistry } from '@opensumi/ide-core-browser/lib/layout';
 
 import { MergeRequestSummary } from './mr-summary';
 import { MergeRequestExplorerId } from './common';
 import { ChangeTreeView } from './changes-tree';
 import { WebSCMView } from './web-scm';
-import { MenuContribution, IMenuRegistry } from '@ali/ide-core-browser/lib/menu/next';
+import { MenuContribution, IMenuRegistry } from '@opensumi/ide-core-browser/lib/menu/next';
 
 @Domain(ComponentContribution, MenuContribution)
 export class MergeRequestContribution implements ComponentContribution, MenuContribution {
@@ -14,7 +14,7 @@ export class MergeRequestContribution implements ComponentContribution, MenuCont
     registry.register(MergeRequestExplorerId, [ChangeTreeView, WebSCMView], {
       titleComponent: MergeRequestSummary,
       iconClass: getIcon('explorer'),
-      priority: 1,
+      priority: 10,
       containerId: MergeRequestExplorerId,
     });
   }

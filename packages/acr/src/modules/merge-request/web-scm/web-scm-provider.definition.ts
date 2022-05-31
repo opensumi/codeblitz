@@ -1,12 +1,12 @@
 /**
  * web scm provider 所有的 provider/group/resource 定义都在这里
  */
-import { Autowired, Injectable, Optional } from '@ali/common-di';
-import { URI, Uri, Event, Emitter } from '@ali/ide-core-common';
-import { Sequence, ISplice } from '@ali/ide-core-common/lib/sequence';
-import { ISCMProvider, ISCMResourceGroup, ISCMResource, VSCommand } from '@ali/ide-scm';
+import { Autowired, Injectable, Optional } from '@opensumi/di';
+import { URI, Uri, Event, Emitter } from '@opensumi/ide-core-common';
+import { Sequence, ISplice } from '@opensumi/ide-core-common/lib/sequence';
+import { ISCMProvider, ISCMResourceGroup, ISCMResource, VSCommand } from '@opensumi/ide-scm';
 import { toGitUri, toDiffUri } from '../changes-tree/util';
-import { WorkbenchEditorService } from '@ali/ide-editor';
+import { WorkbenchEditorService } from '@opensumi/ide-editor';
 import { WorkspaceManagerService } from '../../workspace/workspace-loader.service';
 
 @Injectable({ multiple: true })
@@ -47,8 +47,8 @@ export class WebSCMProvider implements ISCMProvider {
   public statusBarCommands: VSCommand[] | undefined = [];
 
   public onDidChangeStatusBarCommandsEmitter = new Emitter<VSCommand[]>();
-  readonly onDidChangeStatusBarCommands: Event<VSCommand[]> = this
-    .onDidChangeStatusBarCommandsEmitter.event;
+  readonly onDidChangeStatusBarCommands: Event<VSCommand[]> =
+    this.onDidChangeStatusBarCommandsEmitter.event;
 
   public onDidChangeEmitter = new Emitter<void>();
   readonly onDidChange: Event<void> = this.onDidChangeEmitter.event;

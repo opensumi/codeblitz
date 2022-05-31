@@ -1,6 +1,6 @@
-import { Provider, ConstructorOf } from '@ali/common-di';
-import { BackService } from '@ali/ide-core-common';
-import { BrowserModule } from '@ali/ide-core-browser';
+import { Provider, ConstructorOf } from '@opensumi/di';
+import { BackService } from '@opensumi/ide-core-common';
+import { BrowserModule } from '@opensumi/ide-core-browser';
 import { IExtensionIdentity, IExtensionMode } from '@alipay/alex-shared';
 import * as paths from 'path';
 import { EXT_SCHEME, WORKSPACE_ROOT, OSSBucket } from './constant';

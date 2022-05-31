@@ -1,7 +1,7 @@
 import * as React from 'react';
-import { useInjectable, SlotLocation } from '@ali/ide-core-browser';
-import { Icon } from '@ali/ide-core-browser/lib/components';
-import { IMainLayoutService } from '@ali/ide-main-layout';
+import { useInjectable, SlotLocation } from '@opensumi/ide-core-browser';
+import { Icon } from '@opensumi/ide-core-browser/lib/components';
+import { IMainLayoutService } from '@opensumi/ide-main-layout';
 
 import * as styles from './styles.module.less';
 
@@ -34,7 +34,7 @@ export const ExpandBtn: React.FC = () => {
     const nextValue = !tabbarService.currentContainerId;
     if (nextValue === false) {
       // 将当前 size 值缓存下来
-      lastSize.current = tabbarService.resizeHandle.getSize();
+      lastSize.current = tabbarService.resizeHandle?.getSize();
       layoutService.toggleSlot(SlotLocation.left, false, 0);
     } else {
       layoutService.toggleSlot(SlotLocation.left, true, lastSize.current);

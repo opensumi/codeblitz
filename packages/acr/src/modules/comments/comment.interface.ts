@@ -1,4 +1,4 @@
-import { ICommentsThread } from '@ali/ide-comments';
+import { ICommentsThread } from '@opensumi/ide-comments';
 import { IAnnotationData } from '../antcode-service/base';
 
 export interface ICommentsThreadData {

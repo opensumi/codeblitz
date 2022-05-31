@@ -1,19 +1,20 @@
-import { Autowired } from '@ali/common-di';
-import { Domain, Disposable } from '@ali/ide-core-common';
-import { SEARCH_COMMANDS, CommandContribution, CommandRegistry } from '@ali/ide-core-browser';
+import { Autowired } from '@opensumi/di';
+import { Domain, Disposable } from '@opensumi/ide-core-common';
+import { SEARCH_COMMANDS, CommandContribution, CommandRegistry } from '@opensumi/ide-core-browser';
 import {
   MenuId,
   MenuContribution,
   IMenuRegistry,
   IMenuItem,
-} from '@ali/ide-core-browser/lib/menu/next';
+} from '@opensumi/ide-core-browser/lib/menu/next';
 
 import { RuntimeConfig } from '../../common/types';
 
 @Domain(MenuContribution, CommandContribution)
 export class SearchContribution
   extends Disposable
-  implements MenuContribution, CommandContribution {
+  implements MenuContribution, CommandContribution
+{
   @Autowired(RuntimeConfig)
   runtimeConfig: RuntimeConfig;
 

@@ -1,4 +1,4 @@
-import { Injectable, Injector, ConstructorOf, Provider } from '@ali/common-di';
+import { Injectable, Injector, ConstructorOf, Provider } from '@opensumi/di';
 import {
   BrowserModule,
   ClientApp as BasicClientApp,
@@ -7,9 +7,9 @@ import {
   PreferenceProviderProvider,
   PreferenceScope,
   PreferenceProvider,
-} from '@ali/ide-core-browser';
-import { BackService, BasicModule } from '@ali/ide-core-common';
-import { WSChannelHandler } from '@ali/ide-connection';
+} from '@opensumi/ide-core-browser';
+import { BackService, BasicModule } from '@opensumi/ide-core-common';
+import { WSChannelHandler } from '@opensumi/ide-connection/lib/browser';
 
 import { FCServiceCenter, ClientPort, initFCService } from '../connection';
 import { KaitianExtFsProvider, KtExtFsProviderContribution } from './extension';
@@ -123,7 +123,10 @@ export class ClientApp extends BasicClientApp {
     });
   }
 
-  public async start(container: HTMLElement | IAppRenderer, type?: string): Promise<void> {
+  public async start(
+    container: HTMLElement | IAppRenderer,
+    type?: 'electron' | 'web'
+  ): Promise<void> {
     // 先启动 server 进行必要的初始化，应用的权限等也在 server 中处理
     const serverApp: IServerApp = this.injector.get(IServerApp);
     await serverApp.start();
@@ -154,8 +157,7 @@ export class ClientApp extends BasicClientApp {
       ]);
     }
   }
-
-  dispose() {
+  async dispose() {
     super.dispose();
     this.clearInjector();
   }

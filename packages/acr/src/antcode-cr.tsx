@@ -1,9 +1,9 @@
 import * as React from 'react';
 import * as ReactDOM from 'react-dom';
-import { Injector } from '@ali/common-di';
-import { URI } from '@ali/ide-core-common';
-import { join } from '@ali/ide-core-common/lib/path';
-import { equals } from '@ali/ide-core-common/lib/arrays';
+import { Injector } from '@opensumi/di';
+import { URI } from '@opensumi/ide-core-common';
+import { join } from '@opensumi/ide-core-common/lib/path';
+import { equals } from '@opensumi/ide-core-common/lib/arrays';
 // internal patched
 import { disposeMode, disposableCollection } from '@alipay/alex/lib/core/patch';
 

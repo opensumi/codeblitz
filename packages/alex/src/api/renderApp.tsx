@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useRef, useMemo } from 'react';
 import ReactDOM from 'react-dom';
-import { IReporterService, localize, getDebugLogger } from '@ali/ide-core-common';
+import { IReporterService, localize, getDebugLogger } from '@opensumi/ide-core-common';
 import { REPORT_NAME, RuntimeConfig } from '@alipay/alex-core';
 import { createApp } from './createApp';
 import { Root } from '../core/Root';

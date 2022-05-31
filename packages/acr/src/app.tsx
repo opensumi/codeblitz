@@ -1,11 +1,11 @@
-import { Injector } from '@ali/common-di';
-import { IPreferences } from '@ali/ide-core-browser';
+import { Injector } from '@opensumi/di';
+import { IPreferences } from '@opensumi/ide-core-browser';
 import { IAppConfig, getDefaultAppConfig } from '@alipay/alex';
 
 import { renderApp } from './render-app';
 
 // 引入公共样式文件
-import '@ali/ide-core-browser/lib/style/entry.less';
+import '@opensumi/ide-core-browser/lib/style/entry.less';
 
 import { layoutConfig, LayoutComponent } from './config/layout';
 import { modules } from './config/module';

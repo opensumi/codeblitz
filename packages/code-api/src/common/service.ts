@@ -1,4 +1,4 @@
-import { Injectable, Autowired } from '@ali/common-di';
+import { Injectable, Autowired } from '@opensumi/di';
 import {
   StorageProvider,
   IStorage,
@@ -8,9 +8,9 @@ import {
   CommandService,
   MessageType,
   localize,
-} from '@ali/ide-core-common';
-import { ClientAppStateService } from '@ali/ide-core-browser';
-import { IMessageService } from '@ali/ide-overlay';
+} from '@opensumi/ide-core-common';
+import { ClientAppStateService } from '@opensumi/ide-core-browser';
+import { IMessageService } from '@opensumi/ide-overlay';
 import { GITHUB_OAUTH_TOKEN, GITLAB_PRIVATE_TOKEN } from './constant';
 import { ICodePlatform } from './types';
 import { CODE_PLATFORM_CONFIG } from './config';

@@ -1,6 +1,6 @@
-import * as monaco from '@ali/monaco-editor-core/esm/vs/editor/editor.api';
-import { RawContextKey } from '@ali/ide-core-browser/lib/raw-context-key';
-import { ViewZoneDelegate } from '@ali/ide-monaco-enhance';
+import * as monaco from '@opensumi/monaco-editor-core/esm/vs/editor/editor.api';
+import { RawContextKey } from '@opensumi/ide-core-browser/lib/raw-context-key';
+import { ViewZoneDelegate } from '@opensumi/ide-monaco-enhance';
 
 export type TFoldingType = 'up' | 'down' | 'all';
 

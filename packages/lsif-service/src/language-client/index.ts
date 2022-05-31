@@ -1,5 +1,5 @@
-import * as monaco from '@ali/monaco-editor-core/esm/vs/editor/editor.api';
-import { Autowired, Injectable, ConstructorOf } from '@ali/common-di';
+import * as monaco from '@opensumi/monaco-editor-core/esm/vs/editor/editor.api';
+import { Autowired, Injectable, ConstructorOf } from '@opensumi/di';
 import * as vscode from 'vscode';
 import {
   DocumentSelector,
@@ -20,11 +20,11 @@ import {
   Location,
   FoldingContext,
   FoldingRange,
-} from '@ali/ide-kaitian-extension/lib/common/vscode/model.api';
+} from '@opensumi/ide-extension/lib/common/vscode/model.api';
 import {
   ExtensionDocumentDataManager,
   IExtHostLanguages,
-} from '@ali/ide-kaitian-extension/lib/common/vscode';
+} from '@opensumi/ide-extension/lib/common/vscode';
 import {
   Uri,
   URI,
@@ -32,24 +32,24 @@ import {
   DisposableCollection,
   Emitter,
   DisposableStore,
-} from '@ali/ide-core-common';
-import { Disposable } from '@ali/ide-kaitian-extension/lib/common/vscode/ext-types';
+} from '@opensumi/ide-core-common';
+import { Disposable } from '@opensumi/ide-extension/lib/common/vscode/ext-types';
 
-import { DefinitionAdapter } from '@ali/ide-kaitian-extension/lib/hosted/api/vscode/language/definition';
-import { HoverAdapter } from '@ali/ide-kaitian-extension/lib/hosted/api/vscode/language/hover';
-import { ReferenceAdapter } from '@ali/ide-kaitian-extension/lib/hosted/api/vscode/language/reference';
-import { Adapter } from '@ali/ide-kaitian-extension/lib/hosted/api/vscode/ext.host.language';
-import { FoldingProviderAdapter } from '@ali/ide-kaitian-extension/lib/hosted/api/vscode/language/folding';
-import { CodeLensAdapter } from '@ali/ide-kaitian-extension/lib/hosted/api/vscode/language/lens';
-import { CommandsConverter } from '@ali/ide-kaitian-extension/lib/hosted/api/vscode/ext.host.command';
+import { DefinitionAdapter } from '@opensumi/ide-extension/lib/hosted/api/vscode/language/definition';
+import { HoverAdapter } from '@opensumi/ide-extension/lib/hosted/api/vscode/language/hover';
+import { ReferenceAdapter } from '@opensumi/ide-extension/lib/hosted/api/vscode/language/reference';
+import { Adapter } from '@opensumi/ide-extension/lib/hosted/api/vscode/ext.host.language';
+import { FoldingProviderAdapter } from '@opensumi/ide-extension/lib/hosted/api/vscode/language/folding';
+import { CodeLensAdapter } from '@opensumi/ide-extension/lib/hosted/api/vscode/language/lens';
+import { CommandsConverter } from '@opensumi/ide-extension/lib/hosted/api/vscode/ext.host.command';
 
-import { ExtHostDocumentData } from '@ali/ide-kaitian-extension/lib/hosted/api/vscode/doc/ext-data.host';
-import { IEditorDocumentModelService } from '@ali/ide-editor/lib/browser';
+import { ExtHostDocumentData } from '@opensumi/ide-extension/lib/hosted/api/vscode/doc/ext-data.host';
+import { IEditorDocumentModelService } from '@opensumi/ide-editor/lib/browser';
 import { DocumentFilter } from 'vscode-languageserver-protocol';
-import { fromLanguageSelector } from '@ali/ide-kaitian-extension/lib/common/vscode/converter';
-import { MonacoModelIdentifier, testGlob } from '@ali/ide-kaitian-extension/lib/common/vscode';
-import { LanguageSelector } from '@ali/ide-kaitian-extension/lib/common/vscode/model.api';
-import { CommandDto } from '@ali/ide-kaitian-extension/lib/common/vscode/scm';
+import { fromLanguageSelector } from '@opensumi/ide-extension/lib/common/vscode/converter';
+import { MonacoModelIdentifier, testGlob } from '@opensumi/ide-extension/lib/common/vscode';
+import { LanguageSelector } from '@opensumi/ide-editor';
+import { CommandDto } from '@opensumi/ide-extension/lib/common/vscode/scm';
 
 @Injectable()
 class LiteDocumentDataManager implements Partial<ExtensionDocumentDataManager> {

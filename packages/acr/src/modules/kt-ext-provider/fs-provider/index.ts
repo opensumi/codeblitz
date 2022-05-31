@@ -1,13 +1,21 @@
-import { Injectable } from '@ali/common-di';
-import { Uri, Event } from '@ali/ide-core-browser';
-import { FileSystemProvider, FileStat, FileType, FileChangeEvent } from '@ali/ide-file-service';
-import { BinaryBuffer } from '@ali/ide-core-common/lib/utils/buffer';
+import { Injectable } from '@opensumi/di';
+import { Uri, Event } from '@opensumi/ide-core-browser';
+import {
+  FileSystemProvider,
+  FileStat,
+  FileType,
+  FileChangeEvent,
+  FileSystemProviderCapabilities,
+} from '@opensumi/ide-file-service';
+import { BinaryBuffer } from '@opensumi/ide-core-common/lib/utils/buffer';
 
 /**
  * 解析 kt-ext:// 文件，解决前端插件加载问题
  */
 @Injectable()
 export class KaitianExtFsProvider implements FileSystemProvider {
+  readonly capabilities: FileSystemProviderCapabilities;
+  onDidChangeCapabilities = Event.None;
   async readFile(uri: Uri) {
     const requestUrl = uri.with({ scheme: 'https' });
 
@@ -26,15 +34,15 @@ export class KaitianExtFsProvider implements FileSystemProvider {
     throw new Error('Method not implemented.');
   }
 
-  stat(uri: Uri): Thenable<FileStat> {
+  stat(uri: Uri): Promise<FileStat | void> {
     throw new Error('Method not implemented.');
   }
 
-  readDirectory(uri: Uri): [string, FileType][] | Thenable<[string, FileType][]> {
+  readDirectory(uri: Uri): [string, FileType][] | Promise<[string, FileType][]> {
     throw new Error('Method not implemented.');
   }
 
-  createDirectory(uri: Uri): void | Thenable<void | FileStat> {
+  createDirectory(uri: Uri): void | Promise<void | FileStat> {
     throw new Error('Method not implemented.');
   }
 
@@ -49,7 +57,7 @@ export class KaitianExtFsProvider implements FileSystemProvider {
   delete(
     uri: Uri,
     options: { recursive: boolean; moveToTrash?: boolean | undefined }
-  ): void | Thenable<void> {
+  ): void | Promise<void> {
     throw new Error('Method not implemented.');
   }
 
@@ -57,7 +65,7 @@ export class KaitianExtFsProvider implements FileSystemProvider {
     oldstring: Uri,
     newstring: Uri,
     options: { overwrite: boolean }
-  ): void | Thenable<void | FileStat> {
+  ): void | Promise<void | FileStat> {
     throw new Error('Method not implemented.');
   }
 }

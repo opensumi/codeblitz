@@ -9,7 +9,7 @@ module.exports = (option = {}) => {
 
   return {
     entry: {
-      [config.webviewEntry]: require.resolve('@ali/ide-webview/lib/webview-host/web-preload'),
+      [config.webviewEntry]: require.resolve('@opensumi/ide-webview/lib/webview-host/web-preload'),
     },
     output: {
       filename: `[name].${isDev ? 'js' : '[contenthash:8].js'}`,

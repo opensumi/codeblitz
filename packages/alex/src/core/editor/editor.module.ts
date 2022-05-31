@@ -1,10 +1,10 @@
-import * as monaco from '@ali/monaco-editor-core/esm/vs/editor/editor.api';
-import { FindController } from '@ali/monaco-editor-core/esm/vs/editor/contrib/find/findController';
-import { FindWidget } from '@ali/monaco-editor-core/esm/vs/editor/contrib/find/findWidget';
-import * as monacoKeybindings from '@ali/monaco-editor-core/esm/vs/platform/keybinding/common/keybindingsRegistry';
-import { ContextKeyDefinedExpr } from '@ali/monaco-editor-core/esm/vs/platform/contextkey/common/contextkey';
+import * as monaco from '@opensumi/monaco-editor-core/esm/vs/editor/editor.api';
+import { FindController } from '@opensumi/monaco-editor-core/esm/vs/editor/contrib/find/findController';
+import { FindWidget } from '@opensumi/monaco-editor-core/esm/vs/editor/contrib/find/findWidget';
+import * as monacoKeybindings from '@opensumi/monaco-editor-core/esm/vs/platform/keybinding/common/keybindingsRegistry';
+import { ContextKeyDefinedExpr } from '@opensumi/monaco-editor-core/esm/vs/platform/contextkey/common/contextkey';
 
-import { Provider, Injectable, Autowired } from '@ali/common-di';
+import { Provider, Injectable, Autowired } from '@opensumi/di';
 import debounce from 'lodash.debounce';
 import {
   BrowserModule,
@@ -25,10 +25,10 @@ import {
   ServiceNames,
   IContextKeyService,
   KeybindingRegistryImpl,
-} from '@ali/ide-core-browser';
-import { RawContextKey } from '@ali/ide-core-browser/lib/raw-context-key';
-import { uuid } from '@ali/ide-core-common';
-import { IThemeService, ICSSStyleService } from '@ali/ide-theme';
+} from '@opensumi/ide-core-browser';
+import { RawContextKey } from '@opensumi/ide-core-browser/lib/raw-context-key';
+import { uuid } from '@opensumi/ide-core-common';
+import { IThemeService, ICSSStyleService } from '@opensumi/ide-theme';
 import {
   getExtensionPath,
   AppConfig,
@@ -44,20 +44,20 @@ import {
   EditorPreferences,
   IEditor,
   EditorCollectionService,
-} from '@ali/ide-editor/lib/browser';
-import { ICodeEditor } from '@ali/ide-editor/lib/common';
-import { BreadCrumbServiceImpl } from '@ali/ide-editor/lib/browser/breadcrumb';
-import { IBreadCrumbService } from '@ali/ide-editor/lib/browser/types';
-import { EditorHistoryService, EditorHistoryState } from '@ali/ide-editor/lib/browser/history';
-import { IEditorDocumentModelService } from '@ali/ide-editor/lib/browser/doc-model/types';
-import { FileSchemeDocumentProvider } from '@ali/ide-file-scheme/lib/browser/file-doc';
-import { FILE_SCHEME } from '@ali/ide-file-scheme/lib/common';
-import { QUICK_OPEN_COMMANDS } from '@ali/ide-quick-open/lib/common';
+} from '@opensumi/ide-editor/lib/browser';
+import { ICodeEditor } from '@opensumi/ide-editor/lib/common';
+import { BreadCrumbServiceImpl } from '@opensumi/ide-editor/lib/browser/breadcrumb';
+import { IBreadCrumbService } from '@opensumi/ide-editor/lib/browser/types';
+import { EditorHistoryService, EditorHistoryState } from '@opensumi/ide-editor/lib/browser/history';
+import { IEditorDocumentModelService } from '@opensumi/ide-editor/lib/browser/doc-model/types';
+import { FileSchemeDocumentProvider } from '@opensumi/ide-file-scheme/lib/browser/file-doc';
+import { FILE_SCHEME } from '@opensumi/ide-file-scheme/lib/common';
+import { QUICK_OPEN_COMMANDS } from '@opensumi/ide-quick-open/lib/common';
 
 import * as path from 'path';
 import md5 from 'md5';
-import { IWorkspaceService } from '@ali/ide-workspace';
-import { SCMService } from '@ali/ide-scm';
+import { IWorkspaceService } from '@opensumi/ide-workspace';
+import { SCMService } from '@opensumi/ide-scm';
 import { IDETheme, GeekTheme } from '../extension/metadata';
 import { isCodeDocumentModel, CodeDocumentModel, EditorProps } from './types';
 import styles from '../style.module.less';
@@ -79,7 +79,7 @@ class FileSchemeDocumentProviderOverride extends FileSchemeDocumentProvider {
   @Autowired(IPropsService)
   propsService: IPropsService<EditorProps>;
 
-  async provideEncoding(uri: URI) {
+  provideEncoding(uri: URI) {
     const encoding = this.propsService.props.documentModel.encoding;
     if (uri.scheme === FILE_SCHEME && encoding) {
       return encoding;
@@ -149,9 +149,10 @@ class ThemeContribution extends Disposable implements ClientAppContribution {
       GeekTheme.packageJSON.contributes!.themes,
       URI.parse(getExtensionPath(GeekTheme.extension, 'public'))
     );
-    await this.themeService.applyTheme(undefined, true);
     // 强制用集成设置的默认主题
-    await this.themeService.applyTheme(this.defaultPreferenceProvider.get('general.theme'));
+    await this.themeService.applyTheme(
+      this.defaultPreferenceProvider.get('general.theme') as string
+    );
   }
 }
 
@@ -447,6 +448,7 @@ class EditorSpecialContribution
               {
                 range: new monaco.Range(lineNumber, 1, lineNumber, 1),
                 options: {
+                  description: 'line-content-description',
                   className: styles['line-content'],
                   glyphMarginClassName: styles['line-glyph-margin'],
                 },

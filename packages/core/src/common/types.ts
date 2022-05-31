@@ -1,7 +1,7 @@
-import { IReporter } from '@ali/ide-core-common';
+import { IReporter } from '@opensumi/ide-core-common';
 import { FileSystemConfiguration, FileSystemInstance } from '../server/node';
 
-export { AppConfig } from '@ali/ide-core-browser';
+export { AppConfig } from '@opensumi/ide-core-browser';
 
 export type RootFS = FileSystemInstance<'MountableFileSystem'>;
 

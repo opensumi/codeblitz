@@ -1,7 +1,7 @@
-import { Injectable, Autowired, INJECTOR_TOKEN, Injector } from '@ali/common-di';
-import { Emitter, localize, CommandService } from '@ali/ide-core-common';
+import { Injectable, Autowired, INJECTOR_TOKEN, Injector } from '@opensumi/di';
+import { Emitter, localize, CommandService } from '@opensumi/ide-core-common';
 import { AppConfig } from '@alipay/alex-core';
-import { IMessageService } from '@ali/ide-overlay';
+import { IMessageService } from '@opensumi/ide-overlay';
 import * as path from 'path';
 import md5 from 'md5';
 import {

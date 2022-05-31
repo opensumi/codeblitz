@@ -1,5 +1,5 @@
-import { Injectable, Autowired, Injector, INJECTOR_TOKEN } from '@ali/common-di';
-import { Uri } from '@ali/ide-core-common';
+import { Injectable, Autowired, Injector, INJECTOR_TOKEN } from '@opensumi/di';
+import { Uri } from '@opensumi/ide-core-common';
 import { TextDocumentContentChangeEvent, TextDocument } from 'vscode-languageserver-types';
 import {
   URI,
@@ -9,9 +9,9 @@ import {
   DisposableCollection,
   isArray,
   isEmptyObject,
-} from '@ali/ide-core-common';
-import { parse, ParsedPattern, match } from '@ali/ide-core-common/lib/utils/glob';
-import { FileChangeEvent } from '@ali/ide-core-common';
+} from '@opensumi/ide-core-common';
+import { parse, ParsedPattern, match } from '@opensumi/ide-core-common/lib/utils/glob';
+import { FileChangeEvent } from '@opensumi/ide-core-common';
 import { decode, encode, UTF8, getEncodingInfo } from './encoding';
 import {
   FileSystemError,
@@ -23,7 +23,7 @@ import {
   FileSetContentOptions,
   FileCreateOptions,
   FileCopyOptions,
-} from '@ali/ide-file-service/lib/common';
+} from '@opensumi/ide-file-service/lib/common';
 import * as path from 'path';
 import { HOME_ROOT } from '../../common';
 import { IDiskFileProvider, IFileService } from './base';
@@ -137,7 +137,7 @@ export class FileService extends FCService implements IFileService {
   async getFileStat(uri: string): Promise<FileStat | undefined> {
     const _uri = this.getUri(uri);
     const stat = await this.diskService.stat(_uri.codeUri);
-    return this.filterStat(stat);
+    return this.filterStat(stat as FileStat);
   }
 
   async exists(uri: string): Promise<boolean> {
@@ -240,7 +240,8 @@ export class FileService extends FCService implements IFileService {
     if (result) {
       return result;
     }
-    return this.diskService.stat(_targetUri.codeUri);
+    const stat = await this.diskService.stat(_targetUri.codeUri);
+    return stat as FileStat;
   }
 
   async copy(sourceUri: string, targetUri: string, options?: FileCopyOptions): Promise<FileStat> {
@@ -255,7 +256,8 @@ export class FileService extends FCService implements IFileService {
     if (result) {
       return result;
     }
-    return this.diskService.stat(_targetUri.codeUri);
+    const stat = await this.diskService.stat(_targetUri.codeUri);
+    return stat as FileStat;
   }
 
   async createFile(uri: string, options: FileCreateOptions = {}): Promise<FileStat> {
@@ -283,8 +285,8 @@ export class FileService extends FCService implements IFileService {
     if (result) {
       return result;
     }
-
-    return this.diskService.stat(_uri.codeUri);
+    const stat = await this.diskService.stat(_uri.codeUri);
+    return stat as FileStat;
   }
 
   async delete(uri: string, options?: FileDeleteOptions): Promise<void> {

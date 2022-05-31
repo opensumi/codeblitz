@@ -1,4 +1,4 @@
-import { URI } from '@ali/ide-core-common';
+import { URI } from '@opensumi/ide-core-common';
 
 interface SCMUriQueryParams {
   ref: string; // commitId

@@ -1,5 +1,5 @@
 import { LaunchContribution } from '@alipay/alex-core';
-import { Domain } from '@ali/ide-core-common';
+import { Domain } from '@opensumi/ide-core-common';
 import { migrateSettings } from '../utils/migrate';
 
 @Domain(LaunchContribution)

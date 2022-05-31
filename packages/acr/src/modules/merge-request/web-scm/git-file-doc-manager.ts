@@ -1,11 +1,11 @@
-import { Autowired, Injectable } from '@ali/common-di';
-import { URI } from '@ali/ide-core-browser';
+import { Autowired, Injectable } from '@opensumi/di';
+import { URI } from '@opensumi/ide-core-browser';
 
-import { WorkbenchEditorService, IResourceOpenOptions } from '@ali/ide-editor';
-import { WorkbenchEditorServiceImpl } from '@ali/ide-editor/lib/browser/workbench-editor.service';
-import { ensureDir } from '@ali/ide-core-common/lib/browser-fs/ensure-dir';
-import * as paths from '@ali/ide-core-common/lib/path';
-import { promisify } from '@ali/ide-core-common/lib/browser-fs/util';
+import { WorkbenchEditorService, IResourceOpenOptions } from '@opensumi/ide-editor';
+import { WorkbenchEditorServiceImpl } from '@opensumi/ide-editor/lib/browser/workbench-editor.service';
+import { ensureDir } from '@opensumi/ide-core-common/lib/browser-fs/ensure-dir';
+import * as paths from '@opensumi/ide-core-common/lib/path';
+import { promisify } from '@opensumi/ide-core-common/lib/browser-fs/util';
 
 /**
  * 目前尚未开始使用

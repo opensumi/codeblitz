@@ -1,11 +1,11 @@
-import type { IContentSearchServer as _IContentSearchServer } from '@ali/ide-search/lib/common';
+import type { IContentSearchServer as _IContentSearchServer } from '@opensumi/ide-search/lib/common';
 
 export {
   ContentSearchOptions,
   ContentSearchResult,
   SEARCH_STATE,
   SendClientResult,
-} from '@ali/ide-search/lib/common';
+} from '@opensumi/ide-search/lib/common';
 
 export const IContentSearchServer = Symbol('ContentSearchService');
 

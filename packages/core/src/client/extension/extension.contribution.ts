@@ -1,10 +1,10 @@
-import { Autowired } from '@ali/common-di';
-import { Domain, URI, FsProviderContribution } from '@ali/ide-core-browser';
+import { Autowired } from '@opensumi/di';
+import { Domain, URI, FsProviderContribution } from '@opensumi/ide-core-browser';
 import {
   StaticResourceContribution,
   StaticResourceService,
-} from '@ali/ide-static-resource/lib/browser/static.definition';
-import { IFileServiceClient } from '@ali/ide-file-service';
+} from '@opensumi/ide-static-resource/lib/browser/static.definition';
+import { IFileServiceClient } from '@opensumi/ide-file-service';
 
 import { KaitianExtFsProvider } from './extension-fs.provider';
 import { EXT_SCHEME } from '../../common/constant';
@@ -14,7 +14,8 @@ import { EXT_SCHEME } from '../../common/constant';
  */
 @Domain(StaticResourceContribution, FsProviderContribution)
 export class KtExtFsProviderContribution
-  implements StaticResourceContribution, FsProviderContribution {
+  implements StaticResourceContribution, FsProviderContribution
+{
   @Autowired()
   private readonly ktExtFsProvider: KaitianExtFsProvider;
 

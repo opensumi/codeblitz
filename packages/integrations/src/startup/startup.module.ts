@@ -1,4 +1,4 @@
-import { Provider, Injectable, Autowired } from '@ali/common-di';
+import { Provider, Injectable, Autowired } from '@opensumi/di';
 import {
   Domain,
   BrowserModule,
@@ -7,7 +7,7 @@ import {
   getLanguageId,
   Disposable,
   CommandService,
-} from '@ali/ide-core-browser';
+} from '@opensumi/ide-core-browser';
 import { CodeModelService } from '@alipay/alex-code-service';
 
 @Domain(CommandContribution)

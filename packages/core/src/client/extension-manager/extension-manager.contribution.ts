@@ -1,13 +1,13 @@
-import { Autowired } from '@ali/common-di';
-import { Domain, localize } from '@ali/ide-core-common';
-import { getIcon } from '@ali/ide-core-browser';
-import { ComponentContribution, ComponentRegistry } from '@ali/ide-core-browser/lib/layout';
-import { MainLayoutContribution, IMainLayoutService } from '@ali/ide-main-layout';
+import { Autowired } from '@opensumi/di';
+import { Domain, localize } from '@opensumi/ide-core-common';
+import { getIcon } from '@opensumi/ide-core-browser';
+import { ComponentContribution, ComponentRegistry } from '@opensumi/ide-core-browser/lib/layout';
+import { MainLayoutContribution, IMainLayoutService } from '@opensumi/ide-main-layout';
 import {
   BrowserEditorContribution,
   EditorComponentRegistry,
   ResourceService,
-} from '@ali/ide-editor/lib/browser';
+} from '@opensumi/ide-editor/lib/browser';
 
 import { EXTENSION_SCHEME, enableExtensionsContainerId, IExtensionManagerService } from './base';
 import { ExtensionResourceProvider } from './extension-resource-provider';
@@ -17,7 +17,8 @@ import { ExtensionManagerService } from './extension-manager.service';
 
 @Domain(ComponentContribution, MainLayoutContribution, BrowserEditorContribution)
 export class ExtensionManagerContribution
-  implements ComponentContribution, MainLayoutContribution, BrowserEditorContribution {
+  implements ComponentContribution, MainLayoutContribution, BrowserEditorContribution
+{
   @Autowired()
   private readonly resourceProvider: ExtensionResourceProvider;
 
@@ -50,7 +51,7 @@ export class ExtensionManagerContribution
   }
 
   registerComponent(registry: ComponentRegistry): void {
-    registry.register('@ali/ide-extension-manager', [], {
+    registry.register('@opensumi/ide-extension-manager', [], {
       iconClass: getIcon('extension'),
       title: localize('marketplace.extension.container'),
       priority: 5,

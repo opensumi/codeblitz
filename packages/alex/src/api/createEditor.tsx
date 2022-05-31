@@ -1,4 +1,4 @@
-import '@ali/ide-i18n/lib/browser';
+import '@opensumi/ide-i18n/lib/browser';
 import '@alipay/alex-i18n';
 import {
   ClientApp,
@@ -14,9 +14,9 @@ import {
   IAppRenderer,
   FILES_DEFAULTS,
   IReporter,
-} from '@ali/ide-core-browser';
-import { BoxPanel, SplitPanel } from '@ali/ide-core-browser/lib/components';
-import '@ali/ide-core-browser/lib/style/index.less';
+} from '@opensumi/ide-core-browser';
+import { BoxPanel, SplitPanel } from '@opensumi/ide-core-browser/lib/components';
+import '@opensumi/ide-core-browser/lib/style/index.less';
 import { IPluginConfig } from '@alipay/alex-plugin';
 import { deletionLogPath } from '@alipay/alex-browserfs/lib/backend/OverlayFS';
 

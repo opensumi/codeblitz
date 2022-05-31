@@ -1,5 +1,5 @@
-import { Injectable, Autowired } from '@ali/common-di';
-import { SupportLogNamespace, ILogService, LogLevel } from '@ali/ide-core-common';
+import { Injectable, Autowired } from '@opensumi/di';
+import { SupportLogNamespace, ILogService, LogLevel } from '@opensumi/ide-core-common';
 import { ILogServiceManager } from './base';
 
 // tslint:disable-next-line:no-empty-interface

@@ -1,6 +1,6 @@
 import React from 'react';
-import { KeybindingRegistry } from '@ali/ide-core-browser';
-import { useInjectable, localize } from '@ali/ide-core-browser';
+import { KeybindingRegistry } from '@opensumi/ide-core-browser';
+import { useInjectable, localize } from '@opensumi/ide-core-browser';
 import styles from './editor-empty.module.less';
 import { CommonConfig } from '../../common/config';
 

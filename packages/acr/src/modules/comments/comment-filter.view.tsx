@@ -1,6 +1,6 @@
 import React from 'react';
-import { localize, useInjectable } from '@ali/ide-core-browser';
-import { Select } from '@ali/ide-components';
+import { localize, useInjectable } from '@opensumi/ide-core-browser';
+import { Select } from '@opensumi/ide-components';
 import { AntcodeCommentsService } from './comments.service';
 import { COMMENT_FILTER_TYPE } from './index';
 

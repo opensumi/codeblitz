@@ -1,24 +1,24 @@
 /**
  * kaitian
  */
-import { ClientCommonModule, ModuleConstructor } from '@ali/ide-core-browser';
-import { DecorationModule } from '@ali/ide-decoration/lib/browser';
-import { EditorModule } from '@ali/ide-editor/lib/browser';
-import { FileSchemeModule } from '@ali/ide-file-scheme/lib/browser';
-import { FileServiceClientModule } from '@ali/ide-file-service/lib/browser';
-import { KeymapsModule } from '@ali/ide-keymaps/lib/browser';
-import { LogModule } from '@ali/ide-logs/lib/browser';
-import { MainLayoutModule } from '@ali/ide-main-layout/lib/browser';
-import { MonacoModule } from '@ali/ide-monaco/lib/browser';
-import { MonacoEnhanceModule } from '@ali/ide-monaco-enhance/lib/browser/module';
-import { OverlayModule } from '@ali/ide-overlay/lib/browser';
-import { PreferencesModule } from '@ali/ide-preferences/lib/browser';
-import { QuickOpenModule } from '@ali/ide-quick-open/lib/browser';
-import { SCMModule } from '@ali/ide-scm/lib/browser';
-import { StatusBarModule } from '@ali/ide-status-bar/lib/browser';
-import { StorageModule } from '@ali/ide-storage/lib/browser';
-import { ThemeModule } from '@ali/ide-theme/lib/browser';
-import { WorkspaceModule } from '@ali/ide-workspace/lib/browser';
+import { ClientCommonModule, ModuleConstructor } from '@opensumi/ide-core-browser';
+import { DecorationModule } from '@opensumi/ide-decoration/lib/browser';
+import { EditorModule } from '@opensumi/ide-editor/lib/browser';
+import { FileSchemeModule } from '@opensumi/ide-file-scheme/lib/browser';
+import { FileServiceClientModule } from '@opensumi/ide-file-service/lib/browser';
+import { KeymapsModule } from '@opensumi/ide-keymaps/lib/browser';
+import { LogModule } from '@opensumi/ide-logs/lib/browser';
+import { MainLayoutModule } from '@opensumi/ide-main-layout/lib/browser';
+import { MonacoModule } from '@opensumi/ide-monaco/lib/browser';
+import { MonacoEnhanceModule } from '@opensumi/ide-monaco-enhance/lib/browser/module';
+import { OverlayModule } from '@opensumi/ide-overlay/lib/browser';
+import { PreferencesModule } from '@opensumi/ide-preferences/lib/browser';
+import { QuickOpenModule } from '@opensumi/ide-quick-open/lib/browser';
+import { SCMModule } from '@opensumi/ide-scm/lib/browser';
+import { StatusBarModule } from '@opensumi/ide-status-bar/lib/browser';
+import { StorageModule } from '@opensumi/ide-storage/lib/browser';
+import { ThemeModule } from '@opensumi/ide-theme/lib/browser';
+import { WorkspaceModule } from '@opensumi/ide-workspace/lib/browser';
 
 /**
  * alex

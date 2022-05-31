@@ -1,4 +1,4 @@
-import { Event, IClientAppOpts, URI, Emitter } from '@ali/ide-core-browser';
+import { Event, IClientAppOpts, URI, Emitter } from '@opensumi/ide-core-browser';
 import { IPluginConfig } from '@alipay/alex-plugin';
 import { IExtensionBasicMetadata } from '@alipay/alex-shared';
 

@@ -1,4 +1,4 @@
-import { Autowired, Injectable } from '@ali/common-di';
+import { Autowired, Injectable } from '@opensumi/di';
 import { RuntimeConfig } from '@alipay/alex-core';
 
 import { CodeModelService } from './code-model.service';

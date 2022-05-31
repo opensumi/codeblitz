@@ -1,11 +1,11 @@
 /**
- * copy from @ali/ide-kaitian-extension/src/node/extension.scanner.ts
+ * copy from @opensumi/ide-extension/src/node/extension.scanner.ts
  */
 
 import * as path from 'path';
 import * as fse from 'fs-extra';
-import { mergeContributes } from '@ali/ide-kaitian-extension/lib/node/merge-contributes';
-import { Uri } from '@ali/ide-core-common';
+import { mergeContributes } from '@opensumi/ide-extension/lib/node/merge-contributes';
+import { Uri } from '@opensumi/ide-core-common';
 import pick from 'lodash.pick';
 
 import { NLSInfo, IExtensionBasicMetadata, IExtensionMode } from './type';

@@ -1,11 +1,11 @@
 /**
  * kaitian
  */
-import { CommentsModule } from '@ali/ide-comments/lib/browser';
-import { ExtensionStorageModule } from '@ali/ide-extension-storage/lib/browser';
-import { KaitianExtensionModule } from '@ali/ide-kaitian-extension/lib/browser';
-import { StaticResourceModule } from '@ali/ide-static-resource/lib/browser';
-import { WebviewModule } from '@ali/ide-webview/lib/browser';
+import { CommentsModule } from '@opensumi/ide-comments/lib/browser';
+import { ExtensionStorageModule } from '@opensumi/ide-extension-storage/lib/browser';
+import { ExtensionModule } from '@opensumi/ide-extension/lib/browser';
+import { StaticResourceModule } from '@opensumi/ide-static-resource/lib/browser';
+import { WebviewModule } from '@opensumi/ide-webview/lib/browser';
 
 /**
  * editor special
@@ -19,7 +19,7 @@ setExtensionModules([
   StaticResourceModule,
   ExtensionStorageModule,
   WebviewModule,
-  KaitianExtensionModule,
+  ExtensionModule,
   CommentsModule,
   ExtensionActivateModule,
 ]);

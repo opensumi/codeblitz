@@ -1,7 +1,7 @@
 import React from 'react';
 import { observer } from 'mobx-react-lite';
-import { useInjectable } from '@ali/ide-core-browser';
-import { Select } from '@ali/ide-components';
+import { useInjectable } from '@opensumi/ide-core-browser';
+import { Select } from '@opensumi/ide-components';
 
 import { IAntcodeService } from '../../../antcode-service/base';
 import { antcodeEncodingOpts } from '../../../antcode-service';

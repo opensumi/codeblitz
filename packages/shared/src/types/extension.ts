@@ -1,4 +1,4 @@
-import { Uri } from '@ali/ide-core-common';
+import { Uri } from '@opensumi/ide-core-common';
 import { Optional } from './util';
 
 export interface JSONType {

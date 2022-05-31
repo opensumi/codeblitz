@@ -1,21 +1,22 @@
-import * as monaco from '@ali/monaco-editor-core/esm/vs/editor/editor.api';
+import * as monaco from '@opensumi/monaco-editor-core/esm/vs/editor/editor.api';
 import * as React from 'react';
 import * as ReactDOM from 'react-dom';
 import clsx from 'classnames';
-import { ZoneWidget } from '@ali/ide-monaco-enhance';
+import { ZoneWidget } from '@opensumi/ide-monaco-enhance';
 import * as styles from './styles.module.less';
-import { localize, Emitter, Event, formatLocalize, Position } from '@ali/ide-core-common';
+import { localize, Emitter, Event, formatLocalize, Position } from '@opensumi/ide-core-common';
 import { DiffFoldingChangeData, TFoldingType } from '..';
-import { getIcon } from '@ali/ide-core-browser';
+import { getIcon } from '@opensumi/ide-core-browser';
+import type { ICodeEditor } from '@opensumi/ide-monaco/lib/browser/monaco-api/types';
 
 export class DiffFoldingZoneWidget extends ZoneWidget {
   private _wrapper: HTMLDivElement;
-
+  protected _fillContainer(container: HTMLElement): void {}
   protected readonly _onDidChangeFoldData = new Emitter<DiffFoldingChangeData>();
   readonly onDidChangeFoldData: Event<DiffFoldingChangeData> = this._onDidChangeFoldData.event;
 
   constructor(editor: monaco.editor.ICodeEditor) {
-    super(editor);
+    super(editor as unknown as ICodeEditor);
 
     this._wrapper = document.createElement('div');
     this._container.appendChild(this._wrapper);

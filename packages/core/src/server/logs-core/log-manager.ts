@@ -1,13 +1,13 @@
-import { Injectable, Autowired, ConstructorOf } from '@ali/common-di';
+import { Injectable, Autowired, ConstructorOf } from '@opensumi/di';
 import {
   ILogService,
   LogLevel,
   SupportLogNamespace,
   BaseLogServiceOptions,
   LoggerManagerInitOptions,
-} from '@ali/ide-logs/lib/common';
+} from '@opensumi/ide-logs/lib/common';
 import { ILogServiceManager } from '../core/base';
-import { Emitter } from '@ali/ide-core-common';
+import { Emitter } from '@opensumi/ide-core-common';
 import { ServerConfig } from '../core/app';
 import { LogService, DEFAULT_LOG_FOLDER } from './log.service';
 

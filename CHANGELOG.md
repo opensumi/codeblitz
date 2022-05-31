@@ -1,12 +1,9 @@
-## [1.9.12](https://code.alipay.com/cloud-ide/crew-dragon/compare/v1.9.12-0...v1.9.12) (2022-05-24)
+# [2.0.0-beta.3](https://code.alipay.com/cloud-ide/crew-dragon/compare/v1.9.9...v2.0.0-beta.3) (2022-03-24)
 
 
 ### Bug Fixes
 
-* 修复流水线问题 ([925ac9f](https://code.alipay.com/cloud-ide/crew-dragon/commits/925ac9fca307266b8ef9fe7b77e2bc04bb317bdd))
-* 修复editor主题初始化未注册fromExtension ([69a33ce](https://code.alipay.com/cloud-ide/crew-dragon/commits/69a33ce76fe502ab1ccce906460c393519296414))
-
-
+* ci ([13e12db](https://code.alipay.com/cloud-ide/crew-dragon/commits/13e12db7983e34b972466997d678a3a15bc01f28))
 
 ## [1.9.12-0](https://code.alipay.com/cloud-ide/crew-dragon/compare/v1.9.11...v1.9.12-0) (2022-05-13)
 
@@ -35,6 +32,12 @@
 
 ### Features
 
+* update opensumi 2.14.2 ([ee577dc](https://code.alipay.com/cloud-ide/crew-dragon/commits/ee577dcc1fdd513f5742308f8e718489f8a7bc82))
+
+
+
+# [2.0.0-beta.2](https://code.alipay.com/cloud-ide/crew-dragon/compare/v2.0.0-beta.1...v2.0.0-beta.2) (2022-03-03)
+# [2.0.0-beta.1](https://code.alipay.com/cloud-ide/crew-dragon/compare/v1.9.8...v2.0.0-beta.1) (2022-03-02)
 * 新增 editor 包用于 script 引入 ([2cf4953](https://code.alipay.com/cloud-ide/crew-dragon/commits/2cf4953f7676fa25ee73fa42543b0b3e0d3a2ac5))
 
 
@@ -44,6 +47,12 @@
 
 ### Bug Fixes
 
+* 修改缺失文件内容监听 ([a1dcebe](https://code.alipay.com/cloud-ide/crew-dragon/commits/a1dcebe47a81f7861fa6307042b2d0626b13aab3))
+
+
+### Features
+
+* update opensumi 2.14.2 ([ee577dc](https://code.alipay.com/cloud-ide/crew-dragon/commits/ee577dcc1fdd513f5742308f8e718489f8a7bc82))
 * 修复 snippet 路径协议问题 ([4a3ddf6](https://code.alipay.com/cloud-ide/crew-dragon/commits/4a3ddf6a5a9efb1fd2ac1a6b7025417da9f005ef))
 
 

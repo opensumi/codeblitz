@@ -1,4 +1,4 @@
-import { localize, View } from '@ali/ide-core-browser';
+import { localize, View } from '@opensumi/ide-core-browser';
 import { ChangesTreeView } from './changes-tree.view';
 import { ChangesTreeViewId } from './common';
 

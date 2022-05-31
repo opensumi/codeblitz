@@ -1,10 +1,10 @@
 import type {
   ICommonServer as _ICommonServer,
   ILogServiceManager as _ILogServiceManager,
-} from '@ali/ide-core-common';
+} from '@opensumi/ide-core-common';
 import { RootFS } from '../../common/types';
 
-export { CommonServerPath } from '@ali/ide-core-common';
+export { CommonServerPath } from '@opensumi/ide-core-common';
 
 export const ICommonServer = Symbol('ICommonServer');
 

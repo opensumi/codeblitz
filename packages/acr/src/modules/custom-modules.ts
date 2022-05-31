@@ -1,5 +1,5 @@
-import { BrowserModule } from '@ali/ide-core-browser';
-import { ConstructorOf } from '@ali/ide-core-common';
+import { BrowserModule } from '@opensumi/ide-core-browser';
+import { ConstructorOf } from '@opensumi/ide-core-common';
 
 import { MergeRequestModule } from './merge-request';
 import { WebLiteModule } from './ide-lite';

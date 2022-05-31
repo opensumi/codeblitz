@@ -1,6 +1,6 @@
 import * as React from 'react';
-import { SlotLocation, SlotRenderer } from '@ali/ide-core-browser';
-import { BoxPanel, SplitPanel } from '@ali/ide-core-browser/lib/components';
+import { SlotLocation, SlotRenderer } from '@opensumi/ide-core-browser';
+import { BoxPanel, SplitPanel } from '@opensumi/ide-core-browser/lib/components';
 
 import { MergeRequestExplorerId } from '../modules/merge-request/common';
 import { MenuBarId } from '../modules/menubar';
@@ -17,11 +17,11 @@ export const layoutConfig = {
     modules: [MergeRequestExplorerId],
   },
   [SlotLocation.main]: {
-    modules: ['@ali/ide-editor'],
+    modules: ['@opensumi/ide-editor'],
   },
   [SlotLocation.statusBar]: {
     modules: [
-      // '@ali/ide-status-bar',
+      // '@opensumi/ide-status-bar',
     ],
   },
   [SlotLocation.extra]: {

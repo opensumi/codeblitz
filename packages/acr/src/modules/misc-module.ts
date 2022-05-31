@@ -1,5 +1,5 @@
-import { Injectable } from '@ali/common-di';
-import { BrowserModule } from '@ali/ide-core-browser';
+import { Injectable } from '@opensumi/di';
+import { BrowserModule } from '@opensumi/ide-core-browser';
 
 import { CommentsContribution } from './comments/comments.contribution';
 import { MenubarContribution } from './menubar/menubar.contribution';

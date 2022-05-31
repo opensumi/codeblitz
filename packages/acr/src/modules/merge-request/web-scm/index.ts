@@ -1,4 +1,4 @@
-import { View } from '@ali/ide-core-browser';
+import { View } from '@opensumi/ide-core-browser';
 
 import { SCMResourceView } from './scm-resource.view';
 

@@ -41,16 +41,16 @@ import { CommandService, EDITOR_COMMANDS, URI } from '@alipay/alex/modules/ide-c
 // 布局配置，可根据需要增删模块
 export const layoutConfig = {
   [SlotLocation.left]: {
-    modules: ['@ali/ide-explorer'],
+    modules: ['@opensumi/ide-explorer'],
   },
   [SlotLocation.main]: {
-    modules: ['@ali/ide-editor'],
+    modules: ['@opensumi/ide-editor'],
   },
   // [SlotLocation.bottom]: {
-  //   modules: ['@ali/ide-output', '@ali/ide-markers'],
+  //   modules: ['@opensumi/ide-output', '@opensumi/ide-markers'],
   // },
   [SlotLocation.statusBar]: {
-    modules: ['@ali/ide-status-bar'],
+    modules: ['@opensumi/ide-status-bar'],
   },
 };
 

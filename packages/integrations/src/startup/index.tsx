@@ -44,7 +44,7 @@ const platformConfig = {
 };
 
 const layoutConfig = getDefaultLayoutConfig();
-layoutConfig[SlotLocation.left].modules.push('@ali/ide-extension-manager');
+layoutConfig[SlotLocation.left].modules.push('@opensumi/ide-extension-manager');
 
 let pathParts = location.pathname.split('/').filter(Boolean);
 
@@ -104,7 +104,7 @@ const App = () => (
       workspaceDir: `${platform}/${config.owner}/${config.name}`,
       layoutConfig,
       defaultPreferences: {
-        'general.theme': 'ide-light',
+        'general.theme': 'opensumi-dark',
       },
     }}
     runtimeConfig={{

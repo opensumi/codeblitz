@@ -1,5 +1,5 @@
 import splitRetain from 'split-retain';
-import { Path } from '@ali/ide-core-common/lib/path';
+import { Path } from '@opensumi/ide-core-common/lib/path';
 
 interface ItemDTO<T = any> {
   item: T;
@@ -40,8 +40,8 @@ export function stringComparator<T>(a: T, b: T, iteratee?: (item: T) => string):
     aPath = iteratee(a);
     bPath = iteratee(b);
   } else {
-    aPath = (a as unknown) as string;
-    bPath = (b as unknown) as string;
+    aPath = a as unknown as string;
+    bPath = b as unknown as string;
   }
   // numeric 参数确保数字为第一排序优先级
   return aPath.localeCompare(bPath, 'kn', { numeric: true });

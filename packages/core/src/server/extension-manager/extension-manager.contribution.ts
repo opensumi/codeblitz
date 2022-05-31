@@ -1,5 +1,5 @@
-import { Autowired } from '@ali/common-di';
-import { Domain } from '@ali/ide-core-common';
+import { Autowired } from '@opensumi/di';
+import { Domain } from '@opensumi/ide-core-common';
 import { ServerAppContribution, ServerConfig } from '../core/app';
 import { fsExtra as fse } from '../node';
 

@@ -1,11 +1,11 @@
-import { Injector } from '@ali/common-di';
+import { Injector } from '@opensumi/di';
 import {
   PreferenceService,
   PreferenceProxy,
   createPreferenceProxy,
   PreferenceSchema,
   localize,
-} from '@ali/ide-core-browser';
+} from '@opensumi/ide-core-browser';
 
 export const antCodePreferenceSchema: PreferenceSchema = {
   id: 'acr',

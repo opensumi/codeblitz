@@ -1,6 +1,12 @@
-import { Injectable } from '@ali/common-di';
-import { Uri, Event } from '@ali/ide-core-browser';
-import { FileSystemProvider, FileStat, FileType, FileChangeEvent } from '@ali/ide-file-service';
+import { Injectable } from '@opensumi/di';
+import { Uri, Event } from '@opensumi/ide-core-browser';
+import {
+  FileSystemProvider,
+  FileStat,
+  FileType,
+  FileChangeEvent,
+  FileSystemProviderCapabilities,
+} from '@opensumi/ide-file-service';
 
 /**
  * @class 解析 kt-ext:// 文件，解决前端插件加载问题
@@ -8,6 +14,8 @@ import { FileSystemProvider, FileStat, FileType, FileChangeEvent } from '@ali/id
 @Injectable()
 export class KaitianExtFsProvider implements FileSystemProvider {
   private readonly now = Date.now();
+  readonly capabilities: FileSystemProviderCapabilities;
+  onDidChangeCapabilities = Event.None;
 
   onDidChangeFile: Event<FileChangeEvent>;
 
@@ -15,18 +23,18 @@ export class KaitianExtFsProvider implements FileSystemProvider {
     throw new Error('Method not implemented.');
   }
 
-  stat(uri: Uri): Thenable<FileStat> {
+  stat(uri: Uri): Promise<FileStat | void> {
     return Promise.resolve({
       uri: uri.toString(),
       lastModification: this.now,
-    });
+    } as FileStat);
   }
 
-  readDirectory(): [string, FileType][] | Thenable<[string, FileType][]> {
+  readDirectory(): [string, FileType][] | Promise<[string, FileType][]> {
     throw new Error('Method not implemented.');
   }
 
-  createDirectory(): void | Thenable<void | FileStat> {
+  createDirectory(): void | Promise<void | FileStat> {
     throw new Error('Method not implemented.');
   }
 
@@ -45,11 +53,11 @@ export class KaitianExtFsProvider implements FileSystemProvider {
     throw new Error('Method not implemented.');
   }
 
-  delete(): void | Thenable<void> {
+  delete(): void | Promise<void> {
     throw new Error('Method not implemented.');
   }
 
-  rename(): void | Thenable<void | FileStat> {
+  rename(): void | Promise<void | FileStat> {
     throw new Error('Method not implemented.');
   }
 }

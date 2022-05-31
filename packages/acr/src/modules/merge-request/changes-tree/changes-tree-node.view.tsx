@@ -6,11 +6,11 @@ import {
   INodeRendererProps,
   ClasslistComposite,
   TreeNodeType,
-} from '@ali/ide-components';
-import { LabelService } from '@ali/ide-core-browser/lib/services';
-import { URI, getIcon, CommandService } from '@ali/ide-core-browser';
-import { Loading } from '@ali/ide-core-browser/lib/components/loading';
-import { Icon } from '@ali/ide-core-browser/lib/components';
+} from '@opensumi/ide-components';
+import { LabelService } from '@opensumi/ide-core-browser/lib/services';
+import { URI, getIcon, CommandService } from '@opensumi/ide-core-browser';
+import { Loading } from '@opensumi/ide-core-browser/lib/components/loading';
+import { Icon } from '@opensumi/ide-core-browser/lib/components';
 
 import { ChangeDirectory, ChangeFile } from './changes-tree-node';
 import { ChangesTreeDecorationService } from './changes-tree-decoration.service';

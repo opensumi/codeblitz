@@ -1,6 +1,6 @@
 import React from 'react';
-import { ReactEditorComponent } from '@ali/ide-editor/lib/browser';
-import { Button } from '@ali/ide-components';
+import { ReactEditorComponent } from '@opensumi/ide-editor/lib/browser';
+import { Button } from '@opensumi/ide-components';
 
 import * as style from './editor-bottom-side.module.less';
 import Icon from 'antd/lib/icon';
@@ -13,7 +13,7 @@ import {
   useInjectable,
   CommandService,
   useUpdateOnEvent,
-} from '@ali/ide-core-browser';
+} from '@opensumi/ide-core-browser';
 import { IAntcodeService, IPullRequestChangeDiff } from '../antcode-service/base';
 import { GOTO_PREVIOUS_CHANGE, GOTO_NEXT_CHANGE } from '../merge-request/common';
 import { observer } from 'mobx-react-lite';

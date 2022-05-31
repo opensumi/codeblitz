@@ -1,5 +1,5 @@
 import { DiffFoldingChangeData, TEditorType } from './index';
-import { Autowired } from '@ali/common-di';
+import { Autowired } from '@opensumi/di';
 import {
   Disposable,
   IEventBus,
@@ -8,7 +8,7 @@ import {
   URI,
   WithEventBus,
   OnEvent,
-} from '@ali/ide-core-common';
+} from '@opensumi/ide-core-common';
 import {
   MonacoContribution,
   ClientAppContribution,
@@ -18,15 +18,15 @@ import {
   IContextKey,
   IContextKeyService,
   PreferenceChange,
-} from '@ali/ide-core-browser';
-import { Domain } from '@ali/ide-core-common/lib/di-helper';
-import { WorkbenchEditorService } from '@ali/ide-editor';
+} from '@opensumi/ide-core-browser';
+import { Domain } from '@opensumi/ide-core-common/lib/di-helper';
+import { WorkbenchEditorService } from '@opensumi/ide-editor';
 import { MiscCommands, MISC_IS_EXPAND_RAW_KEY } from '.';
 import { AntcodeDiffFoldingService } from './diff-folding.service';
 import { sleep, generateRange } from './utils';
 import { DiffFoldingWidgetService } from './zone-widget/widget.service';
 import { AntcodeCommentsService } from '../comments/comments.service';
-import { EditorGroupOpenEvent } from '@ali/ide-editor/lib/browser';
+import { EditorGroupOpenEvent } from '@opensumi/ide-editor/lib/browser';
 import { isChangeFileURI } from '../merge-request/changes-tree/util';
 
 @Domain(CommandContribution, ClientAppContribution, MonacoContribution)

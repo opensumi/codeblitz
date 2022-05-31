@@ -1,6 +1,6 @@
 import React from 'react';
-import { Autowired } from '@ali/common-di';
-import { Domain } from '@ali/ide-core-common';
+import { Autowired } from '@opensumi/di';
+import { Domain } from '@opensumi/ide-core-common';
 import {
   CommandContribution,
   KeybindingContribution,
@@ -13,20 +13,20 @@ import {
   SlotRendererRegistry,
   ComponentRegistryInfo,
   useInjectable,
-} from '@ali/ide-core-browser';
+} from '@opensumi/ide-core-browser';
 import {
   MenuContribution,
   IMenuRegistry,
   MenuId,
   IMenuItem,
-} from '@ali/ide-core-browser/lib/menu/next';
-import { WorkbenchEditorService } from '@ali/ide-editor/lib/browser';
-import { TabRendererBase } from '@ali/ide-main-layout/lib/browser/tabbar/renderer.view';
-import { LeftTabPanelRenderer } from '@ali/ide-main-layout/lib/browser/tabbar/panel.view';
+} from '@opensumi/ide-core-browser/lib/menu/next';
+import { WorkbenchEditorService } from '@opensumi/ide-editor/lib/browser';
+import { TabRendererBase } from '@opensumi/ide-main-layout/lib/browser/tabbar/renderer.view';
+import { LeftTabPanelRenderer } from '@opensumi/ide-main-layout/lib/browser/tabbar/panel.view';
 import {
   TabbarServiceFactory,
   TabbarService,
-} from '@ali/ide-main-layout/lib/browser/tabbar/tabbar.service';
+} from '@opensumi/ide-main-layout/lib/browser/tabbar/tabbar.service';
 import { RuntimeConfig } from '../../common/types';
 
 /**
@@ -38,7 +38,8 @@ export class FileTreeCustomContribution
     MenuContribution,
     CommandContribution,
     KeybindingContribution,
-    SlotRendererContribution {
+    SlotRendererContribution
+{
   @Autowired(WorkbenchEditorService)
   workbenchEditorService: WorkbenchEditorService;
 

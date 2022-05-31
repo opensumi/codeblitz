@@ -1,11 +1,11 @@
-import { Autowired } from '@ali/common-di';
-import { Domain, ClientAppContribution, IEventBus, Disposable } from '@ali/ide-core-browser';
+import { Autowired } from '@opensumi/di';
+import { Domain, ClientAppContribution, IEventBus, Disposable } from '@opensumi/ide-core-browser';
 import {
   ExtensionBeforeActivateEvent,
   ExtensionWillActivateEvent,
-} from '@ali/ide-kaitian-extension/lib/browser/types';
+} from '@opensumi/ide-extension/lib/browser/types';
 import { IPluginService } from '@alipay/alex-plugin';
-import { IMainLayoutService } from '@ali/ide-main-layout';
+import { IMainLayoutService } from '@opensumi/ide-main-layout';
 
 @Domain(ClientAppContribution)
 export class ExtensionActivateContribution extends Disposable implements ClientAppContribution {

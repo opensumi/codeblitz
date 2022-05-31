@@ -1,6 +1,6 @@
 import * as React from 'react';
-import { SlotRenderer, SlotLocation } from '@ali/ide-core-browser';
-import { BoxPanel, SplitPanel } from '@ali/ide-core-browser/lib/components';
+import { SlotRenderer, SlotLocation } from '@opensumi/ide-core-browser';
+import { BoxPanel, SplitPanel } from '@opensumi/ide-core-browser/lib/components';
 
 export function LayoutComponent(): React.ReactElement {
   return (
@@ -20,22 +20,22 @@ export function LayoutComponent(): React.ReactElement {
 
 export const getDefaultLayoutConfig = () => ({
   [SlotLocation.top]: {
-    modules: ['@ali/ide-menu-bar'],
+    modules: ['@opensumi/ide-menu-bar'],
   },
   [SlotLocation.action]: {
     modules: [''],
   },
   [SlotLocation.left]: {
-    modules: ['@ali/ide-explorer', '@ali/ide-search'],
+    modules: ['@opensumi/ide-explorer', '@opensumi/ide-search'],
   },
   [SlotLocation.main]: {
-    modules: ['@ali/ide-editor'],
+    modules: ['@opensumi/ide-editor'],
   },
   [SlotLocation.bottom]: {
-    modules: ['@ali/ide-output', '@ali/ide-markers'],
+    modules: ['@opensumi/ide-output', '@opensumi/ide-markers'],
   },
   [SlotLocation.statusBar]: {
-    modules: ['@ali/ide-status-bar'],
+    modules: ['@opensumi/ide-status-bar'],
   },
   [SlotLocation.extra]: {
     modules: ['breadcrumb-menu'],
@@ -52,6 +52,6 @@ export function EditorLayoutComponent(): React.ReactElement {
 
 export const getEditorLayoutConfig = () => ({
   [SlotLocation.main]: {
-    modules: ['@ali/ide-editor'],
+    modules: ['@opensumi/ide-editor'],
   },
 });

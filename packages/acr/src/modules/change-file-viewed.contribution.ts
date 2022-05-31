@@ -1,11 +1,11 @@
-import { Autowired } from '@ali/common-di';
-import { Domain, CommandRegistry, URI } from '@ali/ide-core-common';
+import { Autowired } from '@opensumi/di';
+import { Domain, CommandRegistry, URI } from '@opensumi/ide-core-common';
 import {
   CommandContribution,
   KeybindingContribution,
   KeybindingRegistry,
-} from '@ali/ide-core-browser';
-import { WorkbenchEditorService } from '@ali/ide-editor';
+} from '@opensumi/ide-core-browser';
+import { WorkbenchEditorService } from '@opensumi/ide-editor';
 import { IAntcodeService } from './antcode-service/base';
 
 const TOGGLE_CHANGE_VIEWED = 'commands.markAsRead';

@@ -1,5 +1,5 @@
 import { observable } from 'mobx';
-import { Autowired, Injectable, Injector, INJECTOR_TOKEN } from '@ali/common-di';
+import { Autowired, Injectable, Injector, INJECTOR_TOKEN } from '@opensumi/di';
 import {
   Decoration,
   DecorationsManager,
@@ -7,7 +7,7 @@ import {
   TreeNodeType,
   WatchEvent,
   CompositeTreeNode,
-} from '@ali/ide-components';
+} from '@opensumi/ide-components';
 import {
   CommandService,
   Deferred,
@@ -17,12 +17,12 @@ import {
   Event,
   WithEventBus,
   OnEvent,
-} from '@ali/ide-core-browser';
-import { LabelService } from '@ali/ide-core-browser/lib/services';
-import { Path } from '@ali/ide-core-common/lib/path';
+} from '@opensumi/ide-core-browser';
+import { LabelService } from '@opensumi/ide-core-browser/lib/services';
+import { Path } from '@opensumi/ide-core-common/lib/path';
 import pSeries from 'p-series';
-import { IProgressService } from '@ali/ide-core-browser/lib/progress';
-import { debounce } from '@ali/ide-core-common';
+import { IProgressService } from '@opensumi/ide-core-browser/lib/progress';
+import { debounce } from '@opensumi/ide-core-common';
 
 import { ChangesTreeDecorationService } from './changes-tree-decoration.service';
 import { ChangeDirectory, ChangeFile } from './changes-tree-node';

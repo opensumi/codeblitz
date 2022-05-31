@@ -1,8 +1,8 @@
-import { Autowired, Injectable, Provider } from '@ali/common-di';
-import { BrowserModule } from '@ali/ide-core-browser';
-import { ExtensionServiceImpl } from '@ali/ide-kaitian-extension/lib/browser/extension.service';
+import { Autowired, Injectable, Provider } from '@opensumi/di';
+import { BrowserModule } from '@opensumi/ide-core-browser';
+import { ExtensionServiceImpl } from '@opensumi/ide-extension/lib/browser/extension.service';
 import { IPluginService } from '@alipay/alex-plugin';
-import { ExtensionService } from '@ali/ide-kaitian-extension/lib/common';
+import { ExtensionService } from '@opensumi/ide-extension/lib/common';
 import { ExtensionActivateContribution } from '../extension/extension.contribution';
 
 @Injectable()
@@ -23,7 +23,6 @@ class ExtensionServiceImplOverride extends ExtensionServiceImpl {
     await this.initExtensionMetaData();
     await this.initExtensionInstanceData();
     await this.runExtensionContributes();
-    await this.initThemeAndColor();
     this.doActivate();
   }
 }

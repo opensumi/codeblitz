@@ -1,6 +1,6 @@
-import { Autowired } from '@ali/common-di';
-import { Domain } from '@ali/ide-core-browser';
-import { ComponentContribution, ComponentRegistry } from '@ali/ide-core-browser/lib/layout';
+import { Autowired } from '@opensumi/di';
+import { Domain } from '@opensumi/ide-core-browser';
+import { ComponentContribution, ComponentRegistry } from '@opensumi/ide-core-browser/lib/layout';
 
 import { MenuBarId } from './index';
 import { CustomMenubar } from './custom-menubar';

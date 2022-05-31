@@ -1,5 +1,5 @@
-import { Autowired } from '@ali/common-di';
-import { ClientAppContribution, Domain } from '@ali/ide-core-browser';
+import { Autowired } from '@opensumi/di';
+import { ClientAppContribution, Domain } from '@opensumi/ide-core-browser';
 import { IPluginService, IPluginConfig } from './types';
 
 @Domain(ClientAppContribution)

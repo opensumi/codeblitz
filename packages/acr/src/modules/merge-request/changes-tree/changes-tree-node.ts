@@ -1,5 +1,5 @@
-import { URI } from '@ali/ide-core-browser';
-import { TreeNode, CompositeTreeNode, ITree } from '@ali/ide-components';
+import { URI } from '@opensumi/ide-core-browser';
+import { TreeNode, CompositeTreeNode, ITree } from '@opensumi/ide-components';
 import { ChangesTreeService } from './changes-tree.service';
 import { IPullRequestChangeDiff } from '../../antcode-service/base';
 

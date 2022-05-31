@@ -1,14 +1,17 @@
-import { Autowired } from '@ali/common-di';
-import { Disposable, URI, Domain } from '@ali/ide-core-common';
-import { TextmateService } from '@ali/ide-monaco/lib/browser/textmate.service';
-import { LanguagesContribution, GrammarsContribution } from '@ali/ide-monaco';
+import { Autowired } from '@opensumi/di';
+import { Disposable, URI, Domain } from '@opensumi/ide-core-common';
+import { LanguagesContribution, GrammarsContribution } from '@opensumi/ide-monaco';
 import { Registry } from '@alipay/alex-registry';
 import { TextmateKey } from './base';
+import {
+  ITextmateTokenizer,
+  ITextmateTokenizerService,
+} from '@opensumi/ide-monaco/lib/browser/contrib/tokenizer';
 
 @Domain()
 export class LanguageGrammarRegistrationService extends Disposable {
-  @Autowired(TextmateService)
-  private readonly textMateService: TextmateService;
+  @Autowired(ITextmateTokenizer)
+  private readonly textMateService: ITextmateTokenizerService;
 
   async initRegisterLanguageAndGrammar() {
     // 没啥作用，只是确保传参类型正确

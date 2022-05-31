@@ -1,7 +1,7 @@
 /**
  * 注册编辑器空白页背景图
  */
-import { Domain, ComponentContribution, ComponentRegistry } from '@ali/ide-core-browser';
+import { Domain, ComponentContribution, ComponentRegistry } from '@opensumi/ide-core-browser';
 import { EditorEmptyComponent } from './editor-empty.view';
 
 @Domain(ComponentContribution)

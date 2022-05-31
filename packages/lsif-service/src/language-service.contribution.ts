@@ -1,4 +1,4 @@
-import { Autowired } from '@ali/common-di';
+import { Autowired } from '@opensumi/di';
 import {
   CommandService,
   Disposable,
@@ -8,18 +8,22 @@ import {
   UriComponents,
   IReporterService,
   Emitter,
-} from '@ali/ide-core-common';
+} from '@opensumi/ide-core-common';
 import {
   ClientAppContribution,
   PreferenceService,
   PreferenceChange,
   PreferenceContribution,
   LabelService,
-} from '@ali/ide-core-browser';
-import { Position, Range, Location } from '@ali/ide-kaitian-extension/lib/common/vscode/ext-types';
-import { IWorkspaceService } from '@ali/ide-workspace';
-import * as paths from '@ali/ide-core-common/lib/path';
-import { EditorComponentRegistry, ResourceService, IResource } from '@ali/ide-editor/lib/browser';
+} from '@opensumi/ide-core-browser';
+import { Position, Range, Location } from '@opensumi/ide-extension/lib/common/vscode/ext-types';
+import { IWorkspaceService } from '@opensumi/ide-workspace';
+import * as paths from '@opensumi/ide-core-common/lib/path';
+import {
+  EditorComponentRegistry,
+  ResourceService,
+  IResource,
+} from '@opensumi/ide-editor/lib/browser';
 
 import * as vscode from 'vscode';
 import {
@@ -32,7 +36,7 @@ import { RuntimeConfig, REPORT_NAME } from '@alipay/alex-core';
 import {
   BrowserEditorContribution,
   IEditorDocumentModelContentRegistry,
-} from '@ali/ide-editor/lib/browser';
+} from '@opensumi/ide-editor/lib/browser';
 
 import { SimpleLanguageService } from './language-client';
 import { LsifPreferences, lsifPreferenceSchema } from './lsif-preferences';
@@ -50,7 +54,8 @@ const handleLsifScheme = (scheme: string) => {
 @Domain(ClientAppContribution, PreferenceContribution, BrowserEditorContribution)
 export class LsifContribution
   extends Disposable
-  implements ClientAppContribution, PreferenceContribution, BrowserEditorContribution {
+  implements ClientAppContribution, PreferenceContribution, BrowserEditorContribution
+{
   @Autowired(SimpleLanguageService)
   private readonly simpleLanguageService: SimpleLanguageService;
 

@@ -1,8 +1,8 @@
-import { Injectable, Optional } from '@ali/common-di';
+import { Injectable, Optional } from '@opensumi/di';
 import { action, observable, computed } from 'mobx';
-import { Event, Emitter } from '@ali/ide-core-common';
-import { Path } from '@ali/ide-core-common/lib/path';
-import { URI } from '@ali/ide-core-browser';
+import { Event, Emitter } from '@opensumi/ide-core-common';
+import { Path } from '@opensumi/ide-core-common/lib/path';
+import { URI } from '@opensumi/ide-core-browser';
 import differenceBy from 'lodash/differenceBy';
 
 import {

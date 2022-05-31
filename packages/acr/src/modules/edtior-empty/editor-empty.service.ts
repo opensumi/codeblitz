@@ -1,5 +1,5 @@
-import { Autowired, Injectable } from '@ali/common-di';
-import { KeybindingRegistry } from '@ali/ide-core-browser';
+import { Autowired, Injectable } from '@opensumi/di';
+import { KeybindingRegistry } from '@opensumi/ide-core-browser';
 
 @Injectable()
 export class EditorEmptyService {

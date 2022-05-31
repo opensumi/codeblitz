@@ -1,6 +1,6 @@
-import { Injectable, Autowired } from '@ali/common-di';
-import { Uri } from '@ali/ide-core-common';
-import { posix } from '@ali/ide-core-common/lib/path';
+import { Injectable, Autowired } from '@opensumi/di';
+import { Uri } from '@opensumi/ide-core-common';
+import { posix } from '@opensumi/ide-core-common/lib/path';
 import { IExtensionBasicMetadata } from '@alipay/alex-shared';
 import { IExtensionNodeClientService, IExtensionMetadata, ExtraMetadata } from './base';
 import { ServerConfig } from '../core/app';

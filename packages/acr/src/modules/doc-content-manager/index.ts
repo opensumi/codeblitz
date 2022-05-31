@@ -1,4 +1,4 @@
-import { Autowired, Injectable } from '@ali/common-di';
+import { Autowired, Injectable } from '@opensumi/di';
 
 import { IGitDocContentManager } from './base';
 import { IAntcodeService } from '../antcode-service/base';

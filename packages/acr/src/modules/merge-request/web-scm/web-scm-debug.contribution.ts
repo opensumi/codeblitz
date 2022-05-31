@@ -1,4 +1,4 @@
-import { Autowired } from '@ali/common-di';
+import { Autowired } from '@opensumi/di';
 import {
   Domain,
   CommandRegistry,
@@ -10,12 +10,12 @@ import {
   WithEventBus,
   IContextKeyService,
   IContextKey,
-} from '@ali/ide-core-browser';
-import { MenuContribution, IMenuRegistry, MenuId } from '@ali/ide-core-browser/lib/menu/next';
-import { RawContextKey } from '@ali/ide-core-browser/lib/raw-context-key';
-import { ISCMResource, ISCMResourceGroup } from '@ali/ide-scm';
-import { IFileServiceClient } from '@ali/ide-file-service';
-import * as paths from '@ali/ide-core-common/lib/path';
+} from '@opensumi/ide-core-browser';
+import { MenuContribution, IMenuRegistry, MenuId } from '@opensumi/ide-core-browser/lib/menu/next';
+import { RawContextKey } from '@opensumi/ide-core-browser/lib/raw-context-key';
+import { ISCMResource, ISCMResourceGroup } from '@opensumi/ide-scm';
+import { IFileServiceClient } from '@opensumi/ide-file-service';
+import * as paths from '@opensumi/ide-core-common/lib/path';
 
 import { WebSCMCommands, IDmpService } from './common';
 import { WorkspaceManagerService } from '../../workspace/workspace-loader.service';
@@ -34,7 +34,8 @@ const ACR_WEB_SCM_ENABLE_DOWNLOAD_DIFFS = new RawContextKey<boolean>(
 @Domain(CommandContribution, MenuContribution, ClientAppContribution)
 export class WebSCMDebugContribution
   extends WithEventBus
-  implements CommandContribution, MenuContribution, ClientAppContribution {
+  implements CommandContribution, MenuContribution, ClientAppContribution
+{
   @Autowired(IContextKeyService)
   private readonly globalContextKeyService: IContextKeyService;
 

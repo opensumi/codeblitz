@@ -1,14 +1,14 @@
-import { Autowired } from '@ali/common-di';
-import { Domain } from '@ali/ide-core-common';
-import { LRUMap, URI } from '@ali/ide-core-browser';
-import { getLanguageIdFromMonaco } from '@ali/ide-core-browser/lib/services';
-import { IResource, IDiffResource } from '@ali/ide-editor/lib/common';
+import { Autowired } from '@opensumi/di';
+import { Domain } from '@opensumi/ide-core-common';
+import { LRUMap, URI } from '@opensumi/ide-core-browser';
+import { getLanguageIdFromMonaco } from '@opensumi/ide-core-browser/lib/services';
+import { IResource, IDiffResource } from '@opensumi/ide-editor/lib/common';
 import {
   EditorComponentRegistry,
   IEditorDocumentModelContentRegistry,
   BrowserEditorContribution,
   ResourceService,
-} from '@ali/ide-editor/lib/browser';
+} from '@opensumi/ide-editor/lib/browser';
 import { GitDocContentProvider } from './doc-content-provider/git';
 import { GitResourceProvider } from './resource-provider/git';
 import { IAntcodeService } from '../antcode-service/base';

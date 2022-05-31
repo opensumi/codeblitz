@@ -1,8 +1,8 @@
-import { Injectable, Autowired } from '@ali/common-di';
-import { URI, WithEventBus, MaybePromise, localize } from '@ali/ide-core-browser';
-import { IResourceProvider, IResource } from '@ali/ide-editor';
+import { Injectable, Autowired } from '@opensumi/di';
+import { URI, WithEventBus, MaybePromise, localize } from '@opensumi/ide-core-browser';
+import { IResourceProvider, IResource } from '@opensumi/ide-editor';
 import { EXTENSION_SCHEME } from './base';
-import { IIconService, IconType } from '@ali/ide-theme';
+import { IIconService, IconType } from '@opensumi/ide-theme';
 import * as styles from './common.module.less';
 
 @Injectable()

@@ -25,7 +25,7 @@ module.exports = (config) => {
         getLocalIdent: (loaderContext, localIdentName, localName, options) => {
           const resourcePath = String(loaderContext.resourcePath);
           if (
-            (resourcePath.includes(pkg.name) || resourcePath.includes('@ali/ide')) &&
+            (resourcePath.includes(pkg.name) || resourcePath.includes('@opensumi/ide')) &&
             resourcePath.endsWith('.module.less')
           ) {
             return getLocalIdent(loaderContext, localIdentName, localName, options);

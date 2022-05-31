@@ -1,6 +1,6 @@
 import React from 'react';
 import { observer } from 'mobx-react-lite';
-import { useInjectable, ViewState } from '@ali/ide-core-browser';
+import { useInjectable, ViewState } from '@opensumi/ide-core-browser';
 
 import { ExtensionList } from './extension-list';
 import { IExtensionManagerService } from './base';

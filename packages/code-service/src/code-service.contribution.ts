@@ -1,5 +1,5 @@
-import { Autowired } from '@ali/common-di';
-import { FILE_COMMANDS, CommandContribution, CommandRegistry } from '@ali/ide-core-browser';
+import { Autowired } from '@opensumi/di';
+import { FILE_COMMANDS, CommandContribution, CommandRegistry } from '@opensumi/ide-core-browser';
 import {
   Domain,
   IReporterService,
@@ -12,7 +12,7 @@ import {
   FileChangeType,
   IDisposable,
   IEventBus,
-} from '@ali/ide-core-common';
+} from '@opensumi/ide-core-common';
 import {
   LaunchContribution,
   AppConfig,
@@ -22,16 +22,19 @@ import {
   RuntimeConfig,
   RootFS,
 } from '@alipay/alex-core';
-import { IFileTreeService } from '@ali/ide-file-tree-next';
-import { FileTreeService } from '@ali/ide-file-tree-next/lib/browser/file-tree.service';
-import { FileTreeModelService } from '@ali/ide-file-tree-next/lib/browser/services/file-tree-model.service';
-import { IMessageService } from '@ali/ide-overlay';
-import { BrowserEditorContribution, WorkbenchEditorService } from '@ali/ide-editor/lib/browser';
+import { IFileTreeService } from '@opensumi/ide-file-tree-next';
+import { FileTreeService } from '@opensumi/ide-file-tree-next/lib/browser/file-tree.service';
+import { FileTreeModelService } from '@opensumi/ide-file-tree-next/lib/browser/services/file-tree-model.service';
+import { IMessageService } from '@opensumi/ide-overlay';
+import {
+  BrowserEditorContribution,
+  WorkbenchEditorService,
+} from '@opensumi/ide-editor/lib/browser';
 import * as path from 'path';
-import { QuickPickService } from '@ali/ide-quick-open';
-import { IDiskFileProvider, FileAccess } from '@ali/ide-file-service';
-import { DiskFsProviderClient } from '@ali/ide-file-service/lib/browser/file-service-provider-client';
-import { MainLayoutContribution } from '@ali/ide-main-layout';
+import { QuickPickService } from '@opensumi/ide-quick-open';
+import { IDiskFileProvider, FileAccess } from '@opensumi/ide-file-service';
+import { DiskFsProviderClient } from '@opensumi/ide-file-service/lib/browser/file-service-provider-client';
+import { MainLayoutContribution } from '@opensumi/ide-main-layout';
 import configureFileSystem from './filesystem/configure';
 import { CodeModelService } from './code-model.service';
 import { RefType, ICodeServiceConfig } from './types';

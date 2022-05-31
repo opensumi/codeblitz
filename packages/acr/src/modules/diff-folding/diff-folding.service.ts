@@ -1,8 +1,8 @@
-import * as monaco from '@ali/monaco-editor-core/esm/vs/editor/editor.api';
-import { Autowired, Injectable } from '@ali/common-di';
-import { ICommentsService } from '@ali/ide-comments';
-import { IRange, Position, PreferenceService, Uri, URI } from '@ali/ide-core-browser';
-import { IDiffEditor, WorkbenchEditorService } from '@ali/ide-editor';
+import * as monaco from '@opensumi/monaco-editor-core/esm/vs/editor/editor.api';
+import { Autowired, Injectable } from '@opensumi/di';
+import { ICommentsService } from '@opensumi/ide-comments';
+import { IRange, Position, PreferenceService, Uri, URI } from '@opensumi/ide-core-browser';
+import { IDiffEditor, WorkbenchEditorService } from '@opensumi/ide-editor';
 import { DiffFoldingChangeData, TEditorType } from '.';
 import { generateRange, getMaxLineCount } from './utils';
 import { RangeModel } from './rangeModel';
@@ -33,6 +33,7 @@ export class AntcodeDiffFoldingService {
   }
 
   public getMonacoEditor(type: TEditorType): monaco.editor.ICodeEditor {
+    // @ts-ignore todo
     return type === 'original'
       ? this.diffEditor.originalEditor.monacoEditor
       : this.diffEditor.modifiedEditor.monacoEditor;
@@ -73,9 +74,8 @@ export class AntcodeDiffFoldingService {
   ): Promise<IRange[][]> {
     const { diffEditor } = this.workbenchEditorService.currentEditorGroup;
 
-    const [originalWithCommentRanges, modifiedWithCommentRanges] = this.findCommentsLine(
-      diffEditor
-    );
+    const [originalWithCommentRanges, modifiedWithCommentRanges] =
+      this.findCommentsLine(diffEditor);
 
     // 左右 range 同步
     const [syncOriginReverse, syncModifiedReverse] = [

@@ -2,9 +2,9 @@
 // import { fs } from '../node';
 // import * as jschardet from 'jschardet';
 import * as iconv from 'iconv-lite-umd';
-import { URI } from '@ali/ide-core-common';
-import { FileUri } from '@ali/ide-core-node';
-import { SUPPORTED_ENCODINGS } from '@ali/ide-core-common/lib/const';
+import { URI } from '@opensumi/ide-core-common';
+import { FileUri } from '@opensumi/ide-core-node';
+import { SUPPORTED_ENCODINGS } from '@opensumi/ide-core-common/lib/const';
 
 import { EncodingInfo } from './base';
 

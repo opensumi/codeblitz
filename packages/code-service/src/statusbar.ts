@@ -1,12 +1,12 @@
-import { Autowired } from '@ali/common-di';
-import { Event, IDisposable } from '@ali/ide-core-common';
+import { Autowired } from '@opensumi/di';
+import { Event, IDisposable } from '@opensumi/ide-core-common';
 import {
   IStatusBarService,
   Domain,
   ClientAppContribution,
   StatusBarAlignment,
   localize,
-} from '@ali/ide-core-browser';
+} from '@opensumi/ide-core-browser';
 import { CodeModelService } from './code-model.service';
 
 @Domain(ClientAppContribution)

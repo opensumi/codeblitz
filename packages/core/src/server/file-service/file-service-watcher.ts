@@ -1,4 +1,4 @@
-import { parse, ParsedPattern } from '@ali/ide-core-common/lib/utils/glob';
+import { parse, ParsedPattern } from '@opensumi/ide-core-common/lib/utils/glob';
 import {
   IDisposable,
   Disposable,
@@ -8,7 +8,8 @@ import {
   FileSystemWatcherClient,
   FileSystemWatcherServer,
   WatchOptions,
-} from '@ali/ide-core-common';
+  URI,
+} from '@opensumi/ide-core-common';
 import debounce from 'lodash.debounce';
 import path from 'path';
 import { FileChangeCollection } from './file-change-collection';
@@ -26,6 +27,7 @@ export interface NsfwFileSystemWatcherOption {
 }
 
 export class FWFileSystemWatcherServer implements FileSystemWatcherServer {
+  private static WATCHER_FILE_DETECTED_TIME = 500;
   protected client: FileSystemWatcherClient | undefined;
   protected watcherSequence = 1;
   protected watcherOptions = new Map<number, WatcherOptions>();
@@ -83,42 +85,77 @@ export class FWFileSystemWatcherServer implements FileSystemWatcherServer {
 
   async watchFileChanges(uri: string, options?: WatchOptions): Promise<number> {
     const basePath = Uri.parse(uri).path;
-    const realpath = await fse.realpath(basePath);
-    let watcherId = this.checkIsParentWatched(realpath)!;
+    let realpath;
+    if (await fse.pathExists(basePath)) {
+      realpath = basePath;
+    }
+    let watcherId = realpath && this.checkIsParentWatched(realpath)!;
     if (watcherId) {
       return watcherId;
     }
     watcherId = this.watcherSequence++;
     this.debug('Starting watching:', basePath, options);
     const toDisposeWatcher = new DisposableCollection();
-    this.watchers.set(watcherId, {
-      path: realpath,
-      disposable: toDisposeWatcher,
-    });
-    toDisposeWatcher.push(Disposable.create(() => this.watchers.delete(watcherId)));
     if (await fse.pathExists(basePath)) {
+      this.watchers.set(watcherId, {
+        path: realpath,
+        disposable: toDisposeWatcher,
+      });
+      toDisposeWatcher.push(Disposable.create(() => this.watchers.delete(watcherId)));
       this.start(watcherId, basePath, options, toDisposeWatcher);
     } else {
-      const toClearTimer = new DisposableCollection();
-      const timer = setInterval(async () => {
-        if (await fse.pathExists(basePath)) {
-          toClearTimer.dispose();
-          this.pushAdded(watcherId, basePath);
-          this.start(watcherId, basePath, options, toDisposeWatcher);
-        }
-      }, 500);
-      toClearTimer.push(Disposable.create(() => clearInterval(timer)));
-      toDisposeWatcher.push(toClearTimer);
+      const watchPath = await this.lookup(basePath);
+      if (watchPath) {
+        this.watchers.set(watcherId, {
+          path: watchPath,
+          disposable: toDisposeWatcher,
+        });
+        toDisposeWatcher.push(Disposable.create(() => this.watchers.delete(watcherId)));
+        this.start(watcherId, watchPath, options, toDisposeWatcher, basePath);
+      } else {
+        const toClearTimer = new DisposableCollection();
+        const timer = setInterval(async () => {
+          if (await fse.pathExists(basePath)) {
+            toClearTimer.dispose();
+            this.pushAdded(watcherId, basePath);
+            this.start(watcherId, basePath, options, toDisposeWatcher);
+          }
+        }, FWFileSystemWatcherServer.WATCHER_FILE_DETECTED_TIME);
+        toClearTimer.push(Disposable.create(() => clearInterval(timer)));
+        toDisposeWatcher.push(toClearTimer);
+      }
     }
     this.toDispose.push(toDisposeWatcher);
     return watcherId;
+  }
+
+  /**
+   * 向上查找存在的目录
+   * 默认向上查找 3 层，避免造成较大的目录监听带来的性能问题
+   * 当前框架内所有配置文件可能存在的路径层级均不超过 3 层
+   * @param path 监听路径
+   * @param count 向上查找层级
+   */
+  protected async lookup(path: string, count: number = 3) {
+    let uri = new URI(path);
+    let times = 0;
+    while (!(await fse.pathExists(uri.codeUri.fsPath)) && times <= count) {
+      uri = uri.parent;
+      times++;
+    }
+    if (await fse.pathExists(uri.codeUri.fsPath)) {
+      return uri.codeUri.fsPath;
+    } else {
+      return '';
+    }
   }
 
   protected async start(
     watcherId: number,
     basePath: string,
     rawOptions: WatchOptions | undefined,
-    toDisposeWatcher: DisposableCollection
+    toDisposeWatcher: DisposableCollection,
+    rawFile?: string
   ): Promise<void> {
     const options: WatchOptions = {
       excludes: [],
@@ -128,6 +165,9 @@ export class FWFileSystemWatcherServer implements FileSystemWatcherServer {
     const { watch, actions } = fsWatcher;
     let watcher = await watch(basePath, (events) => {
       for (const event of events) {
+        if (rawFile && event.file !== rawFile) {
+          return;
+        }
         if (event.action === actions.CREATED) {
           this.pushAdded(watcherId, this.resolvePath(event.directory, event.file!));
         }

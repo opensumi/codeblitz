@@ -2,43 +2,43 @@
  * kaitian
  */
 
-import { ClientAddonModule } from '@ali/ide-addons/lib/browser';
-import { CommentsModule } from '@ali/ide-comments/lib/browser';
-import { ClientCommonModule, ModuleConstructor } from '@ali/ide-core-browser';
-import { DebugModule } from '@ali/ide-debug/lib/browser';
-import { DecorationModule } from '@ali/ide-decoration/lib/browser';
-import { EditorModule } from '@ali/ide-editor/lib/browser';
-import { ExplorerModule } from '@ali/ide-explorer/lib/browser';
-import { ExtensionStorageModule } from '@ali/ide-extension-storage/lib/browser';
-import { FileSchemeModule } from '@ali/ide-file-scheme/lib/browser';
-import { FileServiceClientModule } from '@ali/ide-file-service/lib/browser';
-import { FileTreeNextModule } from '@ali/ide-file-tree-next/lib/browser';
-import { KaitianExtensionModule } from '@ali/ide-kaitian-extension/lib/browser';
-import { KeymapsModule } from '@ali/ide-keymaps/lib/browser';
-import { LogModule } from '@ali/ide-logs/lib/browser';
-import { MainLayoutModule } from '@ali/ide-main-layout/lib/browser';
-import { MarkdownModule } from '@ali/ide-markdown/lib/browser';
-import { MarkersModule } from '@ali/ide-markers/lib/browser';
-import { MenuBarModule } from '@ali/ide-menu-bar/lib/browser';
-import { MonacoModule } from '@ali/ide-monaco/lib/browser';
-import { MonacoEnhanceModule } from '@ali/ide-monaco-enhance/lib/browser/module';
-import { OpenedEditorModule } from '@ali/ide-opened-editor/lib/browser';
-import { OutlineModule } from '@ali/ide-outline/lib/browser';
-import { OutputModule } from '@ali/ide-output/lib/browser';
-import { OverlayModule } from '@ali/ide-overlay/lib/browser';
-import { PreferencesModule } from '@ali/ide-preferences/lib/browser';
-import { QuickOpenModule } from '@ali/ide-quick-open/lib/browser';
-import { SCMModule } from '@ali/ide-scm/lib/browser';
-import { SearchModule } from '@ali/ide-search/lib/browser';
-import { StaticResourceModule } from '@ali/ide-static-resource/lib/browser';
-import { StatusBarModule } from '@ali/ide-status-bar/lib/browser';
-import { StorageModule } from '@ali/ide-storage/lib/browser';
-import { ThemeModule } from '@ali/ide-theme/lib/browser';
-import { ToolbarModule } from '@ali/ide-toolbar/lib/browser';
-import { VariableModule } from '@ali/ide-variable/lib/browser';
-import { WebviewModule } from '@ali/ide-webview/lib/browser';
-import { WorkspaceModule } from '@ali/ide-workspace/lib/browser';
-import { WorkspaceEditModule } from '@ali/ide-workspace-edit/lib/browser';
+import { ClientAddonModule } from '@opensumi/ide-addons/lib/browser';
+import { CommentsModule } from '@opensumi/ide-comments/lib/browser';
+import { ClientCommonModule, ModuleConstructor } from '@opensumi/ide-core-browser';
+import { DebugModule } from '@opensumi/ide-debug/lib/browser';
+import { DecorationModule } from '@opensumi/ide-decoration/lib/browser';
+import { EditorModule } from '@opensumi/ide-editor/lib/browser';
+import { ExplorerModule } from '@opensumi/ide-explorer/lib/browser';
+import { ExtensionStorageModule } from '@opensumi/ide-extension-storage/lib/browser';
+import { FileSchemeModule } from '@opensumi/ide-file-scheme/lib/browser';
+import { FileServiceClientModule } from '@opensumi/ide-file-service/lib/browser';
+import { FileTreeNextModule } from '@opensumi/ide-file-tree-next/lib/browser';
+import { ExtensionModule } from '@opensumi/ide-extension/lib/browser';
+import { KeymapsModule } from '@opensumi/ide-keymaps/lib/browser';
+import { LogModule } from '@opensumi/ide-logs/lib/browser';
+import { MainLayoutModule } from '@opensumi/ide-main-layout/lib/browser';
+import { MarkdownModule } from '@opensumi/ide-markdown/lib/browser';
+import { MarkersModule } from '@opensumi/ide-markers/lib/browser';
+import { MenuBarModule } from '@opensumi/ide-menu-bar/lib/browser';
+import { MonacoModule } from '@opensumi/ide-monaco/lib/browser';
+import { MonacoEnhanceModule } from '@opensumi/ide-monaco-enhance/lib/browser/module';
+import { OpenedEditorModule } from '@opensumi/ide-opened-editor/lib/browser';
+import { OutlineModule } from '@opensumi/ide-outline/lib/browser';
+import { OutputModule } from '@opensumi/ide-output/lib/browser';
+import { OverlayModule } from '@opensumi/ide-overlay/lib/browser';
+import { PreferencesModule } from '@opensumi/ide-preferences/lib/browser';
+import { QuickOpenModule } from '@opensumi/ide-quick-open/lib/browser';
+import { SCMModule } from '@opensumi/ide-scm/lib/browser';
+import { SearchModule } from '@opensumi/ide-search/lib/browser';
+import { StaticResourceModule } from '@opensumi/ide-static-resource/lib/browser';
+import { StatusBarModule } from '@opensumi/ide-status-bar/lib/browser';
+import { StorageModule } from '@opensumi/ide-storage/lib/browser';
+import { ThemeModule } from '@opensumi/ide-theme/lib/browser';
+import { ToolbarModule } from '@opensumi/ide-toolbar/lib/browser';
+import { VariableModule } from '@opensumi/ide-variable/lib/browser';
+import { WebviewModule } from '@opensumi/ide-webview/lib/browser';
+import { WorkspaceModule } from '@opensumi/ide-workspace/lib/browser';
+import { WorkspaceEditModule } from '@opensumi/ide-workspace-edit/lib/browser';
 
 /**
  * alex
@@ -91,7 +91,7 @@ export const modules: ModuleConstructor[] = [
   // TerminalNextModule,
 
   // Extension Modules
-  KaitianExtensionModule,
+  ExtensionModule,
   // FeatureExtensionModule,
   ExtensionClientManagerModule,
   MonacoEnhanceModule,

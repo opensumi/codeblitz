@@ -16,7 +16,7 @@ module.exports = (config) => {
         getLocalIdent: (loaderContext, localIdentName, localName, options) => {
           const resourcePath = String(loaderContext.resourcePath);
           if (
-            (resourcePath.includes(pkg.name) || resourcePath.includes('@ali/ide')) &&
+            (resourcePath.includes(pkg.name) || resourcePath.includes('@opensumi/ide')) &&
             resourcePath.endsWith('.module.less')
           ) {
             return getLocalIdent(loaderContext, localIdentName, localName, options);
@@ -46,7 +46,7 @@ module.exports = (config) => {
   // config.module
   //   .rule('font-in-node_modules')
   //   .include
-  //     .add('node_modules/@ali/ide-core-browser')
+  //     .add('node_modules/@opensumi/ide-core-browser')
   //     .end()
   //   .test(/\.(woff(2)?|ttf|eot|svg)(\?v=\d+\.\d+\.\d+)?$/)
   //   .use('file')

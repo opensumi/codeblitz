@@ -1,12 +1,12 @@
 import * as React from 'react';
 import clx from 'classnames';
-import { ProgressBar } from '@ali/ide-core-browser/lib/components/progressbar';
+import { ProgressBar } from '@opensumi/ide-core-browser/lib/components/progressbar';
 import { RawExtensionView } from '../raw-extension';
 import { RawExtension, IExtensionManagerService } from '../base';
 import * as styles from './index.module.less';
-import { useInjectable } from '@ali/ide-core-browser';
+import { useInjectable } from '@opensumi/ide-core-browser';
 import { observer } from 'mobx-react-lite';
-import { Scrollbars } from '@ali/ide-components';
+import { Scrollbars } from '@opensumi/ide-components';
 import { ExtensionManagerService } from '../extension-manager.service';
 
 export interface ExtensionListProps {

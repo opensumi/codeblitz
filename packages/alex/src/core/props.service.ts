@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState } from 'react';
-import { Emitter, Event } from '@ali/ide-core-common';
+import { Emitter, Event } from '@opensumi/ide-core-common';
 
 interface PropsChangeEvent<P> {
   prevProps: P;

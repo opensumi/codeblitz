@@ -1,5 +1,5 @@
-import { MainThreadLanguages } from '@ali/ide-kaitian-extension/lib/browser/vscode/api/main.thread.language';
-import { AbstractExtInstanceManagementService } from '@ali/ide-kaitian-extension/lib/browser/types';
+import { MainThreadLanguages } from '@opensumi/ide-extension/lib/browser/vscode/api/main.thread.language';
+import { AbstractExtInstanceManagementService } from '@opensumi/ide-extension/lib/browser/types';
 
 import { disposableCollection } from '../patch';
 
@@ -22,7 +22,7 @@ MainThreadLanguages.prototype.createSignatureHelpProvider = function (...args: a
 };
 
 disposableCollection.push((injector) => {
-  (injector.get(
-    AbstractExtInstanceManagementService
-  ) as AbstractExtInstanceManagementService).dispose();
+  (
+    injector.get(AbstractExtInstanceManagementService) as AbstractExtInstanceManagementService
+  ).dispose();
 });

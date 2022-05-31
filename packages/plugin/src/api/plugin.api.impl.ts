@@ -1,5 +1,5 @@
 import type * as vscode from 'vscode';
-import { Injector } from '@ali/common-di';
+import { Injector } from '@opensumi/di';
 import { PluginCommands } from './plugin.commands';
 import { IPluginModule, IPluginAPI } from '../types';
 

@@ -1,6 +1,6 @@
-import { Autowired, Injectable } from '@ali/common-di';
-import { IEditorDocumentModelContentProvider } from '@ali/ide-editor/lib/browser';
-import { Emitter, Event, URI, DisposableCollection } from '@ali/ide-core-common';
+import { Autowired, Injectable } from '@opensumi/di';
+import { IEditorDocumentModelContentProvider } from '@opensumi/ide-editor/lib/browser';
+import { Emitter, Event, URI, DisposableCollection } from '@opensumi/ide-core-common';
 
 import { AbstractSCMDocContentProvider } from './base-scm';
 
@@ -11,7 +11,8 @@ import { fromSCMUri } from '../../../utils/scm-uri';
 // @ts-ignore
 export class GitDocContentProvider
   extends AbstractSCMDocContentProvider
-  implements IEditorDocumentModelContentProvider {
+  implements IEditorDocumentModelContentProvider
+{
   // TODO: 需要增加对文件变更后的监听，以保持文件内容最新
   scheme = 'git';
 

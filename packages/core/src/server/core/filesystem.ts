@@ -1,4 +1,4 @@
-import { Deferred, getDebugLogger } from '@ali/ide-core-common';
+import { Deferred, getDebugLogger } from '@opensumi/ide-core-common';
 import { BrowserFS, FileSystem } from '../node';
 import { HOME_ROOT, HOME_IDB_NAME } from '../../common';
 import { RootFS } from '../../common/types';
@@ -33,6 +33,7 @@ export const initializeHomeFileSystem = async (rootFS: RootFS, scenario?: string
           storeName: `${HOME_IDB_NAME}${scenario ? `/${scenario}` : ''}`,
         });
       } catch (err) {
+        // @ts-ignore
         getDebugLogger().error(`初始化 indexedDB 文件系统失败 ${err?.message || ''}`);
         homefs = null;
       }
@@ -42,6 +43,7 @@ export const initializeHomeFileSystem = async (rootFS: RootFS, scenario?: string
     }
     rootFS.mount(HOME_ROOT, homefs);
   } catch (err) {
+    // @ts-ignore
     getDebugLogger().error(`初始化 home 目录失败 ${err?.message || ''}`);
   }
   return {

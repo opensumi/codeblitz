@@ -9,7 +9,7 @@ module.exports = () => {
   return {
     entry: {
       [config.workerEntry]: require.resolve(
-        '@ali/ide-kaitian-extension/lib/hosted/worker.host-preload'
+        '@opensumi/ide-extension/lib/hosted/worker.host-preload'
       ),
     },
     output: {

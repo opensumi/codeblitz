@@ -1,21 +1,21 @@
 import { useState, useEffect } from 'react';
-import { Provider, Injectable, Autowired } from '@ali/common-di';
+import { Provider, Injectable, Autowired } from '@opensumi/di';
 import {
   Domain,
   URI,
   AppConfig,
   BrowserModule,
   FsProviderContribution,
-} from '@ali/ide-core-browser';
+} from '@opensumi/ide-core-browser';
 import { ExtensionServiceClientImpl, IExtensionNodeClientService } from '@alipay/alex-core';
 import { IExtensionMetadata, IExtensionBasicMetadata } from '@alipay/alex-shared';
-import { IFileServiceClient } from '@ali/ide-file-service';
+import { IFileServiceClient } from '@opensumi/ide-file-service';
 import { KaitianExtFsProvider } from '@alipay/alex-core';
 
 import {
   StaticResourceContribution,
   StaticResourceService,
-} from '@ali/ide-static-resource/lib/browser';
+} from '@opensumi/ide-static-resource/lib/browser';
 
 const KT_EXT_LOCAL_SCHEME = 'kt-ext-local';
 

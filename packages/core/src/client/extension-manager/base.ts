@@ -1,4 +1,4 @@
-import { IExtensionProps } from '@ali/ide-core-common';
+import { IExtensionProps } from '@opensumi/ide-core-common';
 
 export const EXTENSION_SCHEME = 'extension';
 export const enableExtensionsContainerId = 'extensions';

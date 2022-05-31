@@ -1,5 +1,5 @@
-import { Injectable } from '@ali/common-di';
-import { OS } from '@ali/ide-core-common';
+import { Injectable } from '@opensumi/di';
+import { OS } from '@opensumi/ide-core-common';
 import { ICommonServer } from './base';
 
 @Injectable()

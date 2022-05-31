@@ -1,11 +1,11 @@
 import * as React from 'react';
-import { Autowired } from '@ali/common-di';
+import { Autowired } from '@opensumi/di';
 import {
   CommentsContribution as CoreCommentsContribution,
   ICommentsFeatureRegistry,
   ICommentsThread,
   ICommentsZoneWidget,
-} from '@ali/ide-comments';
+} from '@opensumi/ide-comments';
 import {
   ClientAppContribution,
   Domain,
@@ -16,18 +16,18 @@ import {
   getIcon,
   Disposable,
   toDisposable,
-} from '@ali/ide-core-browser';
+} from '@opensumi/ide-core-browser';
 import {
   IEditorDocumentModel,
   DidApplyEditorDecorationFromProvider,
   IEditor,
-} from '@ali/ide-editor/lib/browser';
+} from '@opensumi/ide-editor/lib/browser';
 import { AntcodeCommentsService } from './comments.service';
 import { IAntcodeService, IPullRequestChangeDiff } from '../antcode-service/base';
 import { COMMENT_FILTER_TYPE, THREAD_TYPE } from '.';
 import { Commenting } from './components/Commenting';
 import { ChangesTreeDecorationService } from '../merge-request/changes-tree/changes-tree-decoration.service';
-import { IIconService, IconType } from '@ali/ide-theme';
+import { IIconService, IconType } from '@opensumi/ide-theme';
 import { MouseWheelBlock } from './components/MouseWheelBlock';
 import { AnnotationService } from './annotation.service';
 import * as styles from './index.module.less';
@@ -132,6 +132,7 @@ export class CommentsContribution implements ClientAppContribution, CoreComments
             {
               range: range,
               options: {
+                description: 'comments-decoration',
                 glyphMarginClassName: [
                   'comments-decoration',
                   'comments-thread',

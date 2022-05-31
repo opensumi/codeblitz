@@ -1,7 +1,7 @@
-import * as monaco from '@ali/monaco-editor-core/esm/vs/editor/editor.api';
-import { Disposable, Emitter, Event, IRange, positionToRange } from '@ali/ide-core-common';
-import { Injectable, Autowired } from '@ali/common-di';
-import { WorkbenchEditorService } from '@ali/ide-editor';
+import * as monaco from '@opensumi/monaco-editor-core/esm/vs/editor/editor.api';
+import { Disposable, Emitter, Event, IRange, positionToRange } from '@opensumi/ide-core-common';
+import { Injectable, Autowired } from '@opensumi/di';
+import { WorkbenchEditorService } from '@opensumi/ide-editor';
 import { DiffFoldingZoneWidget } from '.';
 import { CUSTOM_FOLDING_LINE_NUMBER, DiffFoldingChangeData, TEditorType, TFoldingType } from '..';
 import { getMaxLineCount, isVisibilityRangeByUpOrDownWidget } from '../utils';
@@ -183,13 +183,27 @@ export class DiffFoldingWidgetService extends Disposable {
     const { originalEditor, modifiedEditor } = diffEditor;
 
     if (type === 'original') {
-      this.originalWidgetMap.set(positions, new DiffFoldingZoneWidget(originalEditor.monacoEditor));
-      // @ts-ignore
-      this.collectDisposable(this.originalWidgetMap.get(positions), 'original');
+      this.originalWidgetMap.set(
+        positions,
+        new DiffFoldingZoneWidget(
+          originalEditor.monacoEditor as unknown as monaco.editor.ICodeEditor
+        )
+      );
+      this.collectDisposable(
+        this.originalWidgetMap.get(positions) as DiffFoldingZoneWidget,
+        'original'
+      );
     } else if (type === 'modified') {
-      this.modifiedWidgetMap.set(positions, new DiffFoldingZoneWidget(modifiedEditor.monacoEditor));
-      // @ts-ignore
-      this.collectDisposable(this.modifiedWidgetMap.get(positions), 'modified');
+      this.modifiedWidgetMap.set(
+        positions,
+        new DiffFoldingZoneWidget(
+          modifiedEditor.monacoEditor as unknown as monaco.editor.ICodeEditor
+        )
+      );
+      this.collectDisposable(
+        this.modifiedWidgetMap.get(positions) as DiffFoldingZoneWidget,
+        'modified'
+      );
     }
   }
 

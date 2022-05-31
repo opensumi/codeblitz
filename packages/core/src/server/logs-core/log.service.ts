@@ -1,4 +1,4 @@
-import { Injectable, Autowired } from '@ali/common-di';
+import { Injectable, Autowired } from '@opensumi/di';
 import {
   ILogService,
   ILogServiceOptions,
@@ -8,7 +8,7 @@ import {
   format,
   DebugLog,
   IBaseLogService,
-} from '@ali/ide-logs/lib/common';
+} from '@opensumi/ide-logs/lib/common';
 import * as path from 'path';
 
 import { ILogServiceForClient } from './base';

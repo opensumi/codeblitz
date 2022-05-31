@@ -1,10 +1,10 @@
 import React from 'react';
 import { observer } from 'mobx-react-lite';
-import { IEventBus } from '@ali/ide-core-browser';
-import { useInjectable } from '@ali/ide-core-browser/lib/react-hooks';
+import { IEventBus } from '@opensumi/ide-core-browser';
+import { useInjectable } from '@opensumi/ide-core-browser/lib/react-hooks';
 import { IAntcodeService } from '../../../antcode-service/base';
-import { ICommentsThread, ICommentsZoneWidget } from '@ali/ide-comments';
-import { EditorType } from '@ali/ide-editor';
+import { ICommentsThread, ICommentsZoneWidget } from '@opensumi/ide-comments';
+import { EditorType } from '@opensumi/ide-editor';
 import { genLineCode } from '../../utils';
 import { DiffChangeEvent } from '../../../../common';
 import { Portal } from '../../../../portal';

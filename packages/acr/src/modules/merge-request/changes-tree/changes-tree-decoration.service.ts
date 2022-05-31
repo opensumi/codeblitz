@@ -1,5 +1,5 @@
-import { Injectable, Autowired } from '@ali/common-di';
-import { IDecorationsService } from '@ali/ide-decoration';
+import { Injectable, Autowired } from '@opensumi/di';
+import { IDecorationsService } from '@opensumi/ide-decoration';
 import {
   URI,
   Uri,
@@ -7,9 +7,9 @@ import {
   IFileDecoration,
   Emitter,
   DisposableCollection,
-} from '@ali/ide-core-browser';
-import { IThemeService } from '@ali/ide-theme';
-import { ICommentsService } from '@ali/ide-comments';
+} from '@opensumi/ide-core-browser';
+import { IThemeService } from '@opensumi/ide-theme';
+import { ICommentsService } from '@opensumi/ide-comments';
 
 import { THREAD_TYPE } from '../../../modules/comments';
 

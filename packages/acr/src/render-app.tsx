@@ -1,15 +1,15 @@
-import { Injector } from '@ali/common-di';
-import { registerExternalPreferenceProvider } from '@ali/ide-core-browser';
-import { IStatusBarService } from '@ali/ide-core-browser/lib/services';
-import { IDocPersistentCacheProvider } from '@ali/ide-editor';
-import { LocalStorageDocCacheImpl } from '@ali/ide-editor/lib/browser/doc-cache/local-storage-cache';
+import { Injector } from '@opensumi/di';
+import { registerExternalPreferenceProvider } from '@opensumi/ide-core-browser';
+import { IStatusBarService } from '@opensumi/ide-core-browser/lib/services';
+import { IDocPersistentCacheProvider } from '@opensumi/ide-editor';
+import { LocalStorageDocCacheImpl } from '@opensumi/ide-editor/lib/browser/doc-cache/local-storage-cache';
 import { RuntimeConfig, ClientApp, HOME_IDB_NAME } from '@alipay/alex-core';
 import { getDefaultAppConfig, IAppConfig } from '@alipay/alex';
 import { EmptyStatusBarService } from './overrides/empty-statusbar.service';
 import '@alipay/alex/languages';
 import { IPluginConfig } from '@alipay/alex-plugin';
 import md5 from 'md5';
-import { editorPreferenceSchema } from '@ali/ide-editor/lib/browser/preference/schema';
+import { editorPreferenceSchema } from '@opensumi/ide-editor/lib/browser/preference/schema';
 
 export async function renderApp(opts: IAppConfig, injector: Injector, customRenderer) {
   injector = injector || new Injector();

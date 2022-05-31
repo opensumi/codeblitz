@@ -1,16 +1,16 @@
-import { coalesce } from '@ali/ide-core-common/lib/arrays';
-import { Domain, URI, localize, CommandService } from '@ali/ide-core-browser';
+import { coalesce } from '@opensumi/ide-core-common/lib/arrays';
+import { Domain, URI, localize, CommandService } from '@opensumi/ide-core-browser';
 import {
   BrowserEditorContribution,
   EditorComponentRegistry,
   EditorComponentRenderMode,
-} from '@ali/ide-editor/lib/browser';
-import { LabelService } from '@ali/ide-core-browser/lib/services';
-import { ResourceService, IResource, WorkbenchEditorService } from '@ali/ide-editor';
-import { IIconService, IconType } from '@ali/ide-theme';
-import { Autowired } from '@ali/common-di';
-import { IWorkspaceService } from '@ali/ide-workspace';
-import { IFileServiceClient } from '@ali/ide-file-service/lib/common';
+} from '@opensumi/ide-editor/lib/browser';
+import { LabelService } from '@opensumi/ide-core-browser/lib/services';
+import { ResourceService, IResource, WorkbenchEditorService } from '@opensumi/ide-editor';
+import { IIconService, IconType } from '@opensumi/ide-theme';
+import { Autowired } from '@opensumi/di';
+import { IWorkspaceService } from '@opensumi/ide-workspace';
+import { IFileServiceClient } from '@opensumi/ide-file-service/lib/common';
 import { RuntimeConfig, AppConfig } from '../../common';
 import { EditorWelcomeComponent } from './welcome.view';
 import { CommonConfig } from '../../common/config';

@@ -1,5 +1,8 @@
-import { Domain } from '@ali/ide-core-common';
-import { BrowserEditorContribution, EditorComponentRegistry } from '@ali/ide-editor/lib/browser';
+import { Domain } from '@opensumi/ide-core-common';
+import {
+  BrowserEditorContribution,
+  EditorComponentRegistry,
+} from '@opensumi/ide-editor/lib/browser';
 import { EditorBottomSideWidget } from './editor-bottom-side.view';
 
 @Domain(BrowserEditorContribution)

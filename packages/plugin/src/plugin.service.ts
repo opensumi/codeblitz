@@ -1,5 +1,5 @@
-import { Injectable, Autowired, Injector, INJECTOR_TOKEN } from '@ali/common-di';
-import { Deferred } from '@ali/ide-core-common';
+import { Injectable, Autowired, Injector, INJECTOR_TOKEN } from '@opensumi/di';
+import { Deferred } from '@opensumi/ide-core-common';
 import { IPluginModule, IPluginAPI } from './types';
 import { createAPIFactory } from './api/plugin.api.impl';
 import { PluginContext } from './api/plugin.context';

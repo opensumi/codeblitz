@@ -1,4 +1,4 @@
-import { LanguagesContribution, GrammarsContribution } from '@ali/ide-monaco';
+import { LanguagesContribution, GrammarsContribution } from '@opensumi/ide-monaco';
 import { Registry } from '@alipay/alex-registry';
 
 export { Registry };

@@ -1,6 +1,6 @@
-import { Injectable } from '@ali/common-di';
-import { Domain } from '@ali/ide-core-browser';
-import { MenuContribution, IMenuRegistry, MenuId } from '@ali/ide-core-browser/lib/menu/next';
+import { Injectable } from '@opensumi/di';
+import { Domain } from '@opensumi/ide-core-browser';
+import { MenuContribution, IMenuRegistry, MenuId } from '@opensumi/ide-core-browser/lib/menu/next';
 
 @Domain(MenuContribution)
 export class MenuConfigContribution implements MenuContribution {

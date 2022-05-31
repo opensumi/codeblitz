@@ -1,6 +1,6 @@
 {
   "name": "alex",
-  "version": "1.9.12",
+  "version": "2.0.0-beta.3",
   "workspaces": [
     "packages/*"
   ],
@@ -8,12 +8,12 @@
   "description": "Ant Codespaces for browser",
   "main": "index.js",
   "engines": {
-    "kaitian": "2.5.5"
+    "kaitian": "2.16.1"
   },
   "scripts": {
     "type-check": "tsc --skipLibCheck --noEmit",
     "preinstall": "node scripts/preinstall && npm run prepare:env",
-    "prepare:env": "yum --version && sudo yum -y install unzip gcc-c++ libX11-devel libxkbfile-devel || echo 'no yum'",
+    "prepare:env": "yum --version && sudo yum -y install unzip gcc-c++ libX11-devel libxkbfile-devel libsecret-devel || echo 'no yum'",
     "init": "npm run clean && npm run generate && npm run build && npm run ext",
     "start": "npm run dev",
     "start:acr": "INTEGRATION=antcode-cr npm run start",
@@ -151,13 +151,13 @@
     },
     {
       "publisher": "cloud-ide-ext",
-      "name": "antcode-scaning",
-      "version": "0.0.8"
+      "name": "editor-plugin-blame",
+      "version": "0.2.5"
     },
     {
       "publisher": "cloud-ide-ext",
-      "name": "editor-plugin-blame",
-      "version": "0.2.5"
+      "name": "antcode-scaning",
+      "version": "0.0.12"
     }
   ]
 }

@@ -1,6 +1,6 @@
 import * as path from 'path';
-import { Injectable, Autowired } from '@ali/common-di';
-import { memoize, Emitter, Deferred } from '@ali/ide-core-common';
+import { Injectable, Autowired } from '@opensumi/di';
+import { memoize, Emitter, Deferred } from '@opensumi/ide-core-common';
 import { fsExtra } from '@alipay/alex-core';
 import { BranchOrTag, ICodeAPIProvider } from '@alipay/alex-code-api';
 import {
@@ -252,8 +252,8 @@ export class RootRepository extends Repository {
   @memoize
   async getRefs() {
     const [branches, tags] = await Promise.all([
-      this.request.getBranches().catch<BranchOrTag[]>(() => []),
-      this.request.getTags().catch<BranchOrTag[]>(() => []),
+      this.request.getBranches().catch(() => []),
+      this.request.getTags().catch(() => []),
     ]);
     this._refs = {
       branches: branches.map((item) => ({

@@ -1,4 +1,4 @@
-import { Injectable } from '@ali/common-di';
+import { Injectable } from '@opensumi/di';
 import { NodeModule } from '../core/app';
 import { ContentSearchService } from './content-search.service';
 import { IContentSearchServer, ContentSearchServerPath } from './base';

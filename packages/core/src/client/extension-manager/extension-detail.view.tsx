@@ -4,16 +4,16 @@ import {
   IClientApp,
   localize,
   formatLocalize,
-} from '@ali/ide-core-browser';
-import { ReactEditorComponent } from '@ali/ide-editor/lib/browser';
-import { Markdown } from '@ali/ide-markdown';
+} from '@opensumi/ide-core-browser';
+import { ReactEditorComponent } from '@opensumi/ide-editor/lib/browser';
+import { Markdown } from '@opensumi/ide-markdown';
 import { observer } from 'mobx-react-lite';
 import * as React from 'react';
 import { ExtensionDetail, IExtensionManagerService } from './base';
 import clx from 'classnames';
 import * as styles from './extension-detail.module.less';
 import * as commonStyles from './common.module.less';
-import { Tabs } from '@ali/ide-components';
+import { Tabs } from '@opensumi/ide-components';
 import 'antd/lib/menu/style/index.css';
 import { ExtensionManagerService } from './extension-manager.service';
 

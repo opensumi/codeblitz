@@ -1,5 +1,5 @@
-import { URI, removeUndefined } from '@ali/ide-core-common';
-import { localize } from '@ali/ide-core-browser';
+import { URI, removeUndefined } from '@opensumi/ide-core-common';
+import { localize } from '@opensumi/ide-core-browser';
 import { IPullRequestChangeDiff } from '../../antcode-service/base';
 
 /**
@@ -94,7 +94,7 @@ interface GitUriParams {
 }
 
 export function fromGitUri(uri: URI): GitUriParams {
-  const query = (uri.getParsedQuery() as unknown) as GitUriParams;
+  const query = uri.getParsedQuery() as unknown as GitUriParams;
   const path = uri.codeUri.path;
   const result: GitUriParams = {
     isCR: query.isCR,

@@ -1,6 +1,6 @@
-import { ILogServiceForClient as _ILogServiceForClient } from '@ali/ide-logs/lib/common';
+import { ILogServiceForClient as _ILogServiceForClient } from '@opensumi/ide-logs/lib/common';
 
-export { LogServiceForClientPath } from '@ali/ide-logs/lib/common';
+export { LogServiceForClientPath } from '@opensumi/ide-logs/lib/common';
 
 export const ILogServiceForClient = Symbol('LogServiceForClient');
 

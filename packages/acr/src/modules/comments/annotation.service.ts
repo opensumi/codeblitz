@@ -1,8 +1,8 @@
-import { Injectable, Autowired } from '@ali/common-di';
+import { Injectable, Autowired } from '@opensumi/di';
 import { IAnnotationData, IAntcodeService } from '../antcode-service/base';
-import { ICommentsService, toRange, ICommentsThread } from '@ali/ide-comments';
+import { ICommentsService, toRange, ICommentsThread } from '@opensumi/ide-comments';
 import { toGitUri } from '../merge-request/changes-tree/util';
-import { URI } from '@ali/ide-core-browser';
+import { URI } from '@opensumi/ide-core-browser';
 import { THREAD_TYPE } from './index';
 
 @Injectable()

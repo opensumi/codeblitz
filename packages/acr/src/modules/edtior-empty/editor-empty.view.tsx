@@ -1,5 +1,5 @@
 import React from 'react';
-import { useInjectable, localize } from '@ali/ide-core-browser';
+import { useInjectable, localize } from '@opensumi/ide-core-browser';
 
 import { EditorEmptyService } from './editor-empty.service';
 import styles from './editor-empty.module.less';

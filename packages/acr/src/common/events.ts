@@ -1,4 +1,4 @@
-import { URI, BasicEvent } from '@ali/ide-core-common';
+import { URI, BasicEvent } from '@opensumi/ide-core-common';
 import { Diff } from './antcode';
 import { FileOpenMethod } from './types';
 

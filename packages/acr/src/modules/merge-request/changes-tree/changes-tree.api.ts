@@ -1,5 +1,5 @@
-import { Autowired, Injectable } from '@ali/common-di';
-import { Path } from '@ali/ide-core-common/lib/path';
+import { Autowired, Injectable } from '@opensumi/di';
+import { Path } from '@opensumi/ide-core-common/lib/path';
 
 import { IAntcodeService, IPullRequestChangeDiff } from '../../antcode-service/base';
 import { IPullRequestChangeItem } from '../../../common';

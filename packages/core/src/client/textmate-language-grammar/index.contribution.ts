@@ -1,6 +1,6 @@
-import { Autowired } from '@ali/common-di';
-import { Disposable, Domain } from '@ali/ide-core-common';
-import { ClientAppContribution } from '@ali/ide-core-browser';
+import { Autowired } from '@opensumi/di';
+import { Disposable, Domain } from '@opensumi/ide-core-common';
+import { ClientAppContribution } from '@opensumi/ide-core-browser';
 
 import { ILanguageGrammarRegistrationService } from './base';
 

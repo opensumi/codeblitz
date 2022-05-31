@@ -1,14 +1,14 @@
-import { Injectable, Autowired } from '@ali/common-di';
-import { replaceLocalizePlaceholder, URI } from '@ali/ide-core-browser';
-import { posix } from '@ali/ide-core-common/lib/path';
+import { Injectable, Autowired } from '@opensumi/di';
+import { replaceLocalizePlaceholder, URI } from '@opensumi/ide-core-browser';
+import { posix } from '@opensumi/ide-core-common/lib/path';
 import { action, observable, computed, runInAction } from 'mobx';
 import {
   IExtensionProps,
   AbstractExtensionManagementService,
-} from '@ali/ide-kaitian-extension/lib/common';
-import { AbstractExtInstanceManagementService } from '@ali/ide-kaitian-extension/lib/browser/types';
-import { StaticResourceService } from '@ali/ide-static-resource/lib/browser';
-import { EditorPreferences, WorkbenchEditorService } from '@ali/ide-editor/lib/browser';
+} from '@opensumi/ide-extension/lib/common';
+import { AbstractExtInstanceManagementService } from '@opensumi/ide-extension/lib/browser/types';
+import { StaticResourceService } from '@opensumi/ide-static-resource/lib/browser';
+import { EditorPreferences, WorkbenchEditorService } from '@opensumi/ide-editor/lib/browser';
 
 import {
   IExtension,

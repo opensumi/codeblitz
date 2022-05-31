@@ -1,6 +1,6 @@
 {
   "name": "@alipay/alex-cli",
-  "version": "1.9.12",
+  "version": "2.0.0-beta.3",
   "description": "@alipay/alex-cli",
   "main": "lib/commander.js",
   "files": [
@@ -10,17 +10,17 @@
     "kaitian AntCodespaces"
   ],
   "engines": {
-    "kaitian": "2.5.5",
+    "kaitian": "2.16.1",
     "node": ">=10.0.0"
   },
   "scripts": {},
   "publishConfig": {
-    "registry": "https://registry.npm.alibaba-inc.com"
+    "registry": "https://registry.antfin-inc.com"
   },
   "dependencies": {
     "@ali/ide-extension-installer": "^2.0.0",
-    "@ali/ide-kaitian-extension": "2.5.5",
-    "@alipay/alex-shared": "1.9.12",
+    "@opensumi/ide-extension": "2.16.1",
+    "@alipay/alex-shared": "2.0.0-beta.3",
     "commander": "^7.2.0",
     "fs-extra": "^9.0.1",
     "lodash.pick": "^4.4.0",

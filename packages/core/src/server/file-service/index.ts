@@ -1,4 +1,4 @@
-import { Injectable, Provider } from '@ali/common-di';
+import { Injectable, Provider } from '@opensumi/di';
 import { IDiskFileProvider, DiskFileServicePath, IFileService, FileServicePath } from './base';
 import { NodeModule } from '../core/app';
 import { DiskFileSystemProvider } from './disk-file-system.provider';

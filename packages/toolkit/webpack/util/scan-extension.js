@@ -1,8 +1,8 @@
 const path = require('path');
 const fs = require('fs/promises');
-const { ExtensionScanner } = require('@ali/ide-kaitian-extension/lib/node/extension.scanner');
+const { ExtensionScanner } = require('@opensumi/ide-extension/lib/node/extension.scanner');
 const { getExtension } = require('@alipay/alex-cli/lib/extension/scanner');
-const { Uri } = require('@ali/ide-core-common');
+const { Uri } = require('@opensumi/ide-core-common');
 
 /**
  * @param {string} p

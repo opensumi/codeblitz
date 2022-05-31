@@ -1,4 +1,4 @@
-import type { IFileSearchService as _IFileSearchService } from '@ali/ide-file-search/lib/common';
+import type { IFileSearchService as _IFileSearchService } from '@opensumi/ide-file-search/lib/common';
 
 export interface IFileSearchService extends _IFileSearchService {}
 

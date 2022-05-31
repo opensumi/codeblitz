@@ -1,10 +1,10 @@
-import { Injectable, Autowired } from '@ali/common-di';
-import { BreadCrumbServiceImpl } from '@ali/ide-editor/lib/browser/breadcrumb';
-import { URI, MaybeNull } from '@ali/ide-core-browser';
-import { IEditor } from '@ali/ide-editor/lib/common';
+import { Injectable, Autowired } from '@opensumi/di';
+import { BreadCrumbServiceImpl } from '@opensumi/ide-editor/lib/browser/breadcrumb';
+import { URI, MaybeNull } from '@opensumi/ide-core-browser';
+import { IEditor } from '@opensumi/ide-editor/lib/common';
 import { RuntimeConfig } from '../../common/types';
 
-export { IBreadCrumbService } from '@ali/ide-editor/lib/browser/types';
+export { IBreadCrumbService } from '@opensumi/ide-editor/lib/browser/types';
 
 @Injectable()
 export class BreadCrumbServiceImplOverride extends BreadCrumbServiceImpl {

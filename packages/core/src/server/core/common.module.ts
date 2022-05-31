@@ -1,5 +1,5 @@
-import { Injectable } from '@ali/common-di';
-import { ICommonServer, CommonServerPath } from '@ali/ide-core-common';
+import { Injectable } from '@opensumi/di';
+import { ICommonServer, CommonServerPath } from '@opensumi/ide-core-common';
 import { NodeModule } from './app';
 import { CommonServer } from './common.server';
 import { FileSystemContribution } from './base';

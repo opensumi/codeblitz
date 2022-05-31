@@ -1,5 +1,5 @@
-import { Autowired } from '@ali/common-di';
-import { Disposable } from '@ali/ide-core-common';
+import { Autowired } from '@opensumi/di';
+import { Disposable } from '@opensumi/ide-core-common';
 import {
   ClientAppContribution,
   CommandContribution,
@@ -11,9 +11,9 @@ import {
   TabBarToolbarContribution,
   ToolbarRegistry,
   IRange,
-} from '@ali/ide-core-browser';
-import { IMenuRegistry, MenuId, MenuContribution } from '@ali/ide-core-browser/lib/menu/next';
-import { PreferenceScope } from '@ali/ide-core-common';
+} from '@opensumi/ide-core-browser';
+import { IMenuRegistry, MenuId, MenuContribution } from '@opensumi/ide-core-browser/lib/menu/next';
+import { PreferenceScope } from '@opensumi/ide-core-common';
 
 import { IAntcodeService } from '../../antcode-service/base';
 import { OpenChangeFilesService } from '../../open-change-files';
@@ -22,7 +22,10 @@ import { ChangesTreeService } from './changes-tree.service';
 import { ChangesTreeCommands, ChangesTreeViewId } from './common';
 import { reportWarmBoot, reportCoolBoot } from '../../../utils/monitor';
 import { isFirstRendered, markFirstRendered } from '../../../rendered-marker';
-import { BrowserEditorContribution, IEditorFeatureRegistry } from '@ali/ide-editor/lib/browser';
+import {
+  BrowserEditorContribution,
+  IEditorFeatureRegistry,
+} from '@opensumi/ide-editor/lib/browser';
 import { isChangeFileURI } from './util';
 
 @Domain(

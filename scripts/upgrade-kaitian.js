@@ -8,7 +8,7 @@ const { StringDecoder } = require('string_decoder');
 
 const depsFileds = require('./deps-fileds');
 
-const pkg = '@ali/ide-core-common';
+const pkg = '@opensumi/ide-core-common';
 
 invoke(async () => {
   const v = args.v || args.version;
@@ -51,7 +51,7 @@ async function getOrCheckVersion(version) {
 async function getKaitianDeps(v) {
   return new Promise((resolve, reject) => {
     const decoder = new StringDecoder('utf8');
-    https.get(`https://g.alipay.com/@ali/kaitian@${v}/manifest.json`, (res) => {
+    https.get(`https://unpkg.com/@opensumi/sumi@${v}/manifest.json`, (res) => {
       const { statusCode } = res;
       if (statusCode >= 200 && statusCode < 300) {
         let text = '';

@@ -1,5 +1,8 @@
-import { Domain } from '@ali/ide-core-common';
-import { BrowserEditorContribution, EditorComponentRegistry } from '@ali/ide-editor/lib/browser';
+import { Domain } from '@opensumi/ide-core-common';
+import {
+  BrowserEditorContribution,
+  EditorComponentRegistry,
+} from '@opensumi/ide-editor/lib/browser';
 import { ExpandBtn } from './editor-expand-btn';
 
 /**

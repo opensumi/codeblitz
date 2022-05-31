@@ -1,6 +1,6 @@
-import { ModuleConstructor } from '@ali/ide-core-browser';
+import { ModuleConstructor } from '@opensumi/ide-core-browser';
 import { IAppOpts } from '@alipay/alex-core';
-import { getThemeId, getThemeType, ThemeContribution, BuiltinTheme } from '@ali/ide-theme';
+import { getThemeId, getThemeType, ThemeContribution, BuiltinTheme } from '@opensumi/ide-theme';
 import { IExtensionBasicMetadata } from '@alipay/alex-shared';
 
 import { IAppConfig } from '../api/types';

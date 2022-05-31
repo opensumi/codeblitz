@@ -1,5 +1,5 @@
-import { Provider, Injectable } from '@ali/common-di';
-import { BrowserModule } from '@ali/ide-core-browser';
+import { Provider, Injectable } from '@opensumi/di';
+import { BrowserModule } from '@opensumi/ide-core-browser';
 import { ExtensionManagerContribution } from './extension-manager.contribution';
 import { ExtensionManagerService } from './extension-manager.service';
 import { IExtensionManagerService } from './base';

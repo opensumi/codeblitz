@@ -1,11 +1,11 @@
-import { Autowired } from '@ali/common-di';
-import { Domain, URI, AppConfig, ClientAppContribution } from '@ali/ide-core-browser';
-import { IFileServiceClient } from '@ali/ide-file-service';
-import { FileServiceClient } from '@ali/ide-file-service/lib/browser/file-service-client';
+import { Autowired } from '@opensumi/di';
+import { Domain, URI, AppConfig, ClientAppContribution } from '@opensumi/ide-core-browser';
+import { IFileServiceClient } from '@opensumi/ide-file-service';
+import { FileServiceClient } from '@opensumi/ide-file-service/lib/browser/file-service-client';
 import {
   StaticResourceContribution,
   StaticResourceService,
-} from '@ali/ide-static-resource/lib/browser/static.definition';
+} from '@opensumi/ide-static-resource/lib/browser/static.definition';
 
 import { KaitianExtFsProvider } from './fs-provider';
 
@@ -13,7 +13,8 @@ const EXPRESS_SERVER_PATH = window.location.href;
 
 @Domain(ClientAppContribution, StaticResourceContribution)
 export class KtExtFsProviderContribution
-  implements ClientAppContribution, StaticResourceContribution {
+  implements ClientAppContribution, StaticResourceContribution
+{
   @Autowired(IFileServiceClient)
   private readonly fileSystem: FileServiceClient;
 
