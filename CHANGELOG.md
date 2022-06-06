@@ -28,6 +28,52 @@
 
 
 ## [1.9.10](https://code.alipay.com/cloud-ide/crew-dragon/compare/v1.9.9...v1.9.10) (2022-04-24)
+# [2.0.0-beta.4](https://code.alipay.com/cloud-ide/crew-dragon/compare/v2.0.0-beta.3...v2.0.0-beta.4) (2022-05-18)
+
+
+### Bug Fixes
+
+* fileTree createFile error ([0f7a751](https://code.alipay.com/cloud-ide/crew-dragon/commits/0f7a751758302add717625e40df85c84e9593def))
+
+
+### Features
+
+* add scm module ([ce5226f](https://code.alipay.com/cloud-ide/crew-dragon/commits/ce5226f729fbf438b8db0461f9b5eacd9b737715))
+* add web-scm ([5b2d17e](https://code.alipay.com/cloud-ide/crew-dragon/commits/5b2d17ee6b94150290e7a1fd8b81e241ab3fea49))
+* update ([d61af5c](https://code.alipay.com/cloud-ide/crew-dragon/commits/d61af5c239238ef5b484c6d283cb699143585663))
+* update codeService ([6e6b52f](https://code.alipay.com/cloud-ide/crew-dragon/commits/6e6b52f60b5f58eb3f5c9471d54aad95cbe1bcfe))
+
+
+
+# [2.0.0-beta.3](https://code.alipay.com/cloud-ide/crew-dragon/compare/v1.9.9...v2.0.0-beta.3) (2022-03-24)
+
+
+### Bug Fixes
+
+* ci ([13e12db](https://code.alipay.com/cloud-ide/crew-dragon/commits/13e12db7983e34b972466997d678a3a15bc01f28))
+
+
+
+# [2.0.0-beta.2](https://code.alipay.com/cloud-ide/crew-dragon/compare/v2.0.0-beta.1...v2.0.0-beta.2) (2022-03-03)
+
+
+
+# [2.0.0-beta.1](https://code.alipay.com/cloud-ide/crew-dragon/compare/v1.9.8...v2.0.0-beta.1) (2022-03-02)
+
+
+### Bug Fixes
+
+* 修改缺失文件内容监听 ([a1dcebe](https://code.alipay.com/cloud-ide/crew-dragon/commits/a1dcebe47a81f7861fa6307042b2d0626b13aab3))
+
+
+### Features
+
+* update opensumi 2.14.2 ([ee577dc](https://code.alipay.com/cloud-ide/crew-dragon/commits/ee577dcc1fdd513f5742308f8e718489f8a7bc82))
+
+
+### Bug Fixes
+
+* 修改缺失文件内容监听 ([a1dcebe](https://code.alipay.com/cloud-ide/crew-dragon/commits/a1dcebe47a81f7861fa6307042b2d0626b13aab3))
 
 
 ### Features
@@ -54,6 +100,7 @@
 
 * update opensumi 2.14.2 ([ee577dc](https://code.alipay.com/cloud-ide/crew-dragon/commits/ee577dcc1fdd513f5742308f8e718489f8a7bc82))
 * 修复 snippet 路径协议问题 ([4a3ddf6](https://code.alipay.com/cloud-ide/crew-dragon/commits/4a3ddf6a5a9efb1fd2ac1a6b7025417da9f005ef))
+* update opensumi 2.14.2 ([ee577dc](https://code.alipay.com/cloud-ide/crew-dragon/commits/ee577dcc1fdd513f5742308f8e718489f8a7bc82))
 
 
 
@@ -64,7 +111,7 @@
 
 * 防止主题dispose后黑屏 ([d2998a8](https://code.alipay.com/cloud-ide/crew-dragon/commits/d2998a8c6cc9a3dbafc3d7cfe3f2fc3b9dbdcafe))
 * 修复调用命令面板时报错 ([795a235](https://code.alipay.com/cloud-ide/crew-dragon/commits/795a23541a26d191455f5ff691324e5c722df2f6))
-* 修复评论icon不展示问题 ([119a349](https://code.alipay.com/cloud-ide/crew-dragon/commits/119a349f9457f3091d99580546b3d033138b92c6))
+* 修复评论icon不展示问题 ([119a349](https://code.alipay.com/cloud-ide/crew-dragon/commits/119a349f9457f3091d99580546b3d033138b92c6))
 
 
 ### Features

@@ -421,10 +421,9 @@ export class FileService extends FCService implements IFileService {
     this.filesExcludes.forEach((str) => {
       if (this.workspaceRoots.length > 0) {
         this.workspaceRoots.forEach((root: string) => {
-          // FIXME: 这里为啥不直接 path.join，toString(true) ?# 也会转码，和实际路径可能不匹配
           const uri = new URI(root);
-          const uriWithExclude = uri.resolve(str).withoutScheme();
-          this.filesExcludesMatcherList.push(parse(uriWithExclude.toString(true)));
+          const uriWithExclude = uri.resolve(str).path.toString();
+          this.filesExcludesMatcherList.push(parse(uriWithExclude));
         });
       } else {
         this.filesExcludesMatcherList.push(parse(str));
@@ -436,7 +435,7 @@ export class FileService extends FCService implements IFileService {
     const uri = new URI(uriString);
 
     return this.filesExcludesMatcherList.some((matcher) => {
-      return matcher(uri.withoutScheme().toString(true));
+      return matcher(uri.path.toString());
     });
   }
 

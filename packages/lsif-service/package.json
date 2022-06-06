@@ -1,6 +1,6 @@
 {
   "name": "@alipay/alex-lsif-service",
-  "version": "2.0.0-beta.3",
+  "version": "2.0.0-beta.4",
   "description": "@alipay/alex-lsif-service",
   "main": "lib/index.js",
   "typings": "lib/index.d.ts",
@@ -19,13 +19,13 @@
     "lockfile": "enable"
   },
   "dependencies": {
-    "@alipay/alex-core": "2.0.0-beta.3",
-    "@alipay/alex-shared": "2.0.0-beta.3",
+    "@alipay/alex-core": "2.0.0-beta.4",
+    "@alipay/alex-shared": "2.0.0-beta.4",
     "@alipay/lsif-client": "^2.0.0",
     "tslib": "^2.2.0"
   },
   "peerDependencies": {
-    "@opensumi/ide-core-common": "2.16.1",
-    "@opensumi/ide-extension": "2.16.1"
+    "@opensumi/ide-core-common": "2.17.0",
+    "@opensumi/ide-extension": "2.17.0"
   }
 }

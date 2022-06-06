@@ -11,6 +11,7 @@ import type {
   IRepositoryModel,
   BranchOrTag,
   CommitParams,
+  Branch,
 } from '../common/types';
 import { CodePlatform, CommitFileStatus } from '../common/types';
 
@@ -61,6 +62,9 @@ export class GitLabAPIService implements ICodeAPIService {
 
   constructor() {
     this._PRIVATE_TOKEN = this.config.token || this.helper.GITLAB_TOKEN;
+  }
+  getUser(repo: IRepositoryModel): Promise<Branch> {
+    throw new Error('Method not implemented.');
   }
 
   async available() {
@@ -333,5 +337,16 @@ export class GitLabAPIService implements ICodeAPIService {
       type: toType(d),
       ...toChangeLines(d.diff),
     }));
+  }
+
+  async bulkChangeFiles() {
+    return [];
+  }
+
+  async getFiles() {
+    return [];
+  }
+  createBranch(repo: IRepositoryModel, newBranch: string): Promise<any> {
+    throw new Error('Method not implemented.');
   }
 }

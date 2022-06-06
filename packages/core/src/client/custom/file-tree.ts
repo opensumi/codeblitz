@@ -14,12 +14,7 @@ import {
   ComponentRegistryInfo,
   useInjectable,
 } from '@opensumi/ide-core-browser';
-import {
-  MenuContribution,
-  IMenuRegistry,
-  MenuId,
-  IMenuItem,
-} from '@opensumi/ide-core-browser/lib/menu/next';
+import { MenuContribution, IMenuRegistry, MenuId } from '@opensumi/ide-core-browser/lib/menu/next';
 import { WorkbenchEditorService } from '@opensumi/ide-editor/lib/browser';
 import { TabRendererBase } from '@opensumi/ide-main-layout/lib/browser/tabbar/renderer.view';
 import { LeftTabPanelRenderer } from '@opensumi/ide-main-layout/lib/browser/tabbar/panel.view';
@@ -30,6 +25,7 @@ import {
 import { RuntimeConfig } from '../../common/types';
 
 /**
+ * TODO SCM 完善文件系统
  * 禁用掉文件树的新增、删除、重命名等操作，用于纯编辑场景
  */
 @Domain(MenuContribution, CommandContribution, KeybindingContribution, SlotRendererContribution)
@@ -53,59 +49,34 @@ export class FileTreeCustomContribution
     if (this.runtimeConfig.unregisterActivityBarExtra) {
       menuRegistry.unregisterMenuId(MenuId.ActivityBarExtra);
     }
-
-    if (!this.runtimeConfig.disableModifyFileTree) return;
-
-    const isDisabled = (commads: Command[], command: Command | string) => {
-      return commads.some((cmd) => {
-        const cmdId = typeof command === 'string' ? command : command.id;
-        return cmd.id === cmdId;
-      });
-    };
-
-    const viewTitleCommand = [
-      FILE_COMMANDS.NEW_FILE,
-      FILE_COMMANDS.NEW_FOLDER,
-      FILE_COMMANDS.RENAME_FILE,
-      FILE_COMMANDS.DELETE_FILE,
-    ];
-    const viewTitle = menuRegistry.getMenuItems(MenuId.ViewTitle);
-    viewTitle.forEach((item: IMenuItem) => {
-      if (isDisabled(viewTitleCommand, item.command)) {
-        item.when = 'false';
-      }
-    });
-
-    const exploreCommand = [
-      ...viewTitleCommand,
-      FILE_COMMANDS.CUT_FILE,
-      FILE_COMMANDS.COPY_FILE,
-      FILE_COMMANDS.PASTE_FILE,
-    ];
-    const exploreItems = menuRegistry.getMenuItems(MenuId.ExplorerContext);
-    exploreItems.forEach((item: IMenuItem) => {
-      if (isDisabled(exploreCommand, item.command)) {
-        item.when = 'false';
-      }
-    });
   }
 
   registerCommands(commands: CommandRegistry) {
-    if (!this.runtimeConfig.disableModifyFileTree) return;
-
-    const fileCommand = [
-      FILE_COMMANDS.NEW_FILE,
-      FILE_COMMANDS.NEW_FOLDER,
+    const SCMFileCommand = [
       FILE_COMMANDS.RENAME_FILE,
       FILE_COMMANDS.DELETE_FILE,
+      FILE_COMMANDS.COPY_FILE,
+      FILE_COMMANDS.PASTE_FILE,
+      FILE_COMMANDS.CUT_FILE,
     ];
+
+    if (this.runtimeConfig.scmFileTree) {
+      SCMFileCommand.forEach((cmd) => {
+        commands.unregisterCommand(cmd.id);
+        commands.registerCommand({ id: cmd.id });
+      });
+    }
+    if (!this.runtimeConfig.disableModifyFileTree) return;
+
+    const fileCommand = [FILE_COMMANDS.NEW_FILE, FILE_COMMANDS.NEW_FOLDER, ...SCMFileCommand];
     fileCommand.forEach((cmd) => {
       commands.unregisterCommand(cmd.id);
+      commands.registerCommand({ id: cmd.id });
     });
   }
 
   registerKeybindings(bindings: KeybindingRegistry) {
-    if (!this.runtimeConfig.disableModifyFileTree) return;
+    if (!this.runtimeConfig.disableModifyFileTree || !this.runtimeConfig.scmFileTree) return;
 
     const keybinding = [
       {

@@ -14,6 +14,7 @@ import type {
   BranchOrTag,
   CommitParams,
   CommitFileChange,
+  Branch,
 } from '../common/types';
 import { CodePlatform, CommitFileStatus } from '../common/types';
 import { CODE_PLATFORM_CONFIG } from '../common/config';
@@ -65,7 +66,12 @@ export class GitHubAPIService implements ICodeAPIService {
   constructor() {
     this._OAUTH_TOKEN = this.config.token || this.helper.GITHUB_TOKEN;
   }
-
+  getUser(repo: IRepositoryModel): Promise<Branch> {
+    throw new Error('Method not implemented.');
+  }
+  createBranch(repo: IRepositoryModel, newBranch: string, ref: string): Promise<Branch> {
+    throw new Error('Method not implemented.');
+  }
   async available() {
     const token = this._OAUTH_TOKEN;
     await this.getRateLimit(token);
@@ -662,5 +668,12 @@ export class GitHubAPIService implements ICodeAPIService {
   // TODO: graphql
   async getCommitCompare(repo: IRepositoryModel, from: string, to: string) {
     return this.rest.getCommitCompare(repo, from, to);
+  }
+
+  async getFiles(repo: IRepositoryModel) {
+    return [];
+  }
+  async bulkChangeFiles() {
+    return [];
   }
 }

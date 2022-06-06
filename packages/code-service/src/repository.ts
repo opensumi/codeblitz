@@ -75,8 +75,9 @@ export class Repository implements IRepositoryModel {
   set commit(value: string) {
     if (value !== this._commit) {
       this._commit = value;
-      this._onDidChangeCommit.fire();
     }
+    // 切相同commit分支
+    this._onDidChangeCommit.fire();
   }
 
   get request(): ICodeAPIProxy {
@@ -249,7 +250,12 @@ export class RootRepository extends Repository {
     }
   }
 
-  @memoize
+  async refreshRepository(commit: string, ref: string) {
+    this.commit = commit;
+    this.ref = ref;
+    await this.getRefs();
+  }
+
   async getRefs() {
     const [branches, tags] = await Promise.all([
       this.request.getBranches().catch(() => []),

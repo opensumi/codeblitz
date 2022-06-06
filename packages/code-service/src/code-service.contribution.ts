@@ -12,6 +12,8 @@ import {
   FileChangeType,
   IDisposable,
   IEventBus,
+  Command,
+  MessageType,
 } from '@opensumi/ide-core-common';
 import {
   LaunchContribution,
@@ -25,21 +27,48 @@ import {
 import { IFileTreeService } from '@opensumi/ide-file-tree-next';
 import { FileTreeService } from '@opensumi/ide-file-tree-next/lib/browser/file-tree.service';
 import { FileTreeModelService } from '@opensumi/ide-file-tree-next/lib/browser/services/file-tree-model.service';
-import { IMessageService } from '@opensumi/ide-overlay';
+import { IMessageService, IDialogService } from '@opensumi/ide-overlay';
 import {
   BrowserEditorContribution,
   WorkbenchEditorService,
 } from '@opensumi/ide-editor/lib/browser';
 import * as path from 'path';
-import { QuickPickService } from '@opensumi/ide-quick-open';
+import { QuickPickService, IQuickInputService } from '@opensumi/ide-quick-open';
 import { IDiskFileProvider, FileAccess } from '@opensumi/ide-file-service';
 import { DiskFsProviderClient } from '@opensumi/ide-file-service/lib/browser/file-service-provider-client';
 import { MainLayoutContribution } from '@opensumi/ide-main-layout';
 import configureFileSystem from './filesystem/configure';
 import { CodeModelService } from './code-model.service';
-import { RefType, ICodeServiceConfig } from './types';
+import { RefType, ICodeServiceConfig, CodePlatform } from './types';
 import { Configure } from './config.service';
+import { ISCMRepository, SCMService, ISCMResource, ISCMResourceGroup } from '@opensumi/ide-scm';
 
+namespace CODE_SERVICE_COMMANDS {
+  const CATEGORY = 'CodeService';
+
+  export const CREATEBRANCH: Command = {
+    id: 'code-service.createBranch',
+    category: CATEGORY,
+  };
+  export const CREATEBRANCHFROM: Command = {
+    id: 'code-service.createBranchFrom',
+    category: CATEGORY,
+  };
+  export const CHECKOUT_BRANCH: Command = {
+    id: 'code-service.checkout',
+    category: CATEGORY,
+    label: localize('code-service.command.checkout'),
+  };
+  export const REINITIALIZE: Command = {
+    id: 'code-service.reinitialize',
+    category: CATEGORY,
+  };
+}
+
+enum PickBranch {
+  CREATEBRANCH = 'createBranch',
+  CREATEBRANCHFROM = 'createBranchFrom',
+}
 @Domain(LaunchContribution, BrowserEditorContribution, CommandContribution, MainLayoutContribution)
 export class CodeContribution
   implements
@@ -60,6 +89,9 @@ export class CodeContribution
   @Autowired(IMessageService)
   messageService: IMessageService;
 
+  @Autowired(IDialogService)
+  dialogService: IDialogService;
+
   @Autowired(IReporterService)
   reporter: IReporterService;
 
@@ -78,6 +110,9 @@ export class CodeContribution
   @Autowired(QuickPickService)
   protected quickPickService: QuickPickService;
 
+  @Autowired(IQuickInputService)
+  protected quickInputService: IQuickInputService;
+
   @Autowired(IDiskFileProvider)
   diskFile: DiskFsProviderClient;
 
@@ -89,6 +124,9 @@ export class CodeContribution
 
   @Autowired(Configure)
   configure: Configure;
+
+  @Autowired(SCMService)
+  scmService: SCMService;
 
   private _unmount: () => void | undefined;
 
@@ -134,21 +172,7 @@ export class CodeContribution
           for (const uri of closes) {
             await this.editorService.close(uri);
           }
-          const { currentResource } = this.editorService;
-          if (currentResource && currentResource.uri.scheme === 'file') {
-            this.codeModel.replaceBrowserUrl({
-              type: 'blob',
-              filepath: path.relative(
-                this.appConfig.workspaceDir,
-                currentResource.uri.codeUri.path
-              ),
-            });
-          } else {
-            this.codeModel.replaceBrowserUrl({
-              type: 'tree',
-              filepath: '',
-            });
-          }
+          this.replaceModelBroswerUri();
         });
       });
     });
@@ -160,9 +184,32 @@ export class CodeContribution
     await initMountDefer.promise;
   }
 
+  replaceModelBroswerUri() {
+    const { currentResource } = this.editorService;
+    if (currentResource && currentResource.uri.scheme === 'file') {
+      this.codeModel.replaceBrowserUrl({
+        type: 'blob',
+        filepath: path.relative(this.appConfig.workspaceDir, currentResource.uri.codeUri.path),
+      });
+    } else {
+      this.codeModel.replaceBrowserUrl({
+        type: 'tree',
+        filepath: '',
+      });
+    }
+  }
+
   async mountFilesystem(rootFS: RootFS) {
     if (this._mounting) return;
     this._mounting = true;
+
+    const scmRepository = this.scmService.repositories[0];
+
+    if (scmRepository && scmRepository.provider.contextValue === 'webscm') {
+      // const choose = await this.dialogService.warning(formatLocalize('code-service.command.scm-checkout-info'),[formatLocalize('common.cancel'),formatLocalize('common.continue')])
+
+      this.commandService.tryExecuteCommand('web-scm.checkout');
+    }
 
     try {
       const { workspaceDir } = this.appConfig;
@@ -223,52 +270,134 @@ export class CodeContribution
 
   registerCommands(commandRegistry: CommandRegistry) {
     this._disposables.push(
-      commandRegistry.registerCommand(
-        {
-          category: 'Code Service',
-          label: localize('code-service.command.checkout'),
-          id: 'code-service.checkout',
-        },
-        {
-          execute: async () => {
-            const { rootRepository: repo } = this.codeModel;
-            await repo.refsInitialized;
-            const getShortCommit = (commit: string) => (commit || '').substr(0, 8);
-            const refs = [...repo.refs.branches, ...repo.refs.tags];
-            const value = await this.quickPickService.show(
-              refs.map((ref, index) => ({
-                value: index,
-                label: ref.name,
-                description: `${ref.type === RefType.Tag ? 'Tag at ' : ''}${getShortCommit(
-                  ref.commit
-                )}`,
-              })),
-              {
-                placeholder: localize('code-service.select-ref-to-checkout'),
-              }
-            );
-            if (typeof value === 'number') {
-              const target = refs[value];
-              if (target.commit === repo.commit) {
+      commandRegistry.registerCommand(CODE_SERVICE_COMMANDS.CHECKOUT_BRANCH, {
+        execute: async () => {
+          const { rootRepository: repo } = this.codeModel;
+          await repo.refsInitialized;
+          const getShortCommit = (commit: string) => (commit || '').substr(0, 8);
+          // TODO 支持其他平台
+          const createBranch =
+            repo.platform !== CodePlatform.antcode
+              ? []
+              : [
+                  {
+                    name: localize('code-service.command.create-branch'),
+                    commit: '',
+                    type: PickBranch.CREATEBRANCH,
+                  },
+                  {
+                    name: localize('code-service.command.create-branch-from'),
+                    commit: '',
+                    type: PickBranch.CREATEBRANCHFROM,
+                  },
+                ];
+          const refs = [...createBranch, ...repo.refs.branches, ...repo.refs.tags];
+
+          const quickPickRef = refs.map((ref, index) => ({
+            value: index,
+            label: ref.name,
+            description: `${ref.type === RefType.Tag ? 'Tag at ' : ''}${getShortCommit(
+              ref.commit
+            )}`,
+          }));
+
+          const value = await this.quickPickService.show([...quickPickRef], {
+            placeholder: localize('code-service.select-ref-to-checkout'),
+          });
+          if (typeof value === 'number') {
+            const target = refs[value];
+            if (target.type === PickBranch.CREATEBRANCH) {
+              this.commandService.executeCommand('code-service.createBranch');
+              return;
+            } else if (target.type === PickBranch.CREATEBRANCHFROM) {
+              this.commandService.executeCommand('code-service.createBranchFrom');
+              return;
+            }
+            if (target.commit === repo.commit) {
+              if (target.name === repo.ref) {
                 this.messageService.warning(localize('code-service.checkout-to-same'));
                 return;
               }
-              this.messageService.info(formatLocalize('code-service.checkout-to', target.name));
-              repo.ref = target.name;
-              repo.commit = target.commit;
             }
-          },
-        }
-      ),
+            this.messageService.info(formatLocalize('code-service.checkout-to', target.name));
+            repo.ref = target.name;
+            repo.commit = target.commit;
+          }
+        },
+      }),
 
-      commandRegistry.registerCommand(
-        { id: 'code-service.reinitialize' },
-        {
-          execute: () => {
-            this.codeModel.reinitialize();
-          },
-        }
-      )
+      commandRegistry.registerCommand(CODE_SERVICE_COMMANDS.REINITIALIZE, {
+        execute: () => {
+          this.codeModel.reinitialize();
+        },
+      }),
+      commandRegistry.registerCommand(CODE_SERVICE_COMMANDS.CREATEBRANCH, {
+        execute: async () => {
+          const { rootRepository: repo } = this.codeModel;
+          const newBranchName = await this.quickInputService.open({
+            placeHolder: formatLocalize('code-service.command.new-branch-name'),
+          });
+          const refBranches = [...repo.refs.branches];
+          if (!newBranchName) {
+            return;
+          }
+          if (!refBranches.find((b) => b.name === newBranchName)) {
+            const branch = await repo.request.createBranch(newBranchName, repo.commit);
+            if (branch) {
+              this.messageService.info(
+                formatLocalize('code-service.command.create-branch-success', newBranchName)
+              );
+              await repo.refreshRepository(branch.commit.id, branch.name);
+            }
+          } else {
+            this.messageService.error(
+              formatLocalize('code-service.command.create-branch-error', newBranchName)
+            );
+          }
+        },
+      }),
+      commandRegistry.registerCommand(CODE_SERVICE_COMMANDS.CREATEBRANCHFROM, {
+        execute: async () => {
+          const { rootRepository: repo } = this.codeModel;
+          const newBranchName = await this.quickInputService.open({
+            placeHolder: formatLocalize('code-service.command.new-branch-name'),
+          });
+          if (!newBranchName) {
+            return;
+          }
+          if (repo.refs.branches.find((b) => b.name === newBranchName)) {
+            this.messageService.error(
+              formatLocalize('code-service.command.create-branch-error', newBranchName)
+            );
+            return;
+          }
+          const getShortCommit = (commit: string) => (commit || '').substr(0, 8);
+          const refs = [...repo.refs.branches, ...repo.refs.tags];
+          const quickPickRef = refs.map((ref, index) => ({
+            value: index,
+            label: ref.name,
+            description: `${ref.type === RefType.Tag ? 'Tag at ' : ''}${getShortCommit(
+              ref.commit
+            )}`,
+          }));
+          const value = await this.quickPickService.show([...quickPickRef], {
+            placeholder: localize(
+              'code-service.command.select-ref-to-create-branch',
+              newBranchName
+            ),
+          });
+          if (typeof value === 'number') {
+            const target = refs[value];
+            const branch = await repo.request.createBranch(newBranchName, target.commit);
+            if (branch) {
+              this.messageService.info(
+                formatLocalize('code-service.command.create-branch-success', newBranchName)
+              );
+              await repo.refreshRepository(branch.commit.id, branch.name);
+            }
+          }
+        },
+      })
     );
   }
 

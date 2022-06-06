@@ -320,7 +320,7 @@ export class DiskFileSystemProvider extends FCService implements IDiskFileProvid
       onDidFilesChanged: (events: DidFilesChangedParams) => {
         const filteredChange = events.changes.filter((file) => {
           const uri = new URI(file.uri);
-          const uriString = uri.withoutScheme().toString();
+          const uriString = uri.path.toString();
           return !this.watchFileExcludesMatcherList.some((match) => match(uriString));
         });
         this.fileChangeEmitter.fire(filteredChange);
@@ -448,6 +448,11 @@ export class DiskFileSystemProvider extends FCService implements IDiskFileProvid
       return newStat;
     } else {
       await fse.move(_sourceUri.path, _targetUri.path, { overwrite });
+      const stat = await this.stat(_sourceUri);
+      // 文件夹重命名 会导致文件夹删不掉
+      if (stat) {
+        this.delete(_sourceUri, { recursive: true });
+      }
       const newStat = await this.doGetStat(_targetUri, 1);
       return newStat!;
     }

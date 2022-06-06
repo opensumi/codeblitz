@@ -18,9 +18,11 @@ import gitlens from '@alipay/alex/extensions/alex.gitlens';
 import graph from '@alipay/alex/extensions/alex.git-graph';
 import codeservice from '@alipay/alex/extensions/alex.code-service';
 import imagePreview from '@alipay/alex/extensions/alex.image-preview';
+import webSCM from '@alipay/alex/extensions/cloud-ide-ext.web-scm';
 
 import { LocalExtensionModule } from '../common/local-extension.module';
 import * as Plugin from '../editor/plugin';
+import * as SCMPlugin from './web-scm.plugin';
 
 (window as any).alex = Alex;
 
@@ -71,13 +73,14 @@ const App = () => (
       };
     }}
     appConfig={{
-      plugins: [Plugin],
+      plugins: [Plugin, SCMPlugin],
       modules: [
         CodeServiceModule.Config({
           platform,
           owner: config.owner,
           name: config.name,
           refPath: config.refPath,
+          commit: config.commit,
           hash: location.hash,
           antcode: {
             endpoint: '/code-service',
@@ -100,6 +103,7 @@ const App = () => (
         gitlens,
         graph,
         imagePreview,
+        webSCM,
       ],
       workspaceDir: `${platform}/${config.owner}/${config.name}`,
       layoutConfig,
@@ -109,8 +113,19 @@ const App = () => (
     }}
     runtimeConfig={{
       biz: 'alex',
+      scmFileTree: true,
+
       // unregisterActivityBarExtra: true,
       // hideLeftTabBar: true
+      // workspace: {
+      //   filesystem: {
+      //     fs: 'IndexedDB',
+      //     options: {
+      //       storeName: 'ALEX_HOME'
+      //       // cacheSize?: number;
+      //     }
+      //   }
+      // }
     }}
   />
 );

@@ -30,7 +30,7 @@ class ExtendedFileSystemResourceProvider extends FileSystemResourceProvider {
     return weight;
   }
 
-  provideResource(uri: URI): MaybePromise<IResource<any>> {
+  provideResource(uri: URI): Promise<IResource<any>> {
     // 为了让 file 协议文件不要默认打开
     return (super.provideResource(uri) as Promise<IResource<any>>).then((n) => ({
       ...n,

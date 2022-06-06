@@ -81,6 +81,34 @@ namespace CODE_SERVICE_COMMANDS {
     id: 'code-service._clipboard',
     category: CATEGORY,
   };
+  export const REPOSITORY: Command = {
+    id: 'code-service.repository',
+    category: CATEGORY,
+  };
+  export const GETTREE: Command = {
+    id: 'code-service.getTree',
+    category: CATEGORY,
+  };
+  export const CREATECOMMIT: Command = {
+    id: 'code-service.createCommit',
+    category: CATEGORY,
+  };
+  export const SEARCHFILES: Command = {
+    id: 'code-service.searchFiles',
+    category: CATEGORY,
+  };
+  export const GETFILES: Command = {
+    id: 'code-service.getFiles',
+    category: CATEGORY,
+  };
+  export const GETUSER: Command = {
+    id: 'code-service.getUser',
+    category: CATEGORY,
+  };
+  export const REFRESHWINDOW: Command = {
+    id: 'code-service.refreshWindow',
+    category: CATEGORY,
+  };
 }
 
 export enum RemoteResourceType {
@@ -139,6 +167,16 @@ export class CommandsContribution extends Disposable implements CommandContribut
       CODE_SERVICE_COMMANDS.CHECKOUT_BRANCH,
       CODE_SERVICE_COMMANDS.CHECKOUT_COMMIT,
       CODE_SERVICE_COMMANDS.CLIPBOARD,
+      // git
+      CODE_SERVICE_COMMANDS.REPOSITORY,
+      CODE_SERVICE_COMMANDS.GETTREE,
+      CODE_SERVICE_COMMANDS.CREATECOMMIT,
+      CODE_SERVICE_COMMANDS.SEARCHFILES,
+      CODE_SERVICE_COMMANDS.GETFILES,
+      CODE_SERVICE_COMMANDS.GETUSER,
+      CODE_SERVICE_COMMANDS.REFRESHWINDOW,
+      // CODE_SERVICE_COMMANDS.CREATEBRANCH,
+      // CODE_SERVICE_COMMANDS.CREATEBRANCHFROM,
     ];
     commandList.forEach((command) => {
       this.addDispose(
@@ -183,6 +221,56 @@ export class CommandsContribution extends Disposable implements CommandContribut
       branches: branches.map((br) => br.name),
       head,
     };
+  }
+
+  async repository() {
+    const { HEAD, commit, headLabel, name, owner, platform, ref, refs } =
+      this.codeModel.rootRepository;
+    return {
+      HEAD,
+      commit,
+      headLabel,
+      name,
+      owner,
+      platform,
+      ref,
+      // refs: refs
+    };
+  }
+
+  async createCommit(repoPath, actions, header) {
+    const repo = this.codeModel.getRepository(repoPath);
+    if (!repo) return;
+    return repo.request.bulkChangeFiles(actions, header);
+  }
+
+  async searchFiles(repoPath, searchString) {
+    const repo = this.codeModel.getRepository(repoPath);
+    if (!repo) return;
+    return repo.request.searchFile(searchString, {
+      limit: 100,
+    });
+  }
+
+  async getFiles(repoPath) {
+    const repo = this.codeModel.getRepository(repoPath);
+    if (!repo) return;
+    return repo.request.getFiles();
+  }
+
+  async getTree(repoPath: string, path: string) {
+    const repo = this.codeModel.getRepository(repoPath);
+    if (!repo) return;
+    return repo.request.getTree(path);
+  }
+
+  async getUser(repoPath: string) {
+    const repo = this.codeModel.getRepository(repoPath);
+    if (!repo) return;
+    return repo.request.getUser();
+  }
+  async refreshWindow() {
+    window.location.href = window.location.href;
   }
 
   async refs(repoPath: string): Promise<

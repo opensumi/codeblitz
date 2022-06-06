@@ -43,9 +43,16 @@ module.exports = () => {
             headers: {
               'PRIVATE-TOKEN': process.env.PRIVATE_TOKEN,
             },
+            secure: false,
             changeOrigin: true,
             pathRewrite: {
               '^/code-service': '',
+            },
+            onProxyReq(request) {
+              request.setHeader(
+                'origin',
+                process.env.CODE_SERVICE_HOST || 'https://code.alipay.com'
+              );
             },
           },
         },

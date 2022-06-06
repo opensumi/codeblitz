@@ -29,11 +29,8 @@ import { AntcodeCommentsService } from '../comments/comments.service';
 import { EditorGroupOpenEvent } from '@opensumi/ide-editor/lib/browser';
 import { isChangeFileURI } from '../merge-request/changes-tree/util';
 
-@Domain(CommandContribution, ClientAppContribution, MonacoContribution)
-export class DiffFoldingContribution
-  extends WithEventBus
-  implements MonacoContribution, CommandContribution
-{
+@Domain(CommandContribution, ClientAppContribution)
+export class DiffFoldingContribution extends WithEventBus implements CommandContribution {
   @Autowired(IEventBus)
   public readonly eventBus: IEventBus;
 

@@ -69,6 +69,8 @@ export interface RuntimeConfig {
   defaultOpenFile?: string | string[];
   /** 禁止文件树更改，此时无法新增、删除、重命名文件 */
   disableModifyFileTree?: boolean;
+  /** 禁止文件树，删除、重命名文件 待文件系统完善后加入删除重命名功能 */
+  scmFileTree?: boolean;
   /** 注销左下角 bar */
   unregisterActivityBarExtra?: boolean;
   /** 隐藏左侧 tabbar */

@@ -14,6 +14,8 @@ export interface RequestOptions extends RequestInit {
   data?: any;
   responseType?: ResponseType;
   validateStatus?: (status: number) => boolean;
+  actions?: any[];
+  header?: Record<string, any>;
 }
 
 export interface Request {

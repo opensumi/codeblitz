@@ -1,4 +1,4 @@
-import { BrowserFS, BrowserFSFileType } from '@alipay/alex-core';
+import { BrowserFS, BrowserFSFileType, WORKSPACE_IDB_NAME } from '@alipay/alex-core';
 import { CodeModelService } from '../code-model.service';
 import { Repository } from '../repository';
 import { TreeEntry } from '../types';

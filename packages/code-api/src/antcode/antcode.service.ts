@@ -5,6 +5,14 @@ import { REPORT_NAME } from '@alipay/alex-core';
 import { request, RequestOptions, isResponseError } from '@alipay/alex-shared';
 import { API } from './types';
 import {
+  Branch,
+  FileAction,
+  FileActionEncoding,
+  FileActionHeader,
+  FileActionResult,
+  FileActionType,
+} from '../common/types';
+import {
   ICodeAPIService,
   ISearchResults,
   EntryParam,
@@ -339,4 +347,44 @@ export class AntCodeAPIService implements ICodeAPIService {
       ...toChangeLines(d.diff),
     }));
   }
+
+  async bulkChangeFiles(repo: IRepositoryModel, actions: FileAction[], header: FileActionHeader) {
+    return (await this.request(`/api/v4/projects/${this.getProjectId(repo)}/repository/files`, {
+      data: {
+        actions: actions,
+        header: header,
+      },
+      method: 'post',
+    })) as FileActionResult[];
+  }
+
+  async getFiles(repo: IRepositoryModel): Promise<string[]> {
+    return await this.request(`/api/v3/projects/${this.getProjectId(repo)}/repository/files_list`, {
+      params: {
+        ref_name: repo.commit,
+      },
+    });
+  }
+
+  async createBranch(repo: IRepositoryModel, branchName: string, target: string) {
+    return this.request<Branch>(
+      `/api/v3/projects/${this.getProjectId(
+        repo
+      )}/repository/branches?branch_name=${branchName}&ref=${target}`,
+      {
+        method: 'post',
+      }
+    );
+  }
+
+  async getUser(): Promise<API.User> {
+    return await this.request(`/api/v3/user`);
+  }
+
+  // async function createPullRequest(data: CodeRegistryPullRequestCreateParameters): Promise<CodeRegistryPullRequest> {
+  //   return (await this.request(`/api/v3/projects/${this.getProjectId(repo)}/pull_requests`,{
+  //     data: data,
+  //     method: 'post',
+  //   }));
+  // }
 }

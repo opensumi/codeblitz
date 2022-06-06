@@ -70,4 +70,22 @@ export namespace API {
     compare_same_ref: boolean;
     compare_timeout: boolean;
   }
+  export interface User {
+    name: string;
+    email: string;
+    id: number;
+    username: string;
+    avatar_url: string;
+    bio: string;
+    department: string;
+    extern_uid: string;
+    identities: any;
+    is_admin: boolean;
+    private_token: string;
+    projects_limit: number;
+    role: number;
+    state: 'blocked' | 'active';
+    web_url: string;
+    website_url: string;
+  }
 }

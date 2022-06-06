@@ -110,6 +110,97 @@ export const enum CommitFileStatus {
   Renamed = 'R',
 }
 
+export interface FileAction {
+  actionType: FileActionType;
+  content: string;
+  encoding?: FileActionEncoding;
+  filePath: string;
+  charse?: string;
+}
+
+export enum FileActionType {
+  create = 'CREATE',
+  update = 'UPDATE',
+  delete = 'DELETE',
+}
+
+export enum FileActionEncoding {
+  text = 'text',
+  base64 = 'base64',
+}
+
+export interface FileActionHeader {
+  authorEmail: string;
+  authorName: string;
+  branch: string;
+  commitMessage: string;
+  lastCommitId?: string;
+  startBranch?: string;
+}
+
+export interface FileActionResult {
+  branchCreated: boolean;
+  branch: string;
+  commitId: string;
+  fileName: string;
+}
+
+export interface RepositoryFileModel {
+  content: string;
+  commitId: string;
+  fileName: string;
+  filePath: string;
+  ref: string;
+}
+
+export interface Branch {
+  name: string;
+  protect: boolean;
+  protected: boolean;
+  protectRuleExactMatched: boolean; // 是否通过名字精准匹配
+  protectRule: string; // 保护分支规则
+  mergeAccessLevel: string | number; // TODO: 后端接口转成字符串了，后面需要改成 number
+  pushAccessLevel: string | number; // TODO: 后端接口转成字符串了，后面需要改成 number
+  ref: string;
+  commit: Commit;
+  branchIterations?: Iteration[];
+  isCooperate?: boolean;
+}
+
+export interface Commit {
+  author_email: string;
+  author_name: string;
+  authored_date: string;
+  committed_date: string;
+  committer_email: string;
+  committer_name: string;
+  created_at: string;
+  id: string;
+  message: string;
+  parent_ids: string[];
+  short_id: string;
+  title: string;
+}
+export interface Iteration {
+  id: number;
+  projectId: number;
+  branch: string;
+  platform?: IterationPlatform;
+  iterationMark: string;
+  msgId: string;
+  releaseMode: string;
+  state: string;
+  title: string;
+  url: string;
+  crateAt: string;
+  updateAt: string;
+}
+export enum IterationPlatform {
+  linke = 'LINKE',
+  yuyan = 'YUYAN',
+  huoban = 'HUOBAN',
+}
+
 export const ICodeAPIProvider = Symbol('ICodeAPIProvider');
 
 export interface ICodeAPIProvider {
@@ -193,6 +284,28 @@ export interface ICodeAPIService {
    * compare commit
    */
   getCommitCompare(repo: IRepositoryModel, from: string, to: string): Promise<CommitFileChange[]>;
+
+  // antcode
+  /**
+   * 获取所有文件
+   */
+  getFiles(repo: IRepositoryModel): Promise<string[]>;
+  /**
+   * 更新文件
+   */
+  bulkChangeFiles(
+    repo: IRepositoryModel,
+    actions: FileAction[],
+    header: FileActionHeader
+  ): Promise<any>;
+  /**
+   * 创建分支
+   */
+  createBranch(repo: IRepositoryModel, newBranch: string, ref: string): Promise<Branch>;
+  /**
+   * 获取用户信息
+   */
+  getUser(repo: IRepositoryModel): Promise<any>;
 }
 
 export interface ICodeAPIServiceProvider extends ICodeAPIService {

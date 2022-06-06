@@ -216,8 +216,7 @@ class EditorHistoryServiceOverride extends EditorHistoryService {
   BrowserEditorContribution,
   ClientAppContribution,
   CommandContribution,
-  KeybindingContribution,
-  MonacoContribution
+  KeybindingContribution
 )
 class EditorSpecialContribution
   extends Disposable
@@ -226,8 +225,7 @@ class EditorSpecialContribution
     BrowserEditorContribution,
     ClientAppContribution,
     CommandContribution,
-    KeybindingContribution,
-    MonacoContribution
+    KeybindingContribution
 {
   @Autowired(WorkbenchEditorService)
   editorService: WorkbenchEditorService;

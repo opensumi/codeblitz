@@ -26,7 +26,7 @@ export const getDefaultLayoutConfig = () => ({
     modules: [''],
   },
   [SlotLocation.left]: {
-    modules: ['@opensumi/ide-explorer', '@opensumi/ide-search'],
+    modules: ['@opensumi/ide-explorer', '@opensumi/ide-search', '@opensumi/ide-scm'],
   },
   [SlotLocation.main]: {
     modules: ['@opensumi/ide-editor'],
