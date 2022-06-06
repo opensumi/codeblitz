@@ -26,13 +26,20 @@ export const CommentFilter = () => {
     ],
     []
   );
-  const [type, setType] = React.useState(options[0].label);
   const antCodeCommentsService = useInjectable<AntcodeCommentsService>(AntcodeCommentsService);
-
+  const commentsType = options.find(
+    (item) => item.value === antCodeCommentsService.commentFilterType
+  );
+  const [type, setType] = React.useState(commentsType?.value);
   const onChange = React.useCallback((value) => {
     setType(value);
     antCodeCommentsService.commentFilterType = value;
+    if (value === COMMENT_FILTER_TYPE.ALL) {
+      antCodeCommentsService.showAll();
+    }
   }, []);
 
-  return <Select options={options} value={type} onChange={onChange} />;
+  return (
+    <Select options={options} value={type} defaultValue={commentsType?.value} onChange={onChange} />
+  );
 };

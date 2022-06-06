@@ -16,12 +16,15 @@ import {
   getIcon,
   Disposable,
   toDisposable,
+  WithEventBus,
+  OnEvent,
 } from '@opensumi/ide-core-browser';
 import {
   IEditorDocumentModel,
   DidApplyEditorDecorationFromProvider,
   IEditor,
 } from '@opensumi/ide-editor/lib/browser';
+import { WorkbenchEditorService } from '@opensumi/ide-editor';
 import { AntcodeCommentsService } from './comments.service';
 import { IAntcodeService, IPullRequestChangeDiff } from '../antcode-service/base';
 import { COMMENT_FILTER_TYPE, THREAD_TYPE } from '.';
@@ -32,11 +35,14 @@ import { MouseWheelBlock } from './components/MouseWheelBlock';
 import { AnnotationService } from './annotation.service';
 import * as styles from './index.module.less';
 import { Portal } from '../../portal';
-import { IAntcodeCommentThread, ICommentsThreadData } from './comment.interface';
+import { IAntcodeCommentThread, ICommentsThreadData, FoldingRegion } from './comment.interface';
 import { getChangeRangeByDiff } from './utils';
-
+import { OpenDiffEditorEvent } from '../../common/events';
 @Domain(ClientAppContribution, CoreCommentsContribution)
-export class CommentsContribution implements ClientAppContribution, CoreCommentsContribution {
+export class CommentsContribution
+  extends WithEventBus
+  implements ClientAppContribution, CoreCommentsContribution
+{
   @Autowired(AnnotationService)
   private readonly annotationService: AnnotationService;
 
@@ -52,8 +58,34 @@ export class CommentsContribution implements ClientAppContribution, CoreComments
   @Autowired(IIconService)
   private readonly iconService: IIconService;
 
+  @Autowired(WorkbenchEditorService)
+  private readonly workbenchEditorService: WorkbenchEditorService;
+
   @Autowired(IEventBus)
-  private readonly eventBus: IEventBus;
+  readonly eventBus: IEventBus;
+
+  @OnEvent(OpenDiffEditorEvent)
+  onEditorGroupOpenEvent(e: OpenDiffEditorEvent) {
+    const openType = this.workbenchEditorService.currentEditorGroup.currentOpenType?.type;
+    this.registerOnDidChangeFolding();
+    // TODO 目前重新打开 会导致展开全部代码 如果 annotation 已经折叠那就再也打不开了
+    // 展开全部annotation
+    let currentUri: URI | null | undefined;
+    if (openType === 'code') {
+      currentUri = this.workbenchEditorService.currentEditor?.currentUri;
+    } else if (openType === 'diff') {
+      currentUri =
+        this.workbenchEditorService.currentEditorGroup.diffEditor.modifiedEditor.currentUri;
+    }
+    if (currentUri) {
+      for (let [, thread] of this.annotationService.getAllAnnotations()) {
+        thread.show();
+        if (thread.uri.isEqual(currentUri)) {
+          thread.show();
+        }
+      }
+    }
+  }
 
   async onStart() {
     // 初始化评论数据
@@ -252,19 +284,94 @@ export class CommentsContribution implements ClientAppContribution, CoreComments
         const onlyShowChangeLineRelatedComment =
           commentFilterType === COMMENT_FILTER_TYPE.CHANGE_LINE_RELATED;
 
+        const showAll = commentFilterType === COMMENT_FILTER_TYPE.ALL;
         // 隐藏全部评论 | 仅展示问题评论
         if (
           isHideAll ||
           (onlyShowProblem && !treadData?.isProblem) ||
           (onlyShowChangeLineRelatedComment && !treadData?.isChangeLineRelated)
         ) {
-          thread.hideAll();
-        } else {
-          thread.show();
+          thread.hide();
         }
         // 只有在已有评论才出现用户头像
         return !!treadData?.noteId;
       },
+    });
+  }
+
+  private registerOnDidChangeFolding() {
+    const openType = this.workbenchEditorService.currentEditorGroup.currentOpenType?.type;
+    if (openType === 'code') {
+      const foldingContrib =
+        this.workbenchEditorService.currentEditor?.monacoEditor.getContribution(
+          'editor.contrib.folding'
+        );
+      if (foldingContrib) {
+        const currentUri = this.workbenchEditorService.currentEditor!.currentUri as URI;
+        this.hideOrShowThread(foldingContrib, currentUri);
+      }
+    } else if (openType === 'diff') {
+      const { diffEditor } = this.workbenchEditorService.currentEditorGroup;
+      const { originalEditor, modifiedEditor } = diffEditor;
+      const originalFoldingContrib =
+        originalEditor.monacoEditor.getContribution('editor.contrib.folding');
+      const modifyFoldingContrib =
+        modifiedEditor.monacoEditor.getContribution('editor.contrib.folding');
+      if (originalFoldingContrib) {
+        const currentUri = originalEditor.currentUri as URI;
+        this.hideOrShowThread(originalFoldingContrib, currentUri);
+      }
+      if (modifyFoldingContrib) {
+        const currentUri = modifiedEditor.currentUri as URI;
+        this.hideOrShowThread(modifyFoldingContrib, currentUri);
+      }
+    }
+  }
+
+  private hideOrShowThread(foldingContrib, currentUri: URI) {
+    foldingContrib.getFoldingModel()?.then((foldingModel) => {
+      foldingModel.onDidChange((e) => {
+        if (e.collapseStateChanged) {
+          const foldingRegin = e.collapseStateChanged[0] as FoldingRegion;
+          // 折叠隐藏折叠区域评论块
+          const { startLineNumber, endLineNumber } = foldingRegin;
+          if (foldingRegin.isCollapsed) {
+            for (let [, commentThread] of this.antcodeCommentsService.getAllComments()) {
+              if (commentThread.uri.isEqual(currentUri) && !commentThread.isCollapsed) {
+                if (
+                  commentThread.range.startLineNumber > startLineNumber &&
+                  commentThread.range.endLineNumber <= endLineNumber
+                ) {
+                  commentThread.hide();
+                }
+              }
+            }
+
+            for (let [, commentThread] of this.annotationService.getAllAnnotations()) {
+              if (commentThread.uri.isEqual(currentUri) && !commentThread.isCollapsed) {
+                if (
+                  commentThread.range.startLineNumber > startLineNumber &&
+                  commentThread.range.endLineNumber <= endLineNumber
+                ) {
+                  commentThread.hide();
+                }
+              }
+            }
+          } else {
+            // annotation 没有展开按钮所以折叠后需展开
+            for (let [, commentThread] of this.annotationService.getAllAnnotations()) {
+              if (commentThread.uri.isEqual(currentUri)) {
+                if (
+                  commentThread.range.startLineNumber > startLineNumber &&
+                  commentThread.range.endLineNumber <= endLineNumber
+                ) {
+                  commentThread.show();
+                }
+              }
+            }
+          }
+        }
+      });
     });
   }
 }

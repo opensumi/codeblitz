@@ -5,6 +5,7 @@ import { toGitUri } from '../merge-request/changes-tree/util';
 import { URI } from '@opensumi/ide-core-browser';
 import { THREAD_TYPE } from './index';
 
+// 代码扫描数据
 @Injectable()
 export class AnnotationService {
   @Autowired(IAntcodeService)
@@ -66,5 +67,9 @@ export class AnnotationService {
     return this.commentsService.commentsThreads.filter(
       (thread) => thread.data?.type === THREAD_TYPE.ANNOTATION && thread.uri.isEqual(annotationUri)
     ).length;
+  }
+
+  public getAllAnnotations() {
+    return this._annotations;
   }
 }

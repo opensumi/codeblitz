@@ -37,7 +37,7 @@ export const EditorEmptyComponent: React.FC = () => {
       <div className={styles.description}>{localize('misc.ide-mode.description')}</div>
       <div className={styles.keybindings}>
         {keyList.map((item) => (
-          <div key={item.value} className={styles.keybinding}>
+          <div key={item.name} className={styles.keybinding}>
             <div className={styles.desc}>{item.name}</div>
             <div className={styles.key}>
               {item.value &&
