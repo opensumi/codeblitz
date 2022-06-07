@@ -847,7 +847,7 @@
     "@nodelib/fs.stat" "2.0.5"
     run-parallel "^1.1.9"
 
-"@nodelib/fs.stat@^2.0.2":
+"@nodelib/fs.stat@2.0.5", "@nodelib/fs.stat@^2.0.2":
   version "2.0.5"
   resolved "https://registry.npm.alibaba-inc.com/@nodelib/fs.stat/download/@nodelib/fs.stat-2.0.5.tgz#5bd262af94e9d25bd1e71b05deed44876a222e8b"
   integrity sha1-W9Jir5Tp0lvR5xsF3u1Eh2oiLos=
@@ -922,17 +922,6 @@
     react-virtualized-auto-sizer "^1.0.2"
     react-window "^1.8.5"
 
-"@opensumi/ide-connection@2.16.1":
-  version "2.16.1"
-  resolved "https://registry.npm.alibaba-inc.com/@opensumi/ide-connection/download/@opensumi/ide-connection-2.16.1.tgz#722bd432b473c5641a1af3cabf3203115705f8a5"
-  integrity sha512-GnIIZAX3fqL9hcWw00JpSRCg2zT7iHzArbPT8v7oWxarwGLRgsHLnLkLRp1png25ZhkyOOmvtuOvp3QYJ3ZHow==
-  dependencies:
-    "@opensumi/ide-core-common" "2.16.1"
-    "@opensumi/vscode-jsonrpc" "^6.1.1-beta.1"
-    path-match "^1.2.4"
-    shortid "^2.2.14"
-    ws "^7.2.0"
-
 "@opensumi/ide-connection@2.17.0":
   version "2.17.0"
   resolved "https://registry.npm.alibaba-inc.com/@opensumi/ide-connection/download/@opensumi/ide-connection-2.17.0.tgz#a68cd584ac7aad37fc7b1793aa587f94a3ced920"
@@ -983,18 +972,6 @@
     vscode-languageserver-protocol "^3.14.1"
     vscode-textmate "5.4.0"
 
-"@opensumi/ide-core-common@2.16.1":
-  version "2.16.1"
-  resolved "https://registry.npm.alibaba-inc.com/@opensumi/ide-core-common/download/@opensumi/ide-core-common-2.16.1.tgz#45b4b39b6f2ec3c6199613368d9ee90a5f2905db"
-  integrity sha512-jyx56LW5s7ooqpvNegIUK6kBAmefoyZgzOYKYFy6Xmn0CrmiQxMF0QY4yTHYfwSZ+kJtnlgqqMT3RV7TY5X5Yg==
-  dependencies:
-    "@opensumi/di" "^1.1.0"
-    iconv-lite "^0.6.0"
-    jschardet "3.0.0"
-    shortid "^2.2.14"
-    strip-json-comments "3.0.1"
-    vscode-uri "^3.0.2"
-
 "@opensumi/ide-core-common@2.17.0":
   version "2.17.0"
   resolved "https://registry.npm.alibaba-inc.com/@opensumi/ide-core-common/download/@opensumi/ide-core-common-2.17.0.tgz#8d58f4e41b7c2728c1ae1cdbd0386b301b14dce4"
@@ -1006,15 +983,6 @@
     shortid "^2.2.14"
     strip-json-comments "3.0.1"
     vscode-uri "^3.0.2"
-
-"@opensumi/ide-core-node@2.16.1":
-  version "2.16.1"
-  resolved "https://registry.npm.alibaba-inc.com/@opensumi/ide-core-node/download/@opensumi/ide-core-node-2.16.1.tgz#f1397bbc885885f6f07fe7e590ba85eb9b2e2742"
-  integrity sha512-eXYa8a7bBt54sZXRhj2xTMJ1rmc4JdxYSBWWS9Lk7Mm7+0qFJCLuUZ0ohCe5khhdKc4u0EqqOJXgTO/mp6kYvw==
-  dependencies:
-    "@opensumi/ide-connection" "2.16.1"
-    "@opensumi/ide-core-common" "2.16.1"
-    keytar "^7.7.0"
 
 "@opensumi/ide-core-node@2.17.0":
   version "2.17.0"
@@ -1402,11 +1370,6 @@
   version "1.49.0-beta.1"
   resolved "https://registry.npm.alibaba-inc.com/@opensumi/vscode-debugprotocol/download/@opensumi/vscode-debugprotocol-1.49.0-beta.1.tgz#1ed6f2f5629702a72979c9948cb628c3ec63c753"
   integrity sha512-0qKdsB1xd7xzeN0M27icx8XCw7IjNMih5XgsAl+BHhoAePZsOTKz6vI2ppBPJ553pdCxazrv7slsHWZIjyR7IA==
-
-"@opensumi/vscode-jsonrpc@^6.1.1-beta.1":
-  version "6.1.1-beta.5"
-  resolved "https://registry.yarnpkg.com/@opensumi/vscode-jsonrpc/-/vscode-jsonrpc-6.1.1-beta.5.tgz#edac34e73ce3b2e3d03bdea6e6b7b36cb2f1a9d3"
-  integrity sha512-AqwxZtUPvYhc+P7S+kMk5pIGHOvsDy91Mb74xMHIxWmwIHQpWPNgKfUfAIQq7CITwlCmz/8FdPbT6EXD5cDhAQ==
 
 "@opensumi/vscode-jsonrpc@^8.0.0-next.2":
   version "8.0.0-next.3"
@@ -6357,6 +6320,11 @@ image-size@~0.5.0:
   resolved "https://registry.npm.alibaba-inc.com/image-size/download/image-size-0.5.5.tgz#09dfd4ab9d20e29eb1c3e80b8990378df9e3cb9c"
   integrity sha1-Cd/Uq50g4p6xw+gLiZA3jfnjy5w=
 
+immediate@~3.0.5:
+  version "3.0.6"
+  resolved "https://registry.yarnpkg.com/immediate/-/immediate-3.0.6.tgz#9db1dbd0faf8de6fbe0f5dd5e56bb606280de69b"
+  integrity sha512-XXOFtyqDjNDAQxVfYxuF7g9Il/IbWmmlQg2MYKOH8ExIT1qg6xc4zyS3HaEEATgs1btfzxq15ciUiY7gjSXRGQ==
+
 immutable@^3.7.4:
   version "3.8.2"
   resolved "https://registry.npm.alibaba-inc.com/immutable/download/immutable-3.8.2.tgz#c2439951455bb39913daf281376f1530e104adf3"
@@ -7727,6 +7695,13 @@ levn@~0.3.0:
     prelude-ls "~1.1.2"
     type-check "~0.3.2"
 
+lie@3.1.1:
+  version "3.1.1"
+  resolved "https://registry.yarnpkg.com/lie/-/lie-3.1.1.tgz#9a436b2cc7746ca59de7a41fa469b3efb76bd87e"
+  integrity sha512-RiNhHysUjhrDQntfYSfY4MU24coXXdEOgw9WGcKHNeEwffDYbF//u87M1EWaMGzuFoSbqW0C9C6lEEhDOAswfw==
+  dependencies:
+    immediate "~3.0.5"
+
 liftoff@^3.1.0:
   version "3.1.0"
   resolved "https://registry.npm.alibaba-inc.com/liftoff/download/liftoff-3.1.0.tgz#c9ba6081f908670607ee79062d700df062c52ed3"
@@ -7827,6 +7802,13 @@ loader-utils@^2.0.0:
     big.js "^5.2.2"
     emojis-list "^3.0.0"
     json5 "^2.1.2"
+
+localforage@^1.10.0:
+  version "1.10.0"
+  resolved "https://registry.yarnpkg.com/localforage/-/localforage-1.10.0.tgz#5c465dc5f62b2807c3a84c0c6a1b1b3212781dd4"
+  integrity sha512-14/H1aX7hzBBmmh7sGPd+AOMkkIrHM3Z1PAyGgZigA1H1p5O5ANnMyWzvpAETtG68/dC4pC0ncy3+PPGzXZHPg==
+  dependencies:
+    lie "3.1.1"
 
 locate-path@^2.0.0:
   version "2.0.0"
@@ -8354,7 +8336,7 @@ mkdirp@0.5.1:
   dependencies:
     minimist "0.0.8"
 
-mkdirp@1.x, mkdirp@^1.0.3:
+mkdirp@1.x, mkdirp@^1.0.3, mkdirp@^1.0.4:
   version "1.0.4"
   resolved "https://registry.npm.alibaba-inc.com/mkdirp/download/mkdirp-1.0.4.tgz#3eb5ed62622756d79a5f0e2a221dfebad75c2f7e"
   integrity sha1-PrXtYmInVteaXw4qIh3+utdcL34=
@@ -9931,6 +9913,11 @@ querystringify@^2.1.1:
   resolved "https://registry.npm.alibaba-inc.com/querystringify/download/querystringify-2.2.0.tgz#3345941b4153cb9d082d8eee4cda2016a9aef7f6"
   integrity sha1-M0WUG0FTy50ILY7uTNogFqmu9/Y=
 
+queue-microtask@^1.2.2:
+  version "1.2.3"
+  resolved "https://registry.yarnpkg.com/queue-microtask/-/queue-microtask-1.2.3.tgz#4929228bbc724dfac43e0efb058caf7b6cfb6243"
+  integrity sha512-NuaNSa6flKT5JaSYQzJok04JzTL1CA6aGhv5rfLW3PgqA+M2ChpZQnAC8h8i4ZFkBS8X5RqkDBHA7r4hej3K9A==
+
 quick-lru@^4.0.1:
   version "4.0.1"
   resolved "https://registry.npm.alibaba-inc.com/quick-lru/download/quick-lru-4.0.1.tgz#5b8878f113a58217848c6482026c73e1ba57727f"
@@ -11024,6 +11011,13 @@ run-async@^2.4.0:
   version "2.4.1"
   resolved "https://registry.npm.alibaba-inc.com/run-async/download/run-async-2.4.1.tgz#8440eccf99ea3e70bd409d49aab88e10c189a455"
   integrity sha1-hEDsz5nqPnC9QJ1JqriOEMGJpFU=
+
+run-parallel@^1.1.9:
+  version "1.2.0"
+  resolved "https://registry.yarnpkg.com/run-parallel/-/run-parallel-1.2.0.tgz#66d1368da7bdf921eb9d95bd1a9229e7f21a43ee"
+  integrity sha512-5l4VyZR86LZ/lDxZTR6jqL8AFE2S0IFLMP26AbjsLVADxHdhB/c0GUsH+y39UfCi3dzz8OlQuPmnaJOMoDHQBA==
+  dependencies:
+    queue-microtask "^1.2.2"
 
 rxjs@^6.6.0, rxjs@^6.6.3:
   version "6.6.7"
