@@ -19,6 +19,7 @@ import { StatusBarModule } from '@opensumi/ide-status-bar/lib/browser';
 import { StorageModule } from '@opensumi/ide-storage/lib/browser';
 import { ThemeModule } from '@opensumi/ide-theme/lib/browser';
 import { WorkspaceModule } from '@opensumi/ide-workspace/lib/browser';
+import { WorkspaceEditModule } from '@opensumi/ide-workspace-edit/lib/browser';
 
 /**
  * alex
@@ -56,7 +57,7 @@ export const getModules: () => ModuleConstructor[] = () => [
   SCMModule,
   DecorationModule,
   KeymapsModule,
-
+  WorkspaceEditModule,
   MonacoEnhanceModule,
 
   ...extensionModules,

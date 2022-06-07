@@ -144,7 +144,7 @@ const App = () => {
           onClick={() => {
             const commands = editorPlugin.api.commands;
             if (commands) {
-              commands.executeCommand('plugin.command.changeTheme', 'ide-dark');
+              commands.executeCommand('plugin.command.changeTheme', 'opensumi-dark');
             }
           }}
           size="small"
@@ -165,7 +165,7 @@ const App = () => {
                 plugins: [editorPlugin],
                 workspaceDir: project,
                 defaultPreferences: {
-                  'general.theme': 'alipay-geek-light',
+                  'general.theme': 'opensumi-light',
                   'editor.scrollBeyondLastLine': false,
                   'lsif.documentScheme': 'file',
                   'lsif.enable': true,
