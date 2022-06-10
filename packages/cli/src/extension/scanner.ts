@@ -139,6 +139,7 @@ export async function getExtension(
       'activationEvents',
       'kaitianContributes',
       'contributes',
+      'browser',
     ]),
     defaultPkgNlsJSON,
     pkgNlsJSON,
