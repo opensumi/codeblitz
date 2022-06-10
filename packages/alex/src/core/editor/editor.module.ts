@@ -51,7 +51,6 @@ import { IBreadCrumbService } from '@opensumi/ide-editor/lib/browser/types';
 import { EditorHistoryService, EditorHistoryState } from '@opensumi/ide-editor/lib/browser/history';
 import { IEditorDocumentModelService } from '@opensumi/ide-editor/lib/browser/doc-model/types';
 import { FileSchemeDocumentProvider } from '@opensumi/ide-file-scheme/lib/browser/file-doc';
-import { FILE_SCHEME } from '@opensumi/ide-file-scheme/lib/common';
 import { QUICK_OPEN_COMMANDS } from '@opensumi/ide-quick-open/lib/common';
 
 import * as path from 'path';
@@ -81,7 +80,7 @@ class FileSchemeDocumentProviderOverride extends FileSchemeDocumentProvider {
 
   provideEncoding(uri: URI) {
     const encoding = this.propsService.props.documentModel.encoding;
-    if (uri.scheme === FILE_SCHEME && encoding) {
+    if (uri.scheme === 'file' && encoding) {
       return encoding;
     }
     return super.provideEncoding(uri);

@@ -1,8 +1,10 @@
 import { Autowired, Injectable } from '@opensumi/di';
-import { Path } from '@opensumi/ide-core-common/lib/path';
+import { path } from '@opensumi/ide-core-common';
 
 import { IAntcodeService, IPullRequestChangeDiff } from '../../antcode-service/base';
 import { IPullRequestChangeItem } from '../../../common';
+
+const { Path } = path;
 
 const PathSeparator = Path.separator;
 

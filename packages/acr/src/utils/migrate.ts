@@ -4,8 +4,10 @@
  */
 
 import { STORAGE_DIR, HOME_ROOT, fsExtra as fse } from '@alipay/alex-core';
-import { posix } from '@opensumi/ide-core-common/lib/path';
+import { path } from '@opensumi/ide-core-common';
 import { USER_PREFERENCE_URI } from '@opensumi/ide-preferences/lib/browser/user-preference-provider';
+
+const { posix } = path;
 
 export const getLegacyACRSettings = async () => {
   let db: IDBDatabase | null = null;

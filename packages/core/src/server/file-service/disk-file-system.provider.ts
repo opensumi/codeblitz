@@ -9,6 +9,8 @@ import {
   DidFilesChangedParams,
   Uri,
   UriComponents,
+  ParsedPattern,
+  parseGlob as parse,
 } from '@opensumi/ide-core-common';
 import {
   FileChangeEvent,
@@ -22,7 +24,6 @@ import {
   FileSystemProviderCapabilities,
 } from '@opensumi/ide-file-service/lib/common';
 import { Injectable } from '@opensumi/di';
-import { ParsedPattern, parse } from '@opensumi/ide-core-common/lib/utils/glob';
 import * as path from 'path';
 import { HOME_ROOT } from '../../common';
 import { IDiskFileProvider } from './base';

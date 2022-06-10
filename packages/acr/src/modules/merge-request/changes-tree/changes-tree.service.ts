@@ -1,7 +1,6 @@
 import { Autowired, Injectable } from '@opensumi/di';
-import { IDisposable, URI } from '@opensumi/ide-core-common';
+import { IDisposable, URI, path as paths } from '@opensumi/ide-core-common';
 import { ITreeNodeOrCompositeTreeNode, Tree, TreeNodeType } from '@opensumi/ide-components';
-import * as paths from '@opensumi/ide-core-common/lib/path';
 import { IContextKey, IContextKeyService, Emitter, Event } from '@opensumi/ide-core-browser';
 
 import { ChangeFileRoot, ChangeDirectory, ChangeFile } from './changes-tree-node';

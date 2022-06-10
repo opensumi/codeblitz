@@ -10,12 +10,12 @@ import {
   WithEventBus,
   IContextKeyService,
   IContextKey,
+  path as paths,
 } from '@opensumi/ide-core-browser';
 import { MenuContribution, IMenuRegistry, MenuId } from '@opensumi/ide-core-browser/lib/menu/next';
 import { RawContextKey } from '@opensumi/ide-core-browser/lib/raw-context-key';
-import { ISCMResource, ISCMResourceGroup } from '@opensumi/ide-scm';
+import { ISCMResource } from '@opensumi/ide-scm';
 import { IFileServiceClient } from '@opensumi/ide-file-service';
-import * as paths from '@opensumi/ide-core-common/lib/path';
 
 import { WebSCMCommands, IDmpService } from './common';
 import { WorkspaceManagerService } from '../../workspace/workspace-loader.service';

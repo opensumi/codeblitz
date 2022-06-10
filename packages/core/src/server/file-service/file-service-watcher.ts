@@ -1,4 +1,3 @@
-import { parse, ParsedPattern } from '@opensumi/ide-core-common/lib/utils/glob';
 import {
   IDisposable,
   Disposable,
@@ -9,6 +8,8 @@ import {
   FileSystemWatcherServer,
   WatchOptions,
   URI,
+  parseGlob as parse,
+  ParsedPattern,
 } from '@opensumi/ide-core-common';
 import debounce from 'lodash.debounce';
 import path from 'path';

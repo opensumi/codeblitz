@@ -1,5 +1,5 @@
 import { Injectable } from '@opensumi/di';
-import { Uri, Event } from '@opensumi/ide-core-browser';
+import { Uri, Event, BinaryBuffer } from '@opensumi/ide-core-browser';
 import {
   FileSystemProvider,
   FileStat,
@@ -7,7 +7,6 @@ import {
   FileChangeEvent,
   FileSystemProviderCapabilities,
 } from '@opensumi/ide-file-service';
-import { BinaryBuffer } from '@opensumi/ide-core-common/lib/utils/buffer';
 
 /**
  * 解析 kt-ext:// 文件，解决前端插件加载问题

@@ -2,8 +2,7 @@
  * web scm provider 所有的 provider/group/resource 定义都在这里
  */
 import { Autowired, Injectable, Optional } from '@opensumi/di';
-import { URI, Uri, Event, Emitter } from '@opensumi/ide-core-common';
-import { Sequence, ISplice } from '@opensumi/ide-core-common/lib/sequence';
+import { URI, Uri, Event, Emitter, Sequence, ISplice } from '@opensumi/ide-core-common';
 import { ISCMProvider, ISCMResourceGroup, ISCMResource, VSCommand } from '@opensumi/ide-scm';
 import { toGitUri, toDiffUri } from '../changes-tree/util';
 import { WorkbenchEditorService } from '@opensumi/ide-editor';
