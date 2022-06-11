@@ -198,6 +198,11 @@
       "publisher": "opensumi-lite-extensions",
       "name": "anycode-typescript",
       "version": "0.0.5"
+    },
+    {
+      "publisher": "opensumi-lite-extensions",
+      "name": "references-view",
+      "version": "1.0.0"
     }
   ]
 }

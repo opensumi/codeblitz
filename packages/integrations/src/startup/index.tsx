@@ -28,6 +28,7 @@ import anycodePhp from '@alipay/alex/extensions/opensumi-lite-extensions.anycode
 import anycodePython from '@alipay/alex/extensions/opensumi-lite-extensions.anycode-python';
 import anycodeRust from '@alipay/alex/extensions/opensumi-lite-extensions.anycode-rust';
 import anycodeTypescript from '@alipay/alex/extensions/opensumi-lite-extensions.anycode-typescript';
+import referencesView from '@alipay/alex/extensions/opensumi-lite-extensions.references-view';
 
 import { LocalExtensionModule } from '../common/local-extension.module';
 import * as Plugin from '../editor/plugin';
@@ -111,16 +112,17 @@ const App = () => (
         StartupModule,
       ],
       extensionMetadata: [
-        // css,
-        // html,
-        // json,
-        // markdown,
-        // typescript,
-        // codeservice,
-        // gitlens,
-        // graph,
-        // imagePreview,
-        // webSCM,
+        css,
+        html,
+        json,
+        markdown,
+        typescript,
+        codeservice,
+        gitlens,
+        graph,
+        imagePreview,
+        webSCM,
+        referencesView,
         anycodeCSharp,
         anycodeCpp,
         anycodeGo,
