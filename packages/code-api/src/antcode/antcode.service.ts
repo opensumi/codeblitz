@@ -262,10 +262,18 @@ export class AntCodeAPIService implements ICodeAPIService {
   }
 
   async searchFile(repo: IRepositoryModel, searchString: string, options: { limit: number }) {
-    // 如果 query 为空字符串则直接返回，否则 antcode 接口会 400
     // TODO：目前 OpenSumi 默认为 ''，后续得实现 queryBuilder 逻辑
     if (searchString === '') {
-      return [];
+      const res = await this.request<string[]>(
+        `/api/v3/projects/${this.getProjectId(repo)}/repository/files_list`,
+        {
+          params: {
+            ref_name: repo.commit,
+          },
+        }
+      );
+      // 默认做个限制，防止请求过多
+      return res.slice(0, 1000);
     }
     const reqRes = await this.request<string[]>(
       `/api/v3/projects/${this.getProjectId(repo)}/repository/files_search`,
