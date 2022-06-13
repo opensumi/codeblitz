@@ -1,9 +1,7 @@
 import * as React from 'react';
 import * as ReactDOM from 'react-dom';
 import { Injector } from '@opensumi/di';
-import { URI } from '@opensumi/ide-core-common';
-import { join } from '@opensumi/ide-core-common/lib/path';
-import { equals } from '@opensumi/ide-core-common/lib/arrays';
+import { URI, path, arrays } from '@opensumi/ide-core-common';
 // internal patched
 import { disposeMode, disposableCollection } from '@alipay/alex/lib/core/patch';
 
@@ -26,6 +24,9 @@ import { RootElementId } from './constant';
 import { Portals } from './portal';
 import { reportUserAccess } from './utils/monitor';
 import { CommentsZoneWidgetPatch, CommentsZoneWidget } from './overrides/comments-zone.view';
+
+const { equals } = arrays;
+const { join } = path;
 
 const { version } = require('../package.json');
 

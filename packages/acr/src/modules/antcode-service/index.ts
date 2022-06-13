@@ -1,7 +1,6 @@
 import { Injectable, Optional } from '@opensumi/di';
 import { action, observable, computed } from 'mobx';
-import { Event, Emitter } from '@opensumi/ide-core-common';
-import { Path } from '@opensumi/ide-core-common/lib/path';
+import { Event, Emitter, path } from '@opensumi/ide-core-common';
 import { URI } from '@opensumi/ide-core-browser';
 import differenceBy from 'lodash/differenceBy';
 
@@ -24,6 +23,8 @@ import {
 import { User } from './interfaces/user';
 import { setUserWorkId } from '../../utils/monitor';
 import { sortPathList } from '../../utils/change-file-sorter';
+
+const { Path } = path;
 
 // antcode 所需要的 encoding 选项 key/value
 export const antcodeEncodingOpts = [

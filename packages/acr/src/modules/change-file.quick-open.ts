@@ -8,15 +8,17 @@ import {
   QuickOpenMode,
   URI,
   formatLocalize,
+  path,
 } from '@opensumi/ide-core-browser';
 import { LabelService } from '@opensumi/ide-core-browser/lib/services';
 import { QuickOpenHandler } from '@opensumi/ide-quick-open/lib/browser/prefix-quick-open.service';
 import { QuickOpenModel } from '@opensumi/ide-quick-open';
-import { basename } from '@opensumi/ide-core-common/lib/path';
 import { OpenChangeFilesService } from './open-change-files';
 
 import { IAntcodeService } from './antcode-service/base';
 import type { IPullRequestChangeDiff } from './antcode-service/base';
+
+const { basename } = path;
 
 @Injectable({ multiple: true })
 export class ChangeFileQuickOpenItem extends QuickOpenItem {

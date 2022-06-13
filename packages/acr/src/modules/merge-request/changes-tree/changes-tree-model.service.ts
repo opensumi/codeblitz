@@ -19,10 +19,9 @@ import {
   OnEvent,
 } from '@opensumi/ide-core-browser';
 import { LabelService } from '@opensumi/ide-core-browser/lib/services';
-import { Path } from '@opensumi/ide-core-common/lib/path';
 import pSeries from 'p-series';
 import { IProgressService } from '@opensumi/ide-core-browser/lib/progress';
-import { debounce } from '@opensumi/ide-core-common';
+import { debounce, path } from '@opensumi/ide-core-common';
 
 import { ChangesTreeDecorationService } from './changes-tree-decoration.service';
 import { ChangeDirectory, ChangeFile } from './changes-tree-node';
@@ -34,6 +33,8 @@ import { ChangesTreeViewId } from './common';
 import { OpenChangeFilesService } from '../../../modules/open-change-files';
 import { OpenDiffEditorEvent } from '../../../common/events';
 import { IAntcodeService } from '../../antcode-service/base';
+
+const { Path } = path;
 
 export interface IEditorTreeHandle extends IRecycleTreeHandle {
   hasDirectFocus: () => boolean;

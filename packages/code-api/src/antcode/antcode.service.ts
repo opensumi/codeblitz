@@ -1,17 +1,9 @@
 import { Injectable, Autowired } from '@opensumi/di';
-import { localize, IReporterService, MessageType } from '@opensumi/ide-core-common';
-import { LRUCache } from '@opensumi/ide-core-common/lib/map';
+import { localize, IReporterService, MessageType, LRUCache } from '@opensumi/ide-core-common';
 import { REPORT_NAME } from '@alipay/alex-core';
 import { request, RequestOptions, isResponseError } from '@alipay/alex-shared';
 import { API } from './types';
-import {
-  Branch,
-  FileAction,
-  FileActionEncoding,
-  FileActionHeader,
-  FileActionResult,
-  FileActionType,
-} from '../common/types';
+import { Branch, FileAction, FileActionHeader, FileActionResult } from '../common/types';
 import {
   ICodeAPIService,
   ISearchResults,

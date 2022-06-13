@@ -1,11 +1,12 @@
 import { Injectable, Autowired } from '@opensumi/di';
-import { Uri } from '@opensumi/ide-core-common';
-import { posix } from '@opensumi/ide-core-common/lib/path';
+import { Uri, path } from '@opensumi/ide-core-common';
 import { IExtensionBasicMetadata } from '@alipay/alex-shared';
 import { IExtensionNodeClientService, IExtensionMetadata, ExtraMetadata } from './base';
 import { ServerConfig } from '../core/app';
 import { getExtensionPath } from '../../common/util';
 import { EXT_SCHEME } from '../../common/constant';
+
+const { posix } = path;
 
 @Injectable()
 export class ExtensionServiceClientImpl implements IExtensionNodeClientService {

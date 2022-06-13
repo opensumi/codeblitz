@@ -17,13 +17,13 @@ import {
   PreferenceScope,
   KeybindingContribution,
   KeybindingRegistry,
+  path as paths,
 } from '@opensumi/ide-core-browser';
 import {
   ILanguageService,
   IEditorDocumentModelService,
   EditorGroupChangeEvent,
 } from '@opensumi/ide-editor/lib/browser';
-import * as paths from '@opensumi/ide-core-common/lib/path';
 import { TOGGLE_DIFF_SIDE_BY_SIDE } from '@opensumi/ide-scm';
 import { QUICK_OPEN_COMMANDS } from '@opensumi/ide-quick-open';
 
