@@ -1,6 +1,5 @@
 import { Injectable, Autowired } from '@opensumi/di';
-import { replaceLocalizePlaceholder, URI } from '@opensumi/ide-core-browser';
-import { posix } from '@opensumi/ide-core-common/lib/path';
+import { replaceLocalizePlaceholder, URI, path } from '@opensumi/ide-core-browser';
 import { action, observable, computed, runInAction } from 'mobx';
 import {
   IExtensionProps,
@@ -18,6 +17,8 @@ import {
   OpenExtensionOptions,
 } from './base';
 import { EXT_SCHEME } from '../../common/constant';
+
+const { posix } = path;
 
 @Injectable()
 export class ExtensionManagerService {

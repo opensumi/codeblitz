@@ -1,7 +1,11 @@
 import * as paths from 'path';
 import { Injectable, Autowired } from '@opensumi/di';
-import { CancellationToken, CancellationTokenSource, URI } from '@opensumi/ide-core-common';
-import { parse } from '@opensumi/ide-core-common/lib/utils/glob';
+import {
+  CancellationToken,
+  CancellationTokenSource,
+  URI,
+  parseGlob as parse,
+} from '@opensumi/ide-core-common';
 import { IFileSearchService } from '@opensumi/ide-file-search/lib/common';
 import { anchorGlob } from '@opensumi/ide-search/lib/common';
 import { AppConfig, RuntimeConfig } from '../../common';

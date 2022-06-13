@@ -13,9 +13,9 @@ import {
   OnEvent,
   IContextKeyService,
   IContextKey,
+  path as paths,
 } from '@opensumi/ide-core-browser';
 import { IFileServiceClient } from '@opensumi/ide-file-service/lib/common';
-import * as paths from '@opensumi/ide-core-common/lib/path';
 import { MenuContribution, IMenuRegistry, MenuId } from '@opensumi/ide-core-browser/lib/menu/next';
 import { ISCMResource, ISCMResourceGroup } from '@opensumi/ide-scm';
 import { WorkbenchEditorService } from '@opensumi/ide-editor';

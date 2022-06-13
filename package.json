@@ -1,6 +1,6 @@
 {
   "name": "alex",
-  "version": "2.0.0-beta.4",
+  "version": "2.0.1",
   "workspaces": [
     "packages/*"
   ],
@@ -8,7 +8,7 @@
   "description": "Ant Codespaces for browser",
   "main": "index.js",
   "engines": {
-    "kaitian": "2.17.0"
+    "kaitian": "2.18.3"
   },
   "scripts": {
     "type-check": "tsc --skipLibCheck --noEmit",

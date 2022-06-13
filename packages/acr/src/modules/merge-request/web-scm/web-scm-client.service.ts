@@ -8,8 +8,8 @@ import {
   STORAGE_SCHEMA,
   URI,
   formatLocalize,
+  path as paths,
 } from '@opensumi/ide-core-common';
-import * as paths from '@opensumi/ide-core-common/lib/path';
 import { IQuickInputService, localize } from '@opensumi/ide-core-browser';
 import { IFileServiceClient } from '@opensumi/ide-file-service';
 import { ISCMRepository, SCMService, ISCMResource, ISCMResourceGroup } from '@opensumi/ide-scm';

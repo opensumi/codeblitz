@@ -1,5 +1,7 @@
 import splitRetain from 'split-retain';
-import { Path } from '@opensumi/ide-core-common/lib/path';
+import { path } from '@opensumi/ide-core-common';
+
+const { Path } = path;
 
 interface ItemDTO<T = any> {
   item: T;

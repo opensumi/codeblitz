@@ -1,6 +1,8 @@
-import { URI, removeUndefined } from '@opensumi/ide-core-common';
+import { URI, objects } from '@opensumi/ide-core-common';
 import { localize } from '@opensumi/ide-core-browser';
 import { IPullRequestChangeDiff } from '../../antcode-service/base';
+
+const { removeUndefined } = objects;
 
 /**
  * 通过 uri 获取 commit id

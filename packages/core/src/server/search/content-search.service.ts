@@ -1,8 +1,12 @@
 import { getMapForWordSeparators } from '@opensumi/monaco-editor-core/esm/vs/editor/common/controller/wordCharacterClassifier';
 import { isValidMatch } from '@opensumi/monaco-editor-core/esm/vs/editor/common/model/textModelSearch';
 import { Injectable, Autowired } from '@opensumi/di';
-import { SupportLogNamespace, ILogService, URI } from '@opensumi/ide-core-common';
-import { parse } from '@opensumi/ide-core-common/lib/utils/glob';
+import {
+  SupportLogNamespace,
+  ILogService,
+  URI,
+  parseGlob as parse,
+} from '@opensumi/ide-core-common';
 import {
   IContentSearchServer,
   ContentSearchOptions,

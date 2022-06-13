@@ -31,7 +31,8 @@ module.exports = (option = {}) => {
         ...(isDev
           ? {}
           : {
-              publicPath: 'https://gw.alipayobjects.com/os/alex-app',
+              // 暂时使用ide-server的 ak
+              publicPath: 'https://gw.alipayobjects.com/os/ide-server',
             }),
       }),
     ],

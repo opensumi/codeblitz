@@ -6,8 +6,8 @@ import {
   PreferenceService,
   PreferenceChange,
   IRange,
+  path,
 } from '@opensumi/ide-core-browser';
-import { basename } from '@opensumi/ide-core-common/lib/path';
 import { IResourceOpenOptions, WorkbenchEditorService } from '@opensumi/ide-editor';
 
 import { FileOpenMethod, DiffChangeEvent, OpenDiffEditorEvent } from '../../common';
@@ -21,6 +21,8 @@ import {
 } from '../merge-request/changes-tree/util';
 
 import './index.module.less';
+
+const { basename } = path;
 
 @Injectable()
 export class OpenChangeFilesService extends Disposable {

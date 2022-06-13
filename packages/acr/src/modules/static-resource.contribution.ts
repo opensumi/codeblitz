@@ -1,11 +1,10 @@
 import { Autowired, Injectable } from '@opensumi/di';
-import { Domain, URI, AppConfig, MaybePromise } from '@opensumi/ide-core-browser';
+import { Domain, URI, AppConfig, path as paths } from '@opensumi/ide-core-browser';
 import {
   StaticResourceContribution as CoreStaticResourceContribution,
   StaticResourceService,
 } from '@opensumi/ide-static-resource/lib/browser/static.definition';
 import { IWorkspaceService } from '@opensumi/ide-workspace';
-import * as paths from '@opensumi/ide-core-common/lib/path';
 import {
   BrowserEditorContribution,
   ResourceService,

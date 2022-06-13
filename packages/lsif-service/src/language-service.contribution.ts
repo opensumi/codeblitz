@@ -15,10 +15,10 @@ import {
   PreferenceChange,
   PreferenceContribution,
   LabelService,
+  path as paths,
 } from '@opensumi/ide-core-browser';
 import { Position, Range, Location } from '@opensumi/ide-extension/lib/common/vscode/ext-types';
 import { IWorkspaceService } from '@opensumi/ide-workspace';
-import * as paths from '@opensumi/ide-core-common/lib/path';
 import {
   EditorComponentRegistry,
   ResourceService,

@@ -1,11 +1,12 @@
 import { IResourceProvider, IResource } from '@opensumi/ide-editor/lib/browser';
-import { URI, localize } from '@opensumi/ide-core-common';
+import { URI, localize, path } from '@opensumi/ide-core-common';
 import { Injectable, Autowired } from '@opensumi/di';
 import { LabelService } from '@opensumi/ide-core-browser/lib/services';
-import { Path } from '@opensumi/ide-core-common/lib/path';
 
 import { getMinimalDiffPath } from '../../../utils';
 import { fromSCMUri } from '../../../utils/scm-uri';
+
+const { Path } = path;
 
 @Injectable()
 export class GitResourceProvider implements IResourceProvider {

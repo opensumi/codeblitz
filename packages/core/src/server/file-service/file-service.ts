@@ -9,8 +9,10 @@ import {
   DisposableCollection,
   isArray,
   isEmptyObject,
+  parseGlob as parse,
+  ParsedPattern,
+  match,
 } from '@opensumi/ide-core-common';
-import { parse, ParsedPattern, match } from '@opensumi/ide-core-common/lib/utils/glob';
 import { FileChangeEvent } from '@opensumi/ide-core-common';
 import { decode, encode, UTF8, getEncodingInfo } from './encoding';
 import {

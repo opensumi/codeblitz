@@ -1,5 +1,4 @@
-import { coalesce } from '@opensumi/ide-core-common/lib/arrays';
-import { Domain, URI, localize, CommandService } from '@opensumi/ide-core-browser';
+import { Domain, URI, localize, CommandService, arrays } from '@opensumi/ide-core-browser';
 import {
   BrowserEditorContribution,
   EditorComponentRegistry,
@@ -16,6 +15,8 @@ import { EditorWelcomeComponent } from './welcome.view';
 import { CommonConfig } from '../../common/config';
 import styles from './welcome.module.less';
 import * as path from 'path';
+
+const { coalesce } = arrays;
 
 @Domain(BrowserEditorContribution)
 export class WelcomeContribution implements BrowserEditorContribution {
