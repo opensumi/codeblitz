@@ -22,7 +22,7 @@ import {
 } from '@opensumi/ide-core-browser';
 import { Domain } from '@opensumi/ide-core-common/lib/di-helper';
 import { WorkbenchEditorService } from '@opensumi/ide-editor';
-import { MiscCommands, MISC_IS_EXPAND_RAW_KEY } from '.';
+import { MiscCommands, MISC_IS_EXPAND_RAW_KEY, MISC_IS_DIFF_DATA } from '.';
 import { AntcodeDiffFoldingService } from './diff-folding.service';
 import { sleep, generateRange } from './utils';
 import { DiffFoldingWidgetService } from './zone-widget/widget.service';
@@ -68,14 +68,14 @@ export class DiffFoldingContribution extends WithEventBus implements CommandCont
   private disposeColl = new DisposableCollection();
 
   private readonly miscIsExpand: IContextKey<boolean>;
+  private readonly isDiffData: IContextKey<boolean>;
 
   private currentURI: URI | undefined;
-
-  private isDiffData = false;
 
   constructor() {
     super();
     this.miscIsExpand = MISC_IS_EXPAND_RAW_KEY.bind(this.globalContextKeyService);
+    this.isDiffData = MISC_IS_DIFF_DATA.bind(this.globalContextKeyService);
     this.antcodeDiffFoldingService.currentRangeModel.setCurrentRangeMap([], 'original');
     this.antcodeDiffFoldingService.currentRangeModel.setCurrentRangeMap([], 'modified');
   }
@@ -120,9 +120,9 @@ export class DiffFoldingContribution extends WithEventBus implements CommandCont
       this.gitDocContentProvider.diffData.has(originalUri.toString()) &&
       this.gitDocContentProvider.diffData.has(modifiedUri.toString())
     ) {
-      this.isDiffData = true;
+      this.isDiffData.set(true);
     } else {
-      this.isDiffData = false;
+      this.isDiffData.set(false);
     }
     // diff 数据折叠
     if (!this.preferenceService.get('acr.foldingEnabled') && !this.isDiffData) return;

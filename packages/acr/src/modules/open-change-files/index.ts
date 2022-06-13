@@ -224,14 +224,10 @@ export class OpenChangeFilesService extends Disposable {
   async fetchDiff(path: string) {
     // 如果没有 diff 信息，则去请求
     const changeDiff = this.antcodeService.pullRequestChangeList.find((changeDiff) => {
-      if (changeDiff.newPath === path) {
-        return true;
-      } else if (changeDiff.newPath !== changeDiff.oldPath && changeDiff.oldPath === path) {
-        // 重命名文件
-        return true;
-      } else {
-        return false;
-      }
+      return (
+        changeDiff.newPath === path ||
+        (changeDiff.newPath !== changeDiff.oldPath && changeDiff.oldPath === path)
+      );
     });
     // @ts-ignore
     if (!changeDiff.diff) {

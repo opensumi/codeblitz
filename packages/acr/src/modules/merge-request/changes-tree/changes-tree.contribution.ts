@@ -176,7 +176,7 @@ export class ChangesTreeContribution
       },
       iconClass: getIcon('file-expand'),
       group: 'navigation',
-      when: 'isInDiffEditor && config.acr.foldingEnabled',
+      when: 'isInDiffEditor && config.acr.foldingEnabled && !misc.isDiffData',
       toggledWhen: 'config.misc.isExpand',
       order: 5,
     });
