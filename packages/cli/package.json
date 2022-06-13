@@ -15,7 +15,7 @@
   },
   "scripts": {},
   "publishConfig": {
-    "registry": "https://registry.antfin-inc.com"
+    "registry": "https://registry.npm.alibaba-inc.com"
   },
   "dependencies": {
     "@ali/ide-extension-installer": "^2.0.0",

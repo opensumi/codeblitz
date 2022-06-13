@@ -27,7 +27,7 @@
     "postinstall": "node ./scripts/install-ext"
   },
   "publishConfig": {
-    "registry": "https://registry.antfin-inc.com"
+    "registry": "https://registry.npm.alibaba-inc.com"
   },
   "dependencies": {
     "@opensumi/ide-addons": "2.18.8",

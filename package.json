@@ -189,7 +189,8 @@
       "publisher": "opensumi-lite-extensions",
       "name": "anycode-python",
       "version": "0.0.5"
-    },{
+    },
+    {
       "publisher": "opensumi-lite-extensions",
       "name": "anycode-rust",
       "version": "0.0.5"
