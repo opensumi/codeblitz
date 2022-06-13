@@ -281,7 +281,6 @@ export class WebSCMContribution
           await this.webSCMController.gitClient.status();
           const stagedFiles = this.webSCMController.gitClient.getStagedFileUriStrs();
           if (!stagedFiles.includes(uriStr)) {
-            console.log('use latest content for:', uriStr);
             await this.fileServiceClient.setContent(fsStat, content);
           }
         }

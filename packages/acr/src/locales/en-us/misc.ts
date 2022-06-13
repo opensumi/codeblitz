@@ -11,4 +11,6 @@ export default {
   'misc.ide-mode.description':
     'IDE code experience, perfect language service, efficient code editing',
   'misc.quick-open.changes_desc': 'Added lines {0} / Deleted lines {1}',
+  'misc.analyse.diff.error': 'Analyse {0} diff data error',
+  'misc.analyse.diff.none': 'No diff data',
 };

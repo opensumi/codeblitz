@@ -1,11 +1,21 @@
 import { Autowired, Injectable } from '@opensumi/di';
 import { IEditorDocumentModelContentProvider } from '@opensumi/ide-editor/lib/browser';
-import { Emitter, Event, URI, DisposableCollection } from '@opensumi/ide-core-common';
+import {
+  Emitter,
+  Event,
+  URI,
+  DisposableCollection,
+  localize,
+  IRange,
+} from '@opensumi/ide-core-common';
 
 import { AbstractSCMDocContentProvider } from './base-scm';
 
 import { IAntcodeService } from '../../antcode-service/base';
 import { fromSCMUri } from '../../../utils/scm-uri';
+import { OpenChangeFilesService } from '../../open-change-files';
+import { diffToContent } from '../../comments/utils';
+import { IMessageService } from '@opensumi/ide-overlay';
 
 @Injectable()
 // @ts-ignore
@@ -19,10 +29,18 @@ export class GitDocContentProvider
   @Autowired(IAntcodeService)
   private readonly antcodeService: IAntcodeService;
 
+  @Autowired()
+  private readonly openChangeFilesService: OpenChangeFilesService;
+
   private disposableCollection = new DisposableCollection();
 
   private _onDidChangeContent: Emitter<URI> = new Emitter();
   public onDidChangeContent: Event<URI> = this._onDidChangeContent.event;
+
+  @Autowired(IMessageService)
+  private readonly messageService: IMessageService;
+
+  public diffData = new Map<string, IRange[]>();
 
   constructor() {
     super();
@@ -43,10 +61,32 @@ export class GitDocContentProvider
     this.disposableCollection.dispose();
   }
 
-  // @ts-ignore
   async fetchContentFromSCM(uri: URI) {
     const info = fromSCMUri(uri);
-    // @ts-ignore
-    return this.antcodeService.getFileContentByRef(info.path, info.ref);
+    let content = await this.antcodeService.getFileContentByRef(info.path, info.ref);
+    // 修复 接口404情况
+    if (!content && typeof content === 'object') {
+      const diffChange = await this.openChangeFilesService.fetchDiff(info.path);
+      content = '';
+      if (diffChange?.diff) {
+        const diffContent = diffToContent(diffChange.diff);
+
+        if (info.ref === this.antcodeService.leftRef) {
+          content = diffContent.original.join('\n');
+          if (!this.diffData.has(uri.toString())) {
+            this.diffData.set(uri.toString(), diffContent.originalFoldingRanges);
+          }
+        } else if (info.ref === this.antcodeService.rightRef) {
+          content = diffContent.modified.join('\n');
+          if (!this.diffData.has(uri.toString())) {
+            this.diffData.set(uri.toString(), diffContent.modifiedFoldingRanges);
+          }
+        }
+      } else {
+        this.messageService.info(localize('misc.analyse.diff.none'));
+        // throw new Error(formatLocalize('misc.analyse.diff.error', diffChange?.newPath))
+      }
+    }
+    return content;
   }
 }

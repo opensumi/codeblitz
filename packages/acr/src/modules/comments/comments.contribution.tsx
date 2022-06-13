@@ -79,7 +79,6 @@ export class CommentsContribution
     }
     if (currentUri) {
       for (let [, thread] of this.annotationService.getAllAnnotations()) {
-        thread.show();
         if (thread.uri.isEqual(currentUri)) {
           thread.show();
         }

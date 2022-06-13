@@ -57,4 +57,5 @@ export default {
   'codereview.folding.expandUp': 'Expand up {0} lines',
   'codereview.folding.expandDown': 'Expand down {0} lines',
   'codereview.folding.expandAll': 'Expand all {0} lines',
+  'codereview.folding.cantExpand': 'Diff data can not expand',
 };

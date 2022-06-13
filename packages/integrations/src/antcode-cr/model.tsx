@@ -511,6 +511,9 @@ const [AcrProvider, useAcr] = createContainer(() => {
       if (isApiError(e) && e.response.status === 413) {
         return null;
       }
+      if (e.response.status === 404) {
+        return null;
+      }
       throw e;
     }
   }

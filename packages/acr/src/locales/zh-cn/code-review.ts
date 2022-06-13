@@ -55,4 +55,5 @@ export default {
   'codereview.folding.expandUp': '向上展开 {0} 行',
   'codereview.folding.expandDown': '向下展开 {0} 行',
   'codereview.folding.expandAll': '展开全部 {0} 行',
+  'codereview.folding.cantExpand': 'Diff 数据无法展开文件',
 };
