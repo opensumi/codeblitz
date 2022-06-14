@@ -223,7 +223,7 @@ export class DiffFoldingContribution extends WithEventBus implements CommandCont
     // zone widget event change
     this.addDispose(
       this.diffFoldingWidgetService.onUnFoldChanged(async (changeData) => {
-        if (this.isDiffData) {
+        if (this.isDiffData.get()) {
           // 文件不展开
           this.messageService.info(localize('codereview.folding.cantExpand'));
           return;
