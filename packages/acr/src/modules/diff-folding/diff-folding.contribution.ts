@@ -127,7 +127,7 @@ export class DiffFoldingContribution extends WithEventBus implements CommandCont
     // diff 数据折叠
     if (!this.preferenceService.get('acr.foldingEnabled') && !this.isDiffData) return;
     let originReverse: IRange[], modifiedReverse: IRange[];
-    if (this.isDiffData) {
+    if (this.isDiffData.get()) {
       originReverse = this.gitDocContentProvider.diffData.get(originalUri.toString()) as IRange[];
       modifiedReverse = this.gitDocContentProvider.diffData.get(modifiedUri.toString()) as IRange[];
 
