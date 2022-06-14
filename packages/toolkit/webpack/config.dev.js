@@ -8,8 +8,8 @@ require('dotenv').config({ path: path.join(__dirname, '../../../.env') });
 
 process.env.NODE_ENV = 'development';
 
-// const antCodeSitHost = 'http://100.83.41.35:80';
-const antCodeSitHost = 'http://code.test.alipay.net';
+const antCodeSitHost = 'http://100.83.41.35:80';
+// const antCodeSitHost = 'http://code.test.alipay.net';
 
 module.exports = () => {
   const integrationConfig = createWebpackConfig({

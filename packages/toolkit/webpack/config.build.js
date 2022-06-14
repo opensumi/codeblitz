@@ -106,4 +106,45 @@ const globalBundle = createWebpackConfig({
   },
 });
 
-module.exports = [libBundle, globalBundle];
+const acrBundle = createWebpackConfig({
+  mode: 'production',
+  tsconfigPath: path.join(__dirname, '../../../tsconfig.json'),
+  outputPath: path.join(__dirname, '../../acr/bundle'),
+  define: Object.keys(define).reduce((obj, key) => {
+    obj[key] = JSON.stringify(define[key]);
+    return obj;
+  }, {}),
+  webpackConfig: {
+    context: path.join(__dirname, '../../..'),
+    entry: {
+      [config.acrGlobalEntry]: './packages/acr/src',
+      [config.acrGlobalMinEntry]: './packages/acr/src',
+    },
+    // 此处 bundle 的包仅作为 commonjs 使用，但因为 external 原因会导致 webpack4 加载 bundle 出错，因此还是使用 umd
+    output: {
+      library: 'ACR',
+      libraryTarget: 'global',
+    },
+    externals: [
+      {
+        react: 'React',
+        'react-dom': 'ReactDOM',
+      },
+    ],
+    optimization: {
+      minimize: true,
+      minimizer: [
+        new TerserPlugin({
+          parallel: true,
+          include: /\.min\.js$/,
+        }),
+        new CssMinimizerPlugin({
+          include: /\.min\.css$/,
+        }),
+      ],
+      concatenateModules: false,
+    },
+  },
+});
+
+module.exports = [libBundle, globalBundle, acrBundle];
