@@ -1,3 +1,13 @@
+## [2.0.2](https://code.alipay.com/cloud-ide/crew-dragon/compare/v2.0.1...v2.0.2) (2022-06-14)
+
+
+### Bug Fixes
+
+* 修复acr内代码折叠问题 ([7fa4632](https://code.alipay.com/cloud-ide/crew-dragon/commits/7fa4632f3cf2a840df9a08756ee1f6b0ef57204e))
+* 修复commit信息丢失导致展示问题 ([b3eefd8](https://code.alipay.com/cloud-ide/crew-dragon/commits/b3eefd8f30d00536b38cede30ada2e98188219d9))
+
+
+
 ## [2.0.1](https://code.alipay.com/cloud-ide/crew-dragon/compare/v2.0.0...v2.0.1) (2022-06-07)
 
 
