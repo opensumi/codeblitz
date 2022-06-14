@@ -1,6 +1,7 @@
 import { SHA1 } from 'crypto-js';
 import { IComment } from '../antcode-service/base';
-
+import { generateRange } from '../diff-folding/utils';
+import { IRange } from '@opensumi/ide-core-browser';
 export class LineNum {
   constructor(public del: number, public add: number) {}
 }
@@ -248,5 +249,72 @@ export function isChangeLineRelated(
   } else {
     // 1 为有边，同样是找到行号则认为是变更行
     return !!findByRight(diffStr, rightLineNumber);
+  }
+}
+
+// 获取diff左侧 右侧内容
+export function diffToContent(diff: string) {
+  let leftContent: string[] = [],
+    rightContent: string[] = [];
+  let leftStart,
+    leftEnd = 0,
+    rightStart,
+    rightEnd = 0;
+
+  let originalFoldingRanges: IRange[] = [];
+  let modifiedFoldingRanges: IRange[] = [];
+  // 第一行展示修复
+  let isStart = true;
+
+  const diffs = diff.split('\n');
+  for (const line of diffs) {
+    if (line.startsWith('@@')) {
+      const matcher = DIFF_CHANGE_LINE_PATTERN.exec(line);
+      if (matcher) {
+        leftStart = parseInt(matcher[1], 10);
+        rightStart = parseInt(matcher[1], 10);
+
+        // 多条diff数据 为保证行数一致需填充数据
+        if (leftStart > leftEnd) {
+          const lines = leftStart - leftEnd;
+          addContent(leftContent, lines);
+          originalFoldingRanges.push(generateRange(isStart ? leftStart : leftStart - 1, leftEnd));
+        }
+        if (rightStart > rightEnd) {
+          const lines = rightStart - rightEnd;
+          addContent(rightContent, lines);
+          modifiedFoldingRanges.push(
+            generateRange(isStart ? rightStart : rightStart - 1, rightEnd)
+          );
+        }
+        leftEnd = leftStart + parseInt(matcher[3] || '1', 10) - 1;
+        rightEnd = leftStart + parseInt(matcher[3] || '1', 10) - 1;
+      }
+    } else {
+      if (line.startsWith('-')) {
+        leftContent.push(line.slice(1));
+      } else if (line.startsWith('+')) {
+        rightContent.push(line.slice(1));
+      } else if (line.startsWith('\\ No newline at end of file')) {
+        continue;
+      } else {
+        leftContent.push(line);
+        rightContent.push(line);
+      }
+    }
+    isStart = false;
+  }
+
+  return {
+    original: leftContent,
+    modified: rightContent,
+    modifiedFoldingRanges,
+    originalFoldingRanges,
+  };
+
+  function addContent(arr: string[], lines: number) {
+    for (let i = 1; i < lines; i++) {
+      arr.push(' // 数据获取失败 仅展示diff数据');
+    }
   }
 }

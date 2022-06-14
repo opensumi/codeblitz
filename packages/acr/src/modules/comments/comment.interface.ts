@@ -15,3 +15,13 @@ export interface IAnnotationThreadData extends IAnnotationData {
 export interface IAntcodeCommentThread extends ICommentsThread {
   data: ICommentsThreadData | IAnnotationThreadData;
 }
+
+export interface FoldingRegion {
+  index: number;
+  ranges: any;
+  endLineNumber: number;
+  isCollapsed: boolean;
+  parentIndex: number;
+  regionIndex: number;
+  startLineNumber: number;
+}

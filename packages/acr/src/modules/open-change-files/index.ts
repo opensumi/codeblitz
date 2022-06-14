@@ -221,11 +221,14 @@ export class OpenChangeFilesService extends Disposable {
     }
   }
 
-  private async fetchDiff(path: string) {
+  async fetchDiff(path: string) {
     // 如果没有 diff 信息，则去请求
-    const changeDiff = this.antcodeService.pullRequestChangeList.find(
-      (changeDiff) => changeDiff.newPath === path
-    );
+    const changeDiff = this.antcodeService.pullRequestChangeList.find((changeDiff) => {
+      return (
+        changeDiff.newPath === path ||
+        (changeDiff.newPath !== changeDiff.oldPath && changeDiff.oldPath === path)
+      );
+    });
     // @ts-ignore
     if (!changeDiff.diff) {
       // @ts-ignore
@@ -234,5 +237,6 @@ export class OpenChangeFilesService extends Disposable {
       changeDiff.diff = data.diff;
       this.eventBus.fire(new DiffChangeEvent(data));
     }
+    return changeDiff;
   }
 }

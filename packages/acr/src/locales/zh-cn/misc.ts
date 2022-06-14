@@ -10,4 +10,6 @@ export default {
   'misc.switch.change-files': '切换变更文件',
   'misc.ide-mode.description': 'IDE 代码体验、完善的语言服务、高效的代码编辑',
   'misc.quick-open.changes_desc': '新增行 {0} / 删除行 {1}',
+  'misc.analyse.diff.error': '解析 {0} 的diff数据失败',
+  'misc.analyse.diff.none': '无可展示的变更',
 };

@@ -18,16 +18,20 @@ import {
   IContextKey,
   IContextKeyService,
   PreferenceChange,
+  localize,
 } from '@opensumi/ide-core-browser';
 import { Domain } from '@opensumi/ide-core-common/lib/di-helper';
 import { WorkbenchEditorService } from '@opensumi/ide-editor';
-import { MiscCommands, MISC_IS_EXPAND_RAW_KEY } from '.';
+import { MiscCommands, MISC_IS_EXPAND_RAW_KEY, MISC_IS_DIFF_DATA } from '.';
 import { AntcodeDiffFoldingService } from './diff-folding.service';
 import { sleep, generateRange } from './utils';
 import { DiffFoldingWidgetService } from './zone-widget/widget.service';
 import { AntcodeCommentsService } from '../comments/comments.service';
 import { EditorGroupOpenEvent } from '@opensumi/ide-editor/lib/browser';
 import { isChangeFileURI } from '../merge-request/changes-tree/util';
+import { GitDocContentProvider } from '../git-scheme/doc-content-provider/git';
+import { IMessageService } from '@opensumi/ide-overlay';
+import { ICommentsService } from '@opensumi/ide-comments';
 
 @Domain(CommandContribution, ClientAppContribution)
 export class DiffFoldingContribution extends WithEventBus implements CommandContribution {
@@ -36,6 +40,9 @@ export class DiffFoldingContribution extends WithEventBus implements CommandCont
 
   @Autowired(WorkbenchEditorService)
   private readonly workbenchEditorService: WorkbenchEditorService;
+
+  @Autowired(GitDocContentProvider)
+  private readonly gitDocContentProvider: GitDocContentProvider;
 
   @Autowired(PreferenceService)
   private readonly preferenceService: PreferenceService;
@@ -52,15 +59,23 @@ export class DiffFoldingContribution extends WithEventBus implements CommandCont
   @Autowired(AntcodeCommentsService)
   private readonly antcodeCommentsService: AntcodeCommentsService;
 
+  @Autowired(IMessageService)
+  private readonly messageService: IMessageService;
+
+  @Autowired(ICommentsService)
+  private readonly commentsService: ICommentsService;
+
   private disposeColl = new DisposableCollection();
 
   private readonly miscIsExpand: IContextKey<boolean>;
+  private readonly isDiffData: IContextKey<boolean>;
 
   private currentURI: URI | undefined;
 
   constructor() {
     super();
     this.miscIsExpand = MISC_IS_EXPAND_RAW_KEY.bind(this.globalContextKeyService);
+    this.isDiffData = MISC_IS_DIFF_DATA.bind(this.globalContextKeyService);
     this.antcodeDiffFoldingService.currentRangeModel.setCurrentRangeMap([], 'original');
     this.antcodeDiffFoldingService.currentRangeModel.setCurrentRangeMap([], 'modified');
   }
@@ -96,23 +111,67 @@ export class DiffFoldingContribution extends WithEventBus implements CommandCont
     if (!isChangeFileURI(uri)) return;
     if (uri.scheme !== 'diff') return;
 
-    if (!this.preferenceService.get('acr.foldingEnabled')) return;
-
     const { diffEditor } = this.workbenchEditorService.currentEditorGroup;
+    const originalUri = diffEditor.originalEditor.currentUri as URI;
+    const modifiedUri = diffEditor.modifiedEditor.currentUri as URI;
+    if (!originalUri || !modifiedUri) return;
+    // TODO 更好判断是否是diff数据
+    if (
+      this.gitDocContentProvider.diffData.has(originalUri.toString()) &&
+      this.gitDocContentProvider.diffData.has(modifiedUri.toString())
+    ) {
+      this.isDiffData.set(true);
+    } else {
+      this.isDiffData.set(false);
+    }
+    // diff 数据折叠
+    if (!this.preferenceService.get('acr.foldingEnabled') && !this.isDiffData) return;
+    let originReverse: IRange[], modifiedReverse: IRange[];
+    if (this.isDiffData.get()) {
+      originReverse = this.gitDocContentProvider.diffData.get(originalUri.toString()) as IRange[];
+      modifiedReverse = this.gitDocContentProvider.diffData.get(modifiedUri.toString()) as IRange[];
 
-    if (!diffEditor.originalEditor.currentUri || !diffEditor.modifiedEditor.currentUri) return;
+      const originalThreads = this.commentsService.getThreadsByUri(originalUri);
+      const modifiedThreads = this.commentsService.getThreadsByUri(modifiedUri);
 
-    const [oRanges, mRanges] = await this.antcodeDiffFoldingService.computeDiffToRange(
-      // FIXME @倾一 清理掉 `!`
-      diffEditor.originalEditor.currentUri.codeUri,
-      diffEditor.modifiedEditor.currentUri.codeUri,
-      !!this.preferenceService.get('diffEditor.ignoreTrimWhitespace')
-    );
+      const originalHideThreads = originalThreads.filter((thread) => {
+        const { startLineNumber } = thread.range;
+        const isHide = originReverse.some((range) => {
+          if (range.endLineNumber >= startLineNumber && range.startLineNumber < startLineNumber) {
+            return true;
+          }
+        });
+        return isHide;
+      });
 
-    const [originReverse, modifiedReverse] = await this.antcodeDiffFoldingService.calcReverseRange(
-      oRanges,
-      mRanges
-    );
+      const modifiedHideThreads = modifiedThreads.filter((thread) => {
+        const { startLineNumber } = thread.range;
+        const isHide = modifiedReverse.some((range) => {
+          if (range.endLineNumber >= startLineNumber && range.startLineNumber < startLineNumber) {
+            return true;
+          }
+        });
+        return isHide;
+      });
+      const hideThreads = [...originalHideThreads, ...modifiedHideThreads];
+      // 此处折叠后不能再打开 折叠部分的评论隐藏
+      hideThreads.forEach((thread) => {
+        // TODO 点击全部评论按钮还是会展示
+        thread.hide();
+      });
+    } else {
+      const [oRanges, mRanges] = await this.antcodeDiffFoldingService.computeDiffToRange(
+        // FIXME @倾一 清理掉 `!`
+        originalUri.codeUri,
+        modifiedUri.codeUri,
+        !!this.preferenceService.get('diffEditor.ignoreTrimWhitespace')
+      );
+
+      [originReverse, modifiedReverse] = await this.antcodeDiffFoldingService.calcReverseRange(
+        oRanges,
+        mRanges
+      );
+    }
 
     this.generateFolding(originReverse, modifiedReverse);
 
@@ -164,6 +223,11 @@ export class DiffFoldingContribution extends WithEventBus implements CommandCont
     // zone widget event change
     this.addDispose(
       this.diffFoldingWidgetService.onUnFoldChanged(async (changeData) => {
+        if (this.isDiffData) {
+          // 文件不展开
+          this.messageService.info(localize('codereview.folding.cantExpand'));
+          return;
+        }
         const { data, type } = changeData;
 
         let formatDataForOriginal: DiffFoldingChangeData = data;

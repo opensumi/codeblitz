@@ -479,15 +479,8 @@ export class BrowserSCMClient extends Disposable {
     //   '/browser_os_home/.kaitian/datas/web-scm.json',
     //   'utf8'
     // );
-    // console.log(
-    //   content,
-    //   'content',
-    //   this.projectRootDir.toString(),
-    //   stagedFiles
-    // );
     if (Array.isArray(stagedFiles) && stagedFiles.length > 0) {
       const validStagedFileList: URI[] = [];
-      // console.log(stagedFiles, 'stagedFiles', this.projectRootDir.toString());
       for (const uriStr of stagedFiles) {
         const uri = new URI(uriStr);
         if (this.projectRootDir.isEqualOrParent(uri)) {

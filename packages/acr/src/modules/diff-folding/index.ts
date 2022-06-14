@@ -23,6 +23,9 @@ export class MiscCommands {
 export const MISC_IS_EXPAND = 'misc.isExpand';
 export const MISC_IS_EXPAND_RAW_KEY = new RawContextKey<boolean>(MISC_IS_EXPAND, false);
 
+export const IS_DIFF_DATA = 'misc.isDiffData';
+export const MISC_IS_DIFF_DATA = new RawContextKey<boolean>(IS_DIFF_DATA, false);
+
 export interface IConverDiffByGit {
   content: string;
   type: '-' | '+' | null;

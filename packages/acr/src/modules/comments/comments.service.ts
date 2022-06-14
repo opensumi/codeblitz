@@ -39,6 +39,10 @@ export class AntcodeCommentsService {
     return this._comments.get(id);
   }
 
+  public getAllComments() {
+    return this._comments;
+  }
+
   /**
    * 创建一个评论
    * @param commentId noteId
@@ -46,7 +50,6 @@ export class AntcodeCommentsService {
    */
   public createComment(comment: IComment) {
     const [, leftLineNumberStr, rightLineNumberStr] = comment.lineCode.split('_');
-
     const [leftLineNumber, rightLineNumber] = [
       parseInt(leftLineNumberStr, 10),
       parseInt(rightLineNumberStr, 10),
@@ -106,6 +109,11 @@ export class AntcodeCommentsService {
     if (comment) {
       comment.dispose();
       this._comments.delete(commentId);
+    }
+  }
+  public showAll() {
+    for (let [, thread] of this._comments) {
+      thread.show();
     }
   }
 }
