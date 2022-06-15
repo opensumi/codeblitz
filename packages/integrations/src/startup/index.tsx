@@ -29,6 +29,8 @@ import anycodePython from '@alipay/alex/extensions/opensumi-lite-extensions.anyc
 import anycodeRust from '@alipay/alex/extensions/opensumi-lite-extensions.anycode-rust';
 import anycodeTypescript from '@alipay/alex/extensions/opensumi-lite-extensions.anycode-typescript';
 import referencesView from '@alipay/alex/extensions/opensumi-lite-extensions.references-view';
+import emmet from '@alipay/alex/extensions/opensumi-lite-extensions.emmet';
+import codeswing from '@alipay/alex/extensions/vscode-extensions.codeswing';
 
 import { LocalExtensionModule } from '../common/local-extension.module';
 import * as Plugin from '../editor/plugin';
@@ -123,6 +125,8 @@ const App = () => (
         imagePreview,
         webSCM,
         referencesView,
+        codeswing,
+        emmet,
         anycodeCSharp,
         anycodeCpp,
         anycodeGo,

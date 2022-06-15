@@ -204,6 +204,16 @@
       "publisher": "opensumi-lite-extensions",
       "name": "references-view",
       "version": "1.0.0"
+    },
+    {
+      "publisher": "opensumi-lite-extensions",
+      "name": "emmet",
+      "version": "1.0.0"
+    },
+    {
+      "publisher": "vscode-extensions",
+      "name": "codeswing",
+      "version": "0.0.21"
     }
   ]
 }
