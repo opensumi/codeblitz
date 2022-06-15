@@ -3,6 +3,15 @@
 
 
 ## [2.0.3](https://code.alipay.com/cloud-ide/crew-dragon/compare/v2.0.2...v2.0.3) (2022-07-08)
+## [2.0.2-5](https://code.alipay.com/cloud-ide/crew-dragon/compare/v2.0.2-4...v2.0.2-5) (2022-06-15)
+
+
+### Features
+
+* 集成 codeswing 及 emmet ([1afa354](https://code.alipay.com/cloud-ide/crew-dragon/commits/1afa354f39f5ecd85057f64d6adf2e4cebf22800))
+
+
+
 ## [2.0.2-4](https://code.alipay.com/cloud-ide/crew-dragon/compare/v2.0.2...v2.0.2-4) (2022-06-15)
 
 
