@@ -22,6 +22,19 @@ export class FileSearchService implements IFileSearchService {
   @Autowired(AppConfig)
   appConfig: AppConfig;
 
+  private async asyncSome(arr, predicate) {
+    for (let e of arr) {
+      if (await predicate(e)) return true;
+    }
+    return false;
+  }
+
+  private asyncExecute(callback) {
+    return new Promise((resolve) =>
+      (window.requestIdleCallback || window.setTimeout)(() => resolve(callback()))
+    );
+  }
+
   async find(
     searchPattern: string,
     options: IFileSearchService.Options,
@@ -39,69 +52,73 @@ export class FileSearchService implements IFileSearchService {
 
     const config = this.runtimeConfig.fileSearch.config || {};
 
-    return new Promise((resolve) => {
-      setTimeout(async () => {
-        if (token.isCancellationRequested) {
-          return resolve([]);
+    if (token.isCancellationRequested) {
+      return [];
+    }
+
+    const provideFileSearchResults = this.runtimeConfig.fileSearch!.provideResults;
+
+    try {
+      const res = await provideFileSearchResults(
+        { pattern: searchPattern },
+        {
+          maxResults: options.limit,
+          includes: options.includePatterns || [],
+          excludes: options.excludePatterns || [],
         }
+      );
 
-        const provideFileSearchResults = this.runtimeConfig.fileSearch!.provideResults;
+      if (token.isCancellationRequested) {
+        return [];
+      }
 
-        try {
-          const res = await provideFileSearchResults(
-            { pattern: searchPattern },
-            {
-              maxResults: options.limit,
-              includes: options.includePatterns || [],
-              excludes: options.excludePatterns || [],
-            }
-          );
+      if (!res) {
+        return [];
+      }
 
-          if (token.isCancellationRequested) {
-            return resolve([]);
+      const includeMatcherList =
+        (config.include === 'local' &&
+          options?.includePatterns?.map((str: string) => parse(anchorGlob(str)))) ||
+        [];
+      const excludeMatcherList =
+        (config.exclude === 'local' &&
+          options?.excludePatterns?.map((str: string) => parse(anchorGlob(str)))) ||
+        [];
+      let resCount = 0;
+      const result = await Promise.all(
+        res.map(async (filepath) => {
+          if (options.limit && resCount >= options.limit) {
+            return;
+          }
+          const fileUri = URI.file(paths.join(this.appConfig.workspaceDir, filepath)).toString();
+          if (
+            includeMatcherList.length > 0 &&
+            !(await this.asyncSome(includeMatcherList, (matcher) =>
+              this.asyncExecute(() => matcher(fileUri))
+            ))
+          ) {
+            return;
           }
 
-          if (!res) {
-            return resolve([]);
+          if (
+            excludeMatcherList.length > 0 &&
+            (await this.asyncSome(excludeMatcherList, (matcher) =>
+              this.asyncExecute(() => matcher(fileUri))
+            ))
+          ) {
+            return;
           }
-
-          const includeMatcherList =
-            (config.include === 'local' &&
-              options?.includePatterns?.map((str: string) => parse(anchorGlob(str)))) ||
-            [];
-          const excludeMatcherList =
-            (config.exclude === 'local' &&
-              options?.excludePatterns?.map((str: string) => parse(anchorGlob(str)))) ||
-            [];
-
-          const filterRes: string[] = [];
-
-          res.forEach((filepath) => {
-            if (options.limit && filterRes.length >= options.limit) {
-              return;
-            }
-            const fileUri = URI.file(paths.join(this.appConfig.workspaceDir, filepath)).toString();
-            if (
-              includeMatcherList.length > 0 &&
-              !includeMatcherList.some((matcher) => matcher(fileUri))
-            )
-              return;
-
-            if (
-              excludeMatcherList.length > 0 &&
-              excludeMatcherList.some((matcher) => matcher(fileUri))
-            )
-              return;
-
-            filterRes.push(fileUri);
-          });
-
-          resolve(filterRes);
-        } catch (err) {
-          this.logger.error(err);
-          resolve([]);
-        }
-      }, 300);
-    });
+          resCount++;
+          return fileUri;
+        })
+      );
+      if (token.isCancellationRequested) {
+        return [];
+      }
+      return result.filter(Boolean) as string[];
+    } catch (err) {
+      this.logger.error(err);
+      return [];
+    }
   }
 }
