@@ -167,6 +167,11 @@ export interface Branch {
   isCooperate?: boolean;
 }
 
+export interface Project {
+  id: string;
+  default_branch: string | null;
+}
+
 export interface Commit {
   author_email: string;
   author_name: string;
@@ -306,6 +311,10 @@ export interface ICodeAPIService {
    * 获取用户信息
    */
   getUser(repo: IRepositoryModel): Promise<any>;
+  /**
+   * 获取仓库信息
+   */
+  getProject(repo: IRepositoryModel): Promise<Project>;
 }
 
 export interface ICodeAPIServiceProvider extends ICodeAPIService {

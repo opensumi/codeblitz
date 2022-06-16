@@ -12,6 +12,7 @@ import type {
   BranchOrTag,
   CommitParams,
   Branch,
+  Project,
 } from '../common/types';
 import { CodePlatform, CommitFileStatus } from '../common/types';
 
@@ -183,14 +184,11 @@ export class GitLabAPIService implements ICodeAPIService {
   }
 
   async getProject(repo: IRepositoryModel) {
-    const data = await this.request<API.ResponseGetProject>(
-      `/api/v3/projects/find_with_namespace`,
-      {
-        params: {
-          path: this.getProjectPath(repo),
-        },
-      }
-    );
+    const data = await this.request<Project>(`/api/v3/projects/find_with_namespace`, {
+      params: {
+        path: this.getProjectPath(repo),
+      },
+    });
     if (!data?.id) {
       const message = formatLocalize('api.response.project-not-found', this.getProjectPath(repo));
       this.showErrorMessage('', message, 404);

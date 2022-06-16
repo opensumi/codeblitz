@@ -201,7 +201,9 @@ export class RootRepository extends Repository {
     this._initialized = true;
     this.getRefs();
     if (!commit && !ref && !refPath) {
-      this.ref = HEAD;
+      // 查询默认分支
+      const { default_branch } = await this.request.getProject();
+      this.ref = default_branch || HEAD;
       await this.initCommit();
       return;
     }
