@@ -3,7 +3,7 @@ import { localize, IReporterService, MessageType, LRUCache } from '@opensumi/ide
 import { REPORT_NAME } from '@alipay/alex-core';
 import { request, RequestOptions, isResponseError } from '@alipay/alex-shared';
 import { API } from './types';
-import { Branch, FileAction, FileActionHeader, FileActionResult } from '../common/types';
+import { Branch, FileAction, FileActionHeader, FileActionResult, Project } from '../common/types';
 import {
   ICodeAPIService,
   ISearchResults,
@@ -16,6 +16,7 @@ import {
 } from '../common/types';
 import { CODE_PLATFORM_CONFIG } from '../common/config';
 import { HelperService } from '../common/service';
+import { formatLocalize } from '@opensumi/ide-core-browser';
 
 const toType = (d: API.ResponseCommitFileChange) => {
   if (d.new_file) return CommitFileStatus.Added;
@@ -371,6 +372,10 @@ export class AntCodeAPIService implements ICodeAPIService {
 
   async getUser(): Promise<API.User> {
     return await this.request(`/api/v3/user`);
+  }
+
+  async getProject(repo: IRepositoryModel): Promise<Project> {
+    return await this.request<Project>(`/api/v3/projects/${this.getProjectId(repo)}`);
   }
 
   // async function createPullRequest(data: CodeRegistryPullRequestCreateParameters): Promise<CodeRegistryPullRequest> {

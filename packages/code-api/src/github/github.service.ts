@@ -15,6 +15,7 @@ import type {
   CommitParams,
   CommitFileChange,
   Branch,
+  Project,
 } from '../common/types';
 import { CodePlatform, CommitFileStatus } from '../common/types';
 import { CODE_PLATFORM_CONFIG } from '../common/config';
@@ -65,6 +66,12 @@ export class GitHubAPIService implements ICodeAPIService {
 
   constructor() {
     this._OAUTH_TOKEN = this.config.token || this.helper.GITHUB_TOKEN;
+  }
+  async getProject(repo: IRepositoryModel): Promise<Project> {
+    const data = await this.requestByREST<Project>(`/repos/${this.getProjectPath(repo)}`, {
+      responseType: 'json',
+    });
+    return data;
   }
   getUser(repo: IRepositoryModel): Promise<Branch> {
     throw new Error('Method not implemented.');
