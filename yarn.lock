@@ -876,13 +876,12 @@
     mkdirp "^1.0.4"
     rimraf "^3.0.2"
 
-"@opensumi/di@^1.0.0", "@opensumi/di@^1.1.0":
-  version "1.1.0"
-  resolved "https://registry.npm.alibaba-inc.com/@opensumi/di/download/@opensumi/di-1.1.0.tgz#18320bc5cb7f39092b1540320fb2bb397291cbaf"
-  integrity sha512-O4dho1UcUDch4LLrDRr2GhIHGNZ7tw86tughGMdjTpJ+rNWr8MHJUGWT3N+qcYLl0trxoCCSRy93QvE1DiVVcw==
+"@opensumi/di@^1.4.0":
+  version "1.4.0"
+  resolved "https://registry.npmmirror.com/@opensumi/di/-/di-1.4.0.tgz#6afea33f08d1551416c2ba3e3c376878e8ddfa31"
+  integrity sha512-lTNnv7RvXd/RkYKEmhorOUZk5pIfvPtJiOIEOWN4RNMDBAGTemObA7D8pkAuWyMCicyjXKxLfhf5yRVyjHudzw==
   dependencies:
-    reflect-metadata "^0.1.12"
-    tslib "^1.9.3"
+    reflect-metadata "^0.1.13"
 
 "@opensumi/ide-addons@2.18.8":
   version "2.18.8"
@@ -10720,7 +10719,7 @@ redent@^3.0.0:
     indent-string "^4.0.0"
     strip-indent "^3.0.0"
 
-reflect-metadata@^0.1.12:
+reflect-metadata@^0.1.13:
   version "0.1.13"
   resolved "https://registry.npm.alibaba-inc.com/reflect-metadata/download/reflect-metadata-0.1.13.tgz#67ae3ca57c972a2aa1642b10fe363fe32d49dc08"
   integrity sha1-Z648pXyXKiqhZCsQ/jY/4y1J3Ag=
@@ -12332,7 +12331,7 @@ tsconfig-paths@^3.9.0:
     minimist "^1.2.0"
     strip-bom "^3.0.0"
 
-tslib@^1.10.0, tslib@^1.9.0, tslib@^1.9.3:
+tslib@^1.10.0, tslib@^1.9.0:
   version "1.14.1"
   resolved "https://registry.npm.alibaba-inc.com/tslib/download/tslib-1.14.1.tgz#cf2d38bdc34a134bcaf1091c41f6619e2f672d00"
   integrity sha1-zy04vcNKE0vK8QkcQfZhni9nLQA=
