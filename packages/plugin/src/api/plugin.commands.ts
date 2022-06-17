@@ -6,11 +6,8 @@ import {
   Disposable,
   IDisposable,
 } from '@opensumi/ide-core-common';
-import {
-  ICommandServiceToken,
-  IMonacoCommandService,
-} from '@opensumi/ide-monaco/lib/browser/contrib/command';
-
+import { ICommandServiceToken } from '@opensumi/ide-monaco/lib/browser/contrib/command';
+import type { IMonacoCommandService } from '@opensumi/ide-monaco/lib/browser/contrib/command';
 type Handler<T = any> = (...args: any[]) => T | Promise<T>;
 
 interface CommandHandler<T> {
