@@ -24,5 +24,7 @@ export class MergeRequestContribution implements ComponentContribution, MenuCont
     menus.unregisterMenuId(`accordion/${MergeRequestExplorerId}`);
     // 卸载配置菜单
     menus.unregisterMenuId(`activityBar/extra`);
+    // 卸载左侧右键菜单
+    menus.unregisterMenuId(`tabbar/left`);
   }
 }
