@@ -1,5 +1,5 @@
 import { Autowired } from '@opensumi/di';
-import { Domain, URI, FsProviderContribution } from '@opensumi/ide-core-browser';
+import { Domain, URI, FsProviderContribution, Schemes } from '@opensumi/ide-core-browser';
 import {
   StaticResourceContribution,
   StaticResourceService,
@@ -37,5 +37,8 @@ export class KtExtFsProviderContribution
 
   registerProvider(registry: IFileServiceClient) {
     registry.registerProvider(EXT_SCHEME, this.ktExtFsProvider);
+    // 一些插件读取文件会直接走 https/http 协议
+    registry.registerProvider(Schemes.https, this.ktExtFsProvider);
+    registry.registerProvider(Schemes.http, this.ktExtFsProvider);
   }
 }
