@@ -105,8 +105,8 @@ namespace CODE_SERVICE_COMMANDS {
     id: 'code-service.getUser',
     category: CATEGORY,
   };
-  export const REFRESHWINDOW: Command = {
-    id: 'code-service.refreshWindow',
+  export const SCMREFRESH: Command = {
+    id: 'code-service.scmRefresh',
     category: CATEGORY,
   };
 }
@@ -174,7 +174,7 @@ export class CommandsContribution extends Disposable implements CommandContribut
       CODE_SERVICE_COMMANDS.SEARCHFILES,
       CODE_SERVICE_COMMANDS.GETFILES,
       CODE_SERVICE_COMMANDS.GETUSER,
-      CODE_SERVICE_COMMANDS.REFRESHWINDOW,
+      CODE_SERVICE_COMMANDS.SCMREFRESH,
       // CODE_SERVICE_COMMANDS.CREATEBRANCH,
       // CODE_SERVICE_COMMANDS.CREATEBRANCHFROM,
     ];
@@ -269,8 +269,10 @@ export class CommandsContribution extends Disposable implements CommandContribut
     if (!repo) return;
     return repo.request.getUser();
   }
-  async refreshWindow() {
-    window.location.href = window.location.href;
+  async scmRefresh(commit: string, ref: string) {
+    // scm 提交完刷新
+    const repo = this.codeModel.rootRepository;
+    await repo.refreshRepository(commit, ref);
   }
 
   async refs(repoPath: string): Promise<
