@@ -43,6 +43,10 @@ const platformConfig = {
     owner: 'kaitian',
     name: 'ide-framework',
   },
+  gitlink: {
+    owner: 'Gitlink',
+    name: 'forgeplus',
+  },
 };
 
 const layoutConfig = getDefaultLayoutConfig();
@@ -87,6 +91,10 @@ const App = () => (
             // for test environment
             // endpoint: '/code-test',
             // origin: 'http://code.test.alipay.net:9009/code-test'
+          },
+          gitlink: {
+            endpoint: '/code-service',
+            // origin: 'https://testforgeplus.trustie.net'
           },
         }),
         CodeAPIModule,

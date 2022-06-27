@@ -89,6 +89,29 @@ export const CODE_PLATFORM_CONFIG: Record<ICodePlatform, ICodePlatformConfig> = 
       },
     },
   },
+  [CodePlatform.gitlink]: {
+    platform: CodePlatform.gitlab,
+    hostname: ['www.gitlink.org.cn'],
+    origin: 'https://www.gitlink.org.cn',
+    endpoint: 'https://www.gitlink.org.cn',
+    brand: 'GitLink',
+    line: {
+      parse(hash: string) {
+        let matched: RegExpMatchArray | null = null;
+        matched = hash.match(/^#L(\d+)(?:-(\d+))?$/);
+        if (matched) {
+          return [+matched[1], +(matched[2] || matched[1])];
+        }
+        return null;
+      },
+      format([startLineNumber, endLineNumber]) {
+        if (startLineNumber === endLineNumber) {
+          return `#L${startLineNumber}`;
+        }
+        return `#L${startLineNumber}-${endLineNumber}`;
+      },
+    },
+  },
 };
 
 export const extendPlatformConfig = (

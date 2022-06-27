@@ -12,6 +12,7 @@ import { ICodePlatform, ICodeAPIProvider, ICodeAPIService, CodePlatform } from '
 import { AntCodeAPIService } from './antcode/antcode.service';
 import { GitHubAPIService } from './github/github.service';
 import { GitLabAPIService } from './gitlab/gitlab.service';
+import { GitLinkAPIService } from './gitlink/gitlink.service';
 import { GitHubView } from './github/github.view';
 import { GitLabView } from './gitlab/gitlab.view';
 
@@ -82,6 +83,9 @@ export class CodeAPIProvider implements ICodeAPIProvider, ClientAppContribution 
         });
       },
     });
+    this.registerPlatformProvider(CodePlatform.gitlink, {
+      provider: GitLinkAPIService,
+    });
   }
 
   registerPlatformProvider(
@@ -113,6 +117,10 @@ export class CodeAPIProvider implements ICodeAPIProvider, ClientAppContribution 
 
   get gitlab() {
     return this.asPlatform(CodePlatform.gitlab) as GitLabAPIService;
+  }
+
+  get gitlink() {
+    return this.asPlatform(CodePlatform.gitlink) as GitLabAPIService;
   }
 
   onStart() {

@@ -47,6 +47,8 @@ import * as WorkspaceEdit from '../modules/opensumi__ide-workspace-edit';
 // others
 import * as CommonDI from '../modules/opensumi__common-di';
 import * as AlexCore from '../modules/alipay__alex-core';
+import * as CodeService from '../modules/alipay__alex-code-service';
+import * as CodeApi from '../modules/alipay__alex-code-api';
 
 // node
 import * as os from 'os';
@@ -98,6 +100,8 @@ export function requireModule(module: '@opensumi/ide-workspace-edit'): typeof Wo
 
 export function requireModule(module: '@opensumi/di'): typeof CommonDI;
 export function requireModule(module: '@alipay/alex-core'): typeof AlexCore;
+export function requireModule(module: '@alipay/alex-code-api'): typeof CodeApi;
+export function requireModule(module: '@alipay/alex-code-service'): typeof CodeService;
 
 export function requireModule(module: 'fs'): typeof AlexCore.fs;
 export function requireModule(module: 'fs-extra'): typeof AlexCore.fsExtra;
@@ -195,7 +199,10 @@ export function requireModule(module: string): any {
       return CommonDI;
     case '@alipay/alex-core':
       return AlexCore;
-
+    case '@alipay/alex-code-api':
+      return CodeApi;
+    case '@alipay/alex-code-service':
+      return CodeService;
     case 'fs':
       return AlexCore.fs;
     case 'fs-extra':
