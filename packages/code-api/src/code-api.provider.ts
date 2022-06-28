@@ -120,7 +120,7 @@ export class CodeAPIProvider implements ICodeAPIProvider, ClientAppContribution 
   }
 
   get gitlink() {
-    return this.asPlatform(CodePlatform.gitlink) as GitLabAPIService;
+    return this.asPlatform(CodePlatform.gitlink) as GitLinkAPIService;
   }
 
   onStart() {

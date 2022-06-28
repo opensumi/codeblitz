@@ -90,7 +90,7 @@ export const CODE_PLATFORM_CONFIG: Record<ICodePlatform, ICodePlatformConfig> = 
     },
   },
   [CodePlatform.gitlink]: {
-    platform: CodePlatform.gitlab,
+    platform: CodePlatform.gitlink,
     hostname: ['www.gitlink.org.cn'],
     origin: 'https://www.gitlink.org.cn',
     endpoint: 'https://www.gitlink.org.cn',

@@ -97,9 +97,9 @@ export class GitLinkAPIService implements ICodeAPIService {
     return `${repo.owner}/${repo.name}`;
   }
 
-  // 静态资源路径
+  // TODO 静态资源路径  gitlink 静态资源好像无法用commit获取
   transformStaticResource(repo: IRepositoryModel, path: string) {
-    return `${this.config.origin}/${this.getProjectPath(repo)}/raw/${repo.commit}/${path}`;
+    return `${this.config.origin}/repo/${this.getProjectPath(repo)}/raw/${repo.commit}/${path}`;
   }
 
   protected async request<T>(path: string, options?: RequestOptions): Promise<T> {
@@ -240,9 +240,6 @@ export class GitLinkAPIService implements ICodeAPIService {
     }));
   }
 
-  /**
-   * gitlab 接口不支持搜索
-   */
   async searchContent() {
     return [];
   }
@@ -272,8 +269,12 @@ export class GitLinkAPIService implements ICodeAPIService {
     return [];
   }
 
-  async getFiles() {
-    return [];
+  async getFiles(repo: IRepositoryModel): Promise<string[]> {
+    return await this.request(`/api/v1/repos/${this.getProjectPath(repo)}/contents`, {
+      params: {
+        ref: repo.commit,
+      },
+    });
   }
   createBranch(repo: IRepositoryModel, newBranch: string): Promise<any> {
     throw new Error('Method not implemented.');
