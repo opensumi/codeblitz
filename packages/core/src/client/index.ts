@@ -164,7 +164,6 @@ export class ClientApp extends BasicClientApp {
     }
   }
   async dispose() {
-    console.log('dispose  =======');
     super.dispose();
     this.clearInjector();
   }
