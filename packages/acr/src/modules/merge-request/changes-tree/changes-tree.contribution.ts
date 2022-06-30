@@ -168,7 +168,6 @@ export class ChangesTreeContribution
       order: 4,
     });
 
-    // 在代码折叠上线之前先隐藏掉这个展开全文的按钮
     menus.registerMenuItem(MenuId.EditorTitle, {
       command: {
         id: ChangesTreeCommands.ExpandFile.id,
