@@ -67,6 +67,9 @@ export class ExtensionServiceClientImpl implements IExtensionNodeClientService {
   updateLanguagePack(): Promise<void> {
     return Promise.resolve();
   }
+  restartExtProcessByClient(): void {
+    throw new Error('Method not implemented.');
+  }
 }
 
 async function getExtraMetaData(
