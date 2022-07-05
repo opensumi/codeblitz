@@ -1,5 +1,4 @@
 import { Autowired } from '@opensumi/di';
-import { Disposable } from '@opensumi/ide-core-common';
 import {
   ClientAppContribution,
   CommandContribution,
@@ -13,7 +12,7 @@ import {
   IRange,
 } from '@opensumi/ide-core-browser';
 import { IMenuRegistry, MenuId, MenuContribution } from '@opensumi/ide-core-browser/lib/menu/next';
-import { PreferenceScope } from '@opensumi/ide-core-common';
+import { PreferenceScope, Disposable } from '@opensumi/ide-core-common';
 
 import { IAntcodeService } from '../../antcode-service/base';
 import { OpenChangeFilesService } from '../../open-change-files';

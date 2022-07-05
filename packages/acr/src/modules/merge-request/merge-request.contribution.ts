@@ -1,8 +1,11 @@
-import { Domain, getIcon, localize, SlotLocation } from '@opensumi/ide-core-browser';
 import {
+  Domain,
+  getIcon,
+  SlotLocation,
   ComponentContribution,
   ComponentRegistry,
   ClientAppContribution,
+  WithEventBus,
 } from '@opensumi/ide-core-browser';
 import { Autowired } from '@opensumi/di';
 
@@ -13,10 +16,13 @@ import { WebSCMView } from './web-scm';
 import { MenuContribution, IMenuRegistry } from '@opensumi/ide-core-browser/lib/menu/next';
 import { LayoutState, LAYOUT_STATE } from '@opensumi/ide-core-browser/lib/layout/layout-state';
 import { IMainLayoutService } from '@opensumi/ide-main-layout';
-
+import { disposableCollection } from '@alipay/alex/lib/core/patch';
+import { AccordionService } from '@opensumi/ide-main-layout/lib/browser/accordion/accordion.service';
+import { WebSCMViewId } from './web-scm/common';
+import { ChangesTreeViewId } from './changes-tree/common';
 @Domain(ComponentContribution, MenuContribution, ClientAppContribution)
-// @ts-ignore
 export class MergeRequestContribution
+  extends WithEventBus
   implements ComponentContribution, MenuContribution, ClientAppContribution
 {
   @Autowired(IMainLayoutService)
@@ -38,6 +44,7 @@ export class MergeRequestContribution
   }
 
   onDidStart() {
+    // 重新载入会导致组件未注册 临时修复
     const tabbarService = this.layoutService.getTabbarService(SlotLocation.left);
     const componentRegistry =
       this.componentRegistry.getComponentRegistryInfo(MergeRequestExplorerId);
@@ -56,6 +63,20 @@ export class MergeRequestContribution
       }
       this.layoutService.toggleSlot(SlotLocation.left, show, size);
     }
+    // 重新载入 titleMenu有缓存 需将其重置
+    disposableCollection.push((injector) => {
+      const accordionService: AccordionService = injector
+        .get(IMainLayoutService)
+        .getAccordionService(MergeRequestExplorerId);
+      const views = accordionService.visibleViews.filter(
+        (view) => view.id === WebSCMViewId || view.id === ChangesTreeViewId
+      );
+      if (views.length) {
+        views.forEach((view) => (view.titleMenu = undefined));
+      }
+      accordionService.disposeView(WebSCMViewId);
+      accordionService.disposeView(ChangesTreeViewId);
+    });
   }
 
   registerMenus(menus: IMenuRegistry) {
