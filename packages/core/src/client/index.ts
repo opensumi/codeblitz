@@ -7,6 +7,7 @@ import {
   PreferenceProviderProvider,
   PreferenceScope,
   PreferenceProvider,
+  IContextKeyService,
 } from '@opensumi/ide-core-browser';
 import { BackService, BasicModule } from '@opensumi/ide-core-common';
 import { WSChannelHandler } from '@opensumi/ide-connection/lib/browser';
@@ -39,7 +40,7 @@ import {
   MonacoSnippetSuggestProviderOverride,
   MonacoSnippetSuggestProvider,
 } from './override/snippet.service';
-
+import { MonacoContextKeyService } from './override/monacoContextKeyService';
 export * from './override/codeEditorService';
 
 export { ExtensionManagerModule as ExtensionClientManagerModule } from './extension-manager';
@@ -83,6 +84,11 @@ export class ClientModule extends BrowserModule {
     {
       token: MonacoSnippetSuggestProvider,
       useClass: MonacoSnippetSuggestProviderOverride,
+      override: true,
+    },
+    {
+      token: IContextKeyService,
+      useClass: MonacoContextKeyService,
       override: true,
     },
   ];

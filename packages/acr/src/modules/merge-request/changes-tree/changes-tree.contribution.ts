@@ -1,5 +1,4 @@
 import { Autowired } from '@opensumi/di';
-import { Disposable } from '@opensumi/ide-core-common';
 import {
   ClientAppContribution,
   CommandContribution,
@@ -13,7 +12,7 @@ import {
   IRange,
 } from '@opensumi/ide-core-browser';
 import { IMenuRegistry, MenuId, MenuContribution } from '@opensumi/ide-core-browser/lib/menu/next';
-import { PreferenceScope } from '@opensumi/ide-core-common';
+import { PreferenceScope, Disposable } from '@opensumi/ide-core-common';
 
 import { IAntcodeService } from '../../antcode-service/base';
 import { OpenChangeFilesService } from '../../open-change-files';
@@ -168,7 +167,6 @@ export class ChangesTreeContribution
       order: 4,
     });
 
-    // 在代码折叠上线之前先隐藏掉这个展开全文的按钮
     menus.registerMenuItem(MenuId.EditorTitle, {
       command: {
         id: ChangesTreeCommands.ExpandFile.id,

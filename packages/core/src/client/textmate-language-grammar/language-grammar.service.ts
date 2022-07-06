@@ -3,10 +3,8 @@ import { Disposable, URI, Domain } from '@opensumi/ide-core-common';
 import { LanguagesContribution, GrammarsContribution } from '@opensumi/ide-monaco';
 import { Registry } from '@alipay/alex-registry';
 import { TextmateKey } from './base';
-import {
-  ITextmateTokenizer,
-  ITextmateTokenizerService,
-} from '@opensumi/ide-monaco/lib/browser/contrib/tokenizer';
+import { ITextmateTokenizer } from '@opensumi/ide-monaco/lib/browser/contrib/tokenizer';
+import type { ITextmateTokenizerService } from '@opensumi/ide-monaco/lib/browser/contrib/tokenizer';
 
 @Domain()
 export class LanguageGrammarRegistrationService extends Disposable {

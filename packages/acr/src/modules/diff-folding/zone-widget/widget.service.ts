@@ -54,7 +54,7 @@ export class DiffFoldingWidgetService extends Disposable {
     const dom = (diffEditor as any).monacoDiffEditor._domElement;
     const key = 'margin-top';
     // 目的是通过 margin-top 属性控制当前 monaco diff editor 的 dom 节点向上位移，隐藏第一行代码的内容，使得 zone widget 从视觉上是位于第一行位置的
-    const value = '-28px';
+    const value = '-24px';
 
     if (isVisibility) {
       dom.style.setProperty(key, value);
