@@ -7,6 +7,7 @@ import { StaticServices } from '@opensumi/monaco-editor-core/esm/vs/editor/stand
 import { ModesRegistry } from '@opensumi/monaco-editor-core/esm/vs/editor/common/modes/modesRegistry';
 import { DirtyDiffWidget } from '@opensumi/ide-scm/lib/browser/dirty-diff/dirty-diff-widget';
 import { AbstractResourcePreferenceProvider } from '@opensumi/ide-preferences/lib/browser/abstract-resource-preference-provider';
+import { DiskFsProviderClient } from '@opensumi/ide-file-service/lib/browser/file-service-provider-client';
 
 export const disposableCollection: ((injector: Injector) => void)[] = [];
 
@@ -33,3 +34,7 @@ Object.defineProperty(AbstractResourcePreferenceProvider.prototype, 'reset', {
   value: () => {},
   configurable: true,
 });
+// 临时修复
+DiskFsProviderClient.prototype.getCurrentUserHome = function () {
+  return this.fileServiceProvider?.getCurrentUserHome();
+};
