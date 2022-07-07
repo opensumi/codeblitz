@@ -3,6 +3,9 @@ import { AbstractExtInstanceManagementService } from '@opensumi/ide-extension/li
 
 import { disposableCollection } from '../patch';
 
+import { ExtensionClientAppContribution } from '@opensumi/ide-extension/lib/browser/extension.contribution';
+import { FileServiceClient } from '@opensumi/ide-file-service/lib/browser/file-service-client';
+
 // TODO: PR to kaitian, monaco 内会 dispose，先临时 override
 // @ts-ignore
 const _createSignatureHelpProvider = MainThreadLanguages.prototype.createSignatureHelpProvider;
@@ -26,3 +29,7 @@ disposableCollection.push((injector) => {
     injector.get(AbstractExtInstanceManagementService) as AbstractExtInstanceManagementService
   ).dispose();
 });
+
+ExtensionClientAppContribution.prototype.onDisposeSideEffects = function () {
+  // 临时修复 防止dispose报错
+};
