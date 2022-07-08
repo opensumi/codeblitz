@@ -1,3 +1,7 @@
+## [2.0.4](https://code.alipay.com/cloud-ide/crew-dragon/compare/v2.0.3...v2.0.4) (2022-07-08)
+
+
+
 ## [2.0.3](https://code.alipay.com/cloud-ide/crew-dragon/compare/v2.0.2...v2.0.3) (2022-07-08)
 
 
