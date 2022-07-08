@@ -1,5 +1,5 @@
 {
-  "__KAITIAN_VERSION__": "2.18.3",
+  "__KAITIAN_VERSION__": "2.18.8",
   "__WORKER_HOST__": "https://gw.alipayobjects.com/os/ide-server/worker-host.8f95ca01.js",
   "__WEBVIEW_ENDPOINT__": "https://gw.alipayobjects.com/os/ide-server/webview.aa3b7960",
   "__WEBVIEW_ENDPOINT_INTERNAL__": "http://alipay-rmsdeploy-image.cn-hangzhou.alipay.aliyun-inc.com/ide-server/webview.aa3b7960",
