@@ -43,6 +43,9 @@ exports.config = {
   webviewEntry: 'webview',
   languageGlobalEntry: 'languages.global',
   languageGlobalMinEntry: 'languages.global.min',
+  acrEntry: 'acr',
+  acrGlobalEntry: 'acr.global',
+  acrGlobalMinEntry: 'acr.global.min',
 };
 
 // just for shared
