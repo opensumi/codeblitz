@@ -1,3 +1,25 @@
+## [2.0.3](https://code.alipay.com/cloud-ide/crew-dragon/compare/v2.0.2...v2.0.3) (2022-07-08)
+
+
+### Bug Fixes
+
+* 如果没有 ref 获取默认分支 ([515ab00](https://code.alipay.com/cloud-ide/crew-dragon/commits/515ab00316c9a8b9883e91f38d064cf2afb56d6f))
+* 修复编译报错 ([0cf261c](https://code.alipay.com/cloud-ide/crew-dragon/commits/0cf261c8f591b0a36b78e6317338be73dea4c33a))
+* 注册时序问题 ([7e0d4a0](https://code.alipay.com/cloud-ide/crew-dragon/commits/7e0d4a037021398f374ab7902625b2d834261845))
+* acr代码折叠样式问题 ([d388842](https://code.alipay.com/cloud-ide/crew-dragon/commits/d3888424edd56c0f2090740d8be92bc4b70fe280))
+* contextKeyService dispose 报错 ([32944ae](https://code.alipay.com/cloud-ide/crew-dragon/commits/32944aeef83b8acccbbddba3a6da3691bcd8a13b))
+* disposeClientExtProcess error ([2b0f7c3](https://code.alipay.com/cloud-ide/crew-dragon/commits/2b0f7c32916f5c9c70bc32da5883bda7647f9496))
+* titleMenu cache ([0837007](https://code.alipay.com/cloud-ide/crew-dragon/commits/0837007414dde16f810f1f7dbe3c8fa66c2b2266))
+
+
+### Features
+
+* 搜索文件过滤同步转为异步 ([b67614e](https://code.alipay.com/cloud-ide/crew-dragon/commits/b67614e11b5cf739f2f3072ded4cd27e89312636))
+* 支持gitlink Api接口 ([8a571b0](https://code.alipay.com/cloud-ide/crew-dragon/commits/8a571b0f45c5fe2b9f713d1de39f57381b41203f))
+* 注册 https 及 http filesystem，插件会读取相关协议内容 ([905f6c2](https://code.alipay.com/cloud-ide/crew-dragon/commits/905f6c23378d96ef6c4acd888f1500743ade972d))
+
+
+
 ## [2.0.2](https://code.alipay.com/cloud-ide/crew-dragon/compare/v2.0.1...v2.0.2) (2022-06-14)
 
 
