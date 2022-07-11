@@ -876,10 +876,10 @@
     mkdirp "^1.0.4"
     rimraf "^3.0.2"
 
-"@opensumi/di@^1.4.0":
-  version "1.4.0"
-  resolved "https://registry.npmmirror.com/@opensumi/di/-/di-1.4.0.tgz#6afea33f08d1551416c2ba3e3c376878e8ddfa31"
-  integrity sha512-lTNnv7RvXd/RkYKEmhorOUZk5pIfvPtJiOIEOWN4RNMDBAGTemObA7D8pkAuWyMCicyjXKxLfhf5yRVyjHudzw==
+"@opensumi/di@^1.0.0", "@opensumi/di@^1.1.0":
+  version "1.5.0"
+  resolved "https://registry.npm.alibaba-inc.com/@opensumi/di/download/@opensumi/di-1.5.0.tgz#d1d4b3ffe80d4fc88faab1915f67bb0542746104"
+  integrity sha512-9yiVpf6HpgaWb1KYr1Ly6eUlp7lYaQ42lniNk8pA/Ei110t0yaUKARSPSgvA98J0Cc8GiTqfW9FnD0bRVFanAw==
   dependencies:
     reflect-metadata "^0.1.13"
 
