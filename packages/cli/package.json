@@ -19,7 +19,7 @@
   },
   "dependencies": {
     "@ali/ide-extension-installer": "^2.0.0",
-    "@opensumi/ide-extension": "2.18.8",
+    "@opensumi/ide-extension": "2.18.10-next-1657505096.0",
     "@alipay/alex-shared": "2.0.4",
     "commander": "^7.2.0",
     "fs-extra": "^9.0.1",
