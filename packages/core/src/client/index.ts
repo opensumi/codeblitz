@@ -30,6 +30,7 @@ import { EditorEmptyContribution } from './editor-empty/editor-empty.contributio
 import { WelcomeContribution } from './welcome/welcome.contributon';
 import { FileSchemeContribution } from './file-scheme/index.contribution';
 import { PreferenceSettingContribution } from './preference/preference.setting.contribution';
+import { LayoutRestoreContributation } from './layout/index.contribution';
 
 import {
   MonacoCodeService,
@@ -71,6 +72,7 @@ export class ClientModule extends BrowserModule {
     FileSchemeContribution,
     SearchContribution,
     PreferenceSettingContribution,
+    LayoutRestoreContributation,
     {
       token: MonacoCodeService,
       useValue: codeServiceEditor,
