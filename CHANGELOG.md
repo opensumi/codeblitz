@@ -1,3 +1,12 @@
+## [2.0.5](https://code.alipay.com/cloud-ide/crew-dragon/compare/v2.0.4...v2.0.5) (2022-07-14)
+
+
+### Bug Fixes
+
+* 全局样式冲突 ([38bf07e](https://code.alipay.com/cloud-ide/crew-dragon/commits/38bf07e9da16f238576503b1c5a9e3f8dd66ce28))
+
+
+
 ## [2.0.4](https://code.alipay.com/cloud-ide/crew-dragon/compare/v2.0.3...v2.0.4) (2022-07-08)
 
 
