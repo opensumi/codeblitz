@@ -50,7 +50,10 @@ const platformConfig = {
 };
 
 const layoutConfig = getDefaultLayoutConfig();
-layoutConfig[SlotLocation.left].modules.push('@opensumi/ide-extension-manager');
+layoutConfig[SlotLocation.left].modules.push(
+  '@opensumi/ide-extension-manager',
+  '@opensumi/ide-scm'
+);
 
 let pathParts = location.pathname.split('/').filter(Boolean);
 

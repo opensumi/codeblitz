@@ -29,6 +29,8 @@ import {
 import { EditorEmptyContribution } from './editor-empty/editor-empty.contribution';
 import { WelcomeContribution } from './welcome/welcome.contributon';
 import { FileSchemeContribution } from './file-scheme/index.contribution';
+import { PreferenceSettingContribution } from './preference/preference.setting.contribution';
+
 import {
   MonacoCodeService,
   IMonacoCodeService,
@@ -68,6 +70,7 @@ export class ClientModule extends BrowserModule {
     MenuConfigContribution,
     FileSchemeContribution,
     SearchContribution,
+    PreferenceSettingContribution,
     {
       token: MonacoCodeService,
       useValue: codeServiceEditor,
