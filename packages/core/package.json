@@ -1,6 +1,6 @@
 {
   "name": "@alipay/alex-core",
-  "version": "2.0.5",
+  "version": "2.0.6",
   "description": "core",
   "main": "lib/index.js",
   "typings": "lib/index.d.ts",
@@ -28,8 +28,8 @@
     "@opensumi/ide-extension": "2.19.0",
     "@opensumi/ide-logs": "2.19.0",
     "@alipay/alex-browserfs": "~2.1.0",
-    "@alipay/alex-registry": "2.0.5",
-    "@alipay/alex-shared": "2.0.5",
+    "@alipay/alex-registry": "2.0.6",
+    "@alipay/alex-shared": "2.0.6",
     "assert": "^2.0.0",
     "fs-extra-factory": "^0.2.1",
     "iconv-lite-umd": "^0.6.8",

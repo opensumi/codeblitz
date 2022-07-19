@@ -1,3 +1,29 @@
+## [2.0.6](https://code.alipay.com/cloud-ide/crew-dragon/compare/v2.0.5...v2.0.6) (2022-07-19)
+
+
+
+## [2.0.5-1](https://code.alipay.com/cloud-ide/crew-dragon/compare/v2.0.5-0...v2.0.5-1) (2022-07-11)
+
+
+
+## [2.0.5-0](https://code.alipay.com/cloud-ide/crew-dragon/compare/v2.0.4...v2.0.5-0) (2022-07-11)
+
+
+### Bug Fixes
+
+* 修复加载 webscm 插件时产生多个相同的 reference ([0b62e3a](https://code.alipay.com/cloud-ide/crew-dragon/commits/0b62e3a4e6e7f1139d8d4d1805271ff6efaea7c1))
+* 修复搜索 query 如果为空字符串 antcode 会报错问题 ([8fe1ccf](https://code.alipay.com/cloud-ide/crew-dragon/commits/8fe1ccf97ec518063a237dd0a7c7c3991226ed9f))
+* 插件 meta 文件输出 browser 字段 ([14a03de](https://code.alipay.com/cloud-ide/crew-dragon/commits/14a03deae5cdae8b3cc954bd96a143b1be9b7742))
+
+
+### Features
+
+* 支持 anycode 初始化文件 ([08c7703](https://code.alipay.com/cloud-ide/crew-dragon/commits/08c7703f1a7f484d0e3f6b9fe776d815c0a4c0ac))
+* 新增 anycode 插件 ([ea0b138](https://code.alipay.com/cloud-ide/crew-dragon/commits/ea0b1382086a0c008b3f65d5cf872a405696d87e))
+* 集成 codeswing 及 emmet ([b66ab1d](https://code.alipay.com/cloud-ide/crew-dragon/commits/b66ab1db801084e14247a9799ec276bcf0b44bc9))
+
+
+
 ## [2.0.5](https://code.alipay.com/cloud-ide/crew-dragon/compare/v2.0.4...v2.0.5) (2022-07-14)
 
 
