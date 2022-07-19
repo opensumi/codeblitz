@@ -43,6 +43,9 @@
 npm run build
 # bundle 成 umd 文件
 node scripts/bundle
+
+# 构建worker 以及webview资源
+node scripts/build-assets
 ```
 
 ### 发布版本
