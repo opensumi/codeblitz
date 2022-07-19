@@ -31,7 +31,7 @@ MainThreadLanguages.prototype.createReferenceProvider = function (...args: any[]
   const _provideReferences = provider.provideReferences;
   provider.provideReferences = function (...args: any[]) {
     return (_provideReferences.call(this, ...args) as Promise<monaco.languages.Location[]>).then(
-      (references) => references.filter((reference) => reference.uri.scheme === 'file')
+      (references) => Array.isArray(references) ? references.filter((reference) => reference.uri.scheme === 'file') : []
     );
   };
   return provider;

@@ -16,7 +16,7 @@ import {
 } from '../common/types';
 import { CODE_PLATFORM_CONFIG } from '../common/config';
 import { HelperService } from '../common/service';
-import { formatLocalize } from '@opensumi/ide-core-browser';
+import { DEFAULT_SEARCH_IN_WORKSPACE_LIMIT } from '@opensumi/ide-search';
 
 const toType = (d: API.ResponseCommitFileChange) => {
   if (d.new_file) return CommitFileStatus.Added;
@@ -273,7 +273,7 @@ export class AntCodeAPIService implements ICodeAPIService {
         }
       );
       // 默认做个限制，防止请求过多
-      return res.slice(0, 1000);
+      return res.slice(0, DEFAULT_SEARCH_IN_WORKSPACE_LIMIT);
     }
     const reqRes = await this.request<string[]>(
       `/api/v3/projects/${this.getProjectId(repo)}/repository/files_search`,
