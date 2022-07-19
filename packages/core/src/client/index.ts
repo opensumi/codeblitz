@@ -44,6 +44,7 @@ import {
   MonacoSnippetSuggestProvider,
 } from './override/snippet.service';
 import { MonacoContextKeyService } from './override/monacoContextKeyService';
+import { ExtensionNodeServiceServerPath } from '@opensumi/ide-extension';
 export * from './override/codeEditorService';
 
 export { ExtensionManagerModule as ExtensionClientManagerModule } from './extension-manager';
@@ -104,8 +105,13 @@ export interface IAppOpts extends IClientAppOpts, IServerAppOpts {}
 
 export { IClientAppOpts };
 
+// FIXME: 默认 dispose 会调用 disposeSideEffect，因为实例已销户，会重新生成实例导致报错
+// 先 dispose，待 opensumi 修复
+// @ts-ignore
 export class ClientApp extends BasicClientApp {
   private clearInjector: () => void;
+
+  private disposeSideEffect = () => {};
 
   constructor(opts: IAppOpts) {
     super(opts);
