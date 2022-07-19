@@ -28,8 +28,6 @@ export class AlexAppContribution extends Disposable implements CommandContributi
       // codeswing 依赖
       // FIXME: 框架侧支持
       ...[
-        'workbench.action.closePanel',
-        'workbench.action.closeSidebar',
         'vscode.setEditorLayout',
       ].map((id) => commands.registerCommand({ id }, { execute: () => {} })),
       commands.registerCommand(
