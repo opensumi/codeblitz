@@ -1,8 +1,4 @@
-## [2.0.5-1](https://code.alipay.com/cloud-ide/crew-dragon/compare/v2.0.5-0...v2.0.5-1) (2022-07-11)
-
-
-
-## [2.0.5-0](https://code.alipay.com/cloud-ide/crew-dragon/compare/v2.0.4...v2.0.5-0) (2022-07-11)
+## [2.0.5](https://code.alipay.com/cloud-ide/crew-dragon/compare/v2.0.4...v2.0.5) (2022-07-14)
 
 
 ### Bug Fixes
@@ -17,6 +13,7 @@
 * 集成 codeswing 及 emmet ([b66ab1d](https://code.alipay.com/cloud-ide/crew-dragon/commits/b66ab1db801084e14247a9799ec276bcf0b44bc9))
 * 新增 anycode 插件 ([ea0b138](https://code.alipay.com/cloud-ide/crew-dragon/commits/ea0b1382086a0c008b3f65d5cf872a405696d87e))
 * 支持 anycode 初始化文件 ([08c7703](https://code.alipay.com/cloud-ide/crew-dragon/commits/08c7703f1a7f484d0e3f6b9fe776d815c0a4c0ac))
+* 全局样式冲突 ([38bf07e](https://code.alipay.com/cloud-ide/crew-dragon/commits/38bf07e9da16f238576503b1c5a9e3f8dd66ce28))
 
 
 

@@ -44,26 +44,7 @@ export class MergeRequestContribution
   }
 
   onDidStart() {
-    // 重新载入会导致组件未注册 临时修复
-    const tabbarService = this.layoutService.getTabbarService(SlotLocation.left);
-    const componentRegistry =
-      this.componentRegistry.getComponentRegistryInfo(MergeRequestExplorerId);
-    if (componentRegistry) {
-      tabbarService.registerContainer(MergeRequestExplorerId, componentRegistry);
-      const state = this.layoutState.getState(LAYOUT_STATE.MAIN, {});
-      let currentId: string,
-        size: number = 0,
-        show = true;
-      for (const key in state) {
-        if (key === SlotLocation.left) {
-          currentId = state[key]?.currentId;
-          size = state[key]?.size || 0;
-          show = currentId ? true : false;
-        }
-      }
-      this.layoutService.toggleSlot(SlotLocation.left, show, size);
-    }
-    // 重新载入 titleMenu有缓存 需将其重置
+    // TODO 重新载入 titleMenu有缓存 需将其重置
     disposableCollection.push((injector) => {
       const accordionService: AccordionService = injector
         .get(IMainLayoutService)

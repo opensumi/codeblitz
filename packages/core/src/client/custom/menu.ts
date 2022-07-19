@@ -6,5 +6,6 @@ import { MenuContribution, IMenuRegistry, MenuId } from '@opensumi/ide-core-brow
 export class MenuConfigContribution implements MenuContribution {
   registerMenus(menuRegistry: IMenuRegistry) {
     menuRegistry.removeMenubarItem(MenuId.MenubarHelpMenu);
+    menuRegistry.removeMenubarItem(MenuId.MenubarTerminalMenu);
   }
 }
