@@ -9,7 +9,7 @@
   ],
   "scripts": {},
   "publishConfig": {
-    "registry": "https://registry.antfin-inc.com"
+    "registry": "https://registry.npm.alibaba-inc.com"
   },
   "tnpm": {
     "mode": "yarn",
@@ -28,6 +28,7 @@
     "diff-match-patch": "^1.0.5",
     "lodash": "^4.17.21",
     "md5": "^2.3.0",
-    "split-retain": "^1.0.1"
+    "split-retain": "^1.0.1",
+    "p-series": "^2.1.0"
   }
 }

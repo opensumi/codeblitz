@@ -110,7 +110,7 @@ export class DiskFileSystemProvider extends FCService implements IDiskFileProvid
    */
   async watch(
     uri: UriComponents,
-    options?: { recursive: boolean; excludes: string[] }
+    options?: { recursive: boolean; excludes?: string[] }
   ): Promise<number> {
     const _uri = Uri.revive(uri);
     const watcherId = await this.watcherServer.watchFileChanges(_uri.toString(), {

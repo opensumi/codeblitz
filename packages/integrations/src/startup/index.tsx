@@ -19,6 +19,18 @@ import graph from '@alipay/alex/extensions/alex.git-graph';
 import codeservice from '@alipay/alex/extensions/alex.code-service';
 import imagePreview from '@alipay/alex/extensions/alex.image-preview';
 import webSCM from '@alipay/alex/extensions/cloud-ide-ext.web-scm';
+import anycode from '@alipay/alex/extensions/opensumi-lite-extensions.anycode';
+import anycodeCSharp from '@alipay/alex/extensions/opensumi-lite-extensions.anycode-c-sharp';
+import anycodeCpp from '@alipay/alex/extensions/opensumi-lite-extensions.anycode-cpp';
+import anycodeGo from '@alipay/alex/extensions/opensumi-lite-extensions.anycode-go';
+import anycodeJava from '@alipay/alex/extensions/opensumi-lite-extensions.anycode-java';
+import anycodePhp from '@alipay/alex/extensions/opensumi-lite-extensions.anycode-php';
+import anycodePython from '@alipay/alex/extensions/opensumi-lite-extensions.anycode-python';
+import anycodeRust from '@alipay/alex/extensions/opensumi-lite-extensions.anycode-rust';
+import anycodeTypescript from '@alipay/alex/extensions/opensumi-lite-extensions.anycode-typescript';
+import referencesView from '@alipay/alex/extensions/opensumi-lite-extensions.references-view';
+import emmet from '@alipay/alex/extensions/opensumi-lite-extensions.emmet';
+import codeswing from '@alipay/alex/extensions/vscode-extensions.codeswing';
 
 import { LocalExtensionModule } from '../common/local-extension.module';
 import * as Plugin from '../editor/plugin';
@@ -115,6 +127,18 @@ const App = () => (
         graph,
         imagePreview,
         webSCM,
+        referencesView,
+        codeswing,
+        emmet,
+        anycodeCSharp,
+        anycodeCpp,
+        anycodeGo,
+        anycodeJava,
+        anycodePhp,
+        anycodePython,
+        anycodeRust,
+        anycodeTypescript,
+        anycode,
       ],
       workspaceDir: `${platform}/${config.owner}/${config.name}`,
       layoutConfig,

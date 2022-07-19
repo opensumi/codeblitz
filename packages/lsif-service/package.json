@@ -12,7 +12,7 @@
   ],
   "scripts": {},
   "publishConfig": {
-    "registry": "https://registry.antfin-inc.com"
+    "registry": "https://registry.npm.alibaba-inc.com"
   },
   "tnpm": {
     "mode": "yarn",
@@ -25,7 +25,7 @@
     "tslib": "^2.2.0"
   },
   "peerDependencies": {
-    "@opensumi/ide-core-common": "2.18.8",
-    "@opensumi/ide-extension": "2.18.8"
+    "@opensumi/ide-core-common": "2.19.0",
+    "@opensumi/ide-extension": "2.19.0"
   }
 }

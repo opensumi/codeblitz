@@ -3,6 +3,16 @@
 
 ### Bug Fixes
 
+* 插件 meta 文件输出 browser 字段 ([14a03de](https://code.alipay.com/cloud-ide/crew-dragon/commits/14a03deae5cdae8b3cc954bd96a143b1be9b7742))
+* 修复加载 webscm 插件时产生多个相同的 reference ([0b62e3a](https://code.alipay.com/cloud-ide/crew-dragon/commits/0b62e3a4e6e7f1139d8d4d1805271ff6efaea7c1))
+* 修复搜索 query 如果为空字符串 antcode 会报错问题 ([8fe1ccf](https://code.alipay.com/cloud-ide/crew-dragon/commits/8fe1ccf97ec518063a237dd0a7c7c3991226ed9f))
+
+
+### Features
+
+* 集成 codeswing 及 emmet ([b66ab1d](https://code.alipay.com/cloud-ide/crew-dragon/commits/b66ab1db801084e14247a9799ec276bcf0b44bc9))
+* 新增 anycode 插件 ([ea0b138](https://code.alipay.com/cloud-ide/crew-dragon/commits/ea0b1382086a0c008b3f65d5cf872a405696d87e))
+* 支持 anycode 初始化文件 ([08c7703](https://code.alipay.com/cloud-ide/crew-dragon/commits/08c7703f1a7f484d0e3f6b9fe776d815c0a4c0ac))
 * 全局样式冲突 ([38bf07e](https://code.alipay.com/cloud-ide/crew-dragon/commits/38bf07e9da16f238576503b1c5a9e3f8dd66ce28))
 
 
@@ -12,6 +22,41 @@
 
 
 ## [2.0.3](https://code.alipay.com/cloud-ide/crew-dragon/compare/v2.0.2...v2.0.3) (2022-07-08)
+## [2.0.2-7](https://code.alipay.com/cloud-ide/crew-dragon/compare/v2.0.2-6...v2.0.2-7) (2022-06-16)
+
+
+
+## [2.0.2-6](https://code.alipay.com/cloud-ide/crew-dragon/compare/v2.0.2...v2.0.2-6) (2022-06-16)
+
+
+### Bug Fixes
+
+* 修复加载 webscm 插件时产生多个相同的 reference ([2aa9172](https://code.alipay.com/cloud-ide/crew-dragon/commits/2aa9172875be2d6f1af043433b4f5e0c1f312b32))
+* 修复搜索 query 如果为空字符串 antcode 会报错问题 ([6668b70](https://code.alipay.com/cloud-ide/crew-dragon/commits/6668b701edf595245a2f392d35428480b2d2159b))
+* 如果没有 ref 获取默认分支 ([515ab00](https://code.alipay.com/cloud-ide/crew-dragon/commits/515ab00316c9a8b9883e91f38d064cf2afb56d6f))
+* 插件 meta 文件输出 browser 字段 ([73fe56d](https://code.alipay.com/cloud-ide/crew-dragon/commits/73fe56df93e349cdc135804f97ae2d7e5279d87a))
+
+
+### Features
+
+* 搜索文件过滤同步转为异步 ([b67614e](https://code.alipay.com/cloud-ide/crew-dragon/commits/b67614e11b5cf739f2f3072ded4cd27e89312636))
+* 支持 anycode 初始化文件 ([200da49](https://code.alipay.com/cloud-ide/crew-dragon/commits/200da4991a3424b7833bfee351f84c74e092aa97))
+* 新增 anycode 插件 ([848cda9](https://code.alipay.com/cloud-ide/crew-dragon/commits/848cda97f2b9ecb33a249dc5ebb494e77fb67ab5))
+* 注册 https 及 http filesystem，插件会读取相关协议内容 ([ae0abc9](https://code.alipay.com/cloud-ide/crew-dragon/commits/ae0abc9b0fc6a0f08bd36c5f20cae6198fb863b0))
+* 集成 codeswing 及 emmet ([72be991](https://code.alipay.com/cloud-ide/crew-dragon/commits/72be9918654434397876b86d0e20481367a944c4))
+
+
+
+## [2.0.2-5](https://code.alipay.com/cloud-ide/crew-dragon/compare/v2.0.2-4...v2.0.2-5) (2022-06-15)
+
+
+### Features
+
+* 集成 codeswing 及 emmet ([1afa354](https://code.alipay.com/cloud-ide/crew-dragon/commits/1afa354f39f5ecd85057f64d6adf2e4cebf22800))
+
+
+
+## [2.0.2-4](https://code.alipay.com/cloud-ide/crew-dragon/compare/v2.0.2...v2.0.2-4) (2022-06-15)
 
 
 ### Bug Fixes
@@ -23,6 +68,9 @@
 * contextKeyService dispose 报错 ([32944ae](https://code.alipay.com/cloud-ide/crew-dragon/commits/32944aeef83b8acccbbddba3a6da3691bcd8a13b))
 * disposeClientExtProcess error ([2b0f7c3](https://code.alipay.com/cloud-ide/crew-dragon/commits/2b0f7c32916f5c9c70bc32da5883bda7647f9496))
 * titleMenu cache ([0837007](https://code.alipay.com/cloud-ide/crew-dragon/commits/0837007414dde16f810f1f7dbe3c8fa66c2b2266))
+* 修复加载 webscm 插件时产生多个相同的 reference ([c1c0c6d](https://code.alipay.com/cloud-ide/crew-dragon/commits/c1c0c6df35d35ce92895d3d15cf5917a439be2e3))
+* 修复搜索 query 如果为空字符串 antcode 会报错问题 ([e55fa9f](https://code.alipay.com/cloud-ide/crew-dragon/commits/e55fa9f2f56eb1d5f895dbaa421f8dc49baa9705))
+* 插件 meta 文件输出 browser 字段 ([68d6c53](https://code.alipay.com/cloud-ide/crew-dragon/commits/68d6c5300492ceb5942a5791eee28620aa3c7d33))
 
 
 ### Features
@@ -30,6 +78,9 @@
 * 搜索文件过滤同步转为异步 ([b67614e](https://code.alipay.com/cloud-ide/crew-dragon/commits/b67614e11b5cf739f2f3072ded4cd27e89312636))
 * 支持gitlink Api接口 ([8a571b0](https://code.alipay.com/cloud-ide/crew-dragon/commits/8a571b0f45c5fe2b9f713d1de39f57381b41203f))
 * 注册 https 及 http filesystem，插件会读取相关协议内容 ([905f6c2](https://code.alipay.com/cloud-ide/crew-dragon/commits/905f6c23378d96ef6c4acd888f1500743ade972d))
+* 支持 anycode 初始化文件 ([8dacff0](https://code.alipay.com/cloud-ide/crew-dragon/commits/8dacff08693cbcb512cf2082ec12e37c1910e36e))
+* 新增 anycode 插件 ([726f59f](https://code.alipay.com/cloud-ide/crew-dragon/commits/726f59f2f2997d1cee9a7f3f32d59cec42196a3f))
+* 注册 https 及 http filesystem，插件会读取相关协议内容 ([ca6d508](https://code.alipay.com/cloud-ide/crew-dragon/commits/ca6d5080a5025e67e04ab7a2091d15dd4f8b4284))
 
 
 

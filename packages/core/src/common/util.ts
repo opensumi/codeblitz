@@ -38,8 +38,8 @@ export const getExtensionPath = (ext: IExtensionIdentity, mode?: IExtensionMode)
     EXT_SCHEME,
     '://',
     mode == 'public' ? OSSBucket.public : OSSBucket.internal,
-    '/marketplace/assets/',
-    `${ext.publisher}.${ext.name}/v${ext.version}/extension`,
+    '/marketplace/extension/',
+    `${ext.publisher}.${ext.name}-${ext.version}`,
   ].join('');
 };
 

@@ -8,7 +8,7 @@
   "description": "Ant Codespaces for browser",
   "main": "index.js",
   "engines": {
-    "kaitian": "2.18.8"
+    "kaitian": "2.19.0"
   },
   "scripts": {
     "type-check": "tsc --skipLibCheck --noEmit",
@@ -154,6 +154,66 @@
       "publisher": "alex",
       "name": "image-preview",
       "version": "1.53.0-patch.1"
+    },
+    {
+      "publisher": "opensumi-lite-extensions",
+      "name": "anycode",
+      "version": "0.0.67"
+    },
+    {
+      "publisher": "opensumi-lite-extensions",
+      "name": "anycode-c-sharp",
+      "version": "0.0.5"
+    },
+    {
+      "publisher": "opensumi-lite-extensions",
+      "name": "anycode-cpp",
+      "version": "0.0.5"
+    },
+    {
+      "publisher": "opensumi-lite-extensions",
+      "name": "anycode-go",
+      "version": "0.0.5"
+    },
+    {
+      "publisher": "opensumi-lite-extensions",
+      "name": "anycode-java",
+      "version": "0.0.5"
+    },
+    {
+      "publisher": "opensumi-lite-extensions",
+      "name": "anycode-php",
+      "version": "0.0.6"
+    },
+    {
+      "publisher": "opensumi-lite-extensions",
+      "name": "anycode-python",
+      "version": "0.0.5"
+    },
+    {
+      "publisher": "opensumi-lite-extensions",
+      "name": "anycode-rust",
+      "version": "0.0.5"
+    },
+    {
+      "publisher": "opensumi-lite-extensions",
+      "name": "anycode-typescript",
+      "version": "0.0.5"
+    },
+    {
+      "publisher": "opensumi-lite-extensions",
+      "name": "references-view",
+      "version": "1.0.0"
+    },
+    {
+      "publisher": "opensumi-lite-extensions",
+      "name": "emmet",
+      "version": "1.0.0"
+    },
+    {
+      "publisher": "vscode-extensions",
+      "name": "codeswing",
+      "version": "0.0.21"
     }
   ]
 }

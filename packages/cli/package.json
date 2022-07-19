@@ -15,11 +15,11 @@
   },
   "scripts": {},
   "publishConfig": {
-    "registry": "https://registry.antfin-inc.com"
+    "registry": "https://registry.npm.alibaba-inc.com"
   },
   "dependencies": {
     "@ali/ide-extension-installer": "^2.0.0",
-    "@opensumi/ide-extension": "2.18.8",
+    "@opensumi/ide-extension": "2.19.0",
     "@alipay/alex-shared": "2.0.5",
     "commander": "^7.2.0",
     "fs-extra": "^9.0.1",

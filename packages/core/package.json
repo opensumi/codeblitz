@@ -12,7 +12,7 @@
   ],
   "scripts": {},
   "publishConfig": {
-    "registry": "https://registry.antfin-inc.com"
+    "registry": "https://registry.npm.alibaba-inc.com"
   },
   "tnpm": {
     "mode": "yarn",
@@ -20,13 +20,13 @@
   },
   "dependencies": {
     "@opensumi/di": "^1.0.0",
-    "@opensumi/ide-core-browser": "2.18.8",
-    "@opensumi/ide-core-common": "2.18.8",
-    "@opensumi/ide-debug": "2.18.8",
-    "@opensumi/ide-file-scheme": "2.18.8",
-    "@opensumi/ide-file-service": "2.18.8",
-    "@opensumi/ide-extension": "2.18.8",
-    "@opensumi/ide-logs": "2.18.8",
+    "@opensumi/ide-core-browser": "2.19.0",
+    "@opensumi/ide-core-common": "2.19.0",
+    "@opensumi/ide-debug": "2.19.0",
+    "@opensumi/ide-file-scheme": "2.19.0",
+    "@opensumi/ide-file-service": "2.19.0",
+    "@opensumi/ide-extension": "2.19.0",
+    "@opensumi/ide-logs": "2.19.0",
     "@alipay/alex-browserfs": "~2.1.0",
     "@alipay/alex-registry": "2.0.5",
     "@alipay/alex-shared": "2.0.5",
