@@ -214,6 +214,11 @@
       "publisher": "vscode-extensions",
       "name": "codeswing",
       "version": "0.0.21"
+    },
+    {
+      "publisher": "opensumi-lite-extensions",
+      "name": "code-runner-for-web",
+      "version": "0.1.5-patch.1"
     }
   ]
 }

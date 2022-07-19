@@ -166,7 +166,7 @@ async function getExtension(
   );
 
   return {
-    id: `${ext.extension.publisher}.${ext.packageJSON.name}`,
+    id: `${ext.packageJSON.publisher}.${ext.packageJSON.name}`,
     extensionId: `${ext.extension.publisher}.${ext.extension.name}`,
     packageJSON: ext.packageJSON,
     defaultPkgNlsJSON: ext.defaultPkgNlsJSON,

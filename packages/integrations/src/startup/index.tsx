@@ -31,6 +31,7 @@ import anycodeTypescript from '@alipay/alex/extensions/opensumi-lite-extensions.
 import referencesView from '@alipay/alex/extensions/opensumi-lite-extensions.references-view';
 import emmet from '@alipay/alex/extensions/opensumi-lite-extensions.emmet';
 import codeswing from '@alipay/alex/extensions/vscode-extensions.codeswing';
+import codeRunner from '@alipay/alex/extensions/opensumi-lite-extensions.code-runner-for-web';
 
 import { LocalExtensionModule } from '../common/local-extension.module';
 import * as Plugin from '../editor/plugin';
@@ -139,6 +140,7 @@ const App = () => (
         anycodeRust,
         anycodeTypescript,
         anycode,
+        codeRunner,
       ],
       workspaceDir: `${platform}/${config.owner}/${config.name}`,
       layoutConfig,
