@@ -1,3 +1,20 @@
+## [2.0.7](https://code.alipay.com/cloud-ide/crew-dragon/compare/v2.0.6...v2.0.7) (2022-07-21)
+
+
+### Bug Fixes
+
+* 修复 ACR dispose 控制台出现 error 问题 ([56bee20](https://code.alipay.com/cloud-ide/crew-dragon/commits/56bee2028abaebb69d94f2f859e416704e9c2fe3))
+* 兼容 references 可能不存在情况 ([b433c95](https://code.alipay.com/cloud-ide/crew-dragon/commits/b433c950d99e6960bbe9ba21b2848b66580f815a))
+
+
+### Features
+
+* 使用 opensumi 默认文件请求限制 ([f498c52](https://code.alipay.com/cloud-ide/crew-dragon/commits/f498c526415f49708cbf3993efaa85661ee2295e))
+* 构建包含 ACR 及 EditorRender 的版本 ([c55db6a](https://code.alipay.com/cloud-ide/crew-dragon/commits/c55db6aa62e6e769910ef08a706cb902eb4836d0))
+* 适配 coderunner ([114d390](https://code.alipay.com/cloud-ide/crew-dragon/commits/114d390a81038f6c169dcd46e6846fd438e4224d))
+
+
+
 ## [2.0.6](https://code.alipay.com/cloud-ide/crew-dragon/compare/v2.0.5...v2.0.6) (2022-07-19)
 
 
