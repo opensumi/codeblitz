@@ -46,6 +46,8 @@ exports.config = {
   acrEntry: 'acr',
   acrGlobalEntry: 'acr.global',
   acrGlobalMinEntry: 'acr.global.min',
+  alexAllGlobalEntry: 'alex.all.global',
+  alexAllGlobalMinEntry: 'alex.all.global.min',
 };
 
 // just for shared

@@ -73,6 +73,8 @@ const globalBundle = createWebpackConfig({
   webpackConfig: {
     context: path.join(__dirname, '../../..'),
     entry: {
+      [config.alexAllGlobalEntry]: './packages/acr/src/all',
+      [config.alexAllGlobalMinEntry]: './packages/acr/src/all',
       [config.appGlobalEntry]: './packages/alex/src',
       [config.appGlobalMinEntry]: './packages/alex/src',
       [config.editorAllGlobalEntry]: './packages/alex/src/editor.all',
