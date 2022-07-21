@@ -1,4 +1,4 @@
-import { Autowired, Injectable } from '@opensumi/di';
+import { Autowired, Injectable, INJECTOR_TOKEN, Injector } from '@opensumi/di';
 import {
   Disposable,
   IEventBus,
@@ -41,6 +41,8 @@ export class OpenChangeFilesService extends Disposable {
   private _currentOpenedChangeFileUri: URI;
 
   private _isFoldingEnabled: boolean;
+
+  public isDiffScheme: boolean;
 
   constructor() {
     super();
@@ -157,6 +159,9 @@ export class OpenChangeFilesService extends Disposable {
         options.range = range;
       }
     }
+
+    this.isDiffScheme = targetUri.scheme === 'diff';
+
     await this.workbenchEditorService.open(targetUri, options);
     // 由于初始化打开 页面内评论 会异步撑开页面 导致revealRangeInCenter方法失效
     setTimeout(() => {

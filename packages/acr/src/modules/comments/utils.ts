@@ -314,7 +314,7 @@ export function diffToContent(diff: string) {
 
   function addContent(arr: string[], lines: number) {
     for (let i = 1; i < lines; i++) {
-      arr.push(' // 数据获取失败 仅展示diff数据');
+      arr.push('  /* 数据获取失败 仅展示diff变更数据 */');
     }
   }
 }

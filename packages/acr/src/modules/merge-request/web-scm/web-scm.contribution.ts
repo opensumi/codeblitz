@@ -166,7 +166,7 @@ export class WebSCMContribution
       type: 'primary',
       group: 'navigation',
       when: `resourceScheme == git`,
-      enabledWhen: 'acr.changeFileEditable',
+      enabledWhen: 'acr.changeFileEditable && !misc.isDiffData',
       order: 7,
     });
 

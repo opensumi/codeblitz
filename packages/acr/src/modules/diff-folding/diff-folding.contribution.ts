@@ -117,7 +117,7 @@ export class DiffFoldingContribution extends WithEventBus implements CommandCont
     if (!originalUri || !modifiedUri) return;
     // TODO 更好判断是否是diff数据
     if (
-      this.gitDocContentProvider.diffData.has(originalUri.toString()) &&
+      this.gitDocContentProvider.diffData.has(originalUri.toString()) ||
       this.gitDocContentProvider.diffData.has(modifiedUri.toString())
     ) {
       this.isDiffData.set(true);

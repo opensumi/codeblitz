@@ -18,7 +18,6 @@ import { diffToContent } from '../../comments/utils';
 import { IMessageService } from '@opensumi/ide-overlay';
 
 @Injectable()
-// @ts-ignore
 export class GitDocContentProvider
   extends AbstractSCMDocContentProvider
   implements IEditorDocumentModelContentProvider
@@ -42,6 +41,10 @@ export class GitDocContentProvider
 
   public diffData = new Map<string, IRange[]>();
 
+  get openedEditorResources() {
+    return this._openedEditorResources;
+  }
+
   constructor() {
     super();
     this.disposableCollection.push(
@@ -63,30 +66,72 @@ export class GitDocContentProvider
 
   async fetchContentFromSCM(uri: URI) {
     const info = fromSCMUri(uri);
-    let content = await this.antcodeService.getFileContentByRef(info.path, info.ref);
-    // 修复 接口404情况
-    if (!content && typeof content === 'object') {
-      const diffChange = await this.openChangeFilesService.fetchDiff(info.path);
-      content = '';
-      if (diffChange?.diff) {
-        const diffContent = diffToContent(diffChange.diff);
+    const query = uri.getParsedQuery();
+    const isLeft = query.ref === this.antcodeService.leftRef;
+    const isRight = query.ref === this.antcodeService.rightRef;
+    let leftQuery, rightQuery;
+    if (isLeft) {
+      leftQuery = query;
+      rightQuery = {
+        ...query,
+        ref: this.antcodeService.rightRef,
+      };
+    } else if (isRight) {
+      rightQuery = query;
+      leftQuery = {
+        ...query,
+        ref: this.antcodeService.leftRef,
+      };
+    } else {
+      throw new Error('ref Error');
+    }
+    const leftUri = uri.withQuery(URI.stringifyQuery(leftQuery));
+    const rightUri = uri.withQuery(URI.stringifyQuery(rightQuery));
 
-        if (info.ref === this.antcodeService.leftRef) {
-          content = diffContent.original.join('\n');
-          if (!this.diffData.has(uri.toString())) {
-            this.diffData.set(uri.toString(), diffContent.originalFoldingRanges);
-          }
-        } else if (info.ref === this.antcodeService.rightRef) {
-          content = diffContent.modified.join('\n');
-          if (!this.diffData.has(uri.toString())) {
-            this.diffData.set(uri.toString(), diffContent.modifiedFoldingRanges);
-          }
+    // diff 要同时请求两侧数据
+    if (this.openChangeFilesService.isDiffScheme) {
+      // 同时请求两边数据
+
+      let [leftContent, rightContent] = await Promise.all([
+        this.antcodeService.getFileContentByRef(leftQuery.path, leftQuery.ref),
+        this.antcodeService.getFileContentByRef(rightQuery.path, rightQuery.ref),
+      ]);
+      // 两边有一边为null 404
+      const isDiffData =
+        (!leftContent && typeof leftContent === 'object') ||
+        (!rightContent && typeof rightContent === 'object');
+      if (isDiffData) {
+        const diffChange = await this.openChangeFilesService.fetchDiff(info.path);
+        if (diffChange?.diff) {
+          const diffContent = diffToContent(diffChange.diff);
+          this._openedEditorResources.set(leftUri.toString(), diffContent.original.join('\n'));
+          this._openedEditorResources.set(rightUri.toString(), diffContent.modified.join('\n'));
+          this.diffData.set(rightUri.toString(), diffContent.modifiedFoldingRanges);
+          this.diffData.set(leftUri.toString(), diffContent.originalFoldingRanges);
+        } else {
+          this.messageService.info(localize('misc.analyse.diff.none'));
         }
       } else {
-        this.messageService.info(localize('misc.analyse.diff.none'));
-        // throw new Error(formatLocalize('misc.analyse.diff.error', diffChange?.newPath))
+        this._openedEditorResources.set(leftUri.toString(), leftContent as string);
+        this._openedEditorResources.set(rightUri.toString(), rightContent as string);
       }
+    } else {
+      let content = await this.antcodeService.getFileContentByRef(query.path, query.ref);
+      if (!content && typeof content === 'object') {
+        const diffChange = await this.openChangeFilesService.fetchDiff(info.path);
+        if (diffChange?.diff) {
+          const diffContent = diffToContent(diffChange.diff);
+          if (isLeft) {
+            content = diffContent.original.join('\n');
+          } else {
+            content = diffContent.modified.join('\n');
+          }
+          this.diffData.set(uri.toString(), diffContent.originalFoldingRanges);
+        } else {
+          this.messageService.info(localize('misc.analyse.diff.none'));
+        }
+      }
+      this._openedEditorResources.set(uri.toString(), content as string);
     }
-    return content;
   }
 }

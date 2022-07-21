@@ -12,16 +12,19 @@ export abstract class AbstractSCMDocContentProvider implements IEditorDocumentMo
   }
 
   // @ts-ignore
-  async provideEditorDocumentModelContent(uri: URI, encoding?: string | undefined) {
+  async provideEditorDocumentModelContent(
+    uri: URI,
+    encoding?: string | undefined
+  ): Promise<string> {
     const uriStr = uri.toString();
 
     if (this._openedEditorResources.has(uriStr)) {
-      return this._openedEditorResources.get(uriStr);
+      return this._openedEditorResources.get(uriStr) as string;
     }
 
-    const content = await this.fetchContentFromSCM(uri);
-    this._openedEditorResources.set(uri.toString(), content);
-    return content;
+    await this.fetchContentFromSCM(uri);
+
+    return this._openedEditorResources.get(uri.toString()) as string;
   }
 
   isReadonly(uri: URI) {
@@ -45,5 +48,5 @@ export abstract class AbstractSCMDocContentProvider implements IEditorDocumentMo
    * 从不同的代码服务平台获取内容
    * @param uri URI
    */
-  abstract fetchContentFromSCM(uri: URI): Promise<string>;
+  abstract fetchContentFromSCM(uri: URI): Promise<void>;
 }
