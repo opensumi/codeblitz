@@ -30,7 +30,7 @@ export const EditorEmptyComponent: React.FC = () => {
     <section className={styles.editorEmpty}>
       <img
         className={styles.logo}
-        src="https://gw.alipayobjects.com/zos/bmw-prod/88f3f739-1b77-4d23-abcd-25095ad5383e.svg"
+        src="https://gw.alipayobjects.com/zos/bmw-prod/8dc21336-0a59-48bf-9cab-f6bb4b5c9f30.svg"
         alt="logo"
       />
       <div className={styles.title}>{brandName}</div>
