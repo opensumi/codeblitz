@@ -272,8 +272,7 @@ export function diffToContent(diff: string) {
       const matcher = DIFF_CHANGE_LINE_PATTERN.exec(line);
       if (matcher) {
         leftStart = parseInt(matcher[1], 10);
-        rightStart = parseInt(matcher[1], 10);
-
+        rightStart = parseInt(matcher[4], 10);
         // 多条diff数据 为保证行数一致需填充数据
         if (leftStart > leftEnd) {
           const lines = leftStart - leftEnd;
@@ -288,7 +287,7 @@ export function diffToContent(diff: string) {
           );
         }
         leftEnd = leftStart + parseInt(matcher[3] || '1', 10) - 1;
-        rightEnd = leftStart + parseInt(matcher[3] || '1', 10) - 1;
+        rightEnd = rightStart + parseInt(matcher[6] || '1', 10) - 1;
       }
     } else {
       if (line.startsWith('-')) {
