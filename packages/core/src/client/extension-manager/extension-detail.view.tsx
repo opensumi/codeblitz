@@ -14,7 +14,6 @@ import clx from 'classnames';
 import * as styles from './extension-detail.module.less';
 import * as commonStyles from './common.module.less';
 import { Tabs } from '@opensumi/ide-components';
-import 'antd/lib/menu/style/index.css';
 import { ExtensionManagerService } from './extension-manager.service';
 
 const tabMap = [
