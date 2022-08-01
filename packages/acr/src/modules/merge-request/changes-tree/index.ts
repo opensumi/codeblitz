@@ -7,6 +7,6 @@ export const ChangeTreeView: View = {
   name: '%changes.tree.title%',
   weight: 5,
   priority: 10,
-  collapsed: true,
+  collapsed: false,
   component: ChangesTreeView,
 };
