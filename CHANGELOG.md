@@ -1,3 +1,12 @@
+## [2.0.10](https://code.alipay.com/cloud-ide/crew-dragon/compare/v2.0.9...v2.0.10) (2022-08-02)
+
+
+### Bug Fixes
+
+* 编辑器模式右侧链接按钮消失 ([ded89e7](https://code.alipay.com/cloud-ide/crew-dragon/commits/ded89e7bb0096ea6a119cf7310b8f8f8fa23990e))
+
+
+
 ## [2.0.9](https://code.alipay.com/cloud-ide/crew-dragon/compare/v2.0.8...v2.0.9) (2022-08-01)
 
 
