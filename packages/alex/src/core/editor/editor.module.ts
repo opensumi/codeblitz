@@ -320,9 +320,8 @@ class EditorSpecialContribution
     //   toJSON: () => ({}),
     //   dispose: () => {},
     // });
-  }
 
-  onStart() {
+    // onStart阶段存在时序问题
     this.addDispose(
       this.editorCollection.onCodeEditorCreate((codeEditor: ICodeEditor) => {
         const disposer = this.contributeEditor(codeEditor);
@@ -436,6 +435,7 @@ class EditorSpecialContribution
       editor.monacoEditor.onMouseMove(
         debounce((event) => {
           const type = event?.target?.type;
+          console.log('type ==', type);
           if (
             type === monaco.editor.MouseTargetType.GUTTER_LINE_NUMBERS ||
             type === monaco.editor.MouseTargetType.GUTTER_GLYPH_MARGIN
@@ -513,6 +513,8 @@ class EditorSpecialContribution
     disposer.addDispose(
       editor.monacoEditor.onMouseDown((event) => {
         const type = event?.target?.type;
+        console.log('type down==', type);
+
         if (
           type === monaco.editor.MouseTargetType.GUTTER_LINE_NUMBERS ||
           type === monaco.editor.MouseTargetType.GUTTER_GLYPH_MARGIN
