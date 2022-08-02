@@ -19,7 +19,6 @@ import { BoxPanel, SplitPanel } from '@opensumi/ide-core-browser/lib/components'
 
 import '@opensumi/ide-core-browser/lib/style/entry.less';
 import '@opensumi/ide-core-browser/lib/style/codicons/codicon-animations.css';
-import './normalize.less';
 
 import { IPluginConfig } from '@alipay/alex-plugin';
 import { deletionLogPath } from '@alipay/alex-browserfs/lib/backend/OverlayFS';
