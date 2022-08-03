@@ -8,6 +8,7 @@ import { ModesRegistry } from '@opensumi/monaco-editor-core/esm/vs/editor/common
 import { DirtyDiffWidget } from '@opensumi/ide-scm/lib/browser/dirty-diff/dirty-diff-widget';
 import { AbstractResourcePreferenceProvider } from '@opensumi/ide-preferences/lib/browser/abstract-resource-preference-provider';
 import { DiskFsProviderClient } from '@opensumi/ide-file-service/lib/browser/file-service-provider-client';
+import { DebugConfigurationManager } from '@opensumi/ide-debug/lib/browser';
 
 export const disposableCollection: ((injector: Injector) => void)[] = [];
 
@@ -38,3 +39,5 @@ Object.defineProperty(AbstractResourcePreferenceProvider.prototype, 'reset', {
 DiskFsProviderClient.prototype.getCurrentUserHome = function () {
   return this.fileServiceProvider?.getCurrentUserHome();
 };
+// 极速版暂不支持断点
+DebugConfigurationManager.prototype.canSetBreakpointsIn = () => false;

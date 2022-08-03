@@ -8,7 +8,7 @@
   "description": "Ant Codespaces for browser",
   "main": "index.js",
   "engines": {
-    "kaitian": "2.19.3"
+    "kaitian": "2.19.4"
   },
   "scripts": {
     "type-check": "tsc --skipLibCheck --noEmit",
@@ -133,7 +133,7 @@
     {
       "publisher": "cloud-ide",
       "name": "vscode-lsif",
-      "version": "0.1.6"
+      "version": "0.2.0"
     },
     {
       "publisher": "alex",
