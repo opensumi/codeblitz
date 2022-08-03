@@ -1,6 +1,6 @@
 {
   "name": "@alipay/alex-shared",
-  "version": "2.0.10",
+  "version": "2.0.11",
   "description": "@alipay/alex-shared",
   "main": "lib/index.js",
   "typing": "lib/index.d.ts",
@@ -12,7 +12,7 @@
   ],
   "scripts": {},
   "publishConfig": {
-    "registry": "https://registry.antfin-inc.com"
+    "registry": "https://registry.npm.alibaba-inc.com"
   },
   "tnpm": {
     "mode": "yarn",
