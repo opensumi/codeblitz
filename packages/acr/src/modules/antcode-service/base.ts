@@ -119,6 +119,8 @@ export interface IAntcodeCRProps {
     extensionMetadata?: IExtensionBasicMetadata[];
   };
   noteIdToReplyIdSet: Map<number | string, Set<number | string>>;
+  // web assembly
+  onigWasmUri?: string;
 }
 
 export interface LsifLocation {

@@ -1,6 +1,7 @@
 import type { IPluginAPI } from '@alipay/alex/lib/editor';
 import * as localforage from 'localforage';
 import type { Uri } from '@alipay/alex';
+
 export const PLUGIN_ID = 'web-scm';
 
 export interface CacheFile {
@@ -31,9 +32,10 @@ export enum Status {
   BOTH_DELETED,
   BOTH_MODIFIED,
 }
+
 export const activate = ({ commands }: IPluginAPI) => {
   if (!localforage.supports(localforage.INDEXEDDB)) {
-    throw new Error('SCM Not Support IndexedDB');
+    throw new Error('[SCM] IndexedDB  Not Support');
   }
 
   // 只存储在IndexedDB
@@ -75,5 +77,20 @@ export const activate = ({ commands }: IPluginAPI) => {
       }
     });
     return files;
+  });
+
+  commands.registerCommand('web-scm.windowOpen', async (path) => {
+    window.open(path);
+  });
+
+  /*
+      21 修改次数
+      22 新增文件
+      23 删除文件
+      24 提交次数
+   */
+  commands.registerCommand('web-scm.yuyanlog', (code, msg, extra) => {
+    // 埋点数据
+    console.log(' >>> log', code, msg, extra);
   });
 };

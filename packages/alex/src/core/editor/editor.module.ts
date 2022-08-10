@@ -435,7 +435,6 @@ class EditorSpecialContribution
       editor.monacoEditor.onMouseMove(
         debounce((event) => {
           const type = event?.target?.type;
-          console.log('type ==', type);
           if (
             type === monaco.editor.MouseTargetType.GUTTER_LINE_NUMBERS ||
             type === monaco.editor.MouseTargetType.GUTTER_GLYPH_MARGIN

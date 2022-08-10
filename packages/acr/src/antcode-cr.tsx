@@ -73,6 +73,7 @@ const AntcodeCR: React.FC<IAntcodeCRProps> = (props) => {
             new URI(window.location.href).withPath(join(props.projectPath, 'raw')).toString(),
           plugins: props.appConfig?.plugins,
           extensionMetadata: props.appConfig?.extensionMetadata,
+          onigWasmUri: props.onigWasmUri,
         },
         {
           // 因为 clientApp 启动时会再次从 preference 读取并设置 language
