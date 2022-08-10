@@ -1,7 +1,6 @@
 import type { IPluginAPI } from '@alipay/alex/lib/editor';
 import * as localforage from 'localforage';
 import type { Uri } from '@alipay/alex';
-// import YuyanMonitor from '@alipay/yuyan-monitor-web';
 
 export const PLUGIN_ID = 'web-scm';
 
@@ -33,12 +32,6 @@ export enum Status {
   BOTH_DELETED,
   BOTH_MODIFIED,
 }
-
-// export const yuyanMonitor = new YuyanMonitor({
-//   yuyanId: '180020010000894003',
-//   userId: '',
-//   debug: true,
-// });
 
 export const activate = ({ commands }: IPluginAPI) => {
   if (!localforage.supports(localforage.INDEXEDDB)) {
@@ -97,11 +90,7 @@ export const activate = ({ commands }: IPluginAPI) => {
       24 提交次数
    */
   commands.registerCommand('web-scm.yuyanlog', (code, msg, extra) => {
+    // 埋点数据
     console.log(' >>> log', code, msg, extra);
-    // yuyanMonitor.log({
-    //   code: code,
-    //   msg: msg,
-    //   ...extra
-    // });
   });
 };
