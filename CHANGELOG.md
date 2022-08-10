@@ -1,3 +1,12 @@
+## [2.0.12-0](https://code.alipay.com/cloud-ide/crew-dragon/compare/v2.0.11...v2.0.12-0) (2022-08-10)
+
+
+### Bug Fixes
+
+* ACR 评论获取 onStart 改为 initialize ([3c08f38](https://code.alipay.com/cloud-ide/crew-dragon/commits/3c08f3872ef80789825c202c75db330a6d75568b))
+
+
+
 ## [2.0.11](https://code.alipay.com/cloud-ide/crew-dragon/compare/v2.0.10...v2.0.11) (2022-08-03)
 
 

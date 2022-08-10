@@ -86,7 +86,7 @@ export class CommentsContribution
     }
   }
 
-  async onStart() {
+  async initialize() {
     // 初始化评论数据
     this.antcodeService.comments.forEach((comment) =>
       this.antcodeCommentsService.createComment(comment)
