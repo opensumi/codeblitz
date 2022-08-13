@@ -1,3 +1,5 @@
+import { StorageChange } from '@opensumi/ide-storage/lib/common';
+
 export namespace API {
   export interface Entry {
     id: string;
@@ -28,7 +30,10 @@ export namespace API {
     entries: Entry[] | Entry;
     last_commit: {};
   };
-
+  export type ResponseFileContent = {
+    content: string;
+    encoding: 'base64';
+  };
   export interface ResponseGetEntry extends Entry {
     size: number;
     render: 'download' | 'image' | 'text';
@@ -90,4 +95,14 @@ export namespace API {
       id: string;
     };
   }
+
+  export type file = Array<{
+    html_url: string;
+    sha: string;
+    path: string;
+    size: number;
+    uri: string;
+    type: 'file' | 'dir';
+    name: string;
+  }>;
 }

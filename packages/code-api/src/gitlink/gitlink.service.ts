@@ -15,6 +15,7 @@ import type {
   Project,
 } from '../common/types';
 import { CodePlatform, CommitFileStatus } from '../common/types';
+import { DEFAULT_SEARCH_IN_WORKSPACE_LIMIT } from '@opensumi/ide-search';
 
 const toType = (d: API.ResponseCommitFileChange) => {
   if (d.new_file) return CommitFileStatus.Added;
@@ -153,7 +154,6 @@ export class GitLinkAPIService implements ICodeAPIService {
     ).commit.sha;
   }
 
-  // getTree getBlob getBlobByCommitPath 暂时都使用同一接口
   async getTree(repo: IRepositoryModel, path: string) {
     const data = await this.request<API.ResponseGetTree>(
       `/api/${this.getProjectPath(repo)}/sub_entries.json`,
@@ -180,18 +180,10 @@ export class GitLinkAPIService implements ICodeAPIService {
   }
 
   async getBlob(repo: IRepositoryModel, entry: EntryParam) {
-    const buf = await this.request<API.ResponseGetSubTree>(
-      `/api/${this.getProjectPath(repo)}/sub_entries.json`,
-      {
-        params: {
-          filepath: entry.path,
-          ref: repo.commit,
-          type: 'file',
-        },
-      }
+    const res = await this.request<API.ResponseFileContent>(
+      `/api/v1/${this.getProjectPath(repo)}/git/blobs/${entry.sha}`
     );
-    let content = (buf.entries as API.Entry).content;
-    return Buffer.from(content);
+    return new Uint8Array(Buffer.from(res.content, res.encoding));
   }
 
   async getBlobByCommitPath(repo: IRepositoryModel, commit: string, path: string) {
@@ -209,7 +201,7 @@ export class GitLinkAPIService implements ICodeAPIService {
     return Buffer.from(content);
   }
 
-  // 此处应该使用后续的api/v1 里的branch接口
+  // api/v1/:owner/:repo/branches/all.json 接口没有commit信息
   async getBranches(repo: IRepositoryModel): Promise<BranchOrTag[]> {
     const branchSlice = await this.request<API.BranchSlice>(
       `/api/${this.getProjectPath(repo)}/branches_slice.json`
@@ -240,12 +232,29 @@ export class GitLinkAPIService implements ICodeAPIService {
     }));
   }
 
+  // 暂时没有搜索内容接口
   async searchContent() {
     return [];
   }
 
-  async searchFile() {
-    return [];
+  async searchFile(repo: IRepositoryModel, searchString: string, options: { limit: number }) {
+    if (searchString === '') {
+      const res = await this.request<API.file>(`/api/${this.getProjectPath(repo)}/files`, {
+        params: {
+          ref: repo.commit,
+        },
+      });
+      // 默认做个限制，防止请求过多
+      return res.map((r) => r.path).slice(0, DEFAULT_SEARCH_IN_WORKSPACE_LIMIT);
+    }
+    const reqRes = await this.request<API.file>(`/api/${this.getProjectPath(repo)}/files`, {
+      params: {
+        ref: repo.commit,
+        limit: options.limit,
+        search: searchString,
+      },
+    });
+    return reqRes.map((r) => r.path).slice(0, DEFAULT_SEARCH_IN_WORKSPACE_LIMIT);
   }
 
   // 不支持
@@ -270,13 +279,23 @@ export class GitLinkAPIService implements ICodeAPIService {
   }
 
   async getFiles(repo: IRepositoryModel): Promise<string[]> {
-    return await this.request(`/api/v1/repos/${this.getProjectPath(repo)}/contents`, {
+    const files = await this.request<API.file>(`/api/${this.getProjectPath(repo)}/files`, {
       params: {
         ref: repo.commit,
       },
     });
+    return files.map((file) => {
+      return file.path;
+    });
   }
-  createBranch(repo: IRepositoryModel, newBranch: string): Promise<any> {
-    throw new Error('Method not implemented.');
+
+  async createBranch(repo: IRepositoryModel, newBranch: string): Promise<any> {
+    return this.request<API.BranchOrTag>(`/api/v1/${this.getProjectPath(repo)}/branches.json`, {
+      data: {
+        new_branch_name: newBranch,
+        old_branch_name: repo.commit,
+      },
+      method: 'post',
+    });
   }
 }

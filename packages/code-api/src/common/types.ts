@@ -32,6 +32,9 @@ export interface TreeEntry extends Partial<EntryInfo> {
    * full path
    */
   path: string;
+
+  // file sha
+  sha?: string;
 }
 
 /**
@@ -48,7 +51,7 @@ export interface EntryInfo {
   fileType: 'binary' | 'text' | 'image';
 }
 
-export type EntryParam = Pick<TreeEntry, 'id' | 'path'>;
+export type EntryParam = Pick<TreeEntry, 'id' | 'path' | 'sha'>;
 
 export interface BranchOrTag {
   name: string;

@@ -177,7 +177,10 @@ const App = () => {
     PRMoreActionLinks,
     // 全屏模式
     isFullscreen,
-
+    // 自定义空白页
+    // EditorEmpty: () => {
+    //   return <div>23232323</div>
+    // },
     appConfig: {
       staticServicePath: Uri.parse(window.location.href)
         .with({ path: path.join('/antcode', project.pathWithNamespace, 'raw') })

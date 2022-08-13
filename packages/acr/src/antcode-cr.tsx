@@ -178,6 +178,7 @@ const AntcodeCR: React.FC<IAntcodeCRProps> = (props) => {
         props.Commenting,
         props.DiscussionItem,
         props.Menubar,
+        props.EditorEmpty,
         props.PRMoreActionLinks,
       ].filter(Boolean) as React.ComponentType[],
     []
