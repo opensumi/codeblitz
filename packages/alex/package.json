@@ -81,8 +81,6 @@
     "@alipay/alex-i18n": "2.0.13",
     "@alipay/alex-lsif-service": "2.0.13",
     "@alipay/alex-plugin": "2.0.13",
-    "antd": "^3.20.3",
-    "@ant-design/icons": "~2.1.1",
     "tslib": "^2.2.0"
   },
   "tnpm": {
