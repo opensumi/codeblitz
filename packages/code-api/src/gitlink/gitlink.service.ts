@@ -13,6 +13,10 @@ import type {
   CommitParams,
   Branch,
   Project,
+  FileAction,
+  FileActionHeader,
+  FileActionResult,
+  User,
 } from '../common/types';
 import { CodePlatform, CommitFileStatus } from '../common/types';
 import { DEFAULT_SEARCH_IN_WORKSPACE_LIMIT } from '@opensumi/ide-search';
@@ -64,8 +68,13 @@ export class GitLinkAPIService implements ICodeAPIService {
   constructor() {
     this._PRIVATE_TOKEN = this.config.token || '';
   }
-  getUser(repo: IRepositoryModel): Promise<Branch> {
-    throw new Error('Method not implemented.');
+  async getUser(repo: IRepositoryModel) {
+    const user = await this.request<API.User>(`/api/users/get_user_info.json`);
+    return {
+      id: user.user_id,
+      name: user.login,
+      email: user.email,
+    };
   }
 
   async available() {
@@ -232,14 +241,14 @@ export class GitLinkAPIService implements ICodeAPIService {
     }));
   }
 
-  // 暂时没有搜索内容接口
+  // TODO gitlink 暂时没有搜索内容接口
   async searchContent() {
     return [];
   }
 
   async searchFile(repo: IRepositoryModel, searchString: string, options: { limit: number }) {
     if (searchString === '') {
-      const res = await this.request<API.file>(`/api/${this.getProjectPath(repo)}/files`, {
+      const res = await this.request<API.files>(`/api/${this.getProjectPath(repo)}/files`, {
         params: {
           ref: repo.commit,
         },
@@ -247,7 +256,7 @@ export class GitLinkAPIService implements ICodeAPIService {
       // 默认做个限制，防止请求过多
       return res.map((r) => r.path).slice(0, DEFAULT_SEARCH_IN_WORKSPACE_LIMIT);
     }
-    const reqRes = await this.request<API.file>(`/api/${this.getProjectPath(repo)}/files`, {
+    const reqRes = await this.request<API.files>(`/api/${this.getProjectPath(repo)}/files`, {
       params: {
         ref: repo.commit,
         limit: options.limit,
@@ -263,23 +272,77 @@ export class GitLinkAPIService implements ICodeAPIService {
   }
 
   async getCommits(repo: IRepositoryModel, params: CommitParams) {
+    const data = await this.request<API.ResponseGetCommits>(
+      `/api/v1/${this.getProjectPath(repo)}/commits.json`,
+      {
+        params: {
+          sha: params.ref,
+          page: params.page,
+          limit: params.pageSize,
+        },
+      }
+    );
+    if (data.commits) {
+      // TODO 缺少 email信息
+      return data.commits.map((c) => ({
+        id: c.sha,
+        parents: c.parent_shas,
+        author: c.author.name,
+        authorEmail: '',
+        authorDate: c.commit_time,
+        committer: c.committer.name,
+        committerEmail: '',
+        committerDate: c.commit_time,
+        message: c.commit_message,
+        title: c.commit_message,
+      }));
+    }
     return [];
   }
 
+  //
   async getCommitDiff(repo: IRepositoryModel, sha: string) {
-    return [];
+    const data = await this.request<API.ResponseCommitFileChange[]>(
+      `/api/v1/${this.getProjectPath(repo)}/commits/${sha}/diff`
+    );
+    return data.map((d) => ({
+      oldFilePath: d.old_path,
+      newFilePath: d.new_path,
+      type: toType(d),
+      ...toChangeLines(d.diff),
+    }));
   }
 
   async getCommitCompare(repo: IRepositoryModel, from: string, to: string) {
     return [];
   }
 
-  async bulkChangeFiles() {
+  async bulkChangeFiles(repo: IRepositoryModel, actions: FileAction[], header: FileActionHeader) {
+    const files = actions.map((action) => {
+      return {
+        ...action,
+        encoding: 'text',
+      };
+    });
+    const res = (await this.request(`/api/v1/${this.getProjectPath(repo)}/contents/batch`, {
+      data: {
+        files: files,
+        branch: header.branch,
+        message: header.commit_message,
+        commit_email: header.author_email,
+        commit_name: header.author_name,
+      },
+      method: 'post',
+    })) as API.ResponsePush;
+
+    if (res.contents) {
+      return res.contents;
+    }
     return [];
   }
 
   async getFiles(repo: IRepositoryModel): Promise<string[]> {
-    const files = await this.request<API.file>(`/api/${this.getProjectPath(repo)}/files`, {
+    const files = await this.request<API.files>(`/api/${this.getProjectPath(repo)}/files`, {
       params: {
         ref: repo.commit,
       },

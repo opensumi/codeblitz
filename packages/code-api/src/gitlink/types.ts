@@ -1,5 +1,3 @@
-import { StorageChange } from '@opensumi/ide-storage/lib/common';
-
 export namespace API {
   export interface Entry {
     id: string;
@@ -20,6 +18,10 @@ export namespace API {
     commit: {
       sha: string;
     };
+  }
+  export interface ResponseGetCommits {
+    total_count: number;
+    commits: ResponseCommits;
   }
 
   export type ResponseGetTree = {
@@ -57,14 +59,62 @@ export namespace API {
     }>;
   }>;
 
+  // export interface ResponseCommit {
+  //   author_email: string;
+  //   author_name: string;
+  //   created_at: string;
+  //   id: string;
+  //   message: string;
+  //   short_id: string;
+  //   title: string;
+  //   sha: string;
+  // }
+
   export interface ResponseCommit {
-    author_email: string;
-    author_name: string;
-    created_at: string;
-    id: string;
-    message: string;
-    short_id: string;
-    title: string;
+    sha: string;
+    author: {
+      id: string;
+      name: string;
+      type: string;
+      image_url: string;
+    };
+    committer: {
+      id: string;
+      name: string;
+      type: string;
+      image_url: string;
+    };
+    commit_message: string;
+    parent_shas: string[];
+    authored_time: string;
+    commited_time: string;
+  }
+
+  export type ResponseCommits = Array<{
+    sha: string;
+    author: {
+      id: string;
+      name: string;
+      type: string;
+      image_url: string;
+    };
+    committer: {
+      id: string;
+      name: string;
+      type: string;
+      image_url: string;
+    };
+    commit_message: string;
+    parent_shas: string[];
+    files: string[];
+    commit_date: string;
+    commit_time: string;
+    branch: string;
+  }>;
+
+  export interface ResponsePush {
+    commit: ResponseCommit;
+    contents: files;
   }
 
   export interface ResponseCommitFileChange {
@@ -96,7 +146,18 @@ export namespace API {
     };
   }
 
-  export type file = Array<{
+  export interface User {
+    username: string;
+    user_id: number;
+    admin: boolean;
+    email: string;
+    has_trace_user: false;
+    image_url: string;
+    // 登陆账号
+    login: string;
+  }
+
+  export type files = Array<{
     html_url: string;
     sha: string;
     path: string;

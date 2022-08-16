@@ -115,11 +115,11 @@ export const enum CommitFileStatus {
 }
 
 export interface FileAction {
-  actionType: FileActionType;
+  action_type: FileActionType;
   content: string;
+  file_path: string;
   encoding?: FileActionEncoding;
-  filePath: string;
-  charse?: string;
+  charset?: string;
 }
 
 export enum FileActionType {
@@ -134,12 +134,12 @@ export enum FileActionEncoding {
 }
 
 export interface FileActionHeader {
-  authorEmail: string;
-  authorName: string;
+  author_email: string;
+  author_name: string;
   branch: string;
-  commitMessage: string;
-  lastCommitId?: string;
-  startBranch?: string;
+  commit_message: string;
+  last_commit_id?: string;
+  start_branch?: string;
 }
 
 export interface FileActionResult {
@@ -171,6 +171,11 @@ export interface Branch {
   isCooperate?: boolean;
 }
 
+export interface User {
+  email: string;
+  name: string;
+  id: number;
+}
 export interface Project {
   id: string;
   default_branch: string | null;
@@ -283,10 +288,12 @@ export interface ICodeAPIService {
   getFileBlame(repo: IRepositoryModel, filepath: string): Promise<Uint8Array>;
   /**
    * commits list
+   * git graph插件使用
    */
   getCommits(repo: IRepositoryModel, params: CommitParams): Promise<CommitRecord[]>;
   /**
    * commit diff
+   * git graph插件使用
    */
   getCommitDiff(repo: IRepositoryModel, sha: string): Promise<CommitFileChange[]>;
   /**
@@ -314,7 +321,7 @@ export interface ICodeAPIService {
   /**
    * 获取用户信息
    */
-  getUser(repo: IRepositoryModel): Promise<any>;
+  getUser(repo: IRepositoryModel): Promise<User | any>;
   /**
    * 获取仓库信息
    */

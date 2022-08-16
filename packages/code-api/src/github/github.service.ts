@@ -73,7 +73,7 @@ export class GitHubAPIService implements ICodeAPIService {
     });
     return data;
   }
-  getUser(repo: IRepositoryModel): Promise<Branch> {
+  getUser(repo: IRepositoryModel): Promise<any> {
     throw new Error('Method not implemented.');
   }
   createBranch(repo: IRepositoryModel, newBranch: string, ref: string): Promise<Branch> {
