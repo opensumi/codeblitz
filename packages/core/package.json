@@ -1,6 +1,6 @@
 {
   "name": "@alipay/alex-core",
-  "version": "2.0.12-0",
+  "version": "2.0.13-0",
   "description": "core",
   "main": "lib/index.js",
   "typings": "lib/index.d.ts",
@@ -12,7 +12,7 @@
   ],
   "scripts": {},
   "publishConfig": {
-    "registry": "https://registry.npm.alibaba-inc.com"
+    "registry": "https://registry.antfin-inc.com"
   },
   "tnpm": {
     "mode": "yarn",
@@ -28,8 +28,8 @@
     "@opensumi/ide-extension": "2.19.4",
     "@opensumi/ide-logs": "2.19.4",
     "@alipay/alex-browserfs": "~2.1.0",
-    "@alipay/alex-registry": "2.0.12-0",
-    "@alipay/alex-shared": "2.0.12-0",
+    "@alipay/alex-registry": "2.0.13-0",
+    "@alipay/alex-shared": "2.0.13-0",
     "assert": "^2.0.0",
     "fs-extra-factory": "^0.2.1",
     "iconv-lite-umd": "^0.6.8",
