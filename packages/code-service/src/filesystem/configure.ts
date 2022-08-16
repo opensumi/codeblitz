@@ -48,7 +48,6 @@ const configureFileSystem = async (model: CodeModelService, scenario?: string | 
         if (!repo) {
           throw new Error('Not found');
         }
-        console.log('===', data);
         return model.codeAPI.asPlatform(repo.platform).getBlob(repo, {
           id: data.id,
           path: data.path,

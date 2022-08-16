@@ -109,8 +109,6 @@ const App: React.FC = () => {
         (model) =>
           model.uri.codeUri.path.startsWith(app.current!.config.workspaceDir) && model.dirty
       );
-
-    console.log('modelList', modelList);
   };
 
   const saveAll = () => {
