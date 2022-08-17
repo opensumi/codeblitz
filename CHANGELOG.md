@@ -1,4 +1,10 @@
 ## [2.0.13-0](https://code.alipay.com/cloud-ide/crew-dragon/compare/v2.0.12-0...v2.0.13-0) (2022-08-16)
+## [2.0.12-2](https://code.alipay.com/cloud-ide/crew-dragon/compare/v2.0.12-0...v2.0.12-2) (2022-08-12)
+
+
+### Bug Fixes
+
+* 修复 gitlink 评论 dispose 后白色区域未消失问题 ([18be202](https://code.alipay.com/cloud-ide/crew-dragon/commits/18be202dd962904e68cd8e61222fb45499d3127a))
 
 
 ### Features
