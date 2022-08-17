@@ -258,6 +258,8 @@ export class AntcodeService implements IAntcodeService {
   }
 
   // @ts-ignore
+  public EditorEmpty: React.FC = null;
+  // @ts-ignore
   public Menubar: React.FC = null;
   // @ts-ignore
   public DiscussionItem: React.FC = null;
@@ -330,6 +332,9 @@ export class AntcodeService implements IAntcodeService {
 
     // @ts-ignore
     this.Menubar = config.Menubar;
+    // @ts-ignore
+    this.EditorEmpty = config.EditorEmpty;
+
     // @ts-ignore
     this.annotations = config.annotations;
     this.noteIdToNote = config.noteIdToNote;

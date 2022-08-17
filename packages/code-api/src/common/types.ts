@@ -32,6 +32,9 @@ export interface TreeEntry extends Partial<EntryInfo> {
    * full path
    */
   path: string;
+
+  // file sha
+  sha?: string;
 }
 
 /**
@@ -48,7 +51,7 @@ export interface EntryInfo {
   fileType: 'binary' | 'text' | 'image';
 }
 
-export type EntryParam = Pick<TreeEntry, 'id' | 'path'>;
+export type EntryParam = Pick<TreeEntry, 'id' | 'path' | 'sha'>;
 
 export interface BranchOrTag {
   name: string;
@@ -112,11 +115,11 @@ export const enum CommitFileStatus {
 }
 
 export interface FileAction {
-  actionType: FileActionType;
+  action_type: FileActionType;
   content: string;
+  file_path: string;
   encoding?: FileActionEncoding;
-  filePath: string;
-  charse?: string;
+  charset?: string;
 }
 
 export enum FileActionType {
@@ -131,26 +134,26 @@ export enum FileActionEncoding {
 }
 
 export interface FileActionHeader {
-  authorEmail: string;
-  authorName: string;
+  author_email: string;
+  author_name: string;
   branch: string;
-  commitMessage: string;
-  lastCommitId?: string;
-  startBranch?: string;
+  commit_message: string;
+  last_commit_id?: string;
+  start_branch?: string;
 }
 
 export interface FileActionResult {
-  branchCreated: boolean;
+  branch_created: boolean;
   branch: string;
-  commitId: string;
-  fileName: string;
+  commit_id: string;
+  file_name: string;
 }
 
 export interface RepositoryFileModel {
   content: string;
-  commitId: string;
-  fileName: string;
-  filePath: string;
+  commit_id: string;
+  file_name: string;
+  filepath: string;
   ref: string;
 }
 
@@ -168,6 +171,11 @@ export interface Branch {
   isCooperate?: boolean;
 }
 
+export interface User {
+  email: string;
+  name: string;
+  id: number;
+}
 export interface Project {
   id: string;
   default_branch: string | null;
@@ -236,6 +244,7 @@ export interface ICodeAPIService {
   getBlob(repo: IRepositoryModel, entry: EntryParam): Promise<Uint8Array>;
   /**
    * 获取 blob
+   * git graph 获取文件内容
    */
   getBlobByCommitPath(repo: IRepositoryModel, commit: string, path: string): Promise<Uint8Array>;
   /**
@@ -280,10 +289,12 @@ export interface ICodeAPIService {
   getFileBlame(repo: IRepositoryModel, filepath: string): Promise<Uint8Array>;
   /**
    * commits list
+   * git graph插件使用
    */
   getCommits(repo: IRepositoryModel, params: CommitParams): Promise<CommitRecord[]>;
   /**
    * commit diff
+   * git graph插件使用
    */
   getCommitDiff(repo: IRepositoryModel, sha: string): Promise<CommitFileChange[]>;
   /**
@@ -311,7 +322,7 @@ export interface ICodeAPIService {
   /**
    * 获取用户信息
    */
-  getUser(repo: IRepositoryModel): Promise<any>;
+  getUser(repo: IRepositoryModel): Promise<User | any>;
   /**
    * 获取仓库信息
    */

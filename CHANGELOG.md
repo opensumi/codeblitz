@@ -1,3 +1,4 @@
+## [2.0.13-0](https://code.alipay.com/cloud-ide/crew-dragon/compare/v2.0.12-0...v2.0.13-0) (2022-08-16)
 ## [2.0.12-2](https://code.alipay.com/cloud-ide/crew-dragon/compare/v2.0.12-0...v2.0.12-2) (2022-08-12)
 
 
@@ -8,6 +9,8 @@
 
 ### Features
 
+* 更新gitlink api ([3d76dab](https://code.alipay.com/cloud-ide/crew-dragon/commits/3d76dab8ec066bf58cc570c34f81c5dca42c433d))
+* 更新gitlink接口 ([ae1933c](https://code.alipay.com/cloud-ide/crew-dragon/commits/ae1933caee9cf1f938e99b2814afb168f5dc19e9))
 * add-webscm-monitor ([2d8db41](https://code.alipay.com/cloud-ide/crew-dragon/commits/2d8db41a8be7570bbab46b8a1d2fb36e571e33e8))
 
 

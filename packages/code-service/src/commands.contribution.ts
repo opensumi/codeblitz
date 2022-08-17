@@ -197,7 +197,7 @@ export class CommandsContribution extends Disposable implements CommandContribut
   // TODO: 这里直接返回 Uint8Array，减少序列化耗时，但考虑到多平台又需转换成统一格式数据
   getFileBlame(filepath: string): Promise<Uint8Array> | void {
     const repo = this.codeModel.getRepository(filepath);
-    if (repo && repo.platform === CodePlatform.antcode) {
+    if (repo) {
       return repo.request.getFileBlame(repo.asRelativePath(filepath));
     }
   }

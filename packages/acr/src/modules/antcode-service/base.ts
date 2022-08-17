@@ -81,6 +81,7 @@ export interface IAntcodeCRProps {
     inputRef?: React.Ref<HTMLTextAreaElement>;
   }>;
   Menubar?: React.FC;
+  EditorEmpty?: React.FC;
   extraContextProvider?: IClientAppOpts['extraContextProvider'];
   noteIdToNote: INoteIdToNote;
   noteUpdateFlag: any;
@@ -221,6 +222,7 @@ export interface IAntcodeService {
 
   // components
   Menubar?: IAntcodeCRProps['Menubar'];
+  EditorEmpty?: IAntcodeCRProps['EditorEmpty'];
   PRMoreActionLinks: IAntcodeCRProps['PRMoreActionLinks'];
 
   // others

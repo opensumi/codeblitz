@@ -51,6 +51,7 @@ const configureFileSystem = async (model: CodeModelService, scenario?: string | 
         return model.codeAPI.asPlatform(repo.platform).getBlob(repo, {
           id: data.id,
           path: data.path,
+          sha: data.sha,
         });
       },
       stat(path: string, data: TreeEntryWithRepo) {

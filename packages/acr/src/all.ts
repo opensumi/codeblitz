@@ -10,3 +10,6 @@ export { default as ACR } from './antcode-cr';
 
 // Editor 组件
 export { EditorRenderer } from '@alipay/alex/lib/editor.all';
+// ALEX 组件
+export { AppRenderer } from '@alipay/alex/lib/index';
+export * from '@alipay/alex/lib//api/require';

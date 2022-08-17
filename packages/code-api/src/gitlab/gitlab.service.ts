@@ -64,7 +64,7 @@ export class GitLabAPIService implements ICodeAPIService {
   constructor() {
     this._PRIVATE_TOKEN = this.config.token || this.helper.GITLAB_TOKEN;
   }
-  getUser(repo: IRepositoryModel): Promise<Branch> {
+  getUser(repo: IRepositoryModel): Promise<any> {
     throw new Error('Method not implemented.');
   }
 

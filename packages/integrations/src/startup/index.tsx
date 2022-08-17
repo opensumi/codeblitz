@@ -57,8 +57,8 @@ const platformConfig = {
     name: 'ide-framework',
   },
   gitlink: {
-    owner: 'Gitlink',
-    name: 'forgeplus',
+    owner: 'qingyou',
+    name: 'test',
   },
 };
 

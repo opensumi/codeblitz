@@ -13,34 +13,30 @@ import type {
   CommitParams,
   Branch,
   Project,
+  FileAction,
+  FileActionHeader,
+  FileActionResult,
+  User,
 } from '../common/types';
 import { CodePlatform, CommitFileStatus } from '../common/types';
+import { DEFAULT_SEARCH_IN_WORKSPACE_LIMIT } from '@opensumi/ide-search';
 
-const toType = (d: API.ResponseCommitFileChange) => {
-  if (d.new_file) return CommitFileStatus.Added;
-  else if (d.deleted_file) return CommitFileStatus.Deleted;
-  else if (d.renamed_file) return CommitFileStatus.Renamed;
-  return CommitFileStatus.Modified;
+const toType = (t: number) => {
+  switch (t) {
+    case 1:
+      return CommitFileStatus.Added;
+    case 2:
+      return CommitFileStatus.Modified;
+    case 3:
+      return CommitFileStatus.Deleted;
+    case 4:
+      return CommitFileStatus.Renamed;
+    case 5:
+      return CommitFileStatus.Added;
+    default:
+      return '';
+  }
 };
-const toChangeLines = (diff: string) => {
-  const diffLines = diff ? diff.split('\n') : [];
-  return diffLines.reduce(
-    (obj, line) => {
-      // +++,--- 在首行为文件名
-      if (line.startsWith('+') && !line.startsWith('+++')) {
-        obj.additions += 1;
-      } else if (line.startsWith('-') && !line.startsWith('---')) {
-        obj.deletions += 1;
-      }
-      return obj;
-    },
-    { additions: 0, deletions: 0 }
-  );
-};
-/*
- *  为保证生产测试一致 暂时使用的是gitlink的生产区接口 https://www.gitlink.org.cn/docs/api
- *  TODO 待后续测试区接口上线  https://testgitea2.trustie.net/api/swagger#/
- */
 
 @Injectable()
 export class GitLinkAPIService implements ICodeAPIService {
@@ -63,8 +59,13 @@ export class GitLinkAPIService implements ICodeAPIService {
   constructor() {
     this._PRIVATE_TOKEN = this.config.token || '';
   }
-  getUser(repo: IRepositoryModel): Promise<Branch> {
-    throw new Error('Method not implemented.');
+  async getUser(repo: IRepositoryModel) {
+    const user = await this.request<API.User>(`/api/users/get_user_info.json`);
+    return {
+      id: user.user_id,
+      name: user.login,
+      email: user.email,
+    };
   }
 
   async available() {
@@ -99,7 +100,8 @@ export class GitLinkAPIService implements ICodeAPIService {
 
   // TODO 静态资源路径  gitlink 静态资源好像无法用commit获取
   transformStaticResource(repo: IRepositoryModel, path: string) {
-    return `${this.config.origin}/repo/${this.getProjectPath(repo)}/raw/${repo.commit}/${path}`;
+    return `${this.config.origin}/repo/${this.getProjectPath(repo)}/${repo.commit}/${path}`;
+    // return `${this.config.origin}/repo/${this.getProjectPath(repo)}/raw/branch/${ref}/${path}`;
   }
 
   protected async request<T>(path: string, options?: RequestOptions): Promise<T> {
@@ -146,14 +148,17 @@ export class GitLinkAPIService implements ICodeAPIService {
   }
 
   async getCommit(repo: IRepositoryModel, ref: string) {
-    return (
-      await this.request<API.ResponseGetCommit>(
-        `/api/${this.getProjectPath(repo)}/commits/${encodeURIComponent(ref)}`
-      )
-    ).commit.sha;
+    const branches = await this.getBranches(repo);
+    const branch = branches.find((branch) => {
+      return branch.name === ref;
+    });
+    if (branch) {
+      return branch.commit.id;
+    } else {
+      throw new Error('[can not find branch]');
+    }
   }
 
-  // getTree getBlob getBlobByCommitPath 暂时都使用同一接口
   async getTree(repo: IRepositoryModel, path: string) {
     const data = await this.request<API.ResponseGetTree>(
       `/api/${this.getProjectPath(repo)}/sub_entries.json`,
@@ -180,22 +185,14 @@ export class GitLinkAPIService implements ICodeAPIService {
   }
 
   async getBlob(repo: IRepositoryModel, entry: EntryParam) {
-    const buf = await this.request<API.ResponseGetSubTree>(
-      `/api/${this.getProjectPath(repo)}/sub_entries.json`,
-      {
-        params: {
-          filepath: entry.path,
-          ref: repo.commit,
-          type: 'file',
-        },
-      }
+    const res = await this.request<API.ResponseFileContent>(
+      `/api/v1/${this.getProjectPath(repo)}/git/blobs/${entry.sha}`
     );
-    let content = (buf.entries as API.Entry).content;
-    return Buffer.from(content);
+    return new Uint8Array(Buffer.from(res.content, res.encoding));
   }
 
   async getBlobByCommitPath(repo: IRepositoryModel, commit: string, path: string) {
-    const buf = await this.request<API.ResponseGetSubTree>(
+    const data = await this.request<API.ResponseGetSubTree>(
       `/api/${this.getProjectPath(repo)}/sub_entries.json`,
       {
         params: {
@@ -205,11 +202,17 @@ export class GitLinkAPIService implements ICodeAPIService {
         },
       }
     );
-    let content = (buf.entries as API.Entry).content;
-    return Buffer.from(content);
+    if (data.entries && typeof data.entries === 'object') {
+      const sha = (data.entries as API.Entry).sha;
+      const entry = {
+        sha: sha,
+      } as EntryParam;
+      return await this.getBlob(repo, entry);
+    } else {
+      throw new Error('[can not find entries]');
+    }
   }
 
-  // 此处应该使用后续的api/v1 里的branch接口
   async getBranches(repo: IRepositoryModel): Promise<BranchOrTag[]> {
     const branchSlice = await this.request<API.BranchSlice>(
       `/api/${this.getProjectPath(repo)}/branches_slice.json`
@@ -240,43 +243,153 @@ export class GitLinkAPIService implements ICodeAPIService {
     }));
   }
 
+  // TODO gitlink 暂时没有搜索内容接口
   async searchContent() {
     return [];
   }
 
-  async searchFile() {
-    return [];
+  async searchFile(repo: IRepositoryModel, searchString: string, options: { limit: number }) {
+    if (searchString === '') {
+      const res = await this.request<API.files>(`/api/${this.getProjectPath(repo)}/files`, {
+        params: {
+          ref: repo.commit,
+        },
+      });
+      // 默认做个限制，防止请求过多
+      return res.map((r) => r.path).slice(0, DEFAULT_SEARCH_IN_WORKSPACE_LIMIT);
+    }
+    const reqRes = await this.request<API.files>(`/api/${this.getProjectPath(repo)}/files`, {
+      params: {
+        ref: repo.commit,
+        limit: options.limit,
+        search: searchString,
+      },
+    });
+    return reqRes.map((r) => r.path).slice(0, DEFAULT_SEARCH_IN_WORKSPACE_LIMIT);
   }
 
-  // 不支持
-  async getFileBlame() {
+  async getFileBlame(repo: IRepositoryModel, path: string) {
+    // const blames = await this.request<API.ResponseFileBlame>(
+    //   `/api/v1/${this.getProjectPath(repo)}/blame?sha=${repo.commit}&filepath=${path}`,
+    //   {
+    //     responseType: 'json',
+    //   }
+    // );
+    // blames.blame_parts.map((blame) => {
+    //   const commit = blame.commit;
+
+    //   return {
+    //     commit: {
+    //       id: commit.sha,
+    //       auther_name: commit.committer.name,
+    //       auther_email: commit.committer?.email,
+    //       authored_date: commit.authored_time,
+    //       committed_date: commit.commited_time,
+    //       message: commit.commit_message,
+    //       author: {
+    //         avatar_url: commit.committer.image_url,
+    //       },
+    //     },
+    //     lines: [],
+    //   };
+    // });
+
     return Uint8Array.from([]);
   }
 
   async getCommits(repo: IRepositoryModel, params: CommitParams) {
+    const data = await this.request<API.ResponseGetCommits>(
+      `/api/v1/${this.getProjectPath(repo)}/commits.json`,
+      {
+        params: {
+          sha: params.ref,
+          page: params.page,
+          limit: params.pageSize,
+        },
+      }
+    );
+    if (data.commits) {
+      // TODO 缺少 email信息
+      return data.commits.map((c) => ({
+        id: c.sha,
+        parents: c.parent_shas,
+        author: c.author.name,
+        authorEmail: '',
+        authorDate: c.commit_time,
+        committer: c.committer.name,
+        committerEmail: '',
+        committerDate: c.commit_time,
+        message: c.commit_message,
+        title: c.commit_message,
+      }));
+    }
     return [];
   }
 
   async getCommitDiff(repo: IRepositoryModel, sha: string) {
-    return [];
+    const data = await this.request<API.ResponseCommitFileChangeData>(
+      `/api/v1/${this.getProjectPath(repo)}/commits/${sha}/diff`
+    );
+    return data.files.map((d) => ({
+      oldFilePath: d.oldname,
+      newFilePath: d.name,
+      type: toType(d.type) as CommitFileStatus,
+      additions: d.addition,
+      deletions: d.deletion,
+    }));
   }
 
   async getCommitCompare(repo: IRepositoryModel, from: string, to: string) {
     return [];
   }
 
-  async bulkChangeFiles() {
+  async bulkChangeFiles(repo: IRepositoryModel, actions: FileAction[], header: FileActionHeader) {
+    const files = actions.map((action) => {
+      return {
+        ...action,
+        encoding: 'text',
+      };
+    });
+    const res = (await this.request(`/api/v1/${this.getProjectPath(repo)}/contents/batch`, {
+      data: {
+        files: files,
+        branch: header.branch,
+        message: header.commit_message,
+        commit_email: header.author_email,
+        commit_name: header.author_name,
+      },
+      method: 'post',
+    })) as API.ResponsePush;
+
+    if (res.contents) {
+      return res.contents.map((content) => {
+        return {
+          ...content,
+          commit_id: res.commit.sha,
+        };
+      });
+    }
     return [];
   }
 
   async getFiles(repo: IRepositoryModel): Promise<string[]> {
-    return await this.request(`/api/v1/repos/${this.getProjectPath(repo)}/contents`, {
+    const files = await this.request<API.files>(`/api/${this.getProjectPath(repo)}/files`, {
       params: {
         ref: repo.commit,
       },
     });
+    return files.map((file) => {
+      return file.path;
+    });
   }
-  createBranch(repo: IRepositoryModel, newBranch: string): Promise<any> {
-    throw new Error('Method not implemented.');
+
+  async createBranch(repo: IRepositoryModel, newBranch: string): Promise<any> {
+    return this.request<API.BranchOrTag>(`/api/v1/${this.getProjectPath(repo)}/branches.json`, {
+      data: {
+        new_branch_name: newBranch,
+        old_branch_name: repo.commit,
+      },
+      method: 'post',
+    });
   }
 }

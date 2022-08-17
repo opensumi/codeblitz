@@ -512,7 +512,6 @@ class EditorSpecialContribution
     disposer.addDispose(
       editor.monacoEditor.onMouseDown((event) => {
         const type = event?.target?.type;
-        console.log('type down==', type);
 
         if (
           type === monaco.editor.MouseTargetType.GUTTER_LINE_NUMBERS ||
