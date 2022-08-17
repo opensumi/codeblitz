@@ -39,6 +39,7 @@ export class MergeRequestContribution
       titleComponent: MergeRequestSummary,
       iconClass: getIcon('explorer'),
       priority: 10,
+      miniSize: 300,
       containerId: MergeRequestExplorerId,
     });
   }

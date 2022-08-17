@@ -6,6 +6,7 @@ export namespace API {
     path: string;
     mode: string;
     content: string;
+    sha: string;
   }
 
   export interface ResponseGetProject {
@@ -59,17 +60,19 @@ export namespace API {
     }>;
   }>;
 
-  // export interface ResponseCommit {
-  //   author_email: string;
-  //   author_name: string;
-  //   created_at: string;
-  //   id: string;
-  //   message: string;
-  //   short_id: string;
-  //   title: string;
-  //   sha: string;
-  // }
+  export interface ResponseFileBlame {
+    file_size: number;
+    file_name: string;
+    num_lines: number;
+    blame_parts: FileBlame[];
+  }
 
+  export interface FileBlame {
+    commit: ResponseCommit;
+    current_number: number;
+    effect_line: number;
+    lines: string[];
+  }
   export interface ResponseCommit {
     sha: string;
     author: {
@@ -77,12 +80,14 @@ export namespace API {
       name: string;
       type: string;
       image_url: string;
+      email?: string; // gitlink 无email数据
     };
     committer: {
       id: string;
       name: string;
       type: string;
       image_url: string;
+      email?: string; // gitlink 无email数据
     };
     commit_message: string;
     parent_shas: string[];
@@ -117,15 +122,36 @@ export namespace API {
     contents: files;
   }
 
+  export interface ResponseCommitFileChangeData {
+    file_nums: number;
+    total_addition: number;
+    total_deletion: number;
+    files: ResponseCommitFileChange[];
+  }
+
   export interface ResponseCommitFileChange {
-    a_mode: string;
-    b_mode: string;
-    deleted_file: boolean;
+    addition: number;
+    deletion: number;
     diff: string;
-    new_file: boolean;
-    new_path: string;
-    old_path: string;
-    renamed_file: boolean;
+    is_ambiguous: boolean;
+    is_bin: boolean;
+    is_created: boolean;
+    is_deleted: boolean;
+    is_incomplete: boolean;
+    is_incomplete_line_too_long: boolean;
+    is_lfs_file: boolean;
+    is_protected: boolean;
+    is_renamed: boolean;
+    is_submodule: boolean;
+    name: string;
+    oldname: string;
+    sections: Array<{
+      file_name: string;
+      name: string;
+      lines: Array<any>;
+    }>;
+    // 文件类型 1: 新增 2: 更改 3: 删除 4: 重命名 5: 复制
+    type: number;
   }
 
   export interface ResponseCommitCompare extends ResponseCommit {

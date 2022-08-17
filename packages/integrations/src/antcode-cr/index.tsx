@@ -181,6 +181,7 @@ const App = () => {
     // EditorEmpty: () => {
     //   return <div>23232323</div>
     // },
+    // onigWasmUri: '',
     appConfig: {
       staticServicePath: Uri.parse(window.location.href)
         .with({ path: path.join('/antcode', project.pathWithNamespace, 'raw') })
@@ -200,6 +201,14 @@ const App = () => {
     zIndex: 1000,
   };
 
+  // 取消语言服务
+  // setTimeout(() => {
+  //   blamePlugin.commands?.executeCommand(
+  //     'alex.setDefaultPreference',
+  //     'acr.lsifEnabled',
+  //     false
+  //   );
+  // }, 0);
   return (
     <div style={{ height: '100%' }}>
       <div className="controller">

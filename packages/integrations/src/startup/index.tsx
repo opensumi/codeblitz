@@ -59,7 +59,6 @@ const platformConfig = {
   gitlink: {
     owner: 'qingyou',
     name: 'test',
-    commit: 'master',
   },
 };
 

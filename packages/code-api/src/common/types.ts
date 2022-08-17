@@ -143,17 +143,17 @@ export interface FileActionHeader {
 }
 
 export interface FileActionResult {
-  branchCreated: boolean;
+  branch_created: boolean;
   branch: string;
-  commitId: string;
-  fileName: string;
+  commit_id: string;
+  file_name: string;
 }
 
 export interface RepositoryFileModel {
   content: string;
-  commitId: string;
-  fileName: string;
-  filePath: string;
+  commit_id: string;
+  file_name: string;
+  filepath: string;
   ref: string;
 }
 
@@ -244,6 +244,7 @@ export interface ICodeAPIService {
   getBlob(repo: IRepositoryModel, entry: EntryParam): Promise<Uint8Array>;
   /**
    * 获取 blob
+   * git graph 获取文件内容
    */
   getBlobByCommitPath(repo: IRepositoryModel, commit: string, path: string): Promise<Uint8Array>;
   /**
