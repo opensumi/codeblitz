@@ -45,7 +45,5 @@ export class MiscModule extends BrowserModule {
     EditorEmptyContribution,
     // experimental
     DiffFoldingContribution,
-    // migrate
-    MigrateContribution,
   ];
 }
