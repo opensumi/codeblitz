@@ -3,6 +3,9 @@ export const localizationBundle = {
   languageName: 'Chinese',
   localizedLanguageName: '中文(中国)',
   contents: {
+    // override opensumi
+    // 极速版暂无回收站，在这里覆盖
+    'file.confirm.delete.ok': '确定',
     'common.save': '保存',
     'common.reset': '重置',
     'common.clear': '清除',
