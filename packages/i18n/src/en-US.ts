@@ -3,6 +3,9 @@ export const localizationBundle = {
   languageName: 'english',
   localizedLanguageName: 'English',
   contents: {
+    // override opensumi
+    // 极速版暂无回收站，在这里覆盖
+    'file.confirm.delete.ok': 'Confirm',
     'common.save': 'Save',
     'common.reset': 'Reset',
     'common.clear': 'Clear',
