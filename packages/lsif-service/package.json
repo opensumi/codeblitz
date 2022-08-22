@@ -25,7 +25,7 @@
     "tslib": "^2.2.0"
   },
   "peerDependencies": {
-    "@opensumi/ide-core-common": "2.19.7",
-    "@opensumi/ide-extension": "2.19.7"
+    "@opensumi/ide-core-common": "2.19.9",
+    "@opensumi/ide-extension": "2.19.9"
   }
 }
