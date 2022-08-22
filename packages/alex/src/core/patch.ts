@@ -3,12 +3,14 @@
  */
 
 import { Injector } from '@opensumi/di';
+import { URI } from '@opensumi/ide-core-common';
 import { StaticServices } from '@opensumi/monaco-editor-core/esm/vs/editor/standalone/browser/standaloneServices';
 import { ModesRegistry } from '@opensumi/monaco-editor-core/esm/vs/editor/common/modes/modesRegistry';
 import { DirtyDiffWidget } from '@opensumi/ide-scm/lib/browser/dirty-diff/dirty-diff-widget';
 import { AbstractResourcePreferenceProvider } from '@opensumi/ide-preferences/lib/browser/abstract-resource-preference-provider';
 import { DiskFsProviderClient } from '@opensumi/ide-file-service/lib/browser/file-service-provider-client';
 import { DebugConfigurationManager } from '@opensumi/ide-debug/lib/browser';
+import { IconService } from '@opensumi/ide-theme/lib/browser';
 
 export const disposableCollection: ((injector: Injector) => void)[] = [];
 
@@ -41,3 +43,36 @@ DiskFsProviderClient.prototype.getCurrentUserHome = function () {
 };
 // 极速版暂不支持断点
 DebugConfigurationManager.prototype.canSetBreakpointsIn = () => false;
+
+// TODO: 临时 patch icon 路径不对问题，蚂蚁链上线依赖
+// OpenSumi 集成 2.10 后删除该 patch 逻辑
+// @ts-ignore
+IconService.prototype.getPath = function(basePath: string, relativePath: string) {
+  if (relativePath.startsWith('./')) {
+    const uri = new URI(basePath).resolve(relativePath.replace(/^\.\//, ''));
+    return uri.scheme ? uri : URI.file(uri.toString());
+  } else if (/^http(s)?/.test(relativePath)) {
+    return new URI(relativePath);
+  } else if (basePath) {
+    const uri = new URI(basePath).resolve(relativePath);
+    return uri.scheme ? uri : URI.file(uri.toString());
+  } else if (/^file:\/\//.test(relativePath)) {
+    return new URI(relativePath);
+  } else {
+    return URI.file(relativePath);
+  }
+}
+
+// @ts-ignore
+IconService.prototype.getMaskStyleSheetWithStaticService = function(path: URI, className: string, baseTheme?: string) {
+  const iconUrl = this.staticResourceService.resolveStaticResource(path).toString();
+  // @ts-ignore
+  return this.getMaskStyleSheet(iconUrl, className, baseTheme);
+}
+
+// @ts-ignore
+IconService.prototype.getBackgroundStyleSheetWithStaticService = function(path: URI, className: string, baseTheme?: string) {
+  const iconUrl = this.staticResourceService.resolveStaticResource(path).toString();
+  // @ts-ignore
+  return this.getBackgroundStyleSheet(iconUrl, className, baseTheme);
+}
