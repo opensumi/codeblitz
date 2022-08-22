@@ -1,3 +1,17 @@
+## [2.0.14](https://code.alipay.com/cloud-ide/crew-dragon/compare/v2.0.13...v2.0.14) (2022-08-22)
+
+
+### Bug Fixes
+
+* 临时 patch icon 路径不对问题 ([9ff7776](https://code.alipay.com/cloud-ide/crew-dragon/commits/9ff7776b126bf794d998c07a5fb78d5bbf62f52c))
+
+
+### Features
+
+* 去掉 acr 老数据迁移 ([be58404](https://code.alipay.com/cloud-ide/crew-dragon/commits/be584048bf4bbb300be1a9c17eae3243c988082b))
+
+
+
 ## [2.0.13](https://code.alipay.com/cloud-ide/crew-dragon/compare/v2.0.13-0...v2.0.13) (2022-08-17)
 
 

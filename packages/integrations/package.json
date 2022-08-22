@@ -1,6 +1,6 @@
 {
   "name": "@alipay/alex-integrations",
-  "version": "2.0.13",
+  "version": "2.0.14",
   "description": "@alipay/alex-integrations",
   "main": "lib/index.js",
   "typing": "types/index.d.ts",
@@ -12,18 +12,18 @@
   ],
   "scripts": {},
   "publishConfig": {
-    "registry": "https://registry.antfin-inc.com"
+    "registry": "https://registry.npm.alibaba-inc.com"
   },
   "dependencies": {
-    "@alipay/alex": "2.0.13",
-    "@alipay/alex-acr": "2.0.13",
-    "@alipay/alex-cli": "2.0.13",
-    "@alipay/alex-code-api": "2.0.13",
-    "@alipay/alex-code-service": "2.0.13",
-    "@alipay/alex-core": "2.0.13",
-    "@alipay/alex-i18n": "2.0.13",
-    "@alipay/alex-lsif-service": "2.0.13",
-    "@alipay/alex-shared": "2.0.13",
+    "@alipay/alex": "2.0.14",
+    "@alipay/alex-acr": "2.0.14",
+    "@alipay/alex-cli": "2.0.14",
+    "@alipay/alex-code-api": "2.0.14",
+    "@alipay/alex-code-service": "2.0.14",
+    "@alipay/alex-core": "2.0.14",
+    "@alipay/alex-i18n": "2.0.14",
+    "@alipay/alex-lsif-service": "2.0.14",
+    "@alipay/alex-shared": "2.0.14",
     "@ant-design/icons": "~2.1.1",
     "ahooks": "2",
     "antd": "^3.20.3",
