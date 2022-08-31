@@ -71,8 +71,29 @@ export namespace API {
     commit: ResponseCommit;
     current_number: number;
     effect_line: number;
+    previous_number: number;
     lines: string[];
   }
+
+  export interface gitlensBlame {
+    commit: {
+      id: string;
+      author_name: string;
+      author_email?: string;
+      authored_date: string;
+      committed_date: string;
+      message: string;
+      author: {
+        avatar_url: string;
+      };
+    };
+    lines: Array<{
+      current_number: number;
+      effect_line: number;
+      previous_number: number;
+    }>;
+  }
+
   export interface ResponseCommit {
     sha: string;
     author: {
