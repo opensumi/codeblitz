@@ -238,6 +238,7 @@ export class CommandsContribution extends Disposable implements CommandContribut
       owner,
       platform,
       ref,
+      origin: CODE_PLATFORM_CONFIG[platform].origin,
       // refs: refs
     };
   }
