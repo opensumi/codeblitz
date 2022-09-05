@@ -77,11 +77,11 @@ export namespace API {
 
   export interface gitlensBlame {
     commit: {
-      id: string;
+      author_email: string;
       author_name: string;
-      author_email?: string;
-      authored_date: string;
-      committed_date: string;
+      authored_date: number;
+      committed_date: number;
+      id: string; // sha
       message: string;
       author: {
         avatar_url: string;
@@ -111,9 +111,8 @@ export namespace API {
       email?: string; // gitlink 无email数据
     };
     commit_message: string;
-    parent_shas: string[];
-    authored_time: string;
-    commited_time: string;
+    authored_time: number;
+    committed_time: number;
   }
 
   export type ResponseCommits = Array<{

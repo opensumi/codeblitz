@@ -278,7 +278,7 @@ export class GitLinkAPIService implements ICodeAPIService {
     const blameHash = {};
     const blamePart: API.gitlensBlame[] = [];
 
-    blames.blame_parts.forEach((blame) => {
+    blames.blame_parts.forEach((blame, index) => {
       const commit = blame.commit;
       if (blameHash[commit.sha]) {
         const bla = blamePart.find((b) => b.commit.id === blame.commit.sha) as API.gitlensBlame;
@@ -293,12 +293,16 @@ export class GitLinkAPIService implements ICodeAPIService {
           commit: {
             id: commit.sha,
             author_name: commit.committer.name,
-            author_email: commit.committer?.email,
-            authored_date: commit.authored_time,
-            committed_date: commit.commited_time,
-            message: commit.commit_message,
+            // gitlink 接口无email信息
+            author_email: commit.author.email || 'no_email',
+            authored_date: commit.authored_time * 1000,
+            committed_date: commit.committed_time * 1000,
+            message: commit.commit_message.replace(/\n/, ''),
             author: {
-              avatar_url: commit.committer.image_url,
+              // gitlink 增加路径
+              avatar_url: this.config.endpoint.endsWith('/')
+                ? this.config.endpoint + commit.committer.image_url
+                : this.config.endpoint + '/' + commit.committer.image_url,
             },
           },
           lines: [
@@ -311,6 +315,7 @@ export class GitLinkAPIService implements ICodeAPIService {
         });
       }
     });
+    console.log('blame', blamePart);
     return new TextEncoder().encode(JSON.stringify(blamePart));
   }
 

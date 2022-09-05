@@ -275,22 +275,21 @@ export class CodeContribution
           const { rootRepository: repo } = this.codeModel;
           await repo.refsInitialized;
           const getShortCommit = (commit: string) => (commit || '').substr(0, 8);
-          // TODO 支持其他平台
-          const createBranch =
-            repo.platform !== CodePlatform.antcode
-              ? []
-              : [
-                  {
-                    name: localize('code-service.command.create-branch'),
-                    commit: '',
-                    type: PickBranch.CREATEBRANCH,
-                  },
-                  {
-                    name: localize('code-service.command.create-branch-from'),
-                    commit: '',
-                    type: PickBranch.CREATEBRANCHFROM,
-                  },
-                ];
+          const createBranch: { name: string; commit: string; type: PickBranch }[] = [];
+          if (repo.platform == CodePlatform.antcode || repo.platform == CodePlatform.gitlink) {
+            createBranch.push(
+              {
+                name: localize('code-service.command.create-branch'),
+                commit: '',
+                type: PickBranch.CREATEBRANCH,
+              },
+              {
+                name: localize('code-service.command.create-branch-from'),
+                commit: '',
+                type: PickBranch.CREATEBRANCHFROM,
+              }
+            );
+          }
           const refs = [...createBranch, ...repo.refs.branches, ...repo.refs.tags];
 
           const quickPickRef = refs.map((ref, index) => ({
