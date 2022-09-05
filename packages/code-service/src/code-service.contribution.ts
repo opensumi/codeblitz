@@ -42,6 +42,7 @@ import { CodeModelService } from './code-model.service';
 import { RefType, ICodeServiceConfig, CodePlatform } from './types';
 import { Configure } from './config.service';
 import { ISCMRepository, SCMService, ISCMResource, ISCMResourceGroup } from '@opensumi/ide-scm';
+import { CODE_PLATFORM_CONFIG } from '@alipay/alex-code-api';
 
 namespace CODE_SERVICE_COMMANDS {
   const CATEGORY = 'CodeService';
@@ -276,7 +277,7 @@ export class CodeContribution
           await repo.refsInitialized;
           const getShortCommit = (commit: string) => (commit || '').substr(0, 8);
           const createBranch: { name: string; commit: string; type: PickBranch }[] = [];
-          if (repo.platform == CodePlatform.antcode || repo.platform == CodePlatform.gitlink) {
+          if (CODE_PLATFORM_CONFIG[repo.platform].createBranch) {
             createBranch.push(
               {
                 name: localize('code-service.command.create-branch'),
