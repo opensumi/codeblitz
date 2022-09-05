@@ -269,32 +269,53 @@ export class GitLinkAPIService implements ICodeAPIService {
   }
 
   async getFileBlame(repo: IRepositoryModel, path: string) {
-    // const blames = await this.request<API.ResponseFileBlame>(
-    //   `/api/v1/${this.getProjectPath(repo)}/blame?sha=${repo.commit}&filepath=${path}`,
-    //   {
-    //     responseType: 'json',
-    //   }
-    // );
-    // blames.blame_parts.map((blame) => {
-    //   const commit = blame.commit;
+    const blames = await this.request<API.ResponseFileBlame>(
+      `/api/v1/${this.getProjectPath(repo)}/blame?sha=${repo.commit}&filepath=${path}`,
+      {
+        responseType: 'json',
+      }
+    );
+    const blameHash = {};
+    const blamePart: API.gitlensBlame[] = [];
 
-    //   return {
-    //     commit: {
-    //       id: commit.sha,
-    //       auther_name: commit.committer.name,
-    //       auther_email: commit.committer?.email,
-    //       authored_date: commit.authored_time,
-    //       committed_date: commit.commited_time,
-    //       message: commit.commit_message,
-    //       author: {
-    //         avatar_url: commit.committer.image_url,
-    //       },
-    //     },
-    //     lines: [],
-    //   };
-    // });
-
-    return Uint8Array.from([]);
+    blames.blame_parts.forEach((blame, index) => {
+      const commit = blame.commit;
+      if (blameHash[commit.sha]) {
+        const bla = blamePart.find((b) => b.commit.id === blame.commit.sha) as API.gitlensBlame;
+        bla.lines.push({
+          current_number: blame.current_number,
+          effect_line: blame.effect_line,
+          previous_number: blame.previous_number,
+        });
+      } else {
+        blameHash[commit.sha] = true;
+        blamePart.push({
+          commit: {
+            id: commit.sha,
+            author_name: commit.committer.name,
+            // gitlink 接口无email信息
+            author_email: commit.author.email || 'no_email',
+            authored_date: commit.authored_time * 1000,
+            committed_date: commit.committed_time * 1000,
+            message: commit.commit_message.replace(/\n/, ''),
+            author: {
+              // gitlink 增加路径
+              avatar_url: this.config.endpoint.endsWith('/')
+                ? this.config.endpoint + commit.committer.image_url
+                : this.config.endpoint + '/' + commit.committer.image_url,
+            },
+          },
+          lines: [
+            {
+              current_number: blame.current_number,
+              effect_line: blame.effect_line,
+              previous_number: blame.previous_number,
+            },
+          ],
+        });
+      }
+    });
+    return new TextEncoder().encode(JSON.stringify(blamePart));
   }
 
   async getCommits(repo: IRepositoryModel, params: CommitParams) {

@@ -42,6 +42,7 @@ import { CodeModelService } from './code-model.service';
 import { RefType, ICodeServiceConfig, CodePlatform } from './types';
 import { Configure } from './config.service';
 import { ISCMRepository, SCMService, ISCMResource, ISCMResourceGroup } from '@opensumi/ide-scm';
+import { CODE_PLATFORM_CONFIG } from '@alipay/alex-code-api';
 
 namespace CODE_SERVICE_COMMANDS {
   const CATEGORY = 'CodeService';
@@ -275,22 +276,21 @@ export class CodeContribution
           const { rootRepository: repo } = this.codeModel;
           await repo.refsInitialized;
           const getShortCommit = (commit: string) => (commit || '').substr(0, 8);
-          // TODO 支持其他平台
-          const createBranch =
-            repo.platform !== CodePlatform.antcode
-              ? []
-              : [
-                  {
-                    name: localize('code-service.command.create-branch'),
-                    commit: '',
-                    type: PickBranch.CREATEBRANCH,
-                  },
-                  {
-                    name: localize('code-service.command.create-branch-from'),
-                    commit: '',
-                    type: PickBranch.CREATEBRANCHFROM,
-                  },
-                ];
+          const createBranch: { name: string; commit: string; type: PickBranch }[] = [];
+          if (CODE_PLATFORM_CONFIG[repo.platform].createBranchAble) {
+            createBranch.push(
+              {
+                name: localize('code-service.command.create-branch'),
+                commit: '',
+                type: PickBranch.CREATEBRANCH,
+              },
+              {
+                name: localize('code-service.command.create-branch-from'),
+                commit: '',
+                type: PickBranch.CREATEBRANCHFROM,
+              }
+            );
+          }
           const refs = [...createBranch, ...repo.refs.branches, ...repo.refs.tags];
 
           const quickPickRef = refs.map((ref, index) => ({

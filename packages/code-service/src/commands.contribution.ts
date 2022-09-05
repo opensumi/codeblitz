@@ -207,7 +207,11 @@ export class CommandsContribution extends Disposable implements CommandContribut
     if (repo) {
       if (res.type === RemoteResourceType.Commit) {
         const { origin } = CODE_PLATFORM_CONFIG[repo.platform];
-        this.openerService.open(`${origin}/${repo.owner}/${repo.name}/commit/${res.sha}`);
+        if (repo.platform === CodePlatform.gitlink) {
+          this.openerService.open(`${origin}/${repo.owner}/${repo.name}/commits/${res.sha}`);
+        } else {
+          this.openerService.open(`${origin}/${repo.owner}/${repo.name}/commit/${res.sha}`);
+        }
       }
     }
   }
@@ -234,6 +238,7 @@ export class CommandsContribution extends Disposable implements CommandContribut
       owner,
       platform,
       ref,
+      origin: CODE_PLATFORM_CONFIG[platform].origin,
       // refs: refs
     };
   }
