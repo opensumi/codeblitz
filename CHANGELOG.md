@@ -1,3 +1,13 @@
+## [2.0.16](https://code.alipay.com/cloud-ide/crew-dragon/compare/v2.0.15...v2.0.16) (2022-09-05)
+
+
+### Features
+
+* 更新gitlink blame接口 ([ec711a9](https://code.alipay.com/cloud-ide/crew-dragon/commits/ec711a9a393985df1633c536e1632cb150f642ce))
+* 修改gitlink gitLens插件 ([000aae6](https://code.alipay.com/cloud-ide/crew-dragon/commits/000aae6d9808233b4d16cbea96b932c5e4be989a))
+
+
+
 ## [2.0.15](https://code.alipay.com/cloud-ide/crew-dragon/compare/v2.0.14...v2.0.15) (2022-08-30)
 
 
