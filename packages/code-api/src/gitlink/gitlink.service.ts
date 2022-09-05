@@ -315,7 +315,6 @@ export class GitLinkAPIService implements ICodeAPIService {
         });
       }
     });
-    console.log('blame', blamePart);
     return new TextEncoder().encode(JSON.stringify(blamePart));
   }
 
