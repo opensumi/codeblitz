@@ -12,7 +12,7 @@ export interface ICodePlatformConfig {
     parse(hash: string): [number, number] | null;
     format(lineNumbers: [number, number]): string;
   };
-  createBranch?: boolean;
+  createBranchAble?: boolean;
 }
 
 // 代码托管平台配置
@@ -43,7 +43,7 @@ export const CODE_PLATFORM_CONFIG: Record<ICodePlatform, ICodePlatformConfig> = 
         return `#L${startLineNumber}-${endLineNumber}`;
       },
     },
-    createBranch: true,
+    createBranchAble: true,
   },
   [CodePlatform.github]: {
     platform: CodePlatform.github,
@@ -113,7 +113,7 @@ export const CODE_PLATFORM_CONFIG: Record<ICodePlatform, ICodePlatformConfig> = 
         return `#L${startLineNumber}-${endLineNumber}`;
       },
     },
-    createBranch: true,
+    createBranchAble: true,
   },
 };
 
