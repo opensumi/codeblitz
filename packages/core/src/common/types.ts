@@ -172,6 +172,14 @@ export interface RuntimeConfig {
       options: FileSearchOptions
     ): ProviderResult<string[]>;
   };
+  /**
+   * 欢迎页自定义内容
+   */
+  WelcomePage?: React.FC;
+  /**
+   * 空白页自定义内容
+   */
+  EditorEmpty?: React.FC;
 }
 
 export type SearchMode = Boolean | 'local';

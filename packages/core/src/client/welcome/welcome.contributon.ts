@@ -45,9 +45,10 @@ export class WelcomeContribution implements BrowserEditorContribution {
   commandService: CommandService;
 
   registerEditorComponent(registry: EditorComponentRegistry) {
+    const welcomePage = this.runtimeConfig.WelcomePage;
     registry.registerEditorComponent({
       uid: 'welcome',
-      component: EditorWelcomeComponent,
+      component: welcomePage ? welcomePage : EditorWelcomeComponent,
       renderMode: EditorComponentRenderMode.ONE_PER_WORKBENCH,
     });
 
@@ -67,7 +68,9 @@ export class WelcomeContribution implements BrowserEditorContribution {
         return {
           uri,
           name: localize('menu.help.welcome'),
-          icon: `${iconClass} ${styles.tabIcon}`,
+          icon: this.runtimeConfig.WelcomePage
+            ? `${styles.tabIcon}`
+            : `${iconClass} ${styles.tabIcon}`,
         };
       },
     });
