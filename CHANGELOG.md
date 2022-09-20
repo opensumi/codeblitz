@@ -1,3 +1,17 @@
+## [2.0.17](https://code.alipay.com/cloud-ide/crew-dragon/compare/v2.0.16...v2.0.17) (2022-09-20)
+
+
+### Bug Fixes
+
+* 编辑器stretchHeight滚动问题 ([a7e87cf](https://code.alipay.com/cloud-ide/crew-dragon/commits/a7e87cfea2d24b92bb31dd48eaad578f9e3a5dde))
+
+
+### Features
+
+* 增加空白页以及欢迎页自定义 ([e780964](https://code.alipay.com/cloud-ide/crew-dragon/commits/e780964a91f58edf47b9bad1984cf71b6986b24a))
+
+
+
 ## [2.0.16](https://code.alipay.com/cloud-ide/crew-dragon/compare/v2.0.15...v2.0.16) (2022-09-05)
 
 
