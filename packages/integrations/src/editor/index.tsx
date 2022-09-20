@@ -183,7 +183,7 @@ const App = () => {
               editorConfig={{
                 adjustFindWidgetTop: true,
                 // disableEditorSearch: true,
-                stretchHeight: true,
+                // stretchHeight: true,
               }}
               documentModel={{
                 type: 'code',
