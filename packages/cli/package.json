@@ -19,8 +19,8 @@
   },
   "dependencies": {
     "@ali/ide-extension-installer": "^2.0.0",
-    "@opensumi/ide-extension": "2.19.10",
     "@alipay/alex-shared": "2.1.0-0",
+    "@opensumi/ide-extension": "2.20.2",
     "commander": "^7.2.0",
     "fs-extra": "^9.0.1",
     "lodash.pick": "^4.4.0",

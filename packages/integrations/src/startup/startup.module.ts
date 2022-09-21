@@ -27,9 +27,9 @@ export class AlexAppContribution extends Disposable implements CommandContributi
     this.addDispose([
       // codeswing 依赖
       // FIXME: 框架侧支持
-      ...[
-        'vscode.setEditorLayout',
-      ].map((id) => commands.registerCommand({ id }, { execute: () => {} })),
+      // ...[
+      //   'vscode.setEditorLayout',
+      // ].map((id) => commands.registerCommand({ id }, { execute: () => {} })),
       commands.registerCommand(
         { id: 'cloudide.command.workspace.getRuntimeConfig' },
         {

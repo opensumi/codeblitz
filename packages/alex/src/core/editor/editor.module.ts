@@ -1,6 +1,6 @@
 import * as monaco from '@opensumi/monaco-editor-core/esm/vs/editor/editor.api';
-import { FindController } from '@opensumi/monaco-editor-core/esm/vs/editor/contrib/find/findController';
-import { FindWidget } from '@opensumi/monaco-editor-core/esm/vs/editor/contrib/find/findWidget';
+import { FindController } from '@opensumi/monaco-editor-core/esm/vs/editor/contrib/find/browser/findController';
+import { FindWidget } from '@opensumi/monaco-editor-core/esm/vs/editor/contrib/find/browser/findWidget';
 import * as monacoKeybindings from '@opensumi/monaco-editor-core/esm/vs/platform/keybinding/common/keybindingsRegistry';
 import { ContextKeyDefinedExpr } from '@opensumi/monaco-editor-core/esm/vs/platform/contextkey/common/contextkey';
 import { LAYOUT_VIEW_SIZE } from '@opensumi/ide-core-browser/lib/layout/constants';
@@ -25,6 +25,7 @@ import {
   ServiceNames,
   IContextKeyService,
   KeybindingRegistryImpl,
+  QUICK_OPEN_COMMANDS,
 } from '@opensumi/ide-core-browser';
 import { RawContextKey } from '@opensumi/ide-core-browser/lib/raw-context-key';
 import { uuid } from '@opensumi/ide-core-common';
@@ -51,7 +52,6 @@ import { IBreadCrumbService } from '@opensumi/ide-editor/lib/browser/types';
 import { EditorHistoryService, EditorHistoryState } from '@opensumi/ide-editor/lib/browser/history';
 import { IEditorDocumentModelService } from '@opensumi/ide-editor/lib/browser/doc-model/types';
 import { FileSchemeDocumentProvider } from '@opensumi/ide-file-scheme/lib/browser/file-doc';
-import { QUICK_OPEN_COMMANDS } from '@opensumi/ide-quick-open/lib/common';
 
 import * as path from 'path';
 import md5 from 'md5';
@@ -589,7 +589,7 @@ class EditorSpecialContribution
     if (typeof adjustFindWidgetTop === 'undefined') {
       return;
     }
-    const findController: FindController = editor.monacoEditor.getContribution(FindController.ID);
+    const findController: FindController = editor.monacoEditor.getContribution(FindController.ID)!;
     const findState = findController.getState();
 
     let styleDisposer: IDisposable | null = null;

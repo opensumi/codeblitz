@@ -108,14 +108,11 @@ export class DiskFileSystemProvider extends FCService implements IDiskFileProvid
 
   /**
    * @param {Uri} uri
-   * @param {{ recursive: boolean; excludes: string[] }} [options]  // 还不支持 recursive 参数
+   * @param {{ excludes: string[] }} [options]  // 还不支持 recursive 参数
    * @returns {number}
    * @memberof DiskFileSystemProvider
    */
-  async watch(
-    uri: UriComponents,
-    options?: { recursive: boolean; excludes?: string[] }
-  ): Promise<number> {
+  async watch(uri: UriComponents, options?: { excludes?: string[] }): Promise<number> {
     const _uri = Uri.revive(uri);
     const watcherId = await this.watcherServer.watchFileChanges(_uri.toString(), {
       excludes: options && options.excludes ? options.excludes : [],

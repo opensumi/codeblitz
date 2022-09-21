@@ -95,7 +95,6 @@ export class FileService extends FCService implements IFileService {
     const _uri = this.getUri(uri);
 
     const watcherId = await this.diskService.watch(_uri.codeUri, {
-      recursive: true,
       excludes: (options && options.excludes) || [],
     });
     this.watcherDisposerMap.set(id, {
