@@ -42,7 +42,7 @@ import { CodeModelService } from './code-model.service';
 import { RefType, ICodeServiceConfig, CodePlatform } from './types';
 import { Configure } from './config.service';
 import { ISCMRepository, SCMService, ISCMResource, ISCMResourceGroup } from '@opensumi/ide-scm';
-import { CODE_PLATFORM_CONFIG } from '@alipay/alex-code-api';
+import { CODE_PLATFORM_CONFIG, RequestFailed } from '@alipay/alex-code-api';
 
 namespace CODE_SERVICE_COMMANDS {
   const CATEGORY = 'CodeService';
@@ -343,15 +343,20 @@ export class CodeContribution
           }
           if (!refBranches.find((b) => b.name === newBranchName)) {
             const branch = await repo.request.createBranch(newBranchName, repo.commit);
-            if (branch) {
+            if (branch?.commit.id) {
               this.messageService.info(
                 formatLocalize('code-service.command.create-branch-success', newBranchName)
               );
               await repo.refreshRepository(branch.commit.id, branch.name);
+            } else {
+              this.messageService.error(
+                (branch as any as RequestFailed).message ||
+                  formatLocalize('code-service.command.create-branch-error', newBranchName)
+              );
             }
           } else {
             this.messageService.error(
-              formatLocalize('code-service.command.create-branch-error', newBranchName)
+              formatLocalize('code-service.command.create-branch-error-exists', newBranchName)
             );
           }
         },
@@ -367,7 +372,7 @@ export class CodeContribution
           }
           if (repo.refs.branches.find((b) => b.name === newBranchName)) {
             this.messageService.error(
-              formatLocalize('code-service.command.create-branch-error', newBranchName)
+              formatLocalize('code-service.command.create-branch-error-exists', newBranchName)
             );
             return;
           }
@@ -389,11 +394,16 @@ export class CodeContribution
           if (typeof value === 'number') {
             const target = refs[value];
             const branch = await repo.request.createBranch(newBranchName, target.commit);
-            if (branch) {
+            if (branch?.commit.id) {
               this.messageService.info(
                 formatLocalize('code-service.command.create-branch-success', newBranchName)
               );
               await repo.refreshRepository(branch.commit.id, branch.name);
+            } else {
+              this.messageService.error(
+                (branch as any as RequestFailed).message ||
+                  formatLocalize('code-service.command.create-branch-error', newBranchName)
+              );
             }
           }
         },

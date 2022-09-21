@@ -31,7 +31,8 @@ export const localizationBundle = {
 
     'code-service.command.create-branch': '创建分支',
     'code-service.command.create-branch-from': '从...创建分支',
-    'code-service.command.create-branch-error': '分支已存在 {0}',
+    'code-service.command.create-branch-error-exists': '分支已存在 {0}',
+    'code-service.command.create-branch-error': '分支创建失败 {0}',
     'code-service.command.create-branch-success': '分支 {0} 创建成功',
     'code-service.command.new-branch-name': '输入新分支',
     'code-service.command.check-branch-name': '检查分支名是否正确',

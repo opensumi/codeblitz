@@ -225,6 +225,12 @@ export interface ICodeAPIProvider {
   asPlatform(platform: ICodePlatform): ICodeAPIService;
 }
 
+export interface RequestFailed {
+  message: string;
+  status?: number;
+  error?: string;
+}
+
 export interface ICodeAPIService {
   /**
    * 检查 API service 可用性
