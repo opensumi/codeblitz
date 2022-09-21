@@ -113,7 +113,7 @@ export const CODE_PLATFORM_CONFIG: Record<ICodePlatform, ICodePlatformConfig> = 
         return `#L${startLineNumber}-${endLineNumber}`;
       },
     },
-    createBranchAble: true,
+    createBranchAble: false,
   },
 };
 

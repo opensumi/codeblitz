@@ -100,8 +100,9 @@ export class GitLinkAPIService implements ICodeAPIService {
 
   // TODO 静态资源路径  gitlink 静态资源好像无法用commit获取
   transformStaticResource(repo: IRepositoryModel, path: string) {
-    return `${this.config.origin}/repo/${this.getProjectPath(repo)}/${repo.commit}/${path}`;
-    // return `${this.config.origin}/repo/${this.getProjectPath(repo)}/raw/branch/${ref}/${path}`;
+    return `${this.config.origin}/repo/${this.getProjectPath(repo)}/raw/branch/${
+      repo.commit
+    }/${path}`;
   }
 
   protected async request<T>(path: string, options?: RequestOptions): Promise<T> {

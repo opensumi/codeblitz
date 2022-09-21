@@ -32,7 +32,8 @@ export const localizationBundle = {
 
     'code-service.command.create-branch': 'Create new branch...',
     'code-service.command.create-branch-from': 'Create new branch from...',
-    'code-service.command.create-branch-error': 'New Branch is exists {0}',
+    'code-service.command.create-branch-error-exists': 'New Branch is exists {0}',
+    'code-service.command.create-branch-error': 'Create branch failed {0}',
     'code-service.command.create-branch-success': 'New branch {0} created success',
     'code-service.command.new-branch-name': 'Input new branch name',
     'code-service.command.check-branch-name': 'Check the new branch name',
