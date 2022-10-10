@@ -1,8 +1,7 @@
 # ALEX (ant light editor extension)
 > Ant Codespaces 极速版，无容器环境
 
-![image](https://gw.alipayobjects.com/zos/bmw-prod/8dc21336-0a59-48bf-9cab-f6bb4b5c9f30.svg)
-
+<img style='margin: 0 auto; display: block;' src="https://gw.alipayobjects.com/zos/bmw-prod/8dc21336-0a59-48bf-9cab-f6bb4b5c9f30.svg" width="200" height="200" alt="ALEX" />
 ## 项目启动
 ### 准备
 需要安装 yarn >= 1.0，使用 yarn 的 [workspaces](https://classic.yarnpkg.com/en/docs/workspaces/) 来管理 packages，tnpm 已配置 mode 为 yarn，因此可以使用 tnpm 安装依赖
