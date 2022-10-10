@@ -1,6 +1,7 @@
 # ALEX (ant light editor extension)
 > Ant Codespaces 极速版，无容器环境
 
+![image](https://gw.alipayobjects.com/zos/bmw-prod/8dc21336-0a59-48bf-9cab-f6bb4b5c9f30.svg)
 
 ## 项目启动
 ### 准备
