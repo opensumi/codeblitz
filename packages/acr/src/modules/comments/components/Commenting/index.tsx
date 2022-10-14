@@ -90,10 +90,7 @@ export const Commenting: React.FC<{
   ];
 
   const onCloseThread = React.useCallback(() => {
-    // TODO： Gitlink 评论 dispose 后白色区域仍然存在，临时先在这里加个 setTimeout
-    setTimeout(() => {
-      thread.dispose();
-    });
+    thread.dispose();
   }, [thread]);
 
   return (
