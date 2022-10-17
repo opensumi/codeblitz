@@ -32,6 +32,7 @@ import referencesView from '@alipay/alex/extensions/opensumi-lite-extensions.ref
 import emmet from '@alipay/alex/extensions/opensumi-lite-extensions.emmet';
 import codeswing from '@alipay/alex/extensions/vscode-extensions.codeswing';
 import codeRunner from '@alipay/alex/extensions/opensumi-lite-extensions.code-runner-for-web';
+import vditor from '@alipay/alex/extensions/alex.vditor-markdown';
 
 import { LocalExtensionModule } from '../common/local-extension.module';
 import * as Plugin from '../editor/plugin';
@@ -122,6 +123,7 @@ const App = () => (
         html,
         json,
         markdown,
+        vditor,
         typescript,
         codeservice,
         gitlens,

@@ -219,6 +219,11 @@
       "publisher": "opensumi-lite-extensions",
       "name": "code-runner-for-web",
       "version": "0.1.5-patch.1"
+    },
+    {
+      "publisher": "alex",
+      "name": "vditor-markdown",
+      "version": "0.0.1"
     }
   ]
 }
