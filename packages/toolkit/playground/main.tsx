@@ -145,8 +145,8 @@ const App: React.FC = () => {
             layoutComponent: LayoutComponent,
             // 默认偏好设置
             defaultPreferences: {
-              // 主题色 ide-light | ide-dark
-              'general.theme': 'ide-light',
+              // 主题色 opensumi-light | opensumi-dark
+              'general.theme': 'opensumi-light',
               'editor.previewMode': false,
               // 'editor.forceReadOnly': true,
               // 'editor.readonlyFiles': ['/workspace/**']

@@ -182,6 +182,7 @@ const App = () => {
               }}
               editorConfig={{
                 adjustFindWidgetTop: true,
+                disableCache: true,
                 // disableEditorSearch: true,
                 // stretchHeight: true,
               }}

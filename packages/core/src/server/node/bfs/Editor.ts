@@ -71,6 +71,7 @@ export interface EditorOptions {
    * @return An array of bytes or a thenable that resolves to such.
    */
   readFile(path: string): Uint8Array | Thenable<Uint8Array>;
+  disableCache?: boolean;
 }
 
 /**
@@ -98,11 +99,13 @@ export class Editor extends BaseFileSystem implements FileSystem {
   public readonly prefixUrl: string;
   private _index: FileIndex<{}>;
   private _readFile: EditorOptions['readFile'];
+  private _isDisableCache: EditorOptions['disableCache'];
 
   public constructor(opts: EditorOptions) {
     super();
     this._index = new FileIndex();
     this._readFile = opts.readFile;
+    this._isDisableCache = opts.disableCache || false;
   }
 
   public empty(): void {
@@ -177,7 +180,7 @@ export class Editor extends BaseFileSystem implements FileSystem {
         case ActionType.TRUNCATE_FILE:
           return cb(ApiError.EEXIST(path));
         case ActionType.NOP:
-          if (stats.fileData) {
+          if (stats.fileData && !this._isDisableCache) {
             return cb(null, new NoSyncFile(self, path, flags, Stats.clone(stats), stats.fileData));
           }
           asPromise(this._readFile(stripLeadingSlash(path)))
