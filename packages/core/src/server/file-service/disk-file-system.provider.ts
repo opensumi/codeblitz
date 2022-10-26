@@ -1,4 +1,4 @@
-import { RuntimeConfig } from '@alipay/alex-core';
+import { RuntimeConfig } from '../../common';
 import {
   Event,
   IDisposable,
