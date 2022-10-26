@@ -1,3 +1,19 @@
+## [2.0.21](https://code.alipay.com/cloud-ide/crew-dragon/compare/v2.0.20...v2.0.21) (2022-10-26)
+
+
+### Bug Fixes
+
+* 修复评论弹出空白问题 ([a862bda](https://code.alipay.com/cloud-ide/crew-dragon/commits/a862bdae2a2977c665be231c676ab318c17276df))
+
+
+### Features
+
+* 编辑器增加缓存控制 ([3f5210a](https://code.alipay.com/cloud-ide/crew-dragon/commits/3f5210ade8e3c02254b264776f8a2f3233c1977e))
+* 增加文件类型判断 ([f81928d](https://code.alipay.com/cloud-ide/crew-dragon/commits/f81928d9b5e618c69ed3fbb7882984e05971d39f))
+* markdown 能力增强 ([84245e3](https://code.alipay.com/cloud-ide/crew-dragon/commits/84245e343de128e35a3add1405e0efe3994481b1))
+
+
+
 ## [2.0.20](https://code.alipay.com/cloud-ide/crew-dragon/compare/v2.0.19...v2.0.20) (2022-10-20)
 
 
