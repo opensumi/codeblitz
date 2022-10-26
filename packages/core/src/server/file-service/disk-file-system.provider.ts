@@ -1,3 +1,4 @@
+import { RuntimeConfig } from '@alipay/alex-core';
 import {
   Event,
   IDisposable,
@@ -23,7 +24,7 @@ import {
   FileAccess,
   FileSystemProviderCapabilities,
 } from '@opensumi/ide-file-service/lib/common';
-import { Injectable } from '@opensumi/di';
+import { Autowired, Injectable } from '@opensumi/di';
 import * as path from 'path';
 import { HOME_ROOT } from '../../common';
 import { IDiskFileProvider } from './base';
@@ -46,6 +47,9 @@ export class DiskFileSystemProvider extends FCService implements IDiskFileProvid
   protected readonly watcherDisposerMap = new Map<number, IDisposable>();
   protected watchFileExcludes: string[] = [];
   protected watchFileExcludesMatcherList: ParsedPattern[] = [];
+
+  @Autowired(RuntimeConfig)
+  private runtimeConfig: RuntimeConfig;
 
   static H5VideoExtList = ['mp4', 'ogg', 'webm'];
 
@@ -575,6 +579,10 @@ export class DiskFileSystemProvider extends FCService implements IDiskFileProvid
           if (ext[0] === '.') {
             ext = ext.slice(1);
           }
+        }
+        // 使用路径判断文件格式存在问题
+        if (typeof this.runtimeConfig.resolveFileType === 'function') {
+          return this.runtimeConfig.resolveFileType(uri.slice(7));
         }
         return this._getFileType(ext);
       }

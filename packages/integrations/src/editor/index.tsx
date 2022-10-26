@@ -45,6 +45,9 @@ const fileOptions = (function transform(obj) {
   'ide-s/TypeScript-Node-Starter': {
     'feat/123123': ['gbk.ts'],
   },
+  'zoloz_common/zoloz-api-test': {
+    master: ['integration/saas/src/test/resources/images/doc/VN/id/cover_face_vnid2.jpg'],
+  },
 });
 
 const App = () => {
@@ -179,6 +182,9 @@ const App = () => {
                 scenario: null,
                 startupEditor: 'none',
                 // hideEditorTab: true,
+                resolveFileType(path) {
+                  return 'text';
+                },
               }}
               editorConfig={{
                 adjustFindWidgetTop: true,
