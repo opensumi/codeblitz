@@ -1,6 +1,7 @@
 import type { IPluginAPI } from '@alipay/alex/lib/editor';
 import * as localforage from 'localforage';
 import type { Uri } from '@alipay/alex';
+import { Deferred } from '@alipay/alex/lib/modules/opensumi__ide-core-browser';
 
 export const PLUGIN_ID = 'web-scm';
 
@@ -37,6 +38,7 @@ export const activate = ({ commands }: IPluginAPI) => {
   if (!localforage.supports(localforage.INDEXEDDB)) {
     throw new Error('[SCM] IndexedDB  Not Support');
   }
+  const workerReady = new Deferred<void>();
 
   // 只存储在IndexedDB
   localforage.config({
@@ -92,5 +94,9 @@ export const activate = ({ commands }: IPluginAPI) => {
   commands.registerCommand('web-scm.yuyanlog', (code, msg, extra) => {
     // 埋点数据
     console.log(' >>> log', code, msg, extra);
+  });
+
+  commands.registerCommand('alex.gty.workerReady', () => {
+    return workerReady.resolve();
   });
 };

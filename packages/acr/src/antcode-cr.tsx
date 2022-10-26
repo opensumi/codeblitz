@@ -55,6 +55,7 @@ const AntcodeCR: React.FC<IAntcodeCRProps> = (props) => {
         {
           token: CommentsZoneWidget,
           useClass: CommentsZoneWidgetPatch,
+          override: true,
         }
       );
 
