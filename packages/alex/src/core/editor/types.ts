@@ -71,6 +71,10 @@ export interface EditorConfig {
    * scrollbar 配置，参考 monaco 的 scrollbar 配置项，[文档链接](https://microsoft.github.io/monaco-editor/api/interfaces/monaco.editor.ieditorscrollbaroptions.html)
    */
   scrollbar?: Record<string, any>;
+  /**
+   * 去除编辑器缓存，此时没有缓存打开会重新请求
+   */
+  disableCache?: boolean;
 }
 
 export interface EditorProps {

@@ -40,7 +40,7 @@ const getDefaultAppConfig = (): IAppOpts => ({
   extWorkerHost: EXT_WORKER_HOST,
   webviewEndpoint: WEBVIEW_ENDPOINT,
   defaultPreferences: {
-    'general.theme': 'ide-light',
+    'general.theme': 'opensumi-light',
     'application.confirmExit': 'never',
     'editor.autoSave': 'afterDelay',
     'editor.autoSaveDelay': 1000, // one second

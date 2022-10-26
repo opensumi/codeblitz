@@ -180,6 +180,12 @@ export interface RuntimeConfig {
    * 空白页自定义内容
    */
   EditorEmpty?: React.FC;
+  /**
+   * 当文件后缀名判断格式 不满足条件时，可通过此配置项进行自定义
+   * 优先会从语法服务中获取类型
+   * https://aone.alipay.com/v2/project/1158176/bug/100102353
+   */
+  resolveFileType?: (path: string) => 'image' | 'text' | 'video' | undefined;
 }
 
 export type SearchMode = Boolean | 'local';

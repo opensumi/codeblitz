@@ -27,7 +27,7 @@ exports.activate = async (ctx) => {
   commands.registerCommand('alex.settings', () => {
     workspace.getConfiguration().update('editor.fontSize', 16, true);
     workspace.getConfiguration().update('editor.tabSize', 8, true);
-    workspace.getConfiguration().update('general.theme', 'ide-dark', true);
+    workspace.getConfiguration().update('general.theme', 'opensumi-dark', true);
   });
 };
 

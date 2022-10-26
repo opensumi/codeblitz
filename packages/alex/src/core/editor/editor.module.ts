@@ -277,6 +277,7 @@ class EditorSpecialContribution
           const slashIndex = filepath.indexOf('/');
           return this.propsService.props.documentModel.readFile(filepath.slice(slashIndex + 1));
         },
+        disableCache: this.propsService.props.editorConfig?.disableCache,
       }),
       createFileSystem(InMemory, {}),
     ]);
