@@ -1,3 +1,12 @@
+## [2.0.22](https://code.alipay.com/cloud-ide/crew-dragon/compare/v2.0.21...v2.0.22) (2022-11-04)
+
+
+### Bug Fixes
+
+* 修复MonacoContextKeyService绑定错误 ([fab79f0](https://code.alipay.com/cloud-ide/crew-dragon/commits/fab79f00cb1f336e4992d08f77e0261f6af731c5))
+
+
+
 ## [2.0.21](https://code.alipay.com/cloud-ide/crew-dragon/compare/v2.0.20...v2.0.21) (2022-10-26)
 
 
