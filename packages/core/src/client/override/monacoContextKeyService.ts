@@ -12,7 +12,8 @@ export class MonacoContextKeyService extends BaseContextKeyService implements IC
     // TODO 不放window
     // ContextKeyService 全局唯一 组件重置后需重新绑定
     this.contextKeyService =
-      (window as any)._alex.ContextKeyService || new ContextKeyService(this.configurationService);
+      (window as any)?._alex?.ContextKeyService || new ContextKeyService(this.configurationService);
+    (window as any)._alex = {};
     (window as any)._alex.ContextKeyService = this.contextKeyService;
   }
 
