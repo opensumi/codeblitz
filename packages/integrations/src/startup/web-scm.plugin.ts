@@ -56,9 +56,6 @@ export const activate = ({ commands }: IPluginAPI) => {
   commands.registerCommand('web-scm.localforage.remove', async (key) => {
     return await localforage.removeItem(key);
   });
-  commands.registerCommand('web-scm.localforage.removeModify', async (key) => {
-    return await localforage.removeItem(key);
-  });
   commands.registerCommand('web-scm.localforage.clear', async () => {
     return await localforage.clear();
   });
@@ -66,16 +63,7 @@ export const activate = ({ commands }: IPluginAPI) => {
     const files: CacheFile[] = [];
     await localforage.iterate((value: CacheFile, key: string) => {
       if (key.startsWith(basePath)) {
-        if (key.endsWith(':MODIFY')) {
-          files.push(value);
-        }
-        // if (
-        //   value.type === Status.ADDED ||
-        //   value.type === Status.UNTRACKED
-        // ) {
-        // } else if (value.type === Status.DELETED) {
-        // } else if (value.type === Status.MODIFIED) {
-        // }
+        files.push(value);
       }
     });
     return files;

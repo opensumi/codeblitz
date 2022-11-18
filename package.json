@@ -21,6 +21,7 @@
     "generate": "node scripts/generate",
     "editor": "INTEGRATION=editor npm run dev",
     "acr": "INTEGRATION=antcode-cr npm run dev",
+    "fs": "INTEGRATION=filesystem npm run dev",
     "build": "node scripts/build",
     "bundle": "node scripts/bundle",
     "create": "node scripts/create",
@@ -224,6 +225,11 @@
       "publisher": "alex",
       "name": "vditor-markdown",
       "version": "0.0.1"
+    },
+    {
+      "publisher": "opensumi-lite-extensions",
+      "name": "merge-conflict",
+      "version": "1.0.0"
     }
   ]
 }
