@@ -93,8 +93,13 @@ const requestImpl: any = async (url: string, options?: RequestOptions) => {
   const validateStatus = options.validateStatus || defaultValidateStatus;
 
   if (!validateStatus(response.status)) {
+    let resMsg: any;
+    try {
+      resMsg = await response.json();
+    } catch (err) {}
+
     throw new ResponseError(
-      response.statusText || 'Request Error',
+      resMsg?.message || response.statusText || 'Request Error',
       'ResponseError',
       { url: urlInstance.toString(), ...opts },
       response

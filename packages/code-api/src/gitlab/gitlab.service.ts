@@ -13,8 +13,10 @@ import type {
   CommitParams,
   Branch,
   Project,
+  EntryInfo,
 } from '../common/types';
 import { CodePlatform, CommitFileStatus } from '../common/types';
+import { API as ConflictAPI } from '../antcode/types';
 
 const toType = (d: API.ResponseCommitFileChange) => {
   if (d.new_file) return CommitFileStatus.Added;
@@ -63,6 +65,28 @@ export class GitLabAPIService implements ICodeAPIService {
 
   constructor() {
     this._PRIVATE_TOKEN = this.config.token || this.helper.GITLAB_TOKEN;
+  }
+  getEntryInfo?(repo: IRepositoryModel, entry: EntryParam): Promise<EntryInfo> {
+    throw new Error('Method not implemented.');
+  }
+  getBranchNames?(repo: IRepositoryModel): Promise<string[]> {
+    throw new Error('Method not implemented.');
+  }
+  canResolveConflict(
+    repo: IRepositoryModel,
+    prId: string
+  ): Promise<ConflictAPI.CanResolveConflictResponse> {
+    throw new Error('Method not implemented.');
+  }
+  resolveConflict(): Promise<ConflictAPI.ResolveConflictResponse> {
+    throw new Error('Method not implemented.');
+  }
+  getConflict(
+    repo: IRepositoryModel,
+    sourceBranch: string,
+    targetBranch: string
+  ): Promise<ConflictAPI.ConflictResponse> {
+    throw new Error('Method not implemented.');
   }
   getUser(repo: IRepositoryModel): Promise<any> {
     throw new Error('Method not implemented.');

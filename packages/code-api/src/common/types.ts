@@ -1,3 +1,5 @@
+import type { API as AntCodeAPI } from '../antcode/types';
+export { AntCodeAPI };
 type ConstructorOf<T = any> = new (...args: any[]) => T;
 
 export enum CodePlatform {
@@ -58,6 +60,7 @@ export interface BranchOrTag {
   commit: {
     id: string;
   };
+  protected?: boolean;
 }
 
 export interface RefsParam {
@@ -252,7 +255,12 @@ export interface ICodeAPIService {
    * 获取 blob
    * git graph 获取文件内容
    */
-  getBlobByCommitPath(repo: IRepositoryModel, commit: string, path: string): Promise<Uint8Array>;
+  getBlobByCommitPath(
+    repo: IRepositoryModel,
+    commit: string,
+    path: string,
+    options?: any
+  ): Promise<Uint8Array>;
   /**
    * 获取 entry 相关信息
    */
@@ -333,6 +341,33 @@ export interface ICodeAPIService {
    * 获取仓库信息
    */
   getProject(repo: IRepositoryModel): Promise<Project>;
+  /* 解决冲突场景 */
+
+  // 是否可以在线解决冲突
+  canResolveConflict(
+    repo: IRepositoryModel,
+    sourceBranch: string,
+    targetBranch: string,
+    prId: string
+  ): Promise<AntCodeAPI.CanResolveConflictResponse>;
+  /**
+   * 解决冲突提交
+   */
+  resolveConflict(
+    repo: IRepositoryModel,
+    content: AntCodeAPI.ResolveConflict,
+    sourceBranch: string,
+    targetBranch: string,
+    prId?: string
+  ): Promise<AntCodeAPI.ResolveConflictResponse>;
+  /**
+   * 获取解决冲突信息
+   */
+  getConflict(
+    repo: IRepositoryModel,
+    sourceBranch: string,
+    targetBranch: string
+  ): Promise<AntCodeAPI.ConflictResponse>;
 }
 
 export interface ICodeAPIServiceProvider extends ICodeAPIService {

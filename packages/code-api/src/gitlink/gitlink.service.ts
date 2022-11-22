@@ -17,9 +17,11 @@ import type {
   FileActionHeader,
   FileActionResult,
   User,
+  EntryInfo,
 } from '../common/types';
 import { CodePlatform, CommitFileStatus } from '../common/types';
 import { DEFAULT_SEARCH_IN_WORKSPACE_LIMIT } from '@opensumi/ide-search';
+import { API as ConflictAPI } from '../antcode/types';
 
 const toType = (t: number) => {
   switch (t) {
@@ -58,6 +60,28 @@ export class GitLinkAPIService implements ICodeAPIService {
 
   constructor() {
     this._PRIVATE_TOKEN = this.config.token || '';
+  }
+  getEntryInfo?(repo: IRepositoryModel, entry: EntryParam): Promise<EntryInfo> {
+    throw new Error('Method not implemented.');
+  }
+  getBranchNames?(repo: IRepositoryModel): Promise<string[]> {
+    throw new Error('Method not implemented.');
+  }
+  canResolveConflict(
+    repo: IRepositoryModel,
+    prId: string
+  ): Promise<ConflictAPI.CanResolveConflictResponse> {
+    throw new Error('Method not implemented.');
+  }
+  resolveConflict(): Promise<ConflictAPI.ResolveConflictResponse> {
+    throw new Error('Method not implemented.');
+  }
+  getConflict(
+    repo: IRepositoryModel,
+    sourceBranch: string,
+    targetBranch: string
+  ): Promise<ConflictAPI.ConflictResponse> {
+    throw new Error('Method not implemented.');
   }
   async getUser(repo: IRepositoryModel) {
     const user = await this.request<API.User>(`/api/users/get_user_info.json`);

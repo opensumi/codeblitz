@@ -16,7 +16,7 @@ module.exports = () => {
     tsconfigPath: path.join(__dirname, '../../../tsconfig.json'),
     useLocalWorkerAndWebviewHost: true,
     define: {
-      'process.env.KTLOG_SHOW_DEBUG': true,
+      'process.env.KTLOG_SHOW_DEBUG': false,
     },
     webpackConfig: {
       context: path.join(__dirname, '../../..'),
@@ -30,12 +30,22 @@ module.exports = () => {
           '/code-test': {
             target: antCodeSitHost,
             changeOrigin: true,
+            headers: {
+              'PRIVATE-TOKEN': process.env.PRIVATE_TOKEN,
+            },
+            secure: false,
             pathRewrite: {
               '^/code-test': '',
             },
             // changeOrigin 只对 get 有效
             onProxyReq: (request) => {
               request.setHeader('origin', antCodeSitHost);
+              // antcode内 webapi 不使用token
+              if (request.path.startsWith('/webapi')) {
+                request.setHeader('PRIVATE-TOKEN', '');
+              } else {
+                request.setHeader('PRIVATE-TOKEN', process.env.PRIVATE_TOKEN);
+              }
             },
           },
           '/code-service': {

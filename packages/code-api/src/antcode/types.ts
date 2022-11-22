@@ -88,4 +88,38 @@ export namespace API {
     web_url: string;
     website_url: string;
   }
+
+  export interface RequestResponseOptions {
+    errorOption?: boolean;
+  }
+
+  export interface CanResolveConflictResponse {
+    online_resolve: boolean;
+    unsupport_type: string;
+  }
+
+  export interface ResolveConflict {
+    commit_message: string;
+    files: {
+      content: string;
+      our_path: string;
+      their_path: string;
+    }[];
+    head_sha: string;
+    start_sha: string;
+  }
+
+  export interface ResolveConflictResponse {
+    body: any;
+    statusCode: string;
+    statusCodeValue: number;
+  }
+
+  export type ConflictResponse = Conflict[];
+
+  export interface Conflict {
+    content: string;
+    our_path: string;
+    their_path: string;
+  }
 }

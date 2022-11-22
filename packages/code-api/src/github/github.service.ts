@@ -16,9 +16,11 @@ import type {
   CommitFileChange,
   Branch,
   Project,
+  EntryInfo,
 } from '../common/types';
 import { CodePlatform, CommitFileStatus } from '../common/types';
 import { CODE_PLATFORM_CONFIG } from '../common/config';
+import { API as ConflictAPI } from '../antcode/types';
 
 const toType = (status: string) => {
   switch (status) {
@@ -66,6 +68,28 @@ export class GitHubAPIService implements ICodeAPIService {
 
   constructor() {
     this._OAUTH_TOKEN = this.config.token || this.helper.GITHUB_TOKEN;
+  }
+  getEntryInfo?(repo: IRepositoryModel, entry: EntryParam): Promise<EntryInfo> {
+    throw new Error('Method not implemented.');
+  }
+  getBranchNames?(repo: IRepositoryModel): Promise<string[]> {
+    throw new Error('Method not implemented.');
+  }
+  canResolveConflict(
+    repo: IRepositoryModel,
+    prId: string
+  ): Promise<ConflictAPI.CanResolveConflictResponse> {
+    throw new Error('Method not implemented.');
+  }
+  resolveConflict(): Promise<ConflictAPI.ResolveConflictResponse> {
+    throw new Error('Method not implemented.');
+  }
+  getConflict(
+    repo: IRepositoryModel,
+    sourceBranch: string,
+    targetBranch: string
+  ): Promise<ConflictAPI.ConflictResponse> {
+    throw new Error('Method not implemented.');
   }
   async getProject(repo: IRepositoryModel): Promise<Project> {
     const data = await this.requestByREST<Project>(`/repos/${this.getProjectPath(repo)}`, {

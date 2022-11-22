@@ -97,7 +97,7 @@ export class HelperService {
     msg: { type: MessageType; status?: number; symbol?: string; args?: any[]; message?: string },
     config?: { buttons?: string[]; closable?: boolean }
   ) {
-    const message = `${status ? `${status} - ` : ''}${
+    const message = `${msg.status ? `${msg.status} - ` : ''}${
       msg.symbol ? localize(msg.symbol, ...(msg.args || [])) : msg.message
     }`;
     return this.messageService.open(

@@ -60,11 +60,9 @@ const configureFileSystem = async (model: CodeModelService, scenario?: string | 
         });
       },
     }),
-    // 待 scm 完善支持持久化缓存，暂时先放内存
-    createFileSystem(InMemory, {}),
-    // createFileSystem(IndexedDB, {
-    //   storeName: `${WORKSPACE_IDB_NAME}${scenario ? `/${scenario}` : ''}`,
-    // }),
+    createFileSystem(IndexedDB, {
+      storeName: `${WORKSPACE_IDB_NAME}${scenario ? `/${scenario}` : ''}`,
+    }),
   ]);
   const folderSystem = await createFileSystem(FolderAdapter, {
     wrapped: idbFileSystem,

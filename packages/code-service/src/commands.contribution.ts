@@ -14,6 +14,7 @@ import {
   CommitRecord,
   CommitParams,
   CommitFileChange,
+  AntCodeAPI,
 } from '@alipay/alex-code-api';
 import { CodeModelService } from './code-model.service';
 
@@ -109,6 +110,22 @@ namespace CODE_SERVICE_COMMANDS {
     id: 'code-service.scmRefresh',
     category: CATEGORY,
   };
+  export const CREATENEWBRANCH: Command = {
+    id: 'code-service.createNewBranch',
+    category: CATEGORY,
+  };
+  export const CHECKCONFLICT: Command = {
+    id: 'code-service.checkConflict',
+    category: CATEGORY,
+  };
+  export const RESOLVECONFLICT: Command = {
+    id: 'code-service.resolveConflict',
+    category: CATEGORY,
+  };
+  export const GETCONFLICT: Command = {
+    id: 'code-service.getConflict',
+    category: CATEGORY,
+  };
 }
 
 export enum RemoteResourceType {
@@ -175,8 +192,13 @@ export class CommandsContribution extends Disposable implements CommandContribut
       CODE_SERVICE_COMMANDS.GETFILES,
       CODE_SERVICE_COMMANDS.GETUSER,
       CODE_SERVICE_COMMANDS.SCMREFRESH,
-      // CODE_SERVICE_COMMANDS.CREATEBRANCH,
       // CODE_SERVICE_COMMANDS.CREATEBRANCHFROM,
+
+      // conflict
+      CODE_SERVICE_COMMANDS.GETCONFLICT,
+      CODE_SERVICE_COMMANDS.RESOLVECONFLICT,
+      CODE_SERVICE_COMMANDS.CHECKCONFLICT,
+      CODE_SERVICE_COMMANDS.CREATENEWBRANCH,
     ];
     commandList.forEach((command) => {
       this.addDispose(
@@ -299,6 +321,7 @@ export class CommandsContribution extends Disposable implements CommandContribut
       heads: branches.map((item) => ({
         name: item.name,
         hash: item.commit.id,
+        protected: item.protected,
       })),
       tags: tags.map((item) => ({
         name: item.name,
@@ -325,10 +348,15 @@ export class CommandsContribution extends Disposable implements CommandContribut
     return repo.request.getCommitCompare(from, to);
   }
 
-  async commitFile(repoPath: string, commitHash: string, filePath: string): Promise<Uint8Array> {
+  async commitFile(
+    repoPath: string,
+    commitHash: string,
+    filePath: string,
+    options?: any
+  ): Promise<Uint8Array> {
     const repo = this.codeModel.getRepository(repoPath);
     if (!repo) throw new Error(`${filePath} not exists`);
-    return repo.request.getBlobByCommitPath(commitHash, filePath);
+    return repo.request.getBlobByCommitPath(commitHash, filePath, options);
   }
 
   async remoteUrl(repoPath: string): Promise<string | null> {
@@ -336,6 +364,43 @@ export class CommandsContribution extends Disposable implements CommandContribut
     if (!repo) return null;
     const { origin } = CODE_PLATFORM_CONFIG[repo.platform];
     return `${origin}/${repo.owner}/${repo.name}`;
+  }
+
+  async checkConflict(
+    repoPath: string,
+    sourceBranch: string,
+    targetBranch: string,
+    prId: string
+  ): Promise<AntCodeAPI.CanResolveConflictResponse> {
+    const repo = this.codeModel.getRepository(repoPath);
+    if (!repo) throw new Error('conflict request Error checkConflict');
+    return repo.request.canResolveConflict(sourceBranch, targetBranch, prId);
+  }
+  async resolveConflict(
+    repoPath: string,
+    content: AntCodeAPI.ResolveConflict,
+    sourceBranch: string,
+    targetBranch: string,
+    prId?: string
+  ): Promise<AntCodeAPI.ResolveConflictResponse> {
+    const repo = this.codeModel.getRepository(repoPath);
+    if (!repo) throw new Error('conflict request Error resolveConflict');
+    return repo.request.resolveConflict(content, sourceBranch, targetBranch, prId);
+  }
+  async getConflict(
+    repoPath: string,
+    sourceBranch: string,
+    targetBranch: string
+  ): Promise<AntCodeAPI.ConflictResponse> {
+    const repo = this.codeModel.getRepository(repoPath);
+    if (!repo) throw new Error('conflict request Error getConflict');
+    return repo.request.getConflict(sourceBranch, targetBranch);
+  }
+
+  async createNewBranch(repoPath: string, newBranchName: string, ref: string) {
+    const repo = this.codeModel.getRepository(repoPath);
+    if (!repo) throw new Error('conflict request Error createNewBranch');
+    return repo.request.createBranch(newBranchName, ref);
   }
 
   // TODO: 暂时只支持根仓库的切换，submodules 切换会引起文件变更

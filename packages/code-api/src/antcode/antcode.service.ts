@@ -71,10 +71,16 @@ export class AntCodeAPIService implements ICodeAPIService {
     return `${this.config.origin}/${repo.owner}/${repo.name}/raw/${repo.commit}/${path}`;
   }
 
-  protected async request<T>(path: string, options?: RequestOptions): Promise<T> {
+  protected async request<T>(
+    path: string,
+    options?: RequestOptions,
+    responseOptions?: API.RequestResponseOptions
+  ): Promise<T> {
     const { platform, origin, endpoint } = this.config;
-    const privateToken = this.PRIVATE_TOKEN;
-
+    let privateToken = this.PRIVATE_TOKEN;
+    if (path.startsWith('/webapi/')) {
+      privateToken = '';
+    }
     try {
       const data = await request(path, {
         baseURL: endpoint,
@@ -91,7 +97,7 @@ export class AntCodeAPIService implements ICodeAPIService {
           : options),
       });
       return data;
-    } catch (err: unknown) {
+    } catch (err: any) {
       if (isResponseError(err)) {
         const { status } = err.response;
         this.reporter.point(REPORT_NAME.CODE_SERVICE_REQUEST_ERROR, err.message, {
@@ -118,24 +124,17 @@ export class AntCodeAPIService implements ICodeAPIService {
                 window.open(origin);
               }
             });
-        } else if (status === 403) {
-          this.helper.showMessage(CodePlatform.antcode, {
-            type: MessageType.Error,
-            symbol: 'api.response.project-no-access',
-            status: 401,
-          });
-        } else if (status === 404) {
-          // TODO 更精细化的错误提示
-          this.helper.showMessage(CodePlatform.antcode, {
-            type: MessageType.Error,
-            symbol: 'error.resource-not-found',
-            status: 404,
-          });
         } else {
+          if (responseOptions?.errorOption === false) {
+            // 此处为了web-scm查询 新增文件无需提示
+            console.log(err);
+            return undefined as any;
+          }
           this.helper.showMessage(CodePlatform.antcode, {
             type: MessageType.Error,
-            symbol: 'error.request',
-            status,
+            status: status,
+            symbol: err?.message ? '' : 'error.request',
+            message: err?.message,
           });
         }
       } else {
@@ -185,7 +184,12 @@ export class AntCodeAPIService implements ICodeAPIService {
     return new Uint8Array(buf);
   }
 
-  async getBlobByCommitPath(repo: IRepositoryModel, commit: string, path: string) {
+  async getBlobByCommitPath(
+    repo: IRepositoryModel,
+    commit: string,
+    path: string,
+    options?: API.RequestResponseOptions
+  ) {
     const buf = await this.request<ArrayBuffer>(
       `/api/v3/projects/${this.getProjectId(repo)}/repository/blobs/${commit}`,
       {
@@ -193,7 +197,8 @@ export class AntCodeAPIService implements ICodeAPIService {
         params: {
           filepath: path,
         },
-      }
+      },
+      options
     );
     return new Uint8Array(buf);
   }
@@ -391,10 +396,69 @@ export class AntCodeAPIService implements ICodeAPIService {
     return await this.request<Project>(`/api/v3/projects/${this.getProjectId(repo)}`);
   }
 
-  // async function createPullRequest(data: CodeRegistryPullRequestCreateParameters): Promise<CodeRegistryPullRequest> {
-  //   return (await this.request(`/api/v3/projects/${this.getProjectId(repo)}/pull_requests`,{
-  //     data: data,
-  //     method: 'post',
-  //   }));
-  // }
+  async canResolveConflict(
+    repo: IRepositoryModel,
+    sourceBranch: string,
+    targetBranch: string,
+    prId?: string
+  ): Promise<API.CanResolveConflictResponse> {
+    if (prId) {
+      return await this.request<API.CanResolveConflictResponse>(
+        `/api/v3/projects/${this.getProjectId(
+          repo
+        )}/pull_requests/${prId}/can_resolve_conflicts_inweb`
+      );
+    }
+    return await this.request<API.CanResolveConflictResponse>(
+      `/webapi/projects/${this.getProjectId(repo)}/repository/can_resolve_conflicts_inweb`,
+      {
+        params: {
+          source_branch: sourceBranch,
+          target_branch: targetBranch,
+        },
+      }
+    );
+  }
+
+  async resolveConflict(
+    repo: IRepositoryModel,
+    content: API.ResolveConflict,
+    sourceBranch: string,
+    targetBranch: string,
+    prId?: string
+  ): Promise<API.ResolveConflictResponse> {
+    if (prId) {
+      return await this.request<API.ResolveConflictResponse>(
+        `/api/v3/projects/${this.getProjectId(repo)}/pull_requests/${prId}/resolve_conflicts`,
+        {
+          method: 'put',
+          data: content,
+          responseType: undefined,
+        }
+      );
+    } else {
+      return await this.request<API.ResolveConflictResponse>(
+        `/webapi/projects/${this.getProjectId(
+          repo
+        )}/repository/resolve_conflicts?source_branch=${sourceBranch}&target_branch=${targetBranch}`,
+        {
+          method: 'put',
+          data: content,
+          responseType: undefined,
+        }
+      );
+    }
+  }
+
+  async getConflict(
+    repo: IRepositoryModel,
+    sourceBranch: string,
+    targetBranch: string
+  ): Promise<API.ConflictResponse> {
+    return await this.request<API.ConflictResponse>(
+      `/api/v3/projects/${this.getProjectId(
+        repo
+      )}/merge/conflicts?source_branch=${sourceBranch}&target_branch=${targetBranch}`
+    );
+  }
 }
