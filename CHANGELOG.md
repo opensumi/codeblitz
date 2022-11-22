@@ -1,3 +1,17 @@
+# [2.1.0-0](https://code.alipay.com/cloud-ide/crew-dragon/compare/v2.0.21...v2.1.0-0) (2022-11-22)
+
+
+### Bug Fixes
+
+* 修复ACR样式 ([090a57a](https://code.alipay.com/cloud-ide/crew-dragon/commits/090a57a0feed35f48ea4932ac7867a04fcf76fe3))
+
+
+### Features
+
+* 增加解决冲突能力 ([4245757](https://code.alipay.com/cloud-ide/crew-dragon/commits/4245757b631fd2c436cc7903fc6081df40e807d4))
+
+
+
 ## [2.0.21](https://code.alipay.com/cloud-ide/crew-dragon/compare/v2.0.20...v2.0.21) (2022-10-26)
 
 
