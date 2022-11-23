@@ -44,6 +44,11 @@ import {
   MonacoSnippetSuggestProvider,
 } from './override/snippet.service';
 import { MonacoContextKeyService } from './override/monacoContextKeyService';
+import {
+  VSCodeContributesServiceOverride,
+  VSCodeContributesServiceToken,
+} from './override/vscodeContributesService';
+
 import { ExtensionNodeServiceServerPath } from '@opensumi/ide-extension';
 export * from './override/codeEditorService';
 
@@ -95,6 +100,11 @@ export class ClientModule extends BrowserModule {
     {
       token: IContextKeyService,
       useClass: MonacoContextKeyService,
+      override: true,
+    },
+    {
+      token: VSCodeContributesServiceToken,
+      useClass: VSCodeContributesServiceOverride,
       override: true,
     },
   ];

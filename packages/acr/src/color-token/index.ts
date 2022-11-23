@@ -5,7 +5,8 @@ registerColor(
   {
     light: '#FA541C',
     dark: '#D7491A',
-    hc: null,
+    hcLight: null,
+    hcDark: null,
   },
   'volcano warning color token'
 );

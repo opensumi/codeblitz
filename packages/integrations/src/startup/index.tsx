@@ -33,6 +33,7 @@ import emmet from '@alipay/alex/extensions/opensumi-lite-extensions.emmet';
 import codeswing from '@alipay/alex/extensions/vscode-extensions.codeswing';
 import codeRunner from '@alipay/alex/extensions/opensumi-lite-extensions.code-runner-for-web';
 import vditor from '@alipay/alex/extensions/alex.vditor-markdown';
+import mergeConflict from '@alipay/alex/extensions/opensumi-lite-extensions.merge-conflict';
 
 import { LocalExtensionModule } from '../common/local-extension.module';
 import * as Plugin from '../editor/plugin';
@@ -143,6 +144,7 @@ const App = () => (
         anycodeTypescript,
         anycode,
         codeRunner,
+        mergeConflict,
       ],
       workspaceDir: `${platform}/${config.owner}/${config.name}`,
       layoutConfig,
@@ -153,7 +155,7 @@ const App = () => (
     runtimeConfig={{
       biz: 'alex',
       scmFileTree: true,
-
+      scenario: 'ALEX_TEST',
       // unregisterActivityBarExtra: true,
       // hideLeftTabBar: true
       // workspace: {

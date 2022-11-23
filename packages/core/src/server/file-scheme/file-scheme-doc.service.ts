@@ -1,6 +1,7 @@
 import { Injectable, Autowired } from '@opensumi/di';
 import {
   IEditorDocumentModelSaveResult,
+  SaveTaskResponseState,
   URI,
   IEditorDocumentChange,
   BasicTextLines,
@@ -36,7 +37,7 @@ export class FileSchemeDocNodeServiceImpl implements IFileSchemeDocNodeService {
           const currentMd5 = md5(content);
           if (change.baseMd5 !== currentMd5) {
             return {
-              state: 'diff',
+              state: SaveTaskResponseState.DIFF,
             };
           }
         }
@@ -46,16 +47,16 @@ export class FileSchemeDocNodeServiceImpl implements IFileSchemeDocNodeService {
         }
         await fse.writeFile(fsPath, encode(contentRes, encoding ? encoding : 'utf8'));
         return {
-          state: 'success',
+          state: SaveTaskResponseState.SUCCESS,
         };
       }
       return {
-        state: 'error',
+        state: SaveTaskResponseState.ERROR,
         errorMessage: 'useByContent',
       };
     } catch (e: any) {
       return {
-        state: 'error',
+        state: SaveTaskResponseState.ERROR,
         errorMessage: e.toString(),
       };
     }
@@ -74,22 +75,22 @@ export class FileSchemeDocNodeServiceImpl implements IFileSchemeDocNodeService {
           const res = await this.fileService.resolveContent(uri, { encoding });
           if (content.baseMd5 !== md5(res.content)) {
             return {
-              state: 'diff',
+              state: SaveTaskResponseState.DIFF,
             };
           }
         }
         await this.fileService.setContent(stat, content.content, { encoding });
         return {
-          state: 'success',
+          state: SaveTaskResponseState.SUCCESS,
         };
       }
       await this.fileService.createFile(uri, { content: content.content, encoding });
       return {
-        state: 'success',
+        state: SaveTaskResponseState.SUCCESS,
       };
     } catch (e: any) {
       return {
-        state: 'error',
+        state: SaveTaskResponseState.ERROR,
         errorMessage: e.toString(),
       };
     }

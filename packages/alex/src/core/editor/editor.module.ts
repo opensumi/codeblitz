@@ -163,9 +163,6 @@ class EditorHistoryServiceOverride extends EditorHistoryService {
   @Autowired(AppConfig)
   appConfig: AppConfig;
 
-  @Autowired(WorkbenchEditorService)
-  editorService: WorkbenchEditorService;
-
   @Autowired(IPropsService)
   propsService: IPropsService<EditorProps>;
 

@@ -225,4 +225,8 @@ export class ContentSearchService implements IContentSearchServer {
       this.searchError(searchInfo.searchId, `search error ${err?.message || ''}`);
     }
   }
+
+  dispose(): void {
+    this.requestMap.clear();
+  }
 }

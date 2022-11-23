@@ -66,6 +66,7 @@ module.exports = (option) => {
     module: {
       // https://github.com/webpack/webpack/issues/196#issuecomment-397606728
       exprContextCritical: false,
+      unknownContextCritical: false,
       rules: [
         {
           test: /\.tsx?$/,
