@@ -1,4 +1,4 @@
-import { getMapForWordSeparators } from '@opensumi/monaco-editor-core/esm/vs/editor/common/controller/wordCharacterClassifier';
+import { getMapForWordSeparators } from '@opensumi/monaco-editor-core/esm/vs/editor/common/core/wordCharacterClassifier';
 import { isValidMatch } from '@opensumi/monaco-editor-core/esm/vs/editor/common/model/textModelSearch';
 import { Injectable, Autowired } from '@opensumi/di';
 import {
@@ -224,5 +224,9 @@ export class ContentSearchService implements IContentSearchServer {
       this.logger.error(err);
       this.searchError(searchInfo.searchId, `search error ${err?.message || ''}`);
     }
+  }
+
+  dispose(): void {
+    this.requestMap.clear();
   }
 }

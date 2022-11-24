@@ -25,7 +25,6 @@ import {
   EditorGroupChangeEvent,
 } from '@opensumi/ide-editor/lib/browser';
 import { TOGGLE_DIFF_SIDE_BY_SIDE } from '@opensumi/ide-scm';
-import { QUICK_OPEN_COMMANDS } from '@opensumi/ide-quick-open';
 
 import { IMenuRegistry, MenuId, MenuContribution } from '@opensumi/ide-core-browser/lib/menu/next';
 import { fromDiffUri, fromGitUri } from './merge-request/changes-tree/util';
@@ -34,6 +33,7 @@ import { WorkspaceManagerService } from './workspace/workspace-loader.service';
 import { IAntcodeService } from './antcode-service/base';
 import { reportDiffEditorInlineMode } from '../utils/monitor';
 import { ACR_IS_HIGHLIGHT, ACR_IS_FULLSCREEN } from '../constant';
+import { QUICK_OPEN_COMMANDS } from '@alipay/alex/lib/modules/opensumi__ide-core-browser';
 
 class MiscCommands {
   static ExpandFie = {

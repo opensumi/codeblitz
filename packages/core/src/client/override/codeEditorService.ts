@@ -7,19 +7,20 @@
 
 import { Injector } from '@opensumi/di';
 import { MonacoCodeService } from '@opensumi/ide-editor/lib/browser/editor.override';
-import { CodeEditorServiceImpl } from '@opensumi/monaco-editor-core/esm/vs/editor/browser/services/codeEditorServiceImpl';
-import { StaticServices } from '@opensumi/monaco-editor-core/esm/vs/editor/standalone/browser/standaloneServices';
+import { AbstractCodeEditorService } from '@opensumi/monaco-editor-core/esm/vs/editor/browser/services/abstractCodeEditorService';
+import { IStandaloneThemeService } from '@opensumi/monaco-editor-core/esm/vs/editor/standalone/common/standaloneTheme';
+import { StandaloneServices } from '@opensumi/monaco-editor-core/esm/vs/editor/standalone/browser/standaloneServices';
 
 export const IMonacoCodeService = Symbol('IMonacoCodeService');
 
 export { MonacoCodeService };
 
-class CodeEditorService extends CodeEditorServiceImpl {
+class CodeEditorService extends AbstractCodeEditorService {
   private injector: Injector | null = null;
   private uid = 0;
 
   constructor() {
-    super(null, StaticServices.standaloneThemeService.get());
+    super(StandaloneServices.get(IStandaloneThemeService));
   }
 
   setInjector(injector: Injector) {

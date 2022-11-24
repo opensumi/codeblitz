@@ -73,6 +73,12 @@ export class EmptyStatusBarService implements IStatusBarService {
       console.log('empty Method not implemented.');
     }
   }
+  getColor() {
+    if (process.env.NODE_ENV !== 'production') {
+      console.log('empty Method not implemented.');
+    }
+    return undefined;
+  }
   addElement(id: string, entry: StatusBarEntry): StatusBarEntryAccessor {
     if (process.env.NODE_ENV !== 'production') {
       console.log('empty Method not implemented.');

@@ -4,8 +4,9 @@
 
 import { Injector } from '@opensumi/di';
 import { URI } from '@opensumi/ide-core-common';
-import { StaticServices } from '@opensumi/monaco-editor-core/esm/vs/editor/standalone/browser/standaloneServices';
-import { ModesRegistry } from '@opensumi/monaco-editor-core/esm/vs/editor/common/modes/modesRegistry';
+import { ModesRegistry } from '@opensumi/monaco-editor-core/esm/vs/editor/common/languages/modesRegistry';
+import { StandaloneServices } from '@opensumi/monaco-editor-core/esm/vs/editor/standalone/browser/standaloneServices';
+import { ILanguageService } from '@opensumi/monaco-editor-core/esm/vs/editor/common/languages/language';
 import { DirtyDiffWidget } from '@opensumi/ide-scm/lib/browser/dirty-diff/dirty-diff-widget';
 import { AbstractResourcePreferenceProvider } from '@opensumi/ide-preferences/lib/browser/abstract-resource-preference-provider';
 import { DiskFsProviderClient } from '@opensumi/ide-file-service/lib/browser/file-service-provider-client';
@@ -16,7 +17,7 @@ export const disposableCollection: ((injector: Injector) => void)[] = [];
 
 // TODO: 不使用 private 如何清除副作用
 export const disposeMode = () => {
-  const modeService: any = StaticServices.modeService;
+  const modeService: any = StandaloneServices.get(ILanguageService);
 
   // 需要把 LanguageRegistry dispose，否则二次加载会重复触发事件，导致加载越来越慢
   modeService._value?._registry?.dispose?.();
@@ -47,7 +48,7 @@ DebugConfigurationManager.prototype.canSetBreakpointsIn = () => false;
 // TODO: 临时 patch icon 路径不对问题，蚂蚁链上线依赖
 // OpenSumi 集成 2.10 后删除该 patch 逻辑
 // @ts-ignore
-IconService.prototype.getPath = function(basePath: string, relativePath: string) {
+IconService.prototype.getPath = function (basePath: string, relativePath: string) {
   if (relativePath.startsWith('./')) {
     const uri = new URI(basePath).resolve(relativePath.replace(/^\.\//, ''));
     return uri.scheme ? uri : URI.file(uri.toString());
@@ -61,18 +62,26 @@ IconService.prototype.getPath = function(basePath: string, relativePath: string)
   } else {
     return URI.file(relativePath);
   }
-}
+};
 
 // @ts-ignore
-IconService.prototype.getMaskStyleSheetWithStaticService = function(path: URI, className: string, baseTheme?: string) {
+IconService.prototype.getMaskStyleSheetWithStaticService = function (
+  path: URI,
+  className: string,
+  baseTheme?: string
+) {
   const iconUrl = this.staticResourceService.resolveStaticResource(path).toString();
   // @ts-ignore
   return this.getMaskStyleSheet(iconUrl, className, baseTheme);
-}
+};
 
 // @ts-ignore
-IconService.prototype.getBackgroundStyleSheetWithStaticService = function(path: URI, className: string, baseTheme?: string) {
+IconService.prototype.getBackgroundStyleSheetWithStaticService = function (
+  path: URI,
+  className: string,
+  baseTheme?: string
+) {
   const iconUrl = this.staticResourceService.resolveStaticResource(path).toString();
   // @ts-ignore
   return this.getBackgroundStyleSheet(iconUrl, className, baseTheme);
-}
+};

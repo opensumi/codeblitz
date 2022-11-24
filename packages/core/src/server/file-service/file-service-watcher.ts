@@ -5,7 +5,7 @@ import {
   Uri,
   FileChangeType,
   FileSystemWatcherClient,
-  FileSystemWatcherServer,
+  IFileSystemWatcherServer,
   WatchOptions,
   URI,
   parseGlob as parse,
@@ -27,7 +27,7 @@ export interface NsfwFileSystemWatcherOption {
   error?: (message: string, ...args: any[]) => void;
 }
 
-export class FWFileSystemWatcherServer implements FileSystemWatcherServer {
+export class FWFileSystemWatcherServer implements IFileSystemWatcherServer {
   private static WATCHER_FILE_DETECTED_TIME = 500;
   protected client: FileSystemWatcherClient | undefined;
   protected watcherSequence = 1;

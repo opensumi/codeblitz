@@ -8,7 +8,7 @@
   "description": "Ant Codespaces for browser",
   "main": "index.js",
   "engines": {
-    "kaitian": "2.19.10"
+    "kaitian": "2.21.4"
   },
   "scripts": {
     "type-check": "tsc --skipLibCheck --noEmit",
@@ -99,7 +99,7 @@
     {
       "publisher": "cloud-ide-ext",
       "name": "web-scm",
-      "version": "0.0.9"
+      "version": "0.1.3"
     },
     {
       "publisher": "alex-ext-public",

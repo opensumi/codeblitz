@@ -2,6 +2,7 @@ import { Injectable, Autowired } from '@opensumi/di';
 import { IFileSchemeDocClient, IContentChange, ISavingContent } from '@opensumi/ide-file-scheme';
 import {
   IEditorDocumentModelSaveResult,
+  SaveTaskResponseState,
   IEditorDocumentEditChange,
 } from '@opensumi/ide-core-browser';
 import { IFileServiceClient, TextDocumentContentChangeEvent } from '@opensumi/ide-file-service';
@@ -29,7 +30,7 @@ export class FileSchemeDocClientService implements IFileSchemeDocClient {
           const res = await this.fileService.resolveContent(uri, { encoding });
           if (change.baseMd5 !== md5(res.content)) {
             return {
-              state: 'diff',
+              state: SaveTaskResponseState.DIFF,
             };
           }
         }
@@ -52,17 +53,17 @@ export class FileSchemeDocClientService implements IFileSchemeDocClient {
         });
         await this.fileService.updateContent(stat, docChanges, { encoding });
         return {
-          state: 'success',
+          state: SaveTaskResponseState.SUCCESS,
         };
       } else {
         return {
-          state: 'error',
+          state: SaveTaskResponseState.ERROR,
           errorMessage: 'useByContent',
         };
       }
     } catch (e: any) {
       return {
-        state: 'error',
+        state: SaveTaskResponseState.ERROR,
         errorMessage: e.toString(),
       };
     }
@@ -81,13 +82,13 @@ export class FileSchemeDocClientService implements IFileSchemeDocClient {
           const res = await this.fileService.resolveContent(uri, { encoding });
           if (content.baseMd5 !== md5(res.content)) {
             return {
-              state: 'diff',
+              state: SaveTaskResponseState.DIFF,
             };
           }
         }
         await this.fileService.setContent(stat, content.content, { encoding });
         return {
-          state: 'success',
+          state: SaveTaskResponseState.SUCCESS,
         };
       } else {
         await this.fileService.createFile(uri, {
@@ -95,12 +96,12 @@ export class FileSchemeDocClientService implements IFileSchemeDocClient {
           encoding,
         });
         return {
-          state: 'success',
+          state: SaveTaskResponseState.SUCCESS,
         };
       }
     } catch (e: any) {
       return {
-        state: 'error',
+        state: SaveTaskResponseState.ERROR,
         errorMessage: e.toString(),
       };
     }

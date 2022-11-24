@@ -6,11 +6,12 @@ import { IEditor } from '@opensumi/ide-editor';
 
 export { CommentsZoneWidget };
 
-// 临时修复
+// TODO: 临时修复
 @Injectable({ multiple: true })
 export class CommentsZoneWidgetPatch extends CommentsZoneWidget {
   constructor(editor: IEditor, thread: ICommentsThread) {
     const { monacoEditor } = editor;
+    // @ts-ignore
     monacoEditor.onDidChangeConfiguration = Event.map(
       monacoEditor.onDidChangeConfiguration,
       (e) => {
