@@ -1,3 +1,25 @@
+# [2.1.0](https://code.alipay.com/cloud-ide/crew-dragon/compare/v2.1.0-0...v2.1.0) (2022-11-24)
+
+
+
+## [2.0.23](https://code.alipay.com/cloud-ide/crew-dragon/compare/v2.0.22...v2.0.23) (2022-11-04)
+
+
+### Bug Fixes
+
+* assignment error ([6d71df8](https://code.alipay.com/cloud-ide/crew-dragon/commits/6d71df8625bc75335b3e698739aa42335b5c4430))
+
+
+
+## [2.0.22](https://code.alipay.com/cloud-ide/crew-dragon/compare/v2.0.21...v2.0.22) (2022-11-04)
+
+
+### Bug Fixes
+
+* 修复MonacoContextKeyService绑定错误 ([fab79f0](https://code.alipay.com/cloud-ide/crew-dragon/commits/fab79f00cb1f336e4992d08f77e0261f6af731c5))
+
+
+
 # [2.1.0-0](https://code.alipay.com/cloud-ide/crew-dragon/compare/v2.0.21...v2.1.0-0) (2022-11-22)
 ## [2.0.23](https://code.alipay.com/cloud-ide/crew-dragon/compare/v2.0.22...v2.0.23) (2022-11-04)
 
