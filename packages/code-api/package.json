@@ -1,6 +1,6 @@
 {
   "name": "@alipay/alex-code-api",
-  "version": "2.1.0",
+  "version": "2.1.1-0",
   "description": "@alipay/alex-code-api",
   "main": "lib/index.js",
   "typings": "lib/index.d.ts",
@@ -12,16 +12,16 @@
   ],
   "scripts": {},
   "publishConfig": {
-    "registry": "https://registry.npm.alibaba-inc.com"
+    "registry": "https://registry.antfin-inc.com"
   },
   "tnpm": {
     "mode": "yarn",
     "lockfile": "enable"
   },
   "dependencies": {
-    "@alipay/alex-core": "2.1.0",
-    "@alipay/alex-code-service": "2.1.0",
-    "@alipay/alex-shared": "2.1.0",
+    "@alipay/alex-core": "2.1.1-0",
+    "@alipay/alex-code-service": "2.1.1-0",
+    "@alipay/alex-shared": "2.1.1-0",
     "tslib": "^2.2.0"
   }
 }

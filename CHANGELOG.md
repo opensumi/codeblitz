@@ -1,3 +1,12 @@
+## [2.1.1-0](https://code.alipay.com/cloud-ide/crew-dragon/compare/v2.1.0...v2.1.1-0) (2022-11-25)
+
+
+### Bug Fixes
+
+* 编辑器模式初始化问题 ([b0451ac](https://code.alipay.com/cloud-ide/crew-dragon/commits/b0451ac6d5aadea1d20a8b8cf8fe3724534d7d61))
+
+
+
 # [2.1.0](https://code.alipay.com/cloud-ide/crew-dragon/compare/v2.1.0-0...v2.1.0) (2022-11-24)
 
 
