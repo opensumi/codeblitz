@@ -22,6 +22,7 @@ class ExtensionServiceImplOverride extends ExtensionServiceImpl {
   async lazyActivate(this: any) {
     await this.initExtensionMetaData();
     await this.initExtensionInstanceData();
+    await this.runEagerExtensionsContributes();
     await this.runExtensionContributes();
     this.doActivate();
   }
