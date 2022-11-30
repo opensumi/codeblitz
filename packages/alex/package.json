@@ -1,6 +1,6 @@
 {
   "name": "@alipay/alex",
-  "version": "2.1.0",
+  "version": "2.1.1-0",
   "description": "@alipay/alex",
   "main": "lib/index.js",
   "typings": "lib/index.d.ts",
@@ -27,7 +27,7 @@
     "postinstall": "node ./scripts/install-ext"
   },
   "publishConfig": {
-    "registry": "https://registry.npm.alibaba-inc.com"
+    "registry": "https://registry.antfin-inc.com"
   },
   "dependencies": {
     "@opensumi/ide-addons": "2.21.4",
@@ -72,15 +72,15 @@
     "@opensumi/ide-testing": "2.21.4",
     "@opensumi/ide-variable": "2.21.4",
     "@ali/kaitian-textmate-languages": "^2.7.0",
-    "@alipay/alex-cli": "2.1.0",
-    "@alipay/alex-code-api": "2.1.0",
-    "@alipay/alex-core": "2.1.0",
-    "@alipay/alex-registry": "2.1.0",
-    "@alipay/alex-shared": "2.1.0",
-    "@alipay/alex-code-service": "2.1.0",
-    "@alipay/alex-i18n": "2.1.0",
-    "@alipay/alex-lsif-service": "2.1.0",
-    "@alipay/alex-plugin": "2.1.0",
+    "@alipay/alex-cli": "2.1.1-0",
+    "@alipay/alex-code-api": "2.1.1-0",
+    "@alipay/alex-core": "2.1.1-0",
+    "@alipay/alex-registry": "2.1.1-0",
+    "@alipay/alex-shared": "2.1.1-0",
+    "@alipay/alex-code-service": "2.1.1-0",
+    "@alipay/alex-i18n": "2.1.1-0",
+    "@alipay/alex-lsif-service": "2.1.1-0",
+    "@alipay/alex-plugin": "2.1.1-0",
     "tslib": "^2.2.0"
   },
   "tnpm": {
