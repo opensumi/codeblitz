@@ -88,6 +88,10 @@ export interface RuntimeConfig {
    */
   hideEditorTab?: boolean;
   /**
+   * 取消左侧选中行高亮
+   */
+  disableHighlightLine?: boolean;
+  /**
    * 隐藏编辑器的面包屑导航
    */
   hideBreadcrumb?: boolean;

@@ -20,8 +20,7 @@ export const disposeMode = () => {
   const modeService: any = StandaloneServices.get(ILanguageService);
 
   // 需要把 LanguageRegistry dispose，否则二次加载会重复触发事件，导致加载越来越慢
-  modeService._value?._registry?.dispose?.();
-  modeService._value = null;
+  modeService._registry?.dispose?.();
   (<any>ModesRegistry)._languages = [];
 };
 
@@ -44,44 +43,3 @@ DiskFsProviderClient.prototype.getCurrentUserHome = function () {
 };
 // 极速版暂不支持断点
 DebugConfigurationManager.prototype.canSetBreakpointsIn = () => false;
-
-// TODO: 临时 patch icon 路径不对问题，蚂蚁链上线依赖
-// OpenSumi 集成 2.10 后删除该 patch 逻辑
-// @ts-ignore
-IconService.prototype.getPath = function (basePath: string, relativePath: string) {
-  if (relativePath.startsWith('./')) {
-    const uri = new URI(basePath).resolve(relativePath.replace(/^\.\//, ''));
-    return uri.scheme ? uri : URI.file(uri.toString());
-  } else if (/^http(s)?/.test(relativePath)) {
-    return new URI(relativePath);
-  } else if (basePath) {
-    const uri = new URI(basePath).resolve(relativePath);
-    return uri.scheme ? uri : URI.file(uri.toString());
-  } else if (/^file:\/\//.test(relativePath)) {
-    return new URI(relativePath);
-  } else {
-    return URI.file(relativePath);
-  }
-};
-
-// @ts-ignore
-IconService.prototype.getMaskStyleSheetWithStaticService = function (
-  path: URI,
-  className: string,
-  baseTheme?: string
-) {
-  const iconUrl = this.staticResourceService.resolveStaticResource(path).toString();
-  // @ts-ignore
-  return this.getMaskStyleSheet(iconUrl, className, baseTheme);
-};
-
-// @ts-ignore
-IconService.prototype.getBackgroundStyleSheetWithStaticService = function (
-  path: URI,
-  className: string,
-  baseTheme?: string
-) {
-  const iconUrl = this.staticResourceService.resolveStaticResource(path).toString();
-  // @ts-ignore
-  return this.getBackgroundStyleSheet(iconUrl, className, baseTheme);
-};

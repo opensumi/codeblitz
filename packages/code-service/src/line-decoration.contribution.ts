@@ -16,6 +16,7 @@ import { IThemeService } from '@opensumi/ide-theme';
 import debounce from 'lodash.debounce';
 import { CodeModelService } from './code-model.service';
 import styles from './style.module.less';
+import { RuntimeConfig } from '@alipay/alex-core';
 
 @Domain(BrowserEditorContribution, CommandContribution)
 export class LineDecorationContribution implements BrowserEditorContribution, CommandContribution {
@@ -27,6 +28,9 @@ export class LineDecorationContribution implements BrowserEditorContribution, Co
 
   @Autowired(CodeModelService)
   codeModel: CodeModelService;
+
+  @Autowired(RuntimeConfig)
+  private readonly runtimeConfig: RuntimeConfig;
 
   private lineNumbers: [number, number] | null = null;
 
@@ -41,7 +45,10 @@ export class LineDecorationContribution implements BrowserEditorContribution, Co
         disposer.addDispose(
           editor.monacoEditor.onMouseMove(
             debounce((event) => {
-              if (this.editorService.currentEditor !== editor) {
+              if (
+                this.editorService.currentEditor !== editor ||
+                this.runtimeConfig.disableHighlightLine
+              ) {
                 return;
               }
 
@@ -132,6 +139,10 @@ export class LineDecorationContribution implements BrowserEditorContribution, Co
   }
 
   private highlightLine(editor: IEditor) {
+    if (this.runtimeConfig.disableHighlightLine) {
+      return;
+    }
+
     if (!this.lineNumbers) {
       return [];
     }

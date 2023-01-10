@@ -55,6 +55,8 @@ export const getDefaultAppConfig = (): IAppOpts => ({
     'editor.quickSuggestionsDelay': 10,
     'settings.userBeforeWorkspace': true,
     'editor.fixedOverflowWidgets': true,
+    // 取消高亮线
+    'editor.guides.bracketPairs': false,
     'files.exclude': {
       ...FILES_DEFAULTS.filesExclude,
       // browserfs OverlayFS 用来记录删除的文件

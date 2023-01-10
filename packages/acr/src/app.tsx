@@ -32,6 +32,7 @@ export default function render(
         'editor.quickSuggestionsMaxCount': 50,
         'editor.fontSize': 13,
         'editor.wordWrap': 'off',
+        'editor.guides.bracketPairs': false,
         'diffEditor.renderSideBySide': true,
         'diffEditor.renderIndicators': false,
         'lsif.enable': true,

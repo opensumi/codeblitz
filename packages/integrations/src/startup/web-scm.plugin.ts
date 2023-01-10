@@ -96,6 +96,7 @@ export const activate = ({ commands }: IPluginAPI) => {
       // targetBranch: "merge1",
       // prId: "146007520",
       // hasTag: false,
+      // from: 0
     };
   });
 };
