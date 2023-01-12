@@ -8,7 +8,7 @@
   "description": "Ant Codespaces for browser",
   "main": "index.js",
   "engines": {
-    "kaitian": "2.21.13"
+    "kaitian": "2.22.0"
   },
   "scripts": {
     "type-check": "tsc --skipLibCheck --noEmit",
