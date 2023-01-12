@@ -8,7 +8,7 @@
   "description": "Ant Codespaces for browser",
   "main": "index.js",
   "engines": {
-    "kaitian": "2.21.13-next-1673339651.0"
+    "kaitian": "2.21.13"
   },
   "scripts": {
     "type-check": "tsc --skipLibCheck --noEmit",
@@ -76,6 +76,7 @@
     "jsdom": "^16.5.3",
     "json5": "^2.2.0",
     "lint-staged": "^10.5.1",
+    "localforage": "^1.10.0",
     "minimist": "^1.2.5",
     "prettier": "^2.1.2",
     "signale": "^1.4.0",
@@ -83,8 +84,7 @@
     "ts-node": "^9.0.0",
     "tslib": "^2.2.0",
     "typescript": "^4.2.3",
-    "urllib": "^2.36.1",
-    "localforage": "^1.10.0"
+    "urllib": "^2.36.1"
   },
   "tnpm": {
     "mode": "yarn",
