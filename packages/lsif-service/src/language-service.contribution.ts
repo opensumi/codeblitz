@@ -36,6 +36,7 @@ import { RuntimeConfig, REPORT_NAME } from '@alipay/alex-core';
 import {
   BrowserEditorContribution,
   IEditorDocumentModelContentRegistry,
+  EditorOpenType,
 } from '@opensumi/ide-editor/lib/browser';
 
 import { SimpleLanguageService } from './language-client';
@@ -371,7 +372,7 @@ export class LsifContribution
   registerEditorComponent(registry: EditorComponentRegistry) {
     registry.registerEditorComponentResolver(handleLsifScheme, (_resource, results) => {
       results.push({
-        type: 'code',
+        type: EditorOpenType.code,
         readonly: true,
       });
     });

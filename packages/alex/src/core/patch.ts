@@ -10,7 +10,7 @@ import { ILanguageService } from '@opensumi/monaco-editor-core/esm/vs/editor/com
 import { DirtyDiffWidget } from '@opensumi/ide-scm/lib/browser/dirty-diff/dirty-diff-widget';
 import { AbstractResourcePreferenceProvider } from '@opensumi/ide-preferences/lib/browser/abstract-resource-preference-provider';
 import { DiskFsProviderClient } from '@opensumi/ide-file-service/lib/browser/file-service-provider-client';
-import { DebugConfigurationManager } from '@opensumi/ide-debug/lib/browser';
+import { DebugConfigurationManager } from '@opensumi/ide-debug/lib/browser/debug-configuration-manager';
 import { IconService } from '@opensumi/ide-theme/lib/browser';
 
 export const disposableCollection: ((injector: Injector) => void)[] = [];

@@ -16,7 +16,7 @@ import {
   DEFAULT_SEARCH_IN_WORKSPACE_LIMIT,
   anchorGlob,
 } from '@opensumi/ide-search/lib/common';
-import { ContentSearchClientService } from '@opensumi/ide-search/lib/browser/search.service';
+import { IContentSearchClientService } from '@opensumi/ide-search';
 import * as paths from 'path';
 import { AppConfig, RuntimeConfig } from '../../common';
 import { ILogServiceManager } from '../core/base';
@@ -25,6 +25,7 @@ import { BatchedCollector } from './search-manager';
 interface SearchInfo {
   searchId: number;
   resultLength: number;
+  dataBuf: string;
 }
 
 interface RegExpOptions {
@@ -43,8 +44,8 @@ export class ContentSearchService implements IContentSearchServer {
   @Autowired(ILogServiceManager)
   loggerManager: ILogServiceManager;
 
-  @Autowired(ContentSearchClientService)
-  searchService: ContentSearchClientService;
+  @Autowired(IContentSearchClientService)
+  searchService: IContentSearchClientService;
 
   @Autowired(AppConfig)
   appConfig: AppConfig;
@@ -74,16 +75,17 @@ export class ContentSearchService implements IContentSearchServer {
   }
 
   async search(
+    searchId: number,
     what: string,
     rootUris: string[],
     opts?: ContentSearchOptions,
     cb?: (data: any) => {}
   ): Promise<number> {
     const searchInfo: SearchInfo = {
-      searchId: this.searchId++,
+      searchId: searchId,
       resultLength: 0,
+      dataBuf: '',
     };
-
     // 先把 searchId 发送到 client 再请求，否则可能状态不对
     setTimeout(() => {
       this.searchStart(searchInfo.searchId);
@@ -109,6 +111,7 @@ export class ContentSearchService implements IContentSearchServer {
     error?: string
   ) {
     if (this.requestMap.has(id)) {
+      // @ts-ignore
       this.searchService.onSearchResult({
         data,
         id,
