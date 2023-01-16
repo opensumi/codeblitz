@@ -31,7 +31,7 @@ import { Adapter } from '@opensumi/ide-extension/lib/hosted/api/vscode/ext.host.
 
 import { ExtHostDocumentData } from '@opensumi/ide-extension/lib/hosted/api/vscode/doc/ext-data.host';
 import { IEditorDocumentModelService } from '@opensumi/ide-editor/lib/browser';
-import { DocumentFilter } from 'vscode-languageserver-protocol';
+import { isDocumentFilter } from '@opensumi/ide-extension/lib/common/vscode/model.api';
 import { fromLanguageSelector } from '@opensumi/ide-extension/lib/common/vscode/converter';
 import { MonacoModelIdentifier, testGlob } from '@opensumi/ide-extension/lib/common/vscode';
 import { LanguageSelector } from '@opensumi/ide-editor';
@@ -351,7 +351,7 @@ export class SimpleLanguageService implements Partial<IExtHostLanguages> {
       return selector.some((filter) => this.matchLanguage(filter, languageId));
     }
 
-    if (DocumentFilter.is(selector)) {
+    if (isDocumentFilter(selector)) {
       return !selector.language || selector.language === languageId;
     }
 
@@ -365,7 +365,7 @@ export class SimpleLanguageService implements Partial<IExtHostLanguages> {
     if (Array.isArray(selector)) {
       return selector.some((filter) => this.matchModel(filter, model));
     }
-    if (DocumentFilter.is(selector)) {
+    if (isDocumentFilter(selector)) {
       if (!!selector.language && selector.language !== model.languageId) {
         return false;
       }

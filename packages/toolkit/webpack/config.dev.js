@@ -16,7 +16,7 @@ module.exports = () => {
     tsconfigPath: path.join(__dirname, '../../../tsconfig.json'),
     useLocalWorkerAndWebviewHost: true,
     define: {
-      'process.env.KTLOG_SHOW_DEBUG': false,
+      'process.env.KTLOG_SHOW_DEBUG': true,
     },
     webpackConfig: {
       context: path.join(__dirname, '../../..'),

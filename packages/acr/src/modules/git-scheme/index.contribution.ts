@@ -8,6 +8,7 @@ import {
   IEditorDocumentModelContentRegistry,
   BrowserEditorContribution,
   ResourceService,
+  EditorOpenType,
 } from '@opensumi/ide-editor/lib/browser';
 import { GitDocContentProvider } from './doc-content-provider/git';
 import { GitResourceProvider } from './resource-provider/git';
@@ -53,18 +54,18 @@ export class GitSchemeContribution implements BrowserEditorContribution {
         const type = this.getFileType(resource.uri);
         if (type === 'image') {
           results.push({
-            type: 'component',
+            type: EditorOpenType.component,
             componentId: IMAGE_PREVIEW_COMPONENT_ID,
           });
         } else if (type === 'binary') {
           results.push({
-            type: 'component',
+            type: EditorOpenType.component,
             componentId: EXTERNAL_OPEN_COMPONENT_ID,
           });
         } else {
           // TODO: 处理 video 等文件，参照 packages/file-scheme/src/browser/file-scheme.contribution.ts
           results.push({
-            type: 'code',
+            type: EditorOpenType.code,
           });
         }
       }
@@ -79,7 +80,7 @@ export class GitSchemeContribution implements BrowserEditorContribution {
         if (modified && this.getFileType(modified) !== 'text') {
           resolve([
             {
-              type: 'component',
+              type: EditorOpenType.component,
               componentId: 'diff-view',
             },
           ]);

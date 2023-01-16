@@ -1,10 +1,4 @@
-import {
-  ILogger,
-  useInjectable,
-  IClientApp,
-  localize,
-  formatLocalize,
-} from '@opensumi/ide-core-browser';
+import { useInjectable, localize } from '@opensumi/ide-core-browser';
 import { ReactEditorComponent } from '@opensumi/ide-editor/lib/browser';
 import { Markdown } from '@opensumi/ide-markdown';
 import { observer } from 'mobx-react-lite';

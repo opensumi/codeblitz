@@ -1,7 +1,6 @@
 import { Injectable, Injector, ConstructorOf, Provider } from '@opensumi/di';
 import {
   BrowserModule,
-  ClientApp as BasicClientApp,
   IAppRenderer,
   IClientAppOpts,
   PreferenceProviderProvider,
@@ -9,6 +8,8 @@ import {
   PreferenceProvider,
   IContextKeyService,
 } from '@opensumi/ide-core-browser';
+import { ClientApp as BasicClientApp } from '@opensumi/ide-core-browser/lib/bootstrap/app';
+
 import { BackService, BasicModule } from '@opensumi/ide-core-common';
 import { WSChannelHandler } from '@opensumi/ide-connection/lib/browser';
 

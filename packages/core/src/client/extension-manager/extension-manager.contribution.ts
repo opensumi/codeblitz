@@ -7,6 +7,7 @@ import {
   BrowserEditorContribution,
   EditorComponentRegistry,
   ResourceService,
+  EditorOpenType,
 } from '@opensumi/ide-editor/lib/browser';
 
 import { EXTENSION_SCHEME, enableExtensionsContainerId, IExtensionManagerService } from './base';
@@ -43,7 +44,7 @@ export class ExtensionManagerContribution
     editorComponentRegistry.registerEditorComponentResolver(EXTENSION_SCHEME, (_, __, resolve) => {
       resolve([
         {
-          type: 'component',
+          type: EditorOpenType.component,
           componentId: EXTENSIONS_DETAIL_COMPONENT_ID,
         },
       ]);

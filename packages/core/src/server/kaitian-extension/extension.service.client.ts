@@ -10,6 +10,9 @@ const { posix } = path;
 
 @Injectable()
 export class ExtensionServiceClientImpl implements IExtensionNodeClientService {
+  getOpenVSXRegistry(): Promise<string> {
+    throw new Error('Method not implemented.');
+  }
   @Autowired(ServerConfig)
   serverConfig: ServerConfig;
 

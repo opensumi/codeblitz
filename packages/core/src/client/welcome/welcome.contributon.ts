@@ -5,7 +5,12 @@ import {
   EditorComponentRenderMode,
 } from '@opensumi/ide-editor/lib/browser';
 import { LabelService } from '@opensumi/ide-core-browser/lib/services';
-import { ResourceService, IResource, WorkbenchEditorService } from '@opensumi/ide-editor';
+import {
+  ResourceService,
+  IResource,
+  WorkbenchEditorService,
+  EditorOpenType,
+} from '@opensumi/ide-editor';
 import { IIconService, IconType } from '@opensumi/ide-theme';
 import { Autowired } from '@opensumi/di';
 import { IWorkspaceService } from '@opensumi/ide-workspace';
@@ -54,7 +59,7 @@ export class WelcomeContribution implements BrowserEditorContribution {
 
     registry.registerEditorComponentResolver('welcome', (_resource, results) => {
       results.push({
-        type: 'component',
+        type: EditorOpenType.component,
         componentId: 'welcome',
       });
     });

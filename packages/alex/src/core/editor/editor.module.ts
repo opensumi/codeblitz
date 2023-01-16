@@ -432,6 +432,9 @@ class EditorSpecialContribution
     disposer.addDispose(
       editor.monacoEditor.onMouseMove(
         debounce((event) => {
+          if (this.runtimeConfig.disableHighlightLine) {
+            return;
+          }
           const type = event?.target?.type;
           if (
             type === monaco.editor.MouseTargetType.GUTTER_LINE_NUMBERS ||
@@ -456,6 +459,9 @@ class EditorSpecialContribution
     );
     let oldClickDecorations: string[] = [];
     const highlightLine = (lineNumber: number | [number, number] | Array<[number, number]>) => {
+      if (this.runtimeConfig.disableHighlightLine) {
+        return;
+      }
       let centerLine: number;
       let newDecorations: monaco.editor.IModelDeltaDecoration[];
       if (Array.isArray(lineNumber) && Array.isArray(lineNumber[0])) {
