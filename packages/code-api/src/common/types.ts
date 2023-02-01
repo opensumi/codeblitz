@@ -368,6 +368,12 @@ export interface ICodeAPIService {
     sourceBranch: string,
     targetBranch: string
   ): Promise<AntCodeAPI.ConflictResponse>;
+
+  mergeBase(
+    repo: IRepositoryModel,
+    target: string,
+    source: string
+  ): Promise<AntCodeAPI.ResponseCommit>;
 }
 
 export interface ICodeAPIServiceProvider extends ICodeAPIService {

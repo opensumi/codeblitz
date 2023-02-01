@@ -69,6 +69,13 @@ export class GitHubAPIService implements ICodeAPIService {
   constructor() {
     this._OAUTH_TOKEN = this.config.token || this.helper.GITHUB_TOKEN;
   }
+  mergeBase(
+    repo: IRepositoryModel,
+    target: string,
+    source: string
+  ): Promise<ConflictAPI.ResponseCommit> {
+    throw new Error('Method not implemented.');
+  }
   getEntryInfo?(repo: IRepositoryModel, entry: EntryParam): Promise<EntryInfo> {
     throw new Error('Method not implemented.');
   }
