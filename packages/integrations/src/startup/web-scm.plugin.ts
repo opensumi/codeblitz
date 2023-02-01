@@ -70,7 +70,11 @@ export const activate = ({ commands }: IPluginAPI) => {
   });
 
   commands.registerCommand('web-scm.windowOpen', async (path) => {
-    window.open(path);
+    if (!path) {
+      window.location = window.location;
+    } else {
+      window.open(path);
+    }
   });
 
   /*
@@ -92,11 +96,11 @@ export const activate = ({ commands }: IPluginAPI) => {
     // 测试解决冲突内容
     return {
       isMergeConflicts: false,
-      // sourceBranch: "merge2",
-      // targetBranch: "merge1",
-      // prId: "146007520",
-      // hasTag: false,
-      // from: 0
+      sourceBranch: 'merge4',
+      targetBranch: 'merge1',
+      prId: '146206608',
+      hasTag: false,
+      from: 0,
     };
   });
 };

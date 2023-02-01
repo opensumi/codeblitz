@@ -126,6 +126,10 @@ namespace CODE_SERVICE_COMMANDS {
     id: 'code-service.getConflict',
     category: CATEGORY,
   };
+  export const MERGEBASE: Command = {
+    id: 'code-service.mergeBase',
+    category: CATEGORY,
+  };
 }
 
 export enum RemoteResourceType {
@@ -192,6 +196,7 @@ export class CommandsContribution extends Disposable implements CommandContribut
       CODE_SERVICE_COMMANDS.GETFILES,
       CODE_SERVICE_COMMANDS.GETUSER,
       CODE_SERVICE_COMMANDS.SCMREFRESH,
+      CODE_SERVICE_COMMANDS.MERGEBASE,
       // CODE_SERVICE_COMMANDS.CREATEBRANCHFROM,
 
       // conflict
@@ -401,6 +406,12 @@ export class CommandsContribution extends Disposable implements CommandContribut
     const repo = this.codeModel.getRepository(repoPath);
     if (!repo) throw new Error('conflict request Error createNewBranch');
     return repo.request.createBranch(newBranchName, ref);
+  }
+
+  async mergeBase(repoPath: string, target: string, source: string) {
+    const repo = this.codeModel.getRepository(repoPath);
+    if (!repo) throw new Error('conflict request Error createNewBranch');
+    return repo.request.mergeBase(target, source);
   }
 
   // TODO: 暂时只支持根仓库的切换，submodules 切换会引起文件变更
