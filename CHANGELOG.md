@@ -1,3 +1,12 @@
+# [2.2.0](https://code.alipay.com/cloud-ide/crew-dragon/compare/v2.2.0-1...v2.2.0) (2023-02-01)
+
+
+### Features
+
+* 支持3-way-merge 解决冲突 ([3dc6135](https://code.alipay.com/cloud-ide/crew-dragon/commits/3dc613571fedb5577590019180c84c4376fe3639))
+
+
+
 # [2.2.0-1](https://code.alipay.com/cloud-ide/crew-dragon/compare/v2.1.1-1...v2.2.0-1) (2023-01-16)
 
 

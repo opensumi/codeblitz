@@ -1,6 +1,6 @@
 {
   "name": "alex",
-  "version": "2.2.0-1",
+  "version": "2.2.0",
   "workspaces": [
     "packages/*"
   ],
