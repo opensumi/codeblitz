@@ -44,6 +44,7 @@ const getDefaultAppConfig = (): IAppOpts => ({
     'application.confirmExit': 'never',
     'editor.autoSave': 'afterDelay',
     'editor.guides.bracketPairs': false,
+    'editor.minimap': false,
     'editor.autoSaveDelay': 1000, // one second
     'editor.fixedOverflowWidgets': true, // widget editor 默认改为 fixed
     'files.exclude': {

@@ -1,6 +1,6 @@
 {
   "name": "alex",
-  "version": "2.2.0",
+  "version": "2.2.1",
   "workspaces": [
     "packages/*"
   ],
@@ -8,7 +8,7 @@
   "description": "Ant Codespaces for browser",
   "main": "index.js",
   "engines": {
-    "kaitian": "2.22.0"
+    "kaitian": "2.22.2-next-1675654400.0"
   },
   "scripts": {
     "type-check": "tsc --skipLibCheck --noEmit",
@@ -99,7 +99,7 @@
     {
       "publisher": "cloud-ide-ext",
       "name": "web-scm",
-      "version": "0.1.10"
+      "version": "0.1.12"
     },
     {
       "publisher": "alex-ext-public",
@@ -245,6 +245,11 @@
       "publisher": "cloud-ide-ext",
       "name": "aci-yaml",
       "version": "1.11.9"
+    },
+    {
+      "publisher": "aistudio",
+      "name": "libro",
+      "version": "0.0.3"
     }
   ]
 }
