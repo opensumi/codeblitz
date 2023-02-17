@@ -1,5 +1,5 @@
 {
-  "name": "alex",
+  "name": "@alipay/alex",
   "version": "2.2.1",
   "workspaces": [
     "packages/*"
