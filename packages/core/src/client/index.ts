@@ -124,8 +124,11 @@ export class ClientApp extends BasicClientApp {
 
   private disposeSideEffect = () => {};
 
+  private modules: ModuleConstructor[] = [];
+
   constructor(opts: IAppOpts) {
     super(opts);
+    this.modules = opts.modules;
     this.initServer(opts);
     this.initCodeServiceEditor();
   }
