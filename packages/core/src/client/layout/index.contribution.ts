@@ -23,7 +23,7 @@ export class LayoutRestoreContributation implements ClientAppContribution {
     const layoutDirection = [SlotLocation.left, SlotLocation.bottom, SlotLocation.right];
     layoutDirection.forEach((direction) => {
       const tabbarService = this.layoutService.getTabbarService(direction);
-      layoutConfig[direction]?.modules.forEach((module) => {
+      layoutConfig[direction]?.modules?.forEach((module) => {
         const componentRegistry = this.componentRegistry.getComponentRegistryInfo(module);
         if (componentRegistry) {
           tabbarService.registerContainer(
