@@ -1,3 +1,12 @@
+## [2.2.2](https://code.alipay.com/cloud-ide/crew-dragon/compare/v2.2.0...v2.2.2) (2023-02-24)
+
+
+### Bug Fixes
+
+* layout config ([14158d1](https://code.alipay.com/cloud-ide/crew-dragon/commits/14158d138120dc4a3dba92d6ffa965eed27a24bc))
+
+
+
 ## [2.2.1](https://code.alipay.com/cloud-ide/crew-dragon/compare/v2.2.0...v2.2.1) (2023-02-06)
 
 
