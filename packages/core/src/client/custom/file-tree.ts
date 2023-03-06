@@ -1,6 +1,6 @@
 import React from 'react';
 import { Autowired } from '@opensumi/di';
-import { Domain } from '@opensumi/ide-core-common';
+import { Domain, localize, Throttler, URI, IClipboardService } from '@opensumi/ide-core-common';
 import {
   CommandContribution,
   KeybindingContribution,
@@ -14,7 +14,12 @@ import {
   ComponentRegistryInfo,
   useInjectable,
 } from '@opensumi/ide-core-browser';
-import { MenuContribution, IMenuRegistry, MenuId } from '@opensumi/ide-core-browser/lib/menu/next';
+import {
+  MenuContribution,
+  IMenuRegistry,
+  MenuId,
+  ExplorerContextCallback,
+} from '@opensumi/ide-core-browser/lib/menu/next';
 import { WorkbenchEditorService } from '@opensumi/ide-editor/lib/browser';
 import { TabRendererBase } from '@opensumi/ide-main-layout/lib/browser/tabbar/renderer.view';
 import { LeftTabPanelRenderer } from '@opensumi/ide-main-layout/lib/browser/tabbar/panel.view';
@@ -23,6 +28,15 @@ import {
   TabbarService,
 } from '@opensumi/ide-main-layout/lib/browser/tabbar/tabbar.service';
 import { RuntimeConfig } from '../../common/types';
+import { FileTreeModelService } from '@opensumi/ide-file-tree-next/lib/browser/services/file-tree-model.service';
+import { Directory } from '@opensumi/ide-file-tree-next/lib/common/file-tree-node.define';
+import { IFileTreeService, PasteTypes } from '@opensumi/ide-file-tree-next';
+import { FileTreeService } from '@opensumi/ide-file-tree-next/lib/browser/file-tree.service';
+import {
+  FilesExplorerFocusedContext,
+  FilesExplorerInputFocusedContext,
+} from '@opensumi/ide-core-browser/lib/contextkey/explorer';
+import { FilesExplorerFilteredContext } from '@opensumi/ide-core-browser/lib/contextkey/explorer';
 
 /**
  * TODO SCM 完善文件系统
@@ -42,8 +56,20 @@ export class FileTreeCustomContribution
   @Autowired(RuntimeConfig)
   runtimeConfig: RuntimeConfig;
 
+  @Autowired(FileTreeModelService)
+  private readonly fileTreeModelService: FileTreeModelService;
+
+  @Autowired(IFileTreeService)
+  private readonly fileTreeService: FileTreeService;
+
+  @Autowired(IClipboardService)
+  private readonly clipboardService: IClipboardService;
+
   @Autowired(AppConfig)
   appConfig: AppConfig;
+
+  private willDeleteUris: URI[] = [];
+  private deleteThrottler: Throttler = new Throttler();
 
   registerMenus(menuRegistry: IMenuRegistry) {
     if (this.runtimeConfig.unregisterActivityBarExtra) {
@@ -60,10 +86,129 @@ export class FileTreeCustomContribution
       FILE_COMMANDS.CUT_FILE,
     ];
 
+    const isContextMenuFile = () => {
+      return (
+        !!this.fileTreeModelService.contextMenuFile &&
+        !this.fileTreeModelService.contextMenuFile.uri.isEqual(
+          (this.fileTreeModelService.treeModel.root as Directory).uri
+        ) &&
+        !Directory.is(this.fileTreeModelService.contextMenuFile)
+      );
+    };
+
+    const isFocusedFile = () => {
+      return (
+        !!this.fileTreeModelService.focusedFile &&
+        !this.fileTreeModelService.focusedFile.uri.isEqual(
+          (this.fileTreeModelService.treeModel.root as Directory).uri
+        ) &&
+        !Directory.is(this.fileTreeModelService.focusedFile)
+      );
+    };
+
+    // SCM 禁用文件夹层级的删除重命名复制粘贴等功能
     if (this.runtimeConfig.scmFileTree) {
       SCMFileCommand.forEach((cmd) => {
         commands.unregisterCommand(cmd.id);
-        commands.registerCommand({ id: cmd.id });
+      });
+      const exitFilterMode = () => {
+        if (this.fileTreeService.filterMode) {
+          this.fileTreeService.toggleFilterMode();
+        }
+      };
+      commands.registerCommand<ExplorerContextCallback>(FILE_COMMANDS.RENAME_FILE, {
+        execute: (uri) => {
+          exitFilterMode();
+          if (!uri) {
+            if (this.fileTreeModelService.contextMenuFile) {
+              uri = this.fileTreeModelService.contextMenuFile.uri;
+            } else if (this.fileTreeModelService.focusedFile) {
+              uri = this.fileTreeModelService.focusedFile.uri;
+            } else {
+              return;
+            }
+          }
+          this.fileTreeModelService.renamePrompt(uri);
+        },
+        isEnabled: () => !Directory.is(this.fileTreeModelService.contextMenuFile),
+        isVisible: () => isContextMenuFile(),
+      });
+
+      commands.registerCommand<ExplorerContextCallback>(FILE_COMMANDS.DELETE_FILE, {
+        execute: (_, uris) => {
+          exitFilterMode();
+          if (!uris) {
+            if (this.fileTreeModelService.focusedFile) {
+              this.willDeleteUris.push(this.fileTreeModelService.focusedFile.uri);
+            } else if (
+              this.fileTreeModelService.selectedFiles &&
+              this.fileTreeModelService.selectedFiles.length > 0
+            ) {
+              this.willDeleteUris = this.willDeleteUris.concat(
+                this.fileTreeModelService.selectedFiles.map((file) => file.uri)
+              );
+            } else {
+              return;
+            }
+          } else {
+            this.willDeleteUris = this.willDeleteUris.concat(uris);
+          }
+          return this.deleteThrottler.queue<void>(this.doDelete.bind(this));
+        },
+        isEnabled: () => !Directory.is(this.fileTreeModelService.contextMenuFile),
+        isVisible: () => isContextMenuFile(),
+      });
+
+      commands.registerCommand<ExplorerContextCallback>(FILE_COMMANDS.COPY_FILE, {
+        execute: (_, uris) => {
+          if (uris && uris.length) {
+            this.fileTreeModelService.copyFile(uris);
+          } else {
+            const selectedUris = this.fileTreeModelService.selectedFiles.map((file) => file.uri);
+            if (selectedUris && selectedUris.length) {
+              this.fileTreeModelService.copyFile(selectedUris);
+            }
+          }
+        },
+        isEnabled: () => !Directory.is(this.fileTreeModelService.contextMenuFile),
+        isVisible: () => isContextMenuFile() || isFocusedFile(),
+      });
+
+      commands.registerCommand<ExplorerContextCallback>(FILE_COMMANDS.CUT_FILE, {
+        execute: (_, uris) => {
+          if (uris && uris.length) {
+            this.fileTreeModelService.cutFile(uris);
+          } else {
+            const selectedUris = this.fileTreeModelService.selectedFiles.map((file) => file.uri);
+            if (selectedUris && selectedUris.length) {
+              this.fileTreeModelService.cutFile(selectedUris);
+            }
+          }
+        },
+        isEnabled: () => !Directory.is(this.fileTreeModelService.contextMenuFile),
+        isVisible: () => isContextMenuFile() || isFocusedFile(),
+      });
+
+      commands.registerCommand<ExplorerContextCallback>(FILE_COMMANDS.PASTE_FILE, {
+        execute: (uri) => {
+          exitFilterMode();
+          if (uri) {
+            this.fileTreeModelService.pasteFile(uri);
+          } else if (this.fileTreeModelService.focusedFile) {
+            let uri;
+            if (this.fileTreeModelService.activeUri) {
+              uri = this.fileTreeModelService.activeUri;
+            } else {
+              uri = this.fileTreeModelService.focusedFile.uri;
+            }
+            this.fileTreeModelService.pasteFile(uri);
+          }
+        },
+        isVisible: () => !Directory.is(this.fileTreeModelService.contextMenuFile),
+        isEnabled: () =>
+          (this.fileTreeModelService.pasteStore &&
+            this.fileTreeModelService.pasteStore.type !== PasteTypes.NONE) ||
+          !!this.clipboardService.hasResources(),
       });
     }
     if (!this.runtimeConfig.disableModifyFileTree) return;
@@ -76,37 +221,37 @@ export class FileTreeCustomContribution
   }
 
   registerKeybindings(bindings: KeybindingRegistry) {
-    if (!this.runtimeConfig.disableModifyFileTree || !this.runtimeConfig.scmFileTree) return;
+    if (!this.runtimeConfig.disableModifyFileTree && !this.runtimeConfig.scmFileTree) return;
 
     const keybinding = [
       {
         command: FILE_COMMANDS.COPY_FILE.id,
         keybinding: 'ctrlcmd+c',
-        when: 'filesExplorerFocus && !inputFocus',
+        when: `${FilesExplorerFocusedContext.raw} && !${FilesExplorerInputFocusedContext.raw} && !${FilesExplorerFilteredContext.raw}`,
       },
       {
         command: FILE_COMMANDS.PASTE_FILE.id,
         keybinding: 'ctrlcmd+v',
-        when: 'filesExplorerFocus && !inputFocus',
+        when: `${FilesExplorerFocusedContext.raw} && !${FilesExplorerInputFocusedContext.raw} && !${FilesExplorerFilteredContext.raw}`,
       },
       {
         command: FILE_COMMANDS.CUT_FILE.id,
         keybinding: 'ctrlcmd+x',
-        when: 'filesExplorerFocus && !inputFocus',
+        when: `${FilesExplorerFocusedContext.raw} && !${FilesExplorerInputFocusedContext.raw} && !${FilesExplorerFilteredContext.raw}`,
       },
       {
         command: FILE_COMMANDS.RENAME_FILE.id,
         keybinding: 'enter',
-        when: 'filesExplorerFocus && !inputFocus',
+        when: `${FilesExplorerFocusedContext.raw} && !${FilesExplorerInputFocusedContext.raw} && !${FilesExplorerFilteredContext.raw}`,
       },
       {
         command: FILE_COMMANDS.DELETE_FILE.id,
         keybinding: 'ctrlcmd+backspace',
-        when: 'filesExplorerFocus && !inputFocus',
+        when: `${FilesExplorerFocusedContext.raw} && !${FilesExplorerInputFocusedContext.raw} && !${FilesExplorerFilteredContext.raw}`,
       },
     ];
     keybinding.forEach((binding) => {
-      bindings.unregisterKeybinding(binding);
+      bindings.unregisterKeybinding(binding.keybinding);
     });
   }
 
@@ -135,5 +280,11 @@ export class FileTreeCustomContribution
         TabpanelView: LeftTabPanelRenderer,
       });
     registry.registerSlotRenderer('left', LeftTabRenderer);
+  }
+
+  private doDelete() {
+    const uris = this.willDeleteUris.slice();
+    this.willDeleteUris = [];
+    return this.fileTreeModelService.deleteFileByUris(uris);
   }
 }

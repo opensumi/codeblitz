@@ -151,8 +151,8 @@ module.exports = (option) => {
                 lessOptions: {
                   javascriptEnabled: true,
                   modifyVars: {
-                    'kt-html-selector': 'alex-root',
-                    'kt-body-selector': 'alex-root',
+                    'html-selector': 'alex-root',
+                    'body-selector': 'alex-root',
                   },
                 },
               },
@@ -198,6 +198,11 @@ module.exports = (option) => {
           use: 'raw-loader',
         },
       ],
+      parser: {
+        javascript: {
+          dynamicImportMode: 'eager',
+        },
+      },
     },
     plugins: [
       new webpack.DefinePlugin({
@@ -260,6 +265,10 @@ module.exports = (option) => {
               chunkFilename: '[id].css',
             }),
             ...(process.env.ANALYZE === '1' ? [new BundleAnalyzerPlugin()] : []),
+            // 打 bundle 包不分 chunks
+            new webpack.optimize.LimitChunkCountPlugin({
+              maxChunks: 1,
+            }),
           ]),
     ].filter(Boolean),
     devServer: {

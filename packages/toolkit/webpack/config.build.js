@@ -52,12 +52,12 @@ const libBundle = createWebpackConfig({
           amd: 'moment',
         },
       },
-      '@ant-design/icons/lib/dist',
       '@alipay/alex-registry',
     ],
     optimization: {
       minimize: false,
       concatenateModules: false,
+      splitChunks: false,
     },
   },
 });
@@ -82,7 +82,7 @@ const globalBundle = createWebpackConfig({
     },
     resolve: {
       // global 对外使用，忽略掉 yuyan 埋点
-			alias: {
+      alias: {
         '@alipay/yuyan-monitor-web': path.resolve(__dirname, 'patches', 'yuyan-monitor.js'),
       },
     },
@@ -110,6 +110,7 @@ const globalBundle = createWebpackConfig({
         }),
       ],
       concatenateModules: false,
+      splitChunks: false,
     },
   },
 });
@@ -151,6 +152,7 @@ const acrBundle = createWebpackConfig({
         }),
       ],
       concatenateModules: false,
+      splitChunks: false,
     },
   },
 });

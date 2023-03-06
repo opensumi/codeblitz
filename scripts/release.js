@@ -127,6 +127,9 @@ invoke(async () => {
     await publishPackage(pkg, targetVersion);
   }
 
+  step('git checkout branch');
+  await exec(`git checkout -b release/v${targetVersion}`);
+
   step('git commit');
   const { stdout } = await exec('git diff', { stdio: 'pipe' });
   if (stdout) {
@@ -141,7 +144,7 @@ invoke(async () => {
   await exec(`git push origin refs/tags/v${targetVersion}`);
   await exec('git push');
 
-  signale.success('发布完成');
+  signale.success('发布完成 需前往仓库提交 PR 到 master ');
 });
 
 function getPkgRoot(pkg) {

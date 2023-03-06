@@ -1537,6 +1537,14 @@
     "@types/eslint" "*"
     "@types/estree" "*"
 
+"@types/eslint-scope@^3.7.3":
+  version "3.7.4"
+  resolved "https://registry.antgroup-inc.cn/@types/eslint-scope/-/eslint-scope-3.7.4.tgz#37fc1223f0786c39627068a12e94d6e6fc61de16"
+  integrity sha512-9K4zoImiZc3HlIp6AVUDE4CWYx22a+lhSZMYNpbjW04+YF0KWj4pJXnEMjdnFTiQibFFmElcsasJXDbdI/EPhA==
+  dependencies:
+    "@types/eslint" "*"
+    "@types/estree" "*"
+
 "@types/eslint@*":
   version "8.4.1"
   resolved "https://registry.npm.alibaba-inc.com/@types/eslint/download/@types/eslint-8.4.1.tgz"
@@ -1545,7 +1553,7 @@
     "@types/estree" "*"
     "@types/json-schema" "*"
 
-"@types/estree@*":
+"@types/estree@*", "@types/estree@^0.0.51":
   version "0.0.51"
   resolved "https://registry.npm.alibaba-inc.com/@types/estree/download/@types/estree-0.0.51.tgz"
   integrity sha512-CuPgU6f3eT/XgKKPqKd/gLZV1Xmvf1a2R5POBOGQa6uv82xpls89HU5zKeVoyR8XzHd1RGNOlQlvUe3CFkjWNQ==
@@ -2127,6 +2135,11 @@ acorn@^8.0.4, acorn@^8.2.4, acorn@^8.4.1, acorn@^8.7.0:
   version "8.7.0"
   resolved "https://registry.npm.alibaba-inc.com/acorn/download/acorn-8.7.0.tgz"
   integrity sha512-V/LGr1APy+PXIwKebEWrkZPwoeoF+w1jiOBUmuxuiUIaOHtob8Qc9BTrYo7VuI5fR8tqsy+buA2WFooR5olqvQ==
+
+acorn@^8.7.1:
+  version "8.8.2"
+  resolved "https://registry.antgroup-inc.cn/acorn/-/acorn-8.8.2.tgz#1b2f25db02af965399b9776b0c2c391276d37c4a"
+  integrity sha512-xjIYgE8HBrkpd/sJqOGNspf8uHG+NOHGOw6a/Urj8taM2EXfdNAH2oFcPeIFfsv3+kz/mJrS5VuMqbNLjCa2vw==
 
 add-dom-event-listener@^1.1.0:
   version "1.1.0"
@@ -4595,6 +4608,14 @@ enhanced-resolve@^4.0.0:
     graceful-fs "^4.1.2"
     memory-fs "^0.5.0"
     tapable "^1.0.0"
+
+enhanced-resolve@^5.10.0:
+  version "5.12.0"
+  resolved "https://registry.antgroup-inc.cn/enhanced-resolve/-/enhanced-resolve-5.12.0.tgz#300e1c90228f5b570c4d35babf263f6da7155634"
+  integrity sha512-QHTXI/sZQmko1cbDoNAa3mJ5qhWUUNAq3vR0/YiD379fWQrcfuoX1+HW2S0MTt7XmoPLapdaDKUtelUSPic7hQ==
+  dependencies:
+    graceful-fs "^4.2.4"
+    tapable "^2.2.0"
 
 enhanced-resolve@^5.7.0, enhanced-resolve@^5.8.3:
   version "5.9.0"
@@ -7416,7 +7437,7 @@ json-parse-better-errors@^1.0.1, json-parse-better-errors@^1.0.2:
   resolved "https://registry.npm.alibaba-inc.com/json-parse-better-errors/download/json-parse-better-errors-1.0.2.tgz"
   integrity sha1-u4Z8+zRQ5pEHwTHRxRS6s9yLyqk=
 
-json-parse-even-better-errors@^2.3.0:
+json-parse-even-better-errors@^2.3.0, json-parse-even-better-errors@^2.3.1:
   version "2.3.1"
   resolved "https://registry.npm.alibaba-inc.com/json-parse-even-better-errors/download/json-parse-even-better-errors-2.3.1.tgz"
   integrity sha1-fEeAWpQxmSjgV3dAXcEuH3pO4C0=
@@ -12831,6 +12852,14 @@ watchpack@^2.3.1:
     glob-to-regexp "^0.4.1"
     graceful-fs "^4.1.2"
 
+watchpack@^2.4.0:
+  version "2.4.0"
+  resolved "https://registry.antgroup-inc.cn/watchpack/-/watchpack-2.4.0.tgz#fa33032374962c78113f93c7f2fb4c54c9862a5d"
+  integrity sha512-Lcvm7MGST/4fup+ifyKi2hjyIAwcdI4HRgtvTpIUxBRhB+RFtUh8XtDOxUfctVCnhVi+QQj49i91OyvzkJl6cg==
+  dependencies:
+    glob-to-regexp "^0.4.1"
+    graceful-fs "^4.1.2"
+
 wbuf@^1.1.0, wbuf@^1.7.3:
   version "1.7.3"
   resolved "https://registry.npm.alibaba-inc.com/wbuf/download/wbuf-1.7.3.tgz"
@@ -12961,7 +12990,7 @@ webpack-sources@^3.2.3:
   resolved "https://registry.npm.alibaba-inc.com/webpack-sources/download/webpack-sources-3.2.3.tgz"
   integrity sha512-/DyMEOrDgLKKIG0fmvtz+4dUX/3Ghozwgm6iPp8KRhvn+eQf9+Q7GWxVNMk3+uCPWfdXYC4ExGBckIXdFEfH1w==
 
-webpack@^5, webpack@^5.25.0, webpack@^5.38.1:
+webpack@^5, webpack@^5.25.0:
   version "5.68.0"
   resolved "https://registry.npm.alibaba-inc.com/webpack/download/webpack-5.68.0.tgz"
   integrity sha512-zUcqaUO0772UuuW2bzaES2Zjlm/y3kRBQDVFVCge+s2Y8mwuUTdperGaAv65/NtRL/1zanpSJOq/MD8u61vo6g==
@@ -12989,6 +13018,36 @@ webpack@^5, webpack@^5.25.0, webpack@^5.38.1:
     tapable "^2.1.1"
     terser-webpack-plugin "^5.1.3"
     watchpack "^2.3.1"
+    webpack-sources "^3.2.3"
+
+webpack@^5.73.0:
+  version "5.75.0"
+  resolved "https://registry.antgroup-inc.cn/webpack/-/webpack-5.75.0.tgz#1e440468647b2505860e94c9ff3e44d5b582c152"
+  integrity sha512-piaIaoVJlqMsPtX/+3KTTO6jfvrSYgauFVdt8cr9LTHKmcq/AMd4mhzsiP7ZF/PGRNPGA8336jldh9l2Kt2ogQ==
+  dependencies:
+    "@types/eslint-scope" "^3.7.3"
+    "@types/estree" "^0.0.51"
+    "@webassemblyjs/ast" "1.11.1"
+    "@webassemblyjs/wasm-edit" "1.11.1"
+    "@webassemblyjs/wasm-parser" "1.11.1"
+    acorn "^8.7.1"
+    acorn-import-assertions "^1.7.6"
+    browserslist "^4.14.5"
+    chrome-trace-event "^1.0.2"
+    enhanced-resolve "^5.10.0"
+    es-module-lexer "^0.9.0"
+    eslint-scope "5.1.1"
+    events "^3.2.0"
+    glob-to-regexp "^0.4.1"
+    graceful-fs "^4.2.9"
+    json-parse-even-better-errors "^2.3.1"
+    loader-runner "^4.2.0"
+    mime-types "^2.1.27"
+    neo-async "^2.6.2"
+    schema-utils "^3.1.0"
+    tapable "^2.1.1"
+    terser-webpack-plugin "^5.1.3"
+    watchpack "^2.4.0"
     webpack-sources "^3.2.3"
 
 websocket-driver@>=0.5.1, websocket-driver@^0.7.4:
