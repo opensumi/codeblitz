@@ -53,7 +53,6 @@ export const install = async (
   extensions.forEach((ext) => {
     console.log(`  * ${formatExtension(ext)}`);
   });
-  console.log();
 
   const installedExtensions: IExtensionIdentity[] = [];
 
