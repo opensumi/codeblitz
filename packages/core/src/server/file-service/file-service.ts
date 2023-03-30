@@ -158,7 +158,7 @@ export class FileService extends FCService implements IFileService {
       throw FileSystemError.FileNotFound(uri);
     }
     if (stat.isDirectory) {
-      throw FileSystemError.FileIsDirectory(uri, 'Cannot resolve the content.');
+      throw FileSystemError.FileIsADirectory(uri, 'Cannot resolve the content.');
     }
     const encoding = await this.doGetEncoding(options);
     const buffer = await this.diskService.readFile(_uri.codeUri, encoding);
@@ -177,7 +177,7 @@ export class FileService extends FCService implements IFileService {
       throw FileSystemError.FileNotFound(file.uri);
     }
     if (stat.isDirectory) {
-      throw FileSystemError.FileIsDirectory(file.uri, 'Cannot set the content.');
+      throw FileSystemError.FileIsADirectory(file.uri, 'Cannot set the content.');
     }
     if (!(await this.isInSync(file, stat))) {
       throw this.createOutOfSyncError(file, stat);
@@ -206,7 +206,7 @@ export class FileService extends FCService implements IFileService {
       throw FileSystemError.FileNotFound(file.uri);
     }
     if (stat.isDirectory) {
-      throw FileSystemError.FileIsDirectory(file.uri, 'Cannot set the content.');
+      throw FileSystemError.FileIsADirectory(file.uri, 'Cannot set the content.');
     }
     if (!this.checkInSync(file, stat)) {
       throw this.createOutOfSyncError(file, stat);

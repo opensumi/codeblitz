@@ -190,7 +190,7 @@ export class DiskFileSystemProvider extends FCService implements IDiskFileProvid
         }
 
         if (error.code === 'EISDIR') {
-          throw FileSystemError.FileIsDirectory(
+          throw FileSystemError.FileIsADirectory(
             uri.path,
             'Error occurred while reading file: path is a directory.'
           );
@@ -405,12 +405,12 @@ export class DiskFileSystemProvider extends FCService implements IDiskFileProvid
     // Different types. Files <-> Directory.
     if (targetStat && sourceStat.isDirectory !== targetStat.isDirectory) {
       if (targetStat.isDirectory) {
-        throw FileSystemError.FileIsDirectory(
+        throw FileSystemError.FileIsADirectory(
           targetStat.uri,
           `Cannot move '${sourceStat.uri}' file to an existing location.`
         );
       }
-      throw FileSystemError.FileNotDirectory(
+      throw FileSystemError.FileNotADirectory(
         targetStat.uri,
         `Cannot move '${sourceStat.uri}' directory to an existing location.`
       );
