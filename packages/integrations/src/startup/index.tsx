@@ -123,28 +123,29 @@ const App = () => (
         css,
         html,
         json,
-        markdown,
-        vditor,
+        // markdown,
+        // vditor,
         typescript,
-        codeservice,
-        gitlens,
-        graph,
-        imagePreview,
+        // codeservice,
+        // gitlens,
+        // graph,
+        // imagePreview,
         webSCM,
-        referencesView,
-        codeswing,
-        emmet,
-        anycodeCSharp,
-        anycodeCpp,
-        anycodeGo,
-        anycodeJava,
-        anycodePhp,
-        anycodePython,
-        anycodeRust,
-        anycodeTypescript,
-        anycode,
-        codeRunner,
-        mergeConflict,
+        // referencesView,
+        // codeswing,
+        // emmet,
+        // anycodeCSharp,
+        // anycodeCpp,
+        // anycodeGo,
+        // anycodeJava,
+        // anycodePhp,
+        // anycodePython,
+        // anycodeRust,
+        // anycodeTypescript,
+        // anycode,
+        // codeRunner,
+        // mergeConflict,
+        // typescript
       ],
       workspaceDir: `${platform}/${config.owner}/${config.name}`,
       layoutConfig,
@@ -177,7 +178,12 @@ render();
 // for dispose test
 window.reset = (destroy = false) =>
   destroy ? ReactDOM.render(<div>destroyed</div>, document.getElementById('main')) : render();
-
+(window as any).command = () => {
+  const commands = Plugin.api.commands;
+  if (commands) {
+    commands.executeCommand('plugin.command.test', 1, 2);
+  }
+};
 declare global {
   interface Window {
     app: IAppInstance;

@@ -15,6 +15,7 @@ export class MonacoContextKeyService extends BaseContextKeyService implements IC
       (window as any)?._alex?.ContextKeyService || new ContextKeyService(this.configurationService);
     (window as any)._alex = {};
     (window as any)._alex.ContextKeyService = this.contextKeyService;
+    this.listenToContextChanges();
   }
 
   dispose(): void {}

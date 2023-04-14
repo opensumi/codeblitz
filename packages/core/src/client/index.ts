@@ -10,7 +10,7 @@ import {
 } from '@opensumi/ide-core-browser';
 import { ClientApp as BasicClientApp } from '@opensumi/ide-core-browser/lib/bootstrap/app';
 
-import { BackService, BasicModule } from '@opensumi/ide-core-common';
+import { BackService, BasicModule, Disposable } from '@opensumi/ide-core-common';
 import { WSChannelHandler } from '@opensumi/ide-connection/lib/browser';
 
 import { FCServiceCenter, ClientPort, initFCService } from '../connection';
@@ -36,8 +36,8 @@ import { LayoutRestoreContributation } from './layout/index.contribution';
 import {
   MonacoCodeService,
   IMonacoCodeService,
-  codeServiceEditor,
-} from './override/codeEditorService';
+  monacoCodeServiceProxy,
+} from './override/monacoOverride/codeEditorService';
 import { BreadCrumbServiceImplOverride, IBreadCrumbService } from './override/breadcrumb.service';
 import { SearchContribution } from './search/index.contribution';
 import {
@@ -51,7 +51,24 @@ import {
 } from './override/vscodeContributesService';
 
 import { ExtensionNodeServiceServerPath } from '@opensumi/ide-extension';
-export * from './override/codeEditorService';
+import {
+  IMonacoTextModelService,
+  MonacoTextModelService,
+  monacoTextModelServiceProxy,
+} from './override/monacoOverride/textModelService';
+import {
+  IMonacoBulkEditServiceProxy,
+  MonacoBulkEditService,
+  monacoBulkEditServiceProxy,
+} from './override/monacoOverride/workspaceEditService';
+import { ICommandServiceToken } from '@opensumi/ide-monaco/lib/browser/contrib/command';
+import { MonacoCommandService } from '@opensumi/ide-editor/lib/browser/monaco-contrib/command/command.service';
+import { IBulkEditServiceShape } from '@opensumi/ide-workspace-edit';
+import {
+  IMonacoCommandServiceProxy,
+  monacoCommandServiceProxy,
+} from './override/monacoOverride/commandService';
+export * from './override/monacoOverride/codeEditorService';
 
 export { ExtensionManagerModule as ExtensionClientManagerModule } from './extension-manager';
 
@@ -80,14 +97,58 @@ export class ClientModule extends BrowserModule {
     SearchContribution,
     PreferenceSettingContribution,
     LayoutRestoreContributation,
+
+    /*  monaco override*/
     {
       token: MonacoCodeService,
-      useValue: codeServiceEditor,
+      useValue: monacoCodeServiceProxy,
+      override: true,
     },
     {
       token: IMonacoCodeService,
       useClass: MonacoCodeService,
     },
+    // MonacoTextModelService
+    {
+      token: MonacoTextModelService,
+      useValue: monacoTextModelServiceProxy,
+      override: true,
+    },
+    {
+      token: IMonacoTextModelService,
+      useClass: MonacoTextModelService,
+    },
+    // IBulkEditServiceShape
+    {
+      token: IBulkEditServiceShape,
+      useValue: monacoBulkEditServiceProxy,
+      override: true,
+    },
+    {
+      token: IMonacoBulkEditServiceProxy,
+      useClass: MonacoBulkEditService,
+    },
+    // MonacoCommandService
+    {
+      token: ICommandServiceToken,
+      useValue: monacoCommandServiceProxy,
+      override: true,
+    },
+    {
+      token: IMonacoCommandServiceProxy,
+      useClass: MonacoCommandService,
+    },
+    // MonacoContextKeyService
+    {
+      token: IContextKeyService,
+      useValue: monacoCommandServiceProxy,
+      override: true,
+    },
+    {
+      token: IMonacoCommandServiceProxy,
+      useClass: MonacoCommandService,
+    },
+    /* monaco override */
     {
       token: IBreadCrumbService,
       useClass: BreadCrumbServiceImplOverride,
@@ -96,11 +157,6 @@ export class ClientModule extends BrowserModule {
     {
       token: MonacoSnippetSuggestProvider,
       useClass: MonacoSnippetSuggestProviderOverride,
-      override: true,
-    },
-    {
-      token: IContextKeyService,
-      useClass: MonacoContextKeyService,
       override: true,
     },
     {
@@ -126,15 +182,21 @@ export class ClientApp extends BasicClientApp {
 
   private modules: ModuleConstructor[] = [];
 
+  private disposer = new Disposable();
+
   constructor(opts: IAppOpts) {
     super(opts);
     this.modules = opts.modules;
     this.initServer(opts);
-    this.initCodeServiceEditor();
+    // monaco override proxy 防止组件卸载后 monaco override 实例被销毁
+    this.initMonacoProxy();
   }
 
-  initCodeServiceEditor() {
-    this.clearInjector = codeServiceEditor.setInjector(this.injector);
+  initMonacoProxy() {
+    this.disposer.addDispose(monacoCodeServiceProxy.setInjector(this.injector));
+    this.disposer.addDispose(monacoTextModelServiceProxy.setInjector(this.injector));
+    this.disposer.addDispose(monacoBulkEditServiceProxy.setInjector(this.injector));
+    this.disposer.addDispose(monacoCommandServiceProxy.setInjector(this.injector));
   }
 
   private initServer(opts: IAppOpts) {
@@ -190,7 +252,7 @@ export class ClientApp extends BasicClientApp {
   }
   async dispose() {
     super.dispose();
-    this.clearInjector();
+    this.disposer.dispose();
   }
 }
 
