@@ -37,7 +37,10 @@ import {
   MonacoCodeService,
   IMonacoCodeService,
   monacoCodeServiceProxy,
+  customCodeEditorService,
 } from './override/monacoOverride/codeEditorService';
+import { ICodeEditorService } from '@opensumi/monaco-editor-core/esm/vs/editor/browser/services/codeEditorService';
+import { IKeybindingService } from '@opensumi/monaco-editor-core/esm/vs/platform/keybinding/common/keybinding';
 import { BreadCrumbServiceImplOverride, IBreadCrumbService } from './override/breadcrumb.service';
 import { SearchContribution } from './search/index.contribution';
 import {
@@ -76,6 +79,7 @@ import {
   // monacoCommandServiceProxy,
   ScopedContextKeyServiceProxy,
 } from './override/monacoOverride/contextKeyService';
+import { customKeybindingService } from './override/monacoOverride/customKeybindingService';
 export * from './override/monacoOverride/codeEditorService';
 
 export { ExtensionManagerModule as ExtensionClientManagerModule } from './extension-manager';
@@ -145,6 +149,14 @@ export class ClientModule extends BrowserModule {
     {
       token: IMonacoCommandServiceProxy,
       useClass: MonacoCommandService,
+    },
+    // {
+    //   token: ICodeEditorService,
+    //   useValue: customCodeEditorService
+    // },
+    {
+      token: IKeybindingService,
+      useValue: customKeybindingService,
     },
     // MonacoContextKeyService
     {
