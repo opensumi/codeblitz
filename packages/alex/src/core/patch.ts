@@ -12,7 +12,7 @@ import { AbstractResourcePreferenceProvider } from '@opensumi/ide-preferences/li
 import { DiskFsProviderClient } from '@opensumi/ide-file-service/lib/browser/file-service-provider-client';
 import { DebugConfigurationManager } from '@opensumi/ide-debug/lib/browser/debug-configuration-manager';
 import { IconService } from '@opensumi/ide-theme/lib/browser';
-
+import { InstantiationService } from '@opensumi/monaco-editor-core/esm/vs/platform/instantiation/common/instantiationService.js';
 export const disposableCollection: ((injector: Injector) => void)[] = [];
 
 // TODO: 不使用 private 如何清除副作用
@@ -28,6 +28,9 @@ export const disposeMode = () => {
   modeService._encounteredLanguages?.clear();
 
   (<any>ModesRegistry)._languages = [];
+
+  // @ts-ignore
+  // InstantiationService.prototype?._services?.clear();
 };
 
 // TODO: 此处 diff 的 stage 和 revertChange 应该是 git 注册的，框架中直接添加了按钮，耦合，需要修复实现 scm/change/title

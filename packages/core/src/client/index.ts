@@ -64,10 +64,18 @@ import {
 import { ICommandServiceToken } from '@opensumi/ide-monaco/lib/browser/contrib/command';
 import { MonacoCommandService } from '@opensumi/ide-editor/lib/browser/monaco-contrib/command/command.service';
 import { IBulkEditServiceShape } from '@opensumi/ide-workspace-edit';
+// @ts-ignore
 import {
   IMonacoCommandServiceProxy,
   monacoCommandServiceProxy,
 } from './override/monacoOverride/commandService';
+import {
+  IScopedContextKeyServiceProxy,
+  MonacoContextKeyServiceOverride,
+  // IMonacoCommandServiceProxy,
+  // monacoCommandServiceProxy,
+  ScopedContextKeyServiceProxy,
+} from './override/monacoOverride/contextKeyService';
 export * from './override/monacoOverride/codeEditorService';
 
 export { ExtensionManagerModule as ExtensionClientManagerModule } from './extension-manager';
@@ -141,13 +149,26 @@ export class ClientModule extends BrowserModule {
     // MonacoContextKeyService
     {
       token: IContextKeyService,
-      useValue: monacoCommandServiceProxy,
+      useClass: MonacoContextKeyServiceOverride,
       override: true,
     },
     {
-      token: IMonacoCommandServiceProxy,
-      useClass: MonacoCommandService,
+      token: IScopedContextKeyServiceProxy,
+      useClass: ScopedContextKeyServiceProxy,
     },
+    // {
+    //   token: IScopedContextKeyServiceProxy,
+    //   useClass: MonacoCommandService,
+    // },
+    // {
+    //   token: ScopedContextKeyServiceProxy,
+    //   useFactory: (injector) => {
+    //     const contextKeyService = injector.get(ScopedContextKeyServiceProxy);
+
+    //     return new ScopedContextKeyServiceProxy(,injector);
+    //   },
+    //   // override: true,
+    // },
     /* monaco override */
     {
       token: IBreadCrumbService,
