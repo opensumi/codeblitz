@@ -37,7 +37,6 @@ import {
   MonacoCodeService,
   IMonacoCodeService,
   monacoCodeServiceProxy,
-  customCodeEditorService,
 } from './override/monacoOverride/codeEditorService';
 import { ICodeEditorService } from '@opensumi/monaco-editor-core/esm/vs/editor/browser/services/codeEditorService';
 import { IKeybindingService } from '@opensumi/monaco-editor-core/esm/vs/platform/keybinding/common/keybinding';
@@ -150,10 +149,6 @@ export class ClientModule extends BrowserModule {
       token: IMonacoCommandServiceProxy,
       useClass: MonacoCommandService,
     },
-    // {
-    //   token: ICodeEditorService,
-    //   useValue: customCodeEditorService
-    // },
     {
       token: IKeybindingService,
       useValue: customKeybindingService,
