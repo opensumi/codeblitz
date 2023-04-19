@@ -1,22 +1,32 @@
-import { Injectable } from '@opensumi/di';
-import { IContextKeyService } from '@opensumi/ide-core-browser';
-import { ContextKeyService } from '@opensumi/monaco-editor-core/esm/vs/platform/contextkey/browser/contextKeyService';
-import { MonacoContextKeyService as BaseContextKeyService } from '@opensumi/ide-monaco/lib/browser/monaco.context-key.service';
-// TODO 暂时此处覆盖其 dispose 防止报错
+import { Autowired, Injectable, Injector, INJECTOR_TOKEN } from '@opensumi/di';
+import {
+  MonacoContribution,
+  Domain,
+  MonacoOverrideServiceRegistry,
+} from '@opensumi/ide-core-browser';
+import { StandaloneKeybindingServiceProxy } from './monacoOverride/standaloneKeybindingService';
+
+import { ICommandServiceToken } from '@opensumi/ide-monaco/lib/browser/contrib/command';
+import { MonacoCodeService } from './monacoOverride/codeEditorService';
+import { MonacoCommandService } from '@opensumi/ide-editor/lib/browser/monaco-contrib/command/command.service';
+// import { MonacoCodeService, monacoCodeServiceProxy } from './codeEditorService';
+
+export const IMonacoOverrideService = Symbol('IMonacoOverrideService');
 @Injectable()
-export class MonacoContextKeyService extends BaseContextKeyService implements IContextKeyService {
-  public readonly contextKeyService: ContextKeyService;
+@Domain(MonacoContribution)
+export class MonacoOverrideService implements MonacoContribution {
+  @Autowired(ICommandServiceToken)
+  monacoCommandService: MonacoCommandService;
 
-  constructor() {
-    super();
-    // TODO 不放window
-    // ContextKeyService 全局唯一 组件重置后需重新绑定
-    this.contextKeyService =
-      (window as any)?._alex?.ContextKeyService || new ContextKeyService(this.configurationService);
-    (window as any)._alex = {};
-    (window as any)._alex.ContextKeyService = this.contextKeyService;
-    this.listenToContextChanges();
+  @Autowired(MonacoCodeService)
+  monacoCodeService: MonacoCodeService;
+
+  registerOverrideService(registry: MonacoOverrideServiceRegistry) {
+    // TODO opensumi ServiceNames
+    registry.registerOverrideService(
+      // @ts-ignore
+      'keybindingService',
+      new StandaloneKeybindingServiceProxy(this.monacoCodeService, this.monacoCommandService)
+    );
   }
-
-  dispose(): void {}
 }

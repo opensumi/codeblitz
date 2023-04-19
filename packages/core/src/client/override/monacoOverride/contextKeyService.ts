@@ -132,26 +132,11 @@ export class ScopedContextKeyServiceProxy
   extends BaseContextKeyService
   implements IScopedContextKeyService
 {
-  injector: Injector;
-  isProxyInjector: boolean = false;
-  constructor(
-    @Optional() public readonly contextKeyService: ContextKeyService,
-    proxyInjector?: Injector
-  ) {
+  constructor(@Optional() public readonly contextKeyService: ContextKeyService) {
     super();
-    if (proxyInjector) {
-      this.injector = proxyInjector;
-      this.isProxyInjector = true;
-      this.contextKeyService = this.injector.get(ContextKeyService);
-    }
-    // this.contextKeyService = contextKeyService;
     this.listenToContextChanges();
   }
   attachToDomNode(domNode: HTMLElement): void {
-    if (this.isProxyInjector) {
-      return this.injector.get(ScopedContextKeyServiceProxy).attachToDomNode(domNode);
-    }
-
     if (this.contextKeyService['_domNode']) {
       this.contextKeyService['_domNode'].removeAttribute(KEYBINDING_CONTEXT_ATTR);
     }
@@ -163,9 +148,6 @@ export class ScopedContextKeyServiceProxy
   }
 
   match(expression: string | ContextKeyExpression | undefined): boolean {
-    if (this.isProxyInjector) {
-      return this.injector.get(ScopedContextKeyServiceProxy).match(expression);
-    }
     try {
       let parsed: ContextKeyExpression | undefined;
       if (typeof expression === 'string') {

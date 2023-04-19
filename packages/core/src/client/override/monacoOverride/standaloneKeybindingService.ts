@@ -1,31 +1,31 @@
+import { CommandService } from '@alipay/alex/modules/ide-core-browser';
+import { ICommandService } from '@opensumi/monaco-editor-core/esm/vs/platform/commands/common/commands';
 import { StandaloneKeybindingService } from '@opensumi/monaco-editor-core/esm/vs/editor/standalone/browser/standaloneServices';
 import { StandaloneServices } from '@opensumi/monaco-editor-core/esm/vs/editor/standalone/browser/standaloneServices';
 import { IContextKeyService } from '@opensumi/monaco-editor-core/esm/vs/platform/contextkey/common/contextkey';
-import { ICommandService } from '@opensumi/monaco-editor-core/esm/vs/platform/commands/common/commands';
 import { ITelemetryService } from '@opensumi/monaco-editor-core/esm/vs/platform/telemetry/common/telemetry';
 import { INotificationService } from '@opensumi/monaco-editor-core/esm/vs/platform/notification/common/notification';
 import { ILogService } from '@opensumi/monaco-editor-core/esm/vs/platform/log/common/log';
 import { ICodeEditorService } from '@opensumi/monaco-editor-core/esm/vs/editor/browser/services/codeEditorService';
+import { monacoCommandServiceProxy } from './commandService';
+import { MonacoCodeService, monacoCodeServiceProxy } from './codeEditorService';
+import { Injector } from '@opensumi/di';
+import { ICommandServiceToken } from '@opensumi/ide-monaco/lib/browser/contrib/command';
 
-class CustomKeybindingService extends StandaloneKeybindingService {
-  constructor() {
-    const codeEditorService = StandaloneServices.get(ICodeEditorService);
-
+export class StandaloneKeybindingServiceProxy extends StandaloneKeybindingService {
+  // TODO contextService
+  constructor(monacoCodeService: ICodeEditorService, monacoCommandService: ICommandService) {
     super(
       StandaloneServices.get(IContextKeyService),
-      StandaloneServices.get(ICommandService),
+      monacoCommandService,
+      // StandaloneServices.get(ICommandService),
       StandaloneServices.get(ITelemetryService),
       StandaloneServices.get(INotificationService),
       StandaloneServices.get(ILogService),
-      StandaloneServices.get(ICodeEditorService)
+      // StandaloneServices.get(ICodeEditorService)
+      monacoCodeService
     );
-
-    codeEditorService.onCodeEditorAdd(() => {
-      this['_domNodeListeners'].forEach((d) => {
-        d.dispose();
-      });
-    });
   }
 }
 
-export const customKeybindingService = new CustomKeybindingService();
+// export const standaloneKeybindingServiceProxy = new StandaloneKeybindingServiceProxy();

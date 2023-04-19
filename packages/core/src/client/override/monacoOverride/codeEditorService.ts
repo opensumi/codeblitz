@@ -40,7 +40,7 @@ class MonacoCodeServiceProxy extends AbstractCodeEditorService {
     return this.injector!.get(IMonacoCodeService).getActiveCodeEditor();
   }
 
-  openCodeEditor(...args: any[]) {
+  async openCodeEditor(...args: any[]) {
     return this.injector!.get(IMonacoCodeService).openCodeEditor(...args);
   }
 }

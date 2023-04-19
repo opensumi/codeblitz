@@ -1,3 +1,4 @@
+import { MonacoOverrides } from './override/monacoOverride/index';
 import { Injectable, Injector, ConstructorOf, Provider } from '@opensumi/di';
 import {
   BrowserModule,
@@ -6,8 +7,6 @@ import {
   PreferenceProviderProvider,
   PreferenceScope,
   PreferenceProvider,
-  IContextKeyService,
-  KeybindingService,
 } from '@opensumi/ide-core-browser';
 import { ClientApp as BasicClientApp } from '@opensumi/ide-core-browser/lib/bootstrap/app';
 
@@ -34,51 +33,31 @@ import { FileSchemeContribution } from './file-scheme/index.contribution';
 import { PreferenceSettingContribution } from './preference/preference.setting.contribution';
 import { LayoutRestoreContributation } from './layout/index.contribution';
 
-import {
-  MonacoCodeService,
-  IMonacoCodeService,
-  monacoCodeServiceProxy,
-} from './override/monacoOverride/codeEditorService';
-import { ICodeEditorService } from '@opensumi/monaco-editor-core/esm/vs/editor/browser/services/codeEditorService';
 import { BreadCrumbServiceImplOverride, IBreadCrumbService } from './override/breadcrumb.service';
 import { SearchContribution } from './search/index.contribution';
 import {
   MonacoSnippetSuggestProviderOverride,
   MonacoSnippetSuggestProvider,
 } from './override/snippet.service';
-import { MonacoContextKeyService } from './override/monacoContextKeyService';
+import { IMonacoOverrideService, MonacoOverrideService } from './override/monacoContextKeyService';
 import {
   VSCodeContributesServiceOverride,
   VSCodeContributesServiceToken,
 } from './override/vscodeContributesService';
 
-import { ExtensionNodeServiceServerPath } from '@opensumi/ide-extension';
-import {
-  IMonacoTextModelService,
-  MonacoTextModelService,
-  monacoTextModelServiceProxy,
-} from './override/monacoOverride/textModelService';
-import {
-  IMonacoBulkEditServiceProxy,
-  MonacoBulkEditService,
-  monacoBulkEditServiceProxy,
-} from './override/monacoOverride/workspaceEditService';
-import { ICommandServiceToken } from '@opensumi/ide-monaco/lib/browser/contrib/command';
-import { MonacoCommandService } from '@opensumi/ide-editor/lib/browser/monaco-contrib/command/command.service';
-import { IBulkEditServiceShape } from '@opensumi/ide-workspace-edit';
-// @ts-ignore
 import {
   IMonacoCommandServiceProxy,
   monacoCommandServiceProxy,
 } from './override/monacoOverride/commandService';
+import { ICommandServiceToken } from '@opensumi/ide-monaco/lib/browser/contrib/command';
+import { MonacoCommandService } from '@opensumi/ide-editor/lib/browser/monaco-contrib/command/command.service';
 import {
-  IScopedContextKeyServiceProxy,
-  MonacoContextKeyServiceOverride,
-  // IMonacoCommandServiceProxy,
-  // monacoCommandServiceProxy,
-  ScopedContextKeyServiceProxy,
-} from './override/monacoOverride/contextKeyService';
-import { customKeybindingService } from './override/monacoOverride/customKeybindingService';
+  IMonacoCodeService,
+  MonacoCodeService,
+  monacoCodeServiceProxy,
+} from './override/monacoOverride/codeEditorService';
+
+// import { MonacoOverrides } from './override/monacoOverride';
 export * from './override/monacoOverride/codeEditorService';
 
 export { ExtensionManagerModule as ExtensionClientManagerModule } from './extension-manager';
@@ -110,36 +89,7 @@ export class ClientModule extends BrowserModule {
     LayoutRestoreContributation,
 
     /*  monaco override*/
-    {
-      token: MonacoCodeService,
-      useValue: monacoCodeServiceProxy,
-      override: true,
-    },
-    {
-      token: IMonacoCodeService,
-      useClass: MonacoCodeService,
-    },
-    // MonacoTextModelService
-    {
-      token: MonacoTextModelService,
-      useValue: monacoTextModelServiceProxy,
-      override: true,
-    },
-    {
-      token: IMonacoTextModelService,
-      useClass: MonacoTextModelService,
-    },
-    // IBulkEditServiceShape
-    {
-      token: IBulkEditServiceShape,
-      useValue: monacoBulkEditServiceProxy,
-      override: true,
-    },
-    {
-      token: IMonacoBulkEditServiceProxy,
-      useClass: MonacoBulkEditService,
-    },
-    // MonacoCommandService
+    // ...MonacoOverrides,
     {
       token: ICommandServiceToken,
       useValue: monacoCommandServiceProxy,
@@ -150,32 +100,14 @@ export class ClientModule extends BrowserModule {
       useClass: MonacoCommandService,
     },
     {
-      token: KeybindingService,
-      useValue: customKeybindingService,
-    },
-    // MonacoContextKeyService
-    {
-      token: IContextKeyService,
-      useClass: MonacoContextKeyServiceOverride,
+      token: MonacoCodeService,
+      useValue: monacoCodeServiceProxy,
       override: true,
     },
     {
-      token: IScopedContextKeyServiceProxy,
-      useClass: ScopedContextKeyServiceProxy,
+      token: IMonacoCodeService,
+      useClass: MonacoCodeService,
     },
-    // {
-    //   token: IScopedContextKeyServiceProxy,
-    //   useClass: MonacoCommandService,
-    // },
-    // {
-    //   token: ScopedContextKeyServiceProxy,
-    //   useFactory: (injector) => {
-    //     const contextKeyService = injector.get(ScopedContextKeyServiceProxy);
-
-    //     return new ScopedContextKeyServiceProxy(,injector);
-    //   },
-    //   // override: true,
-    // },
     /* monaco override */
     {
       token: IBreadCrumbService,
@@ -191,6 +123,10 @@ export class ClientModule extends BrowserModule {
       token: VSCodeContributesServiceToken,
       useClass: VSCodeContributesServiceOverride,
       override: true,
+    },
+    {
+      token: IMonacoOverrideService,
+      useClass: MonacoOverrideService,
     },
   ];
   preferences = injectDebugPreferences;
@@ -216,15 +152,12 @@ export class ClientApp extends BasicClientApp {
     super(opts);
     this.modules = opts.modules;
     this.initServer(opts);
-    // monaco override proxy 防止组件卸载后 monaco override 实例被销毁
     this.initMonacoProxy();
   }
 
   initMonacoProxy() {
-    this.disposer.addDispose(monacoCodeServiceProxy.setInjector(this.injector));
-    this.disposer.addDispose(monacoTextModelServiceProxy.setInjector(this.injector));
-    this.disposer.addDispose(monacoBulkEditServiceProxy.setInjector(this.injector));
     this.disposer.addDispose(monacoCommandServiceProxy.setInjector(this.injector));
+    this.disposer.addDispose(monacoCodeServiceProxy.setInjector(this.injector));
   }
 
   private initServer(opts: IAppOpts) {
