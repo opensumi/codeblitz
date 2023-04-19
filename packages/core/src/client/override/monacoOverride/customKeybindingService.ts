@@ -9,6 +9,8 @@ import { ICodeEditorService } from '@opensumi/monaco-editor-core/esm/vs/editor/b
 
 class CustomKeybindingService extends StandaloneKeybindingService {
   constructor() {
+    const codeEditorService = StandaloneServices.get(ICodeEditorService);
+
     super(
       StandaloneServices.get(IContextKeyService),
       StandaloneServices.get(ICommandService),
@@ -17,6 +19,12 @@ class CustomKeybindingService extends StandaloneKeybindingService {
       StandaloneServices.get(ILogService),
       StandaloneServices.get(ICodeEditorService)
     );
+
+    codeEditorService.onCodeEditorAdd(() => {
+      this['_domNodeListeners'].forEach((d) => {
+        d.dispose();
+      });
+    });
   }
 }
 

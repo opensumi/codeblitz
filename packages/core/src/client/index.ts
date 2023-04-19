@@ -7,6 +7,7 @@ import {
   PreferenceScope,
   PreferenceProvider,
   IContextKeyService,
+  KeybindingService,
 } from '@opensumi/ide-core-browser';
 import { ClientApp as BasicClientApp } from '@opensumi/ide-core-browser/lib/bootstrap/app';
 
@@ -39,7 +40,6 @@ import {
   monacoCodeServiceProxy,
 } from './override/monacoOverride/codeEditorService';
 import { ICodeEditorService } from '@opensumi/monaco-editor-core/esm/vs/editor/browser/services/codeEditorService';
-import { IKeybindingService } from '@opensumi/monaco-editor-core/esm/vs/platform/keybinding/common/keybinding';
 import { BreadCrumbServiceImplOverride, IBreadCrumbService } from './override/breadcrumb.service';
 import { SearchContribution } from './search/index.contribution';
 import {
@@ -150,7 +150,7 @@ export class ClientModule extends BrowserModule {
       useClass: MonacoCommandService,
     },
     {
-      token: IKeybindingService,
+      token: KeybindingService,
       useValue: customKeybindingService,
     },
     // MonacoContextKeyService
