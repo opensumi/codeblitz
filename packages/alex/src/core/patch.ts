@@ -28,9 +28,6 @@ export const disposeMode = () => {
   modeService._encounteredLanguages?.clear();
 
   (<any>ModesRegistry)._languages = [];
-
-  // @ts-ignore
-  // InstantiationService.prototype?._services?.clear();
 };
 
 // TODO: 此处 diff 的 stage 和 revertChange 应该是 git 注册的，框架中直接添加了按钮，耦合，需要修复实现 scm/change/title

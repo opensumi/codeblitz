@@ -7,10 +7,6 @@ import { ITelemetryService } from '@opensumi/monaco-editor-core/esm/vs/platform/
 import { INotificationService } from '@opensumi/monaco-editor-core/esm/vs/platform/notification/common/notification';
 import { ILogService } from '@opensumi/monaco-editor-core/esm/vs/platform/log/common/log';
 import { ICodeEditorService } from '@opensumi/monaco-editor-core/esm/vs/editor/browser/services/codeEditorService';
-import { monacoCommandServiceProxy } from './commandService';
-import { MonacoCodeService, monacoCodeServiceProxy } from './codeEditorService';
-import { Injector } from '@opensumi/di';
-import { ICommandServiceToken } from '@opensumi/ide-monaco/lib/browser/contrib/command';
 
 export class StandaloneKeybindingServiceProxy extends StandaloneKeybindingService {
   // TODO contextService
@@ -27,5 +23,3 @@ export class StandaloneKeybindingServiceProxy extends StandaloneKeybindingServic
     );
   }
 }
-
-// export const standaloneKeybindingServiceProxy = new StandaloneKeybindingServiceProxy();

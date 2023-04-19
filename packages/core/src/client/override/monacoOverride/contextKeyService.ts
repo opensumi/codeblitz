@@ -164,8 +164,6 @@ export class ScopedContextKeyServiceProxy
   }
 }
 
-// export const monacoTextModelServiceProxy = new ScopedContextKeyServiceProxy();
-
 @Injectable()
 export class MonacoContextKeyServiceOverride
   extends BaseContextKeyService
