@@ -251,7 +251,7 @@ export class FileTreeCustomContribution
       },
     ];
     keybinding.forEach((binding) => {
-      bindings.unregisterKeybinding(binding.keybinding);
+      bindings.unregisterKeybinding(binding);
     });
   }
 
