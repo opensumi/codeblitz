@@ -1,4 +1,3 @@
-import { CommandService } from '@alipay/alex/modules/ide-core-browser';
 import { ICommandService } from '@opensumi/monaco-editor-core/esm/vs/platform/commands/common/commands';
 import { StandaloneKeybindingService } from '@opensumi/monaco-editor-core/esm/vs/editor/standalone/browser/standaloneServices';
 import { StandaloneServices } from '@opensumi/monaco-editor-core/esm/vs/editor/standalone/browser/standaloneServices';
