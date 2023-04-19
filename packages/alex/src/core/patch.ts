@@ -12,7 +12,7 @@ import { AbstractResourcePreferenceProvider } from '@opensumi/ide-preferences/li
 import { DiskFsProviderClient } from '@opensumi/ide-file-service/lib/browser/file-service-provider-client';
 import { DebugConfigurationManager } from '@opensumi/ide-debug/lib/browser/debug-configuration-manager';
 import { IconService } from '@opensumi/ide-theme/lib/browser';
-
+import { InstantiationService } from '@opensumi/monaco-editor-core/esm/vs/platform/instantiation/common/instantiationService.js';
 export const disposableCollection: ((injector: Injector) => void)[] = [];
 
 // TODO: 不使用 private 如何清除副作用

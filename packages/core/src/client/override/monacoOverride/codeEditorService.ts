@@ -15,7 +15,7 @@ export const IMonacoCodeService = Symbol('IMonacoCodeService');
 
 export { MonacoCodeService };
 
-class CodeEditorService extends AbstractCodeEditorService {
+class MonacoCodeServiceProxy extends AbstractCodeEditorService {
   private injector: Injector | null = null;
   private uid = 0;
 
@@ -27,10 +27,12 @@ class CodeEditorService extends AbstractCodeEditorService {
     this.injector = injector;
     this.uid++;
     const currentUId = this.uid;
-    return () => {
-      if (currentUId === this.uid) {
-        this.injector = null;
-      }
+    return {
+      dispose: () => {
+        if (currentUId === this.uid && this.injector) {
+          this.injector = null;
+        }
+      },
     };
   }
 
@@ -38,9 +40,9 @@ class CodeEditorService extends AbstractCodeEditorService {
     return this.injector!.get(IMonacoCodeService).getActiveCodeEditor();
   }
 
-  openCodeEditor(...args: any[]) {
+  async openCodeEditor(...args: any[]) {
     return this.injector!.get(IMonacoCodeService).openCodeEditor(...args);
   }
 }
 
-export const codeServiceEditor = new CodeEditorService();
+export const monacoCodeServiceProxy = new MonacoCodeServiceProxy();
