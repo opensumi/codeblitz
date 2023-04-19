@@ -1,3 +1,22 @@
+## [2.2.4](https://code.alipay.com/cloud-ide/crew-dragon/compare/v2.2.3...v2.2.4) (2023-04-19)
+
+
+### Bug Fixes
+
+* 修复monaco override dispose 问题 ([edfdcc0](https://code.alipay.com/cloud-ide/crew-dragon/commits/edfdcc03db26e6cc7885127834cd890a2cd1d081))
+* 语言服务dispose后失效 ([31245a2](https://code.alipay.com/cloud-ide/crew-dragon/commits/31245a2bf3b83367d7c7171d254432c9640871e9))
+* 增加monaco keybindingService  override ([895b4b5](https://code.alipay.com/cloud-ide/crew-dragon/commits/895b4b51c6bd3ab6164c53b7af756527d3964839))
+* ci ([f878fe2](https://code.alipay.com/cloud-ide/crew-dragon/commits/f878fe2cee93efdbc9dc8dbc3cc92442734637aa))
+* keybinding ([b20e865](https://code.alipay.com/cloud-ide/crew-dragon/commits/b20e865cc23bafd843d2f77bb62e528f00c9d24d))
+
+
+### Features
+
+* 代理 StandaloneKeybindingService ([4838915](https://code.alipay.com/cloud-ide/crew-dragon/commits/4838915c38170c776273cf3c8dff284c07925207))
+* 代理 StandaloneKeybindingService ([b4be681](https://code.alipay.com/cloud-ide/crew-dragon/commits/b4be681070d4670cff56bf984784556f66159b4b))
+
+
+
 ## [2.2.3](https://code.alipay.com/cloud-ide/crew-dragon/compare/v2.2.0...v2.2.3) (2023-03-06)
 
 
