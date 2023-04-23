@@ -109,3 +109,6 @@ packages/acr/bundle
 
 #cloud-ide
 .devcontainer.*
+
+#husky
+.husky

@@ -3,8 +3,7 @@ import { ReactEditorComponent } from '@opensumi/ide-editor/lib/browser';
 import { Button } from '@opensumi/ide-components';
 
 import * as style from './editor-bottom-side.module.less';
-import Icon from 'antd/lib/icon';
-import 'antd/lib/icon/style';
+import { LeftOutlined, RightOutlined, WarningTwoTone } from '@ant-design/icons';
 import Checkbox from 'antd/lib/checkbox';
 import 'antd/lib/checkbox/style';
 import {
@@ -63,8 +62,7 @@ export const EditorBottomSideWidget: ReactEditorComponent<any> = observer(({ res
       <div>
         {annotationCount > 0 && (
           <span className={style.annotation}>
-            <Icon className={style.annotation_icon} type="warning" theme="filled" />{' '}
-            {annotationCount}
+            <WarningTwoTone className={style.annotation_icon} /> {annotationCount}
           </span>
         )}
         {change && (
@@ -88,7 +86,7 @@ export const EditorBottomSideWidget: ReactEditorComponent<any> = observer(({ res
         )}
         <span className={style.btns}>
           <Button>
-            <Icon type="left" />
+            <LeftOutlined />
             <span className={style.btn} onClick={gotoPreviousChangeFile}>
               上一个文件
             </span>
@@ -97,7 +95,7 @@ export const EditorBottomSideWidget: ReactEditorComponent<any> = observer(({ res
             <span className={style.btn} onClick={gotoNextChangeFile}>
               下一个文件
             </span>
-            <Icon type="right" />
+            <RightOutlined />
           </Button>
         </span>
       </div>

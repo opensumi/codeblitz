@@ -2,7 +2,6 @@ import React, { FC, MutableRefObject, memo, useEffect, useRef, useState, useCall
 import {
   message,
   Dropdown,
-  Icon,
   Menu,
   Button,
   Tooltip,
@@ -21,6 +20,13 @@ import { DiffVersion } from '../types/pr';
 import { Annotation, AnnotationStatus } from '../types/annotation';
 import { CheckSuite } from '../types/check-suite';
 import { useAcr, useNote, useGlobal } from '../../model';
+import {
+  DownOutlined,
+  ArrowRightOutlined,
+  FullscreenExitOutlined,
+  FullscreenOutlined,
+  DoubleRightOutlined,
+} from '@ant-design/icons';
 
 export const Commenting: FC<{
   onClose?: () => void;
@@ -309,16 +315,16 @@ export const Menubar = memo<{
             <Dropdown overlay={menuFrom} trigger={['click']}>
               <div className={styles.versionItem}>
                 <span>{idToVerbose.get(fromId)}</span>
-                <Icon type="down" />
+                <DownOutlined />{' '}
               </div>
             </Dropdown>
             <div>
-              <Icon type="arrow-right" />
+              <ArrowRightOutlined />{' '}
             </div>
             <Dropdown overlay={menuTo} trigger={['click']}>
               <div className={styles.versionItem}>
                 <span>{idToVerbose.get(toId)}</span>
-                <Icon type="down" />
+                <DownOutlined />{' '}
               </div>
             </Dropdown>
 
@@ -349,10 +355,10 @@ export const Menubar = memo<{
           </div>
         )}
         {isFullscreen ? (
-          <Icon type="fullscreen-exit" onClick={() => handleChangeFullscreen(false)} />
+          <FullscreenExitOutlined onClick={() => handleChangeFullscreen(false)} />
         ) : (
           <Tooltip title="全屏">
-            <Icon type="fullscreen" onClick={() => handleChangeFullscreen(true)} />
+            <FullscreenOutlined onClick={() => handleChangeFullscreen(true)} />
           </Tooltip>
         )}
       </div>
@@ -439,7 +445,7 @@ export const AnnotationEntry = memo<{
               href={`https://codeinsightapi.alipay.com/api/v1/describe?bug_type=${annotation.bugType}&bug_id=${annotation.bugId}`}
               target="_blank"
             >
-              查看问题详情 <Icon type="double-right" />
+              查看问题详情 <DoubleRightOutlined />
             </a>
           </div>
         </div>
