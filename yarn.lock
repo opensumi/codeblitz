@@ -3472,11 +3472,6 @@ compare-func@^2.0.0:
     array-ify "^1.0.0"
     dot-prop "^5.1.0"
 
-compare-versions@^3.6.0:
-  version "3.6.0"
-  resolved "https://registry.npm.alibaba-inc.com/compare-versions/download/compare-versions-3.6.0.tgz"
-  integrity sha1-GlaJkTaF5ah2N7jT/8p1UU7EHWI=
-
 component-classes@^1.2.5:
   version "1.2.6"
   resolved "https://registry.npm.alibaba-inc.com/component-classes/download/component-classes-1.2.6.tgz"
@@ -5190,13 +5185,6 @@ find-up@^5.0.0:
     locate-path "^6.0.0"
     path-exists "^4.0.0"
 
-find-versions@^4.0.0:
-  version "4.0.0"
-  resolved "https://registry.npm.alibaba-inc.com/find-versions/download/find-versions-4.0.0.tgz"
-  integrity sha1-PFflc7+XdpuMuN8Wk0tieRXaSWU=
-  dependencies:
-    semver-regex "^3.1.2"
-
 findup-sync@^2.0.0:
   version "2.0.0"
   resolved "https://registry.npm.alibaba-inc.com/findup-sync/download/findup-sync-2.0.0.tgz"
@@ -6109,21 +6097,10 @@ humanize-ms@^1.2.0, humanize-ms@^1.2.1:
   dependencies:
     ms "^2.0.0"
 
-husky@^4.3.0:
-  version "4.3.8"
-  resolved "https://registry.npm.alibaba-inc.com/husky/download/husky-4.3.8.tgz"
-  integrity sha1-MRRAYL6WP9aFDlzI8Bmh3+GUKW0=
-  dependencies:
-    chalk "^4.0.0"
-    ci-info "^2.0.0"
-    compare-versions "^3.6.0"
-    cosmiconfig "^7.0.0"
-    find-versions "^4.0.0"
-    opencollective-postinstall "^2.0.2"
-    pkg-dir "^5.0.0"
-    please-upgrade-node "^3.2.0"
-    slash "^3.0.0"
-    which-pm-runs "^1.0.0"
+husky@^5.0.4:
+  version "5.2.0"
+  resolved "https://registry.antgroup-inc.cn/husky/-/husky-5.2.0.tgz#fc5e1c2300d34855d47de4753607d00943fc0802"
+  integrity sha512-AM8T/auHXRBxlrfPVLKP6jt49GCM2Zz47m8G3FOMsLmTv8Dj/fKVWE0Rh2d4Qrvmy131xEsdQnb3OXRib67PGg==
 
 iconv-lite-umd@^0.6.8:
   version "0.6.10"
@@ -8664,11 +8641,6 @@ onigasm@2.2.2:
   dependencies:
     lru-cache "^4.1.1"
 
-opencollective-postinstall@^2.0.2:
-  version "2.0.3"
-  resolved "https://registry.npm.alibaba-inc.com/opencollective-postinstall/download/opencollective-postinstall-2.0.3.tgz"
-  integrity sha1-eg//l49tv6TQBiOPusmO1BmMMlk=
-
 opener@^1.5.2:
   version "1.5.2"
   resolved "https://registry.npm.alibaba-inc.com/opener/download/opener-1.5.2.tgz"
@@ -9177,13 +9149,6 @@ pkg-dir@^4.1.0, pkg-dir@^4.2.0:
   integrity sha1-8JkTPfft5CLoHR2ESCcO6z5CYfM=
   dependencies:
     find-up "^4.0.0"
-
-pkg-dir@^5.0.0:
-  version "5.0.0"
-  resolved "https://registry.npm.alibaba-inc.com/pkg-dir/download/pkg-dir-5.0.0.tgz"
-  integrity sha1-oC1q6+a6EzqSj3Suwguv3+a452A=
-  dependencies:
-    find-up "^5.0.0"
 
 please-upgrade-node@^3.2.0:
   version "3.2.0"
@@ -10877,11 +10842,6 @@ semver-greatest-satisfied-range@^1.1.0:
   integrity sha1-E+jCZYq5aRywzXEJMkAoDTb3els=
   dependencies:
     sver-compat "^1.5.0"
-
-semver-regex@^3.1.2:
-  version "3.1.3"
-  resolved "https://registry.npm.alibaba-inc.com/semver-regex/download/semver-regex-3.1.3.tgz"
-  integrity sha1-srzG+X9jJp8oaZTil+IptiRdDcM=
 
 "semver@2 || 3 || 4 || 5", semver@^5.0.1, semver@^5.4.1, semver@^5.5.0, semver@^5.6.0:
   version "5.7.1"
@@ -12850,11 +12810,6 @@ which-module@^2.0.0:
   version "2.0.0"
   resolved "https://registry.npm.alibaba-inc.com/which-module/download/which-module-2.0.0.tgz"
   integrity sha1-2e8H3Od7mQK4o6j6SzHD4/fm6Ho=
-
-which-pm-runs@^1.0.0:
-  version "1.0.0"
-  resolved "https://registry.npm.alibaba-inc.com/which-pm-runs/download/which-pm-runs-1.0.0.tgz"
-  integrity sha1-Zws6+8VS4LVd9rd4DKdGFfI60cs=
 
 which-typed-array@^1.1.2:
   version "1.1.7"
