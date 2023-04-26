@@ -156,7 +156,7 @@ const App = () => {
         </Button>
       </div>
       <div style={{ display: 'flex' }}>
-        <div style={{ width: '50%', minHeight: 500 }}>
+        <div style={{ width: '80%', minHeight: 500 }}>
           {project ? (
             <EditorRenderer
               key={`${project}-${key}`}
