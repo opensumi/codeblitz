@@ -1,6 +1,4 @@
-export type SqlServiceConfig = {
-  
-}
+export type SqlServiceConfig = {};
 
 // import { TableAuthResponse } from './tools/validationRules/TableAuth';
 import * as monaco from '@opensumi/monaco-editor-core/esm/vs/editor/editor.api';
@@ -35,6 +33,38 @@ export enum supportLanguage {
   ODPSSQL = 'ODPSSQL',
   DB = 'DBSQL',
 }
+
+export const languageRegister = {
+  ODPSSQL: {
+    id: 'ODPSSQL',
+    aliases: ['SQL'],
+    extensions: ['.sql', '.odps', '.odpssql'],
+    resolvedConfiguration: {
+      comments: { lineComment: '--', blockComment: ['/*', '*/'] },
+      brackets: [
+        ['{', '}'],
+        ['[', ']'],
+        ['(', ')'],
+      ],
+      autoClosingPairs: [
+        ['{', '}'],
+        ['[', ']'],
+        ['(', ')'],
+        { open: '"', close: '"', notIn: ['string'] },
+        { open: "N'", close: "'", notIn: ['string', 'comment'] },
+        { open: "'", close: "'", notIn: ['string', 'comment'] },
+      ],
+      surroundingPairs: [
+        ['{', '}'],
+        ['[', ']'],
+        ['(', ')'],
+        ['"', '"'],
+        ["'", "'"],
+        ['`', '`'],
+      ],
+    },
+  },
+};
 
 export enum ErrorType {
   /**
@@ -967,7 +997,6 @@ export type CustomEditorInstance = monaco.editor.IStandaloneCodeEditor & {
 };
 /** 补充补全参数 */
 export interface CompletionProviderOptions {
-
   /** 编辑器配置 */
   options: OpenConf;
   className?: string;
@@ -999,28 +1028,28 @@ export interface CompletionProviderOptions {
   /** 提示表字段时回调 */
   onSuggestFields?: (
     prefix: string,
-    options?: { [key: string]: any },
+    options?: { [key: string]: any }
   ) =>
     | Promise<Array<Partial<monaco.languages.CompletionItem>>>
     | Array<Partial<monaco.languages.CompletionItem>>;
   /** 表名回调 */
   onSuggestTables?: (
     prefix: string,
-    options?: { [key: string]: any },
+    options?: { [key: string]: any }
   ) =>
     | Promise<Array<Partial<monaco.languages.CompletionItem>>>
     | Array<Partial<monaco.languages.CompletionItem>>;
   /** set参数提示回调 */
   onSuggestSetParams?: (
     prefix: string,
-    options?: { [key: string]: any },
+    options?: { [key: string]: any }
   ) =>
     | Promise<Array<Partial<monaco.languages.CompletionItem>>>
     | Array<Partial<monaco.languages.CompletionItem>>;
   /** set参数值提示回调 */
   onSuggestSetValues?: (
     prefix: string,
-    options?: { [key: string]: any },
+    options?: { [key: string]: any }
   ) =>
     | Promise<Array<Partial<monaco.languages.CompletionItem>>>
     | Array<Partial<monaco.languages.CompletionItem>>;
@@ -1065,7 +1094,7 @@ export interface CompletionProviderOptions {
   // mapAuthInfoToDiagnostic?: (authInfo: TableAuthResponse) => Promise<Diagnostic[]>;
   // 用户可以自己根据现有的 item 进行部分字段的修改
   resolveCodeCompletionItem?: (
-    completionItem: monaco.languages.CompletionItem,
+    completionItem: monaco.languages.CompletionItem
   ) => Promise<monaco.languages.CompletionItem>;
   // 是否开启函数签名提示（目前仅对 ODPS 生效）
   enableSignature?: boolean;
@@ -1076,34 +1105,34 @@ export type CustomCompletionProviderOptions = CompletionProviderOptions & {
   editorMap: Map<string, CustomEditorInstance>;
 };
 
-// export const generateCompleteItem = (
-//   text = '',
-//   HotWords,
-//   lowerCase: boolean,
-//   optional?: { kind: number; [propName: string]: any },
-// ): monaco.languages.CompletionItem => {
-//   let specMark = 9;
+export const generateCompleteItem = (
+  text = '',
+  HotWords,
+  lowerCase: boolean,
+  optional?: { kind: number; [propName: string]: any }
+): monaco.languages.CompletionItem => {
+  let specMark = 9;
 
-//   if (text.toUpperCase() === 'WHEN') {
-//     specMark = 1;
-//   } else if (text.toUpperCase() === 'THEN') {
-//     specMark = 2;
-//   } else if (text.toUpperCase() === 'END') {
-//     specMark = 3;
-//   }
+  if (text.toUpperCase() === 'WHEN') {
+    specMark = 1;
+  } else if (text.toUpperCase() === 'THEN') {
+    specMark = 2;
+  } else if (text.toUpperCase() === 'END') {
+    specMark = 3;
+  }
 
-//   const sortText = priority(text, optional.kind, [], specMark);
+  const sortText = priority(text, optional?.kind, [], specMark);
 
-//   const newValues = lowerCase && text ? text.toLowerCase() : text;
-//   return {
-//     label: newValues,
-//     /** 定义一个较低的优先级 */
-//     sortText,
-//     kind: optional.kind,
-//     ...optional,
-//     // detail=sortText[0] === '1' ? `历史词-${optional.detail }` =optional.detail
-//   } as monaco.languages.CompletionItem;
-// };
+  const newValues = lowerCase && text ? text.toLowerCase() : text;
+  return {
+    label: newValues,
+    /** 定义一个较低的优先级 */
+    sortText,
+    kind: optional?.kind,
+    ...optional,
+    // detail=sortText[0] === '1' ? `历史词-${optional.detail }` =optional.detail
+  } as monaco.languages.CompletionItem;
+};
 
 export interface FormatRule {
   regex: RegExp;
@@ -1401,13 +1430,14 @@ export const priority = (
   text,
   completionItemKind,
   hotWords: Array<IHotWords>,
-  specMark: number,
+  specMark: number
 ) => {
   /** 热词以a开头，排位更靠前，设置访问上限1000，访问次数越多，排位越靠前 */
-  const target = hotWords.find(item => item.text === text);
+  const target = hotWords.find((item) => item.text === text);
   if (target) {
-    return `${completionItemKind < 10 ? `0${completionItemKind}` : completionItemKind}1${1000 -
-      target.visited}${specMark}`;
+    return `${completionItemKind < 10 ? `0${completionItemKind}` : completionItemKind}1${
+      1000 - target.visited
+    }${specMark}`;
   } else {
     return `${
       completionItemKind < 10 ? `0${completionItemKind}` : completionItemKind
@@ -1418,15 +1448,13 @@ export const priority = (
 export const CLIDict = {
   chmodCmd: {
     validOption: ['c', 'f', 'v', 'R'],
-    desc:
-      '-c：若该文件权限确实已经更改，才显示其更改动作 \n\n-f：若该文件权限无法被更改也不要显示错误讯息 \n\n-v：显示权限变更的详细资料，\n\n-R：对目前目录下的所有文件与子目录进行相同的权限变更(即以递回的方式逐个变更)',
+    desc: '-c：若该文件权限确实已经更改，才显示其更改动作 \n\n-f：若该文件权限无法被更改也不要显示错误讯息 \n\n-v：显示权限变更的详细资料，\n\n-R：对目前目录下的所有文件与子目录进行相同的权限变更(即以递回的方式逐个变更)',
     modDesc:
       'u 表示该文件的拥有者，g 表示与该文件的拥有者属于同一个群体(group)者，o 表示其他以外的人，a 表示这三者皆是\n\n+ 表示增加权限、- 表示取消权限、= 表示唯一设定权限\n\nr 表示可读取，w 表示可写入，x 表示可执行，X 表示只有当该文件是个子目录或者该文件已经被设定过为可执行',
   },
   chownCmd: {
     validOption: ['c', 'f', 'v', 'R', 'h'],
-    desc:
-      '-c：显示更改的部分的信息 \n\n-f：忽略错误信息 \n\n-h :修复符号链接 \n\n-v：显示详细的处理信息 \n\n-R：对目前目录下的所有文件与子目录进行相同的权限变更(即以递回的方式逐个变更)',
+    desc: '-c：显示更改的部分的信息 \n\n-f：忽略错误信息 \n\n-h :修复符号链接 \n\n-v：显示详细的处理信息 \n\n-R：对目前目录下的所有文件与子目录进行相同的权限变更(即以递回的方式逐个变更)',
   },
   catCmd: {
     validOption: ['A', 'b', 'e', 'E', 'n', 's', 't', 'T', 'u', 'v'],

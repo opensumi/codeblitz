@@ -2,18 +2,26 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import { IAppInstance, AppRenderer, SlotLocation } from '@alipay/alex';
 import * as Alex from '@alipay/alex';
-// import '@alipay/alex/languages/sql';
+import '@alipay/alex/languages/sql';
 import { isFilesystemReady } from '@alipay/alex-core';
-import { CompletionItemKind, SqlServiceModule, supportLanguage } from '@alipay/alex-sql-service';
+import { CompletionItemKind, SqlServiceModule, supportLanguage, setMonacoEnvironment } from '@alipay/alex-sql-service';
 import dtSql from '@alipay/alex/extensions/alex.dt-sql';
+import css from '@alipay/alex/extensions/alex-ext-public.css-language-features-worker';
+import html from '@alipay/alex/extensions/alex-ext-public.html-language-features-worker';
+import json from '@alipay/alex/extensions/alex-ext-public.json-language-features-worker';
+import markdown from '@alipay/alex/extensions/alex-ext-public.markdown-language-features-worker';
+import typescript from '@alipay/alex/extensions/alex-ext-public.typescript-language-features-worker';
 
 (window as any).alex = Alex;
-
+setMonacoEnvironment()
 isFilesystemReady().then(() => {
   console.log('filesystem ready');
 });
 
 const layoutConfig = {
+  [SlotLocation.left]: {
+    modules: ['@opensumi/ide-explorer'],
+  },
   [SlotLocation.action]: {
     modules: [''],
   },
@@ -82,7 +90,15 @@ const App = () => (
           // },
         }),
       ],
-      extensionMetadata: [dtSql],
+      extensionMetadata: [
+        // dtSql,
+        css,
+        html,
+        json,
+        markdown,
+        typescript
+
+      ],
       workspaceDir: `sql-service`,
       layoutConfig,
       defaultPreferences: {

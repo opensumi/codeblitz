@@ -30,3 +30,14 @@ export class SqlServiceModule extends BrowserModule {
     SqlServiceContribution
   ];
 }
+export function generateCorsUrl(url) {
+  return `data:text/javascript;charset=utf-8,${encodeURIComponent(`importScripts('${url}');`)}`;
+}
+
+export function setMonacoEnvironment() {
+  self['MonacoEnvironment'] = {
+    getWorkerUrl: function () {
+      return generateCorsUrl('https://g.alicdn.com/nel/bravo-editor/0.0.103/odps.worker.js');
+    },
+  };
+}
