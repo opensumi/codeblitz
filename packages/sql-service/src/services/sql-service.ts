@@ -8,8 +8,6 @@ import {
   Disposable,
   CommandService,
 } from '@opensumi/ide-core-browser';
-import { CodeModelService } from '@alipay/alex-code-service';
-import {} from '@alipay/alex-code-service';
 import * as monaco from '@opensumi/monaco-editor-core/esm/vs/editor/editor.api';
 import { StandaloneServices } from '@opensumi/monaco-editor-core/esm/vs/editor/standalone/browser/standaloneServices';
 // import { WorkerAccessor } from './types';

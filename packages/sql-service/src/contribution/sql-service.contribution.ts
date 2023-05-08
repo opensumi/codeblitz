@@ -1,21 +1,12 @@
 import { Provider, Injectable, Autowired } from '@opensumi/di';
 import {
   Domain,
-  BrowserModule,
-  CommandContribution,
-  CommandRegistry,
-  getLanguageId,
-  Disposable,
-  CommandService,
   ClientAppContribution,
   IClientApp,
   MaybePromise,
   URI,
 } from '@opensumi/ide-core-browser';
-import { CodeModelService } from '@alipay/alex-code-service';
-import {} from '@alipay/alex-code-service';
 import * as monaco from '@opensumi/monaco-editor-core/esm/vs/editor/editor.api';
-import { StandaloneServices } from '@opensumi/monaco-editor-core/esm/vs/editor/standalone/browser/standaloneServices';
 import { ITextmateTokenizer } from '@opensumi/ide-monaco/lib/browser/contrib/tokenizer';
 import type { ITextmateTokenizerService } from '@opensumi/ide-monaco/lib/browser/contrib/tokenizer';
 import { ISQLServiceConfig } from './sql-service.configuration';
