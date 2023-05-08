@@ -1,3 +1,19 @@
+## [2.2.5-beta.1](https://code.alipay.com/cloud-ide/crew-dragon/compare/v2.2.4...v2.2.5-beta.1) (2023-05-08)
+
+
+### Bug Fixes
+
+* 修复 unregisterKeybinding 的参数问题 ([2a3870c](https://code.alipay.com/cloud-ide/crew-dragon/commits/2a3870c6881125e36d0ae910068439d65318b037))
+
+
+### Features
+
+* 迁移dt-sql ([79020f9](https://code.alipay.com/cloud-ide/crew-dragon/commits/79020f9737c59e0dff38dd70ccddb90d628499a8))
+* 支持worker计算 ([94f7748](https://code.alipay.com/cloud-ide/crew-dragon/commits/94f7748716817e7d382dfcf5292af95bd418cfea))
+* sql service init ([603b3b9](https://code.alipay.com/cloud-ide/crew-dragon/commits/603b3b9a932ac61c060ea018258511d5eb217aec))
+
+
+
 ## [2.2.4](https://code.alipay.com/cloud-ide/crew-dragon/compare/v2.2.3...v2.2.4) (2023-04-19)
 
 
