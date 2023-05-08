@@ -14,6 +14,7 @@ const assetsKeyMap = {
   __WEBVIEW_ENDPOINT__: 'webview/index.html',
   __WEBVIEW_ENDPOINT_INTERNAL__: 'internal/webview/index.html',
   __WEBVIEW_SCRIPT__: 'webview',
+  __ODPS_WORKER__: 'odps-worker',
 };
 
 invoke(async () => {
@@ -59,6 +60,10 @@ invoke(async () => {
       key: assetsKeyMap.__WEBVIEW_SCRIPT__,
       transform: transformHttps,
     },
+    __ODPS_WORKER__: {
+      key: assetsKeyMap.__ODPS_WORKER__,
+      transform: transformHttps,
+    }
   };
   const config = Object.keys(env).reduce(
     (obj, name) => {

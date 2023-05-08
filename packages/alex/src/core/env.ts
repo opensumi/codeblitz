@@ -1,3 +1,4 @@
+import { ODPS } from 'bravo-parser';
 /**
  * worker url
  */
@@ -22,3 +23,6 @@ export const WEBVIEW_SCRIPT = __WEBVIEW_SCRIPT__;
  * alex version
  */
 export const VERSION = __VERSION__;
+
+
+export const ODPS_WORKER = __ODPS_WORKER__;

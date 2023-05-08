@@ -1,20 +1,24 @@
 const path = require('path');
 const webpack = require('webpack');
-const { nodePolyfill } = require('./util');
+const { nodePolyfill, manifestSeed, config } = require('./util');
+const isDev = process.env.NODE_ENV === 'development';
+const { WebpackManifestPlugin } = require('webpack-manifest-plugin');
 
 module.exports = {
   stats: 'errors-only',
-  entry: '../sql-service/src/worker/ODPSWorker.ts',
+  entry: {
+    [config.odpsEntry]: '../sql-service/src/worker/ODPSWorker.ts',
+  },
   output: {
-    path: path.resolve(__dirname, 'dist', 'worker'),
-    filename: 'sql-odps.worker.js',
+    path: path.resolve(__dirname, '../dist'),
+    filename: `[name].${isDev ? 'js' : '[contenthash:8].js'}`,
     libraryTarget: 'umd',
   },
   target: 'webworker',
   optimization: {
     sideEffects: true,
   },
-  devtool: 'source-map',
+  devtool: isDev ? 'inline-source-map' : false,
   mode: 'development',
   module: {
     rules: [
@@ -66,6 +70,11 @@ module.exports = {
     new webpack.optimize.LimitChunkCountPlugin({
       maxChunks: 1,
     }),
+    new WebpackManifestPlugin({
+      publicPath: '',
+      seed: manifestSeed,
+      useEntryKeys: true,
+    }),
     // Ignore require() calls in vs/language/typescript/lib/typescriptServices.js
     // new webpack.IgnorePlugin(
     //   /^((fs)|(path)|(os)|(crypto)|(source-map-support))$/,
@@ -74,7 +83,7 @@ module.exports = {
     // Fix webpack warning https://github.com/Microsoft/monaco-editor-webpack-plugin/issues/13#issuecomment-390806320
     new webpack.ContextReplacementPlugin(
       /monaco-editor(\\|\/)esm(\\|\/)vs(\\|\/)editor(\\|\/)common(\\|\/)services/,
-      __dirname,
+      __dirname
     ),
   ],
 };
