@@ -45,6 +45,34 @@ export const CODE_PLATFORM_CONFIG: Record<ICodePlatform, ICodePlatformConfig> = 
     },
     createBranchAble: true,
   },
+  [CodePlatform.code]: {
+    platform: CodePlatform.code,
+    hostname: [],
+    origin: 'https://twebgwnet.alipay.com',
+    endpoint: 'https://twebgwnet.alipay.com',
+    brand: 'Code',
+    line: {
+      parse(hash: string) {
+        let matched: RegExpMatchArray | null = null;
+        matched = hash.match(/^#L(\d+):?(\d*)$/);
+        if (matched) {
+          return [+matched[1], +matched[1]];
+        }
+        matched = hash.match(/^#L(\d+):?(\d*)-(\d+):?(\d*)$/);
+        if (matched) {
+          return [+matched[1], +matched[3]];
+        }
+        return null;
+      },
+      format([startLineNumber, endLineNumber]) {
+        if (startLineNumber === endLineNumber) {
+          return `#L${startLineNumber}`;
+        }
+        return `#L${startLineNumber}-${endLineNumber}`;
+      },
+    },
+    createBranchAble: true,
+  },
   [CodePlatform.github]: {
     platform: CodePlatform.github,
     hostname: ['github.com'],

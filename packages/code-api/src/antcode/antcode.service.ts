@@ -48,7 +48,7 @@ export class AntCodeAPIService implements ICodeAPIService {
   @Autowired(HelperService)
   helper: HelperService;
 
-  private config = CODE_PLATFORM_CONFIG[CodePlatform.antcode];
+  config = CODE_PLATFORM_CONFIG[CodePlatform.antcode];
 
   private _PRIVATE_TOKEN: string | null;
 
