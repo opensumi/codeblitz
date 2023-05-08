@@ -37,7 +37,7 @@ export function generateCorsUrl(url) {
 export function setMonacoEnvironment() {
   self['MonacoEnvironment'] = {
     getWorkerUrl: function () {
-      return generateCorsUrl('https://g.alicdn.com/nel/bravo-editor/0.0.103/odps.worker.js');
+      return generateCorsUrl('http://127.0.0.1:8080/webpack/dist/worker/sql-odps.worker.js');
     },
   };
 }

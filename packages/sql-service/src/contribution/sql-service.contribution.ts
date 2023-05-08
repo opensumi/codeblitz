@@ -22,6 +22,7 @@ import { ISQLServiceConfig } from './sql-service.configuration';
 import {
   CustomCompletionProviderOptions,
   CustomEditorInstance,
+  languageGrammer,
   languageRegister,
   supportLanguage,
 } from '../types';
@@ -46,7 +47,6 @@ export class SqlServiceContribution implements ClientAppContribution {
   // }
 
   onDidStart(app: IClientApp): MaybePromise<void> {
-    console.log(this.sqlConfig);
     this.registerLanguage(supportLanguage.ODPSSQL);
     const editorMap = new Map<string, CustomEditorInstance>();
 
@@ -90,6 +90,7 @@ export class SqlServiceContribution implements ClientAppContribution {
     // 仅占位
     const uri = new URI();
     this.textmateService.registerLanguages([languageRegister[languageId]], uri);
+    this.textmateService.registerGrammar(languageGrammer[languageId], uri);
   }
 
   setUp(
@@ -111,42 +112,40 @@ export class SqlServiceContribution implements ClientAppContribution {
     }
 
     let CompletionAdapter = new SQLGenericsFeatures.CompletionAdapter(worker, options, languageId);
-    // let DiagnosticsAdapter = new SQLGenericsFeatures.DiagnosticsAdapter(
-    //   languageId,
-    //   worker,
-    //   defaults,
-    //   options
-    // );
-    console.log(' ==> CompletionAdapter', CompletionAdapter, languageId);
+    let DiagnosticsAdapter = new SQLGenericsFeatures.DiagnosticsAdapter(
+      languageId,
+      worker,
+      defaults,
+      options
+    );
     monaco.languages.registerCompletionItemProvider(languageId, CompletionAdapter);
-    // redis,odps,hive开启hover功能
 
-    // monaco.languages.registerHoverProvider(
-    //   languageId,
-    //   new SQLGenericsFeatures.HoverAdapter(worker, options)
-    // );
+    monaco.languages.registerHoverProvider(
+      languageId,
+      new SQLGenericsFeatures.HoverAdapter(worker, options)
+    );
 
-    // monaco.languages.registerDocumentFormattingEditProvider(
-    //   languageId,
-    //   new SQLGenericsFeatures.DocumentFormattingEditAdapter(worker, options)
-    // );
+    monaco.languages.registerDocumentFormattingEditProvider(
+      languageId,
+      new SQLGenericsFeatures.DocumentFormattingEditAdapter(worker, options)
+    );
 
-    // // 目前就支持ODPS，其余到时看需求扩展，需要对应work增加内容
-    // monaco.languages.registerDefinitionProvider(
-    //   languageId,
-    //   new SQLGenericsFeatures.DefinitionAdapter(worker, options)
-    // );
-    // // autofix 仅支持ODPS先
-    // monaco.languages.registerCodeActionProvider(
-    //   languageId,
-    //   new SQLGenericsFeatures.CodeActionProvider(worker, options)
-    // );
+    // 目前就支持ODPS，其余到时看需求扩展，需要对应work增加内容
+    monaco.languages.registerDefinitionProvider(
+      languageId,
+      new SQLGenericsFeatures.DefinitionAdapter(worker, options)
+    );
+    // autofix 仅支持ODPS先
+    monaco.languages.registerCodeActionProvider(
+      languageId,
+      new SQLGenericsFeatures.CodeActionProvider(worker, options)
+    );
 
-    // // ODPS 注册函数参数提示
-    // monaco.languages.registerSignatureHelpProvider(
-    //   languageId,
-    //   new SQLGenericsFeatures.SignatureHelpAdapter(worker, options)
-    // );
+    // ODPS 注册函数参数提示
+    monaco.languages.registerSignatureHelpProvider(
+      languageId,
+      new SQLGenericsFeatures.SignatureHelpAdapter(worker, options)
+    );
 
     // /** 选中内容格式化 */
     // monaco.languages.registerDocumentRangeFormattingEditProvider(
@@ -154,7 +153,4 @@ export class SqlServiceContribution implements ClientAppContribution {
     //   new SQLGenericsFeatures.DocumentRangeFormattingEditAdapter(worker, options)
     // );
   }
-
 }
-
-

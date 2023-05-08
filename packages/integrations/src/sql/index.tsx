@@ -5,12 +5,12 @@ import * as Alex from '@alipay/alex';
 import '@alipay/alex/languages/sql';
 import { isFilesystemReady } from '@alipay/alex-core';
 import { CompletionItemKind, SqlServiceModule, supportLanguage, setMonacoEnvironment } from '@alipay/alex-sql-service';
-import dtSql from '@alipay/alex/extensions/alex.dt-sql';
-import css from '@alipay/alex/extensions/alex-ext-public.css-language-features-worker';
-import html from '@alipay/alex/extensions/alex-ext-public.html-language-features-worker';
-import json from '@alipay/alex/extensions/alex-ext-public.json-language-features-worker';
-import markdown from '@alipay/alex/extensions/alex-ext-public.markdown-language-features-worker';
-import typescript from '@alipay/alex/extensions/alex-ext-public.typescript-language-features-worker';
+// import dtSql from '@alipay/alex/extensions/alex.dt-sql';
+// import css from '@alipay/alex/extensions/alex-ext-public.css-language-features-worker';
+// import html from '@alipay/alex/extensions/alex-ext-public.html-language-features-worker';
+// import json from '@alipay/alex/extensions/alex-ext-public.json-language-features-worker';
+// import markdown from '@alipay/alex/extensions/alex-ext-public.markdown-language-features-worker';
+// import typescript from '@alipay/alex/extensions/alex-ext-public.typescript-language-features-worker';
 
 (window as any).alex = Alex;
 setMonacoEnvironment()
@@ -30,8 +30,6 @@ const layoutConfig = {
   },
 };
 
-const defaultContent = `SELECT * FROM table`;
-
 const App = () => (
   <AppRenderer
     onLoad={(app) => {
@@ -42,7 +40,7 @@ const App = () => (
       modules: [
         SqlServiceModule.Config({
           onValidation: (ast: any, markers: any) => {
-            console.log(ast, markers);
+            // console.log(ast, markers);
             // const filterMarkers = markers.filter((item, index) => {
             //   if (item.message == 'SEMICOLON expected.') {
             //     const markerText = editorIns.current.editor.getModel().getValueInRange({
@@ -56,9 +54,21 @@ const App = () => (
             //     }
             //   }
             // });
-            // return filterMarkers;
-            return [];
+            return markers;
           },
+          lowerCaseComplete: true,
+          marks:[
+            {
+              message: "测试效果",
+              startRow: 1,
+              startCol: 1
+            }
+          ],
+          // @ts-ignore
+          formatRules: [{
+            // regex: /\w/g,
+            // value: 'select',
+          }],
           onSuggestTables: (keyword, options) => {
             console.log(keyword, options);
             return Promise.resolve([
@@ -71,32 +81,98 @@ const App = () => (
               },
             ]);
           },
+          onSuggestFields: (prefix, options) =>{
+            return Promise.resolve([
+              {
+                label: "age",
+                type: "SAMPLE_TYPE_ONE",
+                insertText: "age",
+                kind: CompletionItemKind.Field,
+                sortText: "b"
+              },
+              {
+                label: "banana",
+                type: "SAMPLE_TYPE_ONE",
+                insertText: "banana",
+                kind: CompletionItemKind.Field,
+                sortText: "b"
+              },
+              {
+                label: "sample_one_table1",
+                type: "SAMPLE_TYPE_ONE",
+                insertText: "id_test",
+                kind: CompletionItemKind.Field,
+                sortText: "b"
+              }
+            ])
+          },
           options: {
-            value: defaultContent,
+            // value: defaultContent,
             language: supportLanguage.ODPSSQL,
           },
-          onChange: (value) => {
-            console.log(value);
+          sorter: (type) => {
+            switch (type) {
+              case 'TABLEALIAS':
+              case 'TABLE':
+                return 'c';
+              case 'FIELD':
+              case 'FIELDALIAS':
+                return 'd';
+              case 'KEYWORD':
+              case 'CONSTS':
+                return 'e';
+              case 'FUNCTION':
+                return 'f';
+              default:
+                return 'g'
+            }
           },
-          // completionTypes: {
-          //   KEYWORD: {
-          //     text: '关键词',
-          //     kind: CompletionItemKind.Keyword,
-          //   },
-          //   CUSTOM: {
-          //     text: '手动配置关键词',
-          //     kind: CompletionItemKind.Keyword,
-          //   },
+          // onChange: (value) => {
+          //   console.log(value);
           // },
+          completionTypes: {
+            KEYWORD: {
+              text: "关键词",
+              kind: CompletionItemKind.Keyword
+            },
+            CONSTS: {
+              text: "常量",
+              kind: CompletionItemKind.Snippet
+            },
+            FUNCTION: {
+              text: "函数",
+              kind: CompletionItemKind.Function
+            },
+            TABLE: {
+              text: "表名",
+              kind: CompletionItemKind.Method
+            },
+            TABLEALIAS: {
+              text: "表别名",
+              kind: CompletionItemKind.Method
+            },
+            SNIPPET: {
+              text: "代码块",
+              kind: CompletionItemKind.Snippet
+            },
+            FIELD: {
+              text: "表字段",
+              kind: CompletionItemKind.Field
+            },
+            FIELDALIAS: {
+              text: "表字段别名",
+              kind: CompletionItemKind.Field
+            }
+          },
         }),
       ],
       extensionMetadata: [
         // dtSql,
-        css,
-        html,
-        json,
-        markdown,
-        typescript
+        // css,
+        // html,
+        // json,
+        // markdown,
+        // typescript
 
       ],
       workspaceDir: `sql-service`,
@@ -121,7 +197,7 @@ const App = () => (
                 'main.html': '<div id="root"></div>',
                 'main.css': 'body {}',
                 'main.js': 'console.log("main")',
-                'test.sql': 'SELECT * FROM table',
+                'test.sql': 'select * from',
               });
             },
           },

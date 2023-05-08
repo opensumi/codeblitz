@@ -15,7 +15,9 @@
     "registry": "https://registry.npm.alibaba-inc.com"
   },
   "dependencies": {
-    "chevrotain": "^7.0.0"
+    "chevrotain": "^7.0.0",
+    "bravo-parser": "1.0.64",
+    "sql-prettier": "^0.2.12"
   },
   "tnpm": {
     "mode": "yarn",

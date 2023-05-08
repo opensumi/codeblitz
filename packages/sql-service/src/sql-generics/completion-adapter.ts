@@ -270,25 +270,27 @@ class CompletionAdapter implements monaco.languages.CompletionItemProvider {
     token: CancellationToken,
   ): Thenable<monaco.languages.CompletionList> {
     const resource = model.uri;
-    console.log(1111)
     // @ts-ignore
     return wireCancellationToken(
       token,
       this._worker(resource)
         .then(worker => {
-          console.log(2222, worker)
           return worker.doComplete(
             resource.toString(),
             fromPosition(position),
             this.languageId,
             SQLEditorModel.historyWords,
             SQLEditorModel.visitedTable,
-            this.options,
+            {
+              options: this.options.options,
+              completionTypes: this.options.completionTypes,
+              lowerCaseComplete: this.options.lowerCaseComplete,
+              degenerate: this.options.degenerate,
+
+            },
           );
         })
         .then(async (info: CompleteProviderReturnType) => {
-          console.log(2222, info)
-
           if (!info) {
             this.options.editorMap
               .get(model.id)

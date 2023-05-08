@@ -5,7 +5,7 @@
 'use strict';
 
 // import { LanguageServiceDefaultsImpl } from './monaco.contribution';
-// import { GQL, Redis, Hive, ODPS, Shell, Blink, ADB } from 'bravo-parser';
+import { GQL, Redis, Hive, ODPS, Shell, Blink, ADB } from 'bravo-parser';
 import {
   IDisposable,
   Uri,
@@ -21,7 +21,8 @@ class AbstractWorker {}
 const WorkerMap = {
   ODPSSQL: {
     workerName: 'ODPSWorker',
-    // tokens: ODPS.tokens
+    tokens: ODPS.tokens,
+    
   },
 };
 

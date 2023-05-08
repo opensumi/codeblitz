@@ -1,28 +1,23 @@
-// import CodeActionProvider from './CodeActionAdapter';
+import CodeActionProvider from './code-action-adapter';
 import CompletionAdapter from './completion-adapter';
-// import DefinitionAdapter from './DefinitionAdapter';
-// import DiagnosticsAdapter from './DiagnosticAdapter';
-// import DocumentColorAdapter from './DocumentColorAdapter';
-// import DocumentFormattingEditAdapter from './DocumentFormattingEditAdapter';
+import DefinitionAdapter from './definition-adapter';
+import DiagnosticsAdapter from './diagnostic-adapter';
+import DocumentColorAdapter from './document-color-adapter';
+import DocumentFormattingEditAdapter from './document-form-adapter';
 // import DocumentRangeFormattingEditAdapter from './DocumentRangeFormattingEditAdapter';
-// import HoverAdapter from './HoverAdapter';
-// import SignatureHelpAdapter from './SignatureHelpAdapter';
+import HoverAdapter from './hover-adapter';
+import SignatureHelpAdapter from './signature-help-adapter';
 
-// export {
-//   // CodeActionProvider,
-//   CompletionAdapter,
-//   // DefinitionAdapter,
-//   // DiagnosticsAdapter,
-//   // DocumentColorAdapter,
-//   // DocumentFormattingEditAdapter,
-//   // DocumentRangeFormattingEditAdapter,
-//   // HoverAdapter,
-//   // SignatureHelpAdapter,
-// };
 
 export const SQLGenericsFeatures = {
-
   CompletionAdapter,
-
+  CodeActionProvider,
+  DefinitionAdapter,
+  DiagnosticsAdapter,
+  DocumentColorAdapter,
+  DocumentFormattingEditAdapter,
+  // DocumentRangeFormattingEditAdapter,
+  HoverAdapter,
+  SignatureHelpAdapter,
 }
 
