@@ -7,10 +7,9 @@ import { SqlServiceContribution } from './contribution/sql-service.contribution'
 
 export * from './types';
 
-
 const defaultConfig: CompletionProviderOptions = {
-  options: {language: supportLanguage.ODPSSQL},
-}
+  options: { language: supportLanguage.ODPSSQL },
+};
 
 @Injectable()
 export class SqlServiceModule extends BrowserModule {
@@ -26,9 +25,7 @@ export class SqlServiceModule extends BrowserModule {
     });
   }
 
-  providers: Provider[] = [
-    SqlServiceContribution
-  ];
+  providers: Provider[] = [SqlServiceContribution];
 }
 export function generateCorsUrl(url) {
   return `data:text/javascript;charset=utf-8,${encodeURIComponent(`importScripts('${url}');`)}`;
@@ -37,7 +34,7 @@ export function generateCorsUrl(url) {
 export function setMonacoEnvironment() {
   self['MonacoEnvironment'] = {
     getWorkerUrl: function () {
-      return generateCorsUrl('http://127.0.0.1:8080/webpack/dist/worker/sql-odps.worker.js');
+      return generateCorsUrl('http://127.0.0.1:8080/dist/odps-worker.c12f03e6.js');
     },
   };
 }

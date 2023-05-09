@@ -5,8 +5,11 @@ import {
   IClientApp,
   MaybePromise,
   URI,
+  WithEventBus,
+  OnEvent
 } from '@opensumi/ide-core-browser';
-import * as monaco from '@opensumi/monaco-editor-core/esm/vs/editor/editor.api';
+// import { monaco , URI as MonacoURI } from '@opensumi/ide-monaco/lib/browser/monaco-api';
+import * as  monaco from '@opensumi/monaco-editor-core/esm/vs/editor/editor.api';
 import { ITextmateTokenizer } from '@opensumi/ide-monaco/lib/browser/contrib/tokenizer';
 import type { ITextmateTokenizerService } from '@opensumi/ide-monaco/lib/browser/contrib/tokenizer';
 import { ISQLServiceConfig } from './sql-service.configuration';
@@ -19,23 +22,75 @@ import {
 } from '../types';
 import type { CompletionProviderOptions } from '../types';
 import { LanguageServiceDefaultsImpl, WorkerManager } from '../worker/workerManager';
-// import { WorkerAccessor } from './types';
+import { AppConfig, RuntimeConfig } from '@alipay/alex-core';
 
 import { Uri } from '@opensumi/monaco-editor-core/esm/vs/editor/editor.api';
 import { globalConfig } from '../config';
 import { SQLGenericsFeatures } from '../sql-generics/';
 import { DiagnosticsOptions } from '../worker/types';
+import { IFileServiceClient, FileChangeType } from '@opensumi/ide-file-service/lib/common';
+import * as path from 'path';
+import { EditorDocumentModelContentChangedEvent } from '@opensumi/ide-editor/lib/browser';
+
 @Injectable()
 @Domain(ClientAppContribution)
-export class SqlServiceContribution implements ClientAppContribution {
+export class SqlServiceContribution extends WithEventBus implements ClientAppContribution {
   @Autowired(ISQLServiceConfig)
   sqlConfig: CompletionProviderOptions;
+
   @Autowired(ITextmateTokenizer)
   textmateService: ITextmateTokenizerService;
 
-  // initialize() {
-  //   this.setMonacoEnvironment();
-  // }
+  @Autowired(AppConfig)
+  appConfig: AppConfig;
+
+  @Autowired(RuntimeConfig)
+  runtimeConfig: RuntimeConfig;
+
+  @Autowired(IFileServiceClient)
+  fileService: IFileServiceClient;
+
+  initialize() {
+    type EventType = { uri: string; filepath: string };
+    this.addDispose(
+      this.fileService.onFilesChanged((changes) => {
+        const changed: EventType[] = [];
+
+        for (const change of changes) {
+          const relativePath = this.getWorkspaceRelativePath(new URI(change.uri));
+          if (relativePath === null) {
+            continue;
+          }
+          const obj: EventType = { uri: change.uri, filepath: relativePath };
+          switch (change.type) {
+            case FileChangeType.UPDATED:
+              changed.push(obj);
+              break;
+            default:
+              break;
+          }
+        }
+        if (changed.length && this.sqlConfig?.onChange) {
+          // TODO: 直接返回 buffer? 编码假定为 utf8 了
+          Promise.all(
+            changed.map(async ({ uri, filepath }) => {
+              const { content } = await this.fileService.resolveContent(uri);
+              return {
+                filepath,
+                content,
+              };
+            })
+          )
+            .then((data) => {
+              this.sqlConfig.onChange?.(data)
+            })
+            .catch((err) => {
+              console.error(err);
+            });
+        }
+      })
+    );
+  }
 
   onDidStart(app: IClientApp): MaybePromise<void> {
     this.registerLanguage(supportLanguage.ODPSSQL);
@@ -143,5 +198,14 @@ export class SqlServiceContribution implements ClientAppContribution {
     //   languageId,
     //   new SQLGenericsFeatures.DocumentRangeFormattingEditAdapter(worker, options)
     // );
+  }
+  
+  getWorkspaceRelativePath(uri: URI): string | null {
+    const absolutePath = uri.codeUri.path;
+    const { workspaceDir } = this.appConfig;
+    if (!absolutePath.startsWith(workspaceDir)) {
+      return null;
+    }
+    return path.relative(this.appConfig.workspaceDir, absolutePath);
   }
 }

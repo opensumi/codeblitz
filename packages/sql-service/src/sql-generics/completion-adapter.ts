@@ -377,9 +377,18 @@ class CompletionAdapter implements monaco.languages.CompletionItemProvider {
           // 合理的方式应该是onSuggestFileds新增参数标记，由业务控制
           // 但是考虑改动不兼容，先特殊处理
           const incomplete = asyncItems.length > 100;
+          const completionItems = items.map(item => {
+          // 当选中补全后自动再触发补全
+            return {
+              ...item,
+              command: {
+                id: 'editor.action.triggerSuggest',
+              }
+            }
+          })
           return {
             incomplete,
-            suggestions: items,
+            suggestions: completionItems,
           };
         })
         .catch(err => {

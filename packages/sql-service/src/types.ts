@@ -1570,7 +1570,7 @@ export interface CompletionProviderOptions {
   /** SQL编辑器创建成功的回调 */
   // onEditorCreated?: (editor: CustomEditorInstance) => void;
   /** 输入时触发回调 */
-  // onChange?: (value: string) => void;
+  onChange?: (data: {filepath: string, content:string}[]) => void;
   /** 提示表字段时回调 */
   onSuggestFields?: (
     prefix: string,

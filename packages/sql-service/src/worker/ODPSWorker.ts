@@ -47,7 +47,6 @@ import { Parser, Lexer, SyntaxKind, Tokens } from 'bravo-parser/lib/sql-parser/O
 
 // import { OdpsSqlLexer as Lexer, OdpsSqlParser as Parser, OdpsSqlListener, OdpsSqlVisitor } from '../parser/odps-parser/index';
 
-
 import { createUtils } from 'bravo-parser/lib/utils';
 import { parseErrorChecker } from '../tools/parserChecker';
 import {
@@ -602,6 +601,7 @@ export class ODPSWorker {
       /** 额外获取补全信息的接口，基于光标位置构建ast，提供补全信息 */
       const completeErrors = ast.nextToken;
 
+      console.log('==> ast', ast, completeErrors)
       /** 语法解析时长 */
       const parseTime = new Date().getTime() - startTime;
 
