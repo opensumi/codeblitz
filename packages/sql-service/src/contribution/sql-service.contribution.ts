@@ -37,10 +37,7 @@ import {
   BrowserEditorContribution,
   IEditorDocumentModelService,
 } from '@opensumi/ide-editor/lib/browser';
-import { PropsServiceImpl } from '@alipay/alex/lib/core/props.service';
 import {
-  PreferenceSchema,
-  PreferenceSchemaProvider,
   PreferenceService,
 } from '@opensumi/ide-core-browser';
 
