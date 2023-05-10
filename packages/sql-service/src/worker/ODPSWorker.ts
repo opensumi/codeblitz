@@ -601,7 +601,6 @@ export class ODPSWorker {
       /** 额外获取补全信息的接口，基于光标位置构建ast，提供补全信息 */
       const completeErrors = ast.nextToken;
 
-      console.log('==> ast', ast, completeErrors)
       /** 语法解析时长 */
       const parseTime = new Date().getTime() - startTime;
 

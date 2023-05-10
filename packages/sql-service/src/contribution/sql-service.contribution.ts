@@ -6,10 +6,10 @@ import {
   MaybePromise,
   URI,
   WithEventBus,
-  OnEvent
+  OnEvent,
 } from '@opensumi/ide-core-browser';
 // import { monaco , URI as MonacoURI } from '@opensumi/ide-monaco/lib/browser/monaco-api';
-import * as  monaco from '@opensumi/monaco-editor-core/esm/vs/editor/editor.api';
+import * as monaco from '@opensumi/monaco-editor-core/esm/vs/editor/editor.api';
 import { ITextmateTokenizer } from '@opensumi/ide-monaco/lib/browser/contrib/tokenizer';
 import type { ITextmateTokenizerService } from '@opensumi/ide-monaco/lib/browser/contrib/tokenizer';
 import { ISQLServiceConfig } from './sql-service.configuration';
@@ -31,10 +31,25 @@ import { DiagnosticsOptions } from '../worker/types';
 import { IFileServiceClient, FileChangeType } from '@opensumi/ide-file-service/lib/common';
 import * as path from 'path';
 import { EditorDocumentModelContentChangedEvent } from '@opensumi/ide-editor/lib/browser';
+import { WorkbenchEditorServiceImpl } from '@opensumi/ide-editor/lib/browser/workbench-editor.service';
+import { WorkbenchEditorService } from '@opensumi/ide-editor';
+import {
+  BrowserEditorContribution,
+  IEditorDocumentModelService,
+} from '@opensumi/ide-editor/lib/browser';
+import { PropsServiceImpl } from '@alipay/alex/lib/core/props.service';
+import {
+  PreferenceSchema,
+  PreferenceSchemaProvider,
+  PreferenceService,
+} from '@opensumi/ide-core-browser';
 
 @Injectable()
-@Domain(ClientAppContribution)
-export class SqlServiceContribution extends WithEventBus implements ClientAppContribution {
+@Domain(ClientAppContribution, BrowserEditorContribution)
+export class SqlServiceContribution
+  extends WithEventBus
+  implements ClientAppContribution, BrowserEditorContribution
+{
   @Autowired(ISQLServiceConfig)
   sqlConfig: CompletionProviderOptions;
 
@@ -49,6 +64,15 @@ export class SqlServiceContribution extends WithEventBus implements ClientAppCon
 
   @Autowired(IFileServiceClient)
   fileService: IFileServiceClient;
+
+  @Autowired(WorkbenchEditorService)
+  private readonly editorService: WorkbenchEditorServiceImpl;
+
+  @Autowired(PreferenceService)
+  private readonly preferenceService: PreferenceService;
+
+  @Autowired(IEditorDocumentModelService)
+  private editorDocumentModelService: IEditorDocumentModelService;
 
   initialize() {
     type EventType = { uri: string; filepath: string };
@@ -82,7 +106,7 @@ export class SqlServiceContribution extends WithEventBus implements ClientAppCon
             })
           )
             .then((data) => {
-              this.sqlConfig.onChange?.(data)
+              this.sqlConfig.onChange?.(data);
             })
             .catch((err) => {
               console.error(err);
@@ -129,6 +153,22 @@ export class SqlServiceContribution extends WithEventBus implements ClientAppCon
       new LanguageServiceDefaultsImpl(supportLanguage.ODPSSQL, diagnosticDefault),
       false,
       config
+    );
+  }
+
+  onDidRestoreState() {
+    this.addDispose(
+      this.preferenceService.onPreferencesChanged((e) => {
+        const encoding = e['files.encoding'];
+        if (encoding && encoding.newValue !== encoding.oldValue) {
+          const resource = this.editorService.currentResource;
+          if (resource) {
+            this.editorDocumentModelService.changeModelOptions(resource.uri, {
+              encoding: encoding.newValue,
+            });
+          }
+        }
+      })
     );
   }
 
@@ -199,7 +239,7 @@ export class SqlServiceContribution extends WithEventBus implements ClientAppCon
     //   new SQLGenericsFeatures.DocumentRangeFormattingEditAdapter(worker, options)
     // );
   }
-  
+
   getWorkspaceRelativePath(uri: URI): string | null {
     const absolutePath = uri.codeUri.path;
     const { workspaceDir } = this.appConfig;

@@ -28,7 +28,6 @@ class SignatureHelpAdapter implements monaco.languages.SignatureHelpProvider {
           return worker.doSignatureHelp(resource.toString(), fromPosition(position), context);
         })
         .then(async (info:  monaco.languages.SignatureHelp) => {
-          console.log(info)
           if (!this.options.enableSignature) {
             return {} as monaco.languages.SignatureHelpResult;
           }

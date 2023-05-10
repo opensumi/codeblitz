@@ -4,6 +4,7 @@ import { extendModule, ModuleConstructor } from '@alipay/alex-core';
 import { CompletionProviderOptions, supportLanguage } from './types';
 import { ISQLServiceConfig } from './contribution/sql-service.configuration';
 import { SqlServiceContribution } from './contribution/sql-service.contribution';
+import { SQLKeybindContribution } from './contribution/sql-keybind.contribution';
 
 export * from './types';
 
@@ -25,16 +26,16 @@ export class SqlServiceModule extends BrowserModule {
     });
   }
 
-  providers: Provider[] = [SqlServiceContribution];
+  providers: Provider[] = [SqlServiceContribution, SQLKeybindContribution];
 }
 export function generateCorsUrl(url) {
   return `data:text/javascript;charset=utf-8,${encodeURIComponent(`importScripts('${url}');`)}`;
 }
 
-export function setMonacoEnvironment() {
+export function setMonacoEnvironment(uri?: string) {
   self['MonacoEnvironment'] = {
     getWorkerUrl: function () {
-      return generateCorsUrl('http://127.0.0.1:8080/dist/odps-worker.c12f03e6.js');
+      return generateCorsUrl('http://127.0.0.1:8080/dist/odps-worker.22f636bf.js');
     },
   };
 }

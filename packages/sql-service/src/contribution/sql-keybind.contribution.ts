@@ -1,73 +1,76 @@
 import { Autowired } from '@opensumi/di';
-import { Domain, CommandRegistry, URI } from '@opensumi/ide-core-common';
+import { Domain, CommandRegistry, URI, Command } from '@opensumi/ide-core-common';
 import {
   CommandContribution,
   KeybindingContribution,
   KeybindingRegistry,
+  ClientAppContribution
 } from '@opensumi/ide-core-browser';
 import { WorkbenchEditorService } from '@opensumi/ide-editor';
-import { RuntimeConfig } from '@alipay/alex-core';
+import { AppConfig, RuntimeConfig, WORKSPACE_ROOT } from '@alipay/alex-core';
+import { IFileServiceClient } from '@opensumi/ide-file-service';
+import { IEditorDocumentModelService } from '@opensumi/ide-editor/lib/browser';
+import { EditorDocumentModelServiceImpl } from '@opensumi/ide-editor/lib/browser/doc-model/editor-document-model-service';
+
+import * as path from 'path';
 
 const TOGGLE_CHANGE_VIEWED = 'commands.markAsRead';
-// const keybinding = [
-//   {
-//     command: FILE_COMMANDS.COPY_FILE.id,
-//     // keybinding: 'ctrlcmd+c',
-//     // when: `${FilesExplorerFocusedContext.raw} && !${FilesExplorerInputFocusedContext.raw} && !${FilesExplorerFilteredContext.raw}`,
-//   },
-//   {
-//     command: FILE_COMMANDS.PASTE_FILE.id,
-//     keybinding: 'ctrlcmd+v',
-//     when: `${FilesExplorerFocusedContext.raw} && !${FilesExplorerInputFocusedContext.raw} && !${FilesExplorerFilteredContext.raw}`,
-//   },
-//   {
-//     command: FILE_COMMANDS.CUT_FILE.id,
-//     keybinding: 'ctrlcmd+x',
-//     when: `${FilesExplorerFocusedContext.raw} && !${FilesExplorerInputFocusedContext.raw} && !${FilesExplorerFilteredContext.raw}`,
-//   },
-//   {
-//     command: FILE_COMMANDS.RENAME_FILE.id,
-//     keybinding: 'enter',
-//     when: `${FilesExplorerFocusedContext.raw} && !${FilesExplorerInputFocusedContext.raw} && !${FilesExplorerFilteredContext.raw}`,
-//   },
-//   {
-//     command: FILE_COMMANDS.DELETE_FILE.id,
-//     keybinding: 'ctrlcmd+backspace',
-//     when: `${FilesExplorerFocusedContext.raw} && !${FilesExplorerInputFocusedContext.raw} && !${FilesExplorerFilteredContext.raw}`,
-//   },
-// ];
 
-@Domain(CommandContribution, KeybindingContribution)
+export namespace SQL_COMMANDS {
+  export const GET_CURRENT_EDITOR: Command = {
+    id: 'alex.sql.editor',
+  };
+  export const OPEN_FILE: Command = {
+    id: 'alex.sql.open',
+  };
+  export const ENCODING: Command = {
+    id: 'alex.sql.encoding',
+  };
+}
+@Domain(CommandContribution, KeybindingContribution, )
 export class SQLKeybindContribution implements CommandContribution, KeybindingContribution {
-
   @Autowired(WorkbenchEditorService)
   private readonly workbenchEditorService: WorkbenchEditorService;
 
+  @Autowired(AppConfig)
+  appConfig: AppConfig;
+
   @Autowired(RuntimeConfig)
   runtimeConfig: RuntimeConfig;
-  registerCommands(commands: CommandRegistry): void {
-    commands.registerCommand(
-      {
-        id: TOGGLE_CHANGE_VIEWED,
-        label: '%commands.markAsRead%',
-      },
-      {
-        execute: async (_uri?: URI) => {
-          // @ts-ignore
-          const uri = _uri || this.workbenchEditorService.currentResource.uri;
-          if (uri) {
-          }
-        },
-      }
-    );
-  }
 
-  // registerKeybindings(keybindings: KeybindingRegistry): void {
-  //   keybindings.registerKeybinding({
-  //     command: TOGGLE_CHANGE_VIEWED,
-  //     keybinding: 'alt+c',
-  //   });
-  // }
+  @Autowired(IFileServiceClient)
+  fileService: IFileServiceClient;
+
+  @Autowired(IEditorDocumentModelService)
+  modelService: EditorDocumentModelServiceImpl;
+
+  registerCommands(commands: CommandRegistry): void {
+    commands.registerCommand(SQL_COMMANDS.GET_CURRENT_EDITOR, {
+      execute: () => {
+        return this.workbenchEditorService.currentEditor;
+      },
+    });
+
+    commands.registerCommand(SQL_COMMANDS.OPEN_FILE, {
+      execute: (filepath: string, defaultContent?: string) => {
+        const { workspaceDir } = this.appConfig;
+        const uri = URI.file(path.join(workspaceDir, filepath));
+        this.fileService.access(uri.toString()).then((res) => {
+          if (!res) {
+            this.fileService
+              .createFile(uri.toString(), {
+                content: defaultContent,
+              })
+              .then(() => {
+                this.workbenchEditorService.open(uri);
+              });
+          } else {
+            this.workbenchEditorService.open(uri);
+          }
+        });
+      },
+    });
+  }
 
   registerKeybindings(keybindings: KeybindingRegistry) {
     const keybindingList = [
@@ -79,6 +82,7 @@ export class SQLKeybindContribution implements CommandContribution, KeybindingCo
       'alt+shift+t',
       'alt+shift+w',
       'ctrlcmd+\\',
+      'ctrlcmd+o',
     ];
     for (let i = 1; i < 10; i++) {
       keybindingList.push(`ctrlcmd+${i}`);
@@ -91,9 +95,5 @@ export class SQLKeybindContribution implements CommandContribution, KeybindingCo
     keybindingList.forEach((binding) => {
       keybindings.unregisterKeybinding(binding);
     });
-
-
-
-
   }
 }

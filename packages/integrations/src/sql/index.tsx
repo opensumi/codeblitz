@@ -1,9 +1,7 @@
-import React from 'react';
+import React, { useState } from 'react';
 import ReactDOM from 'react-dom';
 import { IAppInstance, AppRenderer, SlotLocation } from '@alipay/alex';
-import * as Alex from '@alipay/alex';
 import '@alipay/alex/languages/sql';
-import { isFilesystemReady } from '@alipay/alex-core';
 import {
   CompletionItemKind,
   SqlServiceModule,
@@ -12,212 +10,269 @@ import {
 } from '@alipay/alex-sql-service';
 import { Button } from '@opensumi/ide-components';
 import * as SQLPlugin from './sql.plugin';
-
-
-
+import { IEditor } from '@opensumi/ide-editor';
+import { Popover, Radio } from 'antd';
+import 'antd/dist/antd.css';
 setMonacoEnvironment();
 
-
 const layoutConfig = {
-  // [SlotLocation.action]: {
-  //   modules: [''],
-  // },
   [SlotLocation.main]: {
     modules: ['@opensumi/ide-editor'],
-  },
+  }
 };
 
 function format() {
-  
-  // if(SQLPlugin.)
-
-
+  SQLPlugin.api.commands?.executeCommand('editor.action.formatDocument');
 }
 
+function updatePrefeence(perferenceName, value) {
+  // 设置首选项
+  SQLPlugin.api.commands?.executeCommand('alex.setDefaultPreference', perferenceName, value);
+}
 
+async function addLine() {
+  const editor = (await SQLPlugin.api.commands?.executeCommand('alex.sql.editor')) as IEditor;
+  editor?.monacoEditor.trigger('editor', 'type', { text: '\n' });
+}
 
+function openFile() {
+  /** COMMAND alex.sql.open
+   *  @param {string} uri - 文件uri
+   *  @param {string} content - 文件内容 无内容时创建并注入默认内容
+   */
+  SQLPlugin.api.commands?.executeCommand('alex.sql.open', 'test1.sql', '默认内容');
+}
 
-const App = () => (
-  <div style={{ height: '100%' }}>
-    <div style={{margin: '20px'}}>
-      <Button onClick={()=> format()}>格式化</Button>
-      <Button>添加行</Button>
-      <Button>更新preference</Button>
-      <Button>打开文件</Button>
+async function editor() {
+  const editor = (await SQLPlugin.api.commands?.executeCommand('alex.sql.editor')) as IEditor;
+  console.log(editor?.monacoEditor.getValue());
+}
+
+const App = () => {
+  const [fontValue, setFontValue] = useState(16);
+  const [encoding, setEncoding] = useState('utf8');
+
+  const onChangeFont = (e) => {
+    setFontValue(e.target.value);
+    console.log(e.target.value)
+    updatePrefeence('editor.fontSize', e.target.value);
+    console.log(SQLPlugin.api.commands?.executeCommand('alex.getDefaultPreference', 'files.encoding'))
+  };
+  const onChangeEnoding = (e) => {
+    setEncoding(e.target.value);
+    console.log(e.target.value)
+
+    updatePrefeence('files.encoding', e.target.value);
+
+  };
+
+  const content = () => (
+    <div>
+      <p>编码</p>
+      <Radio.Group onChange={onChangeEnoding} value={encoding}>
+        <Radio value={'utf8'}>utf8</Radio>
+        <Radio value={'gbk'}>gbk</Radio>
+        <Radio value={'utf16le'}>utf16le</Radio>
+
+      </Radio.Group>
+      <p>字体大小</p>
+      <Radio.Group onChange={onChangeFont} value={fontValue}>
+        <Radio value={10}>10</Radio>
+        <Radio value={16}>16</Radio>
+      </Radio.Group>
     </div>
-    <AppRenderer
-      onLoad={(app) => {
-        window.app = app;
-      }}
-      appConfig={{
-        plugins: [SQLPlugin],
-        modules: [
-          SqlServiceModule.Config({
-            onValidation: (ast: any, markers: any) => {
-              // console.log(ast, markers);
-              // const filterMarkers = markers.filter((item, index) => {
-              //   if (item.message == 'SEMICOLON expected.') {
-              //     const markerText = editorIns.current.editor.getModel().getValueInRange({
-              //       startLineNumber: item.startLineNumber,
-              //       startColumn: item.startColumn,
-              //       endLineNumber: item.endLineNumber,
-              //       endColumn: item.endColumn,
-              //     });
-              //     if (!['by', 'from'].includes(markerText)) {
-              //       return true;
-              //     }
-              //   }
-              // });
-              return markers;
-            },
-            lowerCaseComplete: true,
-            marks: [
-              {
-                message: '测试效果',
-                startRow: 1,
-                startCol: 1,
+  );
+
+  return (
+    <div style={{ height: '50%' }}>
+      <div style={{ margin: '20px'}}>
+        <Button onClick={() => format()}>格式化</Button>
+        <Button onClick={() => addLine()}>添加行</Button>
+        <Button onClick={() => openFile()}>打开文件</Button>
+        <Button onClick={() => editor()}>获取当前内容</Button>
+        <Popover content={content} placement="top">
+          <Button>设置</Button>
+        </Popover>
+      </div>
+      <AppRenderer
+        onLoad={(app) => {
+          window.app = app;
+        }}
+        appConfig={{
+          plugins: [SQLPlugin],
+          modules: [
+            SqlServiceModule.Config({
+              onValidation: (ast: any, markers: any) => {
+                // console.log(ast, markers);
+                // const filterMarkers = markers.filter((item, index) => {
+                //   if (item.message == 'SEMICOLON expected.') {
+                //     const markerText = editorIns.current.editor.getModel().getValueInRange({
+                //       startLineNumber: item.startLineNumber,
+                //       startColumn: item.startColumn,
+                //       endLineNumber: item.endLineNumber,
+                //       endColumn: item.endColumn,
+                //     });
+                //     if (!['by', 'from'].includes(markerText)) {
+                //       return true;
+                //     }
+                //   }
+                // });
+                return markers;
               },
-            ],
-            formatRules: [
-              // @ts-ignore
-              {
-                // regex: /\w/g,
-                // value: 'select',
-              },
-            ],
-            onSuggestTables: (keyword, options) => {
-              console.log(keyword, options);
-              return Promise.resolve([
+              // onWokerLoad: ({language, loadTime}) => {
+              //   // worker 加载完成
+              //   console.log(language, loadTime);
+              // },
+              lowerCaseComplete: true,
+              marks: [
                 {
-                  label: 'sample_one_table1',
-                  type: 'SAMPLE_TYPE_ONE',
-                  insertText: 'LD.sample_one_table1',
+                  message: '测试效果',
+                  startRow: 1,
+                  startCol: 1,
+                },
+              ],
+              formatRules: [
+                // @ts-ignore
+                {
+                  // regex: /\w/g,
+                  // value: 'select',
+                },
+              ],
+              onSuggestTables: (keyword, options) => {
+                console.log(keyword, options);
+                return Promise.resolve([
+                  {
+                    label: 'sample_one_table1',
+                    type: 'SAMPLE_TYPE_ONE',
+                    insertText: 'LD.sample_one_table1',
+                    kind: CompletionItemKind.Method,
+                    sortText: 'a',
+                  },
+                ]);
+              },
+              onSuggestFields: (prefix, options) => {
+                return Promise.resolve([
+                  {
+                    label: 'age',
+                    type: 'SAMPLE_TYPE_ONE',
+                    insertText: 'age',
+                    kind: CompletionItemKind.Field,
+                    sortText: 'b',
+                  },
+                  {
+                    label: 'banana',
+                    type: 'SAMPLE_TYPE_ONE',
+                    insertText: 'banana',
+                    kind: CompletionItemKind.Field,
+                    sortText: 'b',
+                  },
+                  {
+                    label: 'sample_one_table1',
+                    type: 'SAMPLE_TYPE_ONE',
+                    insertText: 'id_test',
+                    kind: CompletionItemKind.Field,
+                    sortText: 'b',
+                  },
+                ]);
+              },
+              options: {
+                language: supportLanguage.ODPSSQL,
+              },
+              sorter: (type) => {
+                switch (type) {
+                  case 'TABLEALIAS':
+                  case 'TABLE':
+                    return 'c';
+                  case 'FIELD':
+                  case 'FIELDALIAS':
+                    return 'd';
+                  case 'KEYWORD':
+                  case 'CONSTS':
+                    return 'e';
+                  case 'FUNCTION':
+                    return 'f';
+                  default:
+                    return 'g';
+                }
+              },
+              onChange: (data) => {
+                console.log(data);
+              },
+              completionTypes: {
+                KEYWORD: {
+                  text: '关键词',
+                  kind: CompletionItemKind.Keyword,
+                },
+                CONSTS: {
+                  text: '常量',
+                  kind: CompletionItemKind.Snippet,
+                },
+                FUNCTION: {
+                  text: '函数',
+                  kind: CompletionItemKind.Function,
+                },
+                TABLE: {
+                  text: '表名',
                   kind: CompletionItemKind.Method,
-                  sortText: 'a',
                 },
-              ]);
-            },
-            onSuggestFields: (prefix, options) => {
-              return Promise.resolve([
-                {
-                  label: 'age',
-                  type: 'SAMPLE_TYPE_ONE',
-                  insertText: 'age',
+                TABLEALIAS: {
+                  text: '表别名',
+                  kind: CompletionItemKind.Method,
+                },
+                SNIPPET: {
+                  text: '代码块',
+                  kind: CompletionItemKind.Snippet,
+                },
+                FIELD: {
+                  text: '表字段',
                   kind: CompletionItemKind.Field,
-                  sortText: 'b',
                 },
-                {
-                  label: 'banana',
-                  type: 'SAMPLE_TYPE_ONE',
-                  insertText: 'banana',
+                FIELDALIAS: {
+                  text: '表字段别名',
                   kind: CompletionItemKind.Field,
-                  sortText: 'b',
                 },
-                {
-                  label: 'sample_one_table1',
-                  type: 'SAMPLE_TYPE_ONE',
-                  insertText: 'id_test',
-                  kind: CompletionItemKind.Field,
-                  sortText: 'b',
+              },
+            }),
+          ],
+          extensionMetadata: [],
+          workspaceDir: `sql-service`,
+          layoutConfig,
+          defaultPreferences: {
+            'general.theme': 'opensumi-light',
+            'application.confirmExit': 'never',
+            'editor.autoSave': 'afterDelay',
+            'editor.guides.bracketPairs': false,
+            'editor.minimap': false,
+            'editor.autoSaveDelay': 1000,
+            'editor.fixedOverflowWidgets': true, // widget editor 默认改为 fixed
+            'files.encoding': 'utf8', // 默认编码
+          },
+        }}
+        runtimeConfig={{
+          biz: 'sql-service',
+          hideEditorTab: true,
+          scenario: 'ALEX_TEST',
+          defaultOpenFile: 'test.sql',
+          hideBreadcrumb: true,
+          hideLeftTabBar: true,
+          workspace: {
+            filesystem: {
+              fs: 'FileIndexSystem',
+              options: {
+                // 初始全量文件索引
+                requestFileIndex() {
+                  return Promise.resolve({
+                    'test.sql': 'select * from',
+                  });
                 },
-              ]);
-            },
-            options: {
-              language: supportLanguage.ODPSSQL,
-            },
-            sorter: (type) => {
-              switch (type) {
-                case 'TABLEALIAS':
-                case 'TABLE':
-                  return 'c';
-                case 'FIELD':
-                case 'FIELDALIAS':
-                  return 'd';
-                case 'KEYWORD':
-                case 'CONSTS':
-                  return 'e';
-                case 'FUNCTION':
-                  return 'f';
-                default:
-                  return 'g';
-              }
-            },
-            onChange: (data) => {
-              console.log(data);
-            },
-            completionTypes: {
-              KEYWORD: {
-                text: '关键词',
-                kind: CompletionItemKind.Keyword,
-              },
-              CONSTS: {
-                text: '常量',
-                kind: CompletionItemKind.Snippet,
-              },
-              FUNCTION: {
-                text: '函数',
-                kind: CompletionItemKind.Function,
-              },
-              TABLE: {
-                text: '表名',
-                kind: CompletionItemKind.Method,
-              },
-              TABLEALIAS: {
-                text: '表别名',
-                kind: CompletionItemKind.Method,
-              },
-              SNIPPET: {
-                text: '代码块',
-                kind: CompletionItemKind.Snippet,
-              },
-              FIELD: {
-                text: '表字段',
-                kind: CompletionItemKind.Field,
-              },
-              FIELDALIAS: {
-                text: '表字段别名',
-                kind: CompletionItemKind.Field,
-              },
-            },
-          }),
-        ],
-        extensionMetadata: [],
-        workspaceDir: `sql-service`,
-        layoutConfig,
-        defaultPreferences: {
-          'general.theme': 'opensumi-light',
-          'application.confirmExit': 'never',
-          'editor.autoSave': 'afterDelay',
-          'editor.guides.bracketPairs': false,
-          'editor.minimap': false,
-          'editor.autoSaveDelay': 500,
-          'editor.fixedOverflowWidgets': true, // widget editor 默认改为 fixed
-        },
-      }}
-      runtimeConfig={{
-        biz: 'sql-service',
-        hideEditorTab: true,
-        scenario: 'ALEX_TEST',
-        defaultOpenFile: 'test.sql',
-        hideBreadcrumb: true,
-        hideLeftTabBar: true,
-        workspace: {
-          filesystem: {
-            fs: 'FileIndexSystem',
-            options: {
-              // 初始全量文件索引
-              requestFileIndex() {
-                return Promise.resolve({
-                  'test.sql': 'select * from',
-                });
               },
             },
           },
-        },
-      }}
-    />
-  </div>
-);
+        }}
+      />
+    </div>
+  );
+};
 
 let key = 0;
 const render = () => ReactDOM.render(<App key={key++} />, document.getElementById('main'));
