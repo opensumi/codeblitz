@@ -1,6 +1,6 @@
 {
   "name": "@alipay/alex",
-  "version": "2.2.5-beta.2",
+  "version": "2.2.5-beta.3",
   "workspaces": [
     "packages/*"
   ],

@@ -1,3 +1,12 @@
+## [2.2.5-beta.3](https://code.alipay.com/cloud-ide/crew-dragon/compare/v2.2.5-beta.2...v2.2.5-beta.3) (2023-05-10)
+
+
+### Features
+
+* 支持onchange方法 ([5106da5](https://code.alipay.com/cloud-ide/crew-dragon/commits/5106da5ab90e2d0b55e77b1ed5e74ff131e754cc))
+
+
+
 ## [2.2.5-beta.2](https://code.alipay.com/cloud-ide/crew-dragon/compare/v2.2.5-beta.1...v2.2.5-beta.2) (2023-05-08)
 
 
