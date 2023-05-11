@@ -13,13 +13,27 @@ import {
   CompleteProviderReturnType,
 } from '../types';
 
-import { Thenable, Position, CancellationToken, Range } from '@opensumi/monaco-editor-core/esm/vs/editor/editor.api';
-import { transformOptions, wireCancellationToken, toTextEdit, toRange, fromPosition } from '../services/utils';
+import {
+  Thenable,
+  Position,
+  CancellationToken,
+  Range,
+} from '@opensumi/monaco-editor-core/esm/vs/editor/editor.api';
+import {
+  transformOptions,
+  wireCancellationToken,
+  toTextEdit,
+  toRange,
+  fromPosition,
+} from '../services/utils';
 // import { handleTimeAnalysis } from './utils/logger';
 import _get from 'lodash/get';
 import _cloneDeep from 'lodash/cloneDeep';
 import SQLEditorModel from './model';
-import { peelCstToAtomQuerysWithOtherType, peelFromClauseToTableName } from '../tools/validationRules/define';
+import {
+  peelCstToAtomQuerysWithOtherType,
+  peelFromClauseToTableName,
+} from '../tools/validationRules/define';
 import * as monaco from '@opensumi/monaco-editor-core/esm/vs/editor/editor.api';
 
 const completeDegradeTrigger = {
@@ -33,12 +47,12 @@ const completeTrigger = {
 
 async function asyncItemSimpleCaseHandler(
   simpleCase: asyncItemsType,
-  options: CustomCompletionProviderOptions,
+  options: CustomCompletionProviderOptions
 ) {
   if (simpleCase.hitCache) {
     return Promise.resolve({
       visitedTableIncrement: undefined,
-      items: simpleCase.items?.map(item => ({
+      items: simpleCase.items?.map((item) => ({
         ...item,
         sortText: priority(item?.label, item?.kind, [], 9),
         insertText: item?.insertText || item?.label,
@@ -47,7 +61,6 @@ async function asyncItemSimpleCaseHandler(
   } else if (/* options.query */ false) {
     // const request = transformOptions(options).request;
     // const startFetch = new Date().getTime();
-
     // try {
     //   const tables = await request(...simpleCase.params);
     //   let visitedTableIncrement;
@@ -55,28 +68,23 @@ async function asyncItemSimpleCaseHandler(
     //    * 缓存注释
     //    * 根据后端返回的allEntities判定，若为true，则已经获取符合该前缀的所有实体，此时缓存前缀和实体的映射关系
     //    */
-
     //   /** 只有查表场景，包含第二个参数
     //    * 1. 需要存储sqlType
     //    * 2. 需要自动回填表前缀
     //    */
     //   const sqlType = simpleCase.params[1];
     //   const keyword = simpleCase.params[0];
-
     //   if (_get(tables, 'data.allEntities')) {
     //     let record = {
     //       name: keyword,
     //       sqlType,
     //       data: _get(tables, 'data.entities'),
     //     };
-
     //     if (!sqlType) {
     //       delete record.sqlType;
     //     }
-
     //     visitedTableIncrement = record;
     //   }
-
     //   const items = (_get(tables, 'data.entities') || []).map(table => {
     //     const item = generateCompleteItem(
     //       table.name,
@@ -92,12 +100,10 @@ async function asyncItemSimpleCaseHandler(
     //       ...item,
     //     };
     //   });
-
     //   if (_get(options, 'options.monitorTime')) {
     //     // 当通过query参数内置请求时，输出请求接口的时间
     //     console.log('fetch time:', new Date().getTime() - startFetch);
     //   }
-
     //   return {
     //     visitedTableIncrement,
     //     items,
@@ -111,7 +117,7 @@ async function asyncItemSimpleCaseHandler(
     const cbType = simpleCase.type;
     // @ts-ignore
     const sqlType = simpleCase.params[1];
-        // @ts-ignore
+    // @ts-ignore
 
     const keyword = simpleCase.params[0];
 
@@ -149,7 +155,7 @@ async function asyncItemSimpleCaseHandler(
 // 检查当前异步代码补全是否是字段补全
 function checkIsFieldComplete(info: CompleteProviderReturnType) {
   const asyncItems = info.asyncItems || {};
-  // @ts-ignore 
+  // @ts-ignore
   const isJoinPart = info.asyncItems?.isJoinPart;
   const fieldComplete = asyncItems.type === CompleteType.field && !isJoinPart;
   return fieldComplete;
@@ -161,7 +167,7 @@ class CompletionAdapter implements monaco.languages.CompletionItemProvider {
   constructor(
     private _worker: WorkerAccessor,
     options: CustomCompletionProviderOptions,
-    languageId: string,
+    languageId: string
   ) {
     this.options = options;
     this.languageId = languageId;
@@ -185,13 +191,13 @@ class CompletionAdapter implements monaco.languages.CompletionItemProvider {
 
   formatSyncItems = (
     info: CompleteProviderReturnType,
-    completionTypes: CustomCompletionProviderOptions['completionTypes'],
+    completionTypes: CustomCompletionProviderOptions['completionTypes']
   ): monaco.languages.CompletionItem[] => {
     if (!info.syncItems) {
       return [];
     }
 
-    return info.syncItems.map(syncItem => {
+    return info.syncItems.map((syncItem) => {
       let item: monaco.languages.CompletionItem = {
         label: syncItem.label,
         insertText: syncItem?.insertText || syncItem.label,
@@ -235,7 +241,7 @@ class CompletionAdapter implements monaco.languages.CompletionItemProvider {
       if (info.asyncItems.completeType === 'recombination') {
         const resultArray = await Promise.all(
           // @ts-ignore
-          info.asyncItems.items.map(item => asyncItemSimpleCaseHandler(item, this.options)),
+          info.asyncItems.items.map((item) => asyncItemSimpleCaseHandler(item, this.options))
         );
 
         resultArray.forEach((result: any) => {
@@ -248,7 +254,7 @@ class CompletionAdapter implements monaco.languages.CompletionItemProvider {
       } else {
         const { items: simpleCaseItems, visitedTableIncrement } = await asyncItemSimpleCaseHandler(
           info.asyncItems,
-          this.options,
+          this.options
         );
 
         // @ts-ignore
@@ -267,14 +273,14 @@ class CompletionAdapter implements monaco.languages.CompletionItemProvider {
     model: monaco.editor.IReadOnlyModel,
     position: Position,
     context: monaco.languages.CompletionContext,
-    token: CancellationToken,
+    token: CancellationToken
   ): Thenable<monaco.languages.CompletionList> {
     const resource = model.uri;
     // @ts-ignore
     return wireCancellationToken(
       token,
       this._worker(resource)
-        .then(worker => {
+        .then((worker) => {
           return worker.doComplete(
             resource.toString(),
             fromPosition(position),
@@ -286,8 +292,7 @@ class CompletionAdapter implements monaco.languages.CompletionItemProvider {
               completionTypes: this.options.completionTypes,
               lowerCaseComplete: this.options.lowerCaseComplete,
               degenerate: this.options.degenerate,
-
-            },
+            }
           );
         })
         .then(async (info: CompleteProviderReturnType) => {
@@ -296,7 +301,7 @@ class CompletionAdapter implements monaco.languages.CompletionItemProvider {
               .get(model.id)
               ?.getContribution<SuggestControllerProps>('editor.contrib.suggestController')
               ?.cancelSuggestWidget();
-              // @ts-ignore
+            // @ts-ignore
             this.options.customizeFieldSuggest(false);
             return;
           }
@@ -307,10 +312,10 @@ class CompletionAdapter implements monaco.languages.CompletionItemProvider {
             // handleTimeAnalysis(info.monitorInfo);
           }
 
-          const syncItems: any = this.formatSyncItems(info, this.options.completionTypes);
-          const asyncItems: any = await this.getAsyncItems(info);
+          const syncItems = this.formatSyncItems(info, this.options.completionTypes);
+          const asyncItems = await this.getAsyncItems(info);
 
-          const items = syncItems.concat(asyncItems).filter(item => item?.label);
+          const items = syncItems.concat(asyncItems).filter((item) => item?.label);
 
           // 缓存提示内容
           SQLEditorModel.prevSuggestions = {
@@ -326,7 +331,7 @@ class CompletionAdapter implements monaco.languages.CompletionItemProvider {
                   info.fixedValue.startLineNumber + 1,
                   info.fixedValue.startColumn + 1,
                   info.fixedValue.endLineNumber + 1,
-                  info.fixedValue.endColumn + 1,
+                  info.fixedValue.endColumn + 1
                 ),
                 text: info.fixedValue.text,
               },
@@ -368,7 +373,7 @@ class CompletionAdapter implements monaco.languages.CompletionItemProvider {
               info.ast,
               info.currentSqlIndex || 0,
               syncItems,
-              info.asyncItems,
+              info.asyncItems
             );
             return;
           }
@@ -377,21 +382,25 @@ class CompletionAdapter implements monaco.languages.CompletionItemProvider {
           // 合理的方式应该是onSuggestFileds新增参数标记，由业务控制
           // 但是考虑改动不兼容，先特殊处理
           const incomplete = asyncItems.length > 100;
-          const completionItems = items.map(item => {
-          // 当选中补全后自动再触发补全
-            return {
-              ...item,
-              command: {
-                id: 'editor.action.triggerSuggest',
+          const completionItems = items.map((item) => {
+            const text = item.insertText || (item.label as string);
+            if (text.endsWith(' ')) {
+              // 当选中补全后自动再触发补全
+              return {
+                ...item,
+                command: {
+                  id: 'editor.action.triggerSuggest',
+                },
               }
             }
-          })
+            return item;
+          });
           return {
             incomplete,
             suggestions: completionItems,
           };
         })
-        .catch(err => {
+        .catch((err) => {
           console.log(err);
         })
     );
@@ -403,7 +412,7 @@ class CompletionAdapter implements monaco.languages.CompletionItemProvider {
     ast: any,
     currentSqlIndex: number,
     syncItems: any[],
-    asyncItems: any,
+    asyncItems: any
   ) {
     if (!this.options.customizeFieldSuggest || !ast) return;
     // 清除 monaco 自带提示
@@ -416,7 +425,8 @@ class CompletionAdapter implements monaco.languages.CompletionItemProvider {
     const tableNames = this.extractTableNameFromAst(ast.cst, currentSqlIndex);
     // 根据当前编辑位置，剥离当前用于过滤的关键词 filterKeywords: { text: '', range: Range }
     const currentLineText = model.getValue().split('\n')[position.lineNumber - 1];
-    let keywordsText = currentLineText.slice(0, position.column - 1).match(/(\,|\(|\s)(\w+)$/)?.[2] || '';
+    let keywordsText =
+      currentLineText.slice(0, position.column - 1).match(/(\,|\(|\s)(\w+)$/)?.[2] || '';
 
     const keywords: { text: string; range: Range } = {
       text: keywordsText,
@@ -424,7 +434,7 @@ class CompletionAdapter implements monaco.languages.CompletionItemProvider {
         position.lineNumber,
         position.column - (keywordsText?.length || 0),
         position.lineNumber,
-        position.column,
+        position.column
       ),
     };
 
@@ -433,19 +443,19 @@ class CompletionAdapter implements monaco.languages.CompletionItemProvider {
     const syncItemList = asyncItems?.isWhereClause
       ? []
       : syncItems
-          .filter(item => {
+          .filter((item) => {
             return keywordsText
               ? item.label.toLowerCase().includes(keywordsText.toLowerCase())
               : item;
           })
           .filter(
-            item =>
+            (item) =>
               item.detail === '函数' ||
               item.label === '*' ||
               item.label === 'DISTINCT' ||
-              item.label === 'distinct',
+              item.label === 'distinct'
           );
-    
+
     // 组件会根据表名、过滤关键词做相关交互
     // 控制自定义组件挂载显示
     this.options.customizeFieldSuggest(
@@ -453,7 +463,7 @@ class CompletionAdapter implements monaco.languages.CompletionItemProvider {
       tableNames,
       keywords,
       syncItemList,
-      asyncItems?.isWhereClause,
+      asyncItems?.isWhereClause
     );
   }
 
@@ -466,7 +476,7 @@ class CompletionAdapter implements monaco.languages.CompletionItemProvider {
 
   resolveCompletionItem(
     item: monaco.languages.CompletionItem,
-    token: CancellationToken,
+    token: CancellationToken
   ): Thenable<monaco.languages.CompletionItem> {
     // 用户可以自己对 completionItem 进行修改，比如异步的获取 doc
     if (this.options.resolveCodeCompletionItem) {

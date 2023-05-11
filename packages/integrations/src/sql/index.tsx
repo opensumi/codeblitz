@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useRef, useState } from 'react';
 import ReactDOM from 'react-dom';
 import { IAppInstance, AppRenderer, SlotLocation } from '@alipay/alex';
 import '@alipay/alex/languages/sql';
@@ -13,6 +13,8 @@ import * as SQLPlugin from './sql.plugin';
 import { IEditor } from '@opensumi/ide-editor';
 import { Popover, Radio } from 'antd';
 import 'antd/dist/antd.css';
+import odcTheme from '@alipay/alex/extensions/alex.odc-theme';
+
 setMonacoEnvironment();
 
 const layoutConfig = {
@@ -48,22 +50,39 @@ async function editor() {
   console.log(editor?.monacoEditor.getValue());
 }
 
+
+
 const App = () => {
   const [fontValue, setFontValue] = useState(16);
   const [encoding, setEncoding] = useState('utf8');
 
+  let tableID = 1
+
+  const suggestTables = useRef([{
+    label: `sample_one_table_${tableID}`,
+    type: 'SAMPLE_TYPE_ONE',
+    insertText: 'LD.sample_one_table1',
+    kind: CompletionItemKind.Method,
+    sortText: 'a',
+  }])
+
+  function changeTables() {
+    tableID++;
+    suggestTables.current = suggestTables.current.concat([{
+      label: `sample_one_table_${tableID}`,
+      type: 'SAMPLE_TYPE_ONE',
+      insertText: 'LD.sample_one_table1',
+      kind: CompletionItemKind.Method,
+      sortText: 'a',
+    }])
+  }
   const onChangeFont = (e) => {
     setFontValue(e.target.value);
-    console.log(e.target.value)
     updatePrefeence('editor.fontSize', e.target.value);
-    console.log(SQLPlugin.api.commands?.executeCommand('alex.getDefaultPreference', 'files.encoding'))
   };
   const onChangeEnoding = (e) => {
     setEncoding(e.target.value);
-    console.log(e.target.value)
-
     updatePrefeence('files.encoding', e.target.value);
-
   };
 
   const content = () => (
@@ -90,6 +109,7 @@ const App = () => {
         <Button onClick={() => addLine()}>添加行</Button>
         <Button onClick={() => openFile()}>打开文件</Button>
         <Button onClick={() => editor()}>获取当前内容</Button>
+        <Button onClick={() => changeTables()}>change suggest Tables</Button>
         <Popover content={content} placement="top">
           <Button>设置</Button>
         </Popover>
@@ -139,16 +159,8 @@ const App = () => {
                 },
               ],
               onSuggestTables: (keyword, options) => {
-                console.log(keyword, options);
-                return Promise.resolve([
-                  {
-                    label: 'sample_one_table1',
-                    type: 'SAMPLE_TYPE_ONE',
-                    insertText: 'LD.sample_one_table1',
-                    kind: CompletionItemKind.Method,
-                    sortText: 'a',
-                  },
-                ]);
+                console.log('suggest',keyword, options,suggestTables.current);
+                return suggestTables.current;
               },
               onSuggestFields: (prefix, options) => {
                 return Promise.resolve([
@@ -177,6 +189,7 @@ const App = () => {
               },
               options: {
                 language: supportLanguage.ODPSSQL,
+                disableAsyncItemCache: true,
               },
               sorter: (type) => {
                 switch (type) {
@@ -234,11 +247,11 @@ const App = () => {
               },
             }),
           ],
-          extensionMetadata: [],
+          extensionMetadata: [odcTheme],
           workspaceDir: `sql-service`,
           layoutConfig,
           defaultPreferences: {
-            'general.theme': 'opensumi-light',
+            'general.theme': 'odc-light',
             'application.confirmExit': 'never',
             'editor.autoSave': 'afterDelay',
             'editor.guides.bracketPairs': false,

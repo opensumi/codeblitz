@@ -255,6 +255,11 @@
       "publisher": "aistudio",
       "name": "libro",
       "version": "0.0.3"
+    },
+    {
+      "publisher": "alex",
+      "name": "odc-theme",
+      "version": "1.0.0"
     }
   ]
 }
