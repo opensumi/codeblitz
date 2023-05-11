@@ -1,6 +1,6 @@
 {
   "name": "@alipay/alex-registry",
-  "version": "2.2.5-beta.3",
+  "version": "2.2.5-beta.4",
   "description": "@alipay/alex-registry",
   "main": "lib/index.js",
   "typings": "lib/index.d.ts",
