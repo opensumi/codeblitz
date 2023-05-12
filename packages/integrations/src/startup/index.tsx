@@ -38,6 +38,7 @@ import mergeConflict from '@alipay/alex/extensions/opensumi-lite-extensions.merg
 import { LocalExtensionModule } from '../common/local-extension.module';
 import * as Plugin from '../editor/plugin';
 import * as SCMPlugin from './web-scm.plugin';
+import { WorkbenchEditorService } from '@opensumi/ide-editor';
 
 (window as any).alex = Alex;
 
@@ -93,6 +94,11 @@ const App = () => (
           commands.executeCommand('plugin.command.test', 1, 2);
         }
       };
+      Plugin.api.commands?.registerCommand('alex.gty.getActiveTextDocument', () => {
+        const workbenchEditorService = (app.injector.get(WorkbenchEditorService) as WorkbenchEditorService)
+        const currentUri = workbenchEditorService.currentEditorGroup?.currentResource?.uri.codeUri
+        return currentUri || ''
+      });
     }}
     appConfig={{
       plugins: [Plugin, SCMPlugin],
