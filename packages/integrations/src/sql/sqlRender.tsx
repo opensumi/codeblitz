@@ -1,5 +1,5 @@
 import { AppRenderer2, SlotLocation } from '@alipay/alex';
-import React, { useRef, useState } from 'react';
+import React, { useMemo, useRef, useState } from 'react';
 import ReactDOM from 'react-dom';
 import '@alipay/alex/languages/sql';
 import {
@@ -8,16 +8,23 @@ import {
   supportLanguage,
   setMonacoEnvironment,
 } from '@alipay/alex-sql-service';
-import * as SQLPlugin from './sql.plugin';
+import SqlPlugin from './sql.plugin';
 import { Popover, Radio } from 'antd';
 import 'antd/dist/antd.css';
 import odcTheme from '@alipay/alex/extensions/alex.odc-theme';
 import { Button } from '@opensumi/ide-components';
+import { IEditor } from '@opensumi/ide-editor';
 
 
 let id = 1
 
 export const SQLRender: React.FC = (props) => {
+
+  const PluginID = id
+  const SQLPlugin = useMemo(() => {
+    return new SqlPlugin(PluginID);
+  }, []);
+
   let tableID = 123;
 
   const suggestTables = [
@@ -38,17 +45,41 @@ export const SQLRender: React.FC = (props) => {
   const [editor, setEditor] = useState(true);
 
   id++
-
   console.log('render sql ==>',id)
 
+
+  async function addLine() {
+    const editor = (await SQLPlugin.commands?.executeCommand('alex.sql.editor')) as IEditor;
+    editor?.monacoEditor.trigger('editor', 'type', { text: '\n' });
+  }
+  function format() {
+    SQLPlugin.commands?.executeCommand('editor.action.formatDocument');
+  }
+  function openFile() {
+    /** COMMAND alex.sql.open
+     *  @param {string} uri - 文件uri
+     *  @param {string} content - 文件内容 无内容时创建并注入默认内容
+     */
+    SQLPlugin.commands?.executeCommand('alex.sql.open', 'test1.sql', '默认内容');
+  }
+  async function getEditor() {
+    const editor = (await SQLPlugin.commands?.executeCommand('alex.sql.editor')) as IEditor;
+    console.log(editor?.monacoEditor.getValue());
+  }
+  
   return (
-    <div style={{ height: '300px', display: 'flex' }}>
+    <div style={{ height: '200px', display: 'flex' }}>
       <Button style={{ zIndex: '100' }} onClick={() => setEditor(false)}>销毁editor</Button>
+      <Button style={{ zIndex: '100' }} onClick={() => format()}>格式化</Button>
+      <Button style={{ zIndex: '100' }} onClick={() => addLine()}>添加行</Button>
+      <Button style={{ zIndex: '100' }} onClick={() => openFile()}>打开文件</Button>
+      <Button style={{ zIndex: '100' }} onClick={() => getEditor()}>获取当前内容</Button>
+
       {editor && (
         <div style={{ border: '2px solid red', zIndex: '10', width: '100%'}}>
         <AppRenderer2
           appConfig={{
-            // plugins: [SQLPlugin],
+            plugins: [SQLPlugin],
             modules: [
               SqlServiceModule.Config({
                 onValidation: (ast: any, markers: any) => {
@@ -197,7 +228,7 @@ export const SQLRender: React.FC = (props) => {
             biz: 'sql-service',
             // hideEditorTab: true,
             scenario: 'ALEX_TEST',
-            // defaultOpenFile: 'test.sql',
+            defaultOpenFile: 'test.sql',
             hideBreadcrumb: true,
             hideLeftTabBar: true,
             registerKeybindings: [

@@ -1,4 +1,4 @@
-import React, { useRef, useState } from 'react';
+import React, { useMemo, useRef, useState } from 'react';
 import ReactDOM from 'react-dom';
 import { IAppInstance, AppRenderer, SlotLocation, AppRenderer2 } from '@alipay/alex';
 import '@alipay/alex/languages/sql';
@@ -9,12 +9,12 @@ import {
   setMonacoEnvironment,
 } from '@alipay/alex-sql-service';
 import { Button } from '@opensumi/ide-components';
-import * as SQLPlugin from './sql.plugin';
+import SqlPlugin  from './sql.plugin';
 import { IEditor } from '@opensumi/ide-editor';
 import { Popover, Radio } from 'antd';
 import 'antd/dist/antd.css';
 import odcTheme from '@alipay/alex/extensions/alex.odc-theme';
-import {SQLRender} from './sqlRender'
+import { SQLRender } from './sqlRender';
 
 setMonacoEnvironment();
 
@@ -24,34 +24,15 @@ const layoutConfig = {
   },
 };
 
-function format() {
-  SQLPlugin.api.commands?.executeCommand('editor.action.formatDocument');
-}
 
-function updatePrefeence(perferenceName, value) {
-  // 设置首选项
-  SQLPlugin.api.commands?.executeCommand('alex.setDefaultPreference', perferenceName, value);
-}
-
-async function addLine() {
-  const editor = (await SQLPlugin.api.commands?.executeCommand('alex.sql.editor')) as IEditor;
-  editor?.monacoEditor.trigger('editor', 'type', { text: '\n' });
-}
-
-function openFile() {
-  /** COMMAND alex.sql.open
-   *  @param {string} uri - 文件uri
-   *  @param {string} content - 文件内容 无内容时创建并注入默认内容
-   */
-  SQLPlugin.api.commands?.executeCommand('alex.sql.open', 'test1.sql', '默认内容');
-}
-
-async function editor() {
-  const editor = (await SQLPlugin.api.commands?.executeCommand('alex.sql.editor')) as IEditor;
-  console.log(editor?.monacoEditor.getValue());
-}
 
 const App = () => {
+  const PluginID = 1
+
+  const SQLPlugin = useMemo(() => {
+    return new SqlPlugin(PluginID);
+  }, []);
+  
   const [fontValue, setFontValue] = useState(16);
   const [encoding, setEncoding] = useState('utf8');
   const [editorNumber, setEditorNumber] = useState(1);
@@ -80,6 +61,10 @@ const App = () => {
       },
     ]);
   }
+
+
+
+
   const onChangeFont = (e) => {
     setFontValue(e.target.value);
     updatePrefeence('editor.fontSize', e.target.value);
@@ -91,7 +76,35 @@ const App = () => {
 
   function editorNumberUpdate() {
     console.log('editorNumberUpdate', editorNumber);
-    setEditorNumber(editorNumber+1)
+    setEditorNumber(editorNumber + 1);
+  }
+
+
+  function format() {
+    SQLPlugin.commands?.executeCommand('editor.action.formatDocument');
+  }
+  
+  function updatePrefeence(perferenceName, value) {
+    // 设置首选项
+    SQLPlugin.commands?.executeCommand('alex.setDefaultPreference', perferenceName, value);
+  }
+  
+  async function addLine() {
+    const editor = (await SQLPlugin.commands?.executeCommand('alex.sql.editor')) as IEditor;
+    editor?.monacoEditor.trigger('editor', 'type', { text: '\n' });
+  }
+  
+  function openFile() {
+    /** COMMAND alex.sql.open
+     *  @param {string} uri - 文件uri
+     *  @param {string} content - 文件内容 无内容时创建并注入默认内容
+     */
+    SQLPlugin.commands?.executeCommand('alex.sql.open', 'test1.sql', '默认内容');
+  }
+  
+  async function editor() {
+    const editor = (await SQLPlugin.commands?.executeCommand('alex.sql.editor')) as IEditor;
+    console.log(editor?.monacoEditor.getValue());
   }
 
   const content = () => (
@@ -112,7 +125,7 @@ const App = () => {
 
   return (
     <div style={{ height: '100%', overflow: 'scroll' }}>
-      <div style={{ height: '500px' }}>
+      <div style={{ height: '300px' }}>
         <div style={{ margin: '20px' }}>
           <Button onClick={() => format()}>格式化</Button>
           <Button onClick={() => addLine()}>添加行</Button>
@@ -273,7 +286,7 @@ const App = () => {
               'editor.autoSaveDelay': 1000,
               'editor.fixedOverflowWidgets': true, // widget editor 默认改为 fixed
               'files.encoding': 'utf8', // 默认编码
-              'editor.fontSize': 12
+              'editor.fontSize': 12,
             },
           }}
           runtimeConfig={{
@@ -303,12 +316,23 @@ const App = () => {
               },
             },
           }}
-        />        
+        />
       </div>
-
-      {editorNumber > 1 ? <div><SQLRender/></div> : null }
-      {editorNumber > 2 ? <div><SQLRender/></div> : null }
-
+      {editorNumber > 1 ? (
+        <div>
+          <SQLRender />
+        </div>
+      ) : null}
+      {editorNumber > 2 ? (
+        <div>
+          <SQLRender />
+        </div>
+      ) : null}
+      {editorNumber > 3 ? (
+        <div>
+          <SQLRender />
+        </div>
+      ) : null}
     </div>
   );
 };

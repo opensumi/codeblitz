@@ -40,6 +40,10 @@ export class FileSystemConfigContribution extends Disposable implements FileSyst
     const fsConfig = this.runtimeConfig.workspace?.filesystem;
     if (!fsConfig) return;
     const { workspaceDir } = this.appConfig;
+    // @ts-ignore
+    if (rootFS && rootFS.mountList.includes(workspaceDir)) {
+      return;
+    }
     try {
       const workspaceFS = await BrowserFS.getFileSystem(fsConfig);
       rootFS.mount(workspaceDir, workspaceFS);

@@ -5,11 +5,9 @@ import { REPORT_NAME, RuntimeConfig } from '@alipay/alex-core';
 import { createApp } from './createApp';
 import { Root } from '../core/Root';
 import { RootProps, LandingProps } from '../core/types';
-import { setSingleInjector, singleInjector, useConstant } from '../core/hooks';
+import { setSingleInjector, singleInjector, useConstant, isRendered, setRendered } from '../core/hooks';
 import { IConfig, IAppInstance } from './types';
 import styles from '../core/style.module.less';
-import { setInjector } from '@opensumi/di/dist/helper';
-import { Injector } from '@opensumi/di';
 
 export interface IAppRendererProps extends IConfig {
   onLoad?(app: IAppInstance): void;
@@ -124,17 +122,17 @@ export const AppRenderer: React.FC<IAppRendererProps> = ({ onLoad, Landing, ...o
 
 // 缓存apprender 每次渲染都不卸载组件
 export const AppRenderer2: React.FC<IAppRendererProps> = ({ onLoad, Landing, ...opts }) => {
-
-  const app = useConstant(() => createApp({
-    ...opts,
-    // @ts-ignore
-    injector: singleInjector
-  }));
+  const app = useConstant(() =>
+    createApp({
+      ...opts,
+      // @ts-ignore
+      // injector: singleInjector,
+    })
+  );
   const themeType = useConstant(() => app.currentThemeType);
   const appElementRef = useRef<React.ReactElement | null>(null);
-  setSingleInjector(app.injector)
+  // setSingleInjector(app.injector);
 
-  console.log('app', app);
   // 确保回调始终为最新
   // TODO: 用 PropsService
   const runtimeConfig: RuntimeConfig = app.injector.get(RuntimeConfig);
@@ -153,6 +151,7 @@ export const AppRenderer2: React.FC<IAppRendererProps> = ({ onLoad, Landing, ...
         return Promise.resolve();
       })
       .then(() => {
+        setRendered();
         onLoad?.(app);
       })
       .catch((err: Error) => {

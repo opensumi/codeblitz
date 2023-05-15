@@ -22,3 +22,10 @@ export let singleApp: IAppInstance| null = null
 export function setSingleApp(app: IAppInstance){
   singleApp = app;
 }
+
+export let isRendered = false;
+
+export const setRendered = () => {
+  isRendered = true;
+}
+
