@@ -38,7 +38,6 @@ import {
   IEditorDocumentModelService,
 } from '@opensumi/ide-editor/lib/browser';
 import { PreferenceService } from '@opensumi/ide-core-browser';
-import { isRendered } from '@alipay/alex/lib/core/hooks';
 
 @Injectable()
 @Domain(ClientAppContribution, BrowserEditorContribution)
@@ -113,10 +112,6 @@ export class SqlServiceContribution
   }
 
   onDidStart(app: IClientApp): MaybePromise<void> {
-    // TODO hack 逻辑
-    // if (isRendered) {
-    //   return;
-    // }
     this.registerLanguage(supportLanguage.ODPSSQL);
     const editorMap = new Map<string, CustomEditorInstance>();
 

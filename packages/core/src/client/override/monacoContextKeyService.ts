@@ -9,7 +9,6 @@ import { StandaloneKeybindingServiceProxy } from './monacoOverride/standaloneKey
 import { ICommandServiceToken } from '@opensumi/ide-monaco/lib/browser/contrib/command';
 import { MonacoCodeService } from './monacoOverride/codeEditorService';
 import { MonacoCommandService } from '@opensumi/ide-editor/lib/browser/monaco-contrib/command/command.service';
-import { isRendered } from '@alipay/alex/lib/core/hooks';
 // import { MonacoCodeService, monacoCodeServiceProxy } from './codeEditorService';
 
 export const IMonacoOverrideService = Symbol('IMonacoOverrideService');
@@ -23,10 +22,6 @@ export class MonacoOverrideService implements MonacoContribution {
   monacoCodeService: MonacoCodeService;
 
   registerOverrideService(registry: MonacoOverrideServiceRegistry) {
-    // TODO hack 逻辑
-    if(isRendered){
-      return
-    }
 
     // TODO opensumi ServiceNames
     registry.registerOverrideService(

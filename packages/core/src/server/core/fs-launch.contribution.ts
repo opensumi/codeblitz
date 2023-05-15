@@ -5,7 +5,6 @@ import { IServerApp, RuntimeConfig, RootFS, AppConfig } from '../../common/types
 import { LaunchContribution } from './app';
 import { FileSystemContribution } from './base';
 import { BrowserFS } from '../node';
-import { setSingleInjector, singleInjector } from '@alipay/alex/lib/core/hooks';
 
 @Domain(LaunchContribution)
 export class FileSystemLaunchContribution implements LaunchContribution {

@@ -5,7 +5,15 @@ import { REPORT_NAME, RuntimeConfig } from '@alipay/alex-core';
 import { createApp } from './createApp';
 import { Root } from '../core/Root';
 import { RootProps, LandingProps } from '../core/types';
-import { setSingleInjector, singleInjector, useConstant, isRendered, setRendered } from '../core/hooks';
+import {
+  setSingleInjector,
+  singleInjector,
+  useConstant,
+  isRendered,
+  setRendered,
+  setSingleApp,
+  singleApp,
+} from '../core/hooks';
 import { IConfig, IAppInstance } from './types';
 import styles from '../core/style.module.less';
 
@@ -126,13 +134,14 @@ export const AppRenderer2: React.FC<IAppRendererProps> = ({ onLoad, Landing, ...
     createApp({
       ...opts,
       // @ts-ignore
-      // injector: singleInjector,
+      injector: singleInjector,
     })
   );
+
   const themeType = useConstant(() => app.currentThemeType);
   const appElementRef = useRef<React.ReactElement | null>(null);
-  // setSingleInjector(app.injector);
-
+  setSingleInjector(app.injector);
+  setSingleApp(app);
   // 确保回调始终为最新
   // TODO: 用 PropsService
   const runtimeConfig: RuntimeConfig = app.injector.get(RuntimeConfig);
