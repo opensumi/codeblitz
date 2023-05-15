@@ -1,6 +1,6 @@
+import { AppRenderer2, SlotLocation } from '@alipay/alex';
 import React, { useRef, useState } from 'react';
 import ReactDOM from 'react-dom';
-import { IAppInstance, AppRenderer, SlotLocation, AppRenderer2 } from '@alipay/alex';
 import '@alipay/alex/languages/sql';
 import {
   CompletionItemKind,
@@ -8,130 +8,47 @@ import {
   supportLanguage,
   setMonacoEnvironment,
 } from '@alipay/alex-sql-service';
-import { Button } from '@opensumi/ide-components';
 import * as SQLPlugin from './sql.plugin';
-import { IEditor } from '@opensumi/ide-editor';
 import { Popover, Radio } from 'antd';
 import 'antd/dist/antd.css';
 import odcTheme from '@alipay/alex/extensions/alex.odc-theme';
-import {SQLRender} from './sqlRender'
+import { Button } from '@opensumi/ide-components';
 
-setMonacoEnvironment();
 
-const layoutConfig = {
-  [SlotLocation.main]: {
-    modules: ['@opensumi/ide-editor'],
-  },
-};
+let id = 1
 
-function format() {
-  SQLPlugin.api.commands?.executeCommand('editor.action.formatDocument');
-}
+export const SQLRender: React.FC = (props) => {
+  let tableID = 123;
 
-function updatePrefeence(perferenceName, value) {
-  // 设置首选项
-  SQLPlugin.api.commands?.executeCommand('alex.setDefaultPreference', perferenceName, value);
-}
-
-async function addLine() {
-  const editor = (await SQLPlugin.api.commands?.executeCommand('alex.sql.editor')) as IEditor;
-  editor?.monacoEditor.trigger('editor', 'type', { text: '\n' });
-}
-
-function openFile() {
-  /** COMMAND alex.sql.open
-   *  @param {string} uri - 文件uri
-   *  @param {string} content - 文件内容 无内容时创建并注入默认内容
-   */
-  SQLPlugin.api.commands?.executeCommand('alex.sql.open', 'test1.sql', '默认内容');
-}
-
-async function editor() {
-  const editor = (await SQLPlugin.api.commands?.executeCommand('alex.sql.editor')) as IEditor;
-  console.log(editor?.monacoEditor.getValue());
-}
-
-const App = () => {
-  const [fontValue, setFontValue] = useState(16);
-  const [encoding, setEncoding] = useState('utf8');
-  const [editorNumber, setEditorNumber] = useState(1);
-
-  let tableID = 1;
-
-  const suggestTables = useRef([
+  const suggestTables = [
     {
-      label: `sample_one_table_${tableID}`,
-      type: 'SAMPLE_TYPE_ONE',
+      label: `sample_two_table_${tableID}`,
+      type: 'SAMPLE_TYPE_TWO',
       insertText: 'LD.sample_one_table1',
       kind: CompletionItemKind.Method,
       sortText: 'a',
     },
-  ]);
-
-  function changeTables() {
-    tableID++;
-    suggestTables.current = suggestTables.current.concat([
-      {
-        label: `sample_one_table_${tableID}`,
-        type: 'SAMPLE_TYPE_ONE',
-        insertText: 'LD.sample_one_table1',
-        kind: CompletionItemKind.Method,
-        sortText: 'a',
-      },
-    ]);
-  }
-  const onChangeFont = (e) => {
-    setFontValue(e.target.value);
-    updatePrefeence('editor.fontSize', e.target.value);
-  };
-  const onChangeEnoding = (e) => {
-    setEncoding(e.target.value);
-    updatePrefeence('files.encoding', e.target.value);
+  ];
+  const layoutConfig = {
+    [SlotLocation.main]: {
+      modules: ['@opensumi/ide-editor'],
+    },
   };
 
-  function editorNumberUpdate() {
-    console.log('editorNumberUpdate', editorNumber);
-    setEditorNumber(editorNumber+1)
-  }
+  const [editor, setEditor] = useState(true);
 
-  const content = () => (
-    <div>
-      <p>编码</p>
-      <Radio.Group onChange={onChangeEnoding} value={encoding}>
-        <Radio value={'utf8'}>utf8</Radio>
-        <Radio value={'gbk'}>gbk</Radio>
-        <Radio value={'utf16le'}>utf16le</Radio>
-      </Radio.Group>
-      <p>字体大小</p>
-      <Radio.Group onChange={onChangeFont} value={fontValue}>
-        <Radio value={10}>10</Radio>
-        <Radio value={16}>16</Radio>
-      </Radio.Group>
-    </div>
-  );
+  id++
+
+  console.log('render sql ==>',id)
 
   return (
-    <div style={{ height: '100%', overflow: 'scroll' }}>
-      <div style={{ height: '500px' }}>
-        <div style={{ margin: '20px' }}>
-          <Button onClick={() => format()}>格式化</Button>
-          <Button onClick={() => addLine()}>添加行</Button>
-          <Button onClick={() => openFile()}>打开文件</Button>
-          <Button onClick={() => editor()}>获取当前内容</Button>
-          <Button onClick={() => changeTables()}>change suggest Tables</Button>
-          <Popover content={content} placement="top">
-            <Button>设置</Button>
-          </Popover>
-          <Button onClick={() => changeTables()}>change suggest Tables</Button>
-          <Button onClick={() => window.reset()}>reset </Button>
-          <Button onClick={() => editorNumberUpdate()}>添加编辑器</Button>
-        </div>
+    <div style={{ height: '300px', display: 'flex' }}>
+      <Button style={{ zIndex: '100' }} onClick={() => setEditor(false)}>销毁editor</Button>
+      {editor && (
+        <div style={{ border: '2px solid red', zIndex: '10', width: '100%'}}>
         <AppRenderer2
-          onLoad={(app) => {
-            window.app = app;
-          }}
           appConfig={{
-            plugins: [SQLPlugin],
+            // plugins: [SQLPlugin],
             modules: [
               SqlServiceModule.Config({
                 onValidation: (ast: any, markers: any) => {
@@ -171,8 +88,8 @@ const App = () => {
                   },
                 ],
                 onSuggestTables: (keyword, options) => {
-                  console.log('suggest', keyword, options, suggestTables.current);
-                  return suggestTables.current;
+                  console.log('suggest', keyword, options, suggestTables);
+                  return suggestTables;
                 },
                 onSuggestFields: (prefix, options) => {
                   console.log('files', prefix, options);
@@ -262,7 +179,7 @@ const App = () => {
               }),
             ],
             extensionMetadata: [odcTheme],
-            workspaceDir: `sql-service`,
+            workspaceDir: `sql-service-${id}`,
             layoutConfig,
             defaultPreferences: {
               'general.theme': 'odc-light',
@@ -273,14 +190,14 @@ const App = () => {
               'editor.autoSaveDelay': 1000,
               'editor.fixedOverflowWidgets': true, // widget editor 默认改为 fixed
               'files.encoding': 'utf8', // 默认编码
-              'editor.fontSize': 12
+              'editor.fontSize': 12,
             },
           }}
           runtimeConfig={{
             biz: 'sql-service',
             // hideEditorTab: true,
             scenario: 'ALEX_TEST',
-            defaultOpenFile: 'test.sql',
+            // defaultOpenFile: 'test.sql',
             hideBreadcrumb: true,
             hideLeftTabBar: true,
             registerKeybindings: [
@@ -303,26 +220,9 @@ const App = () => {
               },
             },
           }}
-        />        
-      </div>
-
-      {editorNumber > 1 ? <div><SQLRender/></div> : null }
-      {editorNumber > 2 ? <div><SQLRender/></div> : null }
-
+        />
+        </div>
+      )}
     </div>
   );
 };
-
-let key = 0;
-const render = () => ReactDOM.render(<App key={key++} />, document.getElementById('main'));
-render();
-// for dispose test
-window.reset = (destroy = false) =>
-  destroy ? ReactDOM.render(<div>destroyed</div>, document.getElementById('main')) : render();
-
-declare global {
-  interface Window {
-    app: IAppInstance;
-    reset(destroyed?: boolean): void;
-  }
-}
