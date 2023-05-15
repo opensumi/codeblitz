@@ -5,9 +5,11 @@ import { REPORT_NAME, RuntimeConfig } from '@alipay/alex-core';
 import { createApp } from './createApp';
 import { Root } from '../core/Root';
 import { RootProps, LandingProps } from '../core/types';
-import { useConstant } from '../core/hooks';
+import { setSingleInjector, singleInjector, useConstant } from '../core/hooks';
 import { IConfig, IAppInstance } from './types';
 import styles from '../core/style.module.less';
+import { setInjector } from '@opensumi/di/dist/helper';
+import { Injector } from '@opensumi/di';
 
 export interface IAppRendererProps extends IConfig {
   onLoad?(app: IAppInstance): void;
@@ -105,6 +107,72 @@ export const AppRenderer: React.FC<IAppRendererProps> = ({ onLoad, Landing, ...o
 
     return () => {
       app.destroy();
+    };
+  }, []);
+
+  const rootClassName = useMemo(
+    () => (opts.runtimeConfig.hideEditorTab ? styles['hide-editor-tab'] : ''),
+    [opts.runtimeConfig.hideEditorTab]
+  );
+
+  return (
+    <Root {...state} theme={themeType} Landing={Landing} className={rootClassName}>
+      {appElementRef.current}
+    </Root>
+  );
+};
+
+// 缓存apprender 每次渲染都不卸载组件
+export const AppRenderer2: React.FC<IAppRendererProps> = ({ onLoad, Landing, ...opts }) => {
+
+  const app = useConstant(() => createApp({
+    ...opts,
+    // @ts-ignore
+    injector: singleInjector
+  }));
+  const themeType = useConstant(() => app.currentThemeType);
+  const appElementRef = useRef<React.ReactElement | null>(null);
+  setSingleInjector(app.injector)
+
+  console.log('app', app);
+  // 确保回调始终为最新
+  // TODO: 用 PropsService
+  const runtimeConfig: RuntimeConfig = app.injector.get(RuntimeConfig);
+  runtimeConfig.workspace = opts.runtimeConfig.workspace;
+
+  const [state, setState] = useState<{
+    status: RootProps['status'];
+    error?: RootProps['error'];
+  }>(() => ({ status: 'loading' }));
+
+  useEffect(() => {
+    app
+      .start((appElement) => {
+        appElementRef.current = appElement;
+        setState({ status: 'success' });
+        return Promise.resolve();
+      })
+      .then(() => {
+        onLoad?.(app);
+      })
+      .catch((err: Error) => {
+        setState({ error: err?.message || localize('error.unknown'), status: 'error' });
+
+        (app.injector.get(IReporterService) as IReporterService).point(
+          REPORT_NAME.ALEX_APP_START_ERROR,
+          err?.message,
+          {
+            error: err,
+          }
+        );
+        getDebugLogger().error(err);
+        setTimeout(() => {
+          throw err;
+        });
+      });
+
+    return () => {
+      // app.destroy();
     };
   }, []);
 

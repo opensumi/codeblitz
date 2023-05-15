@@ -21,6 +21,10 @@ class AlexContribution implements KeybindingContribution {
         keybindings.unregisterKeybinding(binding);
       });
     }
+
+    if(this.runtimeConfig.registerKeybindings?.length){
+      keybindings.registerKeybindings(this.runtimeConfig.registerKeybindings)
+    }
   }
 }
 

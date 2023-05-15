@@ -1,4 +1,6 @@
+import { Injector } from '@opensumi/di';
 import { useRef } from 'react';
+import { IAppInstance } from '../api/types';
 
 export const useConstant = <T>(fn: () => T): T => {
   const valueRef = useRef<{ v: T }>();
@@ -7,3 +9,16 @@ export const useConstant = <T>(fn: () => T): T => {
   }
   return valueRef.current.v;
 };
+
+
+export let singleInjector: Injector | null = null;
+
+export function setSingleInjector(inject) {
+  singleInjector = inject;
+}
+
+export let singleApp: IAppInstance| null = null
+
+export function setSingleApp(app: IAppInstance){
+  singleApp = app;
+}

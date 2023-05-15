@@ -140,9 +140,6 @@ export { IClientAppOpts };
 // 先 dispose，待 opensumi 修复
 // @ts-ignore
 export class ClientApp extends BasicClientApp {
-  private clearInjector: () => void;
-
-  private disposeSideEffect = () => {};
 
   private modules: ModuleConstructor[] = [];
 

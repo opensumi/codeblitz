@@ -87,10 +87,6 @@ export class SQLKeybindContribution implements CommandContribution, KeybindingCo
     for (let i = 1; i < 10; i++) {
       keybindingList.push(`ctrlcmd+${i}`);
     }
-    // 自定义注销的快捷键
-    if (this.runtimeConfig.unregisterKeybindings) {
-      keybindingList.push(...this.runtimeConfig.unregisterKeybindings);
-    }
 
     keybindingList.forEach((binding) => {
       keybindings.unregisterKeybinding(binding);

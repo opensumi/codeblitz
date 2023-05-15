@@ -91,6 +91,9 @@ export function createApp({ appConfig, runtimeConfig }: IConfig): IAppInstance {
   opts.workspaceDir = makeWorkspaceDir(opts.workspaceDir);
   // 托管 preference 逻辑
   registerLocalStorageProvider(opts);
+  
+  console.log(' ==> opts',opts.injector);
+
   const app = new ClientApp(opts) as IAppInstance;
 
   Object.defineProperty(app, 'currentThemeType', {
