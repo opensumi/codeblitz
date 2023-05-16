@@ -1,6 +1,6 @@
 import React, { useMemo, useRef, useState } from 'react';
 import ReactDOM from 'react-dom';
-import { IAppInstance, AppRenderer, SlotLocation, AppRenderer2, KeepAlive } from '@alipay/alex';
+import { IAppInstance, AppRenderer, SlotLocation } from '@alipay/alex';
 import '@alipay/alex/languages/sql';
 import {
   CompletionItemKind,
@@ -9,28 +9,16 @@ import {
   setMonacoEnvironment,
 } from '@alipay/alex-sql-service';
 import { Button } from '@opensumi/ide-components';
-import SqlPlugin from './sql.plugin';
+import * as SQLPlugin from './sql.plugin';
 import { IEditor } from '@opensumi/ide-editor';
 import { Popover, Radio, Menu } from 'antd';
 import 'antd/dist/antd.css';
 import odcTheme from '@alipay/alex/extensions/alex.odc-theme';
 import { SQLRender } from './sqlRender';
-import { Tabs } from 'antd';
 
 setMonacoEnvironment();
 
-const layoutConfig = {
-  [SlotLocation.main]: {
-    modules: ['@opensumi/ide-editor'],
-  },
-};
-
 const App = () => {
-  const PluginID = '';
-
-  const SQLPlugin = useMemo(() => {
-    return new SqlPlugin(PluginID);
-  }, []);
 
   const [fontValue, setFontValue] = useState(16);
   const [encoding, setEncoding] = useState('utf8');
@@ -76,16 +64,16 @@ const App = () => {
   }
 
   function format() {
-    SQLPlugin.commands?.executeCommand('editor.action.formatDocument');
+    SQLPlugin.api.commands?.executeCommand('editor.action.formatDocument');
   }
 
   function updatePrefeence(perferenceName, value) {
     // 设置首选项
-    SQLPlugin.commands?.executeCommand('alex.setDefaultPreference', perferenceName, value);
+    SQLPlugin.api.commands?.executeCommand('alex.setDefaultPreference', perferenceName, value);
   }
 
   async function addLine() {
-    const editor = (await SQLPlugin.commands?.executeCommand('alex.sql.editor')) as IEditor;
+    const editor = (await SQLPlugin.api.commands?.executeCommand('alex.sql.editor')) as IEditor;
     editor?.monacoEditor.trigger('editor', 'type', { text: '\n' });
   }
 
@@ -94,11 +82,11 @@ const App = () => {
      *  @param {string} uri - 文件uri
      *  @param {string} content - 文件内容 无内容时创建并注入默认内容
      */
-    SQLPlugin.commands?.executeCommand('alex.sql.open', 'test1.sql', '默认内容');
+    SQLPlugin.api.commands?.executeCommand('alex.sql.open', 'test1.sql', '默认内容');
   }
 
   async function editor() {
-    const editor = (await SQLPlugin.commands?.executeCommand('alex.sql.editor')) as IEditor;
+    const editor = (await SQLPlugin.api.commands?.executeCommand('alex.sql.editor')) as IEditor;
     console.log(editor?.monacoEditor.getValue());
   }
 
@@ -132,29 +120,36 @@ const App = () => {
   const menuCick = (e) => {
     console.log('click ', e);
     setCurrent(e.key);
+    // 每次切换tab 打开对应的文件
+    if(e.key === '1') {
+      SQLPlugin.api.commands?.executeCommand('alex.sql.open', 'test_uri1/test.sql');
+    }else {
+      SQLPlugin.api.commands?.executeCommand('alex.sql.open', 'test_uri2/test.sql');
+
+    }
   };
 
   return (
     <div style={{ height: '100%', overflow: 'scroll' }}>
       <div style={{ height: '300px' }}>
         <div style={{ margin: '20px' }}>
-          {/* <Button onClick={() => format()}>格式化</Button>
+          <Button onClick={() => format()}>格式化</Button>
           <Button onClick={() => addLine()}>添加行</Button>
           <Button onClick={() => openFile()}>打开文件</Button>
           <Button onClick={() => editor()}>获取当前内容</Button>
-          <Button onClick={() => changeTables()}>change suggest Tables</Button>
+          {/* <Button onClick={() => changeTables()}>change suggest Tables</Button> */}
           <Popover content={content} placement="top">
             <Button>设置</Button>
           </Popover>
-          <Button onClick={() => changeTables()}>change suggest Tables</Button>
+          {/* <Button onClick={() => changeTables()}>change suggest Tables</Button> */}
           <Button onClick={() => window.reset()}>reset </Button>
-          <Button onClick={() => editorNumberUpdate()}>添加编辑器</Button> */}
+          {/* <Button onClick={() => editorNumberUpdate()}>添加编辑器</Button> */}
           <Menu onClick={menuCick} selectedKeys={[current]} mode="horizontal" items={items} />
           <div style={{ display: `${current === '1' ? 'block' : 'none'}` }}>
-              <SQLRender id="1" visible={current === '1'} />
+              <SQLRender  id={current} visible={current === '1'} />
           </div>
           <div style={{ display: `${current === '2' ? 'block' : 'none'}` }}>
-              <SQLRender id="2" visible={current === '2'} />
+              <SQLRender  id={current} visible={current === '2'} />
           </div>
         </div>
 

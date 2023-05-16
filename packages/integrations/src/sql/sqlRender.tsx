@@ -1,5 +1,5 @@
-import { AppRenderer, AppRenderer2, KeepAlive, SlotLocation } from '@alipay/alex';
-import React, { useMemo, useRef, useState } from 'react';
+import { AppRenderer, SlotLocation } from '@alipay/alex';
+import React, { useContext, useEffect, useMemo, useRef, useState } from 'react';
 import ReactDOM from 'react-dom';
 import '@alipay/alex/languages/sql';
 import {
@@ -8,32 +8,51 @@ import {
   supportLanguage,
   setMonacoEnvironment,
 } from '@alipay/alex-sql-service';
-import SqlPlugin from './sql.plugin';
+import * as SQLPlugin from './sql.plugin';
 import { Popover, Radio } from 'antd';
 import 'antd/dist/antd.css';
 import odcTheme from '@alipay/alex/extensions/alex.odc-theme';
 import { Button } from '@opensumi/ide-components';
 import { IEditor } from '@opensumi/ide-editor';
 
+import { KeepAlive } from './KeepAlive';
 
+
+let tableID = 1;
+
+const tableMap = {
+  1: [],
+  2: []
+}
 export const SQLRender = (props) => {
 
+
+  const id = useRef(props.id)
+
+  const suggestTables = useRef(tableMap);
+
+  useEffect(() => {
+    id.current = props.id;
+
+    console.log('id', id)
+  }, [props.id])
+
+  console.log('props',props);
+
+  function changeTables() {
+    tableID++;
+    suggestTables.current[id.current] = suggestTables.current[id.current].concat([
+      {
+        label: `sample_one_table_${tableID}`,
+        type: 'SAMPLE_TYPE_ONE',
+        insertText: 'LD.sample_one_table1',
+        kind: CompletionItemKind.Method,
+        sortText: 'a',
+      },
+    ])
+    console.log('suggestTables ==> ',suggestTables)
+  }
   const PluginID = props.id
-  const SQLPlugin = useMemo(() => {
-    return new SqlPlugin(PluginID);
-  }, []);
-
-  let tableID = 'table1';
-
-  const suggestTables = [
-    {
-      label: `sample_two_table_${tableID}`,
-      type: 'SAMPLE_TYPE_TWO',
-      insertText: 'LD.sample_one_table1',
-      kind: CompletionItemKind.Method,
-      sortText: 'a',
-    },
-  ];
   const layoutConfig = {
     [SlotLocation.main]: {
       modules: ['@opensumi/ide-editor'],
@@ -45,33 +64,11 @@ export const SQLRender = (props) => {
 
   console.log('render sql ==>',props)
 
-
-  async function addLine() {
-    const editor = (await SQLPlugin.commands?.executeCommand('alex.sql.editor')) as IEditor;
-    editor?.monacoEditor.trigger('editor', 'type', { text: '\n' });
-  }
-  function format() {
-    SQLPlugin.commands?.executeCommand('editor.action.formatDocument');
-  }
-  function openFile() {
-    /** COMMAND alex.sql.open
-     *  @param {string} uri - 文件uri
-     *  @param {string} content - 文件内容 无内容时创建并注入默认内容
-     */
-    SQLPlugin.commands?.executeCommand('alex.sql.open', 'test1.sql', '默认内容');
-  }
-  async function getEditor() {
-    const editor = (await SQLPlugin.commands?.executeCommand('alex.sql.editor')) as IEditor;
-    console.log(editor?.monacoEditor.getValue());
-  }
   
   return (
     <div style={{ height: '200px', display: 'flex' }}>
       <Button style={{ zIndex: '100' }} onClick={() => setEditor(false)}>销毁editor</Button>
-      <Button style={{ zIndex: '100' }} onClick={() => format()}>格式化</Button>
-      <Button style={{ zIndex: '100' }} onClick={() => addLine()}>添加行</Button>
-      <Button style={{ zIndex: '100' }} onClick={() => openFile()}>打开文件</Button>
-      <Button style={{ zIndex: '100' }} onClick={() => getEditor()}>获取当前内容</Button>
+      <Button onClick={() => changeTables()}>change suggest Tables</Button>
 
       {editor && (
         <div style={{ border: '2px solid red', zIndex: '10', width: '100%'}}>
@@ -119,8 +116,8 @@ export const SQLRender = (props) => {
                       },
                     ],
                     onSuggestTables: (keyword, options) => {
-                      console.log('suggest', keyword, options, suggestTables);
-                      return suggestTables;
+                      console.log('suggest', keyword, options, suggestTables, id);
+                      return suggestTables.current[id.current];
                     },
                     onSuggestFields: (prefix, options) => {
                       console.log('files', prefix, options);
@@ -210,7 +207,7 @@ export const SQLRender = (props) => {
                   }),
                 ],
                 extensionMetadata: [odcTheme],
-                workspaceDir: `sql-service-${PluginID}`,
+                workspaceDir: `sql-service`,
                 layoutConfig,
                 defaultPreferences: {
                   'general.theme': 'odc-light',
@@ -228,7 +225,7 @@ export const SQLRender = (props) => {
                 biz: 'sql-service',
                 // hideEditorTab: true,
                 scenario: 'ALEX_TEST',
-                defaultOpenFile: 'test.sql',
+                // defaultOpenFile: 'test.sql',
                 hideBreadcrumb: true,
                 hideLeftTabBar: true,
                 registerKeybindings: [
@@ -244,7 +241,8 @@ export const SQLRender = (props) => {
                       // 初始全量文件索引
                       requestFileIndex() {
                         return Promise.resolve({
-                          'test.sql': 'select * from',
+                          'test_uri1/test.sql': 'select * from 111',
+                          'test_uri2/test.sql': 'select * from 222',
                         });
                       },
                     },

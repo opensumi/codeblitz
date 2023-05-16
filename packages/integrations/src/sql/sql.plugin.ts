@@ -1,35 +1,15 @@
-import { commands } from 'vscode';
-import type { IPluginAPI, IPluginModule } from '@alipay/alex/lib/editor';
+import type { IPluginAPI } from '@alipay/alex';
 
+export const PLUGIN_ID = 'sql-plugin';
+let _commands: IPluginAPI['commands'] | null = null;
 
-export default class SQLPlugin implements IPluginModule {
-  /**
-   * 插件 ID，用于唯一标识插件
-   */
-  PLUGIN_ID = 'sql-plugin';
-  private _id: string;
-  commands: IPluginAPI['commands'];
-  static api: any;
+export const api = {
+  get commands() {
+    return _commands;
+  },
+};
 
-  constructor(
-    id: string
-  ) {
-    this._id = id;
-  }
-
-  /**
-   * 激活插件
-   */
-  activate = ({ commands }: IPluginAPI) => {
-    this.commands = commands;
-    commands.registerCommand('alex.update.perference', async (key) => {
-      return commands.executeCommand('')
-    });
-    console.log(commands)
-  };
-
-  /**
-   * 注销插件，可在此时机清理副作用
-   */
-  deactivate() {}
-}
+export const activate = ({ commands }: IPluginAPI) => {
+  // 只需获取command 方法
+  _commands = commands;
+};

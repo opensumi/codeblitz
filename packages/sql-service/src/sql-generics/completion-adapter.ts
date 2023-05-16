@@ -238,7 +238,6 @@ class CompletionAdapter implements monaco.languages.CompletionItemProvider {
     let asyncItemsArr: monaco.languages.CompletionItem[] = [];
 
     if (info.asyncItems) {
-      console.log('asyncItems')
       // 暂存所有提示字段或表名
       if (info.asyncItems.completeType === 'recombination') {
         const resultArray = await Promise.all(
@@ -254,8 +253,6 @@ class CompletionAdapter implements monaco.languages.CompletionItemProvider {
           }
         });
       } else {
-        console.log('asyncItems')
-
         const { items: simpleCaseItems, visitedTableIncrement } = await asyncItemSimpleCaseHandler(
           info.asyncItems,
           this.options
@@ -317,7 +314,6 @@ class CompletionAdapter implements monaco.languages.CompletionItemProvider {
           }
 
           const syncItems = this.formatSyncItems(info, this.options.completionTypes);
-          console.log('info', info);
           const asyncItems = await this.getAsyncItems(info);
 
           const items = syncItems.concat(asyncItems).filter((item) => item?.label);
