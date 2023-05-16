@@ -128,6 +128,38 @@ export const AppRenderer: React.FC<IAppRendererProps> = ({ onLoad, Landing, ...o
   );
 };
 
+const appContainer = document.createElement('div')
+appContainer.style.width = '100%'
+appContainer.style.height = '100%'
+
+let appMounted = false
+
+export const KeepLive: React.FC = (props) => {
+  const anchorRef = useRef<HTMLDivElement>(null)
+  useEffect(() => {
+    if (!appMounted) {
+      appMounted = true
+      ReactDOM.render(<>{props.children}</>, appContainer)
+    }
+
+    anchorRef?.current?.insertAdjacentElement('afterend', appContainer)
+
+    return () => {
+      try {
+        if (anchorRef?.current?.parentNode !== null) {
+          anchorRef?.current?.parentNode.removeChild(appContainer);
+        }
+      } catch (error) {
+        console.error(error)
+      }
+    }
+  }, [])
+
+  return <div ref={anchorRef} />
+}
+
+
+
 // 缓存apprender 每次渲染都不卸载组件
 export const AppRenderer2: React.FC<IAppRendererProps> = ({ onLoad, Landing, ...opts }) => {
   const app = useConstant(() =>

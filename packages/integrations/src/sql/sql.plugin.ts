@@ -7,12 +7,12 @@ export default class SQLPlugin implements IPluginModule {
    * 插件 ID，用于唯一标识插件
    */
   PLUGIN_ID = 'sql-plugin';
-  private _id: number;
+  private _id: string;
   commands: IPluginAPI['commands'];
   static api: any;
 
   constructor(
-    id: number
+    id: string
   ) {
     this._id = id;
   }

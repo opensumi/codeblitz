@@ -1,6 +1,6 @@
 import React, { useMemo, useRef, useState } from 'react';
 import ReactDOM from 'react-dom';
-import { IAppInstance, AppRenderer, SlotLocation, AppRenderer2 } from '@alipay/alex';
+import { IAppInstance, AppRenderer, SlotLocation, AppRenderer2, KeepLive } from '@alipay/alex';
 import '@alipay/alex/languages/sql';
 import {
   CompletionItemKind,
@@ -9,12 +9,13 @@ import {
   setMonacoEnvironment,
 } from '@alipay/alex-sql-service';
 import { Button } from '@opensumi/ide-components';
-import SqlPlugin  from './sql.plugin';
+import SqlPlugin from './sql.plugin';
 import { IEditor } from '@opensumi/ide-editor';
-import { Popover, Radio } from 'antd';
+import { Popover, Radio, Menu } from 'antd';
 import 'antd/dist/antd.css';
 import odcTheme from '@alipay/alex/extensions/alex.odc-theme';
 import { SQLRender } from './sqlRender';
+import { Tabs } from 'antd';
 
 setMonacoEnvironment();
 
@@ -24,15 +25,13 @@ const layoutConfig = {
   },
 };
 
-
-
 const App = () => {
-  const PluginID = 1
+  const PluginID = '';
 
   const SQLPlugin = useMemo(() => {
     return new SqlPlugin(PluginID);
   }, []);
-  
+
   const [fontValue, setFontValue] = useState(16);
   const [encoding, setEncoding] = useState('utf8');
   const [editorNumber, setEditorNumber] = useState(1);
@@ -62,9 +61,6 @@ const App = () => {
     ]);
   }
 
-
-
-
   const onChangeFont = (e) => {
     setFontValue(e.target.value);
     updatePrefeence('editor.fontSize', e.target.value);
@@ -79,21 +75,20 @@ const App = () => {
     setEditorNumber(editorNumber + 1);
   }
 
-
   function format() {
     SQLPlugin.commands?.executeCommand('editor.action.formatDocument');
   }
-  
+
   function updatePrefeence(perferenceName, value) {
     // 设置首选项
     SQLPlugin.commands?.executeCommand('alex.setDefaultPreference', perferenceName, value);
   }
-  
+
   async function addLine() {
     const editor = (await SQLPlugin.commands?.executeCommand('alex.sql.editor')) as IEditor;
     editor?.monacoEditor.trigger('editor', 'type', { text: '\n' });
   }
-  
+
   function openFile() {
     /** COMMAND alex.sql.open
      *  @param {string} uri - 文件uri
@@ -101,7 +96,7 @@ const App = () => {
      */
     SQLPlugin.commands?.executeCommand('alex.sql.open', 'test1.sql', '默认内容');
   }
-  
+
   async function editor() {
     const editor = (await SQLPlugin.commands?.executeCommand('alex.sql.editor')) as IEditor;
     console.log(editor?.monacoEditor.getValue());
@@ -122,12 +117,28 @@ const App = () => {
       </Radio.Group>
     </div>
   );
+  const items = [
+    {
+      label: 'Navigation One',
+      key: '1',
+    },
+    {
+      label: 'Navigation Two',
+      key: '2',
+    },
+  ];
+  const [current, setCurrent] = useState('1');
+
+  const menuCick = (e) => {
+    console.log('click ', e);
+    setCurrent(e.key);
+  };
 
   return (
     <div style={{ height: '100%', overflow: 'scroll' }}>
       <div style={{ height: '300px' }}>
         <div style={{ margin: '20px' }}>
-          <Button onClick={() => format()}>格式化</Button>
+          {/* <Button onClick={() => format()}>格式化</Button>
           <Button onClick={() => addLine()}>添加行</Button>
           <Button onClick={() => openFile()}>打开文件</Button>
           <Button onClick={() => editor()}>获取当前内容</Button>
@@ -137,9 +148,17 @@ const App = () => {
           </Popover>
           <Button onClick={() => changeTables()}>change suggest Tables</Button>
           <Button onClick={() => window.reset()}>reset </Button>
-          <Button onClick={() => editorNumberUpdate()}>添加编辑器</Button>
+          <Button onClick={() => editorNumberUpdate()}>添加编辑器</Button> */}
+          <Menu onClick={menuCick} selectedKeys={[current]} mode="horizontal" items={items} />
+          <div style={{ display: `${current === '1' ? 'block' : 'none'}` }}>
+              <SQLRender id="1" />
+          </div>
+          <div style={{ display: `${current === '2' ? 'block' : 'none'}` }}>
+              <SQLRender id="2" />
+          </div>
         </div>
-        <AppRenderer2
+
+        {/* <AppRenderer2
           onLoad={(app) => {
             window.app = app;
           }}
@@ -316,23 +335,8 @@ const App = () => {
               },
             },
           }}
-        />
+        /> */}
       </div>
-      {editorNumber > 1 ? (
-        <div>
-          <SQLRender />
-        </div>
-      ) : null}
-      {editorNumber > 2 ? (
-        <div>
-          <SQLRender />
-        </div>
-      ) : null}
-      {editorNumber > 3 ? (
-        <div>
-          <SQLRender />
-        </div>
-      ) : null}
     </div>
   );
 };
