@@ -1,3 +1,17 @@
+## [2.2.5-beta.5](https://code.alipay.com/cloud-ide/crew-dragon/compare/v2.2.5-beta.4...v2.2.5-beta.5) (2023-05-16)
+
+
+### Bug Fixes
+
+* signature error ([8cefe63](https://code.alipay.com/cloud-ide/crew-dragon/commits/8cefe63ae99f0893b6c3eb48a08f90643aeb1d33))
+
+
+### Features
+
+* keepalive ([76b2382](https://code.alipay.com/cloud-ide/crew-dragon/commits/76b2382b6ff807da88dd7d6f60ccd503fb6b8dcd))
+
+
+
 ## [2.2.5-beta.4](https://code.alipay.com/cloud-ide/crew-dragon/compare/v2.2.5-beta.3...v2.2.5-beta.4) (2023-05-11)
 
 
