@@ -1,4 +1,4 @@
-import { AppRenderer, AppRenderer2, KeepLive, SlotLocation } from '@alipay/alex';
+import { AppRenderer, AppRenderer2, KeepAlive, SlotLocation } from '@alipay/alex';
 import React, { useMemo, useRef, useState } from 'react';
 import ReactDOM from 'react-dom';
 import '@alipay/alex/languages/sql';
@@ -75,7 +75,7 @@ export const SQLRender = (props) => {
 
       {editor && (
         <div style={{ border: '2px solid red', zIndex: '10', width: '100%'}}>
-          <KeepLive>
+          <KeepAlive visible={props.visible}>
             <AppRenderer
               key={PluginID}
               appConfig={{
@@ -252,7 +252,7 @@ export const SQLRender = (props) => {
                 },
               }}
             />
-        </KeepLive>
+        </KeepAlive>
         </div>
       )}
     </div>

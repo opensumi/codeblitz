@@ -134,26 +134,31 @@ appContainer.style.height = '100%'
 
 let appMounted = false
 
-export const KeepLive: React.FC = (props) => {
+export const KeepAlive: React.FC<{ visible: boolean }> = (props) => {
   const anchorRef = useRef<HTMLDivElement>(null)
+
   useEffect(() => {
     if (!appMounted) {
       appMounted = true
       ReactDOM.render(<>{props.children}</>, appContainer)
     }
-
-    anchorRef?.current?.insertAdjacentElement('afterend', appContainer)
-
-    return () => {
-      try {
-        if (anchorRef?.current?.parentNode !== null) {
-          anchorRef?.current?.parentNode.removeChild(appContainer);
-        }
-      } catch (error) {
-        console.error(error)
-      }
-    }
   }, [])
+
+  useEffect(() => {
+    if (props.visible) {
+      anchorRef?.current?.insertAdjacentElement('afterend', appContainer)
+    }
+
+    // return () => {
+    //   try {
+    //     if (anchorRef?.current?.parentNode !== null) {
+    //       anchorRef?.current?.parentNode.removeChild(appContainer);
+    //     }
+    //   } catch (error) {
+    //     console.error(error)
+    //   }
+    // }
+  }, [props.visible])
 
   return <div ref={anchorRef} />
 }

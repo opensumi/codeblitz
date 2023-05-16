@@ -1,6 +1,6 @@
 import React, { useMemo, useRef, useState } from 'react';
 import ReactDOM from 'react-dom';
-import { IAppInstance, AppRenderer, SlotLocation, AppRenderer2, KeepLive } from '@alipay/alex';
+import { IAppInstance, AppRenderer, SlotLocation, AppRenderer2, KeepAlive } from '@alipay/alex';
 import '@alipay/alex/languages/sql';
 import {
   CompletionItemKind,
@@ -151,10 +151,10 @@ const App = () => {
           <Button onClick={() => editorNumberUpdate()}>添加编辑器</Button> */}
           <Menu onClick={menuCick} selectedKeys={[current]} mode="horizontal" items={items} />
           <div style={{ display: `${current === '1' ? 'block' : 'none'}` }}>
-              <SQLRender id="1" />
+              <SQLRender id="1" visible={current === '1'} />
           </div>
           <div style={{ display: `${current === '2' ? 'block' : 'none'}` }}>
-              <SQLRender id="2" />
+              <SQLRender id="2" visible={current === '2'} />
           </div>
         </div>
 
