@@ -1,6 +1,6 @@
 {
   "name": "@alipay/alex-i18n",
-  "version": "2.2.5-beta.5",
+  "version": "2.2.5-beta.6",
   "description": "@alipay/alex-i18n",
   "main": "lib/index.js",
   "typings": "lib/index.d.ts",
@@ -19,8 +19,8 @@
     "lockfile": "enable"
   },
   "dependencies": {
-    "@alipay/alex-core": "2.2.5-beta.5",
-    "@alipay/alex-shared": "2.2.5-beta.5",
+    "@alipay/alex-core": "2.2.5-beta.6",
+    "@alipay/alex-shared": "2.2.5-beta.6",
     "tslib": "^2.2.0"
   }
 }

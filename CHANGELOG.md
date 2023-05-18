@@ -1,3 +1,7 @@
+## [2.2.5-beta.6](https://code.alipay.com/cloud-ide/crew-dragon/compare/v2.2.5-beta.5...v2.2.5-beta.6) (2023-05-18)
+
+
+
 ## [2.2.5-beta.5](https://code.alipay.com/cloud-ide/crew-dragon/compare/v2.2.5-beta.4...v2.2.5-beta.5) (2023-05-16)
 
 

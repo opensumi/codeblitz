@@ -1,6 +1,6 @@
 {
   "name": "@alipay/alex-code-api",
-  "version": "2.2.5-beta.5",
+  "version": "2.2.5-beta.6",
   "description": "@alipay/alex-code-api",
   "main": "lib/index.js",
   "typings": "lib/index.d.ts",
@@ -19,9 +19,9 @@
     "lockfile": "enable"
   },
   "dependencies": {
-    "@alipay/alex-core": "2.2.5-beta.5",
-    "@alipay/alex-code-service": "2.2.5-beta.5",
-    "@alipay/alex-shared": "2.2.5-beta.5",
+    "@alipay/alex-core": "2.2.5-beta.6",
+    "@alipay/alex-code-service": "2.2.5-beta.6",
+    "@alipay/alex-shared": "2.2.5-beta.6",
     "tslib": "^2.2.0"
   }
 }
