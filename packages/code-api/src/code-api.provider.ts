@@ -10,6 +10,7 @@ import {
 import { IMainLayoutService } from '@opensumi/ide-main-layout';
 import { ICodePlatform, ICodeAPIProvider, ICodeAPIService, CodePlatform } from './common/types';
 import { AntCodeAPIService } from './antcode/antcode.service';
+import { CodeAPIService } from './antcode/code.service';
 import { GitHubAPIService } from './github/github.service';
 import { GitLabAPIService } from './gitlab/gitlab.service';
 import { GitLinkAPIService } from './gitlink/gitlink.service';
@@ -38,6 +39,9 @@ export class CodeAPIProvider implements ICodeAPIProvider, ClientAppContribution 
   constructor() {
     this.registerPlatformProvider(CodePlatform.antcode, {
       provider: AntCodeAPIService,
+    });
+    this.registerPlatformProvider(CodePlatform.code, {
+      provider: CodeAPIService,
     });
     this.registerPlatformProvider(CodePlatform.github, {
       provider: GitHubAPIService,
