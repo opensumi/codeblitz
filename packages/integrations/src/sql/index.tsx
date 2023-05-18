@@ -122,10 +122,9 @@ const App = () => {
     setCurrent(e.key);
     // 每次切换tab 打开对应的文件
     if(e.key === '1') {
-      SQLPlugin.api.commands?.executeCommand('alex.sql.open', 'test_uri1/test.sql');
+      SQLPlugin.api.commands?.executeCommand('alex.sql.open', 'test_uri1/test.sql', '');
     }else {
-      SQLPlugin.api.commands?.executeCommand('alex.sql.open', 'test_uri2/test.sql');
-
+      SQLPlugin.api.commands?.executeCommand('alex.sql.open', 'test_uri3/test.sql');
     }
   };
 

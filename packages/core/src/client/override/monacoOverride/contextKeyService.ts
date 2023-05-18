@@ -209,8 +209,9 @@ export class MonacoContextKeyServiceOverride
 
   constructor() {
     super();
-    this.contextKeyService = new ContextKeyService(this.configurationService);
+    this.contextKeyService = (window as any).contextService || new ContextKeyService(this.configurationService);
     this.listenToContextChanges();
+    (window as any).contextService = this.contextKeyService
   }
 
   dispose(): void {

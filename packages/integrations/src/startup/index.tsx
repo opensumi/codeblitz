@@ -84,7 +84,7 @@ if (pathParts[2]) {
 config.refPath = pathParts.slice(3).join('/');
 
 const App = () => (
-  <AppRenderer2
+  <AppRenderer
     onLoad={(app) => {
       window.app = app;
       window.testPlugin = () => {
