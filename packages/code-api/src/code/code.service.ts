@@ -77,7 +77,7 @@ export default class CodeAPIService extends AntCodeAPIService {
             console.log(err);
             return undefined as any;
           }
-          this.helper.showMessage(CodePlatform.antcode, {
+          this.helper.showMessage(CodePlatform.code, {
             type: MessageType.Error,
             status: status,
             symbol: err?.message ? '' : 'error.request',
@@ -85,7 +85,7 @@ export default class CodeAPIService extends AntCodeAPIService {
           });
         }
       } else {
-        this.helper.showMessage(CodePlatform.antcode, {
+        this.helper.showMessage(CodePlatform.code, {
           type: MessageType.Error,
           symbol: 'api.response.unknown-error',
         });
