@@ -16,7 +16,7 @@ const webgwRequestOpts = {
 /**
  * 小程序云Code
  */
-export default class CodeApiService extends AntCodeAPIService {
+export default class CodeAPIService extends AntCodeAPIService {
   config = CODE_PLATFORM_CONFIG[CodePlatform.code];
 
   protected async request<T>(
@@ -34,16 +34,14 @@ export default class CodeApiService extends AntCodeAPIService {
         baseURL: endpoint,
         credentials: 'include',
         responseType: 'json',
-        ...(privateToken
-          ? {
-              ...options,
-              headers: {
-                'PRIVATE-TOKEN': privateToken,
-                ...webgwRequestOpts,
-                ...options?.headers,
-              },
-            }
-          : options),
+        ...options,
+        ...({
+          headers: {
+            ...(privateToken ? { 'PRIVATE-TOKEN': privateToken } : {}),
+            ...options?.headers,
+            ...webgwRequestOpts,
+          },
+        }),
       });
       return data;
     } catch (err: any) {
@@ -58,10 +56,10 @@ export default class CodeApiService extends AntCodeAPIService {
           const goto = localize('api.login.goto');
           this.helper
             .showMessage(
-              CodePlatform.antcode,
+              CodePlatform.code,
               {
                 type: MessageType.Error,
-                symbol: 'api.response.no-login-antcode',
+                symbol: 'api.response.no-login-code',
                 status: 401,
               },
               {
@@ -96,46 +94,11 @@ export default class CodeApiService extends AntCodeAPIService {
     }
   }
 
-  private getProjectIdByRepo(repo: IRepositoryModel) {
-    return `${repo.owner}%2F${repo.name}`;
-  }
-
-  /*
-   * 获取两个分支 的共同祖先
-   * 类似于 git merge-base branch1 branch2
-   * 接口暂时只支持查询两个分支
-   */
-  async mergeBase(
+  mergeBase(
     repo: IRepositoryModel,
     target: string,
     source: string
   ): Promise<API.ResponseCommit> {
-    let url = `/tcloudantcodeweb/api/v4/projects/${this.getProjectIdByRepo(
-      repo
-    )}/repository/merge_base?refs[]=${target}&refs[]=${source}`;
-    if (this.config.endpoint) {
-      url = createUrl(this.config.endpoint, url);
-    }
-    const urlInstance = new URL(url, location.origin);
-    const privateToken = this.PRIVATE_TOKEN;
-    return (
-      await fetch(urlInstance.toString(), {
-        method: 'GET',
-        ...(privateToken
-          ? {
-              headers: {
-                'PRIVATE-TOKEN': privateToken,
-                'Content-Type': 'application/json',
-                ...webgwRequestOpts
-              },
-            }
-          : {
-              headers: {
-                'Content-Type': 'application/json',
-                ...webgwRequestOpts
-              },
-            }),
-      })
-    ).json();
+    throw new Error('Method not implemented.');
   }
 }

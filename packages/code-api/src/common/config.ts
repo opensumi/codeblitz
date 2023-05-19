@@ -48,7 +48,7 @@ export const CODE_PLATFORM_CONFIG: Record<ICodePlatform, ICodePlatformConfig> = 
   [CodePlatform.code]: {
     platform: CodePlatform.code,
     hostname: [],
-    origin: 'https://twebgwnet.alipay.com',
+    origin: 'https://code.cloud.alipay.com',
     endpoint: 'https://twebgwnet.alipay.com',
     brand: 'Code',
     line: {
