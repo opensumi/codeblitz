@@ -42,6 +42,8 @@ export type ICodeServiceConfig = {
   commit?: string;
   /** url hash */
   hash?: string;
+  /** 租户 */
+  tenant?: string;
 } & {
   /** submodules 多平台配置 */
   [key in ICodePlatform]?: {

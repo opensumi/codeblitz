@@ -255,7 +255,7 @@ export class CommandsContribution extends Disposable implements CommandContribut
   }
 
   async repository() {
-    const { HEAD, commit, headLabel, name, owner, platform, ref, refs } =
+    const { HEAD, commit, headLabel, name, owner, platform, ref, refs, tenant } =
       this.codeModel.rootRepository;
     return {
       HEAD,
@@ -266,6 +266,7 @@ export class CommandsContribution extends Disposable implements CommandContribut
       platform,
       ref,
       origin: CODE_PLATFORM_CONFIG[platform].origin,
+      tenant,
       // refs: refs
     };
   }
