@@ -66,14 +66,6 @@ export class Repository implements IRepositoryModel {
   }
 
   /**
-   * 小程序仓库租户
-   */
-   private _tenant: string;
-   get tenant() {
-     return this._tenant;
-   }
-
-  /**
    * commit
    */
   private _commit: string;
@@ -111,14 +103,12 @@ export class Repository implements IRepositoryModel {
     owner: string;
     name: string;
     commit: string;
-    tenant: string;
   }) {
     this._root = data.root;
     this._platform = data.platform;
     this._owner = data.owner;
     this._name = data.name;
     this._commit = data.commit;
-    this._tenant = data.tenant;
   }
 
   async addSubmodulePath(path: string) {

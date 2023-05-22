@@ -52,7 +52,6 @@ export class CodeModelService {
         owner: config.owner,
         name: config.name,
         platform: config.platform,
-        tenant: config.tenant,
         commit: 'HEAD',
       },
     ]);
