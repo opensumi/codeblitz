@@ -946,6 +946,7 @@ export const ODPSTokens = (customSetting: Record<string, string[]> = {}) => {
       comments: [
         [/--+.*/, 'comment'],
         [/\/\*/, { token: 'comment.quote', next: '@comment' }],
+        // [/##+.*/,'commant']
       ],
       comment: [
         [/[^*/]+/, 'comment'],

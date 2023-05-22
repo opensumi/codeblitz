@@ -32,10 +32,10 @@ export function generateCorsUrl(url) {
   return `data:text/javascript;charset=utf-8,${encodeURIComponent(`importScripts('${url}');`)}`;
 }
 
-export function setMonacoEnvironment(uri?: string) {
+export function setMonacoEnvironment(uri: string) {
   self['MonacoEnvironment'] = {
     getWorkerUrl: function () {
-      return generateCorsUrl('http://127.0.0.1:8080/dist/odps-worker.403d1f02.js');
+      return generateCorsUrl(uri);
     },
   };
 }

@@ -6,7 +6,8 @@ import {
   KeybindingRegistry,
   ClientAppContribution,
   QUICK_OPEN_COMMANDS,
-  EDITOR_COMMANDS
+  EDITOR_COMMANDS,
+  Keybinding,
 } from '@opensumi/ide-core-browser';
 import { WorkbenchEditorService } from '@opensumi/ide-editor';
 import { AppConfig, RuntimeConfig, WORKSPACE_ROOT } from '@alipay/alex-core';
@@ -31,7 +32,9 @@ export namespace SQL_COMMANDS {
   };
 }
 @Domain(CommandContribution, KeybindingContribution, MenuContribution)
-export class SQLKeybindContribution implements CommandContribution, KeybindingContribution, MenuContribution {
+export class SQLKeybindContribution
+  implements CommandContribution, KeybindingContribution, MenuContribution
+{
   @Autowired(WorkbenchEditorService)
   private readonly workbenchEditorService: WorkbenchEditorService;
 
@@ -100,7 +103,7 @@ export class SQLKeybindContribution implements CommandContribution, KeybindingCo
     // menus.unregisterMenuItem(MenuId.EditorContext, EDITOR_COMMANDS.FORMAT_DOCUMENT_WITH.id);
     // menus.unregisterMenuItem(MenuId.EditorContext, 'editor.action.revealDefinition');
     // menus.unregisterMenuItem(MenuId.EditorContext, 'EditorContextPeek');
+    // menus.unregisterMenuItem(MenuId.EditorContext, EDITOR_COMMANDS.FORMAT_DOCUMENT_WITH.id);
     // menus.unregisterMenuItem(MenuId.EditorContext, 'editor.action.changeAll');
-    menus.unregisterMenuId(MenuId.EditorContext)
   }
 }

@@ -221,6 +221,9 @@ module.exports = (option) => {
         __ODPS_WORKER__: process.env.ODPS_WORKER
           ? JSON.stringify(`/assets/~${process.env.ODPS_WORKER}`)
           : JSON.stringify(`${baseURL}/${config.odpsEntry}.js`),
+        __OB_WORKER__: process.env.OB_WORKER
+          ? JSON.stringify(`/assets/~${process.env.ODPS_WORKER}`)
+          : JSON.stringify(`${baseURL}/${config.obEntry}.js`),
         ...option.define,
       }),
       new webpack.ProvidePlugin({

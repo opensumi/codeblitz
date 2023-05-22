@@ -1,3 +1,4 @@
+// 生成所有 sql 语法worker 文件
 const path = require('path');
 const webpack = require('webpack');
 const { nodePolyfill, manifestSeed, config } = require('./util');
@@ -8,6 +9,7 @@ module.exports = {
   stats: 'errors-only',
   entry: {
     [config.odpsEntry]: '../sql-service/src/worker/ODPSWorker.ts',
+    [config.obEntry]: '../sql-service/src/worker/OBWorker.ts',
   },
   output: {
     path: path.resolve(__dirname, '../dist'),

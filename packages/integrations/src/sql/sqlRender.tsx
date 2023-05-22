@@ -230,7 +230,7 @@ export const SQLRender = (props) => {
                 hideLeftTabBar: true,
                 registerKeybindings: [
                   {
-                    command: '',
+                    command: 'editor.action.formatDocument',
                     keybinding: 'f8',
                   },
                 ],
@@ -241,8 +241,8 @@ export const SQLRender = (props) => {
                       // 初始全量文件索引
                       requestFileIndex() {
                         return Promise.resolve({
-                          'test_uri1/test.sql': 'select * from 111',
-                          'test_uri2/test.sql': 'select * from 222',
+                          'test_uri1': { 'test.sql': 'select * from 111' },
+                          'test_uri2': { 'test.sql': 'select * from 222' },
                         });
                       },
                     },
