@@ -5,17 +5,17 @@ import { initialize } from '@opensumi/monaco-editor-core/esm/vs/editor/editor.wo
 import { TableAuthResponse } from '../tools/validationRules/TableAuth';
 
 import * as ls from 'vscode-languageserver-types';
-import _find from 'lodash/find';
-import _filter from 'lodash/filter';
-import _flatten from 'lodash/flatten';
-import _isEmpty from 'lodash/isEmpty';
-import _union from 'lodash/union';
-import _uniq from 'lodash/uniq';
-import _get from 'lodash/get';
-import _orderByget from 'lodash/orderBy';
-import _flattenDeep from 'lodash/flattenDeep';
-import _findLast from 'lodash/findLast';
-import _orderBy from 'lodash/orderBy';
+// import _find from 'lodash/find';
+// import _filter from 'lodash/filter';
+// import _flatten from 'lodash/flatten';
+// import _isEmpty from 'lodash/isEmpty';
+// import _union from 'lodash/union';
+// import _uniq from 'lodash/uniq';
+// import _get from 'lodash/get';
+// import _orderByget from 'lodash/orderBy';
+// import _flattenDeep from 'lodash/flattenDeep';
+// import _findLast from 'lodash/findLast';
+// import _orderBy from 'lodash/orderBy';
 import { validateGroupBy, validateSelectAll, validateTableAuth } from '../tools/validationRules';
 import { functionTypeTextMap } from '../sql-functions/odps/definitions';
 import { InputStream, CommonTokenStream } from 'antlr4';
@@ -86,6 +86,10 @@ class OBWorker {
     this.tokens = createData.languageTokens;
     console.log(tokens, parser);
 
+
+    console.log('lexer ==> ',Lexer)
+    console.log('tokens ==> ',tokens)
+    console.log('parser ==> ',parser)
 
   }
 

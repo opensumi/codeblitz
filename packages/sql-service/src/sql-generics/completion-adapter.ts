@@ -306,7 +306,7 @@ class CompletionAdapter implements monaco.languages.CompletionItemProvider {
             this.options.customizeFieldSuggest(false);
             return;
           }
-
+          // console.log('===> info' , info)
           // 是否配置了跳过性能分析上报
           const skipCompletionReport = _get(this.options, 'options.skipReport', false);
           if (!skipCompletionReport) {

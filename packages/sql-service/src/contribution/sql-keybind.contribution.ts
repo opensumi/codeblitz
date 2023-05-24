@@ -61,17 +61,19 @@ export class SQLKeybindContribution
       execute: (filepath: string, defaultContent?: string) => {
         const { workspaceDir } = this.appConfig;
         const uri = URI.file(path.join(workspaceDir, filepath));
-        this.fileService.access(uri.toString()).then((res) => {
+        return this.fileService.access(uri.toString()).then((res) => {
           if (!res) {
-            this.fileService
+            return this.fileService
               .createFile(uri.toString(), {
                 content: defaultContent,
               })
               .then(() => {
-                this.workbenchEditorService.open(uri);
-              });
+                return this.workbenchEditorService.open(uri);
+              }).catch(err=> {
+                return false
+              })
           } else {
-            this.workbenchEditorService.open(uri);
+            return this.workbenchEditorService.open(uri);
           }
         });
       },
@@ -105,5 +107,6 @@ export class SQLKeybindContribution
     // menus.unregisterMenuItem(MenuId.EditorContext, 'EditorContextPeek');
     // menus.unregisterMenuItem(MenuId.EditorContext, EDITOR_COMMANDS.FORMAT_DOCUMENT_WITH.id);
     // menus.unregisterMenuItem(MenuId.EditorContext, 'editor.action.changeAll');
+    menus.unregisterMenuId(MenuId.EditorContext)
   }
 }
