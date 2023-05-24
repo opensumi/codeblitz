@@ -16,6 +16,7 @@ import { Button } from '@opensumi/ide-components';
 import { IEditor } from '@opensumi/ide-editor';
 
 import { KeepAlive } from './KeepAlive';
+setMonacoEnvironment('http://127.0.0.1:8080/packages/toolkit/dist/odps-worker.dfb39f71.js');
 
 
 let tableID = 1;
@@ -33,7 +34,6 @@ export const SQLRender = (props) => {
 
   useEffect(() => {
     id.current = props.id;
-
     console.log('id', id)
   }, [props.id])
 
@@ -60,10 +60,6 @@ export const SQLRender = (props) => {
   };
 
   const [editor, setEditor] = useState(true);
-
-
-  console.log('render sql ==>',props)
-
   
   return (
     <div style={{ height: '200px', display: 'flex' }}>

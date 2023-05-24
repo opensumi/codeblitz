@@ -15,8 +15,10 @@ import { Popover, Radio, Menu } from 'antd';
 import 'antd/dist/antd.css';
 import odcTheme from '@alipay/alex/extensions/alex.odc-theme';
 import { SQLRender } from './sqlRender';
-
-setMonacoEnvironment();
+import * as monaco from '@opensumi/monaco-editor-core/esm/vs/editor/editor.api';
+import { ODPSTokens } from '@alipay/alex-sql-service/lib/config';
+import { ILanguageService } from '@opensumi/monaco-editor-core/esm/vs/editor/common/languages/language';
+import { StandaloneServices } from '@opensumi/monaco-editor-core/esm/vs/editor/standalone/browser/standaloneServices';
 
 const App = () => {
 
@@ -118,7 +120,6 @@ const App = () => {
   const [current, setCurrent] = useState('1');
 
   const menuCick = (e) => {
-    console.log('click ', e);
     setCurrent(e.key);
     // 每次切换tab 打开对应的文件
     if(e.key === '1') {
@@ -128,14 +129,132 @@ const App = () => {
     }
   };
 
+  // 渲染 monaco 原生编辑器
+  const WhiteTheme: any = {
+    base: 'vs',
+    inherit: true,
+    colors: {
+      'editor.background': '#FFFFFF', // 背景色
+      'editor.lineHighlightBackground': '#e8f3ff', // 行高亮色
+      'editorCursor.foreground': '#171617', // 光标颜色
+      'editor.selectionBackground': '#8AA7F8', // 选中文本框颜色
+      'editorIndentGuide.background': '#e8f3ff', // 层级提示颜色
+      'editorBracketMatch.background': '#8AA7F8', // 选中括号的背景色
+      'editor.selectionHighlightBackground': '#CBD4F2', // 已选中的其他内容的高亮颜色
+      'editor.findMatchBackground': '#FFA011',
+  
+    },
+    rules: [
+      { token: '', foreground: '171617', background: 'EBEAEF' }, // 默认字体颜色,以及右侧 minimap 背景色
+      { token: 'keywords', foreground: '770088', fontStyle: 'bold' }, // 关键词颜色
+      { token: 'customKeywords', foreground: '196FD8' }, // 自定义关键词颜色
+      { token: 'number', foreground: '2E7F01' }, // 数值颜色
+      { token: 'comment', foreground: 'ab5808' }, // 注释颜色
+      { token: 'builtinFunctions', foreground: 'CB3BC1' }, // 内置函数
+      { token: 'function', foreground: 'CB3BC1' }, // 函数颜色
+      { token: 'operator', foreground: '232226' }, // 运算符颜色
+      { token: 'string', foreground: 'D45E00' }, // 字符串颜色
+    ],
+    encodedTokensColors: [
+      null,
+      '#333333',
+      '#FFFFFF',
+      '#CB3BC1',
+      '#AB5808',
+      '#0000FF',
+      '#811F3F',
+      '#FF0000',
+      '#09885A',
+      '#0451A5',
+      '#196FD8',
+      '#267F99',
+      '#795E26',
+      '#800000',
+      '#001080',
+      '#CD3131',
+      '#770088',
+      '#AF00DB',
+      '#000000',
+      '#D16969',
+      '#000080',
+      '#A31515',
+      '#2E7F01',
+      '#232226',
+      '#D45E00',
+    ],
+  };
+
+
+  function initMonaco() {
+    initMonacoTheme();
+    createMonao();
+    initMonacoLanguage();
+  }
+  function initMonacoTheme() {
+    monaco.editor.defineTheme('monaco-light', WhiteTheme);
+    monaco.editor.setTheme('monaco-light');
+    monaco.languages.setMonarchTokensProvider('odc-sql', ODPSTokens());
+  }
+
+  function initMonacoLanguage() {
+    const LanguageService = StandaloneServices.get(ILanguageService)
+    LanguageService['_registry']['_registerLanguages']([{
+      id: 'odc-sql'
+    }])
+    monaco.languages.registerCompletionItemProvider('odc-sql', {
+      provideCompletionItems: (model, position, context, token) => {
+        // TODO 关键词排序
+        const suggestions = ['select','from'].map((key) => {
+          return {
+            label: key,
+            kind: monaco.languages.CompletionItemKind.Keyword,
+            insertText: key,
+            range: {
+              startLineNumber: position.lineNumber,
+              endLineNumber: position.lineNumber,
+              startColumn: position.column - 1,
+              endColumn: position.column,
+            },
+          } as monaco.languages.CompletionItem;
+        });
+        return {
+          suggestions: suggestions,
+        };
+      },
+    });
+  }
+
+
+  function createMonao() {
+    monaco.editor.create(document.getElementById('monaco') as HTMLElement, {
+      language: 'odc-sql',
+      value: 'select * from',
+      folding: true,
+      theme: 'monaco-light',
+      lineNumbersMinChars: 3.5,
+      scrollbar: {
+        verticalScrollbarSize: 8,
+        horizontalScrollbarSize: 8,
+      },
+      minimap: {
+        enabled: false,
+      },
+      formatOnPaste: true,
+      renderValidationDecorations: 'on',
+    });
+  
+  }
+
   return (
     <div style={{ height: '100%', overflow: 'scroll' }}>
       <div style={{ height: '300px' }}>
-        <div style={{ margin: '20px' }}>
+        <div style={{ margin: '20px' }} onContextMenu={()=>{console.log('ContextMenu')}} onClick={()=>console.log('click')}>
           <Button onClick={() => format()}>格式化</Button>
           <Button onClick={() => addLine()}>添加行</Button>
           <Button onClick={() => openFile()}>打开文件</Button>
           <Button onClick={() => editor()}>获取当前内容</Button>
+          <Button onClick={() => initMonaco()}>原生编辑器</Button>
+
           {/* <Button onClick={() => changeTables()}>change suggest Tables</Button> */}
           <Popover content={content} placement="top">
             <Button>设置</Button>
@@ -147,7 +266,7 @@ const App = () => {
           <div style={{ display: `${current === '1' ? 'block' : 'none'}` }}>
               <SQLRender  id={current} visible={current === '1'} />
           </div>
-          <div style={{ display: `${current === '2' ? 'block' : 'none'}` }}>
+          <div style={{ display: `${current === '2' ? 'block' : 'none'}` }} >
               <SQLRender  id={current} visible={current === '2'} />
           </div>
         </div>
@@ -331,6 +450,9 @@ const App = () => {
           }}
         /> */}
       </div>
+      <div style={{ height: '300px', margin: '20px', border: '2px soldi' }} id="monaco">
+        
+        </div>
     </div>
   );
 };
