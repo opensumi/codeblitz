@@ -1018,5 +1018,9 @@ export const globalConfig = {
     tokens: ODPSTokens,
     config: config,
   },
+  OB: {
+    tokens: ODPSTokens,
+    config: config,
+  }
 
 };

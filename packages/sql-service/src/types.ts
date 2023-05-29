@@ -2059,7 +2059,7 @@ interface nocacheAsyncItemType extends baseAsyncItemType {
   items?: Array<asyncItemsType>;
 }
 
-interface cacheAsyncItemType extends baseAsyncItemType {
+export interface cacheAsyncItemType extends baseAsyncItemType {
   /** 是否命中缓存，简单场景下必选，复杂场景下非必选 */
   hitCache?: true;
   items?: Array<monaco.languages.CompletionItem & { builtInCompletionType: builtInCompletionType }>;

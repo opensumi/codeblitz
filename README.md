@@ -49,6 +49,14 @@ node scripts/bundle
 
 # 构建worker 以及webview资源
 node scripts/build-assets
+
+# sql-service 服务
+# 编译g4语法文件 
+node scripts/antlr.js
+
+# 本地生成sql worker 静态资源
+cd packages/toolkit && npm run build:sql
+
 ```
 
 ### 发布版本

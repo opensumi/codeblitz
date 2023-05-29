@@ -11,6 +11,7 @@ import {
   CustomCompletionProviderOptions,
   SuggestControllerProps,
   CompleteProviderReturnType,
+  cacheAsyncItemType,
 } from '../types';
 
 import {
@@ -48,7 +49,7 @@ const completeTrigger = {
 async function asyncItemSimpleCaseHandler(
   simpleCase: asyncItemsType,
   options: CustomCompletionProviderOptions
-) {
+){
   if (simpleCase.hitCache) {
     return Promise.resolve({
       visitedTableIncrement: undefined,
@@ -200,11 +201,14 @@ class CompletionAdapter implements monaco.languages.CompletionItemProvider {
 
     return info.syncItems.map((syncItem) => {
       let item: monaco.languages.CompletionItem = {
-        label: syncItem.label,
+        label: {
+          label: syncItem.label,
+          description: syncItem.detail,
+        },
         insertText: syncItem?.insertText || syncItem.label,
         filterText: syncItem.filterText,
         documentation: syncItem.documentation,
-        detail: syncItem.detail,
+        // detail: syncItem.detail,
         kind: syncItem.kind,
         insertTextRules: syncItem.insertTextRules,
       } as monaco.languages.CompletionItem;
@@ -241,8 +245,7 @@ class CompletionAdapter implements monaco.languages.CompletionItemProvider {
       // 暂存所有提示字段或表名
       if (info.asyncItems.completeType === 'recombination') {
         const resultArray = await Promise.all(
-          // @ts-ignore
-          info.asyncItems.items.map((item) => asyncItemSimpleCaseHandler(item, this.options))
+          info.asyncItems.items?.map((item) => asyncItemSimpleCaseHandler(item, this.options)) || []
         );
 
         resultArray.forEach((result: any) => {
@@ -260,7 +263,6 @@ class CompletionAdapter implements monaco.languages.CompletionItemProvider {
 
         // @ts-ignore
         asyncItemsArr = asyncItemsArr.concat(simpleCaseItems);
-
         if (visitedTableIncrement) {
           SQLEditorModel.visitedTable.push(visitedTableIncrement);
         }
@@ -277,7 +279,6 @@ class CompletionAdapter implements monaco.languages.CompletionItemProvider {
     token: CancellationToken
   ): Thenable<monaco.languages.CompletionList> {
     const resource = model.uri;
-    // @ts-ignore
     return wireCancellationToken(
       token,
       this._worker(resource)
@@ -304,9 +305,11 @@ class CompletionAdapter implements monaco.languages.CompletionItemProvider {
               ?.cancelSuggestWidget();
             // @ts-ignore
             this.options.customizeFieldSuggest(false);
-            return;
+            return {
+              suggestions: [],
+            };
           }
-          // console.log('===> info' , info)
+          console.log('===> info' , info)
           // 是否配置了跳过性能分析上报
           const skipCompletionReport = _get(this.options, 'options.skipReport', false);
           if (!skipCompletionReport) {
@@ -356,7 +359,9 @@ class CompletionAdapter implements monaco.languages.CompletionItemProvider {
               .get(model.id)
               ?.getContribution<SuggestControllerProps>('editor.contrib.suggestController')
               ?.cancelSuggestWidget();
-            return;
+            return {
+              suggestions: [],
+            };
           }
 
           const { onProvideCompletion } = this.options;
@@ -376,7 +381,9 @@ class CompletionAdapter implements monaco.languages.CompletionItemProvider {
               syncItems,
               info.asyncItems
             );
-            return;
+            return {
+              suggestions: [],
+            };
           }
 
           // 当异步内容大于100项时，默认深度查询。
@@ -391,18 +398,16 @@ class CompletionAdapter implements monaco.languages.CompletionItemProvider {
                 ...item,
                 command: {
                   id: 'editor.action.triggerSuggest',
+                  title: 'Suggest',
                 },
               }
             }
             return item;
           });
           return {
-            incomplete,
+            incomplete: incomplete,
             suggestions: completionItems,
           };
-        })
-        .catch((err) => {
-          console.log(err);
         })
     );
   }

@@ -16,7 +16,7 @@ import { Button } from '@opensumi/ide-components';
 import { IEditor } from '@opensumi/ide-editor';
 
 import { KeepAlive } from './KeepAlive';
-setMonacoEnvironment('http://127.0.0.1:8080/packages/toolkit/dist/odps-worker.dfb39f71.js');
+setMonacoEnvironment('http://127.0.0.1:8080/packages/toolkit/dist/odps-worker.67dbbf44.js');
 
 
 let tableID = 1;
@@ -43,12 +43,15 @@ export const SQLRender = (props) => {
     tableID++;
     suggestTables.current[id.current] = suggestTables.current[id.current].concat([
       {
-        label: `sample_one_table_${tableID}`,
+        label: {
+          label: `sample_one_table_${tableID}`,
+          description: 'sample_one_table',
+        },
         type: 'SAMPLE_TYPE_ONE',
         insertText: 'LD.sample_one_table1',
         kind: CompletionItemKind.Method,
         sortText: 'a',
-      },
+      } ,
     ])
     console.log('suggestTables ==> ',suggestTables)
   }
@@ -97,13 +100,6 @@ export const SQLRender = (props) => {
                     //   console.log(language, loadTime);
                     // },
                     lowerCaseComplete: true,
-                    marks: [
-                      {
-                        message: '测试效果',
-                        startRow: 1,
-                        startCol: 1,
-                      },
-                    ],
                     formatRules: [
                       // @ts-ignore
                       {
@@ -115,9 +111,36 @@ export const SQLRender = (props) => {
                       console.log('suggest', keyword, options, suggestTables, id);
                       return suggestTables.current[id.current];
                     },
-                    onSuggestFields: (prefix, options) => {
-                      console.log('files', prefix, options);
+                    onSuggestFields: async(prefix, options) => {
+                      console.log('fields', prefix, options);
 
+                      return new Promise((resolve) => {
+                        setTimeout(() => {
+                          resolve([
+                            {
+                              label: 'age',
+                              // type: 'SAMPLE_TYPE_ONE',
+                              insertText: 'age',
+                              kind: CompletionItemKind.Field,
+                              sortText: 'b',
+                            },
+                            {
+                              label: 'banana',
+                              // type: 'SAMPLE_TYPE_ONE',
+                              insertText: 'banana',
+                              kind: CompletionItemKind.Field,
+                              sortText: 'b',
+                            },
+                            {
+                              label: 'sample_one_table1',
+                              // type: 'SAMPLE_TYPE_ONE',
+                              insertText: 'id_test',
+                              kind: CompletionItemKind.Field,
+                              sortText: 'b',
+                            },
+                          ])
+                        },1000)
+                      })
                       return Promise.resolve([
                         {
                           label: 'age',
