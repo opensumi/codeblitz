@@ -1,6 +1,6 @@
 {
   "name": "@alipay/alex-sql-service",
-  "version": "2.2.5-beta.7",
+  "version": "2.2.5-beta.8",
   "description": "@alipay/alex-shared",
   "main": "lib/index.js",
   "typing": "lib/index.d.ts",
@@ -18,7 +18,7 @@
     "chevrotain": "^7.0.0",
     "bravo-parser": "1.0.64",
     "sql-prettier": "^0.2.12",
-    "@alipay/alex-core": "2.2.5-beta.7"
+    "@alipay/alex-core": "2.2.5-beta.8"
   },
   "tnpm": {
     "mode": "yarn",
