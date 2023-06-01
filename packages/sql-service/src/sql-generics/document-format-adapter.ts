@@ -5,11 +5,11 @@ import { transferFormatTextByCustomRules } from './utils/editor';
 import * as monaco from '@opensumi/monaco-editor-core/esm/vs/editor/editor.api'
 class FormatterAdapter implements monaco.languages.DocumentFormattingEditProvider {
   private options;
-
+  displayName= 'ODPS Formatter'
+  extensionId = "odps-formatter"
   constructor(private _worker: WorkerAccessor, options: CompletionProviderOptions) {
     this.options = options;
   }
-
   provideDocumentFormattingEdits(
     model: monaco.editor.IReadOnlyModel,
     options: monaco.languages.FormattingOptions,

@@ -8,6 +8,7 @@ import {
   QUICK_OPEN_COMMANDS,
   EDITOR_COMMANDS,
   Keybinding,
+  KeybindingRegistryImpl,
 } from '@opensumi/ide-core-browser';
 import { WorkbenchEditorService } from '@opensumi/ide-editor';
 import { AppConfig, RuntimeConfig, WORKSPACE_ROOT } from '@alipay/alex-core';
@@ -99,6 +100,11 @@ export class SQLKeybindContribution
     keybindingList.forEach((binding) => {
       keybindings.unregisterKeybinding(binding);
     });
+    keybindings.registerKeybinding({
+      command: KeybindingRegistryImpl.PASSTHROUGH_PSEUDO_COMMAND,
+      keybinding: 'ctrlcmd+f',
+      when: '!editorFocus',
+    })
   }
   registerMenus(menus: IMenuRegistry): void {
     // menus.unregisterMenuItem(MenuId.EditorContext, QUICK_OPEN_COMMANDS.OPEN.id);

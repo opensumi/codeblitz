@@ -10,7 +10,7 @@ import {
 } from '@alipay/alex-sql-service';
 import { Button } from '@opensumi/ide-components';
 import * as SQLPlugin from './sql.plugin';
-import { IEditor } from '@opensumi/ide-editor';
+import { ICodeEditor, IEditor } from '@opensumi/ide-editor';
 import { Popover, Radio, Menu } from 'antd';
 import 'antd/dist/antd.css';
 import odcTheme from '@alipay/alex/extensions/alex.odc-theme';
@@ -21,7 +21,6 @@ import { ILanguageService } from '@opensumi/monaco-editor-core/esm/vs/editor/com
 import { StandaloneServices } from '@opensumi/monaco-editor-core/esm/vs/editor/standalone/browser/standaloneServices';
 
 const App = () => {
-
   const [fontValue, setFontValue] = useState(16);
   const [encoding, setEncoding] = useState('utf8');
   const [editorNumber, setEditorNumber] = useState(1);
@@ -65,8 +64,28 @@ const App = () => {
     setEditorNumber(editorNumber + 1);
   }
 
-  function format() {
-    SQLPlugin.api.commands?.executeCommand('editor.action.formatDocument');
+  async function format() {
+    const editor = (await SQLPlugin.api.commands?.executeCommand('alex.sql.editor')) as IEditor;
+    if (editor) {
+      const monacoEditor = editor.monacoEditor;
+      const selectText = monacoEditor
+        .getModel()
+        ?.getValueInRange(
+          monacoEditor.getSelection() || {
+            startColumn: 1,
+            startLineNumber: 1,
+            endColumn: 1,
+            endLineNumber: 1,
+          }
+        );
+      if (selectText) {
+        // 格式化选中内容
+        SQLPlugin.api.commands?.executeCommand('editor.action.formatSelection');
+      } else {
+        // 格式化全部文本
+        SQLPlugin.api.commands?.executeCommand('editor.action.formatDocument');
+      }
+    }
   }
 
   function updatePrefeence(perferenceName, value) {
@@ -84,8 +103,12 @@ const App = () => {
      *  @param {string} uri - 文件uri
      *  @param {string} content - 文件内容 无内容时创建并注入默认内容
      */
-    const result = await SQLPlugin.api.commands?.executeCommand('alex.sql.open', 'test1.sql', '默认内容');
-    console.log('open',result);
+    const result = await SQLPlugin.api.commands?.executeCommand(
+      'alex.sql.open',
+      'test1.sql',
+      '默认内容'
+    );
+    console.log('open', result);
   }
 
   async function editor() {
@@ -123,9 +146,9 @@ const App = () => {
   const menuCick = (e) => {
     setCurrent(e.key);
     // 每次切换tab 打开对应的文件
-    if(e.key === '1') {
-     SQLPlugin.api.commands?.executeCommand('alex.sql.open', 'test_uri1/test.sql', '');
-    }else {
+    if (e.key === '1') {
+      SQLPlugin.api.commands?.executeCommand('alex.sql.open', 'test_uri1/test.sql', '');
+    } else {
       SQLPlugin.api.commands?.executeCommand('alex.sql.open', 'test_uri3/test.sql');
     }
   };
@@ -143,7 +166,6 @@ const App = () => {
       'editorBracketMatch.background': '#8AA7F8', // 选中括号的背景色
       'editor.selectionHighlightBackground': '#CBD4F2', // 已选中的其他内容的高亮颜色
       'editor.findMatchBackground': '#FFA011',
-  
     },
     rules: [
       { token: '', foreground: '171617', background: 'EBEAEF' }, // 默认字体颜色,以及右侧 minimap 背景色
@@ -185,7 +207,6 @@ const App = () => {
     ],
   };
 
-
   function initMonaco() {
     initMonacoTheme();
     createMonao();
@@ -198,14 +219,16 @@ const App = () => {
   }
 
   function initMonacoLanguage() {
-    const LanguageService = StandaloneServices.get(ILanguageService)
-    LanguageService['_registry']['_registerLanguages']([{
-      id: 'odc-sql'
-    }])
+    const LanguageService = StandaloneServices.get(ILanguageService);
+    LanguageService['_registry']['_registerLanguages']([
+      {
+        id: 'odc-sql',
+      },
+    ]);
     monaco.languages.registerCompletionItemProvider('odc-sql', {
       provideCompletionItems: (model, position, context, token) => {
         // TODO 关键词排序
-        const suggestions = ['select','from'].map((key) => {
+        const suggestions = ['select', 'from'].map((key) => {
           return {
             label: key,
             kind: monaco.languages.CompletionItemKind.Keyword,
@@ -225,7 +248,6 @@ const App = () => {
     });
   }
 
-
   function createMonao() {
     monaco.editor.create(document.getElementById('monaco') as HTMLElement, {
       language: 'odc-sql',
@@ -243,36 +265,34 @@ const App = () => {
       formatOnPaste: true,
       renderValidationDecorations: 'on',
     });
-  
   }
 
   return (
     <div style={{ height: '100%', overflow: 'scroll' }}>
       <div style={{ height: '300px' }}>
-          <Button onClick={() => format()}>格式化</Button>
-          <Button onClick={() => addLine()}>添加行</Button>
-          <Button onClick={async() => await openFile()}>打开文件</Button>
-          <Button onClick={() => editor()}>获取当前内容</Button>
-          <Button onClick={() => initMonaco()}>原生编辑器</Button>
+        <Button onClick={() => format()}>格式化</Button>
+        <Button onClick={() => format()}>格式化选中行</Button>
+        <Button onClick={() => addLine()}>添加行</Button>
+        <Button onClick={async () => await openFile()}>打开文件</Button>
+        <Button onClick={() => editor()}>获取当前内容</Button>
+        <Button onClick={() => initMonaco()}>原生编辑器</Button>
 
-          {/* <Button onClick={() => changeTables()}>change suggest Tables</Button> */}
-          <Popover content={content} placement="top">
-            <Button>设置</Button>
-          </Popover>
-          {/* <Button onClick={() => changeTables()}>change suggest Tables</Button> */}
-          <Button onClick={() => window.reset()}>reset </Button>
-          {/* <Button onClick={() => editorNumberUpdate()}>添加编辑器</Button> */}
-          <Menu onClick={menuCick} selectedKeys={[current]} mode="horizontal" items={items} />
-          <div style={{ display: `${current === '1' ? 'block' : 'none'}` }}>
-              <SQLRender  id={current} visible={current === '1'} />
-          </div>
-          <div style={{ display: `${current === '2' ? 'block' : 'none'}` }} >
-              <SQLRender  id={current} visible={current === '2'} />
-          </div>
+        {/* <Button onClick={() => changeTables()}>change suggest Tables</Button> */}
+        <Popover content={content} placement="top">
+          <Button>设置</Button>
+        </Popover>
+        {/* <Button onClick={() => changeTables()}>change suggest Tables</Button> */}
+        <Button onClick={() => window.reset()}>reset </Button>
+        {/* <Button onClick={() => editorNumberUpdate()}>添加编辑器</Button> */}
+        <Menu onClick={menuCick} selectedKeys={[current]} mode="horizontal" items={items} />
+        <div style={{ display: `${current === '1' ? 'block' : 'none'}` }}>
+          <SQLRender id={current} visible={current === '1'} />
         </div>
-      <div style={{ height: '300px', margin: '20px', border: '2px soldi' }} id="monaco">
-        
+        <div style={{ display: `${current === '2' ? 'block' : 'none'}` }}>
+          <SQLRender id={current} visible={current === '2'} />
         </div>
+      </div>
+      <div style={{ height: '300px', margin: '20px', border: '2px soldi' }} id="monaco"></div>
     </div>
   );
 };

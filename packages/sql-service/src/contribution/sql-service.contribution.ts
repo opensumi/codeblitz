@@ -229,10 +229,10 @@ export class SqlServiceContribution
     );
 
     // /** 选中内容格式化 */
-    // monaco.languages.registerDocumentRangeFormattingEditProvider(
-    //   languageId,
-    //   new SQLGenericsFeatures.DocumentRangeFormattingEditAdapter(worker, options)
-    // );
+    monaco.languages.registerDocumentRangeFormattingEditProvider(
+      languageId,
+      new SQLGenericsFeatures.DocumentRangeFormattingEditAdapter(worker, options)
+    );
   }
 
   getWorkspaceRelativePath(uri: URI): string | null {
