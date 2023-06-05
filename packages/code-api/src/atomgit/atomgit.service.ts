@@ -133,7 +133,7 @@ export class AtomGitAPIService implements ICodeAPIService {
     return branches.map((data) => ({
       name: data.name,
       commit: {
-        id: data.sha
+        id: data.commit.sha
       },
       protected: data.protected
     }));
@@ -223,9 +223,10 @@ export class AtomGitAPIService implements ICodeAPIService {
   }
   
   public async getProject(repo: IRepositoryModel): Promise<Project> {
+    const repoInfo = await this.request<API.ResponseRepoInfo>(`/repos/${this.getProjectPath(repo)}`);
     return {
-      id: 'atomgit_mock',
-      default_branch: 'main'
+      id: repoInfo.name,
+      default_branch: repoInfo.default_branch
     };
   }
   canResolveConflict(_repo: IRepositoryModel, _sourceBranch: string, _targetBranch: string, _prId: string): Promise<ConflictAPI.CanResolveConflictResponse> {

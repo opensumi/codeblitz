@@ -20,7 +20,9 @@ export namespace API {
 
   export interface ResponseBranchesInfo {
     name: string;
-    sha: string;
+    commit: {
+      sha: string;
+    };
     protected: boolean
   }
 
@@ -40,5 +42,10 @@ export namespace API {
     commit: {
       sha: string
     }
+  }
+
+  export interface ResponseRepoInfo {
+    name: string;
+    default_branch: string;
   }
 }
