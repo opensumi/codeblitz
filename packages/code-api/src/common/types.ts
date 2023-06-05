@@ -7,9 +7,10 @@ export enum CodePlatform {
   github = 'github',
   gitlab = 'gitlab',
   gitlink = 'gitlink',
+  atomgit = 'atomgit',
 }
 
-export type ICodePlatform = 'antcode' | 'github' | 'gitlab' | 'gitlink';
+export type ICodePlatform = keyof typeof CodePlatform;
 
 export type EntryFileType = 'commit' | 'tree' | 'blob';
 
@@ -378,4 +379,23 @@ export interface ICodeAPIService {
 
 export interface ICodeAPIServiceProvider extends ICodeAPIService {
   initialize?(): void | Promise<void>;
+}
+
+export interface GitlensBlame {
+  commit: {
+    author_email: string;
+    author_name: string;
+    authored_date: number;
+    committed_date: number;
+    id: string; // sha
+    message: string;
+    author: {
+      avatar_url: string;
+    };
+  };
+  lines: Array<{
+    current_number: number;
+    effect_line: number;
+    previous_number: number;
+  }>;
 }

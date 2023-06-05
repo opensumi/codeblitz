@@ -11,7 +11,7 @@ import {
 } from '@opensumi/ide-core-common';
 import { ClientAppStateService } from '@opensumi/ide-core-browser';
 import { IMessageService } from '@opensumi/ide-overlay';
-import { GITHUB_OAUTH_TOKEN, GITLAB_PRIVATE_TOKEN } from './constant';
+import { ATOMGIT_PRIVATE_TOKEN, GITHUB_OAUTH_TOKEN, GITLAB_PRIVATE_TOKEN } from './constant';
 import { ICodePlatform } from './types';
 import { CODE_PLATFORM_CONFIG } from './config';
 
@@ -80,6 +80,18 @@ export class HelperService {
       this.delete(GITLAB_PRIVATE_TOKEN);
     } else {
       this.set(GITLAB_PRIVATE_TOKEN, value);
+    }
+  }
+
+  get ATOMGIT_TOKEN() {
+    return this.get(ATOMGIT_PRIVATE_TOKEN);
+  }
+
+  set ATOMGIT_TOKEN(value: string | null) {
+    if (value === null) {
+      this.delete(ATOMGIT_PRIVATE_TOKEN);
+    } else {
+      this.set(ATOMGIT_PRIVATE_TOKEN, value);
     }
   }
 
