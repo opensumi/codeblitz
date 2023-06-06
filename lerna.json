@@ -1,0 +1,15 @@
+{
+  "packages": [
+    "packages/*"
+  ],
+  "npmClient": "tnpm",
+  "registry": "https://registry.antgroup-inc.cn/",
+  "version": "4.1.1",
+  "command": {
+    "bootstrap": {
+      "npmClientArgs": [
+        "--no-package-lock"
+      ]
+    }
+  }
+}
