@@ -109,8 +109,15 @@ export class AtomGitAPIService implements ICodeAPIService {
   }
   async getBlob(repo: IRepositoryModel, entry: EntryParam): Promise<Uint8Array> {
     const { path } = entry;
+    const { ref } = repo;
     const res = await this.request<API.ResponseContentBlob>(
-      `/repos/${this.getProjectPath(repo)}/contents/${path}`,
+      `/repos/${this.getProjectPath(repo)}/contents`,
+      {
+        params: {
+          ref,
+          path: encodeURIComponent(path)
+        }
+      }
     );
 
     const { content, encoding } = res;

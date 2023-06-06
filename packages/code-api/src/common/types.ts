@@ -80,6 +80,7 @@ export interface IRepositoryModel {
   owner: string;
   name: string;
   commit: string;
+  ref?: string;
 }
 
 export interface CommitParams {
