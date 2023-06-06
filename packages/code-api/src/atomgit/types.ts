@@ -28,6 +28,7 @@ export namespace API {
 
   export interface ResponseContentBlob {
     content: string;
+    type: 'file';
     encoding: 'base64'
   }
 

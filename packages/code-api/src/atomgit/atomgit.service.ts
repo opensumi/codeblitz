@@ -36,7 +36,7 @@ export class AtomGitAPIService implements ICodeAPIService {
   }
 
   constructor() {
-    this._PRIVATE_TOKEN = this.config.token || '';
+    this._PRIVATE_TOKEN = this.config.token || 'atu_7d36d5a52af4156b76d6f61b240d72cc';
   }
 
   public async available(): Promise<boolean> {
@@ -115,13 +115,17 @@ export class AtomGitAPIService implements ICodeAPIService {
       {
         params: {
           ref,
-          path: encodeURIComponent(path)
+          path
         }
       }
     );
 
-    const { content, encoding } = res;
+    const { content, encoding, type } = res;
 
+    if (type !== 'file') {
+      throw new Error(`${path} is not a file.`);
+    }
+    
     if (encoding === 'base64') {
       return Buffer.from(decodeURIComponent(escape(atob(content))));
     }
@@ -178,7 +182,7 @@ export class AtomGitAPIService implements ICodeAPIService {
 
         bla.lines.push({
           current_number: blame.start,
-          effect_line: blame.start,
+          effect_line: blame.contents.length,
           previous_number: blame.start,
         });
       } else {
@@ -198,13 +202,15 @@ export class AtomGitAPIService implements ICodeAPIService {
           lines: [
             {
               current_number: blame.start,
-              effect_line: blame.start + blame.contents.length,
+              effect_line: blame.contents.length,
               previous_number: blame.start,
             },
           ],
         });
       }
     });
+
+    console.log('blamePart:>>>>', blamePart)
     return new TextEncoder().encode(JSON.stringify(blamePart));
   }
   getCommits(_repo: IRepositoryModel, _params: CommitParams): Promise<CommitRecord[]> {

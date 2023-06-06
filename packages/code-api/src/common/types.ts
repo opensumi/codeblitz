@@ -396,7 +396,7 @@ export interface GitlensBlame {
   };
   lines: Array<{
     current_number: number;
-    effect_line: number;
-    previous_number: number;
+    effect_line?: number;
+    previous_number?: number;
   }>;
 }
