@@ -1,4 +1,3 @@
-import { ODPS } from 'bravo-parser';
 /**
  * worker url
  */

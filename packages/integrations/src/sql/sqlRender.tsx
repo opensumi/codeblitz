@@ -34,10 +34,8 @@ export const SQLRender = (props) => {
 
   useEffect(() => {
     id.current = props.id;
-    console.log('id', id)
   }, [props.id])
 
-  console.log('props',props);
 
   function changeTables() {
     tableID++;
@@ -53,7 +51,6 @@ export const SQLRender = (props) => {
         sortText: 'a',
       } ,
     ])
-    console.log('suggestTables ==> ',suggestTables)
   }
   const PluginID = props.id
   const layoutConfig = {
@@ -79,7 +76,6 @@ export const SQLRender = (props) => {
                 modules: [
                   SqlServiceModule.Config({
                     onValidation: (ast: any, markers: any) => {
-                      // console.log(ast, markers);
                       // const filterMarkers = markers.filter((item, index) => {
                       //   if (item.message == 'SEMICOLON expected.') {
                       //     const markerText = editorIns.current.editor.getModel().getValueInRange({
