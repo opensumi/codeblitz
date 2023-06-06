@@ -15,7 +15,7 @@
     "type-check": "tsc --skipLibCheck --noEmit",
     "preinstall": "node scripts/preinstall && npm run prepare:env",
     "prepare:env": "yum --version && sudo yum -y install unzip gcc-c++ libX11-devel libxkbfile-devel libsecret-devel || echo 'no yum'",
-    "init": "npm run clean && npm run generate && npm run build && npm run ext",
+    "init": "npm run clean && npm run generate && npm run build:parser && npm run build && npm run ext",
     "start": "npm run dev",
     "start:acr": "INTEGRATION=antcode-cr npm run start",
     "ext": "alex ext",
