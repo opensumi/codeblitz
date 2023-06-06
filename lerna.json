@@ -3,7 +3,7 @@
     "packages/*"
   ],
   "npmClient": "tnpm",
-  "registry": "http://registry.npm.alibaba-inc.com",
+  "registry": "https://registry.antgroup-inc.cn/",
   "version": "4.1.1",
   "command": {
     "bootstrap": {
