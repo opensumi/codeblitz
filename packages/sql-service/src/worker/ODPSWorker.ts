@@ -1,7 +1,7 @@
 // @ts-nocheck
 
 'use strict';
-import { Thenable, worker } from '@opensumi/monaco-editor-core/esm/vs/editor/editor.api.d';
+import { worker } from '@opensumi/monaco-editor-core/esm/vs/editor/editor.api.d';
 import IWorkerContext = worker.IWorkerContext;
 import { initialize } from '@opensumi/monaco-editor-core/esm/vs/editor/editor.worker';
 import { TableAuthResponse } from '../tools/validationRules/TableAuth';

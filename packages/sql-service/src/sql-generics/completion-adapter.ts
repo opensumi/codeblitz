@@ -6,12 +6,9 @@ import {
   asyncItemsType,
   priority,
   SQLType,
-  generateCompleteItem,
-  complementedInsertText,
   CustomCompletionProviderOptions,
   SuggestControllerProps,
   CompleteProviderReturnType,
-  cacheAsyncItemType,
 } from '../types';
 
 import {

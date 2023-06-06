@@ -5,7 +5,7 @@
 'use strict';
 
 // import { LanguageServiceDefaultsImpl } from './monaco.contribution';
-import { GQL, Redis, Hive, ODPS, Shell, Blink, ADB } from 'bravo-parser';
+import { ODPS } from 'bravo-parser';
 import {
   IDisposable,
   Uri,

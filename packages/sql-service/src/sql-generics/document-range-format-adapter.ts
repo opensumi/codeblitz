@@ -1,14 +1,9 @@
 import { WorkerAccessor, CompletionProviderOptions } from '../types';
 import { wireCancellationToken } from './utils/promise';
 import {
-	CancellationToken,
 	Thenable,
-	IRange,
-	Range,
 } from '@opensumi/monaco-editor-core/esm/vs/editor/editor.api';
-import { transferFormatTextByCustomRules } from './utils/editor';
 import * as monaco from '@opensumi/monaco-editor-core/esm/vs/editor/editor.api';
-import * as ls from 'vscode-languageserver-types';
 
 class DocumentRangeFormattingEditAdapter
 	implements monaco.languages.DocumentRangeFormattingEditProvider {

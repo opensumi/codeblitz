@@ -4,22 +4,16 @@ import {
   CommandContribution,
   KeybindingContribution,
   KeybindingRegistry,
-  ClientAppContribution,
-  QUICK_OPEN_COMMANDS,
-  EDITOR_COMMANDS,
-  Keybinding,
   KeybindingRegistryImpl,
 } from '@opensumi/ide-core-browser';
 import { WorkbenchEditorService } from '@opensumi/ide-editor';
-import { AppConfig, RuntimeConfig, WORKSPACE_ROOT } from '@alipay/alex-core';
+import { AppConfig, RuntimeConfig } from '@alipay/alex-core';
 import { IFileServiceClient } from '@opensumi/ide-file-service';
 import { IEditorDocumentModelService } from '@opensumi/ide-editor/lib/browser';
 import { EditorDocumentModelServiceImpl } from '@opensumi/ide-editor/lib/browser/doc-model/editor-document-model-service';
 import { MenuId, MenuContribution, IMenuRegistry } from '@opensumi/ide-core-browser/lib/menu/next';
 
 import * as path from 'path';
-
-const TOGGLE_CHANGE_VIEWED = 'commands.markAsRead';
 
 export namespace SQL_COMMANDS {
   export const GET_CURRENT_EDITOR: Command = {

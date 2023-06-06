@@ -1,4 +1,4 @@
-import { Provider, Injectable, Autowired } from '@opensumi/di';
+import { Injectable, Autowired } from '@opensumi/di';
 import {
   Domain,
   ClientAppContribution,
@@ -6,9 +6,7 @@ import {
   MaybePromise,
   URI,
   WithEventBus,
-  OnEvent,
 } from '@opensumi/ide-core-browser';
-// import { monaco , URI as MonacoURI } from '@opensumi/ide-monaco/lib/browser/monaco-api';
 import * as monaco from '@opensumi/monaco-editor-core/esm/vs/editor/editor.api';
 import { ITextmateTokenizer } from '@opensumi/ide-monaco/lib/browser/contrib/tokenizer';
 import type { ITextmateTokenizerService } from '@opensumi/ide-monaco/lib/browser/contrib/tokenizer';
@@ -30,7 +28,6 @@ import { SQLGenericsFeatures } from '../sql-generics/';
 import { DiagnosticsOptions } from '../worker/types';
 import { IFileServiceClient, FileChangeType } from '@opensumi/ide-file-service/lib/common';
 import * as path from 'path';
-import { EditorDocumentModelContentChangedEvent } from '@opensumi/ide-editor/lib/browser';
 import { WorkbenchEditorServiceImpl } from '@opensumi/ide-editor/lib/browser/workbench-editor.service';
 import { WorkbenchEditorService } from '@opensumi/ide-editor';
 import {
