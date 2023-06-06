@@ -1,0 +1,15 @@
+{
+  "packages": [
+    "packages/*"
+  ],
+  "npmClient": "tnpm",
+  "registry": "http://registry.npm.alibaba-inc.com",
+  "version": "4.1.1",
+  "command": {
+    "bootstrap": {
+      "npmClientArgs": [
+        "--no-package-lock"
+      ]
+    }
+  }
+}
