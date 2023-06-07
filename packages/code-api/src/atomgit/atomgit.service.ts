@@ -19,7 +19,7 @@ import {
 import { API as ConflictAPI } from '../antcode/types';
 import { request, RequestOptions } from '@alipay/alex-shared';
 import { CODE_PLATFORM_CONFIG, HelperService } from '../common';
-import { URI, MessageType } from '@opensumi/ide-core-common';
+import { URI, MessageType, isObject } from '@opensumi/ide-core-common';
 import { API } from './types';
 
 @Injectable()
@@ -32,14 +32,54 @@ export class AtomGitAPIService implements ICodeAPIService {
   private _PRIVATE_TOKEN: string | null;
 
   get PRIVATE_TOKEN() {
-    return this._PRIVATE_TOKEN;
+    return this._PRIVATE_TOKEN || this.helper.ATOMGIT_TOKEN;
   }
 
   constructor() {
-    this._PRIVATE_TOKEN = this.config.token || 'atu_7d36d5a52af4156b76d6f61b240d72cc';
+    this._PRIVATE_TOKEN = this.config.token || this.helper.ATOMGIT_TOKEN || '';
+  }
+
+  private async checkAccessToken(): Promise<boolean> {
+    const popupWindow = window.open(`${this.config.origin}/login/oauth/authorize?client_id=9d8b531661f441d1`, '_blank', 'directories=no,titlebar=no,toolbar=no,location=no,status=no,menubar=no,scrollbars=no,resizable=no,width=800,height=520,top=150,left=150');
+    return new Promise<boolean>((resolve, reject) => {
+      const handleMessage = async (event: MessageEvent) => {
+        try {
+          const { data } = event;
+          if (isObject(data) && data.type === 'atomgit') {
+            const { data: { code } } = data;
+            popupWindow?.close();
+            if (!code) {
+              resolve(false);
+              return;
+            }
+            const tokenResult: any = await this.request('http://svc-ldh2u2i3brw4lg1e.cloudide.svc.et15-sqa.alipay.net:7001/openapi/atomgit-auth-callback', {
+              baseURL: '',
+              method: 'post',
+              credentials: 'omit',
+              data: {
+                code
+              }
+            });
+            if (tokenResult && tokenResult.access_token) {
+              this.helper.ATOMGIT_TOKEN = tokenResult.access_token;
+              resolve(true);
+              return;
+            }
+            resolve(false);
+          }
+        } catch (error) {
+          reject(error);
+        }
+      };
+      window.addEventListener('message', handleMessage);
+    });
   }
 
   public async available(): Promise<boolean> {
+    const token = this._PRIVATE_TOKEN;
+    if (!token) {
+      return await this.checkAccessToken();
+    }
     return true;
   }
 
@@ -57,7 +97,7 @@ export class AtomGitAPIService implements ICodeAPIService {
       const { headers, ...rest } = options || {};
       const privateToken = this.PRIVATE_TOKEN;
       return await request(path, {
-        baseURL: this.config.endpoint,
+        baseURL: options?.baseURL ?? this.config.endpoint,
         responseType: 'json',
         headers: {
           ...(privateToken
@@ -74,6 +114,8 @@ export class AtomGitAPIService implements ICodeAPIService {
       let messageKey = 'error.request';
       if (status === 401) {
         messageKey = 'atomgit.unauthorized';
+        // 401 的情况再登陆一次
+        await this.checkAccessToken();
       } else if (status === 404) {
         messageKey = 'error.resource-not-found';
       }
@@ -136,6 +178,10 @@ export class AtomGitAPIService implements ICodeAPIService {
     throw new Error('Method not implemented.');
   }
   async getBranches(repo: IRepositoryModel): Promise<BranchOrTag[]> {
+    if (!this._PRIVATE_TOKEN) {
+      return [];
+    }
+
     const branches = await this.request<API.ResponseBranchesInfo[]>(`/repos/${this.getProjectPath(repo)}/branches`);
     if (!Array.isArray(branches)) {
       throw new Error('[can not find branch list]');
@@ -210,7 +256,6 @@ export class AtomGitAPIService implements ICodeAPIService {
       }
     });
 
-    console.log('blamePart:>>>>', blamePart)
     return new TextEncoder().encode(JSON.stringify(blamePart));
   }
   getCommits(_repo: IRepositoryModel, _params: CommitParams): Promise<CommitRecord[]> {

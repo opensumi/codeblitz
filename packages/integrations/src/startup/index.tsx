@@ -137,7 +137,7 @@ const App = () => (
         typescript,
         codeservice,
         gitlens,
-        graph,
+        // graph,
         imagePreview,
         webSCM,
         referencesView,

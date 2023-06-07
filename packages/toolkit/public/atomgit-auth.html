@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="UTF-8">
+    <title>AtomGit CloudIDE 应用授权</title>
+    <style>
+      html {
+        overflow: hidden;
+        overscroll-behavior-x: none;
+      }
+      body {
+        margin: 0;
+      }
+      #main {
+        width: 100vw;
+        height: 100vh;
+        margin: 0;
+        padding: 0;
+        overflow: hidden;
+      }
+    </style>
+  </head>
+  <body>
+    <div id="atomgit-main">登陆中...</div>
+  </body>
+  <script>
+    window.addEventListener('load', () => {
+      const searchParams = new URLSearchParams(window.location.search);
+      const code = searchParams.get('code');
+      if (code) {
+        window.opener.postMessage({
+          type: 'atomgit',
+          data: { code }
+        }, '*');
+      }
+    });
+  </script>
+</html>
