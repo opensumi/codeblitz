@@ -10,7 +10,8 @@ import {
   localize,
 } from '@opensumi/ide-core-common';
 import { ClientAppStateService } from '@opensumi/ide-core-browser';
-import { IMessageService } from '@opensumi/ide-overlay';
+import { IMessageService, IDialogService  } from '@opensumi/ide-overlay';
+import { DialogService } from '@opensumi/ide-overlay/lib/browser/dialog.service';
 import { ATOMGIT_PRIVATE_TOKEN, GITHUB_OAUTH_TOKEN, GITLAB_PRIVATE_TOKEN } from './constant';
 import { ICodePlatform } from './types';
 import { CODE_PLATFORM_CONFIG } from './config';
@@ -30,6 +31,9 @@ export class HelperService {
 
   @Autowired(IMessageService)
   messageService: IMessageService;
+
+  @Autowired(IDialogService)
+  public dialogService: DialogService;
 
   @Autowired(ClientAppStateService)
   stateService: ClientAppStateService;
@@ -119,5 +123,17 @@ export class HelperService {
       config?.closable,
       CODE_PLATFORM_CONFIG[platform].brand
     );
+  }
+
+  async showDialog(
+    msg: { 
+      message: string | React.ReactNode,
+      type: MessageType,
+      buttons?: any[],
+      closable?: boolean,
+    }
+  ) {
+    const { message, type, buttons = [], closable = true } = msg;
+    return this.dialogService.open(message, type, buttons, closable);
   }
 }
