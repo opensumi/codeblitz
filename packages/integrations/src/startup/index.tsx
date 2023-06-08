@@ -4,7 +4,7 @@ import { IAppInstance, AppRenderer, getDefaultLayoutConfig, SlotLocation } from 
 import * as Alex from '@alipay/alex';
 import '@alipay/alex/languages';
 import { CodeServiceModule } from '@alipay/alex-code-service';
-import { CodeAPIModule } from '@alipay/alex-code-api';
+import { CodeAPIModule, CodePlatform } from '@alipay/alex-code-api';
 import { isFilesystemReady } from '@alipay/alex-core';
 import { StartupModule } from './startup.module';
 import css from '@alipay/alex/extensions/alex-ext-public.css-language-features-worker';
@@ -87,6 +87,38 @@ if (pathParts[2]) {
 }
 config.refPath = pathParts.slice(3).join('/');
 
+const extensionMetadata = [
+  css,
+  html,
+  json,
+  markdown,
+  vditor,
+  typescript,
+  codeservice,
+  gitlens,
+  imagePreview,
+  webSCM,
+  referencesView,
+  codeswing,
+  emmet,
+  anycodeCSharp,
+  anycodeCpp,
+  anycodeGo,
+  anycodeJava,
+  anycodePhp,
+  anycodePython,
+  anycodeRust,
+  anycodeTypescript,
+  anycode,
+  codeRunner,
+  mergeConflict,
+]
+
+// atomgit 平台暂时不加载 graph 插件
+if (platform !== CodePlatform.atomgit) {
+  extensionMetadata.push(graph);
+}
+
 const App = () => (
   <AppRenderer
     onLoad={(app) => {
@@ -128,33 +160,7 @@ const App = () => (
         LocalExtensionModule,
         StartupModule,
       ],
-      extensionMetadata: [
-        css,
-        html,
-        json,
-        markdown,
-        vditor,
-        typescript,
-        codeservice,
-        gitlens,
-        // graph,
-        imagePreview,
-        webSCM,
-        referencesView,
-        codeswing,
-        emmet,
-        anycodeCSharp,
-        anycodeCpp,
-        anycodeGo,
-        anycodeJava,
-        anycodePhp,
-        anycodePython,
-        anycodeRust,
-        anycodeTypescript,
-        anycode,
-        codeRunner,
-        mergeConflict,
-      ],
+      extensionMetadata,
       workspaceDir: `${platform}/${config.owner}/${config.name}`,
       layoutConfig,
       defaultPreferences: {
