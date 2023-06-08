@@ -8,9 +8,10 @@ export enum CodePlatform {
   gitlab = 'gitlab',
   gitlink = 'gitlink',
   code = 'code',
+  atomgit = 'atomgit',
 }
 
-export type ICodePlatform = 'antcode' | 'github' | 'gitlab' | 'gitlink' | 'code';
+export type ICodePlatform = keyof typeof CodePlatform;
 
 export type EntryFileType = 'commit' | 'tree' | 'blob';
 

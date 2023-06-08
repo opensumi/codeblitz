@@ -14,6 +14,7 @@ import CodeAPIService from './code/code.service';
 import { GitHubAPIService } from './github/github.service';
 import { GitLabAPIService } from './gitlab/gitlab.service';
 import { GitLinkAPIService } from './gitlink/gitlink.service';
+import { AtomGitAPIService } from './atomgit/atomgit.service';
 import { GitHubView } from './github/github.view';
 import { GitLabView } from './gitlab/gitlab.view';
 
@@ -90,6 +91,9 @@ export class CodeAPIProvider implements ICodeAPIProvider, ClientAppContribution 
     this.registerPlatformProvider(CodePlatform.gitlink, {
       provider: GitLinkAPIService,
     });
+    this.registerPlatformProvider(CodePlatform.atomgit, {
+      provider: AtomGitAPIService
+    })
   }
 
   registerPlatformProvider(
@@ -125,6 +129,10 @@ export class CodeAPIProvider implements ICodeAPIProvider, ClientAppContribution 
 
   get gitlink() {
     return this.asPlatform(CodePlatform.gitlink) as GitLinkAPIService;
+  }
+
+  get atomgit() {
+    return this.asPlatform(CodePlatform.atomgit) as AtomGitAPIService;
   }
 
   onStart() {

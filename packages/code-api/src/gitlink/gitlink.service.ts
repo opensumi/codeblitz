@@ -1,5 +1,5 @@
 import { Injectable, Autowired } from '@opensumi/di';
-import { localize, IReporterService, formatLocalize, MessageType } from '@opensumi/ide-core-common';
+import { IReporterService, formatLocalize, MessageType } from '@opensumi/ide-core-common';
 import { request, RequestOptions } from '@alipay/alex-shared';
 import { API } from './types';
 import { HelperService } from '../common/service';
@@ -11,13 +11,10 @@ import type {
   IRepositoryModel,
   BranchOrTag,
   CommitParams,
-  Branch,
-  Project,
   FileAction,
   FileActionHeader,
-  FileActionResult,
-  User,
   EntryInfo,
+  GitlensBlame,
 } from '../common/types';
 import { CodePlatform, CommitFileStatus } from '../common/types';
 import { DEFAULT_SEARCH_IN_WORKSPACE_LIMIT } from '@opensumi/ide-search';
@@ -62,21 +59,21 @@ export class GitLinkAPIService implements ICodeAPIService {
     this._PRIVATE_TOKEN = this.config.token || '';
   }
   mergeBase(
-    repo: IRepositoryModel,
-    target: string,
-    source: string
+    _repo: IRepositoryModel,
+    _target: string,
+    _source: string
   ): Promise<ConflictAPI.ResponseCommit> {
     throw new Error('Method not implemented.');
   }
-  getEntryInfo?(repo: IRepositoryModel, entry: EntryParam): Promise<EntryInfo> {
+  getEntryInfo?(_repo: IRepositoryModel, _entry: EntryParam): Promise<EntryInfo> {
     throw new Error('Method not implemented.');
   }
-  getBranchNames?(repo: IRepositoryModel): Promise<string[]> {
+  getBranchNames?(_repo: IRepositoryModel): Promise<string[]> {
     throw new Error('Method not implemented.');
   }
   canResolveConflict(
-    repo: IRepositoryModel,
-    prId: string
+    _repo: IRepositoryModel,
+    _prId: string
   ): Promise<ConflictAPI.CanResolveConflictResponse> {
     throw new Error('Method not implemented.');
   }
@@ -84,13 +81,13 @@ export class GitLinkAPIService implements ICodeAPIService {
     throw new Error('Method not implemented.');
   }
   getConflict(
-    repo: IRepositoryModel,
-    sourceBranch: string,
-    targetBranch: string
+    _repo: IRepositoryModel,
+    _sourceBranch: string,
+    _targetBranch: string
   ): Promise<ConflictAPI.ConflictResponse> {
     throw new Error('Method not implemented.');
   }
-  async getUser(repo: IRepositoryModel) {
+  async getUser(_repo: IRepositoryModel) {
     const user = await this.request<API.User>(`/api/users/get_user_info.json`);
     return {
       id: user.user_id,
@@ -307,12 +304,12 @@ export class GitLinkAPIService implements ICodeAPIService {
       }
     );
     const blameHash = {};
-    const blamePart: API.gitlensBlame[] = [];
+    const blamePart: GitlensBlame[] = [];
 
-    blames.blame_parts.forEach((blame, index) => {
+    blames.blame_parts.forEach((blame, _index) => {
       const commit = blame.commit;
       if (blameHash[commit.sha]) {
-        const bla = blamePart.find((b) => b.commit.id === blame.commit.sha) as API.gitlensBlame;
+        const bla = blamePart.find((b) => b.commit.id === blame.commit.sha) as GitlensBlame;
         bla.lines.push({
           current_number: blame.current_number,
           effect_line: blame.effect_line,
@@ -391,7 +388,7 @@ export class GitLinkAPIService implements ICodeAPIService {
     }));
   }
 
-  async getCommitCompare(repo: IRepositoryModel, from: string, to: string) {
+  async getCommitCompare(_repo: IRepositoryModel, _from: string, _to: string) {
     return [];
   }
 
