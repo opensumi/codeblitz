@@ -1,8 +1,8 @@
 import * as path from 'path';
 import { Injectable, Autowired } from '@opensumi/di';
-import { memoize, Emitter, Deferred } from '@opensumi/ide-core-common';
+import { Emitter, Deferred } from '@opensumi/ide-core-common';
 import { fsExtra } from '@alipay/alex-core';
-import { BranchOrTag, ICodeAPIProvider } from '@alipay/alex-code-api';
+import { ICodeAPIProvider } from '@alipay/alex-code-api';
 import {
   ICodePlatform,
   Submodule,
@@ -204,7 +204,7 @@ export class RootRepository extends Repository {
       // 查询默认分支
       const { default_branch } = await this.request.getProject();
       this.ref = default_branch || HEAD;
-      await this.initCommit();
+      await this.initCommit(this.ref);
       return;
     }
     if (commit) {

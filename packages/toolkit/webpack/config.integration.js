@@ -239,6 +239,12 @@ module.exports = (option) => {
               publicPath: '/',
               integration: process.env.INTEGRATION,
             }),
+            new HtmlWebpackPlugin({
+              filename: 'atomgit-auth.html',
+              template: option.template || path.join(__dirname, '../public/atomgit-auth.html'),
+              publicPath: '/atomgit-auth',
+              integration: process.env.INTEGRATION,
+            }),
             new FriendlyErrorsWebpackPlugin({
               compilationSuccessInfo: {
                 messages: [`Your application is running here: ${baseURL}`],

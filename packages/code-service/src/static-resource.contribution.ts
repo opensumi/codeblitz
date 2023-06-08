@@ -41,6 +41,7 @@ export class CodeStaticResourceContribution implements StaticResourceContributio
         CODE_PLATFORM_CONFIG[CodePlatform.github].origin,
         CODE_PLATFORM_CONFIG[CodePlatform.gitlab].origin,
         CODE_PLATFORM_CONFIG[CodePlatform.gitlink].origin,
+        CODE_PLATFORM_CONFIG[CodePlatform.atomgit].origin,
       ],
     });
   }

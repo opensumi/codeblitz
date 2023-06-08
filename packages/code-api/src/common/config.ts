@@ -115,6 +115,34 @@ export const CODE_PLATFORM_CONFIG: Record<ICodePlatform, ICodePlatformConfig> = 
     },
     createBranchAble: false,
   },
+  [CodePlatform.atomgit]: {
+    platform: CodePlatform.atomgit,
+    hostname: ['atomgit.com'],
+    origin: 'https://atomgit.com/',
+    endpoint: 'https://api.atomgit.com',
+    brand: 'AtomGit',
+    line: {
+      parse(hash: string) {
+        let matched: RegExpMatchArray | null = null;
+        matched = hash.match(/^#L(\d+):?(\d*)$/);
+        if (matched) {
+          return [+matched[1], +matched[1]];
+        }
+        matched = hash.match(/^#L(\d+):?(\d*)-(\d+):?(\d*)$/);
+        if (matched) {
+          return [+matched[1], +matched[3]];
+        }
+        return null;
+      },
+      format([startLineNumber, endLineNumber]) {
+        if (startLineNumber === endLineNumber) {
+          return `#L${startLineNumber}`;
+        }
+        return `#L${startLineNumber}-${endLineNumber}`;
+      },
+    },
+    createBranchAble: true,
+  }
 };
 
 export const extendPlatformConfig = (

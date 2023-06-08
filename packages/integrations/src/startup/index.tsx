@@ -4,16 +4,14 @@ import { IAppInstance, AppRenderer, getDefaultLayoutConfig, SlotLocation } from 
 import * as Alex from '@alipay/alex';
 import '@alipay/alex/languages';
 import { CodeServiceModule } from '@alipay/alex-code-service';
-import { CodeAPIModule } from '@alipay/alex-code-api';
+import { CodeAPIModule, CodePlatform } from '@alipay/alex-code-api';
 import { isFilesystemReady } from '@alipay/alex-core';
 import { StartupModule } from './startup.module';
-import SarifViewer from '@alipay/alex/extensions/cloud-ide-ext.sarif-viewer';
 import css from '@alipay/alex/extensions/alex-ext-public.css-language-features-worker';
 import html from '@alipay/alex/extensions/alex-ext-public.html-language-features-worker';
 import json from '@alipay/alex/extensions/alex-ext-public.json-language-features-worker';
 import markdown from '@alipay/alex/extensions/alex-ext-public.markdown-language-features-worker';
 import typescript from '@alipay/alex/extensions/alex-ext-public.typescript-language-features-worker';
-import lsif from '@alipay/alex/extensions/cloud-ide.vscode-lsif';
 import gitlens from '@alipay/alex/extensions/alex.gitlens';
 import graph from '@alipay/alex/extensions/alex.git-graph';
 import codeservice from '@alipay/alex/extensions/alex.code-service';
@@ -63,6 +61,11 @@ const platformConfig = {
     owner: 'qingyou',
     name: 'test',
   },
+  // 平台地址: https://atomgit.com/
+  atomgit: {
+    owner: 'ricbet',
+    name: 'atomgit-repo-test'
+  }
 };
 
 const layoutConfig = getDefaultLayoutConfig();
@@ -83,6 +86,38 @@ if (pathParts[2]) {
   config.name = pathParts[2];
 }
 config.refPath = pathParts.slice(3).join('/');
+
+const extensionMetadata = [
+  css,
+  html,
+  json,
+  markdown,
+  vditor,
+  typescript,
+  codeservice,
+  gitlens,
+  imagePreview,
+  webSCM,
+  referencesView,
+  codeswing,
+  emmet,
+  anycodeCSharp,
+  anycodeCpp,
+  anycodeGo,
+  anycodeJava,
+  anycodePhp,
+  anycodePython,
+  anycodeRust,
+  anycodeTypescript,
+  anycode,
+  codeRunner,
+  mergeConflict,
+]
+
+// atomgit 平台暂时不加载 graph 插件
+if (platform !== CodePlatform.atomgit) {
+  extensionMetadata.push(graph);
+}
 
 const App = () => (
   <AppRenderer
@@ -125,33 +160,7 @@ const App = () => (
         LocalExtensionModule,
         StartupModule,
       ],
-      extensionMetadata: [
-        css,
-        html,
-        json,
-        markdown,
-        vditor,
-        typescript,
-        codeservice,
-        gitlens,
-        graph,
-        imagePreview,
-        webSCM,
-        referencesView,
-        codeswing,
-        emmet,
-        anycodeCSharp,
-        anycodeCpp,
-        anycodeGo,
-        anycodeJava,
-        anycodePhp,
-        anycodePython,
-        anycodeRust,
-        anycodeTypescript,
-        anycode,
-        codeRunner,
-        mergeConflict,
-      ],
+      extensionMetadata,
       workspaceDir: `${platform}/${config.owner}/${config.name}`,
       layoutConfig,
       defaultPreferences: {
