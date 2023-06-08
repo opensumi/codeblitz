@@ -145,7 +145,7 @@ export class RootRepository extends Repository {
   private _onDidChangeRef = new Emitter<void>();
   readonly onDidChangeRef = this._onDidChangeRef.event;
 
-  public _initialized = false;
+  private _initialized = false;
 
   private _refs: Refs = { branches: [], tags: [] };
   get refs() {
