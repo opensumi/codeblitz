@@ -7,6 +7,7 @@ export enum CodePlatform {
   github = 'github',
   gitlab = 'gitlab',
   gitlink = 'gitlink',
+  code = 'code',
   atomgit = 'atomgit',
 }
 
