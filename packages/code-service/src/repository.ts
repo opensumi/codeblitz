@@ -194,8 +194,8 @@ export class RootRepository extends Repository {
    * @param ref tag, branch
    * @param refPath [tree|blob]/branch/path
    */
-  async initHEAD({ commit, ref, refPath }: { commit?: string; ref?: string; refPath?: string }) {
-    if (this._initialized) {
+  async initHEAD({ commit, ref, refPath, isForce }: { commit?: string; ref?: string; refPath?: string, isForce?: boolean }) {
+    if (this._initialized && !isForce) {
       return;
     }
     this._initialized = true;

@@ -327,8 +327,8 @@ export class CodeContribution
       }),
 
       commandRegistry.registerCommand(CODE_SERVICE_COMMANDS.REINITIALIZE, {
-        execute: () => {
-          this.codeModel.reinitialize();
+        execute: (isForce?: boolean) => {
+          this.codeModel.reinitialize(isForce);
         },
       }),
       commandRegistry.registerCommand(CODE_SERVICE_COMMANDS.CREATEBRANCH, {

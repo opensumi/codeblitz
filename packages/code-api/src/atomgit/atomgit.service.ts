@@ -89,10 +89,9 @@ export class AtomGitAPIService implements ICodeAPIService {
             });
             if (tokenResult && tokenResult.access_token) {
               this.helper.ATOMGIT_TOKEN = tokenResult.access_token;
-              resolve(true);
-              return;
+              this.helper.reinitializeCodeService(true);
             }
-            resolve(false);
+            resolve(true);
           }
         } catch (error) {
           reject(error);

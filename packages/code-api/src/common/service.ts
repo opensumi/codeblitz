@@ -104,8 +104,8 @@ export class HelperService {
     this.commandService.executeCommand(`workbench.view.${id}`);
   }
 
-  reinitializeCodeService() {
-    this.commandService.executeCommand('code-service.reinitialize');
+  reinitializeCodeService(isForce: boolean = false) {
+    this.commandService.executeCommand('code-service.reinitialize', isForce);
   }
 
   showMessage(

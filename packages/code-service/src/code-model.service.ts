@@ -89,12 +89,13 @@ export class CodeModelService {
   /**
    * 无权限时需要再设置 token 后重新初始化
    */
-  async reinitialize() {
+  async reinitialize(isForce?: boolean) {
     const { codeServiceConfig: config } = this;
     await this.rootRepository.initHEAD({
       commit: config.commit,
       ref: config.branch || config.tag || config.ref,
       refPath: config.refPath,
+      isForce
     });
   }
 
