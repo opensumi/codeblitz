@@ -40,7 +40,7 @@ export class AtomGitAPIService implements ICodeAPIService {
   }
 
   private async checkAccessToken(): Promise<boolean> {
-    const popupWindow = window.open(`${this.config.origin}/login/oauth/authorize?client_id=9d8b531661f441d1`, '_blank', 'directories=no,titlebar=no,toolbar=no,location=no,status=no,menubar=no,scrollbars=no,resizable=no,width=800,height=520,top=150,left=150');
+    const popupWindow = window.open(`${this.config.origin}login/oauth/authorize?client_id=9d8b531661f441d1`, '_blank', 'directories=no,titlebar=no,toolbar=no,location=no,status=no,menubar=no,scrollbars=no,resizable=no,width=800,height=520,top=150,left=150');
     return new Promise<boolean>((resolve, reject) => {
       const handleMessage = async (event: MessageEvent) => {
         try {
@@ -52,7 +52,7 @@ export class AtomGitAPIService implements ICodeAPIService {
               resolve(false);
               return;
             }
-            const tokenResult: any = await this.request('http://svc-ldh2u2i3brw4lg1e.cloudide.svc.et15-sqa.alipay.net:7001/openapi/atomgit-auth-callback', {
+            const tokenResult: any = await this.request('https://twebgwnet.alipay.com/tcloudideweb/openapi/atomgit-auth-callback', {
               baseURL: '',
               method: 'post',
               credentials: 'omit',
