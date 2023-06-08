@@ -81,6 +81,7 @@ export interface IRepositoryModel {
   owner: string;
   name: string;
   commit: string;
+  ref?: string;
 }
 
 export interface CommitParams {
@@ -380,4 +381,23 @@ export interface ICodeAPIService {
 
 export interface ICodeAPIServiceProvider extends ICodeAPIService {
   initialize?(): void | Promise<void>;
+}
+
+export interface GitlensBlame {
+  commit: {
+    author_email: string;
+    author_name: string;
+    authored_date: number;
+    committed_date: number;
+    id: string; // sha
+    message: string;
+    author: {
+      avatar_url: string;
+    };
+  };
+  lines: Array<{
+    current_number: number;
+    effect_line?: number;
+    previous_number?: number;
+  }>;
 }
