@@ -79,6 +79,10 @@ export class AtomGitAPIService implements ICodeAPIService {
               baseURL: '',
               method: 'post',
               credentials: 'omit',
+              headers: {
+                'x-webgw-appId': '180020010001252942',
+                'x-webgw-version': '2.0',
+              },
               data: {
                 code
               }
