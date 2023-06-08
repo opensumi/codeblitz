@@ -39,9 +39,32 @@ export class AtomGitAPIService implements ICodeAPIService {
     this._PRIVATE_TOKEN = this.config.token || this.helper.ATOMGIT_TOKEN || '';
   }
 
+  private sleep(t: number) {
+    return new Promise(res => {
+      setTimeout(() => {
+          res(undefined)
+      }, t)
+    })
+  }
+
   private async checkAccessToken(): Promise<boolean> {
-    const popupWindow = window.open(`${this.config.origin}login/oauth/authorize?client_id=9d8b531661f441d1`, '_blank', 'directories=no,titlebar=no,toolbar=no,location=no,status=no,menubar=no,scrollbars=no,resizable=no,width=800,height=520,top=150,left=150');
-    return new Promise<boolean>((resolve, reject) => {
+    return new Promise<boolean>(async (resolve, reject) => {
+      resolve(true);
+      // 一开始就弹出弹窗会有颜色闪烁问题，先临时 sleep 处理，后面再优化
+      await this.sleep(300);
+
+      const btn = await this.helper.showDialog({
+        message: '检测到 OAuth 未授权',
+        type: MessageType.Info,
+        closable: false,
+        buttons: ['去授权']
+      });
+
+      let popupWindow;
+      if (btn === '去授权') {
+        popupWindow = window.open(`${this.config.origin}login/oauth/authorize?client_id=9d8b531661f441d1`, '_blank', 'directories=no,titlebar=no,toolbar=no,location=no,status=no,menubar=no,scrollbars=no,resizable=no,width=800,height=520,top=150,left=150');
+      }
+
       const handleMessage = async (event: MessageEvent) => {
         try {
           const { data } = event;
