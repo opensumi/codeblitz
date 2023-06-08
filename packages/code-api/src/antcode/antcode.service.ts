@@ -147,7 +147,7 @@ export class AntCodeAPIService implements ICodeAPIService {
     }
   }
 
-  private getProjectId(repo: IRepositoryModel) {
+  getProjectId(repo: IRepositoryModel) {
     return `${repo.owner}%2F${repo.name}`;
   }
 

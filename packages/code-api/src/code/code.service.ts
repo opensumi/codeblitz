@@ -94,11 +94,32 @@ export default class CodeAPIService extends AntCodeAPIService {
     }
   }
 
-  mergeBase(
+  /*
+   * 获取两个分支 的共同祖先
+   * 类似于 git merge-base branch1 branch2
+   * 接口暂时只支持查询两个分支
+   */
+  async mergeBase(
     repo: IRepositoryModel,
     target: string,
     source: string
   ): Promise<API.ResponseCommit> {
-    throw new Error('Method not implemented.');
+    let url = `/api/v4/projects/${this.getProjectId(
+      repo
+    )}/repository/merge_base?refs[]=${target}&refs[]=${source}`;
+    if (this.config.endpoint) {
+      url = createUrl(this.config.endpoint, url);
+    }
+    const urlInstance = new URL(url, location.origin);
+    const privateToken = this.PRIVATE_TOKEN;
+    return (
+      await fetch(urlInstance.toString(), {
+        method: 'GET',
+        headers: {
+          ...(privateToken ? { 'PRIVATE-TOKEN': privateToken } : {}),
+          ...webgwRequestOpts,
+        },
+      })
+    ).json();
   }
 }
