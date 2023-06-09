@@ -104,7 +104,7 @@ export default class CodeAPIService extends AntCodeAPIService {
     target: string,
     source: string
   ): Promise<API.ResponseCommit> {
-    let url = `/api/v4/projects/${this.getProjectId(
+    let url = `/tcloudantcodeweb/api/v4/projects/${this.getProjectId(
       repo
     )}/repository/merge_base?refs[]=${target}&refs[]=${source}`;
     if (this.config.endpoint) {
@@ -115,6 +115,7 @@ export default class CodeAPIService extends AntCodeAPIService {
     return (
       await fetch(urlInstance.toString(), {
         method: 'GET',
+        credentials: 'include',
         headers: {
           ...(privateToken ? { 'PRIVATE-TOKEN': privateToken } : {}),
           ...webgwRequestOpts,
