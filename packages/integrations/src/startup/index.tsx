@@ -16,7 +16,7 @@ import gitlens from '@alipay/alex/extensions/alex.gitlens';
 import graph from '@alipay/alex/extensions/alex.git-graph';
 import codeservice from '@alipay/alex/extensions/alex.code-service';
 import imagePreview from '@alipay/alex/extensions/alex.image-preview';
-import webSCM from '@alipay/alex/extensions/cloud-ide-ext.web-scm';
+import webSCM from '@alipay/alex/extensions/alex-ext-public.web-scm';
 import anycode from '@alipay/alex/extensions/opensumi-lite-extensions.anycode';
 import anycodeCSharp from '@alipay/alex/extensions/opensumi-lite-extensions.anycode-c-sharp';
 import anycodeCpp from '@alipay/alex/extensions/opensumi-lite-extensions.anycode-cpp';
