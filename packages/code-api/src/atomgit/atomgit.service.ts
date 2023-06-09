@@ -69,32 +69,16 @@ export class AtomGitAPIService implements ICodeAPIService {
         try {
           const { data } = event;
           if (isObject(data) && data.type === 'atomgit') {
-            const { data: { code } } = data;
+            const { data: { token } } = data;
             popupWindow?.close();
-            if (!code) {
+            if (!token) {
               resolve(false);
               return;
             }
-
-            // 先临时处理，后续需要将其转移到 ide-codeblitz
-            const tokenResult: any = await request('https://twebgwnet.alipay.com/tcloudideweb/openapi/atomgit-auth-callback', {
-              baseURL: '',
-              responseType: 'json',
-              method: 'post',
-              credentials: 'omit',
-              headers: {
-                'x-webgw-appId': '180020010001252942',
-                'x-webgw-version': '2.0',
-              },
-              data: {
-                code
-              }
-            });
-
-            if (tokenResult && tokenResult.access_token) {
-              this.helper.ATOMGIT_TOKEN = tokenResult.access_token;
-              this.helper.reinitializeCodeService(true);
-            }
+            
+            this.helper.ATOMGIT_TOKEN = token;
+            this.helper.reinitializeCodeService(true);
+            
             resolve(true);
           }
         } catch (error) {
