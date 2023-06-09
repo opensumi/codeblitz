@@ -75,8 +75,11 @@ export class AtomGitAPIService implements ICodeAPIService {
               resolve(false);
               return;
             }
-            const tokenResult: any = await this.request('https://twebgwnet.alipay.com/tcloudideweb/openapi/atomgit-auth-callback', {
+
+            // 先临时处理，后续需要将其转移到 ide-codeblitz
+            const tokenResult: any = await request('https://twebgwnet.alipay.com/tcloudideweb/openapi/atomgit-auth-callback', {
               baseURL: '',
+              responseType: 'json',
               method: 'post',
               credentials: 'omit',
               headers: {
@@ -87,6 +90,7 @@ export class AtomGitAPIService implements ICodeAPIService {
                 code
               }
             });
+
             if (tokenResult && tokenResult.access_token) {
               this.helper.ATOMGIT_TOKEN = tokenResult.access_token;
               this.helper.reinitializeCodeService(true);
@@ -102,7 +106,7 @@ export class AtomGitAPIService implements ICodeAPIService {
   }
 
   public async available(): Promise<boolean> {
-    const token = this._PRIVATE_TOKEN;
+    const token = this.PRIVATE_TOKEN;
     if (!token) {
       return await this.checkAccessToken();
     }
@@ -204,7 +208,7 @@ export class AtomGitAPIService implements ICodeAPIService {
     throw new Error('Method not implemented.');
   }
   async getBranches(repo: IRepositoryModel): Promise<BranchOrTag[]> {
-    if (!this._PRIVATE_TOKEN) {
+    if (!this.PRIVATE_TOKEN) {
       return [];
     }
 
