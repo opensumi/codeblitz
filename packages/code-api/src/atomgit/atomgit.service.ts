@@ -32,7 +32,12 @@ export class AtomGitAPIService implements ICodeAPIService {
   private _PRIVATE_TOKEN: string | null;
 
   get PRIVATE_TOKEN() {
-    return this._PRIVATE_TOKEN || this.helper.ATOMGIT_TOKEN;
+    if (!this._PRIVATE_TOKEN) {
+      this._PRIVATE_TOKEN = this.helper.ATOMGIT_TOKEN;
+      return this._PRIVATE_TOKEN;
+    };
+
+    return this._PRIVATE_TOKEN;
   }
 
   constructor() {
@@ -76,6 +81,9 @@ export class AtomGitAPIService implements ICodeAPIService {
               return;
             }
             
+            // 清理过期的 token；
+            this.clearToken();
+
             this.helper.ATOMGIT_TOKEN = token;
             this.helper.reinitializeCodeService(true);
             
