@@ -1,9 +1,16 @@
 ## [2.2.5-beta.13](https://code.alipay.com/cloud-ide/crew-dragon/compare/v2.2.5-beta.9...v2.2.5-beta.13) (2023-07-03)
+# [2.3.0-rc.1](https://code.alipay.com/cloud-ide/crew-dragon/compare/v2.2.5-beta.9...v2.3.0-rc.1) (2023-06-29)
+
+
+### Bug Fixes
+
+* build error ([a747016](https://code.alipay.com/cloud-ide/crew-dragon/commits/a74701663aa0a699fbd5c556a03a693af2fa94c7))
 
 
 ### Features
 
 * 支持scm新版交互 ([7f1e9a6](https://code.alipay.com/cloud-ide/crew-dragon/commits/7f1e9a6850dfac6aab2cc04ceeb69ed136cac054))
+* 支持自定义worker插件地址 ([49c5d08](https://code.alipay.com/cloud-ide/crew-dragon/commits/49c5d0876a58d48e6a831fa580d451d0233c14f3))
 
 
 
