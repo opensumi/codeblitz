@@ -18,6 +18,11 @@ export type IAppConfig = Partial<IAppOpts> & {
    * 插件配置
    */
   plugins?: IPluginConfig;
+  /** 
+   * 插件OSS地址
+   * extensionOSSPath/publisher.name-version
+   */
+  extensionOSSPath?: string;
 };
 
 export interface IConfig {

@@ -33,7 +33,15 @@ export const getFunctionProps = (obj: Record<string, any>): string[] => {
   }
 };
 
-export const getExtensionPath = (ext: IExtensionIdentity, mode?: IExtensionMode) => {
+export const getExtensionPath = (
+  ext: IExtensionIdentity,
+  mode?: IExtensionMode,
+  OSSPath?: string
+) => {
+  if (!!OSSPath) {
+    return [OSSPath, '/', `${ext.publisher}.${ext.name}-${ext.version}`].join('');
+  }
+
   return [
     EXT_SCHEME,
     '://',

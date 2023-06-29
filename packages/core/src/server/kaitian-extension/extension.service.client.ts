@@ -5,6 +5,7 @@ import { IExtensionNodeClientService, IExtensionMetadata, ExtraMetadata } from '
 import { ServerConfig } from '../core/app';
 import { getExtensionPath } from '../../common/util';
 import { EXT_SCHEME } from '../../common/constant';
+import { AppConfig } from '../../common';
 
 const { posix } = path;
 
@@ -15,6 +16,9 @@ export class ExtensionServiceClientImpl implements IExtensionNodeClientService {
   }
   @Autowired(ServerConfig)
   serverConfig: ServerConfig;
+
+  @Autowired(AppConfig)
+  appConfig: AppConfig & { extensionOSSPath?: string };
 
   getElectronMainThreadListenPath(): Promise<string> {
     throw new Error('Method not implemented.');
@@ -30,9 +34,12 @@ export class ExtensionServiceClientImpl implements IExtensionNodeClientService {
       return [];
     }
     const extensions: IExtensionMetadata[] = await Promise.all(
-      extensionMetadata.map((ext) => getExtension(ext, localization))
+      extensionMetadata.map((ext) =>
+        getExtension(ext, localization, undefined, this.appConfig.extensionOSSPath)
+      )
     );
 
+    console.log('==> extensions', extensions);
     return extensions;
   }
   getExtension(
@@ -130,10 +137,11 @@ async function getExtraMetaData(
 async function getExtension(
   ext: IExtensionBasicMetadata,
   localization: string,
-  extraMetaData?: ExtraMetadata
+  extraMetaData?: ExtraMetadata,
+  OSSPath?: string
 ) {
   const extensionPath =
-    ext.mode === 'local' && ext.uri ? ext.uri : getExtensionPath(ext.extension, ext.mode);
+    ext.mode === 'local' && ext.uri ? ext.uri : getExtensionPath(ext.extension, ext.mode, OSSPath);
   const extensionUri = Uri.parse(extensionPath);
 
   let pkgNlsJSON: { [key: string]: string } | undefined;
