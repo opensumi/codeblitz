@@ -1,6 +1,6 @@
 {
   "name": "@alipay/alex-sql-service",
-  "version": "2.2.5-beta.9",
+  "version": "2.2.5-beta.13",
   "description": "@alipay/alex-shared",
   "main": "lib/index.js",
   "typing": "lib/index.d.ts",
@@ -12,13 +12,13 @@
   ],
   "scripts": {},
   "publishConfig": {
-    "registry": "https://registry.npm.alibaba-inc.com"
+    "registry": "https://registry.antgroup-inc.cn"
   },
   "dependencies": {
     "chevrotain": "^7.0.0",
     "bravo-parser": "1.0.64",
     "sql-prettier": "^0.2.12",
-    "@alipay/alex-core": "2.2.5-beta.9"
+    "@alipay/alex-core": "2.2.5-beta.13"
   },
   "tnpm": {
     "mode": "yarn",

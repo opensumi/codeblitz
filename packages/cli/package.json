@@ -1,6 +1,6 @@
 {
   "name": "@alipay/alex-cli",
-  "version": "2.2.5-beta.9",
+  "version": "2.2.5-beta.13",
   "description": "@alipay/alex-cli",
   "main": "lib/commander.js",
   "files": [
@@ -15,11 +15,11 @@
   },
   "scripts": {},
   "publishConfig": {
-    "registry": "https://registry.npm.alibaba-inc.com"
+    "registry": "https://registry.antgroup-inc.cn"
   },
   "dependencies": {
     "@ali/ide-extension-installer": "^2.0.0",
-    "@alipay/alex-shared": "2.2.5-beta.9",
+    "@alipay/alex-shared": "2.2.5-beta.13",
     "@opensumi/ide-extension": "2.23.0",
     "commander": "^7.2.0",
     "fs-extra": "^9.0.1",

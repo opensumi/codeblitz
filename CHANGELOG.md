@@ -1,3 +1,12 @@
+## [2.2.5-beta.13](https://code.alipay.com/cloud-ide/crew-dragon/compare/v2.2.5-beta.9...v2.2.5-beta.13) (2023-07-03)
+
+
+### Features
+
+* 支持scm新版交互 ([7f1e9a6](https://code.alipay.com/cloud-ide/crew-dragon/commits/7f1e9a6850dfac6aab2cc04ceeb69ed136cac054))
+
+
+
 ## [2.2.5-beta.9](https://code.alipay.com/cloud-ide/crew-dragon/compare/v2.2.5-beta.8...v2.2.5-beta.9) (2023-06-01)
 
 
