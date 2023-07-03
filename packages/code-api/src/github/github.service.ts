@@ -69,6 +69,9 @@ export class GitHubAPIService implements ICodeAPIService {
   constructor() {
     this._OAUTH_TOKEN = this.config.token || this.helper.GITHUB_TOKEN;
   }
+  createPullRequest(repo: IRepositoryModel, sourceBranch: string, targetBranch: string, title: string, autoMerge?: boolean | undefined): Promise<ConflictAPI.ResponseCreatePR> {
+    throw new Error('Method not implemented.');
+  }
   mergeBase(
     repo: IRepositoryModel,
     target: string,

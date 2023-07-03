@@ -122,4 +122,7 @@ export namespace API {
     our_path: string;
     their_path: string;
   }
+  export interface ResponseCreatePR {
+    id: number;
+  }
 }

@@ -66,6 +66,9 @@ export class GitLabAPIService implements ICodeAPIService {
   constructor() {
     this._PRIVATE_TOKEN = this.config.token || this.helper.GITLAB_TOKEN;
   }
+  createPullRequest(repo: IRepositoryModel, sourceBranch: string, targetBranch: string, title: string, autoMerge?: boolean | undefined): Promise<ConflictAPI.ResponseCreatePR> {
+    throw new Error('Method not implemented.');
+  }
   mergeBase(
     repo: IRepositoryModel,
     target: string,
