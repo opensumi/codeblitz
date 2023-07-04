@@ -11,7 +11,7 @@ import {
 import * as SQLPlugin from './sql.plugin';
 import { Popover, Radio } from 'antd';
 import 'antd/dist/antd.css';
-import odcTheme from '@alipay/alex/extensions/alex.odc-theme';
+import odcTheme from '@alipay/alex/extensions/alex-ext-public.odc-theme';
 import { Button } from '@opensumi/ide-components';
 import { IEditor } from '@opensumi/ide-editor';
 

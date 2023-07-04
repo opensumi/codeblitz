@@ -27,10 +27,10 @@ import '@alipay/alex/languages/json';
 //#endregion
 
 //#region 语言功能
-import html from '@alipay/alex/extensions/alex.html-language-features-worker';
-import css from '@alipay/alex/extensions/alex.css-language-features-worker';
-import typescript from '@alipay/alex/extensions/alex.typescript-language-features-worker';
-import json from '@alipay/alex/extensions/alex.json-language-features-worker';
+import html from '@alipay/alex/extensions/alex-ext-public.html-language-features-worker';
+import css from '@alipay/alex/extensions/alex-ext-public.css-language-features-worker';
+import typescript from '@alipay/alex/extensions/alex-ext-public.typescript-language-features-worker';
+import json from '@alipay/alex/extensions/alex-ext-public.json-language-features-worker';
 //#endregion
 
 //#region 获取内置模块，提供 IDE 层面的控制能力

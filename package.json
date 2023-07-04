@@ -97,14 +97,10 @@
   },
   "cloudideExtensions": [
     {
-      "publisher": "cloud-ide-ext",
-      "name": "sarif-viewer",
-      "version": "0.0.9"
-    },
-    {
-      "publisher": "cloud-ide-ext",
+      "publisher": "alex-ext-public",
       "name": "web-scm",
-      "version": "0.2.0"
+      "version": "0.3.1",
+      "mode": "public"
     },
     {
       "publisher": "alex-ext-public",
@@ -142,9 +138,10 @@
       "version": "0.2.0"
     },
     {
-      "publisher": "alex",
+      "publisher": "alex-ext-public",
       "name": "gitlens",
-      "version": "10.2.3-2"
+      "version": "10.2.3-2",
+      "mode": "public"
     },
     {
       "publisher": "alex",
@@ -152,79 +149,94 @@
       "version": "0.0.1"
     },
     {
-      "publisher": "alex",
+      "publisher": "alex-ext-public",
       "name": "git-graph",
-      "version": "1.30.0-2"
+      "version": "1.30.0-3",
+      "mode": "public"
     },
     {
-      "publisher": "alex",
+      "publisher": "alex-ext-public",
       "name": "image-preview",
-      "version": "1.53.0-patch.1"
+      "version": "1.53.0-patch.1",
+      "mode": "public"
     },
     {
-      "publisher": "opensumi-lite-extensions",
+      "publisher": "alex-ext-public",
       "name": "anycode",
-      "version": "0.0.67"
+      "version": "0.0.67",
+      "mode": "public"
     },
     {
-      "publisher": "opensumi-lite-extensions",
+      "publisher": "alex-ext-public",
       "name": "anycode-c-sharp",
-      "version": "0.0.5"
+      "version": "0.0.5",
+      "mode": "public"
     },
     {
-      "publisher": "opensumi-lite-extensions",
+      "publisher": "alex-ext-public",
       "name": "anycode-cpp",
-      "version": "0.0.5"
+      "version": "0.0.5",
+      "mode": "public"
     },
     {
-      "publisher": "opensumi-lite-extensions",
+      "publisher": "alex-ext-public",
       "name": "anycode-go",
-      "version": "0.0.5"
+      "version": "0.0.5",
+      "mode": "public"
     },
     {
-      "publisher": "opensumi-lite-extensions",
+      "publisher": "alex-ext-public",
       "name": "anycode-java",
-      "version": "0.0.5"
+      "version": "0.0.5",
+      "mode": "public"
     },
     {
-      "publisher": "opensumi-lite-extensions",
+      "publisher": "alex-ext-public",
       "name": "anycode-php",
-      "version": "0.0.6"
+      "version": "0.0.6",
+      "mode": "public"
     },
     {
-      "publisher": "opensumi-lite-extensions",
+      "publisher": "alex-ext-public",
       "name": "anycode-python",
-      "version": "0.0.5"
+      "version": "0.0.5",
+      "mode": "public"
     },
     {
-      "publisher": "opensumi-lite-extensions",
+      "publisher": "alex-ext-public",
       "name": "anycode-rust",
-      "version": "0.0.5"
+      "version": "0.0.5",
+      "mode": "public"
     },
     {
-      "publisher": "opensumi-lite-extensions",
+      "publisher": "alex-ext-public",
       "name": "anycode-typescript",
-      "version": "0.0.5"
+      "version": "0.0.5",
+      "mode": "public"
     },
     {
-      "publisher": "opensumi-lite-extensions",
+      "publisher": "alex-ext-public",
       "name": "references-view",
-      "version": "1.0.0"
+      "version": "1.0.0",
+      "mode": "public"
     },
     {
-      "publisher": "opensumi-lite-extensions",
+      "publisher": "alex-ext-public",
       "name": "emmet",
-      "version": "1.0.0"
+      "version": "1.0.0",
+      "mode": "public"
     },
     {
-      "publisher": "vscode-extensions",
+      "publisher": "alex-ext-public",
       "name": "codeswing",
-      "version": "0.0.21"
+      "version": "0.0.21",
+      "mode": "public"
     },
     {
-      "publisher": "opensumi-lite-extensions",
+      "publisher": "alex-ext-public",
       "name": "code-runner-for-web",
-      "version": "0.1.5-patch.1"
+      "version": "0.1.5-patch.1",
+      "mode": "public"
     },
     {
       "publisher": "alex",
@@ -232,34 +244,16 @@
       "version": "0.2.2"
     },
     {
-      "publisher": "opensumi-lite-extensions",
+      "publisher": "alex-ext-public",
       "name": "merge-conflict",
-      "version": "1.0.0"
+      "version": "1.0.0",
+      "mode": "public"
     },
     {
-      "publisher": "vscode-extensions",
-      "name": "vscode-yaml",
-      "version": "1.9.1"
-    },
-    {
-      "publisher": "cloud-ide-ext",
-      "name": "comp-market-test",
-      "version": "0.0.13"
-    },
-    {
-      "publisher": "cloud-ide-ext",
-      "name": "aci-yaml",
-      "version": "1.11.9"
-    },
-    {
-      "publisher": "aistudio",
-      "name": "libro",
-      "version": "0.0.3"
-    },
-    {
-      "publisher": "alex",
+      "publisher": "alex-ext-public",
       "name": "odc-theme",
-      "version": "1.0.0"
+      "version": "1.0.2",
+      "mode": "public"
     }
   ]
 }

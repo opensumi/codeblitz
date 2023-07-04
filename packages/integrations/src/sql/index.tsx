@@ -13,7 +13,6 @@ import * as SQLPlugin from './sql.plugin';
 import { ICodeEditor, IEditor } from '@opensumi/ide-editor';
 import { Popover, Radio, Menu } from 'antd';
 import 'antd/dist/antd.css';
-import odcTheme from '@alipay/alex/extensions/alex.odc-theme';
 import { SQLRender } from './sqlRender';
 import * as monaco from '@opensumi/monaco-editor-core/esm/vs/editor/editor.api';
 import { ODPSTokens } from '@alipay/alex-sql-service/lib/config';

@@ -15,6 +15,7 @@ import {
   ISearchResults,
   CodePlatform,
   GitlensBlame,
+  EntryInfo,
 } from '../common/types';
 import { API as ConflictAPI } from '../antcode/types';
 import { request, RequestOptions } from '@alipay/alex-shared';
@@ -42,6 +43,15 @@ export class AtomGitAPIService implements ICodeAPIService {
 
   constructor() {
     this._PRIVATE_TOKEN = this.config.token || this.helper.ATOMGIT_TOKEN || '';
+  }
+  getEntryInfo?(repo: IRepositoryModel, entry: EntryParam): Promise<EntryInfo> {
+    throw new Error('Method not implemented.');
+  }
+  getBranchNames?(repo: IRepositoryModel): Promise<string[]> {
+    throw new Error('Method not implemented.');
+  }
+  createPullRequest(repo: IRepositoryModel, sourceBranch: string, targetBranch: string, title: string, autoMerge?: boolean | undefined): Promise<ConflictAPI.ResponseCreatePR> {
+    throw new Error('Method not implemented.');
   }
 
   private sleep(t: number) {
