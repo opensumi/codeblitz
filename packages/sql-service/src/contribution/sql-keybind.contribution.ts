@@ -101,12 +101,6 @@ export class SQLKeybindContribution
     })
   }
   registerMenus(menus: IMenuRegistry): void {
-    // menus.unregisterMenuItem(MenuId.EditorContext, QUICK_OPEN_COMMANDS.OPEN.id);
-    // menus.unregisterMenuItem(MenuId.EditorContext, EDITOR_COMMANDS.FORMAT_DOCUMENT_WITH.id);
-    // menus.unregisterMenuItem(MenuId.EditorContext, 'editor.action.revealDefinition');
-    // menus.unregisterMenuItem(MenuId.EditorContext, 'EditorContextPeek');
-    // menus.unregisterMenuItem(MenuId.EditorContext, EDITOR_COMMANDS.FORMAT_DOCUMENT_WITH.id);
-    // menus.unregisterMenuItem(MenuId.EditorContext, 'editor.action.changeAll');
     menus.unregisterMenuId(MenuId.EditorContext)
   }
 }
