@@ -1,3 +1,4 @@
+import { Keybinding } from '@opensumi/ide-core-browser';
 import { IReporter } from '@opensumi/ide-core-common';
 import { FileSystemConfiguration, FileSystemInstance } from '../server/node';
 
@@ -103,6 +104,13 @@ export interface RuntimeConfig {
    * 配置需注销的快捷键
    */
   unregisterKeybindings?: string[];
+  /**
+   * 配置快捷键
+   * 可以通过 plugin 注册对应 command 执行的命令
+   * opensumi keybinding 
+   * https://opensumi.com/zh/docs/integrate/universal-integrate-case/custom-keybinding
+   */
+  registerKeybindings?: Keybinding[];
   /**
    * 文本搜索相关的配置，用于开启了左侧搜索面板的配置选项
    */

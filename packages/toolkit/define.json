@@ -1,7 +1,9 @@
 {
   "__KAITIAN_VERSION__": "2.23.0",
-  "__WORKER_HOST__": "https://gw.alipayobjects.com/os/ide-server/worker-host.12445541.js",
+  "__WORKER_HOST__": "https://gw.alipayobjects.com/os/ide-server/worker-host.32fa4547.js",
   "__WEBVIEW_ENDPOINT__": "https://gw.alipayobjects.com/os/ide-server/webview.1e614a33",
   "__WEBVIEW_ENDPOINT_INTERNAL__": "http://alipay-rmsdeploy-image.cn-hangzhou.alipay.aliyun-inc.com/ide-server/webview.1e614a33",
-  "__WEBVIEW_SCRIPT__": "https://gw.alipayobjects.com/os/ide-server/webview.66e57793.js"
+  "__WEBVIEW_SCRIPT__": "https://gw.alipayobjects.com/os/ide-server/webview.66e57793.js",
+  "__ODPS_WORKER__": "https://gw.alipayobjects.com/os/ide-server/odps-worker.67dbbf44.js",
+  "__OB_WORKER__": "https://gw.alipayobjects.com/os/ide-server/ob-worker.93dc9e03.js"
 }

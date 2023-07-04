@@ -107,6 +107,9 @@ packages/alex/.cloudide
 packages/toolkit/extensions
 packages/acr/bundle
 
+generated-parser
+.antlr
+
 #cloud-ide
 .devcontainer.*
 

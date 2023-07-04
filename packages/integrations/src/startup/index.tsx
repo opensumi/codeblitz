@@ -1,6 +1,6 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-import { IAppInstance, AppRenderer, getDefaultLayoutConfig, SlotLocation } from '@alipay/alex';
+import { IAppInstance, AppRenderer, getDefaultLayoutConfig, SlotLocation, AppRenderer2 } from '@alipay/alex';
 import * as Alex from '@alipay/alex';
 import '@alipay/alex/languages';
 import { CodeServiceModule } from '@alipay/alex-code-service';

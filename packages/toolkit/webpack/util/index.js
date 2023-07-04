@@ -40,6 +40,8 @@ exports.config = {
   editorAllGlobalEntry: 'alex.editor.all.global',
   editorAllGlobalMiniEntry: 'alex.editor.all.global.min',
   workerEntry: 'worker-host',
+  odpsEntry: 'odps-worker',
+  obEntry: 'ob-worker',
   webviewEntry: 'webview',
   languageGlobalEntry: 'languages.global',
   languageGlobalMinEntry: 'languages.global.min',

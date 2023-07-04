@@ -498,4 +498,22 @@ export class AntCodeAPIService implements ICodeAPIService {
       })
     ).json();
   }
+
+  // TODO 轻量PR接口？
+  async createPullRequest(
+    repo: IRepositoryModel,
+    sourceBranch: string,
+    targetBranch: string,
+    title: string,
+    autoMerge?: boolean,
+  ): Promise<API.ResponseCreatePR> {
+    return await this.request<API.ResponseCreatePR>(
+      `/api/v3/projects/${this.getProjectId(
+        repo
+      )}/pull_requests?source_branch=${sourceBranch}&target_branch=${targetBranch}&title=${title}&auto_merge=${autoMerge || true}`,
+      {
+        method: 'post',
+      }
+    );
+  }
 }

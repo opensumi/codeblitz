@@ -22,3 +22,7 @@ export const WEBVIEW_SCRIPT = __WEBVIEW_SCRIPT__;
  * alex version
  */
 export const VERSION = __VERSION__;
+
+
+export const ODPS_WORKER = __ODPS_WORKER__;
+export const OB_WORKER = __OB_WORKER__;

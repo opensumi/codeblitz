@@ -218,6 +218,12 @@ module.exports = (option) => {
         __WEBVIEW_ENDPOINT_INTERNAL__: JSON.stringify(''),
         __WEBVIEW_SCRIPT__: JSON.stringify(''),
         __VERSION__: JSON.stringify(pkg.version),
+        __ODPS_WORKER__: process.env.ODPS_WORKER
+          ? JSON.stringify(`/assets/~${process.env.ODPS_WORKER}`)
+          : JSON.stringify(`${baseURL}/${config.odpsEntry}.js`),
+        __OB_WORKER__: process.env.OB_WORKER
+          ? JSON.stringify(`/assets/~${process.env.ODPS_WORKER}`)
+          : JSON.stringify(`${baseURL}/${config.obEntry}.js`),
         ...option.define,
       }),
       new webpack.ProvidePlugin({

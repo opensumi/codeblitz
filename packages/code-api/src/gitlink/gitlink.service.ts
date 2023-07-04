@@ -58,6 +58,9 @@ export class GitLinkAPIService implements ICodeAPIService {
   constructor() {
     this._PRIVATE_TOKEN = this.config.token || '';
   }
+  createPullRequest(repo: IRepositoryModel, sourceBranch: string, targetBranch: string, title: string, autoMerge?: boolean | undefined): Promise<ConflictAPI.ResponseCreatePR> {
+    throw new Error('Method not implemented.');
+  }
   mergeBase(
     _repo: IRepositoryModel,
     _target: string,

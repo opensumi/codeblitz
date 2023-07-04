@@ -7,6 +7,7 @@ import {
   PreferenceProviderProvider,
   PreferenceScope,
   PreferenceProvider,
+  IContextKeyService,
 } from '@opensumi/ide-core-browser';
 import { ClientApp as BasicClientApp } from '@opensumi/ide-core-browser/lib/bootstrap/app';
 
@@ -56,6 +57,7 @@ import {
   MonacoCodeService,
   monacoCodeServiceProxy,
 } from './override/monacoOverride/codeEditorService';
+import { MonacoContextKeyServiceOverride } from './override/monacoOverride/contextKeyService';
 
 // import { MonacoOverrides } from './override/monacoOverride';
 export * from './override/monacoOverride/codeEditorService';
@@ -128,6 +130,11 @@ export class ClientModule extends BrowserModule {
       token: IMonacoOverrideService,
       useClass: MonacoOverrideService,
     },
+    {
+      token: IContextKeyService,
+      useClass: MonacoContextKeyServiceOverride,
+      override: true,
+    },
   ];
   preferences = injectDebugPreferences;
 }
@@ -140,8 +147,6 @@ export { IClientAppOpts };
 // 先 dispose，待 opensumi 修复
 // @ts-ignore
 export class ClientApp extends BasicClientApp {
-  private clearInjector: () => void;
-
   private disposeSideEffect = () => {};
 
   private modules: ModuleConstructor[] = [];

@@ -377,6 +377,15 @@ export interface ICodeAPIService {
     target: string,
     source: string
   ): Promise<AntCodeAPI.ResponseCommit>;
+
+  createPullRequest(
+    repo: IRepositoryModel,
+    sourceBranch: string,
+    targetBranch: string,
+    title: string,
+    autoMerge?: boolean,
+  ): Promise<AntCodeAPI.ResponseCreatePR>;
+
 }
 
 export interface ICodeAPIServiceProvider extends ICodeAPIService {

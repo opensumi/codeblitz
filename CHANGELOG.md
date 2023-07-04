@@ -1,3 +1,87 @@
+## [2.2.5-beta.13](https://code.alipay.com/cloud-ide/crew-dragon/compare/v2.2.5-beta.9...v2.2.5-beta.13) (2023-07-03)
+# [2.3.0-rc.1](https://code.alipay.com/cloud-ide/crew-dragon/compare/v2.2.5-beta.9...v2.3.0-rc.1) (2023-06-29)
+
+
+### Bug Fixes
+
+* build error ([a747016](https://code.alipay.com/cloud-ide/crew-dragon/commits/a74701663aa0a699fbd5c556a03a693af2fa94c7))
+
+
+### Features
+
+* 支持scm新版交互 ([7f1e9a6](https://code.alipay.com/cloud-ide/crew-dragon/commits/7f1e9a6850dfac6aab2cc04ceeb69ed136cac054))
+* 支持自定义worker插件地址 ([49c5d08](https://code.alipay.com/cloud-ide/crew-dragon/commits/49c5d0876a58d48e6a831fa580d451d0233c14f3))
+
+
+
+## [2.2.5-beta.9](https://code.alipay.com/cloud-ide/crew-dragon/compare/v2.2.5-beta.8...v2.2.5-beta.9) (2023-06-01)
+
+
+### Features
+
+* 更新格式化选定内容 ([3125602](https://code.alipay.com/cloud-ide/crew-dragon/commits/3125602bfbe1758b175a2f77e1c20fecb14d375b))
+
+
+
+## [2.2.5-beta.8](https://code.alipay.com/cloud-ide/crew-dragon/compare/v2.2.5-beta.7...v2.2.5-beta.8) (2023-05-29)
+
+
+
+## [2.2.5-beta.7](https://code.alipay.com/cloud-ide/crew-dragon/compare/v2.2.5-beta.6...v2.2.5-beta.7) (2023-05-24)
+
+
+
+## [2.2.5-beta.6](https://code.alipay.com/cloud-ide/crew-dragon/compare/v2.2.5-beta.5...v2.2.5-beta.6) (2023-05-18)
+
+
+
+## [2.2.5-beta.5](https://code.alipay.com/cloud-ide/crew-dragon/compare/v2.2.5-beta.4...v2.2.5-beta.5) (2023-05-16)
+
+
+### Bug Fixes
+
+* signature error ([8cefe63](https://code.alipay.com/cloud-ide/crew-dragon/commits/8cefe63ae99f0893b6c3eb48a08f90643aeb1d33))
+
+
+### Features
+
+* keepalive ([76b2382](https://code.alipay.com/cloud-ide/crew-dragon/commits/76b2382b6ff807da88dd7d6f60ccd503fb6b8dcd))
+
+
+
+## [2.2.5-beta.4](https://code.alipay.com/cloud-ide/crew-dragon/compare/v2.2.5-beta.3...v2.2.5-beta.4) (2023-05-11)
+
+
+
+## [2.2.5-beta.3](https://code.alipay.com/cloud-ide/crew-dragon/compare/v2.2.5-beta.2...v2.2.5-beta.3) (2023-05-10)
+
+
+### Features
+
+* 支持onchange方法 ([5106da5](https://code.alipay.com/cloud-ide/crew-dragon/commits/5106da5ab90e2d0b55e77b1ed5e74ff131e754cc))
+
+
+
+## [2.2.5-beta.2](https://code.alipay.com/cloud-ide/crew-dragon/compare/v2.2.5-beta.1...v2.2.5-beta.2) (2023-05-08)
+
+
+
+## [2.2.5-beta.1](https://code.alipay.com/cloud-ide/crew-dragon/compare/v2.2.4...v2.2.5-beta.1) (2023-05-08)
+
+
+### Bug Fixes
+
+* 修复 unregisterKeybinding 的参数问题 ([2a3870c](https://code.alipay.com/cloud-ide/crew-dragon/commits/2a3870c6881125e36d0ae910068439d65318b037))
+
+
+### Features
+
+* 迁移dt-sql ([79020f9](https://code.alipay.com/cloud-ide/crew-dragon/commits/79020f9737c59e0dff38dd70ccddb90d628499a8))
+* 支持worker计算 ([94f7748](https://code.alipay.com/cloud-ide/crew-dragon/commits/94f7748716817e7d382dfcf5292af95bd418cfea))
+* sql service init ([603b3b9](https://code.alipay.com/cloud-ide/crew-dragon/commits/603b3b9a932ac61c060ea018258511d5eb217aec))
+
+
+
 ## [2.2.4](https://code.alipay.com/cloud-ide/crew-dragon/compare/v2.2.3...v2.2.4) (2023-04-19)
 
 

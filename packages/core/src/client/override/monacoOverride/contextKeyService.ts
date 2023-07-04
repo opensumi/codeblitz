@@ -14,23 +14,12 @@ import {
   ContextKeyExpr,
   IContextKeyServiceTarget,
   ContextKeyExpression,
-  IContext,
 } from '@opensumi/monaco-editor-core/esm/vs/platform/contextkey/common/contextkey';
 import {
-  ConfigurationTarget,
-  IConfigurationChangeEvent,
   IConfigurationService,
-  IConfigurationOverrides,
-  IConfigurationData,
-  IConfigurationValue,
 } from '@opensumi/monaco-editor-core/esm/vs/platform/configuration/common/configuration';
 export const IScopedContextKeyServiceProxy = Symbol('IScopedContextKeyServiceProxy');
 import { IContextKeyService } from '@opensumi/ide-core-browser';
-// @ts-ignore
-// import { ScopedContextKeyService } from '@opensumi/ide-monaco/lib/browser/monaco.context-key.service';
-
-// import { MonacoContextKeyService as OpenSumiBaseContextKeyService } from '@opensumi/ide-monaco/lib/browser/monaco.context-key.service';
-
 import { isContextKeyService } from '@opensumi/ide-monaco/lib/browser/monaco.context-key.service';
 import { KeybindingResolver } from '@opensumi/monaco-editor-core/esm/vs/platform/keybinding/common/keybindingResolver';
 
@@ -209,8 +198,9 @@ export class MonacoContextKeyServiceOverride
 
   constructor() {
     super();
-    this.contextKeyService = new ContextKeyService(this.configurationService);
+    this.contextKeyService = (window as any).contextService || new ContextKeyService(this.configurationService);
     this.listenToContextChanges();
+    (window as any).contextService = this.contextKeyService
   }
 
   dispose(): void {

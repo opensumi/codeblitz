@@ -111,7 +111,6 @@ export const installLocalExtensions = async (dirs: string[], options?: IExtensio
     }
     console.log(`  * ${readablePath}`);
   });
-  console.log();
 
   const httpUri = await getHttpUri(options);
 

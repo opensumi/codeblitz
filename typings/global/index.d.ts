@@ -18,6 +18,8 @@ declare var __WEBVIEW_ENDPOINT__: string;
 declare var __WEBVIEW_ENDPOINT_INTERNAL__: string;
 declare var __WEBVIEW_SCRIPT__: string;
 declare var __VERSION__: string;
+declare var __ODPS_WORKER__: string;
+declare var __OB_WORKER__: string;
 
 type Optional<T, K extends keyof T> = Omit<T, K> & Partial<T>;
 

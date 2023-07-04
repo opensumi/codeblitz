@@ -3,6 +3,7 @@ import {
   MonacoContribution,
   Domain,
   MonacoOverrideServiceRegistry,
+  IContextKeyService,
 } from '@opensumi/ide-core-browser';
 import { StandaloneKeybindingServiceProxy } from './monacoOverride/standaloneKeybindingService';
 
@@ -16,17 +17,21 @@ export const IMonacoOverrideService = Symbol('IMonacoOverrideService');
 @Domain(MonacoContribution)
 export class MonacoOverrideService implements MonacoContribution {
   @Autowired(ICommandServiceToken)
-  monacoCommandService: MonacoCommandService;
+  private monacoCommandService: MonacoCommandService;
 
   @Autowired(MonacoCodeService)
-  monacoCodeService: MonacoCodeService;
+  private monacoCodeService: MonacoCodeService;
+
+  @Autowired(IContextKeyService)
+  private readonly globalContextKeyService: IContextKeyService;
 
   registerOverrideService(registry: MonacoOverrideServiceRegistry) {
+
     // TODO opensumi ServiceNames
     registry.registerOverrideService(
       // @ts-ignore
       'keybindingService',
-      new StandaloneKeybindingServiceProxy(this.monacoCodeService, this.monacoCommandService)
+      new StandaloneKeybindingServiceProxy(this.globalContextKeyService.contextKeyService, this.monacoCodeService, this.monacoCommandService)
     );
   }
 }

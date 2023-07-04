@@ -142,8 +142,7 @@ invoke(async () => {
   step('提交到远程');
   await exec(`git tag v${targetVersion}`);
   await exec(`git push origin refs/tags/v${targetVersion}`);
-  await exec(`git push --set-upstream orgin release/v${targetVersion}`);
-
+  await exec(`git push --set-upstream origin release/v${targetVersion}`);
   signale.success('发布完成 需前往仓库提交 PR 到 master ');
 });
 

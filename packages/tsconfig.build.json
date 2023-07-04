@@ -16,6 +16,9 @@
       "path": "./code-api/tsconfig.build.json"
     },
     {
+      "path": "./sql-service/tsconfig.build.json"
+    },
+    {
       "path": "./code-service/tsconfig.build.json"
     },
     {
