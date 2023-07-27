@@ -1,30 +1,25 @@
 {
-  "name": "@alipay/alex",
-  "version": "2.3.0-rc.1",
+  "name": "@codeblitzjs/core",
+  "private": true,
   "workspaces": [
     "packages/*"
   ],
-  "private": true,
-  "description": "Ant Codespaces for browser",
+  "description": "codeblitzjs",
   "main": "index.js",
   "engines": {
-    "kaitian": "2.23.0"
+    "opensumi": "2.23.0"
   },
   "scripts": {
     "prepare": "husky install",
     "type-check": "tsc --skipLibCheck --noEmit",
     "preinstall": "node scripts/preinstall && npm run prepare:env",
     "prepare:env": "yum --version && sudo yum -y install unzip gcc-c++ libX11-devel libxkbfile-devel libsecret-devel || echo 'no yum'",
-    "init": "npm run clean && npm run generate && npm run build:parser && npm run build && npm run ext",
+    "init": "npm run clean && npm run generate && npm run build && npm run ext",
     "start": "npm run dev",
-    "start:acr": "INTEGRATION=antcode-cr npm run start",
     "ext": "alex ext",
     "generate": "node scripts/generate",
     "editor": "INTEGRATION=editor npm run dev",
-    "sql": "INTEGRATION=sql npm run dev",
-    "acr": "INTEGRATION=antcode-cr npm run dev",
     "fs": "INTEGRATION=filesystem npm run dev",
-    "build:parser": "node scripts/antlr.js",
     "build": "node scripts/build",
     "bundle": "node scripts/bundle",
     "create": "node scripts/create",
@@ -52,16 +47,8 @@
       "prettier --parser=typescript --write"
     ]
   },
-  "publishConfig": {
-    "registry": "https://registry.npm.alibaba-inc.com"
-  },
-  "repository": {
-    "type": "git",
-    "url": "git@code.alipay.com:cloud-ide/crew-dragon.git"
-  },
+  "repository": "git@github.com:opensumi/codeblitz.git",
   "devDependencies": {
-    "@ali/ide-extension-installer": "^2.1.0",
-    "@alipay/basement": "^3.5.0",
     "@commitlint/cli": "^11.0.0",
     "@commitlint/config-conventional": "^11.0.0",
     "@types/jest": "^26.0.16",
@@ -88,171 +75,139 @@
     "tslib": "^2.2.0",
     "typescript": "^4.2.3",
     "urllib": "^2.36.1",
-    "antlr4": "4.7.2",
     "shelljs": "^0.8.4"
-  },
-  "tnpm": {
-    "mode": "yarn",
-    "lockfile": "enable"
   },
   "cloudideExtensions": [
     {
-      "publisher": "alex-ext-public",
-      "name": "web-scm",
-      "version": "0.3.1",
-      "mode": "public"
-    },
-    {
-      "publisher": "alex-ext-public",
+      "publisher": "codeblitz",
       "name": "css-language-features-worker",
-      "version": "1.53.0-patch.1",
-      "mode": "public"
-    },
-    {
-      "publisher": "alex-ext-public",
-      "name": "markdown-language-features-worker",
-      "version": "1.53.0-patch.1",
-      "mode": "public"
-    },
-    {
-      "publisher": "alex-ext-public",
-      "name": "html-language-features-worker",
-      "version": "1.53.0-patch.1",
-      "mode": "public"
-    },
-    {
-      "publisher": "alex-ext-public",
-      "name": "json-language-features-worker",
-      "version": "1.53.0-patch.1",
-      "mode": "public"
-    },
-    {
-      "publisher": "alex-ext-public",
-      "name": "typescript-language-features-worker",
       "version": "1.53.0-patch.3",
       "mode": "public"
     },
     {
-      "publisher": "cloud-ide",
-      "name": "vscode-lsif",
-      "version": "0.2.0"
+      "publisher": "codeblitz",
+      "name": "markdown-language-features-worker",
+      "version": "1.53.0-patch.2",
+      "mode": "public"
     },
     {
-      "publisher": "alex-ext-public",
+      "publisher": "codeblitz",
+      "name": "html-language-features-worker",
+      "version": "1.53.0-patch.3",
+      "mode": "public"
+    },
+    {
+      "publisher": "codeblitz",
+      "name": "json-language-features-worker",
+      "version": "1.53.0-patch.3",
+      "mode": "public"
+    },
+    {
+      "publisher": "codeblitz",
+      "name": "typescript-language-features-worker",
+      "version": "1.53.0-patch.4",
+      "mode": "public"
+    },
+    {
+      "publisher": "codeblitz",
       "name": "gitlens",
       "version": "10.2.3-2",
       "mode": "public"
     },
     {
-      "publisher": "alex",
-      "name": "code-service",
-      "version": "0.0.1"
-    },
-    {
-      "publisher": "alex-ext-public",
+      "publisher": "codeblitz",
       "name": "git-graph",
       "version": "1.30.0-3",
       "mode": "public"
     },
     {
-      "publisher": "alex-ext-public",
+      "publisher": "codeblitz",
       "name": "image-preview",
       "version": "1.53.0-patch.1",
       "mode": "public"
     },
     {
-      "publisher": "alex-ext-public",
-      "name": "anycode",
-      "version": "0.0.67",
-      "mode": "public"
-    },
-    {
-      "publisher": "alex-ext-public",
-      "name": "anycode-c-sharp",
-      "version": "0.0.5",
-      "mode": "public"
-    },
-    {
-      "publisher": "alex-ext-public",
-      "name": "anycode-cpp",
-      "version": "0.0.5",
-      "mode": "public"
-    },
-    {
-      "publisher": "alex-ext-public",
-      "name": "anycode-go",
-      "version": "0.0.5",
-      "mode": "public"
-    },
-    {
-      "publisher": "alex-ext-public",
-      "name": "anycode-java",
-      "version": "0.0.5",
-      "mode": "public"
-    },
-    {
-      "publisher": "alex-ext-public",
-      "name": "anycode-php",
-      "version": "0.0.6",
-      "mode": "public"
-    },
-    {
-      "publisher": "alex-ext-public",
-      "name": "anycode-python",
-      "version": "0.0.5",
-      "mode": "public"
-    },
-    {
-      "publisher": "alex-ext-public",
-      "name": "anycode-rust",
-      "version": "0.0.5",
-      "mode": "public"
-    },
-    {
-      "publisher": "alex-ext-public",
-      "name": "anycode-typescript",
-      "version": "0.0.5",
-      "mode": "public"
-    },
-    {
-      "publisher": "alex-ext-public",
+      "publisher": "codeblitz",
       "name": "references-view",
       "version": "1.0.0",
       "mode": "public"
     },
     {
-      "publisher": "alex-ext-public",
+      "publisher": "codeblitz",
       "name": "emmet",
       "version": "1.0.0",
       "mode": "public"
     },
     {
-      "publisher": "alex-ext-public",
+      "publisher": "codeblitz",
       "name": "codeswing",
       "version": "0.0.21",
       "mode": "public"
     },
     {
-      "publisher": "alex-ext-public",
+      "publisher": "codeblitz",
       "name": "code-runner-for-web",
       "version": "0.1.5-patch.1",
       "mode": "public"
     },
     {
-      "publisher": "alex",
-      "name": "vditor-markdown",
-      "version": "0.2.2"
-    },
-    {
-      "publisher": "alex-ext-public",
+      "publisher": "codeblitz",
       "name": "merge-conflict",
       "version": "1.0.0",
       "mode": "public"
     },
     {
-      "publisher": "alex-ext-public",
-      "name": "odc-theme",
-      "version": "1.0.2",
+      "publisher": "vscode-extensions",
+      "name": "anycode",
+      "version": "0.0.67",
+      "mode": "public"
+    },
+    {
+      "publisher": "vscode-extensions",
+      "name": "anycode-c-sharp",
+      "version": "0.0.5",
+      "mode": "public"
+    },
+    {
+      "publisher": "vscode-extensions",
+      "name": "anycode-cpp",
+      "version": "0.0.5",
+      "mode": "public"
+    },
+    {
+      "publisher": "vscode-extensions",
+      "name": "anycode-go",
+      "version": "0.0.5",
+      "mode": "public"
+    },
+    {
+      "publisher": "vscode-extensions",
+      "name": "anycode-java",
+      "version": "0.0.5",
+      "mode": "public"
+    },
+    {
+      "publisher": "vscode-extensions",
+      "name": "anycode-php",
+      "version": "0.0.6",
+      "mode": "public"
+    },
+    {
+      "publisher": "vscode-extensions",
+      "name": "anycode-python",
+      "version": "0.0.5",
+      "mode": "public"
+    },
+    {
+      "publisher": "vscode-extensions",
+      "name": "anycode-rust",
+      "version": "0.0.5",
+      "mode": "public"
+    },
+    {
+      "publisher": "vscode-extensions",
+      "name": "anycode-typescript",
+      "version": "0.0.5",
       "mode": "public"
     }
   ]

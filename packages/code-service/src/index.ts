@@ -1,6 +1,6 @@
 import { Injectable, Provider } from '@opensumi/di';
 import { BrowserModule } from '@opensumi/ide-core-browser';
-import { extendModule, ModuleConstructor } from '@alipay/alex-core';
+import { extendModule, ModuleConstructor } from '@codeblitzjs/ide-sumi-core';
 
 import { CodeContribution } from './code-service.contribution';
 import { CodeStaticResourceContribution } from './static-resource.contribution';

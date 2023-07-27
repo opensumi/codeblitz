@@ -1,1 +1,1 @@
-# @alipay/alex-cli
+# @codeblitzjs/ide-cli

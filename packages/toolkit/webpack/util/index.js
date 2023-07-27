@@ -32,27 +32,21 @@ exports.nodePolyfill = {
 };
 
 exports.config = {
-  appEntry: 'alex',
-  appGlobalEntry: 'alex.global',
-  appGlobalMinEntry: 'alex.global.min',
-  editorEntry: 'alex.editor',
-  editorAllEntry: 'alex.editor.all',
-  editorAllGlobalEntry: 'alex.editor.all.global',
-  editorAllGlobalMiniEntry: 'alex.editor.all.global.min',
+  appEntry: 'codeblitz',
+  appGlobalEntry: 'codeblitz.global',
+  appGlobalMinEntry: 'codeblitz.global.min',
+  editorEntry: 'codeblitz.editor',
+  editorAllEntry: 'codeblitz.editor.all',
+  editorAllGlobalEntry: 'codeblitz.editor.all.global',
+  editorAllGlobalMiniEntry: 'codeblitz.editor.all.global.min',
   workerEntry: 'worker-host',
-  odpsEntry: 'odps-worker',
-  obEntry: 'ob-worker',
   webviewEntry: 'webview',
   languageGlobalEntry: 'languages.global',
   languageGlobalMinEntry: 'languages.global.min',
-  acrEntry: 'acr',
-  acrGlobalEntry: 'acr.global',
-  acrGlobalMinEntry: 'acr.global.min',
-  alexAllGlobalEntry: 'alex.all.global',
-  alexAllGlobalMinEntry: 'alex.all.global.min',
+  alexAllGlobalEntry: 'codeblitz.all.global',
+  alexAllGlobalMinEntry: 'codeblitz.all.global.min',
 };
 
-// just for shared
 exports.manifestSeed = {};
 
 function resolvePolyfill(moduleName) {

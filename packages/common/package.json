@@ -1,0 +1,14 @@
+{
+  "name": "@codeblitzjs/ide-common",
+  "version": "1.0.0-next.1",
+  "description": "@codeblitzjs/ide-common",
+  "main": "lib/index.js",
+  "typing": "lib/index.d.ts",
+  "files": [
+    "lib"
+  ],
+  "keywords": [
+    "opensumi codeblitzjs"
+  ],
+  "scripts": {}
+}

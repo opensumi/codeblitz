@@ -6,7 +6,7 @@ invoke(async () => {
   await Promise.all([generateLanguages(), generateModules(), generateShims()]);
 
   try {
-    await exec('yarn workspace @alipay/alex-toolkit build:languages');
+    await exec('yarn workspace @codeblitzjs/ide-toolkit build:languages');
   } catch (err) {
     signale.error('build languages 失败');
     throw err;

@@ -1,6 +1,6 @@
 import { Injectable, Autowired, INJECTOR_TOKEN, Injector } from '@opensumi/di';
 import { Emitter, localize, CommandService } from '@opensumi/ide-core-common';
-import { AppConfig } from '@alipay/alex-core';
+import { AppConfig } from '@codeblitzjs/ide-sumi-core';
 import { IMessageService } from '@opensumi/ide-overlay';
 import * as path from 'path';
 import md5 from 'md5';
@@ -8,7 +8,7 @@ import {
   ICodeAPIProvider,
   CODE_PLATFORM_CONFIG,
   extendPlatformConfig,
-} from '@alipay/alex-code-api';
+} from '@codeblitzjs/ide-code-api';
 import { ICodeServiceConfig, ICodePlatform, TreeEntry, InitializeState } from './types';
 import { parseSubmoduleUrl, isDescendant, logger, HEAD, encodeRefPath } from './utils';
 import { RootRepository, Repository } from './repository';

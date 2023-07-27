@@ -48,7 +48,7 @@ exports.replaceEnv = async () => {
 };
 
 function resolveLibFile(p) {
-  return path.join(__dirname, '../../packages/alex/lib', p);
+  return path.join(__dirname, '../../packages/core/lib', p);
 }
 
 function checkLibFiles(files) {

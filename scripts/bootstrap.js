@@ -24,7 +24,7 @@ packages.forEach(async (pkg) => {
   signale.pending(`开启初始化模块：${name}`);
 
   // package.json
-  const pkgName = name === 'alex' ? `@alipay/alex` : `@alipay/alex-${name}`;
+  const pkgName = `@codeblitzjs/ide-${name}`;
   const json = {
     name: pkgName,
     version,
@@ -32,18 +32,11 @@ packages.forEach(async (pkg) => {
     main: 'lib/index.js',
     typings: 'lib/index.d.ts',
     files: ['lib'],
-    keywords: ['kaitian AntCodespaces'],
+    keywords: ['opensumi codeblitzjs'],
     scripts: {},
-    publishConfig: {
-      registry: 'https://registry.npm.alibaba-inc.com',
-    },
-    tnpm: {
-      mode: 'yarn',
-      lockfile: 'enable',
-    },
     dependencies: {
-      '@alipay/alex-core': version,
-      '@alipay/alex-shared': version,
+      '@codeblitzjs/ide-sumi-core': version,
+      '@codeblitzjs/ide-common': version,
     },
   };
   await fsp.writeFile(resolve('package.json'), JSON.stringify(json, null, 2));

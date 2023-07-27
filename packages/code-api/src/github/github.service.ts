@@ -1,7 +1,7 @@
 import { Injectable, Autowired } from '@opensumi/di';
 import { AppConfig } from '@opensumi/ide-core-browser';
 import { localize, MessageType } from '@opensumi/ide-core-common';
-import { request, isResponseError, RequestOptions } from '@alipay/alex-shared';
+import { request, isResponseError, RequestOptions } from '@codeblitzjs/ide-common';
 import { observable } from 'mobx';
 import { API } from './types';
 import { HelperService } from '../common/service';
@@ -18,9 +18,8 @@ import type {
   Project,
   EntryInfo,
 } from '../common/types';
-import { CodePlatform, CommitFileStatus } from '../common/types';
+import { CodePlatform, CommitFileStatus, CodeAPI as ConflictAPI } from '../common/types';
 import { CODE_PLATFORM_CONFIG } from '../common/config';
-import { API as ConflictAPI } from '../antcode/types';
 
 const toType = (status: string) => {
   switch (status) {

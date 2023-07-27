@@ -7,7 +7,7 @@ import type {
   IRepositoryModel,
   EntryFileType,
   ICodeAPIService,
-} from '@alipay/alex-code-api';
+} from '@codeblitzjs/ide-code-api';
 
 export type {
   ICodePlatform,
@@ -19,7 +19,7 @@ export type {
   IRepositoryModel,
 };
 
-export { CodePlatform } from '@alipay/alex-code-api';
+export { CodePlatform } from '@codeblitzjs/ide-code-api';
 
 export const ICodeServiceConfig = Symbol('ICodeServiceConfig');
 

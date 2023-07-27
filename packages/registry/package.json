@@ -1,20 +1,13 @@
 {
-  "name": "@alipay/alex-registry",
-  "version": "2.3.0-rc.1",
-  "description": "@alipay/alex-registry",
+  "name": "@codeblitzjs/ide-registry",
+  "version": "1.0.0-next.1",
+  "description": "@codeblitzjs/ide-registry",
   "main": "lib/index.js",
   "typings": "lib/index.d.ts",
   "files": [
     "lib"
   ],
   "keywords": [
-    "kaitian AntCodespaces"
-  ],
-  "publishConfig": {
-    "registry": "https://registry.antgroup-inc.cn"
-  },
-  "tnpm": {
-    "mode": "yarn",
-    "lockfile": "enable"
-  }
+    "opensumi codeblitzjs"
+  ]
 }

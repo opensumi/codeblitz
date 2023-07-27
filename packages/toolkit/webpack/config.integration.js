@@ -24,8 +24,7 @@ const { findPortSync } = require('./util/find-porter');
 const { config } = require('./util');
 const pkg = require('../../../package.json');
 
-// acr 需要请求 code 的 test 的环境
-const defaultHost = process.env.INTEGRATION === 'antcode-cr' ? 'local.alipay.net' : 'localhost';
+const defaultHost = 'localhost';
 const HOST = process.env.HOST || defaultHost;
 
 /** @type {ConfigFn} */
@@ -215,15 +214,8 @@ module.exports = (option) => {
         __WEBVIEW_ENDPOINT__: process.env.WEBVIEW_ENDPOINT
           ? JSON.stringify(`/assets/~${process.env.WEBVIEW_ENDPOINT}`)
           : JSON.stringify(`${baseURL}/${config.webviewEntry}`),
-        __WEBVIEW_ENDPOINT_INTERNAL__: JSON.stringify(''),
         __WEBVIEW_SCRIPT__: JSON.stringify(''),
         __VERSION__: JSON.stringify(pkg.version),
-        __ODPS_WORKER__: process.env.ODPS_WORKER
-          ? JSON.stringify(`/assets/~${process.env.ODPS_WORKER}`)
-          : JSON.stringify(`${baseURL}/${config.odpsEntry}.js`),
-        __OB_WORKER__: process.env.OB_WORKER
-          ? JSON.stringify(`/assets/~${process.env.ODPS_WORKER}`)
-          : JSON.stringify(`${baseURL}/${config.obEntry}.js`),
         ...option.define,
       }),
       new webpack.ProvidePlugin({
@@ -243,12 +235,6 @@ module.exports = (option) => {
               filename: 'index.html',
               template: option.template || path.join(__dirname, '../public/index.html'),
               publicPath: '/',
-              integration: process.env.INTEGRATION,
-            }),
-            new HtmlWebpackPlugin({
-              filename: 'atomgit-auth.html',
-              template: option.template || path.join(__dirname, '../public/atomgit-auth.html'),
-              publicPath: '/atomgit-auth',
               integration: process.env.INTEGRATION,
             }),
             new FriendlyErrorsWebpackPlugin({

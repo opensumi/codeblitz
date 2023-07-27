@@ -1,7 +1,7 @@
 {
-  "name": "@alipay/alex-toolkit",
-  "version": "2.3.0-rc.1",
-  "description": "@alipay/alex-toolkit",
+  "name": "@codeblitzjs/ide-toolkit",
+  "version": "1.0.0-next.1",
+  "description": "@codeblitzjs/ide-toolkit",
   "main": "index.js",
   "files": [
     "polyfill",
@@ -9,23 +9,15 @@
     "public"
   ],
   "keywords": [
-    "kaitian AntCodespaces"
+    "opensumi codeblitzjs"
   ],
   "scripts": {
     "dev": "webpack serve --config webpack/config.dev.js",
     "build": "webpack --config webpack/config.build.js",
     "analyze": "ANALYZE=1 npm run build",
-    "build:host": "webpack --config webpack/config.worker.js --config webpack/config.webview.js --config webpack/config.sql.worker.js",
-    "build:sql": "webpack --config webpack/config.sql.worker.js",
+    "build:host": "webpack --config webpack/config.worker.js --config webpack/config.webview.js",
     "build:languages": "webpack --config webpack/config.languages.js",
     "playground": "webpack serve --config playground/webpack.config.js"
-  },
-  "publishConfig": {
-    "registry": "https://registry.antgroup-inc.cn"
-  },
-  "tnpm": {
-    "mode": "yarn",
-    "lockfile": "enable"
   },
   "dependencies": {
     "asserts": "^4.0.2",

@@ -9,7 +9,7 @@ const extensionProgram = program
   .alias('ext')
   .description(
     `
-install kaitian extensions, you should config in package.json firstly, example:
+install opensumi extensions, you should config in package.json firstly, example:
 {
   "cloudideExtensions": {
     "publisher": "kaitian",
@@ -17,7 +17,7 @@ install kaitian extensions, you should config in package.json firstly, example:
     "version": "2.0.0"
   }
 }
-version can be ignored, then will use latest version under current kaitian framework version
+version can be ignored, then will use latest version under current opensumi framework version
 `
   )
   .action((__, command) => {

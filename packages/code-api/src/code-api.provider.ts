@@ -9,14 +9,12 @@ import {
 } from '@opensumi/ide-core-browser';
 import { IMainLayoutService } from '@opensumi/ide-main-layout';
 import { ICodePlatform, ICodeAPIProvider, ICodeAPIService, CodePlatform } from './common/types';
-import { AntCodeAPIService } from './antcode/antcode.service';
-import CodeAPIService from './code/code.service';
 import { GitHubAPIService } from './github/github.service';
 import { GitLabAPIService } from './gitlab/gitlab.service';
-import { GitLinkAPIService } from './gitlink/gitlink.service';
-import { AtomGitAPIService } from './atomgit/atomgit.service';
 import { GitHubView } from './github/github.view';
 import { GitLabView } from './gitlab/gitlab.view';
+import { AtomGitAPIService } from './atomgit/atomgit.service';
+import { GitLinkAPIService } from './gitlink/gitlink.service';
 
 @Domain(ClientAppContribution)
 export class CodeAPIProvider implements ICodeAPIProvider, ClientAppContribution {
@@ -38,12 +36,6 @@ export class CodeAPIProvider implements ICodeAPIProvider, ClientAppContribution 
   private apiServiceMap = new Map<ICodePlatform, ICodeAPIService>();
 
   constructor() {
-    this.registerPlatformProvider(CodePlatform.antcode, {
-      provider: AntCodeAPIService,
-    });
-    this.registerPlatformProvider(CodePlatform.code, {
-      provider: CodeAPIService,
-    });
     this.registerPlatformProvider(CodePlatform.github, {
       provider: GitHubAPIService,
       onCreate: () => {

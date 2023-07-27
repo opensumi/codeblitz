@@ -17,62 +17,6 @@ export interface ICodePlatformConfig {
 
 // 代码托管平台配置
 export const CODE_PLATFORM_CONFIG: Record<ICodePlatform, ICodePlatformConfig> = {
-  [CodePlatform.antcode]: {
-    platform: CodePlatform.antcode,
-    hostname: ['code.alipay.com', 'gitlab.alipay-inc.com', 'gitlab.antfin-inc.com'],
-    origin: 'https://code.alipay.com',
-    endpoint: 'https://code.alipay.com',
-    brand: 'AntCode',
-    line: {
-      parse(hash: string) {
-        let matched: RegExpMatchArray | null = null;
-        matched = hash.match(/^#L(\d+):?(\d*)$/);
-        if (matched) {
-          return [+matched[1], +matched[1]];
-        }
-        matched = hash.match(/^#L(\d+):?(\d*)-(\d+):?(\d*)$/);
-        if (matched) {
-          return [+matched[1], +matched[3]];
-        }
-        return null;
-      },
-      format([startLineNumber, endLineNumber]) {
-        if (startLineNumber === endLineNumber) {
-          return `#L${startLineNumber}`;
-        }
-        return `#L${startLineNumber}-${endLineNumber}`;
-      },
-    },
-    createBranchAble: true,
-  },
-  [CodePlatform.code]: {
-    platform: CodePlatform.code,
-    hostname: [],
-    origin: 'https://code.cloud.alipay.com',
-    endpoint: 'https://twebgwnet.alipay.com',
-    brand: 'Code',
-    line: {
-      parse(hash: string) {
-        let matched: RegExpMatchArray | null = null;
-        matched = hash.match(/^#L(\d+):?(\d*)$/);
-        if (matched) {
-          return [+matched[1], +matched[1]];
-        }
-        matched = hash.match(/^#L(\d+):?(\d*)-(\d+):?(\d*)$/);
-        if (matched) {
-          return [+matched[1], +matched[3]];
-        }
-        return null;
-      },
-      format([startLineNumber, endLineNumber]) {
-        if (startLineNumber === endLineNumber) {
-          return `#L${startLineNumber}`;
-        }
-        return `#L${startLineNumber}-${endLineNumber}`;
-      },
-    },
-    createBranchAble: true,
-  },
   [CodePlatform.github]: {
     platform: CodePlatform.github,
     hostname: ['github.com'],
@@ -98,9 +42,9 @@ export const CODE_PLATFORM_CONFIG: Record<ICodePlatform, ICodePlatformConfig> = 
   },
   [CodePlatform.gitlab]: {
     platform: CodePlatform.gitlab,
-    hostname: ['gitlab.alibaba-inc.com', 'code.aone.alibaba-inc.com'],
-    origin: 'https://gitlab.alibaba-inc.com',
-    endpoint: 'https://gitlab.alibaba-inc.com',
+    hostname: ['gitlab.cn'],
+    origin: 'https://gitlab.cn',
+    endpoint: 'https://gitlab.cn',
     brand: 'GitLab',
     line: {
       parse(hash: string) {

@@ -4,18 +4,18 @@ const fse = require('fs-extra');
 const { invoke, exec } = require('./utils/utils');
 
 invoke(async () => {
-  const targetDir = path.join(__dirname, '../packages/alex/bundle');
+  const targetDir = path.join(__dirname, '../packages/core/bundle');
   await exec(`npx rimraf ${targetDir}`);
 
   signale.pending('开始打包');
 
   try {
-    await exec('yarn workspace @alipay/alex-toolkit build');
+    await exec('yarn workspace @codeblitzjs/ide-toolkit build');
 
     await fse.writeFile(
       path.join(targetDir, 'index.js'),
       `
-module.exports = require("./alex");
+module.exports = require("./core");
     `.trim() + '\n'
     );
     await fse.writeFile(
@@ -27,7 +27,7 @@ export * from "../lib";
 
     // editor 类型文件
     await fse.writeFile(
-      path.join(targetDir, 'alex.editor.d.ts'),
+      path.join(targetDir, 'codeblitz.editor.d.ts'),
       `
 export * from "../lib/editor";
     `.trim() + '\n'
@@ -35,7 +35,7 @@ export * from "../lib/editor";
 
     // editor.all 类型文件
     await fse.writeFile(
-      path.join(targetDir, 'alex.editor.all.d.ts'),
+      path.join(targetDir, 'codeblitz.editor.all.d.ts'),
       `
 export * from "../lib/editor.all";
     `.trim() + '\n'

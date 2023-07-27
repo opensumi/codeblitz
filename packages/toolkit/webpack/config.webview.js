@@ -28,12 +28,6 @@ module.exports = (option = {}) => {
         filename: `[name]${isDev ? '' : '.[contenthash:8]'}/index.html`,
         template: option.template || path.join(__dirname, '../public/webview.html'),
         inject: false,
-        ...(isDev
-          ? {}
-          : {
-              // 暂时使用ide-server的 ak
-              publicPath: 'https://gw.alipayobjects.com/os/ide-server',
-            }),
       }),
     ],
   };

@@ -16,7 +16,7 @@ import { IThemeService } from '@opensumi/ide-theme';
 import debounce from 'lodash.debounce';
 import { CodeModelService } from './code-model.service';
 import styles from './style.module.less';
-import { RuntimeConfig } from '@alipay/alex-core';
+import { RuntimeConfig } from '@codeblitzjs/ide-sumi-core';
 
 @Domain(BrowserEditorContribution, CommandContribution)
 export class LineDecorationContribution implements BrowserEditorContribution, CommandContribution {

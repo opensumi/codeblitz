@@ -1,11 +1,11 @@
 import * as path from 'path';
 import * as os from 'os';
-import { ExtensionInstaller, Extension } from '@ali/ide-extension-installer';
 import * as fse from 'fs-extra';
 import { from, of } from 'rxjs';
 import { mergeMap, filter, map } from 'rxjs/operators';
-import { IExtensionMode } from '@alipay/alex-shared';
-import { EXTENSION_DIR, EXTENSION_METADATA_DIR, EXTENSION_FIELD } from './util/constant';
+import { IExtensionMode } from '@codeblitzjs/ide-common';
+import { EXTENSION_DIR, EXTENSION_METADATA_DIR, EXTENSION_FIELD, MARKETPLACE_CONFIG } from './util/constant';
+import { ExtensionInstaller, Extension } from './util/installer';
 import { getExtension } from './extension/scanner';
 import {
   IExtensionBasicMetadata,
@@ -138,9 +138,9 @@ export const installLocalExtensions = async (dirs: string[], options?: IExtensio
 async function createInstaller() {
   const pkgJSON = fse.readJSONSync(path.join(__dirname, '../package.json'));
   extensionInstaller = new ExtensionInstaller({
-    accountId: 'nGJBcqs1D-ma32P3mBftgsfq',
-    masterKey: '-nzxLbuqvrKh8arE0grj2f1H',
-    frameworkVersion: pkgJSON.engines.kaitian,
+    accountId: MARKETPLACE_CONFIG.ACCOUNT_ID,
+    masterKey: MARKETPLACE_CONFIG.MASTER_KEY,
+    frameworkVersion: pkgJSON.engines.opensumi,
     dist: EXTENSION_DIR,
     ignoreIncreaseCount: true,
     retry: 3, // 失败重试

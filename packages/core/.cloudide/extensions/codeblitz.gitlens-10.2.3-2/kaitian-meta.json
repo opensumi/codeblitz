@@ -1,0 +1,8 @@
+{
+  "web-assets": [
+    "package.json",
+    "README.md",
+    "images/gitlens-icon.png",
+    "dist/extension.js"
+  ]
+}

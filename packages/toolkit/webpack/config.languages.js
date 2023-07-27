@@ -6,11 +6,11 @@ module.exports = () => {
   return {
     context: path.join(__dirname, '../../..'),
     entry: {
-      [config.languageGlobalEntry]: './packages/alex/languages/index.js',
-      [config.languageGlobalMinEntry]: './packages/alex/languages/index.js',
+      [config.languageGlobalEntry]: './packages/core/languages/index.js',
+      [config.languageGlobalMinEntry]: './packages/core/languages/index.js',
     },
     output: {
-      path: path.resolve(__dirname, '../../alex/languages'),
+      path: path.resolve(__dirname, '../../core/languages'),
       library: 'AlexLanguages',
       libraryTarget: 'global',
     },
@@ -20,7 +20,7 @@ module.exports = () => {
       extensions: ['.js', '.json'],
     },
     externals: {
-      '@alipay/alex-registry': 'Alex',
+      '@codeblitzjs/ide-registry': 'Alex',
     },
     optimization: {
       minimize: true,

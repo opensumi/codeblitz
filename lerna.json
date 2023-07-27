@@ -2,8 +2,7 @@
   "packages": [
     "packages/*"
   ],
-  "npmClient": "tnpm",
-  "registry": "https://registry.antgroup-inc.cn/",
+  "npmClient": "npm",
   "version": "4.1.1",
   "command": {
     "bootstrap": {

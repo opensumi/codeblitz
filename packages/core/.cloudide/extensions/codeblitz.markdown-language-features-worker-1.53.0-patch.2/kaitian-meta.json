@@ -1,0 +1,16 @@
+{
+  "web-assets": [
+    "package.json",
+    "media/highlight.css",
+    "media/index.js",
+    "media/markdown.css",
+    "media/pre.js",
+    "media/preview-dark.svg",
+    "media/preview-light.svg",
+    "package.nls.json",
+    "schemas/package.schema.json",
+    "dist/browser/extension.js",
+    "README.md",
+    "icon.png"
+  ]
+}

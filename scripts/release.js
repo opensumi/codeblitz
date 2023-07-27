@@ -10,7 +10,7 @@ const { invoke, exec } = require('./utils/utils');
 const args = require('minimist')(process.argv.slice(2));
 const { SEMVER_INC, getNewVersion, isValidVersion, isVersionGreat } = require('./utils/version');
 const currentVersion = require('../package.json').version;
-const kaitianVersion = require('../package.json').engines.kaitian;
+const opensumiVersion = require('../package.json').engines.opensumi;
 const signale = require('signale');
 const depsFileds = require('./deps-fileds');
 
@@ -30,9 +30,9 @@ invoke(async () => {
   const assetsDefine = await fse.readJson(
     path.resolve(__dirname, '../packages/toolkit/define.json')
   );
-  if (assetsDefine.__KAITIAN_VERSION__ !== kaitianVersion) {
+  if (assetsDefine.__OPENSUMI_VERSION__ !== opensumiVersion) {
     signale.error(
-      `请先运行 node scripts/build-assets 构建发布 kaitian: ${kaitianVersion} 对应资源`
+      `请先运行 node scripts/build-assets 构建发布 opensumi: ${opensumiVersion} 对应资源`
     );
     return;
   }
@@ -127,22 +127,6 @@ invoke(async () => {
     await publishPackage(pkg, targetVersion);
   }
 
-  step('git checkout branch');
-  await exec(`git checkout -b release/v${targetVersion}`);
-
-  step('git commit');
-  const { stdout } = await exec('git diff', { stdio: 'pipe' });
-  if (stdout) {
-    await exec('git add -A');
-    await exec(`git commit -m release:\\ v${targetVersion}`);
-  } else {
-    console.log('无变更文件');
-  }
-
-  step('提交到远程');
-  await exec(`git tag v${targetVersion}`);
-  await exec(`git push origin refs/tags/v${targetVersion}`);
-  await exec(`git push --set-upstream origin release/v${targetVersion}`);
   signale.success('发布完成 需前往仓库提交 PR 到 master ');
 });
 
@@ -158,7 +142,7 @@ async function updatePackage(pkgRoot, version) {
     const obj = pkgJSON[field];
     if (!obj) return;
     Object.keys(obj).forEach((dep) => {
-      const scope = '@alipay/alex';
+      const scope = '@codeblitzjs/ide-core';
       if (
         dep === scope ||
         (dep.startsWith(scope) && packages.includes(dep.replace(new RegExp(`^${scope}-`), '')))
@@ -180,7 +164,7 @@ async function publishPackage(pkgName, version) {
     return;
   }
   try {
-    await exec(`tnpm publish --tag ${args.tag || 'latest'}`, {
+    await exec(`npm publish --tag ${args.tag || 'latest'}`, {
       cwd: pkgRoot,
     });
     signale.success(`${pkgName}@${version} 发布成功`);

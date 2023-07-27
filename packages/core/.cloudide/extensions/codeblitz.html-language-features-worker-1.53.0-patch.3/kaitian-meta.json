@@ -1,0 +1,13 @@
+{
+  "web-assets": [
+    "package.json",
+    "server/dist/browser/htmlServerMain.js",
+    "server/lib/cgmanifest.json",
+    "server/lib/jquery.d.ts",
+    "client/dist/browser/htmlClientMain.js",
+    "schemas/package.schema.json",
+    "README.md",
+    "icons/html.png",
+    "package.nls.json"
+  ]
+}

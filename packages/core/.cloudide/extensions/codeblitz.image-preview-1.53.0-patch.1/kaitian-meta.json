@@ -1,0 +1,14 @@
+{
+  "web-assets": [
+    "package.json",
+    "media/main.js",
+    "media/main.css",
+    "media/loading.svg",
+    "media/loading-dark.svg",
+    "media/loading-hc.svg",
+    "README.md",
+    "icon.png",
+    "icon.svg",
+    "dist/browser/extension.js"
+  ]
+}

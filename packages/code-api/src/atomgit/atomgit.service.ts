@@ -17,10 +17,10 @@ import {
   GitlensBlame,
   EntryInfo,
 } from '../common/types';
-import { API as ConflictAPI } from '../antcode/types';
-import { request, RequestOptions } from '@alipay/alex-shared';
+import { request, RequestOptions } from '@codeblitzjs/ide-common';
 import { CODE_PLATFORM_CONFIG, HelperService } from '../common';
 import { URI, MessageType, isObject } from '@opensumi/ide-core-common';
+import { CodeAPI as ConflictAPI } from '../common/types';
 import { API } from './types';
 
 @Injectable()

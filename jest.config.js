@@ -5,14 +5,14 @@ module.exports = {
   collectCoverageFrom: [
     'packages/*/src/**/*.ts',
     '!packages/toolkit/**',
-    '!packages/alex/.kaitian/**',
-    '!packages/alex/extensions/**',
+    '!packages/core/.kaitian/**',
+    '!packages/core/extensions/**',
   ],
   watchPathIgnorePatterns: ['/node_modules/', '/dist/', '/.git/'],
   moduleFileExtensions: ['ts', 'tsx', 'js', 'json'],
   moduleNameMapper: {
-    '^@alipay/alex-(?!browserfs)(.*?)$': '<rootDir>/packages/$1/src',
-    '^@alipay/alex$': '<rootDir>/packages/alex/src',
+    '^@codeblitzjs/ide-core-(?!browserfs)(.*?)$': '<rootDir>/packages/$1/src',
+    '^@codeblitzjs/ide-core$': '<rootDir>/packages/core/src',
     '\\.(css|less)$': '<rootDir>/mocks/styleMock.js',
   },
   rootDir: __dirname,

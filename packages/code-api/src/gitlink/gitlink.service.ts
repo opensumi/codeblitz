@@ -1,6 +1,6 @@
 import { Injectable, Autowired } from '@opensumi/di';
 import { IReporterService, formatLocalize, MessageType } from '@opensumi/ide-core-common';
-import { request, RequestOptions } from '@alipay/alex-shared';
+import { request, RequestOptions } from '@codeblitzjs/ide-common';
 import { API } from './types';
 import { HelperService } from '../common/service';
 import { CODE_PLATFORM_CONFIG } from '../common/config';
@@ -18,7 +18,7 @@ import type {
 } from '../common/types';
 import { CodePlatform, CommitFileStatus } from '../common/types';
 import { DEFAULT_SEARCH_IN_WORKSPACE_LIMIT } from '@opensumi/ide-search';
-import { API as ConflictAPI } from '../antcode/types';
+import { CodeAPI as ConflictAPI } from '../common/types';
 
 const toType = (t: number) => {
   switch (t) {

@@ -1,7 +1,7 @@
 {
   "references": [
     {
-      "path": "./shared/tsconfig.build.json"
+      "path": "./common/tsconfig.build.json"
     },
     {
       "path": "./cli/tsconfig.build.json"
@@ -10,19 +10,13 @@
       "path": "./registry/tsconfig.build.json"
     },
     {
-      "path": "./core/tsconfig.build.json"
+      "path": "./sumi-core/tsconfig.build.json"
     },
     {
       "path": "./code-api/tsconfig.build.json"
     },
     {
-      "path": "./sql-service/tsconfig.build.json"
-    },
-    {
       "path": "./code-service/tsconfig.build.json"
-    },
-    {
-      "path": "./lsif-service/tsconfig.build.json"
     },
     {
       "path": "./i18n/tsconfig.build.json"
@@ -34,13 +28,10 @@
       "path": "./plugin/tsconfig.build.json"
     },
     {
-      "path": "./alex/tsconfig.build.json"
+      "path": "./core/tsconfig.build.json"
     },
     {
-      "path": "./acr/tsconfig.build.json"
-    },
-    {
-      "path": "./integrations/tsconfig.build.json"
+      "path": "./startup/tsconfig.build.json"
     },
   ],
   "files": [],

@@ -7,21 +7,7 @@ const submodules = [
     name: 'vscode',
     path: 'lib/vscode',
     url: 'https://github.com/microsoft/vscode.git',
-  },
-  {
-    platform: 'antcode',
-    owner: 'kaitian',
-    name: 'ide-framework',
-    path: 'antcode/ide-framework',
-    url: 'git@code.alipay.com:kaitian/ide-framework.git',
-  },
-  {
-    platform: 'gitlab',
-    owner: 'kaitian',
-    name: 'kaitian-cli',
-    path: 'gitlab/kaitian-cli',
-    url: 'git@gitlab.alibaba-inc.com:kaitian/kaitian-cli.git',
-  },
+  }
 ];
 
 const submodulesContent = submodules.reduce((str, item) => {

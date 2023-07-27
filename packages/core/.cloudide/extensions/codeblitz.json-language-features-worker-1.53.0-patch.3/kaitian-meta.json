@@ -1,0 +1,11 @@
+{
+  "web-assets": [
+    "package.json",
+    "server/dist/browser/jsonServerMain.js",
+    "README.md",
+    "icons/json.png",
+    "client/dist/browser/jsonClientMain.js",
+    "package.nls.json",
+    "http://json-schema.org/draft-07/schema#"
+  ]
+}

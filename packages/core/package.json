@@ -1,50 +1,90 @@
 {
-  "name": "@alipay/alex-core",
-  "version": "2.3.0-rc.1",
-  "description": "core",
+  "name": "@codeblitzjs/ide-core",
+  "version": "1.0.0-next.1",
+  "description": "@codeblitzjs/ide-core",
   "main": "lib/index.js",
   "typings": "lib/index.d.ts",
+  "unpkg": "bundle/alex.global.js",
   "files": [
-    "lib"
+    "lib",
+    "bin",
+    "scripts",
+    "!scripts/.no-postinstall",
+    "modules",
+    "languages",
+    "shims",
+    "polyfills",
+    "bundle",
+    "typings"
   ],
   "keywords": [
-    "kaitian AntCodespaces"
+    "opensumi codeblitzjs"
   ],
-  "scripts": {},
-  "publishConfig": {
-    "registry": "https://registry.antgroup-inc.cn"
+  "bin": {
+    "alex": "bin/alex"
   },
-  "tnpm": {
-    "mode": "yarn",
-    "lockfile": "enable"
+  "scripts": {
+    "postinstall": "node ./scripts/install-ext"
   },
   "dependencies": {
-    "@opensumi/di": "^1.0.0",
+    "@opensumi/ide-addons": "2.23.0",
+    "@opensumi/ide-comments": "2.23.0",
     "@opensumi/ide-core-browser": "2.23.0",
     "@opensumi/ide-core-common": "2.23.0",
     "@opensumi/ide-debug": "2.23.0",
+    "@opensumi/ide-decoration": "2.23.0",
+    "@opensumi/ide-editor": "2.23.0",
+    "@opensumi/ide-explorer": "2.23.0",
+    "@opensumi/ide-express-file-server": "2.23.0",
+    "@opensumi/ide-extension-storage": "2.23.0",
     "@opensumi/ide-file-scheme": "2.23.0",
     "@opensumi/ide-file-service": "2.23.0",
+    "@opensumi/ide-file-tree-next": "2.23.0",
+    "@opensumi/ide-i18n": "2.23.0",
     "@opensumi/ide-extension": "2.23.0",
+    "@opensumi/ide-keymaps": "2.23.0",
     "@opensumi/ide-logs": "2.23.0",
-    "@alipay/alex-browserfs": "~2.1.0",
-    "@alipay/alex-registry": "2.3.0-rc.1",
-    "@alipay/alex-shared": "2.3.0-rc.1",
-    "assert": "^2.0.0",
-    "fs-extra-factory": "^0.2.1",
-    "iconv-lite-umd": "^0.6.8",
-    "jschardet": "^2.2.1",
-    "lodash.debounce": "^4.0.8",
-    "md5": "^2.3.0",
-    "uuid": "^3.3.2",
-    "vscode-languageserver-types": "~3.14.0",
+    "@opensumi/ide-main-layout": "2.23.0",
+    "@opensumi/ide-markdown": "2.23.0",
+    "@opensumi/ide-markers": "2.23.0",
+    "@opensumi/ide-menu-bar": "2.23.0",
+    "@opensumi/ide-monaco": "2.23.0",
+    "@opensumi/ide-monaco-enhance": "2.23.0",
+    "@opensumi/ide-opened-editor": "2.23.0",
+    "@opensumi/ide-outline": "2.23.0",
+    "@opensumi/ide-output": "2.23.0",
+    "@opensumi/ide-overlay": "2.23.0",
+    "@opensumi/ide-preferences": "2.23.0",
+    "@opensumi/ide-quick-open": "2.23.0",
+    "@opensumi/ide-scm": "2.23.0",
+    "@opensumi/ide-search": "2.23.0",
+    "@opensumi/ide-static-resource": "2.23.0",
+    "@opensumi/ide-status-bar": "2.23.0",
+    "@opensumi/ide-storage": "2.23.0",
+    "@opensumi/ide-theme": "2.23.0",
+    "@opensumi/ide-webview": "2.23.0",
+    "@opensumi/ide-workspace": "2.23.0",
+    "@opensumi/ide-workspace-edit": "2.23.0",
+    "@opensumi/ide-toolbar": "2.23.0",
+    "@opensumi/ide-testing": "2.23.0",
+    "@opensumi/ide-variable": "2.23.0",
+    "@opensumi/textmate-languages": "^2.7.0",
+    "@codeblitzjs/ide-cli": "1.0.0-next.1",
+    "@codeblitzjs/ide-code-api": "1.0.0-next.1",
+    "@codeblitzjs/ide-sumi-core": "1.0.0-next.1",
+    "@codeblitzjs/ide-registry": "1.0.0-next.1",
+    "@codeblitzjs/ide-common": "1.0.0-next.1",
+    "@codeblitzjs/ide-code-service": "1.0.0-next.1",
+    "@codeblitzjs/ide-i18n": "1.0.0-next.1",
+    "@codeblitzjs/ide-plugin": "1.0.0-next.1",
     "tslib": "^2.2.0"
   },
   "devDependencies": {
-    "@types/fs-extra": "^9.0.4",
-    "@types/lodash.debounce": "^4.0.6",
-    "@types/md5": "^2.2.1",
-    "@types/uuid": "^3",
-    "vscode": "^1.1.37"
+    "@types/react": "^16.9.56",
+    "@types/react-dom": "^16.9.9"
+  },
+  "peerDependencies": {
+    "react": "^16.14.0",
+    "react-dom": "^16.14.0"
   }
 }

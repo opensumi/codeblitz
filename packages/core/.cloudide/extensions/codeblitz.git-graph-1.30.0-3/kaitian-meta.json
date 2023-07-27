@@ -1,0 +1,15 @@
+{
+  "web-assets": [
+    "package.json",
+    "media/out.min.js",
+    "media/out.min.css",
+    "README.md",
+    "resources/icon.png",
+    "resources/webview-icon.svg",
+    "resources/webview-icon-dark.svg",
+    "resources/webview-icon-light.svg",
+    "resources/cmd-icon-dark.svg",
+    "resources/cmd-icon-light.svg",
+    "dist/extension.js"
+  ]
+}

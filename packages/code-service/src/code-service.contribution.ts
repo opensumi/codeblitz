@@ -13,7 +13,6 @@ import {
   IDisposable,
   IEventBus,
   Command,
-  MessageType,
 } from '@opensumi/ide-core-common';
 import {
   LaunchContribution,
@@ -23,7 +22,7 @@ import {
   IServerApp,
   RuntimeConfig,
   RootFS,
-} from '@alipay/alex-core';
+} from '@codeblitzjs/ide-sumi-core';
 import { IFileTreeService } from '@opensumi/ide-file-tree-next';
 import { FileTreeService } from '@opensumi/ide-file-tree-next/lib/browser/file-tree.service';
 import { FileTreeModelService } from '@opensumi/ide-file-tree-next/lib/browser/services/file-tree-model.service';
@@ -39,10 +38,10 @@ import { DiskFsProviderClient } from '@opensumi/ide-file-service/lib/browser/fil
 import { MainLayoutContribution } from '@opensumi/ide-main-layout';
 import configureFileSystem from './filesystem/configure';
 import { CodeModelService } from './code-model.service';
-import { RefType, ICodeServiceConfig, CodePlatform } from './types';
+import { RefType, ICodeServiceConfig } from './types';
 import { Configure } from './config.service';
-import { ISCMRepository, SCMService, ISCMResource, ISCMResourceGroup } from '@opensumi/ide-scm';
-import { CODE_PLATFORM_CONFIG, RequestFailed } from '@alipay/alex-code-api';
+import { SCMService } from '@opensumi/ide-scm';
+import { CODE_PLATFORM_CONFIG, RequestFailed } from '@codeblitzjs/ide-code-api';
 
 namespace CODE_SERVICE_COMMANDS {
   const CATEGORY = 'CodeService';

@@ -1,8 +1,8 @@
 import * as path from 'path';
 import { Injectable, Autowired } from '@opensumi/di';
 import { Emitter, Deferred } from '@opensumi/ide-core-common';
-import { fsExtra } from '@alipay/alex-core';
-import { ICodeAPIProvider } from '@alipay/alex-code-api';
+import { fsExtra } from '@codeblitzjs/ide-sumi-core';
+import { ICodeAPIProvider } from '@codeblitzjs/ide-code-api';
 import {
   ICodePlatform,
   Submodule,

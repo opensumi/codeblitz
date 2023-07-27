@@ -9,13 +9,12 @@ import {
 import { IOpenerService, IClipboardService } from '@opensumi/ide-core-browser';
 import {
   CODE_PLATFORM_CONFIG,
-  CodePlatform,
-  BranchOrTag,
   CommitRecord,
   CommitParams,
   CommitFileChange,
-  AntCodeAPI,
-} from '@alipay/alex-code-api';
+  CodeAPI,
+  CodePlatform,
+} from '@codeblitzjs/ide-code-api';
 import { CodeModelService } from './code-model.service';
 
 // 对外暴露的服务命令
@@ -381,18 +380,18 @@ export class CommandsContribution extends Disposable implements CommandContribut
     sourceBranch: string,
     targetBranch: string,
     prId: string
-  ): Promise<AntCodeAPI.CanResolveConflictResponse> {
+  ): Promise<CodeAPI.CanResolveConflictResponse> {
     const repo = this.codeModel.getRepository(repoPath);
     if (!repo) throw new Error('conflict request Error checkConflict');
     return repo.request.canResolveConflict(sourceBranch, targetBranch, prId);
   }
   async resolveConflict(
     repoPath: string,
-    content: AntCodeAPI.ResolveConflict,
+    content: CodeAPI.ResolveConflict,
     sourceBranch: string,
     targetBranch: string,
     prId?: string
-  ): Promise<AntCodeAPI.ResolveConflictResponse> {
+  ): Promise<CodeAPI.ResolveConflictResponse> {
     const repo = this.codeModel.getRepository(repoPath);
     if (!repo) throw new Error('conflict request Error resolveConflict');
     return repo.request.resolveConflict(content, sourceBranch, targetBranch, prId);
@@ -401,7 +400,7 @@ export class CommandsContribution extends Disposable implements CommandContribut
     repoPath: string,
     sourceBranch: string,
     targetBranch: string
-  ): Promise<AntCodeAPI.ConflictResponse> {
+  ): Promise<CodeAPI.ConflictResponse> {
     const repo = this.codeModel.getRepository(repoPath);
     if (!repo) throw new Error('conflict request Error getConflict');
     return repo.request.getConflict(sourceBranch, targetBranch);

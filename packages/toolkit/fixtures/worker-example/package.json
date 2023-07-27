@@ -3,12 +3,12 @@
   "version": "0.0.1",
   "publisher": "alex",
   "engines": {
-    "kaitian": "*"
+    "opensumi": "*"
   },
   "activationEvents": [
     "*"
   ],
-  "kaitianContributes": {
+  "sumiContributes": {
     "workerMain": "./worker.js",
     "browserMain": "./browser.js",
     "browserViews": {
@@ -17,7 +17,7 @@
         "view": [
           {
             "id": "Component",
-            "iconPath": "https://gw-office.alipayobjects.com/basement_prod/11a7c315-dbea-48c5-8491-b0f5a97042a2.svg"
+            "iconPath": "https://mdn.alipayobjects.com/huamei_hwfivk/afts/img/A*YELPToBg40oAAAAAAAAAAAAADlyoAQ/original"
           }
         ]
       }

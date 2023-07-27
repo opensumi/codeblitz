@@ -43,7 +43,7 @@ export const GitLabView: React.FC = observer(() => {
         <div className={styles.title}>
           {localize('gitlab.auth-title')}
           <a
-            href="https://gitlab.alibaba-inc.com/profile/account"
+            href="https://gitlab.cn"
             target="_blank"
             style={{ marginLeft: 8 }}
           >

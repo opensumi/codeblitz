@@ -1,6 +1,6 @@
 import { Injectable, Autowired } from '@opensumi/di';
 import { localize, IReporterService, formatLocalize, MessageType } from '@opensumi/ide-core-common';
-import { request, RequestOptions } from '@alipay/alex-shared';
+import { request, RequestOptions } from '@codeblitzjs/ide-common';
 import { API } from './types';
 import { HelperService } from '../common/service';
 import { CODE_PLATFORM_CONFIG } from '../common/config';
@@ -15,8 +15,7 @@ import type {
   Project,
   EntryInfo,
 } from '../common/types';
-import { CodePlatform, CommitFileStatus } from '../common/types';
-import { API as ConflictAPI } from '../antcode/types';
+import { CodePlatform, CommitFileStatus, CodeAPI as ConflictAPI } from '../common/types';
 
 const toType = (d: API.ResponseCommitFileChange) => {
   if (d.new_file) return CommitFileStatus.Added;
@@ -41,7 +40,6 @@ const toChangeLines = (diff: string) => {
 };
 
 /**
- * 目前 aone 不支持通过 private token 跨域调用，需要后台转发
  * 这里使用 gitlab 的 v3 接口，projectId 需使用数据库的 id，不支持 owner/name 的形式
  */
 

@@ -1,26 +1,19 @@
 {
-  "name": "@alipay/alex-code-service",
-  "version": "2.3.0-rc.1",
-  "description": "@alipay/alex-code-service",
+  "name": "@codeblitzjs/ide-code-service",
+  "version": "1.0.0-next.1",
+  "description": "@codeblitzjs/ide-code-service",
   "main": "lib/index.js",
   "typings": "lib/index.d.ts",
   "files": [
     "lib"
   ],
   "keywords": [
-    "kaitian AntCodespaces"
+    "opensumi codeblitzjs"
   ],
   "scripts": {},
-  "publishConfig": {
-    "registry": "https://registry.antgroup-inc.cn"
-  },
-  "tnpm": {
-    "mode": "yarn",
-    "lockfile": "enable"
-  },
   "dependencies": {
-    "@alipay/alex-core": "2.3.0-rc.1",
-    "@alipay/alex-code-api": "2.3.0-rc.1",
+    "@codeblitzjs/ide-sumi-core": "1.0.0-next.1",
+    "@codeblitzjs/ide-code-api": "1.0.0-next.1",
     "umi-request": "^1.3.5",
     "tslib": "^2.2.0"
   }

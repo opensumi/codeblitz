@@ -1,5 +1,5 @@
 import { Autowired, Injectable } from '@opensumi/di';
-import { RuntimeConfig } from '@alipay/alex-core';
+import { RuntimeConfig } from '@codeblitzjs/ide-sumi-core';
 
 import { CodeModelService } from './code-model.service';
 

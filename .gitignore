@@ -95,14 +95,14 @@ packages/*/lib
 packages/*/esm
 packages/*/types
 
-packages/alex/extensions
-packages/alex/languages
-packages/alex/modules
-packages/alex/polyfills
-packages/alex/shims
-packages/alex/bundle
-packages/alex/.kaitian
-packages/alex/.cloudide
+packages/core/extensions
+packages/core/languages
+packages/core/modules
+packages/core/polyfills
+packages/core/shims
+packages/core/bundle
+packages/core/.kaitian
+packages/core/.cloudide
 
 packages/toolkit/extensions
 packages/acr/bundle

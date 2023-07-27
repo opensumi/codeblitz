@@ -1,16 +1,11 @@
-# core
+# alex
 
-## client
-适配在前端场景下部分服务
+> 基于 opensumi 的纯前端版本 IDE 框架
 
-- extension kt-ext 的静态文件及文件读取
+## 核心功能
+* 开箱即用，通过 react 组件方式只需几行代码即可运行一个无容器版本的 IDE
+* 内置 BrowserFS，根据业务形式定制 filesystem，实现文件读写
+* 通过 worker 扩展丰富 IDE 功能，支持扩展的自主安装
 
-## server
-实现相对 browser 端 的 server 端，使用 Proxy 代理到 server app
-最大程度复用 browser 端的代码，只需按照需要实现对应 server path 的服务即可
-
-- DiskFileServicePath 文件系统服务
-- ExtensionNodeServiceServerPath 获取 extensions 相关数据服务
-- LogServiceForClientPath 日志服务
-- CommonServerPath 通用后端服务
-- FileSchemeDocNodeServicePath 文件文档服务
+## 开发文档
+* opensumi: [https://opensumi.com/zh](https://opensumi.com/zh)

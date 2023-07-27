@@ -8,9 +8,6 @@ require('dotenv').config({ path: path.join(__dirname, '../../../.env') });
 
 process.env.NODE_ENV = 'development';
 
-// const antCodeSitHost = 'http://100.83.41.35:80';
-const antCodeSitHost = 'http://code.test.alipay.net';
-
 module.exports = () => {
   const integrationConfig = createWebpackConfig({
     tsconfigPath: path.join(__dirname, '../../../tsconfig.json'),
@@ -21,51 +18,11 @@ module.exports = () => {
     webpackConfig: {
       context: path.join(__dirname, '../../..'),
       entry: {
-        [config.appEntry]: `./packages/integrations/src/${process.env.INTEGRATION || 'startup'}`,
+        [config.appEntry]: `./packages/startup/src/${process.env.INTEGRATION || 'startup'}`,
       },
       devtool: 'eval-cheap-module-source-map',
       devServer: {
-        proxy: {
-          // 通过 cookie 请求测试平台
-          '/code-test': {
-            target: antCodeSitHost,
-            changeOrigin: true,
-            headers: {
-              'PRIVATE-TOKEN': process.env.PRIVATE_TOKEN,
-            },
-            secure: false,
-            pathRewrite: {
-              '^/code-test': '',
-            },
-            // changeOrigin 只对 get 有效
-            onProxyReq: (request) => {
-              request.setHeader('origin', antCodeSitHost);
-              // antcode内 webapi 不使用token
-              if (request.path.startsWith('/webapi')) {
-                request.setHeader('PRIVATE-TOKEN', '');
-              } else {
-                request.setHeader('PRIVATE-TOKEN', process.env.PRIVATE_TOKEN);
-              }
-            },
-          },
-          '/code-service': {
-            target: process.env.CODE_SERVICE_HOST || 'https://code.alipay.com',
-            headers: {
-              'PRIVATE-TOKEN': process.env.PRIVATE_TOKEN,
-            },
-            secure: false,
-            changeOrigin: true,
-            pathRewrite: {
-              '^/code-service': '',
-            },
-            onProxyReq(request) {
-              request.setHeader(
-                'origin',
-                process.env.CODE_SERVICE_HOST || 'https://code.alipay.com'
-              );
-            },
-          },
-        },
+        proxy: { },
         historyApiFallback: {
           disableDotRule: true,
         },

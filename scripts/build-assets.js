@@ -6,25 +6,22 @@ const path = require('path');
 const fs = require('fs');
 const signale = require('signale');
 const { invoke, exec } = require('./utils/utils');
-const { upload } = require('./utils/upload');
 const pkg = require('../package.json');
 
 const assetsKeyMap = {
   __WORKER_HOST__: 'worker-host',
   __WEBVIEW_ENDPOINT__: 'webview/index.html',
-  __WEBVIEW_ENDPOINT_INTERNAL__: 'internal/webview/index.html',
   __WEBVIEW_SCRIPT__: 'webview',
-  __ODPS_WORKER__: 'odps-worker',
-  __OB_WORKER__: 'ob-worker',
 };
 
 invoke(async () => {
   signale.pending(`开始编译 worker-host 和 webview`);
 
   await exec('npx rimraf ./packages/toolkit/dist');
-  await exec(`yarn workspace @alipay/alex-toolkit build:host`);
+  await exec(`yarn workspace @codeblitzjs/ide-toolkit build:host`);
 
-  signale.info('构建成功，开始上传 cdn');
+  // signale.info('构建成功，开始上传 cdn');
+  signale.info('构建成功');
 
   const distDir = path.resolve(__dirname, '../packages/toolkit/dist');
   const manifest = require(path.join(distDir, 'manifest.json'));
@@ -35,13 +32,8 @@ invoke(async () => {
     };
     return obj;
   }, {});
-  fileJSON[assetsKeyMap.__WEBVIEW_ENDPOINT_INTERNAL__] = {
-    ...fileJSON[assetsKeyMap.__WEBVIEW_ENDPOINT__],
-    mode: 'internal',
-  };
-  const cdnResult = await upload(fileJSON);
-
-  signale.info('上传成功，生成 define.json');
+  // const cdnResult = await upload(fileJSON);
+  // signale.info('上传成功，生成 define.json');
 
   const transformHttps = (str) => str.replace(/^http:/, 'https:');
   const env = {
@@ -53,20 +45,8 @@ invoke(async () => {
       key: assetsKeyMap.__WEBVIEW_ENDPOINT__,
       transform: (v) => transformHttps(v.slice(0, v.lastIndexOf('/'))),
     },
-    __WEBVIEW_ENDPOINT_INTERNAL__: {
-      key: assetsKeyMap.__WEBVIEW_ENDPOINT_INTERNAL__,
-      transform: (v) => v.slice(0, v.lastIndexOf('/')),
-    },
     __WEBVIEW_SCRIPT__: {
       key: assetsKeyMap.__WEBVIEW_SCRIPT__,
-      transform: transformHttps,
-    },
-    __ODPS_WORKER__: {
-      key: assetsKeyMap.__ODPS_WORKER__,
-      transform: transformHttps,
-    },
-    __OB_WORKER__: {
-      key: assetsKeyMap.__OB_WORKER__,
       transform: transformHttps,
     }
   };
@@ -78,7 +58,7 @@ invoke(async () => {
       }
       return obj;
     },
-    { __KAITIAN_VERSION__: pkg.engines.kaitian }
+    { __OPENSUMI_VERSION__: pkg.engines.opensumi }
   );
 
   fs.writeFileSync(

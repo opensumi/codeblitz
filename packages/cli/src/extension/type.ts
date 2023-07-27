@@ -1,4 +1,4 @@
-import { JSONType } from '@alipay/alex-shared';
+import { JSONType } from '@codeblitzjs/ide-common';
 
 export {
   IExtensionBasicMetadata,
@@ -8,7 +8,7 @@ export {
   JSONType,
   IExtensionMetadata,
   IExtensionMode,
-} from '@alipay/alex-shared';
+} from '@codeblitzjs/ide-common';
 
 export interface IExtensionContributions extends JSONType {}
 

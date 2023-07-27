@@ -23,8 +23,6 @@ export const localizationBundle = {
     'api.response.unknown-error': 'Unknown Error',
     'api.response.project-not-found': 'Project {0} not found',
     'api.response.project-no-access': 'No access to project',
-    'api.response.no-login-antcode':
-      'Login to antcode is expired, please refresh page if you are logged in',
     'api.response.no-login-code':
       'Login to Code is expired, please refresh page if you are logged in',
     'api.login.goto': 'Go to login',

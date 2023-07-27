@@ -6,14 +6,14 @@ const lib = 'require("../bundle")';
 exports.generateLanguages = async () => {
   const languagesDir = path.join(
     __dirname,
-    '../../node_modules/@ali/kaitian-textmate-languages/lib'
+    '../../node_modules/@opensumi/textmate-languages/lib'
   );
-  const targetDir = path.join(__dirname, '../../packages/alex/languages');
+  const targetDir = path.join(__dirname, '../../packages/core/languages');
   await fse.remove(targetDir);
   await fse.ensureDir(targetDir);
 
   let langEntryContent = '';
-  let declarationContent = `declare module '@alipay/alex/languages' {}\n`;
+  let declarationContent = `declare module '@codeblitzjs/ide-core/languages' {}\n`;
 
   fse
     .readdirSync(languagesDir, { withFileTypes: true })
@@ -23,8 +23,8 @@ exports.generateLanguages = async () => {
       fse.writeFileSync(
         path.join(targetDir, `${lang}.js`),
         `
-const { Registry } = require('@alipay/alex-registry');
-const loadLanguage = require('@ali/kaitian-textmate-languages/lib/${lang}');
+const { Registry } = require('@codeblitzjs/ide-registry');
+const loadLanguage = require('@opensumi/textmate-languages/lib/${lang}');
 const registerLanguage = (contrib) => Registry.register('language', contrib);
 const registerGrammar = (contrib) => Registry.register('grammar', contrib);
 loadLanguage(registerLanguage, registerGrammar);
@@ -32,17 +32,17 @@ loadLanguage(registerLanguage, registerGrammar);
       );
 
       langEntryContent += `require('./${lang}')\n`;
-      declarationContent += `declare module '@alipay/alex/languages/${lang}' {}\n`;
+      declarationContent += `declare module '@codeblitzjs/ide-core/languages/${lang}' {}\n`;
     });
 
   fse.writeFileSync(path.join(targetDir, 'index.js'), langEntryContent);
-  const declarationFile = path.join(__dirname, '../../packages/alex/typings/languages.d.ts');
+  const declarationFile = path.join(__dirname, '../../packages/core/typings/languages.d.ts');
   fse.writeFileSync(declarationFile, declarationContent);
 };
 
 exports.generateModules = async () => {
-  const modulesDir = path.join(__dirname, '../../packages/alex/src/modules');
-  const targetDir = path.join(__dirname, '../../packages/alex/modules');
+  const modulesDir = path.join(__dirname, '../../packages/core/src/modules');
+  const targetDir = path.join(__dirname, '../../packages/core/modules');
   await fse.remove(targetDir);
   await fse.ensureDir(targetDir);
   fse.readdirSync(modulesDir).forEach((mod) => {
@@ -64,12 +64,12 @@ export * from "../lib/modules/${scope}__${name}";
 };
 
 exports.generateShims = async () => {
-  const polyfillsDir = path.join(__dirname, '../../packages/alex/polyfills');
+  const polyfillsDir = path.join(__dirname, '../../packages/core/polyfills');
   await fse.remove(polyfillsDir);
   await fse.ensureDir(polyfillsDir);
   await fse.copy(path.join(__dirname, '../../packages/toolkit/polyfill'), polyfillsDir);
 
-  const shimsDir = path.join(__dirname, '../../packages/alex/shims');
+  const shimsDir = path.join(__dirname, '../../packages/core/shims');
   await fse.remove(shimsDir);
   await fse.ensureDir(shimsDir);
   ['fs', 'fs-extra', 'os', 'crypto', 'buffer', 'process', 'assert', 'path'].forEach((id) => {

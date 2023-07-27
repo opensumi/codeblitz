@@ -4,9 +4,9 @@ import {
   StaticResourceContribution,
   StaticResourceService,
 } from '@opensumi/ide-static-resource/lib/browser/static.definition';
-import { AppConfig, RuntimeConfig } from '@alipay/alex-core';
+import { AppConfig, RuntimeConfig } from '@codeblitzjs/ide-sumi-core';
 import * as paths from 'path';
-import { ICodeAPIProvider, CODE_PLATFORM_CONFIG, CodePlatform } from '@alipay/alex-code-api';
+import { ICodeAPIProvider, CODE_PLATFORM_CONFIG, CodePlatform } from '@codeblitzjs/ide-code-api';
 import { CodeModelService } from './code-model.service';
 
 @Domain(StaticResourceContribution)
@@ -37,7 +37,6 @@ export class CodeStaticResourceContribution implements StaticResourceContributio
         return uri;
       },
       roots: [
-        CODE_PLATFORM_CONFIG[CodePlatform.antcode].origin,
         CODE_PLATFORM_CONFIG[CodePlatform.github].origin,
         CODE_PLATFORM_CONFIG[CodePlatform.gitlab].origin,
         CODE_PLATFORM_CONFIG[CodePlatform.gitlink].origin,
