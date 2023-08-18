@@ -164,7 +164,7 @@ async function publishPackage(pkgName, version) {
     return;
   }
   try {
-    await exec(`npm publish --tag ${args.tag || 'latest'}`, {
+    await exec(`npm publish --tag ${args.tag || 'latest'} --access=public`, {
       cwd: pkgRoot,
     });
     signale.success(`${pkgName}@${version} 发布成功`);
