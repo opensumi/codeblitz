@@ -105,7 +105,6 @@ packages/core/.kaitian
 packages/core/.cloudide
 
 packages/toolkit/extensions
-packages/acr/bundle
 
 generated-parser
 .antlr
