@@ -1,6 +1,6 @@
 {
   "name": "@codeblitzjs/ide-cli",
-  "version": "1.0.1",
+  "version": "1.0.0",
   "description": "@codeblitzjs/ide-cli",
   "main": "lib/commander.js",
   "files": [
@@ -15,7 +15,7 @@
   },
   "scripts": {},
   "dependencies": {
-    "@codeblitzjs/ide-common": "1.0.1",
+    "@codeblitzjs/ide-common": "1.0.0",
     "@opensumi/ide-extension": "2.23.0",
     "commander": "^7.2.0",
     "fs-extra": "^9.0.1",
