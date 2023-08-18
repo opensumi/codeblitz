@@ -164,6 +164,9 @@ async function publishPackage(pkgName, version) {
     return;
   }
   try {
+    process.env['NPM_CONFIG_USERCONFIG'] = '~/.npmrc';
+    process.env['npm_config_registry'] = 'https://registry.npmjs.org';
+
     await exec(`npm publish --tag ${args.tag || 'latest'} --access=public`, {
       cwd: pkgRoot,
     });
