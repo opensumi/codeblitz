@@ -1,6 +1,6 @@
 {
   "name": "@codeblitzjs/ide-toolkit",
-  "version": "1.0.1-next.0",
+  "version": "1.0.1",
   "description": "@codeblitzjs/ide-toolkit",
   "main": "index.js",
   "files": [

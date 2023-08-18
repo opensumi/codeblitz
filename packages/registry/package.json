@@ -1,6 +1,6 @@
 {
   "name": "@codeblitzjs/ide-registry",
-  "version": "1.0.1-next.0",
+  "version": "1.0.1",
   "description": "@codeblitzjs/ide-registry",
   "main": "lib/index.js",
   "typings": "lib/index.d.ts",
