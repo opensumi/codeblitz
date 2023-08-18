@@ -1,12 +1,12 @@
 module.exports = {
   "extension": {
-    "publisher": "alex-ext-public",
+    "publisher": "codeblitz",
     "name": "image-preview",
     "version": "1.53.0-patch.1"
   },
   "packageJSON": {
     "name": "image-preview",
-    "publisher": "alex-ext-public",
+    "publisher": "codeblitz",
     "version": "1.53.0-patch.1",
     "displayName": "%displayName%",
     "description": "%description%",

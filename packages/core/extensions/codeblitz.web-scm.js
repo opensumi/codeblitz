@@ -1,6 +1,6 @@
 module.exports = {
   "extension": {
-    "publisher": "alex-ext-public",
+    "publisher": "codeblitz",
     "name": "web-scm",
     "version": "0.3.1"
   },

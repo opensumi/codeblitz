@@ -1,12 +1,12 @@
 module.exports = {
   "extension": {
-    "publisher": "alex-ext-public",
+    "publisher": "codeblitz",
     "name": "git-graph",
     "version": "1.30.0-3"
   },
   "packageJSON": {
     "name": "git-graph",
-    "publisher": "alex-ext-public",
+    "publisher": "codeblitz",
     "version": "1.30.0-3",
     "repository": {
       "type": "git",

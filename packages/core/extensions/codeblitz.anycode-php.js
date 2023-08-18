@@ -1,24 +1,28 @@
 module.exports = {
   "extension": {
-    "publisher": "alex-ext-public",
-    "name": "anycode-go",
-    "version": "0.0.5"
+    "publisher": "codeblitz",
+    "name": "anycode-php",
+    "version": "0.0.6"
   },
   "packageJSON": {
-    "name": "anycode-go",
+    "name": "anycode-php",
     "publisher": "ms-vscode",
-    "version": "0.0.5",
+    "version": "0.0.6",
     "repository": {
       "url": "https://github.com/microsoft/vscode-anycode"
     },
-    "displayName": "anycode-go",
-    "description": "Go for Anycode",
+    "displayName": "anycode-php",
+    "description": "PHP for Anycode",
     "contributes": {
       "anycodeLanguages": {
-        "grammarPath": "./tree-sitter-go.wasm",
-        "languageId": "go",
+        "grammarPath": "./tree-sitter-php.wasm",
+        "languageId": "php",
         "extensions": [
-          "go"
+          "php",
+          "php4",
+          "php5",
+          "phtml",
+          "ctp"
         ],
         "queryPaths": {
           "comments": "./queries/comments.scm",
@@ -28,7 +32,7 @@ module.exports = {
           "references": "./queries/references.scm"
         },
         "suppressedBy": [
-          "golang.Go"
+          "bmewburn.vscode-intelephense-client"
         ]
       }
     }

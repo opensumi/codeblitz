@@ -1,12 +1,12 @@
 module.exports = {
   "extension": {
-    "publisher": "alex-ext-public",
+    "publisher": "codeblitz",
     "name": "odc-theme",
     "version": "1.0.2"
   },
   "packageJSON": {
     "name": "odc-theme",
-    "publisher": "alex-ext-public",
+    "publisher": "codeblitz",
     "version": "1.0.2",
     "displayName": "ODC UI Theme",
     "description": "ODC UI Theme",

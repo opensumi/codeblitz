@@ -1,6 +1,6 @@
 module.exports = {
   "extension": {
-    "publisher": "alex-ext-public",
+    "publisher": "codeblitz",
     "name": "code-runner-for-web",
     "version": "0.1.5-patch.1"
   },

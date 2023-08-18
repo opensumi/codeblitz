@@ -1,12 +1,12 @@
 module.exports = {
   "extension": {
-    "publisher": "alex-ext-public",
+    "publisher": "codeblitz",
     "name": "gitlens",
     "version": "10.2.3-2"
   },
   "packageJSON": {
     "name": "gitlens",
-    "publisher": "alex-ext-public",
+    "publisher": "codeblitz",
     "version": "10.2.3-2",
     "description": "gitlens for alex",
     "icon": "images/gitlens-icon.png",

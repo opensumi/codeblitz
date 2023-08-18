@@ -1,6 +1,6 @@
 module.exports = {
   "extension": {
-    "publisher": "alex-ext-public",
+    "publisher": "codeblitz",
     "name": "anycode",
     "version": "0.0.67"
   },

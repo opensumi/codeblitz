@@ -1,41 +1,35 @@
 module.exports = {
   "extension": {
-    "publisher": "alex-ext-public",
-    "name": "anycode-python",
+    "publisher": "codeblitz",
+    "name": "anycode-rust",
     "version": "0.0.5"
   },
   "packageJSON": {
-    "name": "anycode-python",
+    "name": "anycode-rust",
     "publisher": "ms-vscode",
     "version": "0.0.5",
     "repository": {
       "url": "https://github.com/microsoft/vscode-anycode"
     },
-    "displayName": "anycode-python",
-    "description": "Python for Anycode",
+    "displayName": "anycode-rust",
+    "description": "Rust for Anycode",
     "contributes": {
       "anycodeLanguages": {
-        "grammarPath": "./tree-sitter-python.wasm",
-        "languageId": "python",
+        "grammarPath": "./tree-sitter-rust.wasm",
+        "languageId": "rust",
         "extensions": [
-          "py",
-          "rpy",
-          "pyw",
-          "cpy",
-          "gyp",
-          "gypi",
-          "pyi",
-          "ipy"
+          "rs"
         ],
         "queryPaths": {
           "comments": "./queries/comments.scm",
+          "folding": "./queries/folding.scm",
           "identifiers": "./queries/identifiers.scm",
           "locals": "./queries/locals.scm",
           "outline": "./queries/outline.scm",
           "references": "./queries/references.scm"
         },
         "suppressedBy": [
-          "ms-python.python"
+          "rust-lang.rust"
         ]
       }
     }

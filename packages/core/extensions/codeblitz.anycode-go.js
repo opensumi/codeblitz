@@ -1,24 +1,24 @@
 module.exports = {
   "extension": {
-    "publisher": "alex-ext-public",
-    "name": "anycode-c-sharp",
+    "publisher": "codeblitz",
+    "name": "anycode-go",
     "version": "0.0.5"
   },
   "packageJSON": {
-    "name": "anycode-c-sharp",
+    "name": "anycode-go",
     "publisher": "ms-vscode",
     "version": "0.0.5",
     "repository": {
       "url": "https://github.com/microsoft/vscode-anycode"
     },
-    "displayName": "anycode-c-sharp",
-    "description": "C# for Anycode",
+    "displayName": "anycode-go",
+    "description": "Go for Anycode",
     "contributes": {
       "anycodeLanguages": {
-        "grammarPath": "./tree-sitter-c_sharp.wasm",
-        "languageId": "csharp",
+        "grammarPath": "./tree-sitter-go.wasm",
+        "languageId": "go",
         "extensions": [
-          "cs"
+          "go"
         ],
         "queryPaths": {
           "comments": "./queries/comments.scm",
@@ -28,7 +28,7 @@ module.exports = {
           "references": "./queries/references.scm"
         },
         "suppressedBy": [
-          "ms-dotnettools.csharp"
+          "golang.Go"
         ]
       }
     }

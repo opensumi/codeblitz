@@ -1,28 +1,24 @@
 module.exports = {
   "extension": {
-    "publisher": "alex-ext-public",
-    "name": "anycode-php",
-    "version": "0.0.6"
+    "publisher": "codeblitz",
+    "name": "anycode-c-sharp",
+    "version": "0.0.5"
   },
   "packageJSON": {
-    "name": "anycode-php",
+    "name": "anycode-c-sharp",
     "publisher": "ms-vscode",
-    "version": "0.0.6",
+    "version": "0.0.5",
     "repository": {
       "url": "https://github.com/microsoft/vscode-anycode"
     },
-    "displayName": "anycode-php",
-    "description": "PHP for Anycode",
+    "displayName": "anycode-c-sharp",
+    "description": "C# for Anycode",
     "contributes": {
       "anycodeLanguages": {
-        "grammarPath": "./tree-sitter-php.wasm",
-        "languageId": "php",
+        "grammarPath": "./tree-sitter-c_sharp.wasm",
+        "languageId": "csharp",
         "extensions": [
-          "php",
-          "php4",
-          "php5",
-          "phtml",
-          "ctp"
+          "cs"
         ],
         "queryPaths": {
           "comments": "./queries/comments.scm",
@@ -32,7 +28,7 @@ module.exports = {
           "references": "./queries/references.scm"
         },
         "suppressedBy": [
-          "bmewburn.vscode-intelephense-client"
+          "ms-dotnettools.csharp"
         ]
       }
     }

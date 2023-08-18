@@ -1,6 +1,6 @@
 module.exports = {
   "extension": {
-    "publisher": "alex-ext-public",
+    "publisher": "codeblitz",
     "name": "html-language-features-worker",
     "version": "1.53.0-patch.1"
   },
