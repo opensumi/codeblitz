@@ -7,6 +7,7 @@ import { CodeServiceModule } from '@codeblitzjs/ide-code-service';
 import { CodeAPIModule, CodePlatform } from '@codeblitzjs/ide-code-api';
 import { isFilesystemReady } from '@codeblitzjs/ide-sumi-core';
 import { StartupModule } from './startup.module';
+
 import css from '@codeblitzjs/ide-core/extensions/codeblitz.css-language-features-worker';
 import html from '@codeblitzjs/ide-core/extensions/codeblitz.html-language-features-worker';
 import json from '@codeblitzjs/ide-core/extensions/codeblitz.json-language-features-worker';
@@ -15,16 +16,16 @@ import typescript from '@codeblitzjs/ide-core/extensions/codeblitz.typescript-la
 import gitlens from '@codeblitzjs/ide-core/extensions/codeblitz.gitlens';
 import graph from '@codeblitzjs/ide-core/extensions/codeblitz.git-graph';
 import imagePreview from '@codeblitzjs/ide-core/extensions/codeblitz.image-preview';
-// import webSCM from '@codeblitzjs/ide-core/extensions/codeblitz.web-scm';
-import anycode from '@codeblitzjs/ide-core/extensions/vscode-extensions.anycode';
-import anycodeCSharp from '@codeblitzjs/ide-core/extensions/vscode-extensions.anycode-c-sharp';
-import anycodeCpp from '@codeblitzjs/ide-core/extensions/vscode-extensions.anycode-cpp';
-import anycodeGo from '@codeblitzjs/ide-core/extensions/vscode-extensions.anycode-go';
-import anycodeJava from '@codeblitzjs/ide-core/extensions/vscode-extensions.anycode-java';
-import anycodePhp from '@codeblitzjs/ide-core/extensions/vscode-extensions.anycode-php';
-import anycodePython from '@codeblitzjs/ide-core/extensions/vscode-extensions.anycode-python';
-import anycodeRust from '@codeblitzjs/ide-core/extensions/vscode-extensions.anycode-rust';
-import anycodeTypescript from '@codeblitzjs/ide-core/extensions/vscode-extensions.anycode-typescript';
+import webSCM from '@codeblitzjs/ide-core/extensions/codeblitz.web-scm';
+import anycode from '@codeblitzjs/ide-core/extensions/codeblitz.anycode';
+import anycodeCSharp from '@codeblitzjs/ide-core/extensions/codeblitz.anycode-c-sharp';
+import anycodeCpp from '@codeblitzjs/ide-core/extensions/codeblitz.anycode-cpp';
+import anycodeGo from '@codeblitzjs/ide-core/extensions/codeblitz.anycode-go';
+import anycodeJava from '@codeblitzjs/ide-core/extensions/codeblitz.anycode-java';
+import anycodePhp from '@codeblitzjs/ide-core/extensions/codeblitz.anycode-php';
+import anycodePython from '@codeblitzjs/ide-core/extensions/codeblitz.anycode-python';
+import anycodeRust from '@codeblitzjs/ide-core/extensions/codeblitz.anycode-rust';
+import anycodeTypescript from '@codeblitzjs/ide-core/extensions/codeblitz.anycode-typescript';
 import referencesView from '@codeblitzjs/ide-core/extensions/codeblitz.references-view';
 import emmet from '@codeblitzjs/ide-core/extensions/codeblitz.emmet';
 import codeswing from '@codeblitzjs/ide-core/extensions/codeblitz.codeswing';
@@ -76,7 +77,7 @@ const extensionMetadata = [
   typescript,
   gitlens,
   imagePreview,
-  // webSCM,
+  webSCM,
   referencesView,
   codeswing,
   emmet,

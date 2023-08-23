@@ -95,7 +95,7 @@ packages/*/lib
 packages/*/esm
 packages/*/types
 
-packages/core/extensions
+# packages/core/extensions
 packages/core/languages
 packages/core/modules
 packages/core/polyfills
