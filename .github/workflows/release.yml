@@ -33,7 +33,7 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v3
         with:
-          token: ${{ env.GITHUB_TOKEN }}
+          token: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Use Node.js ${{ matrix.node-version }}
         uses: actions/setup-node@v3
@@ -45,7 +45,7 @@ jobs:
         id: checkTag
         env:
           TAG: v${{github.event.inputs.version}}
-          GITHUB_TOKEN: ${{ env.GITHUB_TOKEN }}
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Git Identity
         if: steps.checkTag.outputs.exists == 'false'
@@ -54,7 +54,7 @@ jobs:
           git config --global user.email 'github-actions[bot]@users.noreply.github.com'
           git remote set-url origin https://x-access-token:${GITHUB_TOKEN}@github.com/$GITHUB_REPOSITORY
         env:
-          GITHUB_TOKEN: ${{ env.GITHUB_TOKEN }}
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Get yarn cache directory path
         id: yarn_cache_dir_path
@@ -91,7 +91,7 @@ jobs:
         run: |
           lerna publish --exact ${{github.event.inputs.version}} --dist-tag latest --force-publish='*' --ignore-prepublish --ignore-scripts --no-private --no-push -y
         env:
-          GH_TOKEN: ${{ env.GITHUB_TOKEN }}
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
 
       # 非 main 分支发布时，需要提交各 package 里的 version 变更
@@ -108,7 +108,7 @@ jobs:
         run: |
           lerna publish --exact ${{github.event.inputs.version}} --dist-tag latest --force-publish='*' --ignore-prepublish --ignore-scripts --no-private -y
         env:
-          GH_TOKEN: ${{ env.GITHUB_TOKEN }}
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
 
       # 当 main 分支进行首次版本发布时，需要推送 Tag 到 Git
@@ -117,7 +117,7 @@ jobs:
         uses: pkgdeps/git-tag-action@v2
         with:
           version: ${{ github.event.inputs.version }}
-          github_token: ${{ env.GITHUB_TOKEN }}
+          github_token: ${{ secrets.GITHUB_TOKEN }}
           github_repo: ${{ github.repository }}
           git_commit_sha: ${{ github.sha }}
           git_tag_prefix: 'v'
