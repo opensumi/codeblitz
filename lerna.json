@@ -3,7 +3,7 @@
     "packages/*"
   ],
   "npmClient": "npm",
-  "version": "4.1.1",
+  "version": "1.0.1-rc-5829763308.0.0",
   "command": {
     "bootstrap": {
       "npmClientArgs": [
