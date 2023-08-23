@@ -1,0 +1,130 @@
+# by https://github.com/opensumi/core/blob/main/.github/workflows/release.yml
+
+name: Release
+
+on:
+  workflow_dispatch:
+    inputs:
+      version:
+        description: 'The version you want to release, eg: 1.0.0'
+        required: true
+      release_branch:
+        description: 'The release branch, eg: v1.xx, main'
+        required: false
+
+jobs:
+  release:
+    name: Release
+    runs-on: ubuntu-latest
+    environment: latest
+    strategy:
+      matrix:
+        node-version: [14.x]
+
+    steps:
+      # 判断用户是否有管理员权限
+      - name: 'Check if user has admin access'
+        uses: 'lannonbr/repo-permission-check-action@2.0.0'
+        with:
+          permission: 'admin'
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Checkout
+        uses: actions/checkout@v3
+        with:
+          token: ${{ env.GITHUB_TOKEN }}
+
+      - name: Use Node.js ${{ matrix.node-version }}
+        uses: actions/setup-node@v3
+        with:
+          node-version: ${{ matrix.node-version }}
+          registry-url: 'https://registry.npmjs.org'
+
+      - uses: mukunku/tag-exists-action@v1.0.0
+        id: checkTag
+        env:
+          TAG: v${{github.event.inputs.version}}
+          GITHUB_TOKEN: ${{ env.GITHUB_TOKEN }}
+
+      - name: Git Identity
+        if: steps.checkTag.outputs.exists == 'false'
+        run: |
+          git config --global user.name 'github-actions[bot]'
+          git config --global user.email 'github-actions[bot]@users.noreply.github.com'
+          git remote set-url origin https://x-access-token:${GITHUB_TOKEN}@github.com/$GITHUB_REPOSITORY
+        env:
+          GITHUB_TOKEN: ${{ env.GITHUB_TOKEN }}
+
+      - name: Get yarn cache directory path
+        id: yarn_cache_dir_path
+        run: echo "dir=$(yarn config get cacheFolder)" >> $GITHUB_OUTPUT
+
+      - uses: actions/cache@v3
+        id: yarn_cache
+        with:
+          path: ${{ steps.yarn_cache_dir_path.outputs.dir }}
+          key: ${{ runner.os }}-yarn-${{ hashFiles('**/yarn.lock') }}
+          restore-keys: |
+            ${{ runner.os }}-yarn-
+
+      # 安装依赖并构建
+      - name: Install dependencies & Build
+        if: steps.checkTag.outputs.exists == 'false'
+        run: |
+          yarn install --immutable
+          yarn run init
+          yarn run update-package -v ${{ github.event.inputs.version }}
+
+      - name: Setup .yarnrc.yml
+        run: |
+          yarn config set -H npmRegistryServer "https://registry.npmjs.org"
+          yarn config set -H npmAlwaysAuth true
+          yarn config set -H npmAuthToken $NPM_AUTH_TOKEN
+        env:
+          NPM_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
+
+      # 发布正式版本
+      # 当 main 分支进行首次版本发布时不推送 Lerna 更改到 Git
+      - name: Publish Prod Version Without Push
+        if: steps.checkTag.outputs.exists == 'false' && github.event.ref == 'refs/heads/main' && github.event.inputs.release_branch != ''
+        run: |
+          lerna publish --exact ${{github.event.inputs.version}} --dist-tag latest --force-publish='*' --ignore-prepublish --ignore-scripts --no-private --no-push -y
+        env:
+          GH_TOKEN: ${{ env.GITHUB_TOKEN }}
+          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
+
+      # 非 main 分支发布时，需要提交各 package 里的 version 变更
+      - name: Commit Files Before Push Release Branch
+        if: github.event.ref != 'refs/heads/main' && github.event.inputs.release_branch == ''
+        run: |
+          git add -A
+          git commit -m 'chore: update package version to v${{github.event.inputs.version}}'
+          git push origin ${{ github.event.inputs.release_branch }}
+
+      # 非 main 分支发布时，自动推送代码到对应分支并打 Tag
+      - name: Publish Prod Version
+        if: steps.checkTag.outputs.exists == 'false' && github.event.ref != 'refs/heads/main' && github.event.inputs.release_branch == ''
+        run: |
+          lerna publish --exact ${{github.event.inputs.version}} --dist-tag latest --force-publish='*' --ignore-prepublish --ignore-scripts --no-private -y
+        env:
+          GH_TOKEN: ${{ env.GITHUB_TOKEN }}
+          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
+
+      # 当 main 分支进行首次版本发布时，需要推送 Tag 到 Git
+      - name: Create Git Tag
+        if: steps.checkTag.outputs.exists == 'false' && github.event.ref == 'refs/heads/main' && github.event.inputs.release_branch != ''
+        uses: pkgdeps/git-tag-action@v2
+        with:
+          version: ${{ github.event.inputs.version }}
+          github_token: ${{ env.GITHUB_TOKEN }}
+          github_repo: ${{ github.repository }}
+          git_commit_sha: ${{ github.sha }}
+          git_tag_prefix: 'v'
+
+      # 在 main 分支运行时，自动切下一个 Release 分支
+      - name: Create And Push Release Branch
+        if: github.event.ref == 'refs/heads/main' && github.event.inputs.release_branch != ''
+        run: |
+          git checkout -b ${{ github.event.inputs.release_branch }}
+          git push origin ${{ github.event.inputs.release_branch }}
