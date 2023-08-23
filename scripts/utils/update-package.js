@@ -1,19 +1,17 @@
 const path = require('path');
 const fse = require('fs-extra');
-const { prompt, Separator } = require('inquirer');
-const chalk = require('chalk');
-const { invoke, exec } = require('./utils/utils');
+const { invoke } = require('./utils');
 const args = require('minimist')(process.argv.slice(2));
-const { SEMVER_INC, getNewVersion, isValidVersion, isVersionGreat } = require('./utils/version');
-const currentVersion = require('../package.json').version;
-const opensumiVersion = require('../package.json').engines.opensumi;
-const signale = require('signale');
-const depsFileds = require('./deps-fileds');
+const depsFileds = require('../deps-fileds');
 
 const packages = fse
   .readdirSync(path.resolve(__dirname, '../../packages'), { withFileTypes: true })
   .filter((dirent) => dirent.isDirectory())
   .map((dirent) => dirent.name);
+
+function getPkgRoot(pkg) {
+  return path.resolve(__dirname, '../../packages/' + pkg);
+}
 
 invoke(async () => {
   const version = args.v || args.version;
