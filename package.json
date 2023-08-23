@@ -13,8 +13,7 @@
   "scripts": {
     "prepare": "husky install",
     "type-check": "tsc --skipLibCheck --noEmit",
-    "preinstall": "node scripts/preinstall && npm run prepare:env",
-    "prepare:env": "yum --version && sudo yum -y install unzip gcc-c++ libX11-devel libxkbfile-devel libsecret-devel || echo 'no yum'",
+    "preinstall": "node scripts/preinstall",
     "init": "npm run clean && npm run generate && npm run build",
     "start": "npm run dev",
     "generate": "node scripts/generate",
