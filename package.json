@@ -27,7 +27,7 @@
     "clean": "rimraf packages/*/lib",
     "test": "jest --runInBand",
     "changelog": "conventional-changelog -p angular -i CHANGELOG.md -s",
-    "update-package": "node script/utils/update-package",
+    "update-package": "node scripts/utils/update-package",
     "release": "node scripts/release",
     "release:next": "node scripts/release --tag=next"
   },
