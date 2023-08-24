@@ -28,6 +28,9 @@ module.exports = {
       "onCommand:_typescript.learnMoreAboutRefactorings",
       "onLanguage:jsonc"
     ],
+    "kaitianContributes": {
+      "workerMain": "./dist/browser/extension.js"
+    },
     "contributes": {
       "jsonValidation": [
         {
@@ -1128,7 +1131,8 @@ module.exports = {
           "name": "typescript-vscode-sh-plugin",
           "enableForWorkspaceTypeScriptVersions": true
         }
-      ]
+      ],
+      "workerMain": "./dist/browser/extension.js"
     },
     "browser": "./dist/browser/extension"
   },

@@ -13,6 +13,9 @@ module.exports = {
     "activationEvents": [
       "*"
     ],
+    "kaitianContributes": {
+      "workerMain": "dist/extension.js"
+    },
     "contributes": {
       "configuration": {
         "type": "object",
@@ -1279,7 +1282,8 @@ module.exports = {
           "mac": "cmd+c",
           "when": "gitlens:enabled && focusedView =~ /^gitlens\\.views\\.search/"
         }
-      ]
+      ],
+      "workerMain": "dist/extension.js"
     }
   },
   "pkgNlsJSON": {},

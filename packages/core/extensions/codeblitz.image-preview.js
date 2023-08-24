@@ -16,6 +16,9 @@ module.exports = {
       "onCommand:imagePreview.zoomIn",
       "onCommand:imagePreview.zoomOut"
     ],
+    "kaitianContributes": {
+      "workerMain": "./dist/browser/extension.js"
+    },
     "contributes": {
       "customEditors": [
         {
@@ -54,7 +57,8 @@ module.exports = {
             "group": "1_imagePreview"
           }
         ]
-      }
+      },
+      "workerMain": "./dist/browser/extension.js"
     },
     "browser": "./dist/browser/extension.js"
   },

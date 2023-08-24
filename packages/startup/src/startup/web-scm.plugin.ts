@@ -77,17 +77,6 @@ export const activate = ({ commands }: IPluginAPI) => {
     }
   });
 
-  /*
-      21 修改次数
-      22 新增文件
-      23 删除文件
-      24 提交次数
-   */
-  commands.registerCommand('web-scm.yuyanlog', (code, msg, extra) => {
-    // 埋点数据
-    console.log(' >>> log', code, msg, extra);
-  });
-
   commands.registerCommand('alex.gty.workerReady', () => {
     return workerReady.resolve();
   });

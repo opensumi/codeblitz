@@ -15,6 +15,9 @@ module.exports = {
       "onLanguage:html",
       "onLanguage:handlebars"
     ],
+    "kaitianContributes": {
+      "workerMain": "client/dist/browser/htmlClientMain.js"
+    },
     "contributes": {
       "configuration": {
         "id": "html",
@@ -225,7 +228,8 @@ module.exports = {
           "fileMatch": "package.json",
           "url": "./schemas/package.schema.json"
         }
-      ]
+      ],
+      "workerMain": "client/dist/browser/htmlClientMain.js"
     },
     "browser": "./client/dist/browser/htmlClientMain"
   },

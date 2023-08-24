@@ -15,6 +15,9 @@ module.exports = {
       "onLanguage:json",
       "onLanguage:jsonc"
     ],
+    "kaitianContributes": {
+      "workerMain": "client/dist/browser/jsonClientMain.js"
+    },
     "contributes": {
       "configuration": {
         "id": "json",
@@ -115,7 +118,8 @@ module.exports = {
           "fileMatch": "*.schema.json",
           "url": "http://json-schema.org/draft-07/schema#"
         }
-      ]
+      ],
+      "workerMain": "client/dist/browser/jsonClientMain.js"
     },
     "browser": "./client/dist/browser/jsonClientMain"
   },

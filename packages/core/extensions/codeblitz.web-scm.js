@@ -2,18 +2,64 @@ module.exports = {
   "extension": {
     "publisher": "codeblitz",
     "name": "web-scm",
-    "version": "0.3.1"
+    "version": "0.3.7"
   },
   "packageJSON": {
     "name": "web-scm",
-    "publisher": "cloud-ide-ext",
-    "version": "0.3.1",
-    "repository": "git@code.alipay.com:alexgroup/web-scm.git",
+    "publisher": "codeblitz",
+    "version": "0.3.7",
     "displayName": "web-scm",
     "description": "web-scm",
     "activationEvents": [
       "*"
     ],
+    "kaitianContributes": {
+      "workerMain": "./out/worker/index.js",
+      "browserMain": "./out/browser/index.js",
+      "configuration": {
+        "title": "WebSCM",
+        "type": "object",
+        "properties": {
+          "git.mergeEditor": {
+            "type": "boolean",
+            "default": true,
+            "markdownDescription": "%config.mergeEditor%",
+            "scope": "window"
+          },
+          "webscm.commitType": {
+            "type": "string",
+            "default": "baseBranch",
+            "enum": [
+              "baseBranch",
+              "newBranch"
+            ],
+            "markdownDescription": "%config.commitType%",
+            "scope": "window"
+          },
+          "webscm.createPR": {
+            "type": "boolean",
+            "default": false,
+            "markdownDescription": "%config.createPR%",
+            "scope": "window"
+          }
+        }
+      },
+      "viewsProxies": [
+        "CommitPanel"
+      ],
+      "browserViews": {
+        "scm": {
+          "type": "add",
+          "view": [
+            {
+              "id": "CommitPanel",
+              "component": "CommitPanel",
+              "title": "提交信息"
+            }
+          ]
+        }
+      }
+    },
     "contributes": {
       "commands": [
         {
@@ -236,7 +282,52 @@ module.exports = {
           "mac": "cmd+enter",
           "when": "scmRepository"
         }
-      ]
+      ],
+      "workerMain": "./out/worker/index.js",
+      "browserMain": "./out/browser/index.js",
+      "configuration": {
+        "title": "WebSCM",
+        "type": "object",
+        "properties": {
+          "git.mergeEditor": {
+            "type": "boolean",
+            "default": true,
+            "markdownDescription": "%config.mergeEditor%",
+            "scope": "window"
+          },
+          "webscm.commitType": {
+            "type": "string",
+            "default": "baseBranch",
+            "enum": [
+              "baseBranch",
+              "newBranch"
+            ],
+            "markdownDescription": "%config.commitType%",
+            "scope": "window"
+          },
+          "webscm.createPR": {
+            "type": "boolean",
+            "default": false,
+            "markdownDescription": "%config.createPR%",
+            "scope": "window"
+          }
+        }
+      },
+      "viewsProxies": [
+        "CommitPanel"
+      ],
+      "browserViews": {
+        "scm": {
+          "type": "add",
+          "view": [
+            {
+              "id": "CommitPanel",
+              "component": "CommitPanel",
+              "title": "提交信息"
+            }
+          ]
+        }
+      }
     }
   },
   "defaultPkgNlsJSON": {

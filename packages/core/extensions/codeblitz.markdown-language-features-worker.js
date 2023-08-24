@@ -24,6 +24,9 @@ module.exports = {
       "onWebviewPanel:markdown.preview",
       "onCustomEditor:vscode.markdown.preview.editor"
     ],
+    "kaitianContributes": {
+      "workerMain": "./dist/browser/extension.js"
+    },
     "contributes": {
       "commands": [
         {
@@ -295,7 +298,8 @@ module.exports = {
       ],
       "markdown.previewScripts": [
         "./media/index.js"
-      ]
+      ],
+      "workerMain": "./dist/browser/extension.js"
     },
     "browser": "./dist/browser/extension"
   },
