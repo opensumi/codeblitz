@@ -106,9 +106,9 @@ export async function getExtension(
     }
   }
 
-  // merge for `sumiContributes` and `contributes`
+  // merge for `kaitianContributes` and `contributes`
   packageJSON.contributes = mergeContributes(
-    packageJSON.sumiContributes,
+    packageJSON.kaitianContributes,
     packageJSON.contributes
   );
 
@@ -137,7 +137,7 @@ export async function getExtension(
       'description',
       'icon',
       'activationEvents',
-      'sumiContributes',
+      'kaitianContributes',
       'contributes',
       'browser',
     ]),

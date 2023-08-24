@@ -18,6 +18,9 @@ module.exports = {
     "activationEvents": [
       "*"
     ],
+    "kaitianContributes": {
+      "workerMain": "./dist/extension.js"
+    },
     "contributes": {
       "commands": [
         {
@@ -1409,7 +1412,8 @@ module.exports = {
             "group": "inline"
           }
         ]
-      }
+      },
+      "workerMain": "./dist/extension.js"
     }
   },
   "pkgNlsJSON": {},
