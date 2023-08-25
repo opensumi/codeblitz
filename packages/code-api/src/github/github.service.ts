@@ -2,11 +2,13 @@ import { Injectable, Autowired } from '@opensumi/di';
 import { AppConfig } from '@opensumi/ide-core-browser';
 import { localize, MessageType } from '@opensumi/ide-core-common';
 import { request, isResponseError, RequestOptions } from '@codeblitzjs/ide-common';
+import { CommandService } from '@opensumi/ide-core-common';
+import { CODE_SERVICE_COMMANDS } from '@codeblitzjs/ide-code-service/src/commands';
 import { observable } from 'mobx';
 import { API } from './types';
 import { HelperService } from '../common/service';
 import { retry, RetryError } from '../common/utils';
-import type {
+import {
   ICodeAPIService,
   TreeEntry,
   EntryParam,
@@ -17,6 +19,11 @@ import type {
   Branch,
   Project,
   EntryInfo,
+  User,
+  FileAction,
+  FileActionHeader,
+  FileOperateResult,
+  FileActionType,
 } from '../common/types';
 import { CodePlatform, CommitFileStatus, CodeAPI as ConflictAPI } from '../common/types';
 import { CODE_PLATFORM_CONFIG } from '../common/config';
@@ -43,6 +50,9 @@ export class GitHubAPIService implements ICodeAPIService {
 
   @Autowired(AppConfig)
   appConfig: AppConfig;
+
+  @Autowired(CommandService)
+  commandService: CommandService;
 
   private config = CODE_PLATFORM_CONFIG[CodePlatform.github];
 
@@ -106,11 +116,27 @@ export class GitHubAPIService implements ICodeAPIService {
     });
     return data;
   }
-  getUser(repo: IRepositoryModel): Promise<any> {
-    throw new Error('Method not implemented.');
+  async getUser(repo: IRepositoryModel): Promise<User> {
+    const user = await this.requestByREST<API.ResponseUser>('/user', {
+      responseType: 'json',
+    });
+
+    return {
+      id: user.id,
+      name: user.name,
+      email: user.email,
+    };
   }
-  createBranch(repo: IRepositoryModel, newBranch: string, ref: string): Promise<Branch> {
-    throw new Error('Method not implemented.');
+  async createBranch(repo: IRepositoryModel, newBranch: string, ref: string): Promise<Branch> {
+    const data = await this.rest.createReference(repo, newBranch, ref)
+
+    return {
+      name: newBranch,
+      ref: data.ref,
+      commit: {
+        id: data.object.sha
+      },
+    }
   }
   async available() {
     const token = this._OAUTH_TOKEN;
@@ -316,6 +342,25 @@ export class GitHubAPIService implements ICodeAPIService {
       });
     },
 
+    createTree: async (repo: IRepositoryModel, trees: API.RequestCreateTree[], base_tree?: string) => {
+      const data = await this.requestByREST<API.ResponseGetTree>(
+        `/repos/${this.getProjectPath(repo)}/git/trees`,
+        {
+          headers: {
+            Accept: 'application/vnd.github+json',
+          },
+          responseType: 'json',
+          method: 'post',
+          data: {
+            base_tree,
+            tree: trees,
+          }
+        }
+      );
+
+      return data;
+    },
+
     getTree: async (repo: IRepositoryModel, path: string) => {
       const data = await this.requestByREST<API.ResponseGetTree>(
         `/repos/${this.getProjectPath(repo)}/git/trees/${repo.commit}:${path}`,
@@ -347,6 +392,25 @@ export class GitHubAPIService implements ICodeAPIService {
       return data.tree.filter((item) => item.type === 'blob').map((item) => item.path);
     },
 
+    createBlob: async (repo: IRepositoryModel, blob: { content: string, encoding?: 'utf-8' | 'base64' }) => {
+      const data = await this.requestByREST<API.ResponseCreateBlob>(
+        `/repos/${this.getProjectPath(repo)}/git/blobs`,
+        {
+          headers: {
+            Accept: 'application/vnd.github+json',
+          },
+          responseType: 'json',
+          method: 'post',
+          data: {
+            content: blob.content,
+            encoding: blob.encoding || 'utf-8',
+          }
+        }
+      );
+
+      return data;
+    },
+
     getBlob: async (repo: IRepositoryModel, entry: EntryParam) => {
       const buf = await this.requestByREST<ArrayBuffer>(
         `/repos/${this.getProjectPath(repo)}/git/blobs/${entry.id}`,
@@ -376,6 +440,49 @@ export class GitHubAPIService implements ICodeAPIService {
       );
       // Buffer toJSON 为 { type: 'Buffer', data: [] }，通过 rpc 传输后无法自动恢复，ArrayBufferView 额外处理了，可以恢复
       return new Uint8Array(Buffer.from(data.content, data.encoding));
+    },
+
+    createReference: async (repo: IRepositoryModel, ref: string, sha: string) => {
+      const data = await this.requestByREST<API.ResponseReference>(`/repos/${this.getProjectPath(repo)}/git/refs`, {
+        responseType: 'json',
+        method: 'post',
+        data: {
+          ref: `refs/heads/${ref}`,
+          sha
+        }
+      });
+
+      return data
+    },
+
+    updateReference: async (repo: IRepositoryModel, ref: string, sha: string, force: boolean = false) => {
+      // 去掉开头的 refs/
+      ref = ref.replace(/^refs\//, '');
+      ref = ref.startsWith('heads') ? ref : `heads/${ref}`;
+
+      const data = await this.requestByREST<API.ResponseReference>(`/repos/${this.getProjectPath(repo)}/git/refs/${ref}`, {
+        responseType: 'json',
+        method: 'post',
+        data: {
+          sha,
+          force
+        }
+      });
+
+      return data
+    },
+
+    getReference: async (repo: IRepositoryModel, ref: string) => {
+      const data = await this.requestByREST<API.ResponseReference>(`/repos/${this.getProjectPath(repo)}/git/ref/${ref}`, {
+        headers: {
+          Accept: 'application/vnd.github+json',
+          'X-GitHub-Api-Version': '2022-11-28'
+        },
+        responseType: 'json',
+        method: 'get',
+      });
+
+      return data
     },
 
     getBranches: async (repo: IRepositoryModel): Promise<BranchOrTag[]> => {
@@ -710,10 +817,66 @@ export class GitHubAPIService implements ICodeAPIService {
     return this.rest.getCommitCompare(repo, from, to);
   }
 
+  // 只支持主分支获取所有文件列表
   async getFiles(repo: IRepositoryModel) {
-    return [];
+    return await this.getAllFiles(repo);
   }
-  async bulkChangeFiles() {
-    return [];
+
+  async bulkChangeFiles(repo: IRepositoryModel, actions: FileAction[], header: FileActionHeader) {
+    const { commit_message } = header;
+    if (!commit_message) {
+      return [];
+    }
+
+    // 先获取分支名
+    const repositoryInfo: IRepositoryModel | undefined = await this.commandService.executeCommand(CODE_SERVICE_COMMANDS.REPOSITORY.id);
+    if (!repositoryInfo || !repositoryInfo.ref) {
+      return [];
+    }
+
+    const { ref: branchName } = repositoryInfo;
+
+    console.log('paramTree: >>>>> repo',  repo, repositoryInfo)
+    const paramTree: API.RequestCreateTree[] = []
+
+    for await (const action of actions) {
+      // 先创建 blob 对象
+      const blob = await this.rest.createBlob(repo, { content: action.content })
+
+      // 然后将 sha 传递给 tree 数据源
+      paramTree.push({
+        path: action.file_path,
+        mode: '100644',
+        type: 'blob',
+        sha: action.action_type === FileActionType.delete ? null : blob.sha
+      })
+    }
+
+    // 创建树
+    const treeData = await this.rest.createTree(repo, paramTree, repo.commit);
+
+    // 获取当前分支最新的 commit
+    const latestCommit = await this.rest.getCommit(repo, branchName);
+
+    // 创建 commit
+    const commitData = await this.requestByREST<API.ResponseCreateCommit>(`/repos/${this.getProjectPath(repo)}/git/commits`, {
+      responseType: 'json',
+      method: 'post',
+      data: {
+        message: commit_message,
+        tree: treeData.sha,
+        parents: [latestCommit]
+      }
+    });
+
+    // 将其关联分支的引用，此时才成功 push
+    const referenceData = await this.rest.updateReference(repo, branchName, commitData.sha)
+    console.log('paramTree: >>>>> referenceData',  referenceData)
+
+    return [
+      {
+        commit_id: referenceData.object.sha
+      }
+    ] as FileOperateResult[];
   }
 }

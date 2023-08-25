@@ -2,12 +2,12 @@ module.exports = {
   "extension": {
     "publisher": "codeblitz",
     "name": "web-scm",
-    "version": "0.3.7"
+    "version": "0.2.3-patch.2"
   },
   "packageJSON": {
     "name": "web-scm",
     "publisher": "codeblitz",
-    "version": "0.3.7",
+    "version": "0.2.3-patch.2",
     "displayName": "web-scm",
     "description": "web-scm",
     "activationEvents": [
@@ -15,7 +15,6 @@ module.exports = {
     ],
     "kaitianContributes": {
       "workerMain": "./out/worker/index.js",
-      "browserMain": "./out/browser/index.js",
       "configuration": {
         "title": "WebSCM",
         "type": "object",
@@ -25,38 +24,7 @@ module.exports = {
             "default": true,
             "markdownDescription": "%config.mergeEditor%",
             "scope": "window"
-          },
-          "webscm.commitType": {
-            "type": "string",
-            "default": "baseBranch",
-            "enum": [
-              "baseBranch",
-              "newBranch"
-            ],
-            "markdownDescription": "%config.commitType%",
-            "scope": "window"
-          },
-          "webscm.createPR": {
-            "type": "boolean",
-            "default": false,
-            "markdownDescription": "%config.createPR%",
-            "scope": "window"
           }
-        }
-      },
-      "viewsProxies": [
-        "CommitPanel"
-      ],
-      "browserViews": {
-        "scm": {
-          "type": "add",
-          "view": [
-            {
-              "id": "CommitPanel",
-              "component": "CommitPanel",
-              "title": "提交信息"
-            }
-          ]
         }
       }
     },
@@ -284,7 +252,6 @@ module.exports = {
         }
       ],
       "workerMain": "./out/worker/index.js",
-      "browserMain": "./out/browser/index.js",
       "configuration": {
         "title": "WebSCM",
         "type": "object",
@@ -294,38 +261,7 @@ module.exports = {
             "default": true,
             "markdownDescription": "%config.mergeEditor%",
             "scope": "window"
-          },
-          "webscm.commitType": {
-            "type": "string",
-            "default": "baseBranch",
-            "enum": [
-              "baseBranch",
-              "newBranch"
-            ],
-            "markdownDescription": "%config.commitType%",
-            "scope": "window"
-          },
-          "webscm.createPR": {
-            "type": "boolean",
-            "default": false,
-            "markdownDescription": "%config.createPR%",
-            "scope": "window"
           }
-        }
-      },
-      "viewsProxies": [
-        "CommitPanel"
-      ],
-      "browserViews": {
-        "scm": {
-          "type": "add",
-          "view": [
-            {
-              "id": "CommitPanel",
-              "component": "CommitPanel",
-              "title": "提交信息"
-            }
-          ]
         }
       }
     }
@@ -483,7 +419,6 @@ module.exports = {
     "confirm stage files with merge conflicts": "Are you sure you want to stage {0} files with merge conflicts",
     "confirm stage file with merge conflicts": "Are you sure you want to stage {0} with merge conflicts?",
     "conflict.unsupport": "Unsupported conflict resolution type 【 {0} 】\n will go to Ant CodeSpaces to resolve conflicts",
-    "conflict.unsupport.local": "Unsupported conflict resolution type 【 {0} 】\n please resolve conflicts locally",
     "open": "Open",
     "index modified": "Index modified",
     "modified": "Modified",
@@ -529,16 +464,7 @@ module.exports = {
     "Current": "Current {0}",
     "Result": "Result",
     "Open Merge": "Open Merge",
-    "Switch MergeEditor": "Switch mergeEditor will reload the window, are you sure you want to continue?",
-    "config.commitType": "Commit to {0} or create new branch",
-    "config.createPR": "Create PR after commit {0}",
-    "config.createPR.to": "After the code is submitted, automatically create a PR and merge it into {0}",
-    "config.commitType.to": "Commit into {0}",
-    "config.createBranch.createPR": "Create a new branch and submit a PR",
-    "commit.message": "Please enter submission information",
-    "commit.branch": "Please enter a branch name",
-    "auto.pr.success": "自动创建 {0} PR 成功",
-    "auto.pr.fail": "创建 {0} PR 失败"
+    "Switch MergeEditor": "Switch mergeEditor will reload the window, are you sure you want to continue?"
   },
   "pkgNlsJSON": {
     "zh-CN": {
@@ -694,8 +620,9 @@ module.exports = {
       "commit message is empty or no changes": "提交信息为空或者没有更改文件",
       "confirm stage files with merge conflicts": "确定要暂存含有合并冲突的 {0} 个文件吗?",
       "confirm stage file with merge conflicts": "确定要暂存含有合并冲突的 {0}  吗?",
-      "conflict.unsupport.local": "【 {0} 】不支持的解决冲突类型 \n 请本地解决冲突",
       "conflict.unsupport": "【 {0} 】不支持的解决冲突类型 \n 点击确定将前往标准版解决冲突",
+      "conflict.unsupport.tooManyFiles": "【 {0} 】需展示的冲突文件超出限制(极速版最多展示五个) \n 点击【 确定 】前往标准版处理",
+      "conflict.unsupport.tooLargeFile": "【 {0} 】冲突文件大小超出限制 \n 点击【 确定 】前往标准版处理",
       "open": "打开",
       "index modified": "已修改索引",
       "modified": "已修改",
@@ -741,16 +668,7 @@ module.exports = {
       "Current": "当前更改 {0}",
       "Result": "合并结果",
       "Open Merge": "打开合并编辑器",
-      "Switch MergeEditor": "切换合并编辑器，将会刷新页面，点击确定刷新",
-      "config.commitType": "直接提交或者创建新分支",
-      "config.createPR": "是否提交完后自动创建 PR",
-      "config.createPR.to": "提交代码后，自动创建 PR 合并到 {0}",
-      "config.commitType.to": "提交到 {0} 分支",
-      "config.createBranch.createPR": "新建分支并提交PR",
-      "commit.message": "请输入提交信息",
-      "commit.branch": "请输入分支名",
-      "auto.pr.success": "自动创建 {0} PR 成功",
-      "auto.pr.fail": "创建 {0} PR 失败"
+      "Switch MergeEditor": "切换合并编辑器，将会刷新页面，点击确定刷新"
     }
   },
   "nlsList": [
