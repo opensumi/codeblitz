@@ -836,7 +836,6 @@ export class GitHubAPIService implements ICodeAPIService {
 
     const { ref: branchName } = repositoryInfo;
 
-    console.log('paramTree: >>>>> repo',  repo, repositoryInfo)
     const paramTree: API.RequestCreateTree[] = []
 
     for await (const action of actions) {
@@ -871,7 +870,6 @@ export class GitHubAPIService implements ICodeAPIService {
 
     // 将其关联分支的引用，此时才成功 push
     const referenceData = await this.rest.updateReference(repo, branchName, commitData.sha)
-    console.log('paramTree: >>>>> referenceData',  referenceData)
 
     return [
       {
