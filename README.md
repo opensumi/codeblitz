@@ -1,8 +1,6 @@
 <p align="center">
-	<a href="https://github.com/opensumi/codeblitz"><img src="https://gw.alipayobjects.com/zos/bmw-prod/8dc21336-0a59-48bf-9cab-f6bb4b5c9f30.svg" width="150" /></a>
+	<a href="https://github.com/opensumi/codeblitz"><img src="https://mdn.alipayobjects.com/huamei_htww6h/afts/img/A*niy4RJmlwuUAAAAAAAAAAAAADhl8AQ/original" width="50%" /></a>
 </p>
-
-<h1 align="center">Codeblitz</h1>
 
 <p align="center">基于 OpenSumi 的纯前端 IDE 基础框架</p>
 
