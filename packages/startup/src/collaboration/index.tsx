@@ -25,7 +25,6 @@ import 'antd/lib/modal/style'
 import Input from 'antd/lib/input'
 import 'antd/lib/input/style'
 import Button from 'antd/lib/button'
-import { some } from 'lodash';
 
 export const layoutConfig = {
   [SlotLocation.main]: {
@@ -73,36 +72,6 @@ const App = () => {
       setOpen(true)
     }
   }, [])
-
-  // useEffect(() => {
-  //   plugin.commandReady.promise.then((commands) => {
-  //     if (config.fontSize !== lastConfig?.fontSize) {
-  //       commands.executeCommand('alex.setDefaultPreference', 'editor.fontSize', config.fontSize);
-  //     } else if (config.tabSize !== lastConfig?.tabSize) {
-  //       commands.executeCommand('alex.setDefaultPreference', 'editor.tabSize', config.tabSize);
-  //     } else if (config.theme !== lastConfig?.theme) {
-  //       commands.executeCommand(
-  //         'alex.setDefaultPreference',
-  //         'general.theme',
-  //         config.theme === 'dark' ? 'ide-dark' : 'ide-light'
-  //       );
-  //     } else if (config.mode !== lastConfig?.mode) {
-  //       commands.executeCommand('alitcode.setLanguage', config.mode);
-  //     }
-  //   });
-  // }, []);
-
-  // const vimActivated = useRef(false);
-  // useEffect(() => {
-  //   plugin.commandReady.promise.then((commands) => {
-  //     if (config.keybindingType === 'vim') {
-  //       vimActivated.current = true;
-  //       commands.executeCommand('toggleVim', true);
-  //     } else if (config.keybindingType === 'standard' && vimActivated.current) {
-  //       commands.executeCommand('toggleVim', false);
-  //     }
-  //   });
-  // }, [config.keybindingType]);
 
   return (
     <div style={{ width: '50%', margin: 'auto', height: 700, position: 'relative' }}>
