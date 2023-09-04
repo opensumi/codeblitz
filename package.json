@@ -19,6 +19,7 @@
     "generate": "node scripts/generate",
     "editor": "INTEGRATION=editor npm run dev",
     "fs": "INTEGRATION=filesystem npm run dev",
+    "collaboration": "yarn workspace @codeblitzjs/ide-startup server & INTEGRATION=collaboration npm run dev",
     "build": "node scripts/build",
     "bundle": "node scripts/bundle",
     "create": "node scripts/create",

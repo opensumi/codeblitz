@@ -10,20 +10,25 @@
   "keywords": [
     "opensumi codeblitzjs"
   ],
-  "scripts": {},
+  "scripts": {
+    "server": "node ./src/collaboration/server"
+  },
   "dependencies": {
-    "@codeblitzjs/ide-core": "1.0.0",
+    "@ant-design/icons": "^4.0.0",
     "@codeblitzjs/ide-cli": "1.0.0",
     "@codeblitzjs/ide-code-api": "1.0.0",
     "@codeblitzjs/ide-code-service": "1.0.0",
-    "@codeblitzjs/ide-sumi-core": "1.0.0",
-    "@codeblitzjs/ide-i18n": "1.0.0",
     "@codeblitzjs/ide-common": "1.0.0",
+    "@codeblitzjs/ide-core": "1.0.0",
+    "@codeblitzjs/ide-i18n": "1.0.0",
+    "@codeblitzjs/ide-sumi-core": "1.0.0",
     "ahooks": "2",
     "antd": "^4.0.0",
-    "@ant-design/icons": "^4.0.0",
     "lodash": "^4.17.21",
+    "ot": "^0.0.15",
     "sha1": "^1.1.1",
+    "socket.io": "^4.7.2",
+    "socket.io-client": "^4.7.2",
     "tslib": "^2.2.0",
     "umi-request": "^1.4.0"
   },
