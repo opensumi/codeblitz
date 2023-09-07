@@ -22,9 +22,6 @@
       "path": "./i18n/tsconfig.build.json"
     },
     {
-      "path": "./code-api/tsconfig.build.json"
-    },
-    {
       "path": "./plugin/tsconfig.build.json"
     },
     {
