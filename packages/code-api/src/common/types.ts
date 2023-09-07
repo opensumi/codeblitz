@@ -143,8 +143,13 @@ export type EntryFileType = 'commit' | 'tree' | 'blob';
 export interface TreeEntry extends Partial<EntryInfo> {
   /**
    * file mode
+   * 100644: 表示文件（blob）
+   * 100755: 表示可执行文件（blob）
+   * 040000: 表示子目录（树）
+   * 160000: 表示子模块（提交）
+   * 120000: 表示指定符号链接路径的 blob。
    */
-  mode: string;
+  mode: '100644' | '100755' | '040000' | '160000' | '120000' | string;
   /**
    * file type
    */
@@ -163,7 +168,7 @@ export interface TreeEntry extends Partial<EntryInfo> {
   path: string;
 
   // file sha
-  sha?: string;
+  sha?: string | null;
 }
 
 /**
@@ -290,16 +295,10 @@ export interface RepositoryFileModel {
 
 export interface Branch {
   name: string;
-  protect: boolean;
-  protected: boolean;
-  protectRuleExactMatched: boolean; // 是否通过名字精准匹配
-  protectRule: string; // 保护分支规则
-  mergeAccessLevel: string | number; // TODO: 后端接口转成字符串了，后面需要改成 number
-  pushAccessLevel: string | number; // TODO: 后端接口转成字符串了，后面需要改成 number
   ref: string;
-  commit: Commit;
-  branchIterations?: Iteration[];
-  isCooperate?: boolean;
+  commit: {
+    id: string
+  };
 }
 
 export interface User {
@@ -356,6 +355,13 @@ export interface RequestFailed {
   message: string;
   status?: number;
   error?: string;
+}
+
+export interface FileOperateResult {
+  branch?: string;
+  branch_created?: boolean;
+  commit_id?: string;
+  file_path?: string;
 }
 
 export interface ICodeAPIService {
@@ -451,7 +457,7 @@ export interface ICodeAPIService {
     repo: IRepositoryModel,
     actions: FileAction[],
     header: FileActionHeader
-  ): Promise<any>;
+  ): Promise<FileOperateResult[]>;
   /**
    * 创建分支
    */

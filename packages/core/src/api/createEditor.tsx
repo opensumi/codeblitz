@@ -28,7 +28,6 @@ import { getModules } from '../core/editor/modules';
 import { mergeConfig } from '../core/utils';
 import { EditorLayoutComponent, getEditorLayoutConfig } from '../core/layout';
 import { IConfig, IAppInstance } from './types';
-import { logPv } from '../core/tracert';
 import { EXT_WORKER_HOST, WEBVIEW_ENDPOINT } from '../core/env';
 
 export { SlotLocation, SlotRenderer, BoxPanel, SplitPanel };
@@ -78,10 +77,6 @@ export function createEditor({ appConfig, runtimeConfig }: IConfig): IAppInstanc
   const _start = app.start;
   app.start = async (container: HTMLElement | IAppRenderer) => {
     await _start.call(app, container);
-
-    setTimeout(() => {
-      logPv(runtimeConfig.biz || location.hostname);
-    });
   };
 
   let destroyed = false;

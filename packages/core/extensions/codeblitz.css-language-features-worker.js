@@ -17,6 +17,9 @@ module.exports = {
       "onLanguage:scss",
       "onCommand:_css.applyCodeAction"
     ],
+    "kaitianContributes": {
+      "workerMain": "client/dist/browser/cssClientMain.js"
+    },
     "contributes": {
       "configuration": [
         {
@@ -793,7 +796,8 @@ module.exports = {
           "fileMatch": "package.json",
           "url": "./schemas/package.schema.json"
         }
-      ]
+      ],
+      "workerMain": "client/dist/browser/cssClientMain.js"
     },
     "browser": "./client/dist/browser/cssClientMain"
   },

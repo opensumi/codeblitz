@@ -37,7 +37,6 @@ import { IconSlim, IDETheme } from '../core/extension/metadata';
 import { mergeConfig, getThemeTypeByPreferenceThemeId } from '../core/utils';
 import { LayoutComponent, getDefaultLayoutConfig } from '../core/layout';
 import { IConfig, IAppInstance } from './types';
-import { logPv } from '../core/tracert';
 import { EXT_WORKER_HOST, WEBVIEW_ENDPOINT } from '../core/env';
 
 export { SlotLocation, SlotRenderer, BoxPanel, SplitPanel };
@@ -104,10 +103,6 @@ export function createApp({ appConfig, runtimeConfig }: IConfig): IAppInstance {
   const _start = app.start;
   app.start = async (container: HTMLElement | IAppRenderer) => {
     await _start.call(app, container);
-
-    setTimeout(() => {
-      logPv(runtimeConfig.biz || location.hostname);
-    });
   };
 
   let destroyed = false;

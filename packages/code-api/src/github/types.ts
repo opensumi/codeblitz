@@ -1,3 +1,5 @@
+import { EntryFileType, TreeEntry } from "../common";
+
 export namespace API {
   interface RateLimit {
     limit: number;
@@ -17,13 +19,15 @@ export namespace API {
 
   export type ResponseGetCommit = string;
 
+  export type RequestCreateTree = Pick<TreeEntry, 'path' | 'mode' | 'sha' | 'type'>;
+
   export interface ResponseGetTree {
     sha: string;
     url: string;
     tree: Array<{
       path: string;
-      mode: string;
-      type: 'commit' | 'tree' | 'blob';
+      mode: TreeEntry['mode'];
+      type: EntryFileType;
       sha: string;
       size?: number;
       url?: string;
@@ -44,6 +48,13 @@ export namespace API {
       type: string;
     };
   }>;
+
+
+  // by https://docs.github.com/zh/rest/git/blobs?apiVersion=2022-11-28#create-a-blob
+  export interface ResponseCreateBlob {
+    url: string,
+    sha: string
+  }
 
   export interface ResponseBlobCommitPath {
     content: string;
@@ -112,5 +123,59 @@ export namespace API {
     merge_base_commit: ResponseCommit;
     commits: ResponseCommit[];
     files: ResponseCommitFileChange[];
+  }
+
+  // by https://docs.github.com/zh/rest/git/refs?apiVersion=2022-11-28#create-a-reference
+  export interface ResponseReference {
+    ref: string,
+    node_id: string,
+    url: string,
+    object: {
+      type: string,
+      sha: string,
+      url: string
+    }
+  }
+
+  // by https://docs.github.com/zh/rest/users/users?apiVersion=2022-11-28#get-a-user
+  export interface ResponseUser {
+    email: string;
+    name: string;
+    id: number;
+  }
+
+  export interface ResponseCreateCommit {
+    "sha": string,
+    "node_id": string,
+    "url": string,
+    "author": {
+      "date": string,
+      "name": string,
+      "email": string,
+    },
+    "committer": {
+      "date": string,
+      "name": string,
+      "email": string,
+    },
+    "message": string,
+    "tree": {
+      "url": string,
+      "sha": string,
+    },
+    "parents": [
+      {
+        "url": string,
+        "sha": string,
+        "html_url": string,
+      }
+    ],
+    "verification": {
+      "verified": boolean,
+      "reason": string,
+      "signature": string | null,
+      "payload": string | null
+    },
+    "html_url": string
   }
 }
