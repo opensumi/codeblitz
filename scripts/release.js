@@ -142,7 +142,7 @@ async function updatePackage(pkgRoot, version) {
     const obj = pkgJSON[field];
     if (!obj) return;
     Object.keys(obj).forEach((dep) => {
-      const scope = '@codeblitzjs/ide-core';
+      const scope = '@codeblitzjs/ide';
       if (
         dep === scope ||
         (dep.startsWith(scope) && packages.includes(dep.replace(new RegExp(`^${scope}-`), '')))
