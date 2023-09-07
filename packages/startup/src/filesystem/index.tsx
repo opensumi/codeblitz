@@ -166,7 +166,6 @@ const App = () => {
             },
           }}
           runtimeConfig={{
-            biz: 'filesystem',
             workspace,
           }}
         />

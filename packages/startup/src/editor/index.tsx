@@ -168,7 +168,6 @@ const App = () => {
                 },
               }}
               runtimeConfig={{
-                biz: 'editor',
                 scenario: null,
                 startupEditor: 'none',
                 // hideEditorTab: true,
