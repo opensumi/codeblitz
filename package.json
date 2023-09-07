@@ -20,6 +20,7 @@
     "editor": "INTEGRATION=editor npm run dev",
     "fs": "INTEGRATION=filesystem npm run dev",
     "build": "node scripts/build",
+    "build:all": "yarn run bundle && yarn run generate && yarn run build",
     "bundle": "node scripts/bundle",
     "create": "node scripts/create",
     "format": "prettier --write --parser typescript \"packages/**/*.ts?(x)\"",
