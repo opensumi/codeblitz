@@ -23,9 +23,6 @@
   "bin": {
     "alex": "bin/alex"
   },
-  "scripts": {
-    "postinstall": "node ./scripts/install-ext"
-  },
   "dependencies": {
     "@codeblitzjs/ide-cli": "1.0.2",
     "@codeblitzjs/ide-code-api": "1.0.2",
