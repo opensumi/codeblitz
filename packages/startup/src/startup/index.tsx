@@ -140,7 +140,6 @@ const App = () => (
       },
     }}
     runtimeConfig={{
-      biz: 'alex',
       scmFileTree: true,
       scenario: 'ALEX_TEST',
     }}

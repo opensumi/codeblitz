@@ -159,7 +159,6 @@ const App: React.FC = () => {
             extensionMetadata: [html, css, typescript, json],
           }}
           runtimeConfig={{
-            biz: 'alex-demo',
             // 禁止就改文件树，此时无法新增、删除、重命名文件
             disableModifyFileTree: true,
             // 默认打开文件
