@@ -15,7 +15,7 @@ invoke(async () => {
     await fse.writeFile(
       path.join(targetDir, 'index.js'),
       `
-module.exports = require("./core");
+module.exports = require("./codeblitz");
     `.trim() + '\n'
     );
     await fse.writeFile(
