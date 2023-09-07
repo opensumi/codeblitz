@@ -15,7 +15,8 @@
     "shims",
     "polyfills",
     "bundle",
-    "typings"
+    "typings",
+    "extensions"
   ],
   "keywords": [
     "opensumi codeblitzjs"
