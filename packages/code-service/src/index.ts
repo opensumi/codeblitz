@@ -14,6 +14,7 @@ import { CommandsContribution } from './commands.contribution';
 export { CodeModelService };
 
 export * from './types';
+export * from './commands';;
 
 export type { EntryFileType, EntryParam, EntryInfo, TreeEntry } from './types';
 

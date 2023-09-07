@@ -3,7 +3,7 @@ import { AppConfig } from '@opensumi/ide-core-browser';
 import { localize, MessageType } from '@opensumi/ide-core-common';
 import { request, isResponseError, RequestOptions } from '@codeblitzjs/ide-common';
 import { CommandService } from '@opensumi/ide-core-common';
-import { CODE_SERVICE_COMMANDS } from '@codeblitzjs/ide-code-service/src/commands';
+import { CODE_SERVICE_COMMANDS } from '@codeblitzjs/ide-code-service';
 import { observable } from 'mobx';
 import { API } from './types';
 import { HelperService } from '../common/service';
