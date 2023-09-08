@@ -1,3 +1,17 @@
+## [1.0.3](https://github.com/opensumi/codeblitz/compare/v1.0.2...v1.0.3) (2023-09-08)
+
+
+### Bug Fixes
+
+* build error ([8502ba7](https://github.com/opensumi/codeblitz/commit/8502ba767468c988f8bbdb43e0d4f6bab2dff9a2))
+* bundle script ([c90a11a](https://github.com/opensumi/codeblitz/commit/c90a11a54a2df72d0264db80363c411d0648ce4e))
+* code-api dependencies ([f376ca4](https://github.com/opensumi/codeblitz/commit/f376ca4a1be2a4c58f5db38990d2bec93eceeda8))
+* dependencies ([e9cdf67](https://github.com/opensumi/codeblitz/commit/e9cdf67d876f07c5ccadae5881c6a54cee3d7fcc))
+* release action bundle ([#14](https://github.com/opensumi/codeblitz/issues/14)) ([27ab99d](https://github.com/opensumi/codeblitz/commit/27ab99d49ef94f84898422bb34c9b9caab962f4a))
+* release script ([0e046da](https://github.com/opensumi/codeblitz/commit/0e046dacd13a4df6235931fd57caad2f1f89d6a1))
+
+
+
 ## 1.0.1-0 (2023-08-18)
 
 
