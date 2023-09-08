@@ -6,7 +6,7 @@ import { VERSION } from './env';
 // TODO: 后续考虑用 shadow DOM
 export class AlexRoot extends HTMLElement {}
 
-customElements.define('alex-root', AlexRoot);
+customElements.get('alex-root') ? null : customElements.define('alex-root', AlexRoot);
 
 export const Root: FC<RootProps> = (props) => {
   const themeType = props.theme;

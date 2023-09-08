@@ -10,13 +10,13 @@
     "opensumi codeblitzjs"
   ],
   "engines": {
-    "opensumi": "2.16.1",
+    "opensumi": "2.26.3",
     "node": ">=10.0.0"
   },
   "scripts": {},
   "dependencies": {
     "@codeblitzjs/ide-common": "1.0.3",
-    "@opensumi/ide-extension": "2.23.0",
+    "@opensumi/ide-extension": "2.26.3",
     "commander": "^7.2.0",
     "fs-extra": "^9.0.1",
     "lodash.flatten": "^4.4.0",
