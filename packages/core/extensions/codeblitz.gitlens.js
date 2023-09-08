@@ -13,7 +13,7 @@ module.exports = {
     "activationEvents": [
       "*"
     ],
-    "kaitianContributes": {
+    "sumiContributes": {
       "workerMain": "dist/extension.js"
     },
     "contributes": {

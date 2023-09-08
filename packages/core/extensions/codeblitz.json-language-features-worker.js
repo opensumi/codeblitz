@@ -15,7 +15,7 @@ module.exports = {
       "onLanguage:json",
       "onLanguage:jsonc"
     ],
-    "kaitianContributes": {
+    "sumiContributes": {
       "workerMain": "client/dist/browser/jsonClientMain.js"
     },
     "contributes": {

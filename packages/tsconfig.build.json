@@ -10,6 +10,9 @@
       "path": "./registry/tsconfig.build.json"
     },
     {
+      "path": "./plugin/tsconfig.build.json"
+    },
+    {
       "path": "./sumi-core/tsconfig.build.json"
     },
     {
@@ -20,9 +23,6 @@
     },
     {
       "path": "./i18n/tsconfig.build.json"
-    },
-    {
-      "path": "./plugin/tsconfig.build.json"
     },
     {
       "path": "./core/tsconfig.build.json"

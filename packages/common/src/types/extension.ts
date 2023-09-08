@@ -39,7 +39,7 @@ export interface IExtensionBasicMetadata {
     description?: string;
     repository?: any;
     activationEvents?: string[];
-    kaitianContributes?: JSONType;
+    sumiContributes?: JSONType;
     contributes?: JSONType;
   };
   defaultPkgNlsJSON?: JSONType;

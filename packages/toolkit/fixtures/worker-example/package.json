@@ -8,7 +8,7 @@
   "activationEvents": [
     "*"
   ],
-  "kaitianContributes": {
+  "sumiContributes": {
     "workerMain": "./worker.js",
     "browserMain": "./browser.js",
     "browserViews": {

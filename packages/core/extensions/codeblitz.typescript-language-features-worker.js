@@ -28,7 +28,7 @@ module.exports = {
       "onCommand:_typescript.learnMoreAboutRefactorings",
       "onLanguage:jsonc"
     ],
-    "kaitianContributes": {
+    "sumiContributes": {
       "workerMain": "./dist/browser/extension.js"
     },
     "contributes": {
