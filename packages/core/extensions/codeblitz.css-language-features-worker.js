@@ -17,7 +17,7 @@ module.exports = {
       "onLanguage:scss",
       "onCommand:_css.applyCodeAction"
     ],
-    "kaitianContributes": {
+    "sumiContributes": {
       "workerMain": "client/dist/browser/cssClientMain.js"
     },
     "contributes": {
