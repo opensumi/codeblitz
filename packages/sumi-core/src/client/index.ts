@@ -58,7 +58,8 @@ import {
   monacoCodeServiceProxy,
 } from './override/monacoOverride/codeEditorService';
 import { MonacoContextKeyServiceOverride } from './override/monacoOverride/contextKeyService';
-
+import { ExtensionStorageServiceOverride } from './override/extensionStorageService';
+import { IExtensionStorageService } from '@opensumi/ide-extension-storage';
 // import { MonacoOverrides } from './override/monacoOverride';
 export * from './override/monacoOverride/codeEditorService';
 
@@ -133,6 +134,11 @@ export class ClientModule extends BrowserModule {
     {
       token: IContextKeyService,
       useClass: MonacoContextKeyServiceOverride,
+      override: true,
+    },
+    {
+      token: IExtensionStorageService,
+      useClass: ExtensionStorageServiceOverride,
       override: true,
     },
   ];
