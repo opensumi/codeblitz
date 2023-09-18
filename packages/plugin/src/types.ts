@@ -35,6 +35,11 @@ export interface IPluginAPI {
      * 检索所有可用命令列表，以 _ 开头的为内置命令，类型和 vscode.commands.getCommands 类似
      */
     getCommands(filterInternal?: boolean): Thenable<string[]>;
+
+    /**
+     * 注册一个命令执行后的钩子，类型和 vscode.commands.afterExecuteCommand 类似
+     */
+    afterExecuteCommand<T>(command: string, callback: (result: T) => void): IDisposable;
   };
 }
 

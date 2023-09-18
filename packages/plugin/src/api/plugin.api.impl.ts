@@ -21,6 +21,10 @@ export const createAPIFactory = (injector: Injector) => {
       getCommands(filterInternal: boolean = false): Thenable<string[]> {
         return pluginCommands.getCommands(filterInternal);
       },
+
+      afterExecuteCommand<T>(id: string, callback: (result: T) => void): vscode.Disposable {
+        return pluginCommands.afterExecuteCommand<T>(id, callback);
+      }
     };
 
     return {

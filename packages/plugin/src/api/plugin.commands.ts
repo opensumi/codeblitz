@@ -113,6 +113,11 @@ export class PluginCommands {
     }
   }
 
+  afterExecuteCommand<T>(id: string, callback: (result: T) => void): IDisposable {
+    this.logger.log('PluginCommands#afterExecuteCommand', id);
+    return this.commandRegistry.afterExecuteCommand(id, callback);
+  }
+
   dispose() {
     this.commandRegistrations.forEach((comamnd) => {
       comamnd.dispose();
