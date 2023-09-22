@@ -11,6 +11,11 @@ const { posix } = path;
 
 @Injectable()
 export class ExtensionServiceClientImpl implements IExtensionNodeClientService {
+  
+  setupNLSConfig(languageId: string, storagePath: string): Promise<void> {
+    return Promise.resolve();
+  }
+
   getOpenVSXRegistry(): Promise<string> {
     throw new Error('Method not implemented.');
   }
@@ -39,7 +44,6 @@ export class ExtensionServiceClientImpl implements IExtensionNodeClientService {
       )
     );
 
-    console.log('==> extensions', extensions);
     return extensions;
   }
   getExtension(

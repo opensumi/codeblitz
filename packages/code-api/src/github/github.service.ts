@@ -10,8 +10,6 @@ import { retry, RetryError } from '../common/utils';
 import {
   ICodeAPIService,
   TreeEntry,
-  EntryParam,
-  IRepositoryModel,
   BranchOrTag,
   CommitParams,
   CommitFileChange,
@@ -24,6 +22,7 @@ import {
   FileOperateResult,
   FileActionType,
 } from '../common/types';
+import type { IRepositoryModel, EntryParam } from '../common/types';
 import { CodePlatform, CommitFileStatus, CodeAPI as ConflictAPI } from '../common/types';
 import { CODE_PLATFORM_CONFIG } from '../common/config';
 
@@ -77,7 +76,13 @@ export class GitHubAPIService implements ICodeAPIService {
   constructor() {
     this._OAUTH_TOKEN = this.config.token || this.helper.GITHUB_TOKEN;
   }
-  createPullRequest(repo: IRepositoryModel, sourceBranch: string, targetBranch: string, title: string, autoMerge?: boolean | undefined): Promise<ConflictAPI.ResponseCreatePR> {
+  createPullRequest(
+    repo: IRepositoryModel,
+    sourceBranch: string,
+    targetBranch: string,
+    title: string,
+    autoMerge?: boolean | undefined
+  ): Promise<ConflictAPI.ResponseCreatePR> {
     throw new Error('Method not implemented.');
   }
   mergeBase(
@@ -127,15 +132,15 @@ export class GitHubAPIService implements ICodeAPIService {
     };
   }
   async createBranch(repo: IRepositoryModel, newBranch: string, ref: string): Promise<Branch> {
-    const data = await this.rest.createReference(repo, newBranch, ref)
+    const data = await this.rest.createReference(repo, newBranch, ref);
 
     return {
       name: newBranch,
       ref: data.ref,
       commit: {
-        id: data.object.sha
+        id: data.object.sha,
       },
-    }
+    };
   }
   async available() {
     const token = this._OAUTH_TOKEN;
@@ -341,7 +346,11 @@ export class GitHubAPIService implements ICodeAPIService {
       });
     },
 
-    createTree: async (repo: IRepositoryModel, trees: API.RequestCreateTree[], base_tree?: string) => {
+    createTree: async (
+      repo: IRepositoryModel,
+      trees: API.RequestCreateTree[],
+      base_tree?: string
+    ) => {
       const data = await this.requestByREST<API.ResponseGetTree>(
         `/repos/${this.getProjectPath(repo)}/git/trees`,
         {
@@ -353,7 +362,7 @@ export class GitHubAPIService implements ICodeAPIService {
           data: {
             base_tree,
             tree: trees,
-          }
+          },
         }
       );
 
@@ -391,7 +400,10 @@ export class GitHubAPIService implements ICodeAPIService {
       return data.tree.filter((item) => item.type === 'blob').map((item) => item.path);
     },
 
-    createBlob: async (repo: IRepositoryModel, blob: { content: string, encoding?: 'utf-8' | 'base64' }) => {
+    createBlob: async (
+      repo: IRepositoryModel,
+      blob: { content: string; encoding?: 'utf-8' | 'base64' }
+    ) => {
       const data = await this.requestByREST<API.ResponseCreateBlob>(
         `/repos/${this.getProjectPath(repo)}/git/blobs`,
         {
@@ -403,7 +415,7 @@ export class GitHubAPIService implements ICodeAPIService {
           data: {
             content: blob.content,
             encoding: blob.encoding || 'utf-8',
-          }
+          },
         }
       );
 
@@ -442,46 +454,60 @@ export class GitHubAPIService implements ICodeAPIService {
     },
 
     createReference: async (repo: IRepositoryModel, ref: string, sha: string) => {
-      const data = await this.requestByREST<API.ResponseReference>(`/repos/${this.getProjectPath(repo)}/git/refs`, {
-        responseType: 'json',
-        method: 'post',
-        data: {
-          ref: `refs/heads/${ref}`,
-          sha
+      const data = await this.requestByREST<API.ResponseReference>(
+        `/repos/${this.getProjectPath(repo)}/git/refs`,
+        {
+          responseType: 'json',
+          method: 'post',
+          data: {
+            ref: `refs/heads/${ref}`,
+            sha,
+          },
         }
-      });
+      );
 
-      return data
+      return data;
     },
 
-    updateReference: async (repo: IRepositoryModel, ref: string, sha: string, force: boolean = false) => {
+    updateReference: async (
+      repo: IRepositoryModel,
+      ref: string,
+      sha: string,
+      force: boolean = false
+    ) => {
       // 去掉开头的 refs/
       ref = ref.replace(/^refs\//, '');
       ref = ref.startsWith('heads') ? ref : `heads/${ref}`;
 
-      const data = await this.requestByREST<API.ResponseReference>(`/repos/${this.getProjectPath(repo)}/git/refs/${ref}`, {
-        responseType: 'json',
-        method: 'post',
-        data: {
-          sha,
-          force
+      const data = await this.requestByREST<API.ResponseReference>(
+        `/repos/${this.getProjectPath(repo)}/git/refs/${ref}`,
+        {
+          responseType: 'json',
+          method: 'post',
+          data: {
+            sha,
+            force,
+          },
         }
-      });
+      );
 
-      return data
+      return data;
     },
 
     getReference: async (repo: IRepositoryModel, ref: string) => {
-      const data = await this.requestByREST<API.ResponseReference>(`/repos/${this.getProjectPath(repo)}/git/ref/${ref}`, {
-        headers: {
-          Accept: 'application/vnd.github+json',
-          'X-GitHub-Api-Version': '2022-11-28'
-        },
-        responseType: 'json',
-        method: 'get',
-      });
+      const data = await this.requestByREST<API.ResponseReference>(
+        `/repos/${this.getProjectPath(repo)}/git/ref/${ref}`,
+        {
+          headers: {
+            Accept: 'application/vnd.github+json',
+            'X-GitHub-Api-Version': '2022-11-28',
+          },
+          responseType: 'json',
+          method: 'get',
+        }
+      );
 
-      return data
+      return data;
     },
 
     getBranches: async (repo: IRepositoryModel): Promise<BranchOrTag[]> => {
@@ -829,26 +855,28 @@ export class GitHubAPIService implements ICodeAPIService {
 
     // 先获取分支名
     // by CODE_SERVICE_COMMANDS
-    const repositoryInfo: IRepositoryModel | undefined = await this.commandService.executeCommand('code-service.repository');
+    const repositoryInfo: IRepositoryModel | undefined = await this.commandService.executeCommand(
+      'code-service.repository'
+    );
     if (!repositoryInfo || !repositoryInfo.ref) {
       return [];
     }
 
     const { ref: branchName } = repositoryInfo;
 
-    const paramTree: API.RequestCreateTree[] = []
+    const paramTree: API.RequestCreateTree[] = [];
 
     for await (const action of actions) {
       // 先创建 blob 对象
-      const blob = await this.rest.createBlob(repo, { content: action.content })
+      const blob = await this.rest.createBlob(repo, { content: action.content });
 
       // 然后将 sha 传递给 tree 数据源
       paramTree.push({
         path: action.file_path,
         mode: '100644',
         type: 'blob',
-        sha: action.action_type === FileActionType.delete ? null : blob.sha
-      })
+        sha: action.action_type === FileActionType.delete ? null : blob.sha,
+      });
     }
 
     // 创建树
@@ -858,23 +886,26 @@ export class GitHubAPIService implements ICodeAPIService {
     const latestCommit = await this.rest.getCommit(repo, branchName);
 
     // 创建 commit
-    const commitData = await this.requestByREST<API.ResponseCreateCommit>(`/repos/${this.getProjectPath(repo)}/git/commits`, {
-      responseType: 'json',
-      method: 'post',
-      data: {
-        message: commit_message,
-        tree: treeData.sha,
-        parents: [latestCommit]
+    const commitData = await this.requestByREST<API.ResponseCreateCommit>(
+      `/repos/${this.getProjectPath(repo)}/git/commits`,
+      {
+        responseType: 'json',
+        method: 'post',
+        data: {
+          message: commit_message,
+          tree: treeData.sha,
+          parents: [latestCommit],
+        },
       }
-    });
+    );
 
     // 将其关联分支的引用，此时才成功 push
-    const referenceData = await this.rest.updateReference(repo, branchName, commitData.sha)
+    const referenceData = await this.rest.updateReference(repo, branchName, commitData.sha);
 
     return [
       {
-        commit_id: referenceData.object.sha
-      }
+        commit_id: referenceData.object.sha,
+      },
     ] as FileOperateResult[];
   }
 }

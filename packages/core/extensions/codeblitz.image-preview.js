@@ -16,7 +16,7 @@ module.exports = {
       "onCommand:imagePreview.zoomIn",
       "onCommand:imagePreview.zoomOut"
     ],
-    "kaitianContributes": {
+    "sumiContributes": {
       "workerMain": "./dist/browser/extension.js"
     },
     "contributes": {

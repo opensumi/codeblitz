@@ -13,7 +13,7 @@ module.exports = {
     "activationEvents": [
       "*"
     ],
-    "kaitianContributes": {
+    "sumiContributes": {
       "workerMain": "./out/worker/index.js",
       "configuration": {
         "title": "WebSCM",

@@ -35,7 +35,7 @@ export async function getExtension(
       const packageJSON = await fse.readJSON(pkgPath);
       if (!packageJSON.engines) {
         pkgCheckResult = false;
-      } else if (!(packageJSON.engines.vscode || packageJSON.engines.opensumi)) {
+      } else if (!(packageJSON.engines.vscode || packageJSON.engines.kaitian)) {
         pkgCheckResult = false;
       }
     } catch (e) {
@@ -106,9 +106,13 @@ export async function getExtension(
     }
   }
 
-  // merge for `kaitianContributes` and `contributes`
+  if (!packageJSON.sumiContributes && packageJSON.kaitianContributes) {
+    packageJSON.sumiContributes = packageJSON.kaitianContributes;
+  }
+
+  // merge for `sumiContributes` and `contributes`
   packageJSON.contributes = mergeContributes(
-    packageJSON.kaitianContributes,
+    packageJSON.sumiContributes,
     packageJSON.contributes
   );
 
@@ -137,7 +141,7 @@ export async function getExtension(
       'description',
       'icon',
       'activationEvents',
-      'kaitianContributes',
+      'sumiContributes',
       'contributes',
       'browser',
     ]),

@@ -15,7 +15,7 @@ module.exports = {
       "onLanguage:html",
       "onLanguage:handlebars"
     ],
-    "kaitianContributes": {
+    "sumiContributes": {
       "workerMain": "client/dist/browser/htmlClientMain.js"
     },
     "contributes": {

@@ -7,13 +7,13 @@ module.exports = {
   "packageJSON": {
     "name": "gitlens",
     "publisher": "codeblitz",
-    "version": "10.2.3-2",
+    "version": "10.2.4",
     "description": "gitlens for alex",
     "icon": "images/gitlens-icon.png",
     "activationEvents": [
       "*"
     ],
-    "kaitianContributes": {
+    "sumiContributes": {
       "workerMain": "dist/extension.js"
     },
     "contributes": {
