@@ -7,7 +7,6 @@ import { IExtensionStorageService } from '@opensumi/ide-extension-storage';
 // 这里手动初始化 否则 ExtensionStoragePathServer 中 deferredStoragePath 会卡住
 
 @Domain(ClientAppContribution)
-@Injectable()
 export class ExtensionStorageServiceOverride
   extends ExtensionStorageService
   implements IExtensionStorageService, ClientAppContribution

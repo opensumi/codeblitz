@@ -13,7 +13,6 @@ import { MonacoCommandService } from '@opensumi/ide-editor/lib/browser/monaco-co
 // import { MonacoCodeService, monacoCodeServiceProxy } from './codeEditorService';
 
 export const IMonacoOverrideService = Symbol('IMonacoOverrideService');
-@Injectable()
 @Domain(MonacoContribution)
 export class MonacoOverrideService implements MonacoContribution {
   @Autowired(ICommandServiceToken)
