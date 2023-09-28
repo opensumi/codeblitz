@@ -213,10 +213,14 @@ export class CodeContribution
 
     try {
       const { workspaceDir } = this.appConfig;
+      
+      const platform = this.codeServiceConfig.platform;
+      const isInMemory = this.codeServiceConfig[platform]?.isInMemory;
 
       const { codeFileSystem, idbFileSystem, overlayFileSystem } = await configureFileSystem(
         this.codeModel,
-        this.runtimeConfig.scenario
+        this.runtimeConfig.scenario,
+        isInMemory
       );
 
       this._unmount?.();

@@ -77,19 +77,9 @@ export const activate = ({ commands }: IPluginAPI) => {
     }
   });
 
-  commands.registerCommand('alex.gty.workerReady', () => {
-    return workerReady.resolve();
-  });
-
   commands.registerCommand('code-service.conflictConfig', () => {
-    // 测试解决冲突内容
     return {
       isMergeConflicts: false,
-      sourceBranch: 'merge4',
-      targetBranch: 'merge1',
-      prId: '146206608',
-      hasTag: false,
-      from: 0,
     };
   });
 };

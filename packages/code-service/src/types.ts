@@ -42,6 +42,8 @@ export type ICodeServiceConfig = {
   commit?: string;
   /** url hash */
   hash?: string;
+  /** 仓库id */
+  projectId?: string;
 } & {
   /** submodules 多平台配置 */
   [key in ICodePlatform]?: {
@@ -52,6 +54,8 @@ export type ICodeServiceConfig = {
     endpoint?: string;
     /** api 请求 token，上层可预设 token */
     token?: string;
+    /** 文件存储系统 默认 IndexedDB 全局缓存 */
+    isInMemory?: boolean;
   };
 };
 

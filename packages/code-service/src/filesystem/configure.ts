@@ -7,7 +7,11 @@ interface TreeEntryWithRepo extends TreeEntry {
   repo: Repository;
 }
 
-const configureFileSystem = async (model: CodeModelService, scenario?: string | null) => {
+const configureFileSystem = async (
+  model: CodeModelService,
+  scenario?: string | null,
+  isInMemory?: boolean
+) => {
   const {
     createFileSystem,
     FileSystem: { DynamicRequest, OverlayFS, FolderAdapter, IndexedDB, InMemory },
@@ -60,7 +64,7 @@ const configureFileSystem = async (model: CodeModelService, scenario?: string | 
         });
       },
     }),
-    createFileSystem(IndexedDB, {
+    createFileSystem(isInMemory ? InMemory : IndexedDB, {
       storeName: `${WORKSPACE_IDB_NAME}${scenario ? `/${scenario}` : ''}`,
     }),
   ]);

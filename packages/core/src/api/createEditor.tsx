@@ -44,6 +44,7 @@ const getDefaultAppConfig = (): IAppOpts => ({
     'editor.autoSave': 'afterDelay',
     'editor.guides.bracketPairs': false,
     'editor.minimap': false,
+    'editor.quickSuggestionsDelay': 10,
     'editor.autoSaveDelay': 1000, // one second
     'editor.fixedOverflowWidgets': true, // widget editor 默认改为 fixed
     'files.exclude': {
@@ -58,7 +59,7 @@ const getDefaultAppConfig = (): IAppOpts => ({
   preferenceDirName: STORAGE_DIR,
   storageDirName: STORAGE_DIR,
   extensionStorageDirName: STORAGE_DIR,
-  appName: 'ALEX',
+  appName: 'CodeBlitz',
   allowSetDocumentTitleFollowWorkspaceDir: false,
 });
 

@@ -80,6 +80,14 @@ export class Repository implements IRepositoryModel {
     this._onDidChangeCommit.fire();
   }
 
+  /**
+   * project
+   */
+  private _projectId?: string;
+  get projectId() {
+    return this._projectId;
+  }
+
   get request(): ICodeAPIProxy {
     return new Proxy(Object.create(null), {
       get: (target, prop) => {
@@ -90,6 +98,7 @@ export class Repository implements IRepositoryModel {
               owner: this.owner,
               name: this.name,
               commit: this.commit,
+              projectId: this.projectId,
             },
             ...args
           );
@@ -103,12 +112,15 @@ export class Repository implements IRepositoryModel {
     owner: string;
     name: string;
     commit: string;
+    projectId?: string;
   }) {
     this._root = data.root;
     this._platform = data.platform;
     this._owner = data.owner;
     this._name = data.name;
     this._commit = data.commit;
+    this._projectId = data.projectId;
+
   }
 
   async addSubmodulePath(path: string) {
@@ -194,7 +206,17 @@ export class RootRepository extends Repository {
    * @param ref tag, branch
    * @param refPath [tree|blob]/branch/path
    */
-  async initHEAD({ commit, ref, refPath, isForce }: { commit?: string; ref?: string; refPath?: string, isForce?: boolean }) {
+  async initHEAD({
+    commit,
+    ref,
+    refPath,
+    isForce,
+  }: {
+    commit?: string;
+    ref?: string;
+    refPath?: string;
+    isForce?: boolean;
+  }) {
     if (this._initialized && !isForce) {
       return;
     }

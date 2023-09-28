@@ -1,6 +1,11 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-import { IAppInstance, AppRenderer, getDefaultLayoutConfig, SlotLocation } from '@codeblitzjs/ide-core';
+import {
+  IAppInstance,
+  AppRenderer,
+  getDefaultLayoutConfig,
+  SlotLocation,
+} from '@codeblitzjs/ide-core';
 import * as Alex from '@codeblitzjs/ide-core';
 import '@codeblitzjs/ide-core/languages';
 import { CodeServiceModule } from '@codeblitzjs/ide-code-service';
@@ -47,7 +52,7 @@ const platformConfig = {
   github: {
     owner: 'opensumi',
     name: 'core',
-  }
+  },
 };
 
 const layoutConfig = getDefaultLayoutConfig();
@@ -92,7 +97,7 @@ const extensionMetadata = [
   anycode,
   codeRunner,
   mergeConflict,
-]
+];
 
 if (platform !== CodePlatform.atomgit) {
   extensionMetadata.push(graph);
@@ -108,11 +113,6 @@ const App = () => (
           commands.executeCommand('plugin.command.test', 1, 2);
         }
       };
-      Plugin.api.commands?.registerCommand('alex.gty.getActiveTextDocument', () => {
-        const workbenchEditorService = (app.injector.get(WorkbenchEditorService) as WorkbenchEditorService)
-        const currentUri = workbenchEditorService.currentEditorGroup?.currentResource?.uri.codeUri
-        return currentUri || ''
-      });
     }}
     appConfig={{
       plugins: [Plugin, SCMPlugin],
@@ -126,7 +126,7 @@ const App = () => (
           hash: location.hash,
           gitlink: {
             endpoint: '/code-service',
-          }
+          },
         }),
         CodeAPIModule,
         LocalExtensionModule,
