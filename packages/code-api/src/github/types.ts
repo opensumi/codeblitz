@@ -178,4 +178,20 @@ export namespace API {
     },
     "html_url": string
   }
+
+  export interface GraphQLBlame {
+    commit: {
+      author: {
+        avatarUrl: string;
+        name: string;
+        email: string;
+        date: string;
+      }
+      committedDate: string;
+      message: string;
+      oid: string;
+    }
+    endingLine: number;
+    startingLine: number;
+  }
 }

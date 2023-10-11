@@ -39,6 +39,7 @@ export const CODE_PLATFORM_CONFIG: Record<ICodePlatform, ICodePlatformConfig> = 
         return `#L${startLineNumber}-L${endLineNumber}`;
       },
     },
+    createBranchAble: true,
   },
   [CodePlatform.gitlab]: {
     platform: CodePlatform.gitlab,
