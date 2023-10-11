@@ -21,8 +21,7 @@
   ```
 #### [AtomGit](https://atomgit.com/)
 - 自行配置 [Private Token](https://atomgit.com/-/profile/tokens)
-- API参考 [GitLink API](https://www.gitlink.org.cn/docs/api#introduction)
-- 介绍 [GitLink WebIDE](https://help.gitlink.org.cn/%E4%BB%A3%E7%A0%81%E5%BA%93%E7%AE%A1%E7%90%86/WebIDE)
+- API参考 [AtomGit API](https://docs.atomgit.com/category/api)
 - 本地开发
   ```bash
   # 1. 启动服务
