@@ -9,8 +9,16 @@
   1. [Github REST API](https://docs.github.com/zh/rest)
   2. [Github GraphQL API](https://docs.github.com/zh/graphql)
 #### [GitLab](https://gitlab.cn/)
-- 提供基础代码服务API请自行集成
+- 提供基础代码服务API请自行集成 修改 packages/code-api/src/common/config.ts 默认配置
 - [GitLab API](https://docs.gitlab.com/ee/api/)
+- 本地开发
+  ```bash
+  # 1. 启动服务
+  npm run start
+
+  # 2. 访问地址
+  http://localhost:9009/gitlab/${group}/${name}
+  ```
 #### [AtomGit](https://atomgit.com/)
 - 自行配置 [Private Token](https://atomgit.com/-/profile/tokens)
 - API参考 [GitLink API](https://www.gitlink.org.cn/docs/api#introduction)
@@ -32,7 +40,7 @@
 
   # 3. 访问地址
   http://localhost:9009/atomgit/opensumi/codeblitz
-
+  ```
 #### [GitLink](https://www.gitlink.org.cn/)  
 - API参考: [GitLink API](https://www.gitlink.org.cn/docs/api#introduction)
 - 介绍: [GitLink WebIDE](https://help.gitlink.org.cn/%E4%BB%A3%E7%A0%81%E5%BA%93%E7%AE%A1%E7%90%86/WebIDE)
