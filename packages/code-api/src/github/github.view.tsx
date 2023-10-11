@@ -63,7 +63,7 @@ export const GitHubView: React.FC = observer(() => {
         <div className={styles.title}>
           {localize('github.auth-title')}
           <a
-            href="https://github.com/settings/tokens/new?scopes=repo&description=Ant%20Codespaces"
+            href="https://github.com/settings/tokens/new?scopes=repo&description=codeblitz"
             target="_blank"
             style={{ marginLeft: 8 }}
           >

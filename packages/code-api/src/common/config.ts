@@ -90,7 +90,7 @@ export const CODE_PLATFORM_CONFIG: Record<ICodePlatform, ICodePlatformConfig> = 
   [CodePlatform.atomgit]: {
     platform: CodePlatform.atomgit,
     hostname: ['atomgit.com'],
-    origin: 'https://atomgit.com/',
+    origin: 'https://atomgit.com',
     endpoint: 'https://api.atomgit.com',
     brand: 'AtomGit',
     line: {
