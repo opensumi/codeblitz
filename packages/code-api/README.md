@@ -1,32 +1,33 @@
 # code-api
 
-## 代码服务对接API
+## Code Service Integration API
 
-### 如何开发
+### How to Develop
 #### [Github](https://github.com/)
-- 自行配置 [PrivateToken](https://github.com/settings/tokens/new?scopes=repo&description=codeblitz)
-- API参考
-  1. [Github REST API](https://docs.github.com/zh/rest)
-  2. [Github GraphQL API](https://docs.github.com/zh/graphql)
+- Configure [PrivateToken](https://github.com/settings/tokens/new?scopes=repo&description=codeblitz) by yourself
+- API Reference
+  1. [Github REST API](https://docs.github.com/rest)
+  2. [Github GraphQL API](https://docs.github.com/graphql)
 #### [GitLab](https://gitlab.cn/)
-- 提供基础代码服务API请自行集成 修改 packages/code-api/src/common/config.ts 默认配置
+- Provide basic code service API for self-integration. Modify the default configuration in packages/code-api/src/common/config.ts
 - [GitLab API](https://docs.gitlab.com/ee/api/)
-- 本地开发
+- Local Development
   ```bash
-  # 1. 启动服务
+  # 1. start server
   npm run start
 
-  # 2. 访问地址
+  # 2. open url
   http://localhost:9009/gitlab/${group}/${name}
   ```
+
 #### [AtomGit](https://atomgit.com/)
-- 自行配置 [Private Token](https://atomgit.com/-/profile/tokens)
-- API参考 [AtomGit API](https://docs.atomgit.com/category/api)
-- 本地开发
+- Configure [Private Token](https://atomgit.com/-/profile/tokens) by yourself
+- API Reference: [AtomGit API](https://docs.atomgit.com/category/api)
+- Local Development
   ```bash
-  # 1. 启动服务
+  # 1. start server
   npm run start
-  # 2. 在 packages/startup/src/startup/index.tsx 设置 AtomGit Token
+  # 2. set  AtomGit Token in packages/startup/src/startup/index.tsx 
 
     CodeServiceModule.Config({
       ...
@@ -37,27 +38,24 @@
       ...
     })
 
-  # 3. 访问地址
+  # 3. open url
   http://localhost:9009/atomgit/opensumi/codeblitz
   ```
 #### [GitLink](https://www.gitlink.org.cn/)  
-- API参考: [GitLink API](https://www.gitlink.org.cn/docs/api#introduction)
-- 介绍: [GitLink WebIDE](https://help.gitlink.org.cn/%E4%BB%A3%E7%A0%81%E5%BA%93%E7%AE%A1%E7%90%86/WebIDE)
-- 本地开发
+- APIReference: [GitLink API](https://www.gitlink.org.cn/docs/api#introduction)
+- Introduction: [GitLink WebIDE](https://help.gitlink.org.cn/%E4%BB%A3%E7%A0%81%E5%BA%93%E7%AE%A1%E7%90%86/WebIDE)
+- Local Development
   ```bash
-  # 1. 修改本地配置 .env 文件
+  # 1. set .env file
   CODE_SERVICE_HOST=https://www.gitlink.org.cn
-  # 2. 配置 gitlnk cookie  
-  在 packages/toolkit/webpack/config.dev.js 内添加 代理Cookie 可以从https://www.gitlink.org.cn 任意响应头中获取
-  # 3. 启动服务
+  # 2. set gitlnk cookie  
+  set Cookie in packages/toolkit/webpack/config.dev.js from https://www.gitlink.org.cn response header
+  # 3. start server
   npm run start
-  # 3. 访问地址
+  # 3. open url
   http://localhost:9009/gitlink/opensumi/core
   ```
 
 TODO
 1. [Gitee](https://gitee.com/)
 2. [Codeup](https://codeup.aliyun.com)
-
-
- 
