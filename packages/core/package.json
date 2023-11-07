@@ -22,7 +22,7 @@
     "opensumi codeblitzjs"
   ],
   "bin": {
-    "alex": "bin/alex"
+    "alex": "bin/codeblitz"
   },
   "dependencies": {
     "@codeblitzjs/ide-cli": "1.0.3",
