@@ -1,6 +1,6 @@
 {
   "name": "@codeblitzjs/ide-cli",
-  "version": "1.0.3",
+  "version": "1.0.5",
   "description": "@codeblitzjs/ide-cli",
   "main": "lib/commander.js",
   "files": [
@@ -15,7 +15,7 @@
   },
   "scripts": {},
   "dependencies": {
-    "@codeblitzjs/ide-common": "1.0.3",
+    "@codeblitzjs/ide-common": "1.0.5",
     "@opensumi/ide-extension": "2.26.8",
     "commander": "^7.2.0",
     "fs-extra": "^9.0.1",
@@ -29,7 +29,7 @@
     "tslib": "^2.2.0",
     "urllib": "^2.36.1",
     "yauzl": "^2.10.0",
-    "async-retry":"^1.3.1",
+    "async-retry": "^1.3.1",
     "await-event": "^2.1.0",
     "content-disposition": "^0.5.3",
     "uuid": "^7.0.2"
