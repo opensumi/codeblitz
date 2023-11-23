@@ -1,6 +1,5 @@
 {
   "name": "@codeblitzjs/ide-sumi-core",
-  "version": "1.0.3",
   "description": "core",
   "main": "lib/index.js",
   "typings": "lib/index.d.ts",
@@ -13,8 +12,6 @@
   "scripts": {},
   "dependencies": {
     "@codeblitzjs/ide-browserfs": "1.0.0",
-    "@codeblitzjs/ide-common": "1.0.3",
-    "@codeblitzjs/ide-registry": "1.0.3",
     "@opensumi/di": "^1.0.0",
     "@opensumi/ide-core-browser": "2.26.8",
     "@opensumi/ide-core-common": "2.26.8",

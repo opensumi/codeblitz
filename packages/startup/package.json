@@ -1,6 +1,5 @@
 {
   "name": "@codeblitzjs/ide-startup",
-  "version": "1.0.3",
   "description": "@codeblitzjs/ide-startup",
   "main": "lib/index.js",
   "typing": "types/index.d.ts",
@@ -13,13 +12,6 @@
   "scripts": {},
   "dependencies": {
     "@ant-design/icons": "^4.0.0",
-    "@codeblitzjs/ide-cli": "1.0.3",
-    "@codeblitzjs/ide-code-api": "1.0.3",
-    "@codeblitzjs/ide-code-service": "1.0.3",
-    "@codeblitzjs/ide-common": "1.0.3",
-    "@codeblitzjs/ide-core": "1.0.3",
-    "@codeblitzjs/ide-i18n": "1.0.3",
-    "@codeblitzjs/ide-sumi-core": "1.0.3",
     "ahooks": "2",
     "antd": "^4.0.0",
     "lodash": "^4.17.21",
