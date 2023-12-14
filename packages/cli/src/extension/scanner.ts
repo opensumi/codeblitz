@@ -35,7 +35,7 @@ export async function getExtension(
       const packageJSON = await fse.readJSON(pkgPath);
       if (!packageJSON.engines) {
         pkgCheckResult = false;
-      } else if (!(packageJSON.engines.vscode || packageJSON.engines.kaitian)) {
+      } else if (!(packageJSON.engines.vscode || packageJSON.engines.kaitian || packageJSON.engines.opensumi)) {
         pkgCheckResult = false;
       }
     } catch (e) {
