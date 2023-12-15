@@ -1,5 +1,5 @@
 import React from 'react';
-import ReactDOM from 'react-dom';
+import { createRoot } from 'react-dom/client';
 import Button from 'antd/lib/button';
 import 'antd/lib/button/style/index.css';
 
@@ -35,7 +35,11 @@ import json from '@codeblitzjs/ide-core/extensions/codeblitz.json-language-featu
 
 //#region 获取内置模块，提供 IDE 层面的控制能力
 import { IEditorDocumentModelService } from '@codeblitzjs/ide-core/modules/ide-editor';
-import { CommandService, EDITOR_COMMANDS, URI } from '@codeblitzjs/ide-core/modules/ide-core-browser';
+import {
+  CommandService,
+  EDITOR_COMMANDS,
+  URI,
+} from '@codeblitzjs/ide-core/modules/ide-core-browser';
 //#endregion
 
 // 布局配置，可根据需要增删模块
@@ -198,4 +202,8 @@ const App: React.FC = () => {
   );
 };
 
-ReactDOM.render(<App />, document.getElementById('main'));
+const root = createRoot(document.getElementById('main') as HTMLElement);
+
+const render = () => root.render(<App />);
+
+render();

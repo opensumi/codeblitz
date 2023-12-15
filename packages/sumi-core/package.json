@@ -10,7 +10,6 @@
   "keywords": [
     "opensumi codeblitzjs"
   ],
-  "scripts": {},
   "dependencies": {
     "@codeblitzjs/ide-browserfs": "1.0.0",
     "@codeblitzjs/ide-common": "1.0.4",

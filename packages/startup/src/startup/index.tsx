@@ -1,5 +1,5 @@
 import React from 'react';
-import ReactDOM from 'react-dom';
+import { createRoot } from 'react-dom/client';
 import {
   IAppInstance,
   AppRenderer,
@@ -147,11 +147,13 @@ const App = () => (
 );
 
 let key = 0;
-const render = () => ReactDOM.render(<App key={key++} />, document.getElementById('main'));
+
+const root = createRoot(document.getElementById('main') as HTMLElement);
+
+const render = () => root.render(<App key={key++} />);
 render();
 // for dispose test
-window.reset = (destroy = false) =>
-  destroy ? ReactDOM.render(<div>destroyed</div>, document.getElementById('main')) : render();
+window.reset = (destroy = false) => (destroy ? root.render(<div>destroyed</div>) : render());
 
 declare global {
   interface Window {

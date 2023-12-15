@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef, useMemo } from 'react';
-import ReactDOM from 'react-dom';
+import { createRoot } from 'react-dom/client';
 import { IReporterService, localize, getDebugLogger } from '@opensumi/ide-core-common';
 import { REPORT_NAME, RuntimeConfig } from '@codeblitzjs/ide-sumi-core';
 import { createApp } from './createApp';
@@ -27,21 +27,17 @@ export const renderApp = (domElement: HTMLElement, props: IAppRendererProps) => 
   const app = createApp(opts);
   const themeType = app.currentThemeType;
   const className = opts.runtimeConfig.hideEditorTab ? styles['hide-editor-tab'] : '';
+  const root = createRoot(domElement);
 
-  ReactDOM.render(
-    <Root status="loading" theme={themeType} Landing={Landing} className={className} />,
-    domElement
-  );
+  root.render(<Root status="loading" theme={themeType} Landing={Landing} className={className} />);
 
   app
     .start((appElement) => {
       return new Promise((resolve) => {
-        ReactDOM.render(
+        root.render(
           <Root status="success" theme={themeType} className={className}>
-            {appElement}
-          </Root>,
-          domElement,
-          resolve
+            {appElement({})}
+          </Root>
         );
       });
     })
@@ -49,9 +45,8 @@ export const renderApp = (domElement: HTMLElement, props: IAppRendererProps) => 
       onLoad?.(app);
     })
     .catch((err: Error) => {
-      ReactDOM.render(
-        <Root status="error" error={err?.message || localize('error.unknown')} theme={themeType} />,
-        domElement
+      root.render(
+        <Root status="error" error={err?.message || localize('error.unknown')} theme={themeType} />
       );
 
       (app.injector.get(IReporterService) as IReporterService).point(
@@ -88,7 +83,7 @@ export const AppRenderer: React.FC<IAppRendererProps> = ({ onLoad, Landing, ...o
   useEffect(() => {
     app
       .start((appElement) => {
-        appElementRef.current = appElement;
+        appElementRef.current = appElement({});
         setState({ status: 'success' });
         return Promise.resolve();
       })
