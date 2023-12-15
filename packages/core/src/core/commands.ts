@@ -44,5 +44,10 @@ export class AlexCommandContribution implements CommandContribution {
         return this.defaultPreference.setPreference(preferenceName, value, resourceUri, language);
       },
     });
+
+    // TODO OpenSumi 内加入命令
+    ['workbench.action.closePanel', 'workbench.action.closeSidebar', 'vscode.setEditorLayout'].map(
+      (id) => registry.registerCommand({ id }, { execute: () => {} })
+    );
   }
 }
