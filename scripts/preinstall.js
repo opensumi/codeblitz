@@ -1,4 +1,11 @@
-if (!/yarn\.js$/.test(process.env.npm_execpath || '')) {
-  console.warn('\u001b[33m⚠ 需要使用 Yarn >= 1.x 以支持 Workspaces\u001b[39m\n');
+let err = false;
+
+if (!/yarn$|yarn[\w-.]*\.c?js$|yarnpkg$/.test(process.env['npm_execpath'])) {
+  console.error('\033[1;31mPlease use yarn to install dependencies.\033[0;0m');
+  err = true;
+}
+
+if (err) {
+  console.error('');
   process.exit(1);
 }
