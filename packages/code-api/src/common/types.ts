@@ -134,6 +134,8 @@ export enum CodePlatform {
   gitlab = 'gitlab',
   gitlink = 'gitlink',
   atomgit = 'atomgit',
+  codeup = 'codeup',
+  gitee = 'gitee',
 }
 
 export type ICodePlatform = keyof typeof CodePlatform;
@@ -212,6 +214,7 @@ export interface IRepositoryModel {
   name: string;
   commit: string;
   ref?: string;
+  projectId?: string;
 }
 
 export interface CommitParams {

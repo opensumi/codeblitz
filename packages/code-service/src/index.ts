@@ -27,6 +27,7 @@ export class CodeServiceModule extends BrowserModule {
         {
           token: ICodeServiceConfig,
           useValue: config,
+          override: true,
         },
       ],
     });

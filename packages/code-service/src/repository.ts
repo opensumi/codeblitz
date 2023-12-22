@@ -65,6 +65,14 @@ export class Repository implements IRepositoryModel {
     return this._name;
   }
 
+
+  /**
+   * project
+   */
+  private _projectId?: string;
+  get projectId() {
+    return this._projectId;
+  }
   /**
    * commit
    */
@@ -90,6 +98,7 @@ export class Repository implements IRepositoryModel {
               owner: this.owner,
               name: this.name,
               commit: this.commit,
+              projectId: this.projectId,
             },
             ...args
           );
@@ -103,12 +112,14 @@ export class Repository implements IRepositoryModel {
     owner: string;
     name: string;
     commit: string;
+    projectId?: string;
   }) {
     this._root = data.root;
     this._platform = data.platform;
     this._owner = data.owner;
     this._name = data.name;
     this._commit = data.commit;
+    this._projectId = data.projectId;
   }
 
   async addSubmodulePath(path: string) {

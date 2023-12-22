@@ -51,6 +51,16 @@ interface Config {
    * 扩展元数据, CLI 自动生成
    */
   extensionMetadata?: IExtensionBasicMetadata[];
+
+  /**
+   * 在 welcome 以及 空白页展示的对外信息
+   */
+  app?: {
+    logo: string;
+    brandName: string;
+    productName: string;
+    icon: string;
+  };
 }
 
 export interface ServerConfig extends Partial<Config> {

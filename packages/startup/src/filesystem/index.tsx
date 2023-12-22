@@ -1,6 +1,10 @@
 import React, { useState, useMemo } from 'react';
-import ReactDOM from 'react-dom';
-import { AppRenderer, BrowserFSFileType as FileType, IAppRendererProps } from '@codeblitzjs/ide-core';
+import { createRoot } from 'react-dom/client';
+import {
+  AppRenderer,
+  BrowserFSFileType as FileType,
+  IAppRendererProps,
+} from '@codeblitzjs/ide-core';
 import '@codeblitzjs/ide-core/languages';
 import Select from 'antd/lib/select';
 import 'antd/lib/select/style';
@@ -174,6 +178,8 @@ const App = () => {
   );
 };
 
+const root = createRoot(document.getElementById('main') as HTMLElement);
+
 zipDataPromise.then(() => {
-  ReactDOM.render(<App />, document.getElementById('main'));
+  root.render(<App />);
 });

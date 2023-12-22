@@ -18,7 +18,7 @@ export const localizationBundle = {
     'common.close': 'Close',
     'common.command.file.search': 'File search',
     'common.command.quickopen.command-terminal': 'Quickly open command terminal',
-    'product.description': 'Professional and efficient cloud research and development platform',
+    'product.description': 'Pure front-end IDE framework based on OpenSumi',
     'api.request.error': 'Request Error',
     'api.response.unknown-error': 'Unknown Error',
     'api.response.project-not-found': 'Project {0} not found',

@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import ReactDOM from 'react-dom';
+import { createRoot } from 'react-dom/client';
 import { IAppInstance, EditorRenderer } from '@codeblitzjs/ide-core/lib/editor';
 import * as Alex from '@codeblitzjs/ide-core/lib/editor';
 // 引入 extension
@@ -29,11 +29,8 @@ const fileOptions = (function transform(obj) {
   });
 })({
   'opensumi/core': {
-    main: [
-      'README.md',
-      'package.json'
-    ],
-  }
+    main: ['README.md', 'package.json'],
+  },
 });
 
 const App = () => {
@@ -57,10 +54,10 @@ const App = () => {
           Accept: 'application/vnd.github.v3.raw',
         },
         responseType: 'arrayBuffer',
-      },
+      }
     );
     if (res) {
-      return res
+      return res;
     }
     throw new Error(`readFile`);
   };
@@ -205,11 +202,13 @@ const App = () => {
   );
 };
 
-ReactDOM.render(<App />, document.getElementById('main'));
+const root = createRoot(document.getElementById('main') as HTMLElement);
+
+root.render(<App />);
 
 // for test
 window.destroy = () => {
-  ReactDOM.render(<div>destroyed</div>, document.getElementById('main'));
+  root.render(<div>destroyed</div>);
 };
 
 declare global {

@@ -194,6 +194,16 @@ export interface RuntimeConfig {
   resolveFileType?: (path: string) => 'image' | 'text' | 'video' | undefined;
 }
 
+
+export interface AppCommonConfig {
+  app?: {
+    logo?: string,
+    brandName?: string,
+    productName?: string,
+    icon?: string,
+  }
+}
+
 export type SearchMode = Boolean | 'local';
 
 export type ProviderResult<T> = T | undefined | null | Thenable<T | undefined | null>;

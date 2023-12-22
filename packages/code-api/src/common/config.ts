@@ -13,6 +13,7 @@ export interface ICodePlatformConfig {
     format(lineNumbers: [number, number]): string;
   };
   createBranchAble?: boolean;
+  [key: string]: any;
 }
 
 // 代码托管平台配置
@@ -39,6 +40,7 @@ export const CODE_PLATFORM_CONFIG: Record<ICodePlatform, ICodePlatformConfig> = 
         return `#L${startLineNumber}-L${endLineNumber}`;
       },
     },
+    createBranchAble: true,
   },
   [CodePlatform.gitlab]: {
     platform: CodePlatform.gitlab,
@@ -114,7 +116,63 @@ export const CODE_PLATFORM_CONFIG: Record<ICodePlatform, ICodePlatformConfig> = 
       },
     },
     createBranchAble: true,
-  }
+  },
+  [CodePlatform.codeup]: {
+    platform: CodePlatform.codeup,
+    hostname: ['codeup.aliyun.com'],
+    origin: 'https://codeup.aliyun.com',
+    endpoint: 'https://codeup.aliyun.com',
+    brand: 'Codeup',
+    line: {
+      parse(hash: string) {
+        let matched: RegExpMatchArray | null = null;
+        matched = hash.match(/^#L(\d+):?(\d*)$/);
+        if (matched) {
+          return [+matched[1], +matched[1]];
+        }
+        matched = hash.match(/^#L(\d+):?(\d*)-(\d+):?(\d*)$/);
+        if (matched) {
+          return [+matched[1], +matched[3]];
+        }
+        return null;
+      },
+      format([startLineNumber, endLineNumber]) {
+        if (startLineNumber === endLineNumber) {
+          return `#L${startLineNumber}`;
+        }
+        return `#L${startLineNumber}-${endLineNumber}`;
+      },
+    },
+    createBranchAble: true,
+  },
+  [CodePlatform.gitee]: {
+    platform: CodePlatform.gitee,
+    hostname: ['gitee.com'],
+    origin: 'https://gitee.com',
+    endpoint: 'https://gitee.com',
+    brand: 'Gitee',
+    line: {
+      parse(hash: string) {
+        let matched: RegExpMatchArray | null = null;
+        matched = hash.match(/^#L(\d+):?(\d*)$/);
+        if (matched) {
+          return [+matched[1], +matched[1]];
+        }
+        matched = hash.match(/^#L(\d+):?(\d*)-(\d+):?(\d*)$/);
+        if (matched) {
+          return [+matched[1], +matched[3]];
+        }
+        return null;
+      },
+      format([startLineNumber, endLineNumber]) {
+        if (startLineNumber === endLineNumber) {
+          return `#L${startLineNumber}`;
+        }
+        return `#L${startLineNumber}-${endLineNumber}`;
+      },
+    },
+    createBranchAble: true,
+  },
 };
 
 export const extendPlatformConfig = (

@@ -1,6 +1,11 @@
 import React from 'react';
-import ReactDOM from 'react-dom';
-import { IAppInstance, AppRenderer, getDefaultLayoutConfig, SlotLocation } from '@codeblitzjs/ide-core';
+import { createRoot } from 'react-dom/client';
+import {
+  IAppInstance,
+  AppRenderer,
+  getDefaultLayoutConfig,
+  SlotLocation,
+} from '@codeblitzjs/ide-core';
 import * as Alex from '@codeblitzjs/ide-core';
 import '@codeblitzjs/ide-core/languages';
 import { CodeServiceModule } from '@codeblitzjs/ide-code-service';
@@ -35,7 +40,8 @@ import mergeConflict from '@codeblitzjs/ide-core/extensions/codeblitz.merge-conf
 import { LocalExtensionModule } from '../common/local-extension.module';
 import * as Plugin from '../editor/plugin';
 import * as SCMPlugin from './web-scm.plugin';
-import { WorkbenchEditorService } from '@opensumi/ide-editor';
+
+import '../index.css';
 
 (window as any).alex = Alex;
 
@@ -51,7 +57,7 @@ const platformConfig = {
   // for your own project
   gitlab: {
     owner: 'opensumi',
-    name: 'core',
+    name: 'codeblitz',
   },
   gitlink: {
     owner: 'opensumi',
@@ -60,7 +66,16 @@ const platformConfig = {
   atomgit: {
     owner: 'opensumi',
     name: 'codeblitz',
-  }
+  },
+  codeup: {
+    owner: '',
+    name: '',
+    projectId: '',
+  }, 
+  gitee: {
+    owner: 'opensumi',
+    name: 'codeblitz',
+  },
 };
 
 const layoutConfig = getDefaultLayoutConfig();
@@ -105,7 +120,7 @@ const extensionMetadata = [
   anycode,
   codeRunner,
   mergeConflict,
-]
+];
 
 if (platform !== CodePlatform.atomgit) {
   extensionMetadata.push(graph);
@@ -121,11 +136,6 @@ const App = () => (
           commands.executeCommand('plugin.command.test', 1, 2);
         }
       };
-      Plugin.api.commands?.registerCommand('alex.gty.getActiveTextDocument', () => {
-        const workbenchEditorService = (app.injector.get(WorkbenchEditorService) as WorkbenchEditorService)
-        const currentUri = workbenchEditorService.currentEditorGroup?.currentResource?.uri.codeUri
-        return currentUri || ''
-      });
     }}
     appConfig={{
       plugins: [Plugin, SCMPlugin],
@@ -137,13 +147,25 @@ const App = () => (
           refPath: config.refPath,
           commit: config.commit,
           hash: location.hash,
+          // for codeup
+          projectId: config.projectId,
           gitlink: {
+            // for proxy
             endpoint: '/code-service',
           },
           atomgit: {
             // atomgit token https://atomgit.com/-/profile/tokens
             token: ''
-          }
+          },
+          gitee: {
+            // gitee token https://gitee.com/profile/personal_access_tokens
+            recursive: true,
+            token: ''
+          },
+          codeup: {
+            // for proxy
+            endpoint: '/code-service',
+          },
         }),
         CodeAPIModule,
         LocalExtensionModule,
@@ -164,11 +186,13 @@ const App = () => (
 );
 
 let key = 0;
-const render = () => ReactDOM.render(<App key={key++} />, document.getElementById('main'));
+
+const root = createRoot(document.getElementById('main') as HTMLElement);
+
+const render = () => root.render(<App key={key++} />);
 render();
 // for dispose test
-window.reset = (destroy = false) =>
-  destroy ? ReactDOM.render(<div>destroyed</div>, document.getElementById('main')) : render();
+window.reset = (destroy = false) => (destroy ? root.render(<div>destroyed</div>) : render());
 
 declare global {
   interface Window {

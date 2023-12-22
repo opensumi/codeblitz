@@ -7,6 +7,7 @@ import {
   ClientAppContribution,
   getExternalIcon,
 } from '@opensumi/ide-core-browser';
+import { IIconService } from '@opensumi/ide-theme';
 import { IMainLayoutService } from '@opensumi/ide-main-layout';
 import { ICodePlatform, ICodeAPIProvider, ICodeAPIService, CodePlatform } from './common/types';
 import { GitHubAPIService } from './github/github.service';
@@ -15,7 +16,8 @@ import { GitHubView } from './github/github.view';
 import { GitLabView } from './gitlab/gitlab.view';
 import { AtomGitAPIService } from './atomgit/atomgit.service';
 import { GitLinkAPIService } from './gitlink/gitlink.service';
-
+import { CodeUPAPIService } from './codeup/codeup.service';
+import { GiteeAPIService } from './gitee/gitee.service';
 @Domain(ClientAppContribution)
 export class CodeAPIProvider implements ICodeAPIProvider, ClientAppContribution {
   @Autowired(INJECTOR_TOKEN)
@@ -23,6 +25,10 @@ export class CodeAPIProvider implements ICodeAPIProvider, ClientAppContribution 
 
   @Autowired(IMainLayoutService)
   private mainLayoutService: IMainLayoutService;
+
+
+  @Autowired(IIconService)
+  iconService: IIconService;
 
   private started = new Deferred<void>();
 
@@ -85,6 +91,12 @@ export class CodeAPIProvider implements ICodeAPIProvider, ClientAppContribution 
     });
     this.registerPlatformProvider(CodePlatform.atomgit, {
       provider: AtomGitAPIService
+    });
+    this.registerPlatformProvider(CodePlatform.codeup, {
+      provider: CodeUPAPIService,
+    });
+    this.registerPlatformProvider(CodePlatform.gitee, {
+      provider: GiteeAPIService,
     })
   }
 
@@ -127,6 +139,9 @@ export class CodeAPIProvider implements ICodeAPIProvider, ClientAppContribution 
     return this.asPlatform(CodePlatform.atomgit) as AtomGitAPIService;
   }
 
+  get codeup() {
+    return this.asPlatform(CodePlatform.codeup) as CodeUPAPIService;
+  }
   onStart() {
     this.started.resolve();
   }

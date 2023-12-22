@@ -1,4 +1,3 @@
-import { MonacoOverrides } from './override/monacoOverride/index';
 import { Injectable, Injector, ConstructorOf, Provider } from '@opensumi/di';
 import {
   BrowserModule,
@@ -60,7 +59,9 @@ import {
 import { MonacoContextKeyServiceOverride } from './override/monacoOverride/contextKeyService';
 import { ExtensionStorageServiceOverride } from './override/extensionStorageService';
 import { IExtensionStorageService } from '@opensumi/ide-extension-storage';
-// import { MonacoOverrides } from './override/monacoOverride';
+import { MonacoOverrides } from './override/monacoOverride';
+import { monacoTextModelServiceProxy } from './override/monacoOverride/textModelService';
+import { monacoBulkEditServiceProxy } from './override/monacoOverride/workspaceEditService';
 export * from './override/monacoOverride/codeEditorService';
 
 export { ExtensionManagerModule as ExtensionClientManagerModule } from './extension-manager';
@@ -90,28 +91,7 @@ export class ClientModule extends BrowserModule {
     SearchContribution,
     PreferenceSettingContribution,
     LayoutRestoreContributation,
-
-    /*  monaco override*/
-    // ...MonacoOverrides,
-    {
-      token: ICommandServiceToken,
-      useValue: monacoCommandServiceProxy,
-      override: true,
-    },
-    {
-      token: IMonacoCommandServiceProxy,
-      useClass: MonacoCommandService,
-    },
-    {
-      token: MonacoCodeService,
-      useValue: monacoCodeServiceProxy,
-      override: true,
-    },
-    {
-      token: IMonacoCodeService,
-      useClass: MonacoCodeService,
-    },
-    /* monaco override */
+    ...MonacoOverrides,
     {
       token: IBreadCrumbService,
       useClass: BreadCrumbServiceImplOverride,
@@ -169,6 +149,8 @@ export class ClientApp extends BasicClientApp {
   initMonacoProxy() {
     this.disposer.addDispose(monacoCommandServiceProxy.setInjector(this.injector));
     this.disposer.addDispose(monacoCodeServiceProxy.setInjector(this.injector));
+    this.disposer.addDispose(monacoTextModelServiceProxy.setInjector(this.injector));
+    this.disposer.addDispose(monacoBulkEditServiceProxy.setInjector(this.injector));
   }
 
   private initServer(opts: IAppOpts) {

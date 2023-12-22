@@ -60,7 +60,7 @@ export const getDefaultAppConfig = (): IAppOpts => ({
       ...FILES_DEFAULTS.filesExclude,
       // browserfs OverlayFS 用来记录删除的文件
       [`**${deletionLogPath}`]: true,
-      '**/.cloudide/**': true,
+      '**/.codeblitz/**': true,
     },
   },
   layoutConfig: getDefaultLayoutConfig(),
@@ -73,8 +73,14 @@ export const getDefaultAppConfig = (): IAppOpts => ({
   preferenceDirName: STORAGE_DIR,
   storageDirName: STORAGE_DIR,
   extensionStorageDirName: STORAGE_DIR,
-  appName: 'ALEX',
+  appName: 'CodeBlitz',
   allowSetDocumentTitleFollowWorkspaceDir: false,
+  app: {
+    logo: 'https://mdn.alipayobjects.com/huamei_hwfivk/afts/img/A*byvFQJURn0kAAAAAAAAAAAAADlyoAQ/original',
+    brandName: 'Codeblitz',
+    productName: 'Codeblitz',
+    icon: 'https://mdn.alipayobjects.com/huamei_hwfivk/afts/img/A*lZQ5S4UoGoQAAAAAAAAAAAAADlyoAQ/original',
+  }
 });
 
 export const DEFAULT_APP_CONFIG = getDefaultAppConfig();
@@ -88,8 +94,7 @@ export function createApp({ appConfig, runtimeConfig }: IConfig): IAppInstance {
     );
   }
   opts.workspaceDir = makeWorkspaceDir(opts.workspaceDir);
-  // 托管 preference 逻辑
-  registerLocalStorageProvider(opts);
+
   
   const app = new ClientApp(opts) as IAppInstance;
 
@@ -138,36 +143,3 @@ export function createApp({ appConfig, runtimeConfig }: IConfig): IAppInstance {
   return app;
 }
 
-function registerLocalStorageProvider(options: IClientAppOpts) {
-  function getScopePrefix(scope: PreferenceScope) {
-    if (scope === PreferenceScope.Workspace) {
-      return options.workspaceDir;
-    }
-    return scope;
-  }
-  const THEME_KEY = 'general.theme';
-  registerExternalPreferenceProvider(THEME_KEY, {
-    set: (value: string, scope) => {
-      if (scope >= PreferenceScope.Folder) {
-        // earlyPreference不支持针对作用域大于等于Folder的值设置
-        return;
-      }
-
-      if ((global as any).localStorage) {
-        if (value !== undefined) {
-          localStorage.setItem(getScopePrefix(scope) + `:${THEME_KEY}`, value);
-        } else {
-          localStorage.removeItem(getScopePrefix(scope) + `:${THEME_KEY}`);
-        }
-      }
-    },
-    get: (scope) => {
-      if ((global as any).localStorage) {
-        const themeId = localStorage.getItem(getScopePrefix(scope) + `:${THEME_KEY}`) || undefined;
-        // 兼容 ide-dark 逻辑
-        // https://github.com/opensumi/core/issues/274
-        return themeId === 'ide-dark' ? options.defaultPreferences!['general.theme'] : themeId;
-      }
-    },
-  });
-}

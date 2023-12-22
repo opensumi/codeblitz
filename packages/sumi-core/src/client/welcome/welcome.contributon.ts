@@ -15,9 +15,9 @@ import { IIconService, IconType } from '@opensumi/ide-theme';
 import { Autowired } from '@opensumi/di';
 import { IWorkspaceService } from '@opensumi/ide-workspace';
 import { IFileServiceClient } from '@opensumi/ide-file-service/lib/common';
-import { RuntimeConfig, AppConfig } from '../../common';
+import { RuntimeConfig, AppConfig, AppCommonConfig } from '../../common';
 import { EditorWelcomeComponent } from './welcome.view';
-import { CommonConfig } from '../../common/config';
+
 import styles from './welcome.module.less';
 import * as path from 'path';
 
@@ -41,7 +41,7 @@ export class WelcomeContribution implements BrowserEditorContribution {
   runtimeConfig: RuntimeConfig;
 
   @Autowired(AppConfig)
-  appConfig: AppConfig;
+  appConfig: AppConfig & AppCommonConfig;
 
   @Autowired(IFileServiceClient)
   fileServiceClient: IFileServiceClient;
@@ -69,7 +69,7 @@ export class WelcomeContribution implements BrowserEditorContribution {
     service.registerResourceProvider({
       scheme: 'welcome',
       provideResource: async (uri: URI): Promise<IResource> => {
-        const iconClass = this.iconService.fromIcon('', CommonConfig.icon, IconType.Background);
+        const iconClass = this.iconService.fromIcon('', this.appConfig.app?.icon, IconType.Background);
         return {
           uri,
           name: localize('menu.help.welcome'),

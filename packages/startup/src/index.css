@@ -1,0 +1,7 @@
+
+/* 适配全局样式 黑色主题初始化为白色 */
+html,
+body {
+  color: var(--foreground);
+  background-color: var(--editor-background);
+}

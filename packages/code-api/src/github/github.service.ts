@@ -822,9 +822,98 @@ export class GitHubAPIService implements ICodeAPIService {
     return this.recursiveTreeMap.get(key)!;
   }
 
-  // TODO: graphql 下才支持
-  async getFileBlame() {
-    return Uint8Array.from([]);
+  async getFileBlame(repo: IRepositoryModel, path: string) {
+    return this.requestGraphQL({
+      data: {
+        query: `query($owner: String!, $name: String!, $expression: String!, $path: String!) {
+          repository(owner: $owner, name: $name) {
+            object(expression: $expression) {
+              ... on Commit {
+                blame(path: $path) {
+                  ranges {
+                    commit {
+                      author {
+                        name
+                        date
+                        email
+                        avatarUrl
+                      }
+                      committedDate
+                      message
+                      oid
+                    }
+                    startingLine
+                    endingLine
+                  }
+                }
+              }
+            }
+          }
+        }`,
+        variables: {
+          owner: repo.owner,
+          name: repo.name,
+          expression: repo.commit,
+          path,
+        },
+      },
+    })
+      .then((res) => {
+        console.log('==>', res);
+
+        const graphHash = {};
+        const graphRes = [];
+        res.repository.object.blame.ranges.forEach((blame: API.GraphQLBlame) => {
+          const commit = blame.commit;
+          const odi = blame.commit.oid;
+
+
+
+
+          // if (graphHash[hash]) {
+            
+
+          // }else {
+          //   graphRes.push()
+          // }
+          // graphHash[hash] = {}
+        });
+        const graphQLBlames = res.repository.object.blame.ranges.map((item: any) => {
+          return {
+            commit: {
+              autohr_email: item.commit.author.email,
+              author_name: item.commit.author.name,
+              authored_date: item.commit.author.date,
+              message: item.commit.message,
+              author: {
+                avatar_url: item.commit.author.avatarUrl,
+              },
+              id: item.commit.oid,
+              committed_date: item.commit.committedDate,
+            },
+            lines: [
+              {
+                current_number: item.startingLine,
+                previous_number: item.endingLine,
+                effect_line: item.endingLine - item.startingLine + 1
+              },
+            ],
+          };
+        });
+
+
+
+
+
+
+
+        console.log(graphQLBlames);
+        return graphQLBlames
+      })
+      .catch((err) => {
+        console.error(err);
+        return [];
+      });
   }
 
   // TODO: graphql

@@ -26,7 +26,6 @@ import { PreferencesModule } from '@opensumi/ide-preferences/lib/browser';
 import { QuickOpenModule } from '@opensumi/ide-quick-open/lib/browser';
 import { SCMModule } from '@opensumi/ide-scm/lib/browser';
 import { SearchModule } from '@opensumi/ide-search/lib/browser';
-import { StaticResourceModule } from '@opensumi/ide-static-resource/lib/browser';
 import { StatusBarModule } from '@opensumi/ide-status-bar/lib/browser';
 import { StorageModule } from '@opensumi/ide-storage/lib/browser';
 import { ThemeModule } from '@opensumi/ide-theme/lib/browser';
@@ -61,7 +60,6 @@ export const modules: ModuleConstructor[] = [
   ExplorerModule,
   FileTreeNextModule,
   FileServiceClientModule,
-  StaticResourceModule,
   SearchModule,
   FileSchemeModule,
   OutputModule,

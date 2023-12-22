@@ -4,14 +4,19 @@ import { ExtensionServiceImpl } from '@opensumi/ide-extension/lib/browser/extens
 import { IPluginService } from '@codeblitzjs/ide-plugin';
 import { ExtensionService } from '@opensumi/ide-extension/lib/common';
 import { ExtensionActivateContribution } from '../extension/extension.contribution';
+import { IExtensionStorageService } from '@opensumi/ide-extension-storage';
 
 @Injectable()
 class ExtensionServiceImplOverride extends ExtensionServiceImpl {
   @Autowired(IPluginService)
   pluginService: IPluginService;
 
-  activate(): Promise<void> {
-    this.lazyActivate();
+  @Autowired(IExtensionStorageService)
+  extensionStorageServiceOverride: IExtensionStorageService;
+
+  async activate(): Promise<void> {
+    await this.extensionStorageServiceOverride.whenReady;
+    await this.lazyActivate();
     return Promise.resolve();
   }
 
@@ -24,7 +29,9 @@ class ExtensionServiceImplOverride extends ExtensionServiceImpl {
     await this.initExtensionInstanceData();
     await this.runEagerExtensionsContributes();
     await this.runExtensionContributes();
+    await this.setupExtensionNLSConfig();
     this.doActivate();
+    // 无需监听插件重启
   }
 }
 
