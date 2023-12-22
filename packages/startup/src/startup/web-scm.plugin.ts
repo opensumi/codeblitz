@@ -69,6 +69,16 @@ export const activate = ({ commands }: IPluginAPI) => {
     return files;
   });
 
+  commands.registerCommand('web-scm.log', () => {
+    // noop
+  });
+
+  // TODO 待 OpenSumi内增加 getEncoding api
+  // https://github.com/opensumi/core/issues/3104
+  commands.registerCommand('code-service.getEncoding', (uri: Uri) => {
+    return 'utf8'
+  });
+
   commands.registerCommand('web-scm.windowOpen', async (path) => {
     if (!path) {
       window.location = window.location;

@@ -56,6 +56,9 @@ export type ICodeServiceConfig = {
     token?: string;
     /** 文件存储系统 默认 IndexedDB 全局缓存 */
     isInMemory?: boolean;
+    /** 是否递归获取文件 只请求一次文件列表 */
+    recursive?: boolean;
+    [key: string]: any;
   };
 };
 

@@ -12,7 +12,7 @@ import {
 import { ClientAppStateService } from '@opensumi/ide-core-browser';
 import { IMessageService, IDialogService  } from '@opensumi/ide-overlay';
 import { DialogService } from '@opensumi/ide-overlay/lib/browser/dialog.service';
-import { ATOMGIT_PRIVATE_TOKEN, GITHUB_OAUTH_TOKEN, GITLAB_PRIVATE_TOKEN } from './constant';
+import { ATOMGIT_PRIVATE_TOKEN, GITEE_PRIVATE_TOKEN, GITHUB_OAUTH_TOKEN, GITLAB_PRIVATE_TOKEN } from './constant';
 import { ICodePlatform } from './types';
 import { CODE_PLATFORM_CONFIG } from './config';
 
@@ -96,6 +96,18 @@ export class HelperService {
       this.delete(ATOMGIT_PRIVATE_TOKEN);
     } else {
       this.set(ATOMGIT_PRIVATE_TOKEN, value);
+    }
+  }
+
+  get GITEE_TOKEN() {
+    return this.get(GITEE_PRIVATE_TOKEN);
+  }
+
+  set GITEE_TOKEN(value: string | null) {
+    if (value === null) {
+      this.delete(GITEE_PRIVATE_TOKEN);
+    } else {
+      this.set(GITEE_PRIVATE_TOKEN, value);
     }
   }
 

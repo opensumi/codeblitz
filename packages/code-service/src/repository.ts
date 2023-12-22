@@ -65,6 +65,14 @@ export class Repository implements IRepositoryModel {
     return this._name;
   }
 
+
+  /**
+   * project
+   */
+  private _projectId?: string;
+  get projectId() {
+    return this._projectId;
+  }
   /**
    * commit
    */
@@ -78,14 +86,6 @@ export class Repository implements IRepositoryModel {
     }
     // 切相同commit分支
     this._onDidChangeCommit.fire();
-  }
-
-  /**
-   * project
-   */
-  private _projectId?: string;
-  get projectId() {
-    return this._projectId;
   }
 
   get request(): ICodeAPIProxy {
@@ -120,7 +120,6 @@ export class Repository implements IRepositoryModel {
     this._name = data.name;
     this._commit = data.commit;
     this._projectId = data.projectId;
-
   }
 
   async addSubmodulePath(path: string) {
@@ -206,17 +205,7 @@ export class RootRepository extends Repository {
    * @param ref tag, branch
    * @param refPath [tree|blob]/branch/path
    */
-  async initHEAD({
-    commit,
-    ref,
-    refPath,
-    isForce,
-  }: {
-    commit?: string;
-    ref?: string;
-    refPath?: string;
-    isForce?: boolean;
-  }) {
+  async initHEAD({ commit, ref, refPath, isForce }: { commit?: string; ref?: string; refPath?: string, isForce?: boolean }) {
     if (this._initialized && !isForce) {
       return;
     }
