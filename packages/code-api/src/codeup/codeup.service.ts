@@ -1,7 +1,7 @@
 
 import { Injectable, Autowired } from '@opensumi/di';
 import { localize, IReporterService, MessageType, LRUCache } from '@opensumi/ide-core-common';
-import { REPORT_NAME } from '@codeblitzjs/ide-core';
+import { REPORT_NAME } from '@codeblitzjs/ide-sumi-core';
 import { request, RequestOptions, isResponseError } from '@codeblitzjs/ide-common';
 import { API } from './types';
 import { Branch, FileAction, FileActionHeader, FileActionResult, Project } from '../common/types';
