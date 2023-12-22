@@ -60,7 +60,7 @@ export const getDefaultAppConfig = (): IAppOpts => ({
       ...FILES_DEFAULTS.filesExclude,
       // browserfs OverlayFS 用来记录删除的文件
       [`**${deletionLogPath}`]: true,
-      '**/.cloudide/**': true,
+      '**/.codeblitz/**': true,
     },
   },
   layoutConfig: getDefaultLayoutConfig(),

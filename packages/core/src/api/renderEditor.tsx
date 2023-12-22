@@ -19,7 +19,7 @@ interface IEditorRendererProps extends IConfig, EditorProps {
 export const renderEditor = (domElement: HTMLElement, props: IEditorRendererProps) => {
   const { onLoad, Landing, ...opts } = props;
   const app = createEditor(opts);
-  const className = `alex-editor ${
+  const className = `codeblitz-editor ${
     opts.runtimeConfig.hideEditorTab ? styles['hide-editor-tab'] : ''
   }`;
 
