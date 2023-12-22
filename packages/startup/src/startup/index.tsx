@@ -51,8 +51,21 @@ isFilesystemReady().then(() => {
 const platformConfig = {
   github: {
     owner: 'opensumi',
+    name: 'codeblitz',
+  },
+  // for your own project
+  gitlab: {
+    owner: 'opensumi',
     name: 'core',
   },
+  gitlink: {
+    owner: 'opensumi',
+    name: 'core',
+  },
+  atomgit: {
+    owner: 'opensumi',
+    name: 'codeblitz',
+  }
 };
 
 const layoutConfig = getDefaultLayoutConfig();
@@ -127,6 +140,10 @@ const App = () => (
           gitlink: {
             endpoint: '/code-service',
           },
+          atomgit: {
+            // atomgit token https://atomgit.com/-/profile/tokens
+            token: ''
+          }
         }),
         CodeAPIModule,
         LocalExtensionModule,

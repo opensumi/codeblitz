@@ -12,7 +12,7 @@
 English | [简体中文](./README-zh_CN.md)
 
 ## Quick Experience
-[https://codeblitz.cloud.alipay.com/](https://codeblitz.cloud.alipay.com/)
+[http://codeblitz.opensumi.com](http://codeblitz.opensumi.com)
 
 
 ## Project Startup

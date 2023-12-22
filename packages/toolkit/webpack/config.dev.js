@@ -8,6 +8,11 @@ require('dotenv').config({ path: path.join(__dirname, '../../../.env') });
 
 process.env.NODE_ENV = 'development';
 
+
+const GITLINK_SERVICE_HOST = 'https://www.gitlink.org.cn'
+const AUTOMGIT_SERVICE_HOST = 'https://www.automgit.org.cn'
+
+
 module.exports = () => {
   const integrationConfig = createWebpackConfig({
     tsconfigPath: path.join(__dirname, '../../../tsconfig.json'),
@@ -22,7 +27,26 @@ module.exports = () => {
       },
       devtool: 'eval-cheap-module-source-map',
       devServer: {
-        proxy: { },
+        proxy: {
+          '/code-service': {
+            target: process.env.CODE_SERVICE_HOST,
+            headers: {
+              // cookie set
+              Cookie: '',
+            },
+            secure: false,
+            changeOrigin: true,
+            pathRewrite: {
+              '^/code-service': '',
+            },
+            onProxyReq(request) {
+              request.setHeader(
+                'origin',
+                process.env.CODE_SERVICE_HOST
+              );
+            },
+          },
+        },
         historyApiFallback: {
           disableDotRule: true,
         },
