@@ -822,7 +822,7 @@ export class GitHubAPIService implements ICodeAPIService {
     return this.recursiveTreeMap.get(key)!;
   }
 
-  async getFileBlame(repo: IRepositoryModel, path: string) {
+  async getFileBlame(repo: IRepositoryModel, path: string): Promise<Uint8Array> {
     return this.requestGraphQL({
       data: {
         query: `query($owner: String!, $name: String!, $expression: String!, $path: String!) {
@@ -859,29 +859,10 @@ export class GitHubAPIService implements ICodeAPIService {
       },
     })
       .then((res) => {
-        console.log('==>', res);
-
-        const graphHash = {};
-        const graphRes = [];
-        res.repository.object.blame.ranges.forEach((blame: API.GraphQLBlame) => {
-          const commit = blame.commit;
-          const odi = blame.commit.oid;
-
-
-
-
-          // if (graphHash[hash]) {
-            
-
-          // }else {
-          //   graphRes.push()
-          // }
-          // graphHash[hash] = {}
-        });
         const graphQLBlames = res.repository.object.blame.ranges.map((item: any) => {
           return {
             commit: {
-              autohr_email: item.commit.author.email,
+              author_email: item.commit.author.email,
               author_name: item.commit.author.name,
               authored_date: item.commit.author.date,
               message: item.commit.message,
@@ -895,24 +876,16 @@ export class GitHubAPIService implements ICodeAPIService {
               {
                 current_number: item.startingLine,
                 previous_number: item.endingLine,
-                effect_line: item.endingLine - item.startingLine + 1
+                effect_line: item.endingLine - item.startingLine + 1,
               },
             ],
           };
         });
-
-
-
-
-
-
-
-        console.log(graphQLBlames);
-        return graphQLBlames
+        return new TextEncoder().encode(JSON.stringify(graphQLBlames));
       })
       .catch((err) => {
         console.error(err);
-        return [];
+        return new TextEncoder().encode('');
       });
   }
 
