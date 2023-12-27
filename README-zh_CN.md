@@ -17,6 +17,8 @@
 ```bash
 1. yarn
 2. yarn run init
-3. yarn run dev
+3. yarn run start
 ```
 终端打开输出的地址，默认端口 9009，如被占用，会从 9009 查找可用端口
+
+### 示例 [codeblitz-sample](https://github.com/opensumi/codeblitz-sample)
