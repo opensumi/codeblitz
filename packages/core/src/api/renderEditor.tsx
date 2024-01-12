@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef, useMemo } from 'react';
-import ReactDOM from 'react-dom';
+import { createRoot } from 'react-dom/client';
 import { IReporterService, localize, getDebugLogger } from '@opensumi/ide-core-common';
 import { REPORT_NAME } from '@codeblitzjs/ide-sumi-core';
 import { createEditor } from './createEditor';
@@ -19,21 +19,21 @@ interface IEditorRendererProps extends IConfig, EditorProps {
 export const renderEditor = (domElement: HTMLElement, props: IEditorRendererProps) => {
   const { onLoad, Landing, ...opts } = props;
   const app = createEditor(opts);
-  const className = `alex-editor ${
+  const className = `codeblitz-editor ${
     opts.runtimeConfig.hideEditorTab ? styles['hide-editor-tab'] : ''
   }`;
 
-  ReactDOM.render(<Root status="loading" Landing={Landing} className={className} />, domElement);
+  const root = createRoot(domElement);
+
+  root.render(<Root status="loading" Landing={Landing} className={className} />);
 
   app
     .start((appElement) => {
       return new Promise((resolve) => {
-        ReactDOM.render(
+        root.render(
           <Root status="success" className={className}>
             {appElement}
-          </Root>,
-          domElement,
-          resolve
+          </Root>
         );
       });
     })
@@ -41,13 +41,12 @@ export const renderEditor = (domElement: HTMLElement, props: IEditorRendererProp
       onLoad?.(app);
     })
     .catch((err: Error) => {
-      ReactDOM.render(
+      root.render(
         <Root
           status="error"
           error={err?.message || localize('error.unknown')}
           className={className}
-        />,
-        domElement
+        />
       );
 
       (app.injector.get(IReporterService) as IReporterService).point(

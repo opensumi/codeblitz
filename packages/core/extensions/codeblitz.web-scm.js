@@ -1,13 +1,13 @@
 module.exports = {
   "extension": {
-    "publisher": "codeblitz",
+    "publisher": "alex-ext-public",
     "name": "web-scm",
-    "version": "0.2.3-patch.2"
+    "version": "0.4.1"
   },
   "packageJSON": {
     "name": "web-scm",
-    "publisher": "codeblitz",
-    "version": "0.2.3-patch.2",
+    "publisher": "alex-ext-public",
+    "version": "0.4.1",
     "displayName": "web-scm",
     "description": "web-scm",
     "activationEvents": [
@@ -15,6 +15,7 @@ module.exports = {
     ],
     "sumiContributes": {
       "workerMain": "./out/worker/index.js",
+      "browserMain": "./out/browser/index.js",
       "configuration": {
         "title": "WebSCM",
         "type": "object",
@@ -24,8 +25,36 @@ module.exports = {
             "default": true,
             "markdownDescription": "%config.mergeEditor%",
             "scope": "window"
+          },
+          "webscm.commitType": {
+            "type": "string",
+            "default": "baseBranch",
+            "enum": [
+              "baseBranch",
+              "newBranch"
+            ],
+            "markdownDescription": "%config.commitType%",
+            "scope": "window"
+          },
+          "webscm.createPR": {
+            "type": "boolean",
+            "default": false,
+            "markdownDescription": "%config.createPR%",
+            "scope": "window"
+          },
+          "webscm.showAIButton": {
+            "type": "boolean",
+            "default": true,
+            "markdownDescription": "%config.showAIMessage%",
+            "scope": "window"
           }
         }
+      },
+      "scm": {
+      },
+      "viewsProxies": [
+      ],
+      "browserViews": {
       }
     },
     "contributes": {
@@ -252,6 +281,7 @@ module.exports = {
         }
       ],
       "workerMain": "./out/worker/index.js",
+      "browserMain": "./out/browser/index.js",
       "configuration": {
         "title": "WebSCM",
         "type": "object",
@@ -261,8 +291,38 @@ module.exports = {
             "default": true,
             "markdownDescription": "%config.mergeEditor%",
             "scope": "window"
+          },
+          "webscm.commitType": {
+            "type": "string",
+            "default": "baseBranch",
+            "enum": [
+              "baseBranch",
+              "newBranch"
+            ],
+            "markdownDescription": "%config.commitType%",
+            "scope": "window"
+          },
+          "webscm.createPR": {
+            "type": "boolean",
+            "default": false,
+            "markdownDescription": "%config.createPR%",
+            "scope": "window"
+          },
+          "webscm.showAIButton": {
+            "type": "boolean",
+            "default": true,
+            "markdownDescription": "%config.showAIMessage%",
+            "scope": "window"
           }
         }
+      },
+      "scm": {
+
+      },
+      "viewsProxies": [
+
+      ],
+      "browserViews": {
       }
     }
   },
@@ -419,6 +479,7 @@ module.exports = {
     "confirm stage files with merge conflicts": "Are you sure you want to stage {0} files with merge conflicts",
     "confirm stage file with merge conflicts": "Are you sure you want to stage {0} with merge conflicts?",
     "conflict.unsupport": "Unsupported conflict resolution type 【 {0} 】\n will go to Ant CodeSpaces to resolve conflicts",
+    "conflict.unsupport.local": "Unsupported conflict resolution type 【 {0} 】\n please resolve conflicts locally",
     "open": "Open",
     "index modified": "Index modified",
     "modified": "Modified",
@@ -451,8 +512,9 @@ module.exports = {
     "neveragain": "Neveragain",
     "add known": "Add known",
     "yes": "Yes",
-    "alex.git.inputBox.merge.conflict.value": "Merge branch '{0}' into {1}",
-    "contains unstaged merge conflict files": "Contains unstaged merge conflict files",
+    "alex.git.inputBox.merge.conflict.value": "Merge '{0}' into {1}",
+    "contains unstaged merge conflict files": "Contains unstaged merge conflict files. If conflicts have been resolved, click the '+' icon in 'Merge Changes' to stage the files.",
+    "contains unstaged merge conflict files2": "Contains unstaged merge conflict files. The files have been automatically staged. If there are still merge conflict files, please resolve them manually: click the '+' icon in 'Merge Changes' to stage the files.",
     "protected branch or tag": "Source branch is protected branch or tag, will create branch \n【 {0} \n No need to switch branches after creation",
     "create branch success": "Create branch successfully {0}",
     "create branch fail": "Failed to create branch {0}",
@@ -464,7 +526,22 @@ module.exports = {
     "Current": "Current {0}",
     "Result": "Result",
     "Open Merge": "Open Merge",
-    "Switch MergeEditor": "Switch mergeEditor will reload the window, are you sure you want to continue?"
+    "Switch MergeEditor": "Switch mergeEditor will reload the window, are you sure you want to continue?",
+    "config.commitType": "Commit to {0} or create new branch",
+    "config.createPR": "Create PR after commit {0}",
+    "config.showAIMessage": "Is show AI Commit Message",
+    "config.createPR.to": "After the code is submitted, automatically create a PR and merge it into {0}",
+    "config.commitType.to": "Commit into {0}",
+    "config.createBranch.createPR": "Create a new branch and submit a PR",
+    "commit.message": "Please enter submission information",
+    "commit.branch": "Please enter a branch name",
+    "auto.pr.success": "Auto create {0} pullrequest success",
+    "auto.pr.fail": "Create {0} pullrequest failed",
+    "ai.auto.generate": "Auto generate",
+    "ai.generating": "Generating",
+    "ai.generate.error": "Content generation failed, please try again later",
+    "ai.generate.error.stage": "No file, can't be automatically generated by AI",
+    "ai.auto.aigenerate": "AI auto generate"
   },
   "pkgNlsJSON": {
     "zh-CN": {
@@ -620,9 +697,8 @@ module.exports = {
       "commit message is empty or no changes": "提交信息为空或者没有更改文件",
       "confirm stage files with merge conflicts": "确定要暂存含有合并冲突的 {0} 个文件吗?",
       "confirm stage file with merge conflicts": "确定要暂存含有合并冲突的 {0}  吗?",
+      "conflict.unsupport.local": "【 {0} 】不支持的解决冲突类型 \n 请本地解决冲突",
       "conflict.unsupport": "【 {0} 】不支持的解决冲突类型 \n 点击确定将前往标准版解决冲突",
-      "conflict.unsupport.tooManyFiles": "【 {0} 】需展示的冲突文件超出限制(极速版最多展示五个) \n 点击【 确定 】前往标准版处理",
-      "conflict.unsupport.tooLargeFile": "【 {0} 】冲突文件大小超出限制 \n 点击【 确定 】前往标准版处理",
       "open": "打开",
       "index modified": "已修改索引",
       "modified": "已修改",
@@ -655,8 +731,9 @@ module.exports = {
       "neveragain": "不再显示",
       "add known": "是否要将“{0}”添加到 .gitignore?",
       "yes": "是",
-      "alex.git.inputBox.merge.conflict.value": "Merge branch '{0}' into {1}",
-      "merge conflicts has unstage file": "含有未暂存的合并冲突文件",
+      "alex.git.inputBox.merge.conflict.value": "Merge '{0}' into '{1}'",
+      "contains unstaged merge conflict files": "含有未暂存的合并冲突文件，如已解决冲突请点击合并更改中的 '+' 图标暂存文件",
+      "contains unstaged merge conflict files2": "含有未暂存的合并冲突文件，已自动暂存文件，若依旧存在合并冲突文件，请手动解决：点击合并更改中的 '+' 图标暂存文件",
       "protected branch or tag": "源分支为受保护分支或者Tag，将自动创建新分支 \n【 {0} 】\n 创建完成后无需切换分支",
       "create branch success": "创建分支成功 {0}",
       "create branch fail": "创建分支失败 {0}",
@@ -668,7 +745,22 @@ module.exports = {
       "Current": "当前更改 {0}",
       "Result": "合并结果",
       "Open Merge": "打开合并编辑器",
-      "Switch MergeEditor": "切换合并编辑器，将会刷新页面，点击确定刷新"
+      "Switch MergeEditor": "切换合并编辑器，将会刷新页面，点击确定刷新",
+      "config.commitType": "直接提交或者创建新分支",
+      "config.createPR": "是否提交完后自动创建 PR",
+      "config.showAIMessage": "是否展示AI Commit Message",
+      "config.createPR.to": "提交代码后，自动创建 PR 合并到 {0}",
+      "config.commitType.to": "提交到 {0} 分支",
+      "config.createBranch.createPR": "新建分支并提交PR",
+      "commit.message": "请输入提交信息",
+      "commit.branch": "请输入分支名",
+      "auto.pr.success": "自动创建 {0} PR 成功",
+      "auto.pr.fail": "创建 {0} PR 失败",
+      "ai.auto.generate": "自动生成",
+      "ai.generating": "正在生成",
+      "ai.generate.error": "内容生成失败，请稍后再试",
+      "ai.generate.error.stage": "无变更文件, 无法 AI 自动生成",
+      "ai.auto.aigenerate": "AI 自动生成"
     }
   },
   "nlsList": [
@@ -679,5 +771,5 @@ module.exports = {
   ],
   "extendConfig": {},
   "webAssets": [],
-  "mode": "public"
+  "mode": "public",
 }

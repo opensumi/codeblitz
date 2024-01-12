@@ -6,12 +6,22 @@ import { TreeEntry } from '../types';
 interface TreeEntryWithRepo extends TreeEntry {
   repo: Repository;
 }
+interface TreeNode extends TreeEntry {
+  children: TreeNode[];
+}
 
-const configureFileSystem = async (model: CodeModelService, scenario?: string | null) => {
+const configureFileSystem = async (
+  model: CodeModelService,
+  scenario?: string | null,
+  isInMemory?: boolean,
+  recursive?: boolean
+) => {
   const {
     createFileSystem,
     FileSystem: { DynamicRequest, OverlayFS, FolderAdapter, IndexedDB, InMemory },
   } = BrowserFS;
+
+  let treeCache: TreeNode[] = [];
 
   const [codeFileSystem, idbFileSystem] = await Promise.all([
     createFileSystem(DynamicRequest, {
@@ -28,7 +38,60 @@ const configureFileSystem = async (model: CodeModelService, scenario?: string | 
           data.name = '';
           repo = subRepo;
         }
+
+        // 全局文件系统 只调用一次 接口需要递归获取所有文件
+        if (recursive) {
+          if (!treeCache.length) {
+            const entryList = await repo.request.getTree(data?.path || '');
+            treeCache = buildTree(entryList);
+          }
+          if (path === '/') {
+            return treeCache.map((item) => {
+              return [
+                item.name,
+                item.type === 'blob' ? BrowserFSFileType.FILE : BrowserFSFileType.DIRECTORY,
+                {
+                  ...item,
+                  repo,
+                },
+              ];
+            });
+          } else {
+            const currentPath = path.startsWith('/') ? path.slice(1) : path;
+
+            // 递归查找路径
+            function recursiveFind(path: string, treeNode: TreeNode[], pathLen: number) {
+              const p = path.split('/')[pathLen];
+              const currentTree = treeNode.find((item) => item.name === p);
+
+              if (currentTree) {
+                pathLen++;
+                if (pathLen === path.split('/').length) {
+                  return currentTree;
+                }
+                return recursiveFind(path, currentTree.children, pathLen);
+              } else {
+                return [] as unknown as TreeNode;
+              }
+            }
+            const result = recursiveFind(currentPath, treeCache, 0);
+
+            return (
+              result?.children.map((item) => {
+                return [
+                  item.name,
+                  item.type === 'blob' ? BrowserFSFileType.FILE : BrowserFSFileType.DIRECTORY,
+                  {
+                    ...item,
+                    repo,
+                  },
+                ];
+              }) || []
+            );
+          }
+        }
         const entryList = await repo.request.getTree(data?.path || '');
+
         return entryList.map((entry) => {
           if (entry.type === 'commit') {
             repo.addSubmodulePath(entry.path);
@@ -60,7 +123,7 @@ const configureFileSystem = async (model: CodeModelService, scenario?: string | 
         });
       },
     }),
-    createFileSystem(IndexedDB, {
+    createFileSystem(isInMemory ? InMemory : IndexedDB, {
       storeName: `${WORKSPACE_IDB_NAME}${scenario ? `/${scenario}` : ''}`,
     }),
   ]);
@@ -79,5 +142,25 @@ const configureFileSystem = async (model: CodeModelService, scenario?: string | 
     overlayFileSystem,
   };
 };
+
+function buildTree(data: TreeEntry[]): TreeNode[] {
+  const map: Record<string, TreeNode> = {};
+  const result: TreeNode[] = [];
+
+  data.forEach((node) => {
+    map[node.path] = { ...node, children: [] };
+  });
+
+  data.forEach((node) => {
+    const parent = map[node.path.substring(0, node.path.lastIndexOf('/'))];
+    if (parent) {
+      parent.children?.push(map[node.path]);
+    } else {
+      result.push(map[node.path]);
+    }
+  });
+
+  return result;
+}
 
 export default configureFileSystem;

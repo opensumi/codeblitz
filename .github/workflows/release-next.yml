@@ -1,0 +1,95 @@
+name: Release NEXT Version
+
+on:
+  workflow_dispatch:
+    inputs:
+      ref:
+        description: 'A valid ref, eg: v1.xx, main'
+        required: true
+        default: 'main'
+
+jobs:
+  next-version:
+    name: Next Version
+    environment: next
+    runs-on: ubuntu-latest
+
+    strategy:
+      matrix:
+        node-version: [16.x]
+
+    steps:
+      # 判断用户是否有写权限
+      - name: 'Check if user has write access'
+        uses: 'lannonbr/repo-permission-check-action@2.0.0'
+        with:
+          permission: 'write'
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      # Checkout to specific branch
+      - uses: actions/checkout@v3
+        with:
+          ref: ${{ github.event.inputs.ref }}
+          token: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Use Node.js ${{ matrix.node-version }}
+        uses: actions/setup-node@v3
+        with:
+          node-version: ${{ matrix.node-version }}
+          registry-url: 'https://registry.npmjs.org'
+
+      - name: Get yarn cache directory path
+        id: yarn_cache_dir_path
+        run: echo "dir=$(yarn config get cacheFolder)" >> $GITHUB_OUTPUT
+
+      - uses: actions/cache@v3
+        id: yarn_cache
+        with:
+          path: ${{ steps.yarn_cache_dir_path.outputs.dir }}
+          key: ${{ runner.os }}-yarn-${{ hashFiles('**/yarn.lock') }}
+          restore-keys: |
+            ${{ runner.os }}-yarn-
+
+      # 安装依赖并构建
+      - name: Install dependencies & Build
+        run: |
+          yarn install --immutable
+          yarn run init
+          yarn run build:all
+
+      - name: Setup .yarnrc.yml
+        run: |
+          yarn config set -H npmRegistryServer "https://registry.npmjs.org"
+          yarn config set -H npmAlwaysAuth true
+          yarn config set -H npmAuthToken $NPM_AUTH_TOKEN
+        env:
+          NPM_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
+
+      - name: Publish prepatch version
+        run: |
+          lerna publish --exact --preid next-$(date +%s) --dist-tag next --force-publish='*' --no-push --no-git-tag-version prepatch --ignore-prepublish --ignore-scripts --no-private -y
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
+
+      - name: Adding markdown
+        if: success()
+        run: |
+          CURRENT_VERSION=$(node -p 'require("./lerna.json").version')
+          CURRENT_COMMIT=$(git rev-parse --short HEAD)
+          echo "CURRENT_VERSION=${CURRENT_VERSION}" >> $GITHUB_ENV
+          echo "CURRENT_COMMIT=${CURRENT_COMMIT}" >> $GITHUB_ENV
+          echo '### Released :rocket:' $CURRENT_VERSION >> $GITHUB_STEP_SUMMARY
+          echo '```' >> $GITHUB_STEP_SUMMARY
+          echo $CURRENT_VERSION >> $GITHUB_STEP_SUMMARY
+          echo '```' >> $GITHUB_STEP_SUMMARY
+          echo 'user input ref:' $INPUT_REF >> $GITHUB_STEP_SUMMARY
+          echo '```log' >> $GITHUB_STEP_SUMMARY
+          git log --oneline -1 >> $GITHUB_STEP_SUMMARY
+          echo '```' >> $GITHUB_STEP_SUMMARY
+          echo 'SUMMARY<<EOF' >> $GITHUB_ENV
+          cat $GITHUB_STEP_SUMMARY >> $GITHUB_ENV
+          echo 'EOF' >> $GITHUB_ENV
+        env:
+          INPUT_REF: ${{ github.event.inputs.ref }}

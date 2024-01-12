@@ -23,6 +23,8 @@ Need to install yarn >= 1.0 and use yarn's [workspaces](https://classic.yarnpkg.
 ```bash
 1. yarn
 2. yarn run init
-3. yarn run dev
+3. yarn run start
 ```
 The terminal opens the output address, the default port is 9009, if it is occupied, it will search for available ports from 9009
+
+### Samples [codeblitz-sample](https://github.com/opensumi/codeblitz-sample)

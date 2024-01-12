@@ -8,7 +8,7 @@
   "description": "codeblitzjs",
   "main": "index.js",
   "engines": {
-    "opensumi": "2.26.8"
+    "opensumi": "2.27.1"
   },
   "scripts": {
     "prepare": "husky install",
@@ -70,11 +70,12 @@
     "localforage": "^1.10.0",
     "minimist": "^1.2.5",
     "prettier": "^2.1.2",
+    "shelljs": "^0.8.4",
     "signale": "^1.4.0",
     "ts-jest": "^26.4.4",
     "ts-node": "^9.0.0",
     "tslib": "^2.2.0",
-    "typescript": "^4.2.3",
-    "shelljs": "^0.8.4"
-  }
+    "typescript": "^4.2.3"
+  },
+  "packageManager": "yarn@3.6.4"
 }

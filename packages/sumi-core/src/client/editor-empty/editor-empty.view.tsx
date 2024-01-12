@@ -1,11 +1,14 @@
 import React from 'react';
 import { KeybindingRegistry } from '@opensumi/ide-core-browser';
 import { useInjectable, localize } from '@opensumi/ide-core-browser';
+import { AppConfig, AppCommonConfig } from '../../common';
+
 import styles from './editor-empty.module.less';
-import { CommonConfig } from '../../common/config';
 
 export const EditorEmptyComponent: React.FC = () => {
   const keybindingRegistry = useInjectable<KeybindingRegistry>(KeybindingRegistry);
+  const appConfig = useInjectable<AppConfig & AppCommonConfig>(AppConfig);
+
   const getKeybindingsForCommand = React.useCallback(
     (command: string) => {
       const keybindings = keybindingRegistry.getKeybindingsForCommand(command);
@@ -32,9 +35,9 @@ export const EditorEmptyComponent: React.FC = () => {
   return (
     <section className={styles.emptyContainer}>
       <div>
-        <img src={CommonConfig.logo} alt="logo" />
+        <img src={appConfig.app?.logo} alt="logo" />
       </div>
-      <p>{CommonConfig.brandName}</p>
+      <p>{appConfig.app?.brandName}</p>
       <ul>
         {keyList.map((item) => (
           <li key={item.name}>

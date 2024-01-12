@@ -6,11 +6,15 @@ import { ServerConfig } from '../core/app';
 import { getExtensionPath } from '../../common/util';
 import { EXT_SCHEME } from '../../common/constant';
 import { AppConfig } from '../../common';
+import { IExtensionLanguagePack } from '@opensumi/ide-extension/lib/common/vscode';
 
 const { posix } = path;
 
 @Injectable()
 export class ExtensionServiceClientImpl implements IExtensionNodeClientService {
+  getLanguagePack(languageId: string): IExtensionLanguagePack | undefined {
+    throw new Error('Method not implemented.');
+  }
   
   setupNLSConfig(languageId: string, storagePath: string): Promise<void> {
     return Promise.resolve();
