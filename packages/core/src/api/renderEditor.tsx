@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef, useMemo } from 'react';
-import { createRoot } from 'react-dom/client';
+import ReactDOM from 'react-dom';
 import { IReporterService, localize, getDebugLogger } from '@opensumi/ide-core-common';
 import { REPORT_NAME } from '@codeblitzjs/ide-sumi-core';
 import { createEditor } from './createEditor';
@@ -23,17 +23,17 @@ export const renderEditor = (domElement: HTMLElement, props: IEditorRendererProp
     opts.runtimeConfig.hideEditorTab ? styles['hide-editor-tab'] : ''
   }`;
 
-  const root = createRoot(domElement);
-
-  root.render(<Root status="loading" Landing={Landing} className={className} />);
+  ReactDOM.render(<Root status="loading" Landing={Landing} className={className} />, domElement);
 
   app
     .start((appElement) => {
       return new Promise((resolve) => {
-        root.render(
+        ReactDOM.render(
           <Root status="success" className={className}>
             {appElement}
-          </Root>
+          </Root>,
+          domElement,
+          resolve
         );
       });
     })
@@ -41,12 +41,13 @@ export const renderEditor = (domElement: HTMLElement, props: IEditorRendererProp
       onLoad?.(app);
     })
     .catch((err: Error) => {
-      root.render(
+      ReactDOM.render(
         <Root
           status="error"
           error={err?.message || localize('error.unknown')}
           className={className}
-        />
+        />,
+        domElement
       );
 
       (app.injector.get(IReporterService) as IReporterService).point(

@@ -1,5 +1,5 @@
 import React from 'react';
-import { createRoot } from 'react-dom/client';
+import ReactDOM from 'react-dom';
 import {
   IAppInstance,
   AppRenderer,
@@ -71,7 +71,7 @@ const platformConfig = {
     owner: '',
     name: '',
     projectId: '',
-  }, 
+  },
   gitee: {
     owner: 'opensumi',
     name: 'codeblitz',
@@ -155,12 +155,12 @@ const App = () => (
           },
           atomgit: {
             // atomgit token https://atomgit.com/-/profile/tokens
-            token: ''
+            token: '',
           },
           gitee: {
             // gitee token https://gitee.com/profile/personal_access_tokens
             recursive: true,
-            token: ''
+            token: '',
           },
           codeup: {
             // for proxy
@@ -187,12 +187,11 @@ const App = () => (
 
 let key = 0;
 
-const root = createRoot(document.getElementById('main') as HTMLElement);
-
-const render = () => root.render(<App key={key++} />);
+const render = () => ReactDOM.render(<App key={key++} />, document.getElementById('main'));
 render();
 // for dispose test
-window.reset = (destroy = false) => (destroy ? root.render(<div>destroyed</div>) : render());
+window.reset = (destroy = false) =>
+  destroy ? ReactDOM.render(<div>destroyed</div>, document.getElementById('main')) : render();
 
 declare global {
   interface Window {

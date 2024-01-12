@@ -1,19 +1,11 @@
 import React, { useState, useEffect, useRef, useMemo } from 'react';
-import { createRoot } from 'react-dom/client';
+import ReactDOM from 'react-dom';
 import { IReporterService, localize, getDebugLogger } from '@opensumi/ide-core-common';
 import { REPORT_NAME, RuntimeConfig } from '@codeblitzjs/ide-sumi-core';
 import { createApp } from './createApp';
 import { Root } from '../core/Root';
 import { RootProps, LandingProps } from '../core/types';
-import {
-  setSingleInjector,
-  singleInjector,
-  useConstant,
-  isRendered,
-  setRendered,
-  setSingleApp,
-  singleApp,
-} from '../core/hooks';
+import { useConstant } from '../core/hooks';
 import { IConfig, IAppInstance } from './types';
 import styles from '../core/style.module.less';
 
@@ -27,17 +19,21 @@ export const renderApp = (domElement: HTMLElement, props: IAppRendererProps) => 
   const app = createApp(opts);
   const themeType = app.currentThemeType;
   const className = opts.runtimeConfig.hideEditorTab ? styles['hide-editor-tab'] : '';
-  const root = createRoot(domElement);
 
-  root.render(<Root status="loading" theme={themeType} Landing={Landing} className={className} />);
+  ReactDOM.render(
+    <Root status="loading" theme={themeType} Landing={Landing} className={className} />,
+    domElement
+  );
 
   app
     .start((appElement) => {
       return new Promise((resolve) => {
-        root.render(
+        ReactDOM.render(
           <Root status="success" theme={themeType} className={className}>
             {appElement}
-          </Root>
+          </Root>,
+          domElement,
+          resolve
         );
       });
     })
@@ -45,8 +41,9 @@ export const renderApp = (domElement: HTMLElement, props: IAppRendererProps) => 
       onLoad?.(app);
     })
     .catch((err: Error) => {
-      root.render(
-        <Root status="error" error={err?.message || localize('error.unknown')} theme={themeType} />
+      ReactDOM.render(
+        <Root status="error" error={err?.message || localize('error.unknown')} theme={themeType} />,
+        domElement
       );
 
       (app.injector.get(IReporterService) as IReporterService).point(

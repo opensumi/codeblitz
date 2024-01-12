@@ -1,5 +1,5 @@
 import React, { useState, useMemo } from 'react';
-import { createRoot } from 'react-dom/client';
+import ReactDOM from 'react-dom';
 import {
   AppRenderer,
   BrowserFSFileType as FileType,
@@ -178,8 +178,6 @@ const App = () => {
   );
 };
 
-const root = createRoot(document.getElementById('main') as HTMLElement);
-
 zipDataPromise.then(() => {
-  root.render(<App />);
+  ReactDOM.render(<App />, document.getElementById('main'));
 });
