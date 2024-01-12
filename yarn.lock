@@ -499,7 +499,7 @@ __metadata:
     lint-staged: ^10.5.1
     localforage: ^1.10.0
     minimist: ^1.2.5
-    node-gyp: ^10.0.1
+    node-gyp: ^9.0.0
     prettier: ^2.1.2
     shelljs: ^0.8.4
     signale: ^1.4.0
