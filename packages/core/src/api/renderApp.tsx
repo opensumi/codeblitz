@@ -36,7 +36,7 @@ export const renderApp = (domElement: HTMLElement, props: IAppRendererProps) => 
       return new Promise((resolve) => {
         root.render(
           <Root status="success" theme={themeType} className={className}>
-            {appElement({})}
+            {appElement}
           </Root>
         );
       });
@@ -83,7 +83,7 @@ export const AppRenderer: React.FC<IAppRendererProps> = ({ onLoad, Landing, ...o
   useEffect(() => {
     app
       .start((appElement) => {
-        appElementRef.current = appElement({});
+        appElementRef.current = appElement;
         setState({ status: 'success' });
         return Promise.resolve();
       })

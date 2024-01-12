@@ -4,7 +4,6 @@ import { CommandContribution, Domain } from '@opensumi/ide-core-common';
 import { IMainLayoutService } from '@opensumi/ide-main-layout';
 import { CodePlatform, ICodeAPIProvider } from './common/types';
 import { CodeAPIProvider } from './code-api.provider';
-
 @Domain(CommandContribution, ClientAppContribution)
 export class CodeAPIContribution implements CommandContribution, ClientAppContribution {
   @Autowired(ICodeAPIProvider)
