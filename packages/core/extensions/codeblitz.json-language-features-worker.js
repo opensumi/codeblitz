@@ -2,12 +2,12 @@ module.exports = {
   "extension": {
     "publisher": "codeblitz",
     "name": "json-language-features-worker",
-    "version": "1.53.0-patch.1"
+    "version": "1.53.0-patch.2"
   },
   "packageJSON": {
     "name": "json-language-features-worker",
     "publisher": "alex",
-    "version": "1.53.0-patch.1",
+    "version": "1.53.0-patch.2",
     "displayName": "%displayName%",
     "description": "%description%",
     "icon": "icons/json.png",

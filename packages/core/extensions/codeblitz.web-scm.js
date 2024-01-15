@@ -26,28 +26,6 @@ module.exports = {
             "markdownDescription": "%config.mergeEditor%",
             "scope": "window"
           },
-          "webscm.commitType": {
-            "type": "string",
-            "default": "baseBranch",
-            "enum": [
-              "baseBranch",
-              "newBranch"
-            ],
-            "markdownDescription": "%config.commitType%",
-            "scope": "window"
-          },
-          "webscm.createPR": {
-            "type": "boolean",
-            "default": false,
-            "markdownDescription": "%config.createPR%",
-            "scope": "window"
-          },
-          "webscm.showAIButton": {
-            "type": "boolean",
-            "default": true,
-            "markdownDescription": "%config.showAIMessage%",
-            "scope": "window"
-          }
         }
       },
       "scm": {
