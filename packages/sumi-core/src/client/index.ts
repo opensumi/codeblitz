@@ -183,7 +183,7 @@ export class ClientApp extends BasicClientApp {
     // 避免 KaitianExtensionClientAppContribution.onStop 报错
     this.injector.addProviders({
       token: WSChannelHandler,
-      useValue: { clientId: 'alex' },
+      useValue: { clientId: 'CodeBlitz' },
     });
     return super.start(container, type);
   }

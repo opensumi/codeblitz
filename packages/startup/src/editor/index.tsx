@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import ReactDOM from 'react-dom';
 import { IAppInstance, EditorRenderer } from '@codeblitzjs/ide-core/lib/editor';
-import * as Alex from '@codeblitzjs/ide-core/lib/editor';
+import * as CodeBlitz from '@codeblitzjs/ide-core/lib/editor';
 // 引入 extension
 import '@codeblitzjs/ide-core/lib/editor.extension';
 import '@codeblitzjs/ide-core/languages';
@@ -15,7 +15,7 @@ import * as editorPlugin from './plugin';
 import { LocalExtensionModule } from '../common/local-extension.module';
 import { request } from '@codeblitzjs/ide-common';
 
-(window as any).alex = Alex;
+(window as any).CodeBlitz = CodeBlitz;
 
 const fileOptions = (function transform(obj) {
   return Object.keys(obj).map((key) => {

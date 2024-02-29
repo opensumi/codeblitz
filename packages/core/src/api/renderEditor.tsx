@@ -120,7 +120,7 @@ export const EditorRenderer: React.FC<IEditorRendererProps> = ({ onLoad, Landing
   );
 
   return (
-    <Root {...state} Landing={Landing} className={`alex-editor ${rootClassName}`}>
+    <Root {...state} Landing={Landing} className={`codeblitz-editor ${rootClassName}`}>
       {appElementRef.current}
     </Root>
   );
