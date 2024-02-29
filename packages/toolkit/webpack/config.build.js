@@ -23,6 +23,7 @@ const libBundle = createWebpackConfig({
     context: path.join(__dirname, '../../..'),
     entry: {
       [config.appEntry]: './packages/core/src',
+      [config.appMinEntry]: './packages/core/src',
       [config.editorEntry]: './packages/core/src/editor',
       [config.editorAllEntry]: './packages/core/src/editor.all',
     },
