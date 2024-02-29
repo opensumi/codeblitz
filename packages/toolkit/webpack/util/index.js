@@ -32,19 +32,22 @@ exports.nodePolyfill = {
 };
 
 exports.config = {
+  // umd 入口
   appEntry: 'codeblitz',
+  appMinEntry: 'codeblitz.min',
+  // global 入口
   appGlobalEntry: 'codeblitz.global',
   appGlobalMinEntry: 'codeblitz.global.min',
+  // editor 模式
   editorEntry: 'codeblitz.editor',
   editorAllEntry: 'codeblitz.editor.all',
+  // 增加插件的 editor 模式
   editorAllGlobalEntry: 'codeblitz.editor.all.global',
   editorAllGlobalMiniEntry: 'codeblitz.editor.all.global.min',
   workerEntry: 'worker-host',
   webviewEntry: 'webview',
   languageGlobalEntry: 'languages.global',
   languageGlobalMinEntry: 'languages.global.min',
-  alexAllGlobalEntry: 'codeblitz.all.global',
-  alexAllGlobalMinEntry: 'codeblitz.all.global.min',
 };
 
 exports.manifestSeed = {};

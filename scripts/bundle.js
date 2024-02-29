@@ -19,12 +19,23 @@ module.exports = require("./codeblitz");
     `.trim() + '\n'
     );
     await fse.writeFile(
+      path.join(targetDir, 'index.min.js'),
+      `
+module.exports = require("./codeblitz.min");
+    `.trim() + '\n'
+    );
+    await fse.writeFile(
       path.join(targetDir, 'index.d.ts'),
       `
 export * from "../lib";
     `.trim() + '\n'
     );
-
+    await fse.writeFile(
+      path.join(targetDir, 'index.min.d.ts'),
+      `
+export * from "../lib";
+    `.trim() + '\n'
+    );
     // editor 类型文件
     await fse.writeFile(
       path.join(targetDir, 'codeblitz.editor.d.ts'),
