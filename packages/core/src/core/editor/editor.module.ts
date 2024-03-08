@@ -3,7 +3,7 @@ import { FindController } from '@opensumi/monaco-editor-core/esm/vs/editor/contr
 import { FindWidget } from '@opensumi/monaco-editor-core/esm/vs/editor/contrib/find/browser/findWidget';
 import * as monacoKeybindings from '@opensumi/monaco-editor-core/esm/vs/platform/keybinding/common/keybindingsRegistry';
 import { ContextKeyDefinedExpr } from '@opensumi/monaco-editor-core/esm/vs/platform/contextkey/common/contextkey';
-import { LAYOUT_VIEW_SIZE } from '@opensumi/ide-core-browser/lib/layout/constants';
+import { DEFAULT_LAYOUT_VIEW_SIZE } from '@opensumi/ide-core-browser/lib/layout/constants';
 import { Provider, Injectable, Autowired } from '@opensumi/di';
 import debounce from 'lodash.debounce';
 import {
@@ -567,7 +567,7 @@ class EditorSpecialContribution
         const contentHeight = monacoEditor.getContentHeight() + 1;
         const tabHeight = this.runtimeConfig.hideEditorTab
           ? 0
-          : LAYOUT_VIEW_SIZE.EDITOR_TABS_HEIGHT;
+          : DEFAULT_LAYOUT_VIEW_SIZE.editorTabsHeight;
         const root = document.querySelector('.codeblitz-root') as HTMLElement;
         root.style.height = `${contentHeight + tabHeight}px`;
         monacoEditor.layout();

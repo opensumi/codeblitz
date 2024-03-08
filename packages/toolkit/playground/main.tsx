@@ -1,5 +1,5 @@
 import React from 'react';
-import ReactDOM from 'react-dom';
+import ReactDOMClient from 'react-dom/client';
 import Button from 'antd/lib/button';
 import 'antd/lib/button/style/index.css';
 import {
@@ -199,4 +199,4 @@ const App: React.FC = () => {
   );
 };
 
-ReactDOM.render(<App />, document.getElementById('main'));
+ReactDOMClient.createRoot(document.getElementById('main')!).render(<App />);

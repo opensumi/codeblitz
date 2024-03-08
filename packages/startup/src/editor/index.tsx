@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import ReactDOM from 'react-dom';
+import ReactDOMClient from 'react-dom/client';
 import { IAppInstance, EditorRenderer } from '@codeblitzjs/ide-core/lib/editor';
 import * as CodeBlitz from '@codeblitzjs/ide-core/lib/editor';
 // 引入 extension
@@ -202,11 +202,11 @@ const App = () => {
   );
 };
 
-ReactDOM.render(<App />, document.getElementById('main'));
+ReactDOMClient.createRoot(document.getElementById('main')!).render(<App />);
 
 // for test
 window.destroy = () => {
-  ReactDOM.render(<div>destroyed</div>, document.getElementById('main'));
+  ReactDOMClient.createRoot(document.getElementById('main')!).render(<div>destroyed</div>);
 };
 
 declare global {
