@@ -38,7 +38,7 @@ export class PluginService {
         plugin.deactivate?.();
       } catch (err: any) {
         console.error(`
-          [Alex Plugin]: deactivate plugin module error ${err.message} \n\n
+          [CodeBlitz Plugin]: deactivate plugin module error ${err.message} \n\n
           Stack: ${err.stack && err.stack}
         `);
         return err;

@@ -18,11 +18,11 @@ exports.activate = async (ctx) => {
 
   // 这里时序似乎有问题，command 是在 onStart 时注册的
   // 而如果插件 activateEvents 为 *，那么有可能在 commands 注册之前激活
-  // 可能需要在 opensumi 中把插件的激活时机调整到 onStart，或者 alex 后续将 extension 模块异步加载可解
+  // 可能需要在 opensumi 中把插件的激活时机调整到 onStart，或者 CodeBlitz 后续将 extension 模块异步加载可解
   // lsif();
 
-  context.workspaceState.update('worker-example-workspace-state', 'alex is great');
-  context.globalState.update('worker-example-global-state', 'alex is great');
+  context.workspaceState.update('worker-example-workspace-state', 'CodeBlitz is great');
+  context.globalState.update('worker-example-global-state', 'CodeBlitz is great');
 
   commands.registerCommand('alex.settings', () => {
     workspace.getConfiguration().update('editor.fontSize', 16, true);

@@ -14,6 +14,6 @@ export const WEBVIEW_ENDPOINT = __WEBVIEW_ENDPOINT__;
 export const WEBVIEW_SCRIPT = __WEBVIEW_SCRIPT__;
 
 /**
- * alex version
+ * codeblitz version
  */
 export const VERSION = __VERSION__;

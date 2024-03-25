@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef, useMemo } from 'react';
-import ReactDOM from 'react-dom';
+import ReactDOMClient from 'react-dom/client';
 import { IReporterService, localize, getDebugLogger } from '@opensumi/ide-core-common';
 import { REPORT_NAME } from '@codeblitzjs/ide-sumi-core';
 import { createEditor } from './createEditor';
@@ -19,21 +19,18 @@ interface IEditorRendererProps extends IConfig, EditorProps {
 export const renderEditor = (domElement: HTMLElement, props: IEditorRendererProps) => {
   const { onLoad, Landing, ...opts } = props;
   const app = createEditor(opts);
-  const className = `codeblitz-editor ${
-    opts.runtimeConfig.hideEditorTab ? styles['hide-editor-tab'] : ''
-  }`;
+  const className = `codeblitz-editor ${opts.runtimeConfig.hideEditorTab ? styles['hide-editor-tab'] : ''
+    }`;
 
-  ReactDOM.render(<Root status="loading" Landing={Landing} className={className} />, domElement);
+  ReactDOMClient.createRoot(domElement).render(<Root status="loading" Landing={Landing} className={className} />);
 
   app
     .start((appElement) => {
       return new Promise((resolve) => {
-        ReactDOM.render(
+        ReactDOMClient.createRoot(domElement).render(
           <Root status="success" className={className}>
-            {appElement}
-          </Root>,
-          domElement,
-          resolve
+            {appElement(domElement)}
+          </Root>
         );
       });
     })
@@ -41,17 +38,16 @@ export const renderEditor = (domElement: HTMLElement, props: IEditorRendererProp
       onLoad?.(app);
     })
     .catch((err: Error) => {
-      ReactDOM.render(
+      ReactDOMClient.createRoot(domElement).render(
         <Root
           status="error"
           error={err?.message || localize('error.unknown')}
           className={className}
         />,
-        domElement
       );
 
       (app.injector.get(IReporterService) as IReporterService).point(
-        REPORT_NAME.ALEX_APP_START_ERROR,
+        REPORT_NAME.CODEBLITZ_APP_START_ERROR,
         err?.message,
         { error: err }
       );
@@ -86,7 +82,7 @@ export const EditorRenderer: React.FC<IEditorRendererProps> = ({ onLoad, Landing
 
     app
       .start((appElement) => {
-        appElementRef.current = appElement;
+        appElementRef.current = appElement({});
         setState({ status: 'success' });
         return Promise.resolve();
       })
@@ -97,7 +93,7 @@ export const EditorRenderer: React.FC<IEditorRendererProps> = ({ onLoad, Landing
         setState({ error: err?.message || localize('error.unknown'), status: 'error' });
 
         (app.injector.get(IReporterService) as IReporterService).point(
-          REPORT_NAME.ALEX_APP_START_ERROR,
+          REPORT_NAME.CODEBLITZ_APP_START_ERROR,
           err?.message,
           {
             error: err,
@@ -120,7 +116,7 @@ export const EditorRenderer: React.FC<IEditorRendererProps> = ({ onLoad, Landing
   );
 
   return (
-    <Root {...state} Landing={Landing} className={`alex-editor ${rootClassName}`}>
+    <Root {...state} Landing={Landing} className={`codeblitz-editor ${rootClassName}`}>
       {appElementRef.current}
     </Root>
   );

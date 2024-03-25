@@ -8,10 +8,10 @@ import { BreakpointsContributionPoint } from '@opensumi/ide-extension/lib/browse
 
 export { VSCodeContributesServiceToken };
 
-// TODO Alex内暂时没有 Terminal 模块
+// TODO CodeBlitz 内暂时没有 Terminal 模块
 // 去除 terminal 依赖项
 
-// Alex 内不需要的初始化贡献点
+// CodeBlitz 内不需要的初始化贡献点
 const OUTSIDE_POINT = [
   TerminalContributionPoint,
   DebuggersContributionPoint,

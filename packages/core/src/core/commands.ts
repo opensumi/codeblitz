@@ -28,7 +28,7 @@ namespace ALEX_COMMANDS {
 }
 
 @Domain(CommandContribution)
-export class AlexCommandContribution implements CommandContribution {
+export class CodeBlitzCommandContribution implements CommandContribution {
   @Autowired(PreferenceProvider, { tag: PreferenceScope.Default })
   private readonly defaultPreference: PreferenceProvider;
 

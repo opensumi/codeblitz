@@ -6,7 +6,7 @@ module.exports = {
   },
   "packageJSON": {
     "name": "html-language-features-worker",
-    "publisher": "alex",
+    "publisher": "codeblitz",
     "version": "1.53.0-patch.1",
     "displayName": "%displayName%",
     "description": "%description%",

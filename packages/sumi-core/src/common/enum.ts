@@ -1,4 +1,4 @@
 export enum REPORT_NAME {
-  ALEX_APP_START_ERROR = 'alex.appStartError',
+  CODEBLITZ_APP_START_ERROR = 'codeblitz.appStartError',
   CODE_SERVICE_REQUEST_ERROR = 'code-service.requestError',
 }

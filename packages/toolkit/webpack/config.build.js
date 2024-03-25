@@ -56,7 +56,16 @@ const libBundle = createWebpackConfig({
       '@codeblitzjs/ide-registry',
     ],
     optimization: {
-      minimize: false,
+      minimize: true,
+      minimizer: [
+        new TerserPlugin({
+          parallel: true,
+          include: /\.min\.js$/,
+        }),
+        new CssMinimizerPlugin({
+          include: /\.min\.css$/,
+        }),
+      ],
       concatenateModules: false,
       splitChunks: false,
     },
@@ -81,7 +90,7 @@ const globalBundle = createWebpackConfig({
     },
     // 此处 bundle 的包仅作为 commonjs 使用，但因为 external 原因会导致 webpack4 加载 bundle 出错，因此还是使用 umd
     output: {
-      library: 'Alex',
+      library: 'CodeBlitz',
       libraryTarget: 'global',
     },
     externals: [

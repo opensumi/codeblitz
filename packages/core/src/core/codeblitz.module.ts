@@ -7,10 +7,10 @@ import {
 } from '@opensumi/ide-core-browser';
 import { RuntimeConfig } from '@codeblitzjs/ide-sumi-core';
 import { ExtensionActivateContribution } from './extension/extension.contribution';
-import { AlexCommandContribution } from './commands';
+import { CodeBlitzCommandContribution } from './commands';
 
 @Domain(KeybindingContribution)
-class AlexContribution implements KeybindingContribution {
+class CodeBlitzContribution implements KeybindingContribution {
   @Autowired(RuntimeConfig)
   private readonly runtimeConfig: RuntimeConfig;
 
@@ -29,10 +29,10 @@ class AlexContribution implements KeybindingContribution {
 }
 
 @Injectable()
-export class AlexModule extends BrowserModule {
+export class CodeBlitzModule extends BrowserModule {
   providers: Provider[] = [
     ExtensionActivateContribution,
-    AlexCommandContribution,
-    AlexContribution,
+    CodeBlitzCommandContribution,
+    CodeBlitzContribution,
   ];
 }

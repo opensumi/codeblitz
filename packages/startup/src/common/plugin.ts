@@ -13,7 +13,7 @@ export class Plugin implements IPluginModule {
     this._commands = commands;
     context.subscriptions.push(
       commands.registerCommand('plugin.command.add', (x: number) => {
-        commands.executeCommand('plugin.command.say', 'alex is great');
+        commands.executeCommand('plugin.command.say', 'CodeBlitz is great');
         return x + x;
       })
     );

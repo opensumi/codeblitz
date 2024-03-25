@@ -14,7 +14,7 @@ export const activate = ({ context, commands }: IPluginAPI) => {
   _commands = commands;
   context.subscriptions.push(
     commands.registerCommand('plugin.command.add', async (x: number) => {
-      commands.executeCommand('plugin.command.say', 'alex is great');
+      commands.executeCommand('plugin.command.say', 'CodeBlitz is great');
       return x + x;
     }),
     commands.registerCommand('plugin.command.changeTheme', (value) => {

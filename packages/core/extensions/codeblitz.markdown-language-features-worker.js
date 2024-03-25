@@ -6,7 +6,7 @@ module.exports = {
   },
   "packageJSON": {
     "name": "markdown-language-features-worker",
-    "publisher": "alex",
+    "publisher": "codeblitz",
     "version": "1.53.0-patch.2",
     "displayName": "%displayName%",
     "description": "%description%",
