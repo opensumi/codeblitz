@@ -8,7 +8,7 @@ module.exports = {
     "name": "gitlens",
     "publisher": "codeblitz",
     "version": "10.2.4",
-    "description": "gitlens for alex",
+    "description": "gitlens for codeblitz",
     "icon": "images/gitlens-icon.png",
     "activationEvents": [
       "*"

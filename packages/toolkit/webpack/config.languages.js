@@ -20,7 +20,7 @@ module.exports = () => {
       extensions: ['.js', '.json'],
     },
     externals: {
-      '@codeblitzjs/ide-registry': 'Alex',
+      '@codeblitzjs/ide-registry': 'CodeBlitz',
     },
     optimization: {
       minimize: true,

@@ -6,7 +6,7 @@ import {
   getDefaultLayoutConfig,
   SlotLocation,
 } from '@codeblitzjs/ide-core';
-import * as Alex from '@codeblitzjs/ide-core';
+import * as CodeBlitz from '@codeblitzjs/ide-core';
 import '@codeblitzjs/ide-core/languages';
 import { CodeServiceModule } from '@codeblitzjs/ide-code-service';
 import { CodeAPIModule, CodePlatform } from '@codeblitzjs/ide-code-api';
@@ -43,7 +43,7 @@ import * as SCMPlugin from './web-scm.plugin';
 
 import '../index.css';
 
-(window as any).alex = Alex;
+(window as any).CodeBlitz = CodeBlitz;
 
 isFilesystemReady().then(() => {
   console.log('filesystem ready');

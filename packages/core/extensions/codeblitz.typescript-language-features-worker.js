@@ -6,7 +6,7 @@ module.exports = {
   },
   "packageJSON": {
     "name": "typescript-language-features-worker",
-    "publisher": "alex",
+    "publisher": "codeblitz",
     "version": "1.53.0-patch.3",
     "displayName": "%displayName%",
     "description": "%description%",

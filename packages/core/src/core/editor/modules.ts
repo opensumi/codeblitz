@@ -21,10 +21,6 @@ import { ThemeModule } from '@opensumi/ide-theme/lib/browser';
 import { WorkspaceModule } from '@opensumi/ide-workspace/lib/browser';
 import { WorkspaceEditModule } from '@opensumi/ide-workspace-edit/lib/browser';
 import { OutputModule } from '@opensumi/ide-output/lib/browser';
-
-/**
- * alex
- */
 import { ClientModule, ServerModuleCollection } from '@codeblitzjs/ide-sumi-core';
 import { PluginModule } from '@codeblitzjs/ide-plugin';
 
@@ -63,7 +59,7 @@ export const getModules: () => ModuleConstructor[] = () => [
 
   ...extensionModules,
 
-  // Alex
+  // CodeBlitzModule,
   ClientModule,
   PluginModule,
   ...ServerModuleCollection,

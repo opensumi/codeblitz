@@ -39,7 +39,7 @@ export const install = async (
   } else {
     const extensionConfig = await getExtensionFromPackage();
     if (!extensionConfig.length && !options?.silent) {
-      log.warn(`当前未配置 ${EXTENSION_FIELD} npx alex ext -h 查看帮助`);
+      log.warn(`当前未配置 ${EXTENSION_FIELD} npx codeblitz ext -h 查看帮助`);
       return;
     }
     checkExtensionConfig(extensionConfig);
