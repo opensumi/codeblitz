@@ -59,7 +59,7 @@
     "@opensumi/ide-opened-editor": "2.27.1",
     "@opensumi/ide-outline": "2.27.1",
     "@opensumi/ide-output": "2.27.1",
-    "@opensumi/ide-overlay": "2.27.1",
+    "@opensumi/ide-overlay": "3.0.2",
     "@opensumi/ide-preferences": "2.27.1",
     "@opensumi/ide-quick-open": "2.27.1",
     "@opensumi/ide-scm": "2.27.1",

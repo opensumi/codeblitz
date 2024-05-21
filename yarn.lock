@@ -619,7 +619,7 @@ __metadata:
     "@opensumi/ide-opened-editor": "npm:2.27.1"
     "@opensumi/ide-outline": "npm:2.27.1"
     "@opensumi/ide-output": "npm:2.27.1"
-    "@opensumi/ide-overlay": "npm:2.27.1"
+    "@opensumi/ide-overlay": "npm:3.0.2"
     "@opensumi/ide-preferences": "npm:2.27.1"
     "@opensumi/ide-quick-open": "npm:2.27.1"
     "@opensumi/ide-scm": "npm:2.27.1"
@@ -1447,6 +1447,17 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@opensumi/ide-core-common@npm:3.0.2":
+  version: 3.0.2
+  resolution: "@opensumi/ide-core-common@npm:3.0.2"
+  dependencies:
+    "@opensumi/di": "npm:^1.4.0"
+    "@opensumi/ide-utils": "npm:3.0.2"
+    jschardet: "npm:3.0.0"
+  checksum: 10/65782f557ab2dc91a41bdd8c64ca55d0ebbc84bc1a0ab4cb8231fc8818800a56646a229e1aebba5a7fda16d71d07c4e5c27ef6ce7e00a0ee980b4ab1518bc1ff
+  languageName: node
+  linkType: hard
+
 "@opensumi/ide-core-node@npm:2.27.1":
   version: 2.27.1
   resolution: "@opensumi/ide-core-node@npm:2.27.1"
@@ -1728,13 +1739,13 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@opensumi/ide-overlay@npm:2.27.1":
-  version: 2.27.1
-  resolution: "@opensumi/ide-overlay@npm:2.27.1"
+"@opensumi/ide-overlay@npm:3.0.2":
+  version: 3.0.2
+  resolution: "@opensumi/ide-overlay@npm:3.0.2"
   dependencies:
-    "@opensumi/ide-core-common": "npm:2.27.1"
-    "@opensumi/ide-theme": "npm:2.27.1"
-  checksum: 10/dafa7efd000e82b02ca540ec50ed8c3fe1fe067cfe0b69cf3c09c8914c085df314aca9a9c21b9ecacc5146cc296c6f578fdcba5874087604e50b1b818e270499
+    "@opensumi/ide-core-common": "npm:3.0.2"
+    "@opensumi/ide-theme": "npm:3.0.2"
+  checksum: 10/caa3febb9d10763c92912df01c27b0c092958f8cce3f81f9c804844dd03d8cfa9b1b49bcc439b72510c55190777b06fa0e14711c7df9fa0c099dc064e42a1856
   languageName: node
   linkType: hard
 
@@ -1869,6 +1880,15 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@opensumi/ide-theme@npm:3.0.2":
+  version: 3.0.2
+  resolution: "@opensumi/ide-theme@npm:3.0.2"
+  dependencies:
+    "@opensumi/ide-core-common": "npm:3.0.2"
+  checksum: 10/77df25f427a3c5b698e370af318ca74af916be27d4e9883ac1fcc96e5c34d95692dc4aea14775e476ccf46d6b4f07ba25017ed19bc116984abdc71c7f2381060
+  languageName: node
+  linkType: hard
+
 "@opensumi/ide-toolbar@npm:2.27.1":
   version: 2.27.1
   resolution: "@opensumi/ide-toolbar@npm:2.27.1"
@@ -1888,6 +1908,19 @@ __metadata:
     nanoid: "npm:3.3.4"
     vscode-uri: "npm:3.0.2"
   checksum: 10/4a9822cb6e42a2e3c7c3dfb7448c8035a58c772e01258a1f7812d6e6c2f51363696cf9a93dd64964fe5f68fb2db3e0c80525186dc46e4a4eb1c2797b7350d263
+  languageName: node
+  linkType: hard
+
+"@opensumi/ide-utils@npm:3.0.2":
+  version: 3.0.2
+  resolution: "@opensumi/ide-utils@npm:3.0.2"
+  dependencies:
+    iconv-lite: "npm:^0.6.3"
+    jschardet: "npm:3.0.0"
+    mri: "npm:^1.2.0"
+    nanoid: "npm:3.3.4"
+    vscode-uri: "npm:3.0.2"
+  checksum: 10/ce8b27d307e95f2c3aa73005c35291bd131a4ff80952473f0ecf5ed8c0996a5c2e9cf392e02f1fe9f0947b2fd1a73386e765aea4336da7e5a3c54a3e96d5db34
   languageName: node
   linkType: hard
 
