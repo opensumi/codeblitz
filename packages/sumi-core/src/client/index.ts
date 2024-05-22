@@ -13,7 +13,6 @@ import { ClientApp as BasicClientApp } from '@opensumi/ide-core-browser/lib/boot
 import { BackService, BasicModule, Disposable } from '@opensumi/ide-core-common';
 import { WSChannelHandler } from '@opensumi/ide-connection/lib/browser';
 
-import { FCServiceCenter, ClientPort, initFCService } from '../connection';
 import { OpenSumiExtFsProvider, KtExtFsProviderContribution } from './extension';
 import { TextmateLanguageGrammarContribution } from './textmate-language-grammar/index.contribution';
 import { ILanguageGrammarRegistrationService } from './textmate-language-grammar/base';
@@ -62,6 +61,8 @@ import { IExtensionStorageService } from '@opensumi/ide-extension-storage';
 import { MonacoOverrides } from './override/monacoOverride';
 import { monacoTextModelServiceProxy } from './override/monacoOverride/textModelService';
 import { monacoBulkEditServiceProxy } from './override/monacoOverride/workspaceEditService';
+import { CodeBlitzConnectionHelper } from './override/webConnectionHelper';
+import { WebConnectionHelper } from '@opensumi/ide-core-browser/lib/application/runtime';
 export * from './override/monacoOverride/codeEditorService';
 
 export { ExtensionManagerModule as ExtensionClientManagerModule } from './extension-manager';
@@ -119,6 +120,11 @@ export class ClientModule extends BrowserModule {
     {
       token: IExtensionStorageService,
       useClass: ExtensionStorageServiceOverride,
+      override: true,
+    },
+    {
+      token: WebConnectionHelper,
+      useClass: CodeBlitzConnectionHelper,
       override: true,
     },
   ];
@@ -179,12 +185,9 @@ export class ClientApp extends BasicClientApp {
     await serverApp.start();
     this.setWorkspaceReadOnly(serverApp.rootFS);
 
-    bindConnectionService(this.injector, this.modules);
-    // 避免 KaitianExtensionClientAppContribution.onStop 报错
-    this.injector.addProviders({
-      token: WSChannelHandler,
-      useValue: { clientId: 'alex' },
-    });
+    if (!type) {
+      await this.createConnection('web');
+    }
     return super.start(container, type);
   }
 
@@ -207,41 +210,5 @@ export class ClientApp extends BasicClientApp {
   async dispose() {
     super.dispose();
     this.disposer.dispose();
-  }
-}
-
-export async function bindConnectionService(injector: Injector, modules: ModuleConstructor[]) {
-  const clientCenter = new FCServiceCenter(ClientPort);
-
-  const { getFCService } = initFCService(clientCenter);
-
-  const backServiceList: BackService[] = [];
-
-  for (const module of modules) {
-    const moduleInstance = injector.get(module) as BasicModule;
-    if (moduleInstance.backServices) {
-      for (const backService of moduleInstance.backServices) {
-        if (isBackServicesInBrowser(backService)) {
-          backServiceList.push(backService);
-        }
-      }
-    }
-  }
-
-  for (const backService of backServiceList) {
-    const { servicePath } = backService;
-    const fcService = getFCService(servicePath);
-
-    const injectService = {
-      token: servicePath,
-      useValue: fcService,
-    } as Provider;
-
-    injector.addProviders(injectService);
-
-    if (backService.clientToken) {
-      const clientService = injector.get(backService.clientToken);
-      fcService.onRequestService(clientService);
-    }
   }
 }

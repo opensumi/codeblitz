@@ -1,4 +1,4 @@
-import { Injector, ConstructorOf } from '@opensumi/di';
+import { Injector, ConstructorOf, InstanceCreator } from '@opensumi/di';
 import {
   MaybePromise,
   ContributionProvider,
@@ -12,10 +12,15 @@ import {
 import { AppConfig, BrowserModule } from '@opensumi/ide-core-browser';
 import { IExtensionBasicMetadata } from '@codeblitzjs/ide-common';
 import * as path from 'path';
-
+import {
+  BaseCommonChannelHandler,
+  commonChannelPathHandler,
+  RPCServiceChannelPath,
+} from '@opensumi/ide-connection/lib/common/server-handler';
+import { RPCServiceCenter, WSChannel, initRPCService } from '@opensumi/ide-connection';
 import { ILogServiceManager } from './base';
 import { INodeLogger, NodeLogger } from './node-logger';
-import { FCServiceCenter, initFCService, ServerPort } from '../../connection';
+import { CodeBlitzConnection, ServerPort } from '../../connection';
 import { IServerApp, HOME_ROOT } from '../../common';
 import { initializeRootFileSystem, initializeHomeFileSystem } from './filesystem';
 import { fsExtra as fse } from '../node';
@@ -211,7 +216,16 @@ export class ServerApp implements IServerApp {
   async start() {
     await this.launch();
     await this.initializeContribution();
-    bindModuleBackService(this.injector, this.modules);
+    const handler = new CodeblitzCommonChannelHandler('codeblitz-server');
+    handler.receiveConnection(new CodeBlitzConnection(ServerPort));
+
+    commonChannelPathHandler.register(RPCServiceChannelPath, {
+      handler: (channel: WSChannel, clientId: string) => {
+        handleClientChannel(this.injector, this.modules, channel, clientId, this.logger);
+      },
+      dispose: () => {},
+    });
+
     await this.startContribution();
   }
 
@@ -220,13 +234,18 @@ export class ServerApp implements IServerApp {
   }
 }
 
-export function bindModuleBackService(injector: Injector, modules: ModuleConstructor[]) {
-  const logger = injector.get(INodeLogger);
-  const serviceCenter = new FCServiceCenter(ServerPort);
-  const { createFCService } = initFCService(serviceCenter);
+export function bindModuleBackService(
+  injector: Injector,
+  modules: ModuleConstructor[],
+  serviceCenter: RPCServiceCenter
+) {
+  const childInjector = injector.createChild();
 
-  for (const module of modules) {
-    const moduleInstance = injector.get(module) as BrowserModule;
+  const logger = childInjector.get(INodeLogger);
+  const { createRPCService } = initRPCService(serviceCenter);
+
+  for (const m of modules) {
+    const moduleInstance = childInjector.get(m) as BrowserModule;
     if (!moduleInstance.backServices) {
       continue;
     }
@@ -238,12 +257,44 @@ export function bindModuleBackService(injector: Injector, modules: ModuleConstru
       if (!serviceToken) {
         continue;
       }
+      if (service.protocol) {
+        serviceCenter.loadProtocol(service.protocol);
+      }
+
       logger.log('back service', serviceToken);
-      const serviceInstance = injector.get(serviceToken);
-      const proxyService = createFCService(servicePath, serviceInstance);
+      const serviceInstance = childInjector.get(serviceToken);
+      const proxyService = createRPCService(servicePath, serviceInstance);
       if (!serviceInstance.client) {
         serviceInstance.client = proxyService;
       }
     }
   }
+
+  return childInjector;
+}
+
+export class CodeblitzCommonChannelHandler extends BaseCommonChannelHandler {
+  doHeartbeat(connection: any): void {}
+}
+
+function handleClientChannel(
+  injector: Injector,
+  modulesInstances: ModuleConstructor[],
+  channel: WSChannel,
+  clientId: string,
+  logger: INodeLogger
+) {
+  logger.log(`New RPC connection ${clientId}`);
+
+  const serviceCenter = new RPCServiceCenter(undefined, logger);
+  const serviceChildInjector = bindModuleBackService(injector, modulesInstances, serviceCenter);
+
+  const remove = serviceCenter.setSumiConnection(channel.createSumiConnection());
+
+  channel.onceClose(() => {
+    remove.dispose();
+    serviceChildInjector.disposeAll();
+
+    logger.log(`Remove RPC connection ${clientId}`);
+  });
 }
