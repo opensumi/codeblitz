@@ -1,6 +1,6 @@
 import { ModuleConstructor } from '@opensumi/ide-core-browser';
 import { IAppOpts } from '@codeblitzjs/ide-sumi-core';
-import { getThemeId, getThemeType, ThemeContribution, BuiltinTheme } from '@opensumi/ide-theme';
+import { getThemeId, getThemeType, IThemeContribution, BuiltinTheme } from '@opensumi/ide-theme';
 import { IExtensionBasicMetadata } from '@codeblitzjs/ide-common';
 
 import { IAppConfig } from '../api/types';
@@ -54,8 +54,8 @@ export const getThemeTypeByPreferenceThemeId = (
   let uiTheme: BuiltinTheme | undefined;
   if (themeId && extensionMetadata) {
     for (const ext of extensionMetadata) {
-      const theme: ThemeContribution | undefined = ext.packageJSON.contributes?.themes?.find(
-        (contrib: ThemeContribution) => contrib && getThemeId(contrib) === themeId
+      const theme: IThemeContribution | undefined = ext.packageJSON.contributes?.themes?.find(
+        (contrib: IThemeContribution) => contrib && getThemeId(contrib) === themeId
       );
 
       if (theme?.uiTheme) {

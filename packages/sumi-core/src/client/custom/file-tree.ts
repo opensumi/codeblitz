@@ -260,7 +260,7 @@ export class FileTreeCustomContribution
 
     const EmptyLeftTabbarRenderer: React.FC = () => {
       const tabbarService: TabbarService = useInjectable(TabbarServiceFactory)('left');
-      tabbarService.barSize = 0;
+      tabbarService.updateBarSize(0);
       return React.createElement('div', { style: { width: 0 } });
     };
 

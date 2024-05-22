@@ -15,6 +15,7 @@
     "@codeblitzjs/ide-common": "1.0.4",
     "@codeblitzjs/ide-registry": "1.0.4",
     "@opensumi/di": "^1.0.0",
+    "@opensumi/ide-ai-native": "3.0.3",
     "@opensumi/ide-core-browser": "3.0.3",
     "@opensumi/ide-core-common": "3.0.3",
     "@opensumi/ide-debug": "3.0.3",
@@ -28,6 +29,7 @@
     "jschardet": "^2.2.1",
     "lodash.debounce": "^4.0.8",
     "md5": "^2.3.0",
+    "mobx-react-lite": "^4.0.7",
     "tslib": "^2.2.0",
     "uuid": "^3.3.2",
     "vscode-languageserver-types": "~3.14.0"

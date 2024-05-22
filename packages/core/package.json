@@ -34,6 +34,7 @@
     "@codeblitzjs/ide-registry": "1.0.4",
     "@codeblitzjs/ide-sumi-core": "1.0.4",
     "@opensumi/ide-addons": "3.0.3",
+    "@opensumi/ide-ai-native": "3.0.3",
     "@opensumi/ide-comments": "3.0.3",
     "@opensumi/ide-core-browser": "3.0.3",
     "@opensumi/ide-core-common": "3.0.3",

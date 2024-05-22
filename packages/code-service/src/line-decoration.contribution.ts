@@ -1,4 +1,5 @@
-import * as monaco from '@opensumi/monaco-editor-core/esm/vs/editor/editor.api';
+import * as monaco from '@opensumi/ide-monaco';
+
 import { Autowired } from '@opensumi/di';
 import {
   Domain,
@@ -17,6 +18,7 @@ import debounce from 'lodash.debounce';
 import { CodeModelService } from './code-model.service';
 import styles from './style.module.less';
 import { RuntimeConfig } from '@codeblitzjs/ide-sumi-core';
+import { monacoBrowser } from '@opensumi/ide-monaco/lib/browser';
 
 @Domain(BrowserEditorContribution, CommandContribution)
 export class LineDecorationContribution implements BrowserEditorContribution, CommandContribution {
@@ -54,8 +56,8 @@ export class LineDecorationContribution implements BrowserEditorContribution, Co
 
               const type = event?.target?.type;
               if (
-                type === monaco.editor.MouseTargetType.GUTTER_LINE_NUMBERS ||
-                type === monaco.editor.MouseTargetType.GUTTER_GLYPH_MARGIN
+                type === monacoBrowser.editor.MouseTargetType.GUTTER_LINE_NUMBERS ||
+                type === monacoBrowser.editor.MouseTargetType.GUTTER_GLYPH_MARGIN
               ) {
                 const lineNumber = event.target.position!.lineNumber;
                 oldHoverDecorations = editor.monacoEditor.deltaDecorations(oldHoverDecorations, [
@@ -85,8 +87,8 @@ export class LineDecorationContribution implements BrowserEditorContribution, Co
 
             const type = event?.target?.type;
             if (
-              type === monaco.editor.MouseTargetType.GUTTER_LINE_NUMBERS ||
-              type === monaco.editor.MouseTargetType.GUTTER_GLYPH_MARGIN
+              type === monacoBrowser.editor.MouseTargetType.GUTTER_LINE_NUMBERS ||
+              type === monacoBrowser.editor.MouseTargetType.GUTTER_GLYPH_MARGIN
             ) {
               const clickedLineNumber = event.target.position!.lineNumber;
               const lastLineNumber = this.lineNumbers;

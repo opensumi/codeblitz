@@ -32,7 +32,7 @@ export const renderEditor = (domElement: HTMLElement, props: IEditorRendererProp
       return new Promise((resolve) => {
         root.render(
           <Root status="success" className={className}>
-            {appElement}
+            {appElement as unknown as React.ReactElement}
           </Root>
         );
       });
@@ -85,7 +85,7 @@ export const EditorRenderer: React.FC<IEditorRendererProps> = ({ onLoad, Landing
 
     app
       .start((appElement) => {
-        appElementRef.current = appElement;
+        appElementRef.current = appElement as unknown as React.ReactElement;
         setState({ status: 'success' });
         return Promise.resolve();
       })

@@ -1,4 +1,5 @@
-import type * as monaco from '@opensumi/monaco-editor-core/esm/vs/editor/editor.api';
+import * as monaco from '@opensumi/ide-monaco';
+
 import { MainThreadLanguages } from '@opensumi/ide-extension/lib/browser/vscode/api/main.thread.language';
 import { AbstractExtInstanceManagementService } from '@opensumi/ide-extension/lib/browser/types';
 
@@ -30,7 +31,10 @@ MainThreadLanguages.prototype.createReferenceProvider = function (...args: any[]
   const _provideReferences = provider.provideReferences;
   provider.provideReferences = function (...args: any[]) {
     return (_provideReferences.call(this, ...args) as Promise<monaco.languages.Location[]>).then(
-      (references) => Array.isArray(references) ? references.filter((reference) => reference.uri.scheme === 'file') : []
+      (references) =>
+        Array.isArray(references)
+          ? references.filter((reference) => reference.uri.scheme === 'file')
+          : []
     );
   };
   return provider;
