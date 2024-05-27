@@ -48,7 +48,7 @@
     "@opensumi/ide-file-service": "2.27.1",
     "@opensumi/ide-file-tree-next": "2.27.1",
     "@opensumi/ide-i18n": "2.27.1",
-    "@opensumi/ide-keymaps": "2.27.1",
+    "@opensumi/ide-keymaps": "3.0.3",
     "@opensumi/ide-logs": "2.27.1",
     "@opensumi/ide-main-layout": "2.27.1",
     "@opensumi/ide-markdown": "2.27.1",
