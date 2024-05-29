@@ -56,7 +56,6 @@ jobs:
         run: |
           yarn install --immutable
           yarn run init
-          yarn run build:all
 
       - name: Setup .yarnrc.yml
         run: |

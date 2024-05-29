@@ -75,7 +75,6 @@ jobs:
         run: |
           yarn install --immutable
           yarn run init
-          yarn run build:all
           yarn run update-package -v ${{ github.event.inputs.version }}
 
       - name: Setup .yarnrc.yml
