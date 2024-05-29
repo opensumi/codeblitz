@@ -34,7 +34,6 @@ import * as Preferences from '../modules/opensumi__ide-preferences';
 import * as QuickOpen from '../modules/opensumi__ide-quick-open';
 import * as Scm from '../modules/opensumi__ide-scm';
 import * as Search from '../modules/opensumi__ide-search';
-import * as StaticResource from '../modules/opensumi__ide-static-resource';
 import * as StatusBar from '../modules/opensumi__ide-status-bar';
 import * as Storage from '../modules/opensumi__ide-storage';
 import * as Theme from '../modules/opensumi__ide-theme';
@@ -88,7 +87,6 @@ export function requireModule(module: '@opensumi/ide-preferences'): typeof Prefe
 export function requireModule(module: '@opensumi/ide-quick-open'): typeof QuickOpen;
 export function requireModule(module: '@opensumi/ide-scm'): typeof Scm;
 export function requireModule(module: '@opensumi/ide-search'): typeof Search;
-export function requireModule(module: '@opensumi/ide-static-resource'): typeof StaticResource;
 export function requireModule(module: '@opensumi/ide-status-bar'): typeof StatusBar;
 export function requireModule(module: '@opensumi/ide-storage'): typeof Storage;
 export function requireModule(module: '@opensumi/ide-theme'): typeof Theme;
@@ -176,8 +174,6 @@ export function requireModule(module: string): any {
       return Scm;
     case '@opensumi/ide-search':
       return Search;
-    case '@opensumi/ide-static-resource':
-      return StaticResource;
     case '@opensumi/ide-status-bar':
       return StatusBar;
     case '@opensumi/ide-storage':

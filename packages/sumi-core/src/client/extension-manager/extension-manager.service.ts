@@ -6,7 +6,7 @@ import {
   AbstractExtensionManagementService,
 } from '@opensumi/ide-extension/lib/common';
 import { AbstractExtInstanceManagementService } from '@opensumi/ide-extension/lib/browser/types';
-import { StaticResourceService } from '@opensumi/ide-static-resource/lib/browser';
+import { StaticResourceService } from '@opensumi/ide-core-browser/lib/static-resource/static.definition';
 import { EditorPreferences, WorkbenchEditorService } from '@opensumi/ide-editor/lib/browser';
 
 import {
