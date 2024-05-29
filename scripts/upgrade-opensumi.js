@@ -81,7 +81,7 @@ async function upgradeOpenSumiDeps(pkgPath, version, opensumiDepList) {
     if (!obj) return;
     Object.keys(obj).forEach((dep) => {
       if (opensumiDepList[dep]) {
-        obj[dep] = opensumiDepList[dep];
+        obj[dep] = version;
         modified = true;
       }
     });

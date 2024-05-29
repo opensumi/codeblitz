@@ -17,10 +17,21 @@ import {
   commonChannelPathHandler,
   RPCServiceChannelPath,
 } from '@opensumi/ide-connection/lib/common/server-handler';
-import { RPCServiceCenter, WSChannel, initRPCService } from '@opensumi/ide-connection';
+import {
+  ChannelMessage,
+  ISerializer,
+  RPCServiceCenter,
+  WSChannel,
+  initRPCService,
+} from '@opensumi/ide-connection';
 import { ILogServiceManager } from './base';
 import { INodeLogger, NodeLogger } from './node-logger';
-import { CodeBlitzConnection, ServerPort } from '../../connection';
+import {
+  CodeBlitzConnection,
+  CodeBlitzMessageIO,
+  ServerPort,
+  codeblitzSerializer,
+} from '../../connection';
 import { IServerApp, HOME_ROOT } from '../../common';
 import { initializeRootFileSystem, initializeHomeFileSystem } from './filesystem';
 import { fsExtra as fse } from '../node';
@@ -274,6 +285,7 @@ export function bindModuleBackService(
 }
 
 export class CodeblitzCommonChannelHandler extends BaseCommonChannelHandler {
+  serializer: ISerializer<ChannelMessage, any> = codeblitzSerializer;
   doHeartbeat(connection: any): void {}
 }
 
@@ -289,7 +301,11 @@ function handleClientChannel(
   const serviceCenter = new RPCServiceCenter(undefined, logger);
   const serviceChildInjector = bindModuleBackService(injector, modulesInstances, serviceCenter);
 
-  const remove = serviceCenter.setSumiConnection(channel.createSumiConnection());
+  const remove = serviceCenter.setSumiConnection(
+    channel.createSumiConnection({
+      io: new CodeBlitzMessageIO(),
+    })
+  );
 
   channel.onceClose(() => {
     remove.dispose();

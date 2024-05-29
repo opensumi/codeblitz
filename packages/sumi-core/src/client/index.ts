@@ -10,8 +10,7 @@ import {
 } from '@opensumi/ide-core-browser';
 import { ClientApp as BasicClientApp } from '@opensumi/ide-core-browser/lib/bootstrap/app';
 
-import { BackService, BasicModule, Disposable } from '@opensumi/ide-core-common';
-import { WSChannelHandler } from '@opensumi/ide-connection/lib/browser';
+import { Disposable } from '@opensumi/ide-core-common';
 
 import { OpenSumiExtFsProvider, KtExtFsProviderContribution } from './extension';
 import { TextmateLanguageGrammarContribution } from './textmate-language-grammar/index.contribution';
@@ -20,7 +19,6 @@ import { LanguageGrammarRegistrationService } from './textmate-language-grammar/
 import { injectDebugPreferences } from './debug';
 import { IServerApp, RootFS } from '../common';
 import { IServerAppOpts, ServerApp } from '../server/core/app';
-import { isBackServicesInBrowser } from '../common/util';
 import {
   FileTreeCustomContribution,
   EditorActionEventContribution,
@@ -176,19 +174,15 @@ export class ClientApp extends BasicClientApp {
     });
   }
 
-  public async start(
-    container: HTMLElement | IAppRenderer,
-    type?: 'electron' | 'web'
-  ): Promise<void> {
+  public async start(container: HTMLElement | IAppRenderer): Promise<void> {
     // 先启动 server 进行必要的初始化，应用的权限等也在 server 中处理
     const serverApp: IServerApp = this.injector.get(IServerApp);
     await serverApp.start();
     this.setWorkspaceReadOnly(serverApp.rootFS);
 
-    if (!type) {
-      await this.createConnection('web');
-    }
-    return super.start(container, type);
+    await this.createConnection('web');
+
+    return super.start(container);
   }
 
   /**
