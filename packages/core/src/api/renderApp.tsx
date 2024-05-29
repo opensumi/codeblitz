@@ -16,6 +16,7 @@ import {
 } from '../core/hooks';
 import { IConfig, IAppInstance } from './types';
 import styles from '../core/style.module.less';
+import { IAppRenderer } from '@opensumi/ide-core-browser';
 
 export interface IAppRendererProps extends IConfig {
   onLoad?(app: IAppInstance): void;
@@ -32,11 +33,11 @@ export const renderApp = (domElement: HTMLElement, props: IAppRendererProps) => 
   root.render(<Root status="loading" theme={themeType} Landing={Landing} className={className} />);
 
   app
-    .start((appElement) => {
+    .start((Children) => {
       return new Promise((resolve) => {
         root.render(
           <Root status="success" theme={themeType} className={className}>
-            {appElement as unknown as React.ReactElement}
+            <Children />
           </Root>
         );
       });
@@ -68,7 +69,7 @@ export const renderApp = (domElement: HTMLElement, props: IAppRendererProps) => 
 export const AppRenderer: React.FC<IAppRendererProps> = ({ onLoad, Landing, ...opts }) => {
   const app = useConstant(() => createApp(opts));
   const themeType = useConstant(() => app.currentThemeType);
-  const appElementRef = useRef<React.ReactElement | null>(null);
+  const appElementRef = useRef<React.FC | null>(null);
 
   // 确保回调始终为最新
   // TODO: 用 PropsService
@@ -83,7 +84,7 @@ export const AppRenderer: React.FC<IAppRendererProps> = ({ onLoad, Landing, ...o
   useEffect(() => {
     app
       .start((appElement) => {
-        appElementRef.current = appElement as unknown as React.ReactElement;
+        appElementRef.current = appElement;
         setState({ status: 'success' });
         return Promise.resolve();
       })
@@ -118,7 +119,7 @@ export const AppRenderer: React.FC<IAppRendererProps> = ({ onLoad, Landing, ...o
 
   return (
     <Root {...state} theme={themeType} Landing={Landing} className={rootClassName}>
-      {appElementRef.current}
+      {appElementRef.current ? <appElementRef.current /> : null}
     </Root>
   );
 };

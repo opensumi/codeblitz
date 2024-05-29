@@ -28,11 +28,11 @@ export const renderEditor = (domElement: HTMLElement, props: IEditorRendererProp
   root.render(<Root status="loading" Landing={Landing} className={className} />);
 
   app
-    .start((appElement) => {
+    .start((Children) => {
       return new Promise((resolve) => {
         root.render(
           <Root status="success" className={className}>
-            {appElement as unknown as React.ReactElement}
+            <Children />
           </Root>
         );
       });

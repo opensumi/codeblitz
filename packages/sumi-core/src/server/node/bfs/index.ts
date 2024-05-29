@@ -188,4 +188,4 @@ type InstanceType<T> = T extends { Create(options: object, cb: BFSCallback<infer
   ? R
   : any;
 
-export type FileSystemInstance<T extends SupportFileSystem> = InstanceType<typeof Backends[T]>;
+export type FileSystemInstance<T extends SupportFileSystem> = InstanceType<(typeof Backends)[T]>;
