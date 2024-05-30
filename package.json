@@ -14,7 +14,7 @@
     "prepare": "husky install",
     "type-check": "tsc --skipLibCheck --noEmit",
     "preinstall": "node scripts/preinstall",
-    "init": "npm run clean && npm run generate && npm run build",
+    "init": "npm run clean && npm run generate && npm run build:all",
     "start": "npm run dev",
     "generate": "node scripts/generate",
     "editor": "INTEGRATION=editor npm run dev",
