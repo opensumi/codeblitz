@@ -114,3 +114,5 @@ generated-parser
 
 #husky
 .husky
+
+scripts/utils/_upload.js
