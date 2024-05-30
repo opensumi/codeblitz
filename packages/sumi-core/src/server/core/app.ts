@@ -1,4 +1,4 @@
-import { Injector, ConstructorOf, InstanceCreator } from '@opensumi/di';
+import { Injector, ConstructorOf } from '@opensumi/di';
 import {
   MaybePromise,
   ContributionProvider,
@@ -26,12 +26,10 @@ import {
 } from '@opensumi/ide-connection';
 import { ILogServiceManager } from './base';
 import { INodeLogger, NodeLogger } from './node-logger';
-import {
-  CodeBlitzConnection,
-  CodeBlitzMessageIO,
-  ServerPort,
-  codeblitzSerializer,
-} from '../../connection';
+import { CodeBlitzConnection, ServerPort } from '../../connection';
+import { RawMessageIO } from '@opensumi/ide-connection/lib/common/rpc/message-io';
+import { rawSerializer } from '@opensumi/ide-connection/lib/common/serializer/raw';
+
 import { IServerApp, HOME_ROOT } from '../../common';
 import { initializeRootFileSystem, initializeHomeFileSystem } from './filesystem';
 import { fsExtra as fse } from '../node';
@@ -285,7 +283,7 @@ export function bindModuleBackService(
 }
 
 export class CodeblitzCommonChannelHandler extends BaseCommonChannelHandler {
-  serializer: ISerializer<ChannelMessage, any> = codeblitzSerializer;
+  serializer: ISerializer<ChannelMessage, any> = rawSerializer;
   doHeartbeat(connection: any): void {}
 }
 
@@ -303,7 +301,7 @@ function handleClientChannel(
 
   const remove = serviceCenter.setSumiConnection(
     channel.createSumiConnection({
-      io: new CodeBlitzMessageIO(),
+      io: new RawMessageIO(),
     })
   );
 

@@ -3,19 +3,8 @@
  * 连接 Cline 和 Server, RPC 的模拟实现
  */
 import { SimpleConnection } from '@opensumi/ide-connection/lib/common/connection/drivers/simple';
-import { IRuntimeSocketConnection, ISerializer } from '@opensumi/ide-connection';
-import { BaseMessageIO, RPCMessage } from '@opensumi/ide-connection/lib/common/rpc/message-io';
+import { IRuntimeSocketConnection } from '@opensumi/ide-connection';
 import { Disposable, IDisposable } from '@opensumi/ide-core-common';
-import {
-  TSumiProtocolMethod,
-  IRequestHeaders,
-  RPCRequestMessage,
-  OperationType,
-  RPCNotificationMessage,
-  RPCCancelMessage,
-  RPCResponseMessage,
-  RPCErrorMessage,
-} from '@opensumi/ide-connection/lib/common/rpc';
 
 export interface Port {
   listen(cb: (...args: any[]) => any): void;
@@ -59,15 +48,6 @@ export abstract class RPCService {
   client?: any;
 }
 
-export const codeblitzSerializer: ISerializer<any, any> = {
-  serialize(data: any) {
-    return data;
-  },
-  deserialize(data: any) {
-    return data;
-  },
-};
-
 export class CodeBlitzConnection extends SimpleConnection implements IRuntimeSocketConnection {
   constructor(port: Port) {
     super({
@@ -91,73 +71,5 @@ export class CodeBlitzConnection extends SimpleConnection implements IRuntimeSoc
   }
   isOpen(): boolean {
     return true;
-  }
-}
-
-export class CodeBlitzMessageIO implements BaseMessageIO {
-  Request(
-    requestId: number,
-    method: string,
-    headers: IRequestHeaders,
-    args: any[]
-  ): RPCRequestMessage {
-    return {
-      kind: OperationType.Request,
-      requestId,
-      method,
-      headers,
-      args,
-    };
-  }
-  Notification(
-    requestId: number,
-    method: string,
-    headers: IRequestHeaders,
-    args: any[]
-  ): RPCNotificationMessage {
-    return {
-      kind: OperationType.Notification,
-      requestId,
-      method,
-      headers,
-      args,
-    };
-  }
-  Cancel(requestId: number): RPCCancelMessage {
-    return {
-      kind: OperationType.Cancel,
-      requestId,
-    };
-  }
-  Response(
-    requestId: number,
-    method: string,
-    headers: Record<string, any>,
-    result: any
-  ): RPCResponseMessage {
-    return {
-      kind: OperationType.Response,
-      requestId,
-      headers,
-      method,
-      result,
-    };
-  }
-  Error(
-    requestId: number,
-    method: string,
-    headers: Record<string, any>,
-    error: any
-  ): RPCErrorMessage {
-    return {
-      kind: OperationType.Error,
-      requestId,
-      method,
-      headers,
-      error,
-    };
-  }
-  readMessage(data: any): RPCMessage {
-    return data;
   }
 }

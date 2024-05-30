@@ -1,11 +1,8 @@
 import { IRuntimeSocketConnection, WSChannel } from '@opensumi/ide-connection';
+import { RawMessageIO } from '@opensumi/ide-connection/lib/common/rpc/message-io';
 import { WSChannelHandler } from '@opensumi/ide-connection/lib/browser/ws-channel-handler';
-import {
-  ClientPort,
-  CodeBlitzConnection,
-  CodeBlitzMessageIO,
-  codeblitzSerializer,
-} from '../../connection';
+import { rawSerializer } from '@opensumi/ide-connection/lib/common/serializer/raw';
+import { ClientPort, CodeBlitzConnection } from '../../connection';
 import { BaseConnectionHelper } from '@opensumi/ide-core-browser/lib/application/runtime/base-socket';
 import { Injectable } from '@opensumi/di';
 import {
@@ -28,12 +25,12 @@ export class CodeBlitzConnectionHelper extends BaseConnectionHelper {
     const connection: IRuntimeSocketConnection<Uint8Array> = this.createConnection();
     const clientId: string = this.appConfig.clientId ?? this.getDefaultClientId();
     const channelHandler = new WSChannelHandler(connection, clientId, {
-      channelSerializer: codeblitzSerializer,
+      serializer: rawSerializer,
       logger: initialLogger,
     });
 
     return createConnectionService(this.injector, modules, channelHandler, {
-      io: new CodeBlitzMessageIO(),
+      io: new RawMessageIO(),
     });
   }
 }
