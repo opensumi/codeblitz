@@ -3,7 +3,7 @@ import { Domain, URI } from '@opensumi/ide-core-browser';
 import {
   StaticResourceContribution,
   StaticResourceService,
-} from '@opensumi/ide-static-resource/lib/browser/static.definition';
+} from '@opensumi/ide-core-browser/lib/static-resource/static.definition';
 import { AppConfig, RuntimeConfig } from '@codeblitzjs/ide-sumi-core';
 import * as paths from 'path';
 import { ICodeAPIProvider, CODE_PLATFORM_CONFIG, CodePlatform } from '@codeblitzjs/ide-code-api';

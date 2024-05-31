@@ -3,7 +3,7 @@ import { Domain, URI, FsProviderContribution, Schemes } from '@opensumi/ide-core
 import {
   StaticResourceContribution,
   StaticResourceService,
-} from '@opensumi/ide-static-resource/lib/browser/static.definition';
+} from '@opensumi/ide-core-browser/lib/static-resource/static.definition';
 import { IFileServiceClient } from '@opensumi/ide-file-service';
 
 import { OpenSumiExtFsProvider } from './extension-fs.provider';

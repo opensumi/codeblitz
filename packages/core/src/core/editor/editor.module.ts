@@ -1,9 +1,9 @@
-import * as monaco from '@opensumi/monaco-editor-core/esm/vs/editor/editor.api';
+import * as monaco from '@opensumi/ide-monaco';
 import { FindController } from '@opensumi/monaco-editor-core/esm/vs/editor/contrib/find/browser/findController';
 import { FindWidget } from '@opensumi/monaco-editor-core/esm/vs/editor/contrib/find/browser/findWidget';
 import * as monacoKeybindings from '@opensumi/monaco-editor-core/esm/vs/platform/keybinding/common/keybindingsRegistry';
 import { ContextKeyDefinedExpr } from '@opensumi/monaco-editor-core/esm/vs/platform/contextkey/common/contextkey';
-import { LAYOUT_VIEW_SIZE } from '@opensumi/ide-core-browser/lib/layout/constants';
+import { LayoutViewSizeConfig } from '@opensumi/ide-core-browser/lib/layout/constants';
 import { Provider, Injectable, Autowired } from '@opensumi/di';
 import debounce from 'lodash.debounce';
 import {
@@ -62,6 +62,7 @@ import { isCodeDocumentModel, CodeDocumentModel, EditorProps } from './types';
 import styles from '../style.module.less';
 import { IPropsService } from '../props.service';
 import { AlexCommandContribution } from '../commands';
+import { monacoBrowser } from '@opensumi/ide-monaco/lib/browser';
 
 const ContextTrue = new RawContextKey('alex.context.true', undefined);
 const ContextFalse = new RawContextKey('alex.context.false', undefined);
@@ -255,6 +256,9 @@ class EditorSpecialContribution
   @Autowired(ICSSStyleService)
   cssStyleService: ICSSStyleService;
 
+  @Autowired(LayoutViewSizeConfig)
+  protected layoutViewSize: LayoutViewSizeConfig;
+
   @Autowired(IContextKeyService)
   private readonly globalContextKeyService: IContextKeyService;
 
@@ -432,8 +436,8 @@ class EditorSpecialContribution
           }
           const type = event?.target?.type;
           if (
-            type === monaco.editor.MouseTargetType.GUTTER_LINE_NUMBERS ||
-            type === monaco.editor.MouseTargetType.GUTTER_GLYPH_MARGIN
+            type === monacoBrowser.editor.MouseTargetType.GUTTER_LINE_NUMBERS ||
+            type === monacoBrowser.editor.MouseTargetType.GUTTER_GLYPH_MARGIN
           ) {
             const lineNumber = event.target.position!.lineNumber;
             oldHoverDecorations = editor.monacoEditor.deltaDecorations(oldHoverDecorations, [
@@ -513,8 +517,8 @@ class EditorSpecialContribution
         const type = event?.target?.type;
 
         if (
-          type === monaco.editor.MouseTargetType.GUTTER_LINE_NUMBERS ||
-          type === monaco.editor.MouseTargetType.GUTTER_GLYPH_MARGIN
+          type === monacoBrowser.editor.MouseTargetType.GUTTER_LINE_NUMBERS ||
+          type === monacoBrowser.editor.MouseTargetType.GUTTER_GLYPH_MARGIN
         ) {
           const lineNumber = event.target.position!.lineNumber;
           const lastLineNumber = this.propsService.props.documentModel.lineNumber;
@@ -567,7 +571,7 @@ class EditorSpecialContribution
         const contentHeight = monacoEditor.getContentHeight() + 1;
         const tabHeight = this.runtimeConfig.hideEditorTab
           ? 0
-          : LAYOUT_VIEW_SIZE.EDITOR_TABS_HEIGHT;
+          : this.layoutViewSize.editorTabsHeight;
         const root = document.querySelector('.alex-root') as HTMLElement;
         root.style.height = `${contentHeight + tabHeight}px`;
         monacoEditor.layout();

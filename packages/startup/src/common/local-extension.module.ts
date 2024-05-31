@@ -7,7 +7,10 @@ import {
   BrowserModule,
   FsProviderContribution,
 } from '@opensumi/ide-core-browser';
-import { ExtensionServiceClientImpl, IExtensionNodeClientService } from '@codeblitzjs/ide-sumi-core';
+import {
+  ExtensionServiceClientImpl,
+  IExtensionNodeClientService,
+} from '@codeblitzjs/ide-sumi-core';
 import { IExtensionMetadata, IExtensionBasicMetadata } from '@codeblitzjs/ide-common';
 import { IFileServiceClient } from '@opensumi/ide-file-service';
 import { OpenSumiExtFsProvider } from '@codeblitzjs/ide-sumi-core';
@@ -15,7 +18,7 @@ import { OpenSumiExtFsProvider } from '@codeblitzjs/ide-sumi-core';
 import {
   StaticResourceContribution,
   StaticResourceService,
-} from '@opensumi/ide-static-resource/lib/browser';
+} from '@opensumi/ide-core-browser/lib/static-resource/static.definition';
 
 const KT_EXT_LOCAL_SCHEME = 'kt-ext-local';
 

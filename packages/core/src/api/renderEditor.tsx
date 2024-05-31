@@ -28,11 +28,11 @@ export const renderEditor = (domElement: HTMLElement, props: IEditorRendererProp
   root.render(<Root status="loading" Landing={Landing} className={className} />);
 
   app
-    .start((appElement) => {
+    .start((IDEApp) => {
       return new Promise((resolve) => {
         root.render(
           <Root status="success" className={className}>
-            {appElement}
+            <IDEApp />
           </Root>
         );
       });
@@ -67,7 +67,7 @@ export const renderEditor = (domElement: HTMLElement, props: IEditorRendererProp
 
 export const EditorRenderer: React.FC<IEditorRendererProps> = ({ onLoad, Landing, ...opts }) => {
   const app = useConstant(() => createEditor(opts));
-  const appElementRef = useRef<React.ReactElement | null>(null);
+  const ideAppRef = useRef<React.FC | null>(null);
   const propsService = useConstant(() => new PropsServiceImpl<EditorProps>());
 
   propsService.props = { documentModel: opts.documentModel, editorConfig: opts.editorConfig };
@@ -84,8 +84,8 @@ export const EditorRenderer: React.FC<IEditorRendererProps> = ({ onLoad, Landing
     });
 
     app
-      .start((appElement) => {
-        appElementRef.current = appElement;
+      .start((IDEApp) => {
+        ideAppRef.current = IDEApp;
         setState({ status: 'success' });
         return Promise.resolve();
       })
@@ -120,7 +120,7 @@ export const EditorRenderer: React.FC<IEditorRendererProps> = ({ onLoad, Landing
 
   return (
     <Root {...state} Landing={Landing} className={`alex-editor ${rootClassName}`}>
-      {appElementRef.current}
+      {ideAppRef.current ? <ideAppRef.current /> : null}
     </Root>
   );
 };

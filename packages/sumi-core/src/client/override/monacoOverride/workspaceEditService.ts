@@ -7,7 +7,7 @@ import type {
   IBulkEditOptions,
 } from '@opensumi/monaco-editor-core/esm/vs/editor/browser/services/bulkEditService';
 import { WorkspaceEdit } from '@opensumi/monaco-editor-core/esm/vs/editor/common/languages';
-import * as monaco from '@opensumi/monaco-editor-core/esm/vs/editor/editor.api';
+import * as monaco from '@opensumi/ide-monaco';
 
 import { MonacoBulkEditService } from '@opensumi/ide-workspace-edit/lib/browser//bulk-edit.service';
 export { MonacoBulkEditService };

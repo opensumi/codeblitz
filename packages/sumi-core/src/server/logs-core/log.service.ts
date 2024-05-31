@@ -13,7 +13,7 @@ import * as path from 'path';
 
 import { ILogServiceForClient } from './base';
 import { ILogServiceManager } from '../core/base';
-import { FCService } from '../../connection';
+import { RPCService } from '../../connection';
 import { HOME_ROOT } from '../../common';
 
 export const DEFAULT_LOG_FOLDER = path.join(HOME_ROOT, `.opensumi/logs/`);
@@ -153,7 +153,7 @@ export class LogService extends BaseLogService implements ILogService {
 }
 
 @Injectable()
-export class LogServiceForClient extends FCService implements ILogServiceForClient {
+export class LogServiceForClient extends RPCService implements ILogServiceForClient {
   @Autowired(ILogServiceManager)
   loggerManager: ILogServiceManager;
 

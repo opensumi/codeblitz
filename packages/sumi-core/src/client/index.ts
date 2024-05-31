@@ -10,10 +10,8 @@ import {
 } from '@opensumi/ide-core-browser';
 import { ClientApp as BasicClientApp } from '@opensumi/ide-core-browser/lib/bootstrap/app';
 
-import { BackService, BasicModule, Disposable } from '@opensumi/ide-core-common';
-import { WSChannelHandler } from '@opensumi/ide-connection/lib/browser';
+import { Disposable } from '@opensumi/ide-core-common';
 
-import { FCServiceCenter, ClientPort, initFCService } from '../connection';
 import { OpenSumiExtFsProvider, KtExtFsProviderContribution } from './extension';
 import { TextmateLanguageGrammarContribution } from './textmate-language-grammar/index.contribution';
 import { ILanguageGrammarRegistrationService } from './textmate-language-grammar/base';
@@ -21,7 +19,6 @@ import { LanguageGrammarRegistrationService } from './textmate-language-grammar/
 import { injectDebugPreferences } from './debug';
 import { IServerApp, RootFS } from '../common';
 import { IServerAppOpts, ServerApp } from '../server/core/app';
-import { isBackServicesInBrowser } from '../common/util';
 import {
   FileTreeCustomContribution,
   EditorActionEventContribution,
@@ -62,6 +59,8 @@ import { IExtensionStorageService } from '@opensumi/ide-extension-storage';
 import { MonacoOverrides } from './override/monacoOverride';
 import { monacoTextModelServiceProxy } from './override/monacoOverride/textModelService';
 import { monacoBulkEditServiceProxy } from './override/monacoOverride/workspaceEditService';
+import { CodeBlitzConnectionHelper } from './override/webConnectionHelper';
+import { WebConnectionHelper } from '@opensumi/ide-core-browser/lib/application/runtime';
 export * from './override/monacoOverride/codeEditorService';
 
 export { ExtensionManagerModule as ExtensionClientManagerModule } from './extension-manager';
@@ -121,6 +120,11 @@ export class ClientModule extends BrowserModule {
       useClass: ExtensionStorageServiceOverride,
       override: true,
     },
+    {
+      token: WebConnectionHelper,
+      useClass: CodeBlitzConnectionHelper,
+      override: true,
+    },
   ];
   preferences = injectDebugPreferences;
 }
@@ -170,22 +174,15 @@ export class ClientApp extends BasicClientApp {
     });
   }
 
-  public async start(
-    container: HTMLElement | IAppRenderer,
-    type?: 'electron' | 'web'
-  ): Promise<void> {
+  public async start(container: HTMLElement | IAppRenderer): Promise<void> {
     // 先启动 server 进行必要的初始化，应用的权限等也在 server 中处理
     const serverApp: IServerApp = this.injector.get(IServerApp);
     await serverApp.start();
     this.setWorkspaceReadOnly(serverApp.rootFS);
 
-    bindConnectionService(this.injector, this.modules);
-    // 避免 KaitianExtensionClientAppContribution.onStop 报错
-    this.injector.addProviders({
-      token: WSChannelHandler,
-      useValue: { clientId: 'alex' },
-    });
-    return super.start(container, type);
+    await this.createConnection('web');
+
+    return super.start(container);
   }
 
   /**
@@ -207,41 +204,5 @@ export class ClientApp extends BasicClientApp {
   async dispose() {
     super.dispose();
     this.disposer.dispose();
-  }
-}
-
-export async function bindConnectionService(injector: Injector, modules: ModuleConstructor[]) {
-  const clientCenter = new FCServiceCenter(ClientPort);
-
-  const { getFCService } = initFCService(clientCenter);
-
-  const backServiceList: BackService[] = [];
-
-  for (const module of modules) {
-    const moduleInstance = injector.get(module) as BasicModule;
-    if (moduleInstance.backServices) {
-      for (const backService of moduleInstance.backServices) {
-        if (isBackServicesInBrowser(backService)) {
-          backServiceList.push(backService);
-        }
-      }
-    }
-  }
-
-  for (const backService of backServiceList) {
-    const { servicePath } = backService;
-    const fcService = getFCService(servicePath);
-
-    const injectService = {
-      token: servicePath,
-      useValue: fcService,
-    } as Provider;
-
-    injector.addProviders(injectService);
-
-    if (backService.clientToken) {
-      const clientService = injector.get(backService.clientToken);
-      fcService.onRequestService(clientService);
-    }
   }
 }

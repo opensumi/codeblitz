@@ -45,7 +45,7 @@ module.exports = (option) => {
       path: outputPath,
       filename: '[name].js',
       chunkFilename: '[name].js',
-      publicPath: '/',
+      publicPath: './',
     },
     resolve: {
       extensions: ['.ts', '.tsx', '.js', '.json', '.less'],
@@ -234,7 +234,7 @@ module.exports = (option) => {
             new HtmlWebpackPlugin({
               filename: 'index.html',
               template: option.template || path.join(__dirname, '../public/index.html'),
-              publicPath: '/',
+              publicPath: './',
               integration: process.env.INTEGRATION,
             }),
             new FriendlyErrorsWebpackPlugin({

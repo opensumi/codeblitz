@@ -2,7 +2,8 @@ import {
   ITextModelService,
   ITextModelContentProvider,
 } from '@opensumi/monaco-editor-core/esm/vs/editor/common/services/resolverService';
-import * as monaco from '@opensumi/monaco-editor-core/esm/vs/editor/editor.api';
+import * as monaco from '@opensumi/ide-monaco';
+
 import { MonacoTextModelService } from '@opensumi/ide-editor/lib/browser/doc-model/override';
 import { Injector } from '@opensumi/di';
 export const IMonacoTextModelService = Symbol('IMonacoTextModelService');

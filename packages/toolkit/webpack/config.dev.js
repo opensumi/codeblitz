@@ -8,9 +8,9 @@ require('dotenv').config({ path: path.join(__dirname, '../../../.env') });
 
 process.env.NODE_ENV = 'development';
 
-const GITLINK_SERVICE_HOST = 'https://www.gitlink.org.cn'
-const AUTOMGIT_SERVICE_HOST = 'https://www.automgit.org.cn'
-const CODEUP_SERVICE_HOST='https://codeup.aliyun.com'
+const GITLINK_SERVICE_HOST = 'https://www.gitlink.org.cn';
+const AUTOMGIT_SERVICE_HOST = 'https://www.automgit.org.cn';
+const CODEUP_SERVICE_HOST = 'https://codeup.aliyun.com';
 
 module.exports = () => {
   const integrationConfig = createWebpackConfig({
@@ -24,7 +24,7 @@ module.exports = () => {
       entry: {
         [config.appEntry]: `./packages/startup/src/${process.env.INTEGRATION || 'startup'}`,
       },
-      devtool: 'eval-cheap-module-source-map',
+      devtool: 'source-map',
       devServer: {
         proxy: {
           '/code-service': {
@@ -39,10 +39,7 @@ module.exports = () => {
               '^/code-service': '',
             },
             onProxyReq(request) {
-              request.setHeader(
-                'origin',
-                process.env.CODE_SERVICE_HOST
-              );
+              request.setHeader('origin', process.env.CODE_SERVICE_HOST);
             },
           },
         },

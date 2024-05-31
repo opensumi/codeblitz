@@ -3,6 +3,7 @@ import { IDiskFileProvider, DiskFileServicePath, IFileService, FileServicePath }
 import { NodeModule } from '../core/app';
 import { DiskFileSystemProvider } from './disk-file-system.provider';
 import { getSafeFileService } from './file-service';
+import { DiskFileServiceProtocol } from '@opensumi/ide-file-service/lib/common/protocols/disk-file-service';
 
 export * from './base';
 
@@ -23,6 +24,7 @@ export class FileServiceModule extends NodeModule {
     {
       servicePath: DiskFileServicePath,
       token: IDiskFileProvider,
+      protocol: DiskFileServiceProtocol,
     },
     {
       servicePath: FileServicePath,

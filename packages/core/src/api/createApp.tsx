@@ -80,7 +80,7 @@ export const getDefaultAppConfig = (): IAppOpts => ({
     brandName: 'Codeblitz',
     productName: 'Codeblitz',
     icon: 'https://mdn.alipayobjects.com/huamei_hwfivk/afts/img/A*lZQ5S4UoGoQAAAAAAAAAAAAADlyoAQ/original',
-  }
+  },
 });
 
 export const DEFAULT_APP_CONFIG = getDefaultAppConfig();
@@ -95,7 +95,6 @@ export function createApp({ appConfig, runtimeConfig }: IConfig): IAppInstance {
   }
   opts.workspaceDir = makeWorkspaceDir(opts.workspaceDir);
 
-  
   const app = new ClientApp(opts) as IAppInstance;
 
   Object.defineProperty(app, 'currentThemeType', {
@@ -142,4 +141,3 @@ export function createApp({ appConfig, runtimeConfig }: IConfig): IAppInstance {
 
   return app;
 }
-

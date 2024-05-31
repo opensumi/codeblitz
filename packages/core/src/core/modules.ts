@@ -2,6 +2,7 @@ import { ClientAddonModule } from '@opensumi/ide-addons/lib/browser';
 import { CommentsModule } from '@opensumi/ide-comments/lib/browser';
 import { ClientCommonModule, ModuleConstructor } from '@opensumi/ide-core-browser';
 import { DebugModule } from '@opensumi/ide-debug/lib/browser';
+import { DesignModule } from '@opensumi/ide-design/lib/browser';
 import { DecorationModule } from '@opensumi/ide-decoration/lib/browser';
 import { EditorModule } from '@opensumi/ide-editor/lib/browser';
 import { ExplorerModule } from '@opensumi/ide-explorer/lib/browser';
@@ -89,6 +90,8 @@ export const modules: ModuleConstructor[] = [
   // FeatureExtensionModule,
   ExtensionClientManagerModule,
   MonacoEnhanceModule,
+
+  DesignModule,
 
   // addons
   ClientAddonModule,

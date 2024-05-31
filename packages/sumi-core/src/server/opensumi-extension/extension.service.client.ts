@@ -15,7 +15,11 @@ export class ExtensionServiceClientImpl implements IExtensionNodeClientService {
   getLanguagePack(languageId: string): IExtensionLanguagePack | undefined {
     throw new Error('Method not implemented.');
   }
-  
+
+  pid(): Promise<number | null> {
+    return Promise.resolve(2);
+  }
+
   setupNLSConfig(languageId: string, storagePath: string): Promise<void> {
     return Promise.resolve();
   }

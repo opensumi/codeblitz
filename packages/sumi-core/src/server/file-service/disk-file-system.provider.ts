@@ -28,7 +28,7 @@ import { Autowired, Injectable } from '@opensumi/di';
 import * as path from 'path';
 import { HOME_ROOT } from '../../common';
 import { IDiskFileProvider } from './base';
-import { FCService } from '../../connection';
+import { RPCService } from '../../connection';
 import { FWFileSystemWatcherServer } from './file-service-watcher';
 import { fsExtra as fse, writeFileAtomic } from '../node';
 
@@ -36,7 +36,7 @@ const debugLog = new DebugLog();
 
 // FIXME: 暂时只用单例
 @Injectable()
-export class DiskFileSystemProvider extends FCService implements IDiskFileProvider {
+export class DiskFileSystemProvider extends RPCService implements IDiskFileProvider {
   readonly capabilities: FileSystemProviderCapabilities;
   onDidChangeCapabilities = Event.None;
   private fileChangeEmitter = new Emitter<FileChangeEvent>();

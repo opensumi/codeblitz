@@ -10,7 +10,7 @@ customElements.get('codeblitz-root') ? null : customElements.define('codeblitz-r
 
 export const Root: FC<RootProps> = (props) => {
   const themeType = props.theme;
-  const LandingComponent = props.Landing!;
+  const LandingComponent = props.Landing || Landing;
 
   // TODO: 可以获取挂载元素的 Rect 来设置宽高
   return (
@@ -23,10 +23,6 @@ export const Root: FC<RootProps> = (props) => {
       {props.children}
     </codeblitz-root>
   );
-};
-
-Root.defaultProps = {
-  Landing,
 };
 
 declare global {

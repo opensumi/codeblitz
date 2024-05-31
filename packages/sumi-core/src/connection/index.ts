@@ -2,8 +2,9 @@
  * Function Call Service Connection
  * 连接 Cline 和 Server, RPC 的模拟实现
  */
-
-import { getFunctionProps } from '../common/util';
+import { SimpleConnection } from '@opensumi/ide-connection/lib/common/connection/drivers/simple';
+import { IRuntimeSocketConnection } from '@opensumi/ide-connection';
+import { Disposable, IDisposable } from '@opensumi/ide-core-common';
 
 export interface Port {
   listen(cb: (...args: any[]) => any): void;
@@ -43,162 +44,32 @@ const { port1, port2 } = createChannel();
 
 export { port1 as ClientPort, port2 as ServerPort };
 
-export abstract class FCService {
+export abstract class RPCService {
   client?: any;
 }
 
-export const NOTREGISTERMETHOD = '$$NOTREGISTERMETHOD';
-
-export type FCServiceMethod = (...args: any[]) => any;
-export type ServiceProxy = any;
-
-export enum ServiceType {
-  Service,
-  Stub,
-}
-
-export function initFCService(center: FCServiceCenter) {
-  return {
-    createFCService: (name: string, service?: any): any => {
-      const proxy = new FCServiceStub(name, center, ServiceType.Service).getProxy();
-      if (service) {
-        proxy.onRequestService(service);
-      }
-
-      return proxy;
-    },
-    getFCService: (name: string): any => {
-      return new FCServiceStub(name, center, ServiceType.Stub).getProxy();
-    },
-  };
-}
-
-export function createFCService(name: string, center: FCServiceCenter): any {
-  return new FCServiceStub(name, center, ServiceType.Service).getProxy();
-}
-
-export function getFCService(name: string, center: FCServiceCenter): any {
-  return new FCServiceStub(name, center, ServiceType.Stub).getProxy();
-}
-
-export class FCServiceCenter {
-  private serviceMethodMap = {};
-
-  private serviceNameMap = {};
-
-  constructor(private port: Port, private logger?: any) {
-    this.logger = logger || console;
-    this.port.listen((name: string, args: any[]) => {
-      // 通过 on 直接注册的 method，目前发现此种用法只在 kaitian-extension 使用过一次
-      if (this.serviceMethodMap[name]) {
-        return this.serviceMethodMap[name](...args);
-      }
-      if (name.startsWith('on:')) {
-        name = name.slice(3);
-      }
-      const [serviceName, serviceMethod] = name.split(':');
-      const service = this.serviceNameMap[serviceName];
-      if (!service) {
-        return NOTREGISTERMETHOD;
-      }
-      const method = service[serviceMethod];
-      if (typeof method !== 'function') {
-        return NOTREGISTERMETHOD;
-      }
-      return method.call(service, ...args);
-    });
-  }
-
-  when() {
-    return true;
-  }
-
-  onRequest(name: string, method: FCServiceMethod) {
-    this.serviceMethodMap[name] = method;
-  }
-
-  /**
-   * 区别于 opensumi，这里使用 serviceName register 服务，减少遍历，同时如果避免代码 class 被编译成 function 造成问题
-   * @param serviceName
-   * @param service
-   */
-  onRegister(serviceName: string, service: string) {
-    this.serviceNameMap[serviceName] = service;
-  }
-
-  async broadcast(name: string, ...args: any[]): Promise<any> {
-    if (name.startsWith('on')) {
-      this.port.call(name, args);
-      return;
-    }
-    return this.port.call(name, args);
-  }
-}
-
-/**
- * RPCServiceStub 的兼容实现
- */
-export class FCServiceStub {
-  constructor(
-    private serviceName: string,
-    private center: FCServiceCenter,
-    private type: ServiceType
-  ) {}
-
-  async ready() {
-    return this.center.when();
-  }
-
-  getNotificationName(name: string) {
-    return `on:${this.serviceName}:${name}`;
-  }
-
-  getRequestName(name: string) {
-    return `${this.serviceName}:${name}`;
-  }
-
-  on(name: string, method: FCServiceMethod) {
-    this.onRequest(name, method);
-  }
-
-  getServiceMethod(service: any): string[] {
-    return getFunctionProps(service);
-  }
-
-  onRequestService(service: any) {
-    this.center.onRegister(this.serviceName, service);
-  }
-
-  onRequest(name: string, method: FCServiceMethod) {
-    this.center.onRequest(this.getMethodName(name), method);
-  }
-
-  broadcast(name: string, ...args: any[]) {
-    return this.center.broadcast(this.getMethodName(name), ...args);
-  }
-
-  getMethodName(name: string) {
-    return name.startsWith('on') ? this.getNotificationName(name) : this.getRequestName(name);
-  }
-
-  getProxy = () => {
-    return new Proxy(this, {
-      // 调用方
-      get: (target, prop: string) => {
-        if (!target[prop]) {
-          if (typeof prop === 'symbol') {
-            return Promise.resolve();
-          } else {
-            return async (...args: any[]) => {
-              await this.ready();
-              const result = await this.broadcast(prop, ...args);
-              return result === NOTREGISTERMETHOD ? undefined : result;
-            };
-          }
-        } else {
-          return target[prop];
-        }
+export class CodeBlitzConnection extends SimpleConnection implements IRuntimeSocketConnection {
+  constructor(port: Port) {
+    super({
+      onMessage(cb) {
+        port.listen(cb);
+        return Disposable.None;
+      },
+      send(data) {
+        port.call(data);
       },
     });
-  };
+  }
+  onOpen(cb: () => void): IDisposable {
+    return Disposable.None;
+  }
+  onClose(cb: (code?: number | undefined, reason?: string | undefined) => void): IDisposable {
+    return Disposable.None;
+  }
+  onError(cb: (error: Error) => void): IDisposable {
+    return Disposable.None;
+  }
+  isOpen(): boolean {
+    return true;
+  }
 }

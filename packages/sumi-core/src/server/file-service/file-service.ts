@@ -29,7 +29,7 @@ import {
 import * as path from 'path';
 import { HOME_ROOT } from '../../common';
 import { IDiskFileProvider, IFileService } from './base';
-import { FCService } from '../../connection';
+import { RPCService } from '../../connection';
 import { fsExtra as fse } from '../node';
 import { ServerConfig } from '../core/app';
 import { INodeLogger } from '../core/node-logger';
@@ -49,7 +49,7 @@ export abstract class FileSystemNodeOptions {
 }
 
 @Injectable()
-export class FileService extends FCService implements IFileService {
+export class FileService extends RPCService implements IFileService {
   protected watcherId: number = 0;
   protected readonly watcherList: number[] = [];
   protected readonly watcherDisposerMap = new Map<number, IDisposable>();
