@@ -22,6 +22,12 @@ export const IDB_ROOT = '/idb';
 // 全局数据存储目录
 export const STORAGE_DIR = '.codeblitz';
 
+/**
+ * home 的 indexedDB 名称
+ */
 export const HOME_IDB_NAME = 'CODEBLITZ_HOME';
 
+/**
+ * workspace 的 indexedDB 名称
+ */
 export const WORKSPACE_IDB_NAME = 'CODEBLITZ_WORKSPACE';

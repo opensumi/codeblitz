@@ -29,6 +29,8 @@ import { mergeConfig } from '../core/utils';
 import { EditorLayoutComponent, getEditorLayoutConfig } from '../core/layout';
 import { IConfig, IAppInstance } from './types';
 import { EXT_WORKER_HOST, WEBVIEW_ENDPOINT } from '../core/env';
+import { interceptAppOpts } from './opts';
+import { appName } from './constants';
 
 export { SlotLocation, SlotRenderer, BoxPanel, SplitPanel };
 
@@ -59,12 +61,12 @@ const getDefaultAppConfig = (): IAppOpts => ({
   preferenceDirName: STORAGE_DIR,
   storageDirName: STORAGE_DIR,
   extensionStorageDirName: STORAGE_DIR,
-  appName: 'CodeBlitz',
+  appName,
   allowSetDocumentTitleFollowWorkspaceDir: false,
 });
 
 export function createEditor({ appConfig, runtimeConfig }: IConfig): IAppInstance {
-  const opts = mergeConfig(getDefaultAppConfig(), appConfig);
+  const opts = interceptAppOpts(mergeConfig(getDefaultAppConfig(), appConfig), runtimeConfig);
 
   if (!opts.workspaceDir) {
     throw new Error(

@@ -9,6 +9,7 @@ import {
   IContextKeyService,
 } from '@opensumi/ide-core-browser';
 import { ClientApp as BasicClientApp } from '@opensumi/ide-core-browser/lib/bootstrap/app';
+import {AINativeModule} from '@opensumi/ide-ai-native/lib/browser'
 
 import { Disposable } from '@opensumi/ide-core-common';
 
@@ -17,7 +18,7 @@ import { TextmateLanguageGrammarContribution } from './textmate-language-grammar
 import { ILanguageGrammarRegistrationService } from './textmate-language-grammar/base';
 import { LanguageGrammarRegistrationService } from './textmate-language-grammar/language-grammar.service';
 import { injectDebugPreferences } from './debug';
-import { IServerApp, RootFS } from '../common';
+import { IServerApp, RootFS, RuntimeConfig } from '../common';
 import { IServerAppOpts, ServerApp } from '../server/core/app';
 import {
   FileTreeCustomContribution,
@@ -126,7 +127,9 @@ export class ClientModule extends BrowserModule {
       override: true,
     },
   ];
-  preferences = injectDebugPreferences;
+  preferences = (injector: Injector) => {
+    injectDebugPreferences(injector);
+  };
 }
 
 export interface IAppOpts extends IClientAppOpts, IServerAppOpts {}

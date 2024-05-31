@@ -175,7 +175,7 @@ const App = () => (
       workspaceDir: `${platform}/${config.owner}/${config.name}`,
       layoutConfig,
       defaultPreferences: {
-        'general.theme': 'opensumi-dark',
+        'general.theme': 'opensumi-design-dark',
       },
     }}
     runtimeConfig={{

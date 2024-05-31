@@ -1,6 +1,11 @@
 import { Keybinding } from '@opensumi/ide-core-browser';
-import { IReporter } from '@opensumi/ide-core-common';
+import { IAINativeCapabilities, IReporter, MaybePromise } from '@opensumi/ide-core-common';
+import type {
+  IAIMiddleware,
+  IEditorInlineChatHandler,
+} from '@opensumi/ide-ai-native/lib/browser/types';
 import { FileSystemConfiguration, FileSystemInstance } from '../server/node';
+import { AIActionItem } from '@opensumi/ide-core-browser/lib/components/ai-native';
 
 export { AppConfig } from '@opensumi/ide-core-browser';
 
@@ -102,7 +107,7 @@ export interface RuntimeConfig {
   /**
    * 配置快捷键
    * 可以通过 plugin 注册对应 command 执行的命令
-   * opensumi keybinding 
+   * opensumi keybinding
    * https://opensumi.com/zh/docs/integrate/universal-integrate-case/custom-keybinding
    */
   registerKeybindings?: Keybinding[];
@@ -192,16 +197,37 @@ export interface RuntimeConfig {
    * 优先会从语法服务中获取类型
    */
   resolveFileType?: (path: string) => 'image' | 'text' | 'video' | undefined;
-}
 
+  /**
+   * AI Native 相关配置
+   */
+  aiNative?: {
+    /**
+     * 是否启用 AI Native 的总开关，必填
+     */
+    enable: boolean;
+    /**
+     * 控制需要启用哪些功能的配置表，默认全部启用
+     */
+    capabilities?: IAINativeCapabilities;
+    /**
+     * 中间件代理能力，目前仅支持代理代码内联补全
+     */
+    middleware?: IAIMiddleware;
+    /**
+     * 提供注册 inline chat 按钮的列表
+     */
+    providerInlineChat?: () => { operational: AIActionItem; handler: IEditorInlineChatHandler }[];
+  };
+}
 
 export interface AppCommonConfig {
   app?: {
-    logo?: string,
-    brandName?: string,
-    productName?: string,
-    icon?: string,
-  }
+    logo?: string;
+    brandName?: string;
+    productName?: string;
+    icon?: string;
+  };
 }
 
 export type SearchMode = Boolean | 'local';

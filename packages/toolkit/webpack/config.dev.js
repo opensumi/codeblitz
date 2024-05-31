@@ -8,10 +8,6 @@ require('dotenv').config({ path: path.join(__dirname, '../../../.env') });
 
 process.env.NODE_ENV = 'development';
 
-const GITLINK_SERVICE_HOST = 'https://www.gitlink.org.cn';
-const AUTOMGIT_SERVICE_HOST = 'https://www.automgit.org.cn';
-const CODEUP_SERVICE_HOST = 'https://codeup.aliyun.com';
-
 module.exports = () => {
   const integrationConfig = createWebpackConfig({
     tsconfigPath: path.join(__dirname, '../../../tsconfig.json'),

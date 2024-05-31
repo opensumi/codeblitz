@@ -45,7 +45,8 @@ module.exports = (option) => {
       path: outputPath,
       filename: '[name].js',
       chunkFilename: '[name].js',
-      publicPath: './',
+      // 不能改成 `./`, 否则无法加载
+      publicPath: '/',
     },
     resolve: {
       extensions: ['.ts', '.tsx', '.js', '.json', '.less'],
@@ -173,6 +174,7 @@ module.exports = (option) => {
                   options: {
                     name: '[name].[ext]',
                     esModule: false,
+                    publicPath: './',
                   },
                 },
               },

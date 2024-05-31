@@ -50,9 +50,6 @@ export const layoutConfig = {
   [SlotLocation.main]: {
     modules: ['@opensumi/ide-editor'],
   },
-  // [SlotLocation.bottom]: {
-  //   modules: ['@opensumi/ide-output', '@opensumi/ide-markers'],
-  // },
   [SlotLocation.statusBar]: {
     modules: ['@opensumi/ide-status-bar'],
   },
@@ -150,7 +147,7 @@ const App: React.FC = () => {
             // 默认偏好设置
             defaultPreferences: {
               // 主题色 opensumi-light | opensumi-dark
-              'general.theme': 'opensumi-light',
+              'general.theme': 'opensumi-design-dark',
               'editor.previewMode': false,
               // 'editor.forceReadOnly': true,
               // 'editor.readonlyFiles': ['/workspace/**']
@@ -163,9 +160,9 @@ const App: React.FC = () => {
             extensionMetadata: [html, css, typescript, json],
           }}
           runtimeConfig={{
-            // 禁止就改文件树，此时无法新增、删除、重命名文件
+            // 禁止修改文件树，此时无法新增、删除、重命名文件
             disableModifyFileTree: true,
-            // 默认打开文件
+            // 默认打开的文件
             defaultOpenFile: 'main.js',
             workspace: {
               // 文件系统配置
