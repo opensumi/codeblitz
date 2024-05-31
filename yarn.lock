@@ -5,18 +5,6 @@ __metadata:
   version: 8
   cacheKey: 10
 
-"@ahooksjs/use-request@npm:^2.8.14":
-  version: 2.8.15
-  resolution: "@ahooksjs/use-request@npm:2.8.15"
-  dependencies:
-    lodash.debounce: "npm:^4.0.8"
-    lodash.throttle: "npm:^4.1.1"
-  peerDependencies:
-    react: ^16.8.0 || ^17.0.0
-  checksum: 10/fc2218ff299621d583d04eec54748355cd5ff4dd328d2a6b227d9459472b22cb0019b6d655cf829469ec1782969396483c0c14a7d770b83df0a9a98cb3f9d991
-  languageName: node
-  linkType: hard
-
 "@ampproject/remapping@npm:^2.2.0":
   version: 2.2.1
   resolution: "@ampproject/remapping@npm:2.2.1"
@@ -696,7 +684,7 @@ __metadata:
     "@codeblitzjs/ide-sumi-core": "npm:1.0.4"
     "@types/react": "npm:^18.2.0"
     "@types/react-dom": "npm:^18.2.0"
-    ahooks: "npm:2"
+    ahooks: "npm:3"
     antd: "npm:^4.0.0"
     js-cookie: "npm:^2.2.1"
     lodash: "npm:^4.17.21"
@@ -2471,13 +2459,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@types/js-cookie@npm:^2.2.6":
-  version: 2.2.7
-  resolution: "@types/js-cookie@npm:2.2.7"
-  checksum: 10/851f47e94ca1fc43661d8f51614d67a613e7810c91b876d0a3b311ce72f7df800107fd02a08cb6948184e12c120b4f058edca2f50424d8798bdcffd6627281e3
-  languageName: node
-  linkType: hard
-
 "@types/json-schema@npm:*, @types/json-schema@npm:^7.0.4, @types/json-schema@npm:^7.0.5, @types/json-schema@npm:^7.0.8, @types/json-schema@npm:^7.0.9":
   version: 7.0.15
   resolution: "@types/json-schema@npm:7.0.15"
@@ -3225,23 +3206,22 @@ __metadata:
   languageName: node
   linkType: hard
 
-"ahooks@npm:2":
-  version: 2.10.14
-  resolution: "ahooks@npm:2.10.14"
+"ahooks@npm:3":
+  version: 3.8.0
+  resolution: "ahooks@npm:3.8.0"
   dependencies:
-    "@ahooksjs/use-request": "npm:^2.8.14"
-    "@types/js-cookie": "npm:^2.2.6"
+    "@babel/runtime": "npm:^7.21.0"
     dayjs: "npm:^1.9.1"
-    intersection-observer: "npm:^0.7.0"
-    js-cookie: "npm:^2.2.1"
-    lodash.debounce: "npm:^4.0.8"
-    lodash.isequal: "npm:^4.5.0"
-    lodash.throttle: "npm:^4.1.1"
+    intersection-observer: "npm:^0.12.0"
+    js-cookie: "npm:^2.x.x"
+    lodash: "npm:^4.17.21"
+    react-fast-compare: "npm:^3.2.2"
     resize-observer-polyfill: "npm:^1.5.1"
     screenfull: "npm:^5.0.0"
+    tslib: "npm:^2.4.1"
   peerDependencies:
-    react: ^16.8.6 || ^17.0
-  checksum: 10/5ca83dcdcaec16d786f47d9ae123ac709b38c9da04bbf18b388772871a25af5e9f67000eaa1f2174d7d723c225923b7ffd4a4eaaf27652d8e03a16c44d40ec45
+    react: ^16.8.0 || ^17.0.0 || ^18.0.0
+  checksum: 10/67d060f23c72f35aafb7af8296a5bd39366f3cbaa194bbe95a7cbd859b495fea6cad532127981aaa8d958981de717645452bef302e96d35145ae9149d00c8886
   languageName: node
   linkType: hard
 
@@ -8631,10 +8611,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"intersection-observer@npm:^0.7.0":
-  version: 0.7.0
-  resolution: "intersection-observer@npm:0.7.0"
-  checksum: 10/40fec6bca05bf37eaf75870d5bdcbc2a7409e517520cf113a26b46e1356e794c872d7f34ef45728201c964bc691ed6fa53117569c6e7e8a7ecc19c55ee9abb89
+"intersection-observer@npm:^0.12.0":
+  version: 0.12.2
+  resolution: "intersection-observer@npm:0.12.2"
+  checksum: 10/cb1a6369bd1636b3f227d7cb7fec22f5a35b9d8ba9e26303b405d50c54c3ef02c5a547107b1d951e7eb421e192a564222faf4660a21fad69c34dcb9f926c159c
   languageName: node
   linkType: hard
 
@@ -9751,7 +9731,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"js-cookie@npm:^2.2.1":
+"js-cookie@npm:^2.2.1, js-cookie@npm:^2.x.x":
   version: 2.2.1
   resolution: "js-cookie@npm:2.2.1"
   checksum: 10/4387f5f5691cb96ca9ff8852c589d3012b53f484fda68630a39e20cabc6c5b740f09225e23233ba56cd9de6ebe300a23d20b2c7315f10c309ad5a89fd8c4990b
@@ -10409,13 +10389,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"lodash.isequal@npm:^4.5.0":
-  version: 4.5.0
-  resolution: "lodash.isequal@npm:4.5.0"
-  checksum: 10/82fc58a83a1555f8df34ca9a2cd300995ff94018ac12cc47c349655f0ae1d4d92ba346db4c19bbfc90510764e0c00ddcc985a358bdcd4b3b965abf8f2a48a214
-  languageName: node
-  linkType: hard
-
 "lodash.ismatch@npm:^4.4.0":
   version: 4.4.0
   resolution: "lodash.ismatch@npm:4.4.0"
@@ -10441,13 +10414,6 @@ __metadata:
   version: 4.4.0
   resolution: "lodash.pick@npm:4.4.0"
   checksum: 10/5a76778aa1c245ce081d19c5a625a44cdf4853f421c8789ec962cb5d73dd21be7cf11ae3bc2123ff5f432326ed0176d674d22ca6e0e8f9eaba5b74b00f632c12
-  languageName: node
-  linkType: hard
-
-"lodash.throttle@npm:^4.1.1":
-  version: 4.1.1
-  resolution: "lodash.throttle@npm:4.1.1"
-  checksum: 10/9be9fb2ffd686c20543167883305542f4564062a5f712a40e8c6f2f0d9fd8254a6e9d801c2470b1b24e0cdf2ae83c1277b55aa0fb4799a2db6daf545f53820e1
   languageName: node
   linkType: hard
 
@@ -14234,6 +14200,13 @@ __metadata:
   languageName: node
   linkType: hard
 
+"react-fast-compare@npm:^3.2.2":
+  version: 3.2.2
+  resolution: "react-fast-compare@npm:3.2.2"
+  checksum: 10/a6826180ba75cefba1c8d3ac539735f9b627ca05d3d307fe155487f5d0228d376dac6c9708d04a283a7b9f9aee599b637446635b79c8c8753d0b4eece56c125c
+  languageName: node
+  linkType: hard
+
 "react-highlight@npm:^0.15.0":
   version: 0.15.0
   resolution: "react-highlight@npm:0.15.0"
@@ -16704,7 +16677,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"tslib@npm:^2.0.3, tslib@npm:^2.1.0, tslib@npm:^2.2.0, tslib@npm:^2.4.0":
+"tslib@npm:^2.0.3, tslib@npm:^2.1.0, tslib@npm:^2.2.0, tslib@npm:^2.4.0, tslib@npm:^2.4.1":
   version: 2.6.2
   resolution: "tslib@npm:2.6.2"
   checksum: 10/bd26c22d36736513980091a1e356378e8b662ded04204453d353a7f34a4c21ed0afc59b5f90719d4ba756e581a162ecbf93118dc9c6be5acf70aa309188166ca
