@@ -33,7 +33,7 @@
     "release:next": "node scripts/release --tag=next"
   },
   "author": "antgroup",
-  "license": "ISC",
+  "license": "MIT",
   "husky": {
     "hooks": {
       "pre-commit": "lint-staged",
@@ -70,7 +70,6 @@
     "localforage": "^1.10.0",
     "minimist": "^1.2.5",
     "prettier": "^2.1.2",
-    "shelljs": "^0.8.4",
     "signale": "^1.4.0",
     "ts-jest": "^26.4.4",
     "ts-node": "^9.0.0",
