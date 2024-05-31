@@ -13,7 +13,6 @@
   "dependencies": {
     "@codeblitzjs/ide-code-api": "1.0.4",
     "@codeblitzjs/ide-sumi-core": "1.0.4",
-    "tslib": "^2.2.0",
-    "umi-request": "^1.3.5"
+    "tslib": "^2.2.0"
   }
 }
