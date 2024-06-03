@@ -4,7 +4,7 @@ import * as fse from 'fs-extra';
 import { from, of } from 'rxjs';
 import { mergeMap, filter, map } from 'rxjs/operators';
 import { IExtensionMode } from '@codeblitzjs/ide-common';
-import { EXTENSION_DIR, EXTENSION_METADATA_DIR, EXTENSION_FIELD, MARKETPLACE_CONFIG } from './util/constant';
+import { EXTENSION_DIR, EXTENSION_METADATA_DIR, EXTENSION_FIELD, resolveMarketplaceConfig } from './util/constant';
 import { ExtensionInstaller, Extension } from './util/installer';
 import { getExtension } from './extension/scanner';
 import {
@@ -18,6 +18,7 @@ import checkFramework from './util/check-framework';
 import { createServer, getHttpUri } from './util/serve-file';
 import { formatExtension } from './util';
 import { createMetadataType } from './extension/metadata-type';
+import { resolveCWDPkgJSON } from './util/path';
 
 let extensionInstaller: ExtensionInstaller;
 let shouldWriteConfig = false;
@@ -137,9 +138,13 @@ export const installLocalExtensions = async (dirs: string[], options?: IExtensio
 
 async function createInstaller() {
   const pkgJSON = fse.readJSONSync(path.join(__dirname, '../package.json'));
+
+  const marketplaceConfig = resolveMarketplaceConfig();
+
   extensionInstaller = new ExtensionInstaller({
-    accountId: MARKETPLACE_CONFIG.ACCOUNT_ID,
-    masterKey: MARKETPLACE_CONFIG.MASTER_KEY,
+    api: marketplaceConfig.endpoint,
+    accountId: marketplaceConfig.accountId,
+    masterKey: marketplaceConfig.masterKey,
     frameworkVersion: pkgJSON.engines.opensumi,
     dist: EXTENSION_DIR,
     ignoreIncreaseCount: true,
@@ -289,9 +294,4 @@ export async function uninstall(extensionId: string[]) {
   await setExtensionFromPackage(remainExtensions);
 
   log.success('卸载扩展成功');
-}
-
-function resolveCWDPkgJSON() {
-  const initCWD = process.env.INIT_CWD || process.cwd();
-  return path.resolve(initCWD, 'package.json');
 }
