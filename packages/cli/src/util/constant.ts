@@ -13,17 +13,32 @@ export const EXTENSION_METADATA_DIR = path.join(FRAMEWORK_PATH, 'extensions');
 export const EXTENSION_METADATA_TYPE_PATH = path.join(FRAMEWORK_PATH, 'extensions.d.ts');
 
 export const EXTENSION_FIELD = 'cloudideExtensions';
+export const EXTENSION_CONFIG_FIELD = 'cloudideMarketplaceConfig';
 
-export const MARKETPLACE_CONFIG = {
-  ENDPOINT: 'https://marketplace.opentrs.cn',
-  ACCOUNT_ID: 'JL1k9cyrepomKpoSWXADGb9G',
-  MASTER_KEY: 't-6MbbT-9C15R_chQ8qUj78P',
+export interface IMarketplaceConfig {
+  endpoint: string;
+  accountId: string;
+  masterKey: string;
+}
+
+export const MARKETPLACE_CONFIG: IMarketplaceConfig = {
+  endpoint: 'https://marketplace.opentrs.cn',
+  accountId: 'JL1k9cyrepomKpoSWXADGb9G',
+  masterKey: 't-6MbbT-9C15R_chQ8qUj78P',
+}
+
+export const resolveMarketplaceConfig = (pkgJSON: any): IMarketplaceConfig => {
+  if (pkgJSON && pkgJSON[EXTENSION_CONFIG_FIELD]) {
+    return pkgJSON[EXTENSION_CONFIG_FIELD] as IMarketplaceConfig;
+  }
+
+  return MARKETPLACE_CONFIG;
 }
 
 function resolveFramework() {
   try {
     const pkgPath = require.resolve(`${FRAMEWORK_NAME}/package.json`);
-    return path.join(pkgPath, '..');
+    return path.resolve(pkgPath, '..');
   } catch (err) {
     return '';
   }

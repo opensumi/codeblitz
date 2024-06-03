@@ -4,7 +4,7 @@ import * as fse from 'fs-extra';
 import { from, of } from 'rxjs';
 import { mergeMap, filter, map } from 'rxjs/operators';
 import { IExtensionMode } from '@codeblitzjs/ide-common';
-import { EXTENSION_DIR, EXTENSION_METADATA_DIR, EXTENSION_FIELD, MARKETPLACE_CONFIG } from './util/constant';
+import { EXTENSION_DIR, EXTENSION_METADATA_DIR, EXTENSION_FIELD, MARKETPLACE_CONFIG, resolveMarketplaceConfig } from './util/constant';
 import { ExtensionInstaller, Extension } from './util/installer';
 import { getExtension } from './extension/scanner';
 import {
@@ -137,9 +137,13 @@ export const installLocalExtensions = async (dirs: string[], options?: IExtensio
 
 async function createInstaller() {
   const pkgJSON = fse.readJSONSync(path.join(__dirname, '../package.json'));
+
+  const marketplaceConfig = resolveMarketplaceConfig(pkgJSON);
+
   extensionInstaller = new ExtensionInstaller({
-    accountId: MARKETPLACE_CONFIG.ACCOUNT_ID,
-    masterKey: MARKETPLACE_CONFIG.MASTER_KEY,
+    api: marketplaceConfig.endpoint,
+    accountId: marketplaceConfig.accountId,
+    masterKey: marketplaceConfig.masterKey,
     frameworkVersion: pkgJSON.engines.opensumi,
     dist: EXTENSION_DIR,
     ignoreIncreaseCount: true,
