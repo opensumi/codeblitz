@@ -1,20 +1,20 @@
-import { Injectable, Autowired } from '@opensumi/di';
-import {
-  StorageProvider,
-  IStorage,
-  STORAGE_SCHEMA,
-  URI,
-  Deferred,
-  CommandService,
-  MessageType,
-  localize,
-} from '@opensumi/ide-core-common';
+import { Autowired, Injectable } from '@opensumi/di';
 import { ClientAppStateService } from '@opensumi/ide-core-browser';
-import { IMessageService, IDialogService  } from '@opensumi/ide-overlay';
+import {
+  CommandService,
+  Deferred,
+  IStorage,
+  localize,
+  MessageType,
+  STORAGE_SCHEMA,
+  StorageProvider,
+  URI,
+} from '@opensumi/ide-core-common';
+import { IDialogService, IMessageService } from '@opensumi/ide-overlay';
 import { DialogService } from '@opensumi/ide-overlay/lib/browser/dialog.service';
+import { CODE_PLATFORM_CONFIG } from './config';
 import { ATOMGIT_PRIVATE_TOKEN, GITEE_PRIVATE_TOKEN, GITHUB_OAUTH_TOKEN, GITLAB_PRIVATE_TOKEN } from './constant';
 import { ICodePlatform } from './types';
-import { CODE_PLATFORM_CONFIG } from './config';
 
 /**
  * 使用 localStorage 存储 token 够用了
@@ -44,7 +44,7 @@ export class HelperService {
     if (!this._storageDeferred) {
       this._storageDeferred = new Deferred();
       const storage = await this.provideStorage(
-        new URI('code-api').withScheme(STORAGE_SCHEMA.SCOPE)
+        new URI('code-api').withScheme(STORAGE_SCHEMA.SCOPE),
       );
       this._storageDeferred.resolve(storage);
     }
@@ -123,7 +123,7 @@ export class HelperService {
   showMessage(
     platform: ICodePlatform,
     msg: { type: MessageType; status?: number; symbol?: string; args?: any[]; message?: string },
-    config?: { buttons?: string[]; closable?: boolean }
+    config?: { buttons?: string[]; closable?: boolean },
   ) {
     const message = `${msg.status ? `${msg.status} - ` : ''}${
       msg.symbol ? localize(msg.symbol, ...(msg.args || [])) : msg.message
@@ -133,17 +133,17 @@ export class HelperService {
       msg.type,
       config?.buttons,
       config?.closable,
-      CODE_PLATFORM_CONFIG[platform].brand
+      CODE_PLATFORM_CONFIG[platform].brand,
     );
   }
 
   async showDialog(
-    msg: { 
-      message: string | React.ReactNode,
-      type: MessageType,
-      buttons?: any[],
-      closable?: boolean,
-    }
+    msg: {
+      message: string | React.ReactNode;
+      type: MessageType;
+      buttons?: any[];
+      closable?: boolean;
+    },
   ) {
     const { message, type, buttons = [], closable = true } = msg;
     return this.dialogService.open(message, type, buttons, closable);

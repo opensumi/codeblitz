@@ -182,7 +182,7 @@ export const extendPlatformConfig = (
     origin?: string;
     endpoint?: string;
     token?: string;
-  }
+  },
 ) => {
   const config = CODE_PLATFORM_CONFIG[platform];
   if (!config) {

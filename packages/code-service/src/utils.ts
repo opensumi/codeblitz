@@ -1,7 +1,7 @@
-import { Uri, getDebugLogger } from '@opensumi/ide-core-common';
 import { CODE_PLATFORM_CONFIG } from '@codeblitzjs/ide-code-api';
+import { getDebugLogger, Uri } from '@opensumi/ide-core-common';
 import { sep } from 'path';
-import { ICodePlatform, Submodule, ProjectDesc } from './types';
+import { ICodePlatform, ProjectDesc, Submodule } from './types';
 
 export const HEAD = 'HEAD';
 

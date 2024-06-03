@@ -1,12 +1,12 @@
+import { CODE_PLATFORM_CONFIG, CodePlatform, ICodeAPIProvider } from '@codeblitzjs/ide-code-api';
+import { AppConfig, RuntimeConfig } from '@codeblitzjs/ide-sumi-core';
 import { Autowired } from '@opensumi/di';
 import { Domain, URI } from '@opensumi/ide-core-browser';
 import {
   StaticResourceContribution,
   StaticResourceService,
 } from '@opensumi/ide-core-browser/lib/static-resource/static.definition';
-import { AppConfig, RuntimeConfig } from '@codeblitzjs/ide-sumi-core';
 import * as paths from 'path';
-import { ICodeAPIProvider, CODE_PLATFORM_CONFIG, CodePlatform } from '@codeblitzjs/ide-code-api';
 import { CodeModelService } from './code-model.service';
 
 @Domain(StaticResourceContribution)

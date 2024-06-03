@@ -1,25 +1,25 @@
+import { request, RequestOptions } from '@codeblitzjs/ide-common';
 import { Autowired, Injectable } from '@opensumi/di';
+import { isObject, MessageType, URI } from '@opensumi/ide-core-common';
+import { CODE_PLATFORM_CONFIG, HelperService } from '../common';
 import {
-  TreeEntry,
-  EntryParam,
-  ICodeAPIService,
-  IRepositoryModel,
-  BranchOrTag,
-  CommitParams,
   Branch,
-  Project,
+  BranchOrTag,
+  CodePlatform,
   CommitFileChange,
+  CommitParams,
   CommitRecord,
+  EntryInfo,
+  EntryParam,
   FileAction,
   FileActionHeader,
-  ISearchResults,
-  CodePlatform,
   GitlensBlame,
-  EntryInfo,
+  ICodeAPIService,
+  IRepositoryModel,
+  ISearchResults,
+  Project,
+  TreeEntry,
 } from '../common/types';
-import { request, RequestOptions } from '@codeblitzjs/ide-common';
-import { CODE_PLATFORM_CONFIG, HelperService } from '../common';
-import { URI, MessageType, isObject } from '@opensumi/ide-core-common';
 import { CodeAPI as ConflictAPI } from '../common/types';
 import { API } from './types';
 
@@ -36,7 +36,7 @@ export class AtomGitAPIService implements ICodeAPIService {
     if (!this._PRIVATE_TOKEN) {
       this._PRIVATE_TOKEN = this.helper.ATOMGIT_TOKEN;
       return this._PRIVATE_TOKEN;
-    };
+    }
 
     return this._PRIVATE_TOKEN;
   }
@@ -50,16 +50,22 @@ export class AtomGitAPIService implements ICodeAPIService {
   getBranchNames?(repo: IRepositoryModel): Promise<string[]> {
     throw new Error('Method not implemented.');
   }
-  createPullRequest(repo: IRepositoryModel, sourceBranch: string, targetBranch: string, title: string, autoMerge?: boolean | undefined): Promise<ConflictAPI.ResponseCreatePR> {
+  createPullRequest(
+    repo: IRepositoryModel,
+    sourceBranch: string,
+    targetBranch: string,
+    title: string,
+    autoMerge?: boolean | undefined,
+  ): Promise<ConflictAPI.ResponseCreatePR> {
     throw new Error('Method not implemented.');
   }
 
   private sleep(t: number) {
     return new Promise(res => {
       setTimeout(() => {
-          res(undefined)
-      }, t)
-    })
+        res(undefined);
+      }, t);
+    });
   }
 
   private async checkAccessToken(): Promise<boolean> {
@@ -72,12 +78,16 @@ export class AtomGitAPIService implements ICodeAPIService {
         message: '检测到 OAuth 未授权',
         type: MessageType.Info,
         closable: false,
-        buttons: ['去授权']
+        buttons: ['去授权'],
       });
 
       let popupWindow;
       if (btn === '去授权') {
-        popupWindow = window.open(`${this.config.origin}login/oauth/authorize?client_id=9d8b531661f441d1`, '_blank', 'directories=no,titlebar=no,toolbar=no,location=no,status=no,menubar=no,scrollbars=no,resizable=no,width=800,height=520,top=150,left=150');
+        popupWindow = window.open(
+          `${this.config.origin}login/oauth/authorize?client_id=9d8b531661f441d1`,
+          '_blank',
+          'directories=no,titlebar=no,toolbar=no,location=no,status=no,menubar=no,scrollbars=no,resizable=no,width=800,height=520,top=150,left=150',
+        );
       }
 
       const handleMessage = async (event: MessageEvent) => {
@@ -90,13 +100,13 @@ export class AtomGitAPIService implements ICodeAPIService {
               resolve(false);
               return;
             }
-            
+
             // 清理过期的 token；
             this.clearToken();
 
             this.helper.ATOMGIT_TOKEN = token;
             this.helper.reinitializeCodeService(true);
-            
+
             resolve(true);
           }
         } catch (error) {
@@ -134,8 +144,8 @@ export class AtomGitAPIService implements ICodeAPIService {
         headers: {
           ...(privateToken
             ? {
-                'Authorization': `Bearer ${privateToken}`,
-              }
+              'Authorization': `Bearer ${privateToken}`,
+            }
             : {}),
           ...headers,
         },
@@ -161,25 +171,29 @@ export class AtomGitAPIService implements ICodeAPIService {
   }
 
   async getCommit(repo: IRepositoryModel, ref: string): Promise<string> {
-    const commitInfo = await this.request<API.ResponseCommit>(`/repos/${this.getProjectPath(repo)}/branches/${encodeURIComponent(ref)}`);
+    const commitInfo = await this.request<API.ResponseCommit>(
+      `/repos/${this.getProjectPath(repo)}/branches/${encodeURIComponent(ref)}`,
+    );
     return commitInfo.commit.sha;
   }
   async getTree(repo: IRepositoryModel, path: string): Promise<TreeEntry[]> {
     const { owner, name, commit } = repo;
     const res = await this.request<API.ResponseFileTree[]>(`/repos/${owner}/${name}/trees/${commit}`, {
       params: {
-        file_path: path
+        file_path: path,
       },
     });
-    
-    return Array.isArray(res) ? res.map(data => {
-      const name = URI.parse(data.path).displayName;
 
-      return {
-        ...data,
-        name
-      } as TreeEntry
-    }) : [];
+    return Array.isArray(res)
+      ? res.map(data => {
+        const name = URI.parse(data.path).displayName;
+
+        return {
+          ...data,
+          name,
+        } as TreeEntry;
+      })
+      : [];
   }
   async getBlob(repo: IRepositoryModel, entry: EntryParam): Promise<Uint8Array> {
     const { path } = entry;
@@ -189,9 +203,9 @@ export class AtomGitAPIService implements ICodeAPIService {
       {
         params: {
           ref,
-          path
-        }
-      }
+          path,
+        },
+      },
     );
 
     const { content, encoding, type } = res;
@@ -199,7 +213,7 @@ export class AtomGitAPIService implements ICodeAPIService {
     if (type !== 'file') {
       throw new Error(`${path} is not a file.`);
     }
-    
+
     if (encoding === 'base64') {
       return Buffer.from(decodeURIComponent(escape(atob(content))));
     }
@@ -222,9 +236,9 @@ export class AtomGitAPIService implements ICodeAPIService {
     return branches.map((data) => ({
       name: data.name,
       commit: {
-        id: data.commit.sha
+        id: data.commit.sha,
       },
-      protected: data.protected
+      protected: data.protected,
     }));
   }
   async getTags(_repo: IRepositoryModel): Promise<BranchOrTag[]> {
@@ -233,18 +247,26 @@ export class AtomGitAPIService implements ICodeAPIService {
   transformStaticResource(_repo: IRepositoryModel, _path: string): string {
     throw new Error('Method not implemented.');
   }
-  async searchContent(_repo: IRepositoryModel, _searchString: string, _options: { limit: number; }): Promise<ISearchResults> {
+  async searchContent(
+    _repo: IRepositoryModel,
+    _searchString: string,
+    _options: { limit: number },
+  ): Promise<ISearchResults> {
     return [];
   }
-  async searchFile(_repo: IRepositoryModel, _searchString: string, _options: { limit?: number | undefined; }): Promise<string[]> {
+  async searchFile(
+    _repo: IRepositoryModel,
+    _searchString: string,
+    _options: { limit?: number | undefined },
+  ): Promise<string[]> {
     return [];
   }
   async getFileBlame(repo: IRepositoryModel, filepath: string): Promise<Uint8Array> {
     const res = await this.request<API.ResponseFileBlame[]>(`/repos/${this.getProjectPath(repo)}/files/blame`, {
       params: {
         file_path: filepath,
-        sha: repo.commit
-      }
+        sha: repo.commit,
+      },
     });
 
     const blameHash = {};
@@ -274,8 +296,8 @@ export class AtomGitAPIService implements ICodeAPIService {
             committed_date: new Date(commit.created_at).getTime(),
             message: commit.title,
             author: {
-              avatar_url: commit?.user?.avatar_url || ''
-            }
+              avatar_url: commit?.user?.avatar_url || '',
+            },
           },
           lines: [
             {
@@ -311,21 +333,36 @@ export class AtomGitAPIService implements ICodeAPIService {
   getUser(_repo: IRepositoryModel): Promise<any> {
     throw new Error('Method not implemented.');
   }
-  
+
   public async getProject(repo: IRepositoryModel): Promise<Project> {
     const repoInfo = await this.request<API.ResponseRepoInfo>(`/repos/${this.getProjectPath(repo)}`);
     return {
       id: repoInfo.name,
-      default_branch: repoInfo.default_branch
+      default_branch: repoInfo.default_branch,
     };
   }
-  canResolveConflict(_repo: IRepositoryModel, _sourceBranch: string, _targetBranch: string, _prId: string): Promise<ConflictAPI.CanResolveConflictResponse> {
+  canResolveConflict(
+    _repo: IRepositoryModel,
+    _sourceBranch: string,
+    _targetBranch: string,
+    _prId: string,
+  ): Promise<ConflictAPI.CanResolveConflictResponse> {
     throw new Error('Method not implemented.');
   }
-  resolveConflict(_repo: IRepositoryModel, _content: ConflictAPI.ResolveConflict, _sourceBranch: string, _targetBranch: string, _prId?: string | undefined): Promise<ConflictAPI.ResolveConflictResponse> {
+  resolveConflict(
+    _repo: IRepositoryModel,
+    _content: ConflictAPI.ResolveConflict,
+    _sourceBranch: string,
+    _targetBranch: string,
+    _prId?: string | undefined,
+  ): Promise<ConflictAPI.ResolveConflictResponse> {
     throw new Error('Method not implemented.');
   }
-  getConflict(_repo: IRepositoryModel, _sourceBranch: string, _targetBranch: string): Promise<ConflictAPI.ConflictResponse> {
+  getConflict(
+    _repo: IRepositoryModel,
+    _sourceBranch: string,
+    _targetBranch: string,
+  ): Promise<ConflictAPI.ConflictResponse> {
     throw new Error('Method not implemented.');
   }
   mergeBase(_repo: IRepositoryModel, _target: string, _source: string): Promise<ConflictAPI.ResponseCommit> {
@@ -336,5 +373,4 @@ export class AtomGitAPIService implements ICodeAPIService {
     this._PRIVATE_TOKEN = null;
     this.helper.ATOMGIT_TOKEN = null;
   }
-
 }

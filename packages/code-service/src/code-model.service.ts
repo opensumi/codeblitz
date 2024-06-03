@@ -1,17 +1,13 @@
-import { Injectable, Autowired, INJECTOR_TOKEN, Injector } from '@opensumi/di';
-import { Emitter, localize, CommandService } from '@opensumi/ide-core-common';
+import { CODE_PLATFORM_CONFIG, extendPlatformConfig, ICodeAPIProvider } from '@codeblitzjs/ide-code-api';
 import { AppConfig } from '@codeblitzjs/ide-sumi-core';
+import { Autowired, Injectable, Injector, INJECTOR_TOKEN } from '@opensumi/di';
+import { CommandService, Emitter, localize } from '@opensumi/ide-core-common';
 import { IMessageService } from '@opensumi/ide-overlay';
-import * as path from 'path';
 import md5 from 'md5';
-import {
-  ICodeAPIProvider,
-  CODE_PLATFORM_CONFIG,
-  extendPlatformConfig,
-} from '@codeblitzjs/ide-code-api';
-import { ICodeServiceConfig, ICodePlatform, TreeEntry, InitializeState } from './types';
-import { parseSubmoduleUrl, isDescendant, logger, HEAD, encodeRefPath } from './utils';
-import { RootRepository, Repository } from './repository';
+import * as path from 'path';
+import { Repository, RootRepository } from './repository';
+import { ICodePlatform, ICodeServiceConfig, InitializeState, TreeEntry } from './types';
+import { encodeRefPath, HEAD, isDescendant, logger, parseSubmoduleUrl } from './utils';
 
 @Injectable()
 export class CodeModelService {
@@ -96,7 +92,7 @@ export class CodeModelService {
       commit: config.commit,
       ref: config.branch || config.tag || config.ref,
       refPath: config.refPath,
-      isForce
+      isForce,
     });
   }
 
@@ -144,9 +140,11 @@ export class CodeModelService {
 
     const resourcePath: string = hint;
 
-    outer: for (const targetRepository of this.repositories.sort(
-      (a, b) => b.root.length - a.root.length
-    )) {
+    outer: for (
+      const targetRepository of this.repositories.sort(
+        (a, b) => b.root.length - a.root.length,
+      )
+    ) {
       if (!isDescendant(targetRepository.root, resourcePath)) {
         continue;
       }
@@ -177,18 +175,15 @@ export class CodeModelService {
     } else {
       let ref: string = rootRepository.ref;
       if (ref === HEAD) {
-        ref =
-          refs.branches.find((br) => br.commit === commit)?.name ||
-          refs.tags.find((tag) => tag.commit === commit)?.name ||
-          HEAD;
+        ref = refs.branches.find((br) => br.commit === commit)?.name
+          || refs.tags.find((tag) => tag.commit === commit)?.name
+          || HEAD;
       }
-      urlPath = `/${rootRepository.owner}/${rootRepository.name}/${type}/${ref}${
-        filepath ? `/${filepath}` : ''
-      }`;
+      urlPath = `/${rootRepository.owner}/${rootRepository.name}/${type}/${ref}${filepath ? `/${filepath}` : ''}`;
     }
     this.commandService.tryExecuteCommand(
       'code-service.replace-browser-url',
-      encodeRefPath(urlPath)
+      encodeRefPath(urlPath),
     );
   }
 

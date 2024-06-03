@@ -1,23 +1,18 @@
-import { Autowired, Injector, INJECTOR_TOKEN, ConstructorOf } from '@opensumi/di';
+import { Autowired, ConstructorOf, Injector, INJECTOR_TOKEN } from '@opensumi/di';
+import { ClientAppContribution, Domain, getExternalIcon, getIcon, SlotLocation } from '@opensumi/ide-core-browser';
 import { Deferred } from '@opensumi/ide-core-common';
-import {
-  SlotLocation,
-  getIcon,
-  Domain,
-  ClientAppContribution,
-  getExternalIcon,
-} from '@opensumi/ide-core-browser';
-import { IIconService } from '@opensumi/ide-theme';
 import { IMainLayoutService } from '@opensumi/ide-main-layout';
-import { ICodePlatform, ICodeAPIProvider, ICodeAPIService, CodePlatform } from './common/types';
-import { GitHubAPIService } from './github/github.service';
-import { GitLabAPIService } from './gitlab/gitlab.service';
-import { GitHubView } from './github/github.view';
-import { GitLabView } from './gitlab/gitlab.view';
+import { IIconService } from '@opensumi/ide-theme';
 import { AtomGitAPIService } from './atomgit/atomgit.service';
-import { GitLinkAPIService } from './gitlink/gitlink.service';
 import { CodeUPAPIService } from './codeup/codeup.service';
+import { CodePlatform, ICodeAPIProvider, ICodeAPIService, ICodePlatform } from './common/types';
 import { GiteeAPIService } from './gitee/gitee.service';
+import { GitHubAPIService } from './github/github.service';
+import { GitHubView } from './github/github.view';
+import { GitLabAPIService } from './gitlab/gitlab.service';
+import { GitLabView } from './gitlab/gitlab.view';
+import { GitLinkAPIService } from './gitlink/gitlink.service';
+
 @Domain(ClientAppContribution)
 export class CodeAPIProvider implements ICodeAPIProvider, ClientAppContribution {
   @Autowired(INJECTOR_TOKEN)
@@ -25,7 +20,6 @@ export class CodeAPIProvider implements ICodeAPIProvider, ClientAppContribution 
 
   @Autowired(IMainLayoutService)
   private mainLayoutService: IMainLayoutService;
-
 
   @Autowired(IIconService)
   iconService: IIconService;
@@ -59,7 +53,7 @@ export class CodeAPIProvider implements ICodeAPIProvider, ClientAppContribution 
               iconClass: getExternalIcon('github'),
               title: 'GitHub',
             },
-            SlotLocation.left
+            SlotLocation.left,
           );
         });
       },
@@ -81,7 +75,7 @@ export class CodeAPIProvider implements ICodeAPIProvider, ClientAppContribution 
               iconClass: getIcon('Gitlab-fill'),
               title: 'GitLab',
             },
-            SlotLocation.left
+            SlotLocation.left,
           );
         });
       },
@@ -90,19 +84,19 @@ export class CodeAPIProvider implements ICodeAPIProvider, ClientAppContribution 
       provider: GitLinkAPIService,
     });
     this.registerPlatformProvider(CodePlatform.atomgit, {
-      provider: AtomGitAPIService
+      provider: AtomGitAPIService,
     });
     this.registerPlatformProvider(CodePlatform.codeup, {
       provider: CodeUPAPIService,
     });
     this.registerPlatformProvider(CodePlatform.gitee, {
       provider: GiteeAPIService,
-    })
+    });
   }
 
   registerPlatformProvider(
     platform: ICodePlatform,
-    provider: { provider: ConstructorOf<ICodeAPIService>; onCreate?: () => void }
+    provider: { provider: ConstructorOf<ICodeAPIService>; onCreate?: () => void },
   ) {
     if (!this.apiProviderMap.has(platform)) {
       this.apiProviderMap.set(platform, provider);

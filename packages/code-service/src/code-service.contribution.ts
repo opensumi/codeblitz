@@ -1,47 +1,44 @@
-import { Autowired } from '@opensumi/di';
-import { FILE_COMMANDS, CommandContribution, CommandRegistry } from '@opensumi/ide-core-browser';
+import { CODE_PLATFORM_CONFIG, RequestFailed } from '@codeblitzjs/ide-code-api';
 import {
-  Domain,
-  IReporterService,
-  Deferred,
-  getDebugLogger,
-  URI,
-  CommandService,
-  localize,
-  formatLocalize,
-  FileChangeType,
-  IDisposable,
-  IEventBus,
-  Command,
-} from '@opensumi/ide-core-common';
-import {
-  LaunchContribution,
   AppConfig,
   CODE_ROOT,
   IDB_ROOT,
   IServerApp,
-  RuntimeConfig,
+  LaunchContribution,
   RootFS,
+  RuntimeConfig,
 } from '@codeblitzjs/ide-sumi-core';
+import { Autowired } from '@opensumi/di';
+import { CommandContribution, CommandRegistry, FILE_COMMANDS } from '@opensumi/ide-core-browser';
+import {
+  Command,
+  CommandService,
+  Deferred,
+  Domain,
+  FileChangeType,
+  formatLocalize,
+  getDebugLogger,
+  IDisposable,
+  IEventBus,
+  IReporterService,
+  localize,
+  URI,
+} from '@opensumi/ide-core-common';
+import { BrowserEditorContribution, WorkbenchEditorService } from '@opensumi/ide-editor/lib/browser';
+import { FileAccess, IDiskFileProvider } from '@opensumi/ide-file-service';
+import { DiskFsProviderClient } from '@opensumi/ide-file-service/lib/browser/file-service-provider-client';
 import { IFileTreeService } from '@opensumi/ide-file-tree-next';
 import { FileTreeService } from '@opensumi/ide-file-tree-next/lib/browser/file-tree.service';
 import { FileTreeModelService } from '@opensumi/ide-file-tree-next/lib/browser/services/file-tree-model.service';
-import { IMessageService, IDialogService } from '@opensumi/ide-overlay';
-import {
-  BrowserEditorContribution,
-  WorkbenchEditorService,
-} from '@opensumi/ide-editor/lib/browser';
-import * as path from 'path';
-import { QuickPickService, IQuickInputService } from '@opensumi/ide-quick-open';
-import { IDiskFileProvider, FileAccess } from '@opensumi/ide-file-service';
-import { DiskFsProviderClient } from '@opensumi/ide-file-service/lib/browser/file-service-provider-client';
 import { MainLayoutContribution } from '@opensumi/ide-main-layout';
-import configureFileSystem from './filesystem/configure';
-import { CodeModelService } from './code-model.service';
-import { RefType, ICodeServiceConfig } from './types';
-import { Configure } from './config.service';
+import { IDialogService, IMessageService } from '@opensumi/ide-overlay';
+import { IQuickInputService, QuickPickService } from '@opensumi/ide-quick-open';
 import { SCMService } from '@opensumi/ide-scm';
-import { CODE_PLATFORM_CONFIG, RequestFailed } from '@codeblitzjs/ide-code-api';
+import * as path from 'path';
+import { CodeModelService } from './code-model.service';
+import { Configure } from './config.service';
+import configureFileSystem from './filesystem/configure';
+import { ICodeServiceConfig, RefType } from './types';
 
 namespace CODE_SERVICE_COMMANDS {
   const CATEGORY = 'CodeService';
@@ -69,13 +66,10 @@ enum PickBranch {
   CREATEBRANCH = 'createBranch',
   CREATEBRANCHFROM = 'createBranchFrom',
 }
+
 @Domain(LaunchContribution, BrowserEditorContribution, CommandContribution, MainLayoutContribution)
 export class CodeContribution
-  implements
-    LaunchContribution,
-    BrowserEditorContribution,
-    CommandContribution,
-    MainLayoutContribution
+  implements LaunchContribution, BrowserEditorContribution, CommandContribution, MainLayoutContribution
 {
   @Autowired()
   codeModel: CodeModelService;
@@ -166,7 +160,7 @@ export class CodeContribution
             } else {
               closes.push(uri);
             }
-          })
+          }),
         ).then(async () => {
           this.diskFile.onDidFilesChanged({ changes });
           for (const uri of closes) {
@@ -222,7 +216,7 @@ export class CodeContribution
         this.codeModel,
         this.runtimeConfig.scenario,
         isInMemory,
-        recursive
+        recursive,
       );
 
       this._unmount?.();
@@ -293,7 +287,7 @@ export class CodeContribution
                 name: localize('code-service.command.create-branch-from'),
                 commit: '',
                 type: PickBranch.CREATEBRANCHFROM,
-              }
+              },
             );
           }
           const refs = [...createBranch, ...repo.refs.branches, ...repo.refs.tags];
@@ -301,9 +295,11 @@ export class CodeContribution
           const quickPickRef = refs.map((ref, index) => ({
             value: index,
             label: ref.name,
-            description: `${ref.type === RefType.Tag ? 'Tag at ' : ''}${getShortCommit(
-              ref.commit
-            )}`,
+            description: `${ref.type === RefType.Tag ? 'Tag at ' : ''}${
+              getShortCommit(
+                ref.commit,
+              )
+            }`,
           }));
 
           const value = await this.quickPickService.show([...quickPickRef], {
@@ -330,7 +326,6 @@ export class CodeContribution
           }
         },
       }),
-
       commandRegistry.registerCommand(CODE_SERVICE_COMMANDS.REINITIALIZE, {
         execute: (isForce?: boolean) => {
           this.codeModel.reinitialize(isForce);
@@ -350,18 +345,18 @@ export class CodeContribution
             const branch = await repo.request.createBranch(newBranchName, repo.commit);
             if (branch?.commit.id) {
               this.messageService.info(
-                formatLocalize('code-service.command.create-branch-success', newBranchName)
+                formatLocalize('code-service.command.create-branch-success', newBranchName),
               );
               await repo.refreshRepository(branch.commit.id, branch.name);
             } else {
               this.messageService.error(
-                (branch as any as RequestFailed).message ||
-                  formatLocalize('code-service.command.create-branch-error', newBranchName)
+                (branch as any as RequestFailed).message
+                  || formatLocalize('code-service.command.create-branch-error', newBranchName),
               );
             }
           } else {
             this.messageService.error(
-              formatLocalize('code-service.command.create-branch-error-exists', newBranchName)
+              formatLocalize('code-service.command.create-branch-error-exists', newBranchName),
             );
           }
         },
@@ -377,7 +372,7 @@ export class CodeContribution
           }
           if (repo.refs.branches.find((b) => b.name === newBranchName)) {
             this.messageService.error(
-              formatLocalize('code-service.command.create-branch-error-exists', newBranchName)
+              formatLocalize('code-service.command.create-branch-error-exists', newBranchName),
             );
             return;
           }
@@ -386,14 +381,16 @@ export class CodeContribution
           const quickPickRef = refs.map((ref, index) => ({
             value: index,
             label: ref.name,
-            description: `${ref.type === RefType.Tag ? 'Tag at ' : ''}${getShortCommit(
-              ref.commit
-            )}`,
+            description: `${ref.type === RefType.Tag ? 'Tag at ' : ''}${
+              getShortCommit(
+                ref.commit,
+              )
+            }`,
           }));
           const value = await this.quickPickService.show([...quickPickRef], {
             placeholder: localize(
               'code-service.command.select-ref-to-create-branch',
-              newBranchName
+              newBranchName,
             ),
           });
           if (typeof value === 'number') {
@@ -401,18 +398,18 @@ export class CodeContribution
             const branch = await repo.request.createBranch(newBranchName, target.commit);
             if (branch?.commit.id) {
               this.messageService.info(
-                formatLocalize('code-service.command.create-branch-success', newBranchName)
+                formatLocalize('code-service.command.create-branch-success', newBranchName),
               );
               await repo.refreshRepository(branch.commit.id, branch.name);
             } else {
               this.messageService.error(
-                (branch as any as RequestFailed).message ||
-                  formatLocalize('code-service.command.create-branch-error', newBranchName)
+                (branch as any as RequestFailed).message
+                  || formatLocalize('code-service.command.create-branch-error', newBranchName),
               );
             }
           }
         },
-      })
+      }),
     );
   }
 
@@ -423,12 +420,12 @@ export class CodeContribution
           return;
         }
         if (
-          resource &&
-          resource.uri.scheme === 'file' &&
-          ['code', 'diff'].includes(
-            this.editorService.currentEditorGroup?.currentOpenType?.type ?? ''
-          ) &&
-          resource.uri.codeUri.path.startsWith(this.appConfig.workspaceDir)
+          resource
+          && resource.uri.scheme === 'file'
+          && ['code', 'diff'].includes(
+            this.editorService.currentEditorGroup?.currentOpenType?.type ?? '',
+          )
+          && resource.uri.codeUri.path.startsWith(this.appConfig.workspaceDir)
         ) {
           this.codeModel.replaceBrowserUrl({
             type: 'blob',
@@ -437,7 +434,7 @@ export class CodeContribution
         } else {
           this.codeModel.replaceBrowserUrl({ type: 'tree', filepath: '' });
         }
-      })
+      }),
     );
   }
 

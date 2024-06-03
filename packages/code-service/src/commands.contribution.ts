@@ -1,20 +1,14 @@
-import { Autowired } from '@opensumi/di';
-import {
-  CommandContribution,
-  Domain,
-  CommandRegistry,
-  Command,
-  Disposable,
-} from '@opensumi/ide-core-common';
-import { IOpenerService, IClipboardService } from '@opensumi/ide-core-browser';
 import {
   CODE_PLATFORM_CONFIG,
-  CommitRecord,
-  CommitParams,
-  CommitFileChange,
   CodeAPI,
   CodePlatform,
+  CommitFileChange,
+  CommitParams,
+  CommitRecord,
 } from '@codeblitzjs/ide-code-api';
+import { Autowired } from '@opensumi/di';
+import { IClipboardService, IOpenerService } from '@opensumi/ide-core-browser';
+import { Command, CommandContribution, CommandRegistry, Disposable, Domain } from '@opensumi/ide-core-common';
 import { CodeModelService } from './code-model.service';
 import { CODE_SERVICE_COMMANDS } from './commands';
 
@@ -29,25 +23,25 @@ export enum RemoteResourceType {
 
 export type RemoteResource =
   | {
-      type: RemoteResourceType.Branch;
-      branch: string;
-    }
+    type: RemoteResourceType.Branch;
+    branch: string;
+  }
   | {
-      type: RemoteResourceType.Branches;
-    }
+    type: RemoteResourceType.Branches;
+  }
   | {
-      type: RemoteResourceType.Commit;
-      sha: string;
-    }
+    type: RemoteResourceType.Commit;
+    sha: string;
+  }
   | {
-      type: RemoteResourceType.File;
-      branch?: string;
-      fileName: string;
-      range?: Range;
-    }
+    type: RemoteResourceType.File;
+    branch?: string;
+    fileName: string;
+    range?: Range;
+  }
   | {
-      type: RemoteResourceType.Repo;
-    };
+    type: RemoteResourceType.Repo;
+  };
 
 @Domain(CommandContribution)
 export class CommandsContribution extends Disposable implements CommandContribution {
@@ -104,7 +98,7 @@ export class CommandsContribution extends Disposable implements CommandContribut
               throw new Error(`command: ${command.id} is not implement`);
             }
           },
-        })
+        }),
       );
     });
   }
@@ -143,8 +137,7 @@ export class CommandsContribution extends Disposable implements CommandContribut
   }
 
   async repository() {
-    const { HEAD, commit, headLabel, name, owner, platform, ref, refs } =
-      this.codeModel.rootRepository;
+    const { HEAD, commit, headLabel, name, owner, platform, ref, refs } = this.codeModel.rootRepository;
     return {
       HEAD,
       commit,
@@ -205,10 +198,10 @@ export class CommandsContribution extends Disposable implements CommandContribut
 
   async refs(repoPath: string): Promise<
     | {
-        head: string | null;
-        heads: { name: string; hash: string }[];
-        tags: { name: string; hash: string }[];
-      }
+      head: string | null;
+      heads: { name: string; hash: string }[];
+      tags: { name: string; hash: string }[];
+    }
     | undefined
   > {
     const repo = this.codeModel.getRepository(repoPath);
@@ -253,7 +246,7 @@ export class CommandsContribution extends Disposable implements CommandContribut
     repoPath: string,
     commitHash: string,
     filePath: string,
-    options?: any
+    options?: any,
   ): Promise<Uint8Array> {
     const repo = this.codeModel.getRepository(repoPath);
     if (!repo) throw new Error(`${filePath} not exists`);
@@ -271,7 +264,7 @@ export class CommandsContribution extends Disposable implements CommandContribut
     repoPath: string,
     sourceBranch: string,
     targetBranch: string,
-    prId: string
+    prId: string,
   ): Promise<CodeAPI.CanResolveConflictResponse> {
     const repo = this.codeModel.getRepository(repoPath);
     if (!repo) throw new Error('conflict request Error checkConflict');
@@ -282,7 +275,7 @@ export class CommandsContribution extends Disposable implements CommandContribut
     content: CodeAPI.ResolveConflict,
     sourceBranch: string,
     targetBranch: string,
-    prId?: string
+    prId?: string,
   ): Promise<CodeAPI.ResolveConflictResponse> {
     const repo = this.codeModel.getRepository(repoPath);
     if (!repo) throw new Error('conflict request Error resolveConflict');
@@ -291,7 +284,7 @@ export class CommandsContribution extends Disposable implements CommandContribut
   async getConflict(
     repoPath: string,
     sourceBranch: string,
-    targetBranch: string
+    targetBranch: string,
   ): Promise<CodeAPI.ConflictResponse> {
     const repo = this.codeModel.getRepository(repoPath);
     if (!repo) throw new Error('conflict request Error getConflict');
@@ -309,7 +302,6 @@ export class CommandsContribution extends Disposable implements CommandContribut
     if (!repo) throw new Error('conflict request Error createNewBranch');
     return repo.request.mergeBase(target, source);
   }
-
 
   async createPR(repoPath: string, target: string, source: string, title: string, autoMerge: boolean) {
     const repo = this.codeModel.getRepository(repoPath);

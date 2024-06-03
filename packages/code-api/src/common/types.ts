@@ -127,7 +127,7 @@ export namespace CodeAPI {
   }
 }
 
-type ConstructorOf<T = any> = new (...args: any[]) => T;
+type ConstructorOf<T = any> = new(...args: any[]) => T;
 
 export enum CodePlatform {
   github = 'github',
@@ -300,7 +300,7 @@ export interface Branch {
   name: string;
   ref: string;
   commit: {
-    id: string
+    id: string;
   };
 }
 
@@ -342,14 +342,14 @@ export interface Iteration {
   crateAt: string;
   updateAt: string;
 }
-export enum IterationPlatform { }
+export enum IterationPlatform {}
 
 export const ICodeAPIProvider = Symbol('ICodeAPIProvider');
 
 export interface ICodeAPIProvider {
   registerPlatformProvider(
     platform: ICodePlatform,
-    provider: { provider: ConstructorOf<ICodeAPIService>; onView?: () => void }
+    provider: { provider: ConstructorOf<ICodeAPIService>; onView?: () => void },
   ): void;
   asPlatform(platform: ICodePlatform): ICodeAPIService;
 }
@@ -392,7 +392,7 @@ export interface ICodeAPIService {
     repo: IRepositoryModel,
     commit: string,
     path: string,
-    options?: any
+    options?: any,
   ): Promise<Uint8Array>;
   /**
    * 获取 entry 相关信息
@@ -420,7 +420,7 @@ export interface ICodeAPIService {
   searchContent(
     repo: IRepositoryModel,
     searchString: string,
-    options: { limit: number }
+    options: { limit: number },
   ): Promise<ISearchResults>;
   /**
    * 文件搜索
@@ -428,7 +428,7 @@ export interface ICodeAPIService {
   searchFile(
     repo: IRepositoryModel,
     searchString: string,
-    options: { limit?: number }
+    options: { limit?: number },
   ): Promise<string[]>;
   /**
    * file blame
@@ -459,7 +459,7 @@ export interface ICodeAPIService {
   bulkChangeFiles(
     repo: IRepositoryModel,
     actions: FileAction[],
-    header: FileActionHeader
+    header: FileActionHeader,
   ): Promise<FileOperateResult[]>;
   /**
    * 创建分支
@@ -480,7 +480,7 @@ export interface ICodeAPIService {
     repo: IRepositoryModel,
     sourceBranch: string,
     targetBranch: string,
-    prId: string
+    prId: string,
   ): Promise<CodeAPI.CanResolveConflictResponse>;
   /**
    * 解决冲突提交
@@ -490,7 +490,7 @@ export interface ICodeAPIService {
     content: CodeAPI.ResolveConflict,
     sourceBranch: string,
     targetBranch: string,
-    prId?: string
+    prId?: string,
   ): Promise<CodeAPI.ResolveConflictResponse>;
   /**
    * 获取解决冲突信息
@@ -498,13 +498,13 @@ export interface ICodeAPIService {
   getConflict(
     repo: IRepositoryModel,
     sourceBranch: string,
-    targetBranch: string
+    targetBranch: string,
   ): Promise<CodeAPI.ConflictResponse>;
 
   mergeBase(
     repo: IRepositoryModel,
     target: string,
-    source: string
+    source: string,
   ): Promise<CodeAPI.ResponseCommit>;
 
   createPullRequest(
@@ -514,7 +514,6 @@ export interface ICodeAPIService {
     title: string,
     autoMerge?: boolean,
   ): Promise<CodeAPI.ResponseCreatePR>;
-
 }
 
 export interface ICodeAPIServiceProvider extends ICodeAPIService {

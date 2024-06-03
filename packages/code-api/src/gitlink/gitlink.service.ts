@@ -1,24 +1,24 @@
-import { Injectable, Autowired } from '@opensumi/di';
-import { IReporterService, formatLocalize, MessageType } from '@opensumi/ide-core-common';
 import { request, RequestOptions } from '@codeblitzjs/ide-common';
-import { API } from './types';
-import { HelperService } from '../common/service';
+import { Autowired, Injectable } from '@opensumi/di';
+import { formatLocalize, IReporterService, MessageType } from '@opensumi/ide-core-common';
+import { DEFAULT_SEARCH_IN_WORKSPACE_LIMIT } from '@opensumi/ide-search';
 import { CODE_PLATFORM_CONFIG } from '../common/config';
+import { HelperService } from '../common/service';
 import type {
-  TreeEntry,
-  EntryParam,
-  ICodeAPIService,
-  IRepositoryModel,
   BranchOrTag,
   CommitParams,
+  EntryInfo,
+  EntryParam,
   FileAction,
   FileActionHeader,
-  EntryInfo,
   GitlensBlame,
+  ICodeAPIService,
+  IRepositoryModel,
+  TreeEntry,
 } from '../common/types';
 import { CodePlatform, CommitFileStatus } from '../common/types';
-import { DEFAULT_SEARCH_IN_WORKSPACE_LIMIT } from '@opensumi/ide-search';
 import { CodeAPI as ConflictAPI } from '../common/types';
+import { API } from './types';
 
 const toType = (t: number) => {
   switch (t) {
@@ -58,13 +58,19 @@ export class GitLinkAPIService implements ICodeAPIService {
   constructor() {
     this._PRIVATE_TOKEN = this.config.token || '';
   }
-  createPullRequest(repo: IRepositoryModel, sourceBranch: string, targetBranch: string, title: string, autoMerge?: boolean | undefined): Promise<ConflictAPI.ResponseCreatePR> {
+  createPullRequest(
+    repo: IRepositoryModel,
+    sourceBranch: string,
+    targetBranch: string,
+    title: string,
+    autoMerge?: boolean | undefined,
+  ): Promise<ConflictAPI.ResponseCreatePR> {
     throw new Error('Method not implemented.');
   }
   mergeBase(
     _repo: IRepositoryModel,
     _target: string,
-    _source: string
+    _source: string,
   ): Promise<ConflictAPI.ResponseCommit> {
     throw new Error('Method not implemented.');
   }
@@ -76,7 +82,7 @@ export class GitLinkAPIService implements ICodeAPIService {
   }
   canResolveConflict(
     _repo: IRepositoryModel,
-    _prId: string
+    _prId: string,
   ): Promise<ConflictAPI.CanResolveConflictResponse> {
     throw new Error('Method not implemented.');
   }
@@ -86,7 +92,7 @@ export class GitLinkAPIService implements ICodeAPIService {
   getConflict(
     _repo: IRepositoryModel,
     _sourceBranch: string,
-    _targetBranch: string
+    _targetBranch: string,
   ): Promise<ConflictAPI.ConflictResponse> {
     throw new Error('Method not implemented.');
   }
@@ -119,7 +125,7 @@ export class GitLinkAPIService implements ICodeAPIService {
     if (!this.projectIdMap.has(projectPath)) {
       this.projectIdMap.set(
         projectPath,
-        this.getProject(repo).then(({ id }) => id)
+        this.getProject(repo).then(({ id }) => id),
       );
     }
     return this.projectIdMap.get(projectPath)!;
@@ -130,9 +136,7 @@ export class GitLinkAPIService implements ICodeAPIService {
   }
 
   transformStaticResource(repo: IRepositoryModel, path: string) {
-    return `${this.config.origin}/api/${this.getProjectPath(repo)}/raw?ref=${
-      repo.commit
-    }&filepath=${path}`;
+    return `${this.config.origin}/api/${this.getProjectPath(repo)}/raw?ref=${repo.commit}&filepath=${path}`;
   }
 
   protected async request<T>(path: string, options?: RequestOptions): Promise<T> {
@@ -145,8 +149,8 @@ export class GitLinkAPIService implements ICodeAPIService {
         headers: {
           ...(privateToken
             ? {
-                'PRIVATE-TOKEN': privateToken,
-              }
+              'PRIVATE-TOKEN': privateToken,
+            }
             : {}),
           ...headers,
         },
@@ -199,7 +203,7 @@ export class GitLinkAPIService implements ICodeAPIService {
           filepath: path,
           type: 'dir',
         },
-      }
+      },
     );
     if (data.entries) {
       return data.entries.map<TreeEntry>((item) => {
@@ -217,7 +221,7 @@ export class GitLinkAPIService implements ICodeAPIService {
 
   async getBlob(repo: IRepositoryModel, entry: EntryParam) {
     const res = await this.request<API.ResponseFileContent>(
-      `/api/v1/${this.getProjectPath(repo)}/git/blobs/${entry.sha}`
+      `/api/v1/${this.getProjectPath(repo)}/git/blobs/${entry.sha}`,
     );
     return new Uint8Array(Buffer.from(res.content, res.encoding));
   }
@@ -231,7 +235,7 @@ export class GitLinkAPIService implements ICodeAPIService {
           ref: commit,
           type: 'file',
         },
-      }
+      },
     );
     if (data.entries && typeof data.entries === 'object') {
       const sha = (data.entries as API.Entry).sha;
@@ -246,7 +250,7 @@ export class GitLinkAPIService implements ICodeAPIService {
 
   async getBranches(repo: IRepositoryModel): Promise<BranchOrTag[]> {
     const branchSlice = await this.request<API.BranchSlice>(
-      `/api/${this.getProjectPath(repo)}/branches_slice.json`
+      `/api/${this.getProjectPath(repo)}/branches_slice.json`,
     );
     const branches: BranchOrTag[] = [];
     branchSlice.forEach((slices) => {
@@ -264,7 +268,7 @@ export class GitLinkAPIService implements ICodeAPIService {
 
   async getTags(repo: IRepositoryModel): Promise<BranchOrTag[]> {
     const tags = await this.request<API.ResponseGetRefs>(
-      `/api/${this.getProjectPath(repo)}/tags.json`
+      `/api/${this.getProjectPath(repo)}/tags.json`,
     );
     return tags.map((tag) => ({
       commit: {
@@ -304,7 +308,7 @@ export class GitLinkAPIService implements ICodeAPIService {
       `/api/v1/${this.getProjectPath(repo)}/blame?sha=${repo.commit}&filepath=${path}`,
       {
         responseType: 'json',
-      }
+      },
     );
     const blameHash = {};
     const blamePart: GitlensBlame[] = [];
@@ -358,7 +362,7 @@ export class GitLinkAPIService implements ICodeAPIService {
           page: params.page,
           limit: params.pageSize,
         },
-      }
+      },
     );
     if (data.commits) {
       // TODO 缺少 email信息
@@ -380,7 +384,7 @@ export class GitLinkAPIService implements ICodeAPIService {
 
   async getCommitDiff(repo: IRepositoryModel, sha: string) {
     const data = await this.request<API.ResponseCommitFileChangeData>(
-      `/api/v1/${this.getProjectPath(repo)}/commits/${sha}/diff`
+      `/api/v1/${this.getProjectPath(repo)}/commits/${sha}/diff`,
     );
     return data.files.map((d) => ({
       oldFilePath: d.oldname,

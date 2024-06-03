@@ -1,18 +1,10 @@
-import * as path from 'path';
-import { Injectable, Autowired } from '@opensumi/di';
-import { Emitter, Deferred } from '@opensumi/ide-core-common';
-import { fsExtra } from '@codeblitzjs/ide-sumi-core';
 import { ICodeAPIProvider } from '@codeblitzjs/ide-code-api';
-import {
-  ICodePlatform,
-  Submodule,
-  IRepositoryModel,
-  Refs,
-  HeadRef,
-  RefType,
-  ICodeAPIProxy,
-} from './types';
-import { parseGitmodules, logger, findRef, HEAD, decodeRefPath } from './utils';
+import { fsExtra } from '@codeblitzjs/ide-sumi-core';
+import { Autowired, Injectable } from '@opensumi/di';
+import { Deferred, Emitter } from '@opensumi/ide-core-common';
+import * as path from 'path';
+import { HeadRef, ICodeAPIProxy, ICodePlatform, IRepositoryModel, Refs, RefType, Submodule } from './types';
+import { decodeRefPath, findRef, HEAD, logger, parseGitmodules } from './utils';
 
 @Injectable({ multiple: true })
 export class Repository implements IRepositoryModel {
@@ -65,7 +57,6 @@ export class Repository implements IRepositoryModel {
     return this._name;
   }
 
-
   /**
    * project
    */
@@ -100,7 +91,7 @@ export class Repository implements IRepositoryModel {
               commit: this.commit,
               projectId: this.projectId,
             },
-            ...args
+            ...args,
           );
       },
     });
@@ -205,7 +196,9 @@ export class RootRepository extends Repository {
    * @param ref tag, branch
    * @param refPath [tree|blob]/branch/path
    */
-  async initHEAD({ commit, ref, refPath, isForce }: { commit?: string; ref?: string; refPath?: string, isForce?: boolean }) {
+  async initHEAD(
+    { commit, ref, refPath, isForce }: { commit?: string; ref?: string; refPath?: string; isForce?: boolean },
+  ) {
     if (this._initialized && !isForce) {
       return;
     }
@@ -239,13 +232,12 @@ export class RootRepository extends Repository {
       await this.getRefs();
       const branchName = findRef(
         this.refs.branches.map((item) => item.name),
-        p
+        p,
       );
-      const matchedRef =
-        branchName ||
-        findRef(
+      const matchedRef = branchName
+        || findRef(
           this.refs.tags.map((item) => item.name),
-          p
+          p,
         );
       if (matchedRef) {
         this.ref = matchedRef;
@@ -297,9 +289,9 @@ export class RootRepository extends Repository {
     const shortCommit = this.commit.substr(0, 8);
     if (this.ref === HEAD) {
       return (
-        this.refs.branches.find((br) => br.commit === this.commit)?.name ||
-        this.refs.tags.find((tag) => tag.commit === this.commit)?.name ||
-        shortCommit
+        this.refs.branches.find((br) => br.commit === this.commit)?.name
+        || this.refs.tags.find((tag) => tag.commit === this.commit)?.name
+        || shortCommit
       );
     }
     if (/^[0-9a-f]{40}$/.test(this.ref)) {
