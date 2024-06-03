@@ -10,7 +10,7 @@ import debounce from 'lodash.debounce';
 import * as path from 'path';
 import { fs } from '../bfs';
 
-const enum ActionType {
+enum ActionType {
   CREATED = 0,
   DELETED = 1,
   MODIFIED = 2,
@@ -88,13 +88,13 @@ api.forEach(({ name, action }) => {
           directory: path.dirname(p),
           ...(name !== 'rename'
             ? {
-                file: path.basename(p),
-              }
+              file: path.basename(p),
+            }
             : {
-                oldFile: path.basename(p),
-                newDirectory: path.dirname(args[0]),
-                newFile: path.basename(args[0]),
-              }),
+              oldFile: path.basename(p),
+              newDirectory: path.dirname(args[0]),
+              newFile: path.basename(args[0]),
+            }),
         } as FileChangeEvent);
       }
       return res;
@@ -113,13 +113,13 @@ apiSync.forEach(({ name, action }) => {
       directory: path.dirname(p),
       ...(name !== 'renameSync'
         ? {
-            file: path.basename(p),
-          }
+          file: path.basename(p),
+        }
         : {
-            oldFile: path.basename(p),
-            newDirectory: path.dirname(args[0]),
-            newFile: path.basename(args[0]),
-          }),
+          oldFile: path.basename(p),
+          newDirectory: path.dirname(args[0]),
+          newFile: path.basename(args[0]),
+        }),
     } as FileChangeEvent);
     return res;
   };
@@ -284,14 +284,14 @@ interface FWFunction {
   (
     watchPath: string,
     eventCallback: (events: Array<ChangeEvent>) => void,
-    options?: Partial<Options>
+    options?: Partial<Options>,
   ): Promise<FW>;
 }
 
 export const watch: FWFunction = (
   dirOrFile: string,
   eventHandler: (events: ChangeEvent[]) => void,
-  { debounceMS = 500 } = {}
+  { debounceMS = 500 } = {},
 ) => {
   if (Number.isInteger(debounceMS)) {
     if (debounceMS < 1) {
@@ -369,7 +369,7 @@ export const watch: FWFunction = (
               }
             },
             null,
-            disposables
+            disposables,
           );
         },
         stop() {

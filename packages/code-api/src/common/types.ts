@@ -248,7 +248,7 @@ export interface CommitFileChange {
   deletions: number | null;
 }
 
-export const enum CommitFileStatus {
+export enum CommitFileStatus {
   Added = 'A',
   Modified = 'M',
   Deleted = 'D',

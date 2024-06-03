@@ -88,7 +88,7 @@ invoke(async () => {
   const { yes } = await prompt({
     type: 'confirm',
     name: 'yes',
-    message: `确认发布 v${targetVersion} (tag: ${args.tag || 'latest'})}`,
+    message: `确认发布 v${targetVersion} (tag: ${args.tag || 'latest'})`,
   });
 
   if (!yes) {
