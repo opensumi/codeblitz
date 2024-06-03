@@ -9,7 +9,6 @@ import {
   IContextKeyService,
 } from '@opensumi/ide-core-browser';
 import { ClientApp as BasicClientApp } from '@opensumi/ide-core-browser/lib/bootstrap/app';
-import {AINativeModule} from '@opensumi/ide-ai-native/lib/browser'
 
 import { Disposable } from '@opensumi/ide-core-common';
 
@@ -63,6 +62,7 @@ import { monacoBulkEditServiceProxy } from './override/monacoOverride/workspaceE
 import { CodeBlitzConnectionHelper } from './override/webConnectionHelper';
 import { WebConnectionHelper } from '@opensumi/ide-core-browser/lib/application/runtime';
 import { CodeBlitzAINativeContribution } from './ai-native';
+import { injectAINativePreferences } from './ai-native/preferences';
 export * from './override/monacoOverride/codeEditorService';
 
 export { ExtensionManagerModule as ExtensionClientManagerModule } from './extension-manager';
@@ -131,6 +131,7 @@ export class ClientModule extends BrowserModule {
   ];
   preferences = (injector: Injector) => {
     injectDebugPreferences(injector);
+    injectAINativePreferences(injector);
   };
 }
 
