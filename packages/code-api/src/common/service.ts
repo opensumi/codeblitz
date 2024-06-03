@@ -124,7 +124,7 @@ export class HelperService {
   }
 
   showMessage(
-    platform: ICodePlatform,
+    platform: ICodePlatform | string,
     msg: { type: MessageType; status?: number; symbol?: string; args?: any[]; message?: string },
     config?: { buttons?: string[]; closable?: boolean },
   ) {
