@@ -604,7 +604,7 @@ __metadata:
     "@opensumi/ide-file-scheme": "npm:3.0.4-next-1716974737.0"
     "@opensumi/ide-file-service": "npm:3.0.4-next-1716974737.0"
     "@opensumi/ide-file-tree-next": "npm:3.0.4-next-1716974737.0"
-    "@opensumi/ide-i18n": "npm:3.0.4-next-1716974737.0"
+    "@opensumi/ide-i18n": "npm:3.0.4"
     "@opensumi/ide-keymaps": "npm:3.0.4-next-1716974737.0"
     "@opensumi/ide-logs": "npm:3.0.4-next-1716974737.0"
     "@opensumi/ide-main-layout": "npm:3.0.4-next-1716974737.0"
@@ -1527,6 +1527,17 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@opensumi/ide-core-common@npm:3.0.4":
+  version: 3.0.4
+  resolution: "@opensumi/ide-core-common@npm:3.0.4"
+  dependencies:
+    "@opensumi/di": "npm:^1.4.0"
+    "@opensumi/ide-utils": "npm:3.0.4"
+    jschardet: "npm:3.0.0"
+  checksum: 10/30894301153a79b11778310c62739d21237f10d89948ce6028a3a0e841beaf082a4475407a9b5308b4a32ea3fe4b0a084c5ff553425289917cc58adbe1630196
+  languageName: node
+  linkType: hard
+
 "@opensumi/ide-core-common@npm:3.0.4-next-1716974737.0":
   version: 3.0.4-next-1716974737.0
   resolution: "@opensumi/ide-core-common@npm:3.0.4-next-1716974737.0"
@@ -1716,12 +1727,12 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@opensumi/ide-i18n@npm:3.0.4-next-1716974737.0":
-  version: 3.0.4-next-1716974737.0
-  resolution: "@opensumi/ide-i18n@npm:3.0.4-next-1716974737.0"
+"@opensumi/ide-i18n@npm:3.0.4":
+  version: 3.0.4
+  resolution: "@opensumi/ide-i18n@npm:3.0.4"
   dependencies:
-    "@opensumi/ide-core-common": "npm:3.0.4-next-1716974737.0"
-  checksum: 10/184e218a5cf602d5e0cc426a67486486532bb9dc063e5df2679631f1750ef50ebab7c873014308b36cf2857b4185c67048a6dabc8a7a23f6c4abefa7b7af907e
+    "@opensumi/ide-core-common": "npm:3.0.4"
+  checksum: 10/1a30f846c48803b1ffa8b4d06812154df010abeca48197009f3a939cf6ed0c6df3eabe8d6ac1f8e6bdb6d89a7ec32567658a1580e49ec273cd7058c577d63261
   languageName: node
   linkType: hard
 
@@ -1967,6 +1978,19 @@ __metadata:
   dependencies:
     "@opensumi/ide-core-common": "npm:3.0.4-next-1716974737.0"
   checksum: 10/dcbbc3c6578337379a9d4e81f45e8a4311549d13263a8e22144c302581cd74ecf97672a91e717ce7fa5b51965fd006e1e758eb1e476cf43a13069d8aa6c6d79f
+  languageName: node
+  linkType: hard
+
+"@opensumi/ide-utils@npm:3.0.4":
+  version: 3.0.4
+  resolution: "@opensumi/ide-utils@npm:3.0.4"
+  dependencies:
+    iconv-lite: "npm:^0.6.3"
+    jschardet: "npm:3.0.0"
+    mri: "npm:^1.2.0"
+    nanoid: "npm:3.3.4"
+    vscode-uri: "npm:3.0.2"
+  checksum: 10/a5b81dbe014cfcc32c6e5a0eadc85044df4237388b117e6c24233fccb6f16e9f0fb2edb7da97ea43a36357307ea4260419e4d29d76e14a00a07692dcd807f750
   languageName: node
   linkType: hard
 

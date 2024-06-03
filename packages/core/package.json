@@ -49,7 +49,7 @@
     "@opensumi/ide-file-scheme": "3.0.4-next-1716974737.0",
     "@opensumi/ide-file-service": "3.0.4-next-1716974737.0",
     "@opensumi/ide-file-tree-next": "3.0.4-next-1716974737.0",
-    "@opensumi/ide-i18n": "3.0.4-next-1716974737.0",
+    "@opensumi/ide-i18n": "3.0.4",
     "@opensumi/ide-keymaps": "3.0.4-next-1716974737.0",
     "@opensumi/ide-logs": "3.0.4-next-1716974737.0",
     "@opensumi/ide-main-layout": "3.0.4-next-1716974737.0",
