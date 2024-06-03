@@ -1,10 +1,10 @@
 import {
-  CODE_PLATFORM_CONFIG,
   CodeAPI,
   CodePlatform,
   CommitFileChange,
   CommitParams,
   CommitRecord,
+  ICodeAPIProvider,
 } from '@codeblitzjs/ide-code-api';
 import { Autowired } from '@opensumi/di';
 import { IClipboardService, IOpenerService } from '@opensumi/ide-core-browser';
@@ -47,6 +47,9 @@ export type RemoteResource =
 export class CommandsContribution extends Disposable implements CommandContribution {
   @Autowired(CodeModelService)
   private readonly codeModel: CodeModelService;
+
+  @Autowired(ICodeAPIProvider)
+  readonly codeAPI: ICodeAPIProvider;
 
   @Autowired(IOpenerService)
   private readonly openerService: IOpenerService;
@@ -115,7 +118,8 @@ export class CommandsContribution extends Disposable implements CommandContribut
     const repo = this.codeModel.getRepository(filepath);
     if (repo) {
       if (res.type === RemoteResourceType.Commit) {
-        const { origin } = CODE_PLATFORM_CONFIG[repo.platform];
+        const configs = this.codeAPI.getCodePlatformConfigs();
+        const { origin } = configs[repo.platform];
         if (repo.platform === CodePlatform.gitlink) {
           this.openerService.open(`${origin}/${repo.owner}/${repo.name}/commits/${res.sha}`);
         } else {
@@ -138,6 +142,8 @@ export class CommandsContribution extends Disposable implements CommandContribut
 
   async repository() {
     const { HEAD, commit, headLabel, name, owner, platform, ref, refs } = this.codeModel.rootRepository;
+    const configs = this.codeAPI.getCodePlatformConfigs();
+
     return {
       HEAD,
       commit,
@@ -146,7 +152,7 @@ export class CommandsContribution extends Disposable implements CommandContribut
       owner,
       platform,
       ref,
-      origin: CODE_PLATFORM_CONFIG[platform].origin,
+      origin: configs[platform].origin,
       // refs: refs
     };
   }
@@ -256,7 +262,8 @@ export class CommandsContribution extends Disposable implements CommandContribut
   async remoteUrl(repoPath: string): Promise<string | null> {
     const repo = this.codeModel.getRepository(repoPath);
     if (!repo) return null;
-    const { origin } = CODE_PLATFORM_CONFIG[repo.platform];
+    const configs = this.codeAPI.getCodePlatformConfigs();
+    const { origin } = configs[repo.platform];
     return `${origin}/${repo.owner}/${repo.name}`;
   }
 

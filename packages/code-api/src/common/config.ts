@@ -1,4 +1,4 @@
-import { CodePlatform, ICodePlatform } from './types';
+import { CodePlatform } from './types';
 
 export interface ICodePlatformConfig {
   platform: CodePlatform;
@@ -17,7 +17,7 @@ export interface ICodePlatformConfig {
 }
 
 // 代码托管平台配置
-export const CODE_PLATFORM_CONFIG: Record<ICodePlatform, ICodePlatformConfig> = {
+export const CODE_PLATFORM_CONFIG: Record<string, ICodePlatformConfig> = {
   [CodePlatform.github]: {
     platform: CodePlatform.github,
     hostname: ['github.com'],
@@ -173,31 +173,4 @@ export const CODE_PLATFORM_CONFIG: Record<ICodePlatform, ICodePlatformConfig> = 
     },
     createBranchAble: true,
   },
-};
-
-export const extendPlatformConfig = (
-  platform: ICodePlatform,
-  data: {
-    hostname?: string[];
-    origin?: string;
-    endpoint?: string;
-    token?: string;
-  },
-) => {
-  const config = CODE_PLATFORM_CONFIG[platform];
-  if (!config) {
-    return;
-  }
-  if (Array.isArray(data.hostname)) {
-    config.hostname.push(...data.hostname);
-  }
-  if (data.origin) {
-    config.origin = data.origin;
-  }
-  if (data.endpoint) {
-    config.endpoint = data.endpoint;
-  }
-  if (data.token) {
-    config.token = data.token;
-  }
 };

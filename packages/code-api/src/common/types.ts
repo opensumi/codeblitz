@@ -1,3 +1,5 @@
+import { ICodePlatformConfig } from './config';
+
 export namespace CodeAPI {
   interface Entry {
     id: string;
@@ -352,6 +354,13 @@ export interface ICodeAPIProvider {
     provider: { provider: ConstructorOf<ICodeAPIService>; onView?: () => void },
   ): void;
   asPlatform(platform: ICodePlatform): ICodeAPIService;
+  getCodePlatformConfigs(): Record<string, ICodePlatformConfig>;
+  extendPlatformConfig(platform: ICodePlatform, data: {
+    hostname?: string[];
+    origin?: string;
+    endpoint?: string;
+    token?: string;
+  }): void;
 }
 
 export interface RequestFailed {

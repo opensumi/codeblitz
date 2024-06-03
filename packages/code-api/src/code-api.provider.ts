@@ -5,6 +5,7 @@ import { IMainLayoutService } from '@opensumi/ide-main-layout';
 import { IIconService } from '@opensumi/ide-theme';
 import { AtomGitAPIService } from './atomgit/atomgit.service';
 import { CodeUPAPIService } from './codeup/codeup.service';
+import { CODE_PLATFORM_CONFIG, ICodePlatformConfig } from './common';
 import { CodePlatform, ICodeAPIProvider, ICodeAPIService, ICodePlatform } from './common/types';
 import { GiteeAPIService } from './gitee/gitee.service';
 import { GitHubAPIService } from './github/github.service';
@@ -12,6 +13,12 @@ import { GitHubView } from './github/github.view';
 import { GitLabAPIService } from './gitlab/gitlab.service';
 import { GitLabView } from './gitlab/gitlab.view';
 import { GitLinkAPIService } from './gitlink/gitlink.service';
+
+interface ICodePlatformAPIProvider {
+  provider: ConstructorOf<ICodeAPIService>;
+  config: ICodePlatformConfig;
+  onCreate?: () => void;
+}
 
 @Domain(ClientAppContribution)
 export class CodeAPIProvider implements ICodeAPIProvider, ClientAppContribution {
@@ -27,13 +34,10 @@ export class CodeAPIProvider implements ICodeAPIProvider, ClientAppContribution 
   private started = new Deferred<void>();
 
   private apiProviderMap = new Map<
-    ICodePlatform,
-    {
-      provider: ConstructorOf<ICodeAPIService>;
-      onCreate?: () => void;
-    }
+    string,
+    ICodePlatformAPIProvider
   >();
-  private apiServiceMap = new Map<ICodePlatform, ICodeAPIService>();
+  private apiServiceMap = new Map<string, ICodeAPIService>();
 
   constructor() {
     this.registerPlatformProvider(CodePlatform.github, {
@@ -57,6 +61,7 @@ export class CodeAPIProvider implements ICodeAPIProvider, ClientAppContribution 
           );
         });
       },
+      config: CODE_PLATFORM_CONFIG[CodePlatform.github],
     });
     this.registerPlatformProvider(CodePlatform.gitlab, {
       provider: GitLabAPIService,
@@ -79,24 +84,29 @@ export class CodeAPIProvider implements ICodeAPIProvider, ClientAppContribution 
           );
         });
       },
+      config: CODE_PLATFORM_CONFIG[CodePlatform.gitlab],
     });
     this.registerPlatformProvider(CodePlatform.gitlink, {
       provider: GitLinkAPIService,
+      config: CODE_PLATFORM_CONFIG[CodePlatform.gitlink],
     });
     this.registerPlatformProvider(CodePlatform.atomgit, {
       provider: AtomGitAPIService,
+      config: CODE_PLATFORM_CONFIG[CodePlatform.atomgit],
     });
     this.registerPlatformProvider(CodePlatform.codeup, {
       provider: CodeUPAPIService,
+      config: CODE_PLATFORM_CONFIG[CodePlatform.codeup],
     });
     this.registerPlatformProvider(CodePlatform.gitee, {
       provider: GiteeAPIService,
+      config: CODE_PLATFORM_CONFIG[CodePlatform.gitee],
     });
   }
 
   registerPlatformProvider(
     platform: ICodePlatform,
-    provider: { provider: ConstructorOf<ICodeAPIService>; onCreate?: () => void },
+    provider: ICodePlatformAPIProvider,
   ) {
     if (!this.apiProviderMap.has(platform)) {
       this.apiProviderMap.set(platform, provider);
@@ -136,6 +146,44 @@ export class CodeAPIProvider implements ICodeAPIProvider, ClientAppContribution 
   get codeup() {
     return this.asPlatform(CodePlatform.codeup) as CodeUPAPIService;
   }
+
+  getCodePlatformConfigs(): Record<string, ICodePlatformConfig> {
+    const result = {} as Record<string, ICodePlatformConfig>;
+
+    this.apiProviderMap.forEach((provider, key) => {
+      result[key] = provider.config;
+    });
+
+    return result;
+  }
+
+  extendPlatformConfig(
+    platform: string,
+    data: {
+      hostname?: string[] | undefined;
+      origin?: string | undefined;
+      endpoint?: string | undefined;
+      token?: string | undefined;
+    },
+  ): void {
+    const provider = this.apiProviderMap.get(platform);
+    if (!provider) {
+      return;
+    }
+    if (Array.isArray(data.hostname)) {
+      provider.config.hostname.push(...data.hostname);
+    }
+    if (data.origin) {
+      provider.config.origin = data.origin;
+    }
+    if (data.endpoint) {
+      provider.config.endpoint = data.endpoint;
+    }
+    if (data.token) {
+      provider.config.token = data.token;
+    }
+  }
+
   onStart() {
     this.started.resolve();
   }

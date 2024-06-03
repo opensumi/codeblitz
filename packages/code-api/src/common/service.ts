@@ -14,7 +14,7 @@ import { IDialogService, IMessageService } from '@opensumi/ide-overlay';
 import { DialogService } from '@opensumi/ide-overlay/lib/browser/dialog.service';
 import { CODE_PLATFORM_CONFIG } from './config';
 import { ATOMGIT_PRIVATE_TOKEN, GITEE_PRIVATE_TOKEN, GITHUB_OAUTH_TOKEN, GITLAB_PRIVATE_TOKEN } from './constant';
-import { ICodePlatform } from './types';
+import { ICodeAPIProvider, ICodePlatform } from './types';
 
 /**
  * 使用 localStorage 存储 token 够用了
@@ -25,6 +25,9 @@ import { ICodePlatform } from './types';
 export class HelperService {
   @Autowired(StorageProvider)
   private provideStorage: StorageProvider;
+
+  @Autowired(ICodeAPIProvider)
+  readonly codeAPI: ICodeAPIProvider;
 
   @Autowired(CommandService)
   private readonly commandService: CommandService;
@@ -128,12 +131,14 @@ export class HelperService {
     const message = `${msg.status ? `${msg.status} - ` : ''}${
       msg.symbol ? localize(msg.symbol, ...(msg.args || [])) : msg.message
     }`;
+    const configs = this.codeAPI.getCodePlatformConfigs();
+
     return this.messageService.open(
       message,
       msg.type,
       config?.buttons,
       config?.closable,
-      CODE_PLATFORM_CONFIG[platform].brand,
+      configs[platform].brand,
     );
   }
 
