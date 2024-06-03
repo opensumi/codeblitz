@@ -1,7 +1,7 @@
 import { CodePlatform } from './types';
 
 export interface ICodePlatformConfig {
-  platform: CodePlatform;
+  platform: CodePlatform | string;
   origin: string;
   hostname: string[];
   endpoint: string;

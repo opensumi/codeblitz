@@ -356,12 +356,12 @@ export const ICodeAPIProvider = Symbol('ICodeAPIProvider');
 
 export interface ICodeAPIProvider {
   registerPlatformProvider(
-    platform: ICodePlatform,
+    platform: string,
     provider: ICodePlatformAPIProvider,
   ): void;
-  asPlatform(platform: ICodePlatform): ICodeAPIService;
+  asPlatform(platform: string): ICodeAPIService;
   getCodePlatformConfigs(): Record<string, ICodePlatformConfig>;
-  extendPlatformConfig(platform: ICodePlatform, data: {
+  extendPlatformConfig(platform: string, data: {
     hostname?: string[];
     origin?: string;
     endpoint?: string;

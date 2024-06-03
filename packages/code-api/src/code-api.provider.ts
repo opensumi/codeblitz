@@ -105,7 +105,7 @@ export class CodeAPIProvider implements ICodeAPIProvider, ClientAppContribution 
   }
 
   registerPlatformProvider(
-    platform: ICodePlatform,
+    platform: string,
     provider: ICodePlatformAPIProvider,
   ) {
     if (!this.apiProviderMap.has(platform)) {
