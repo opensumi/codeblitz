@@ -13,7 +13,7 @@ export const EXTENSION_METADATA_DIR = path.join(FRAMEWORK_PATH, 'extensions');
 export const EXTENSION_METADATA_TYPE_PATH = path.join(FRAMEWORK_PATH, 'extensions.d.ts');
 
 export const EXTENSION_FIELD = 'cloudideExtensions';
-export const EXTENSION_CONFIG_FIELD = 'cloudideMarketplaceConfig';
+export const EXTENSION_CONFIG_FIELD = 'marketplaceConfig';
 
 export interface IMarketplaceConfig {
   endpoint: string;
