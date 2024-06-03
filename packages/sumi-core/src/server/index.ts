@@ -6,6 +6,7 @@ import { FileSchemeNodeModule } from './file-scheme';
 import { FileSearchModule } from './file-search';
 import { SearchModule } from './search';
 import { ExtensionManagerModule } from './extension-manager';
+import { AINativeModule } from '@opensumi/ide-ai-native/lib/browser';
 
 export * from './core';
 export * from './opensumi-extension';
@@ -32,4 +33,5 @@ export const ServerModuleCollection = [
   FileSearchModule,
   SearchModule,
   ExtensionManagerModule,
+  AINativeModule,
 ];

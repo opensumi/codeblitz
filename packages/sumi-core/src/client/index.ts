@@ -17,7 +17,7 @@ import { TextmateLanguageGrammarContribution } from './textmate-language-grammar
 import { ILanguageGrammarRegistrationService } from './textmate-language-grammar/base';
 import { LanguageGrammarRegistrationService } from './textmate-language-grammar/language-grammar.service';
 import { injectDebugPreferences } from './debug';
-import { IServerApp, RootFS } from '../common';
+import { IServerApp, RootFS, RuntimeConfig } from '../common';
 import { IServerAppOpts, ServerApp } from '../server/core/app';
 import {
   FileTreeCustomContribution,
@@ -61,6 +61,8 @@ import { monacoTextModelServiceProxy } from './override/monacoOverride/textModel
 import { monacoBulkEditServiceProxy } from './override/monacoOverride/workspaceEditService';
 import { CodeBlitzConnectionHelper } from './override/webConnectionHelper';
 import { WebConnectionHelper } from '@opensumi/ide-core-browser/lib/application/runtime';
+import { CodeBlitzAINativeContribution } from './ai-native';
+import { injectAINativePreferences } from './ai-native/preferences';
 export * from './override/monacoOverride/codeEditorService';
 
 export { ExtensionManagerModule as ExtensionClientManagerModule } from './extension-manager';
@@ -90,6 +92,7 @@ export class ClientModule extends BrowserModule {
     SearchContribution,
     PreferenceSettingContribution,
     LayoutRestoreContributation,
+    CodeBlitzAINativeContribution,
     ...MonacoOverrides,
     {
       token: IBreadCrumbService,
@@ -126,7 +129,10 @@ export class ClientModule extends BrowserModule {
       override: true,
     },
   ];
-  preferences = injectDebugPreferences;
+  preferences = (injector: Injector) => {
+    injectDebugPreferences(injector);
+    injectAINativePreferences(injector);
+  };
 }
 
 export interface IAppOpts extends IClientAppOpts, IServerAppOpts {}

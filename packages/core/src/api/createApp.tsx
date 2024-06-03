@@ -38,6 +38,8 @@ import { mergeConfig, getThemeTypeByPreferenceThemeId } from '../core/utils';
 import { LayoutComponent, getDefaultLayoutConfig } from '../core/layout';
 import { IConfig, IAppInstance } from './types';
 import { EXT_WORKER_HOST, WEBVIEW_ENDPOINT } from '../core/env';
+import { interceptAppOpts } from './opts';
+import { appName } from './constants';
 
 export { SlotLocation, SlotRenderer, BoxPanel, SplitPanel };
 
@@ -48,7 +50,7 @@ export const getDefaultAppConfig = (): IAppOpts => ({
   extWorkerHost: EXT_WORKER_HOST,
   webviewEndpoint: WEBVIEW_ENDPOINT,
   defaultPreferences: {
-    'general.theme': 'opensumi-dark',
+    'general.theme': 'opensumi-design-dark',
     'general.icon': 'vsicons-slim',
     'application.confirmExit': 'never',
     'editor.quickSuggestionsDelay': 10,
@@ -73,7 +75,7 @@ export const getDefaultAppConfig = (): IAppOpts => ({
   preferenceDirName: STORAGE_DIR,
   storageDirName: STORAGE_DIR,
   extensionStorageDirName: STORAGE_DIR,
-  appName: 'CodeBlitz',
+  appName,
   allowSetDocumentTitleFollowWorkspaceDir: false,
   app: {
     logo: 'https://mdn.alipayobjects.com/huamei_hwfivk/afts/img/A*byvFQJURn0kAAAAAAAAAAAAADlyoAQ/original',
@@ -86,7 +88,7 @@ export const getDefaultAppConfig = (): IAppOpts => ({
 export const DEFAULT_APP_CONFIG = getDefaultAppConfig();
 
 export function createApp({ appConfig, runtimeConfig }: IConfig): IAppInstance {
-  const opts = mergeConfig(getDefaultAppConfig(), appConfig);
+  const opts = interceptAppOpts(mergeConfig(getDefaultAppConfig(), appConfig), runtimeConfig);
 
   if (!opts.workspaceDir) {
     throw new Error(

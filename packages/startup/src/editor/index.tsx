@@ -134,7 +134,7 @@ const App = () => {
           onClick={() => {
             const commands = editorPlugin.api.commands;
             if (commands) {
-              commands.executeCommand('plugin.command.changeTheme', 'opensumi-dark');
+              commands.executeCommand('plugin.command.changeTheme', 'opensumi-design-dark');
             }
           }}
           size="small"
