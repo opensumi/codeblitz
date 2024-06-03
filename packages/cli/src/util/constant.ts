@@ -1,4 +1,5 @@
 import * as path from 'path';
+import { log } from './log';
 
 export const PRODUCT = 'codeblitz';
 
@@ -21,15 +22,29 @@ export interface IMarketplaceConfig {
   masterKey: string;
 }
 
-export const MARKETPLACE_CONFIG: IMarketplaceConfig = {
+const MARKETPLACE_CONFIG: IMarketplaceConfig = {
   endpoint: 'https://marketplace.opentrs.cn',
   accountId: 'JL1k9cyrepomKpoSWXADGb9G',
   masterKey: 't-6MbbT-9C15R_chQ8qUj78P',
 }
 
-export const resolveMarketplaceConfig = (pkgJSON: any): IMarketplaceConfig => {
+export const resolveMarketplaceConfig = (pkgJSON: {
+  [EXTENSION_CONFIG_FIELD]: IMarketplaceConfig
+}): IMarketplaceConfig => {
   if (pkgJSON && pkgJSON[EXTENSION_CONFIG_FIELD]) {
-    return pkgJSON[EXTENSION_CONFIG_FIELD] as IMarketplaceConfig;
+    const config = pkgJSON[EXTENSION_CONFIG_FIELD];
+    if (config.endpoint) {
+      log.info('使用 package.json 中的定义的 marketplaceConfig.endpoint 配置: ' + pkgJSON[EXTENSION_CONFIG_FIELD].endpoint)
+      MARKETPLACE_CONFIG.endpoint = config.endpoint;
+    }
+    if (config.accountId) {
+      log.info('使用 package.json 中的定义的 marketplaceConfig.accountId 配置: ' + pkgJSON[EXTENSION_CONFIG_FIELD].accountId)
+      MARKETPLACE_CONFIG.accountId = config.accountId;
+    }
+    if (config.masterKey) {
+      log.info('使用 package.json 中的定义的 marketplaceConfig.masterKey 配置。')
+      MARKETPLACE_CONFIG.masterKey = config.masterKey;
+    }
   }
 
   return MARKETPLACE_CONFIG;

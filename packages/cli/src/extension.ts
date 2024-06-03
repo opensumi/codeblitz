@@ -4,7 +4,7 @@ import * as fse from 'fs-extra';
 import { from, of } from 'rxjs';
 import { mergeMap, filter, map } from 'rxjs/operators';
 import { IExtensionMode } from '@codeblitzjs/ide-common';
-import { EXTENSION_DIR, EXTENSION_METADATA_DIR, EXTENSION_FIELD, MARKETPLACE_CONFIG, resolveMarketplaceConfig } from './util/constant';
+import { EXTENSION_DIR, EXTENSION_METADATA_DIR, EXTENSION_FIELD, resolveMarketplaceConfig } from './util/constant';
 import { ExtensionInstaller, Extension } from './util/installer';
 import { getExtension } from './extension/scanner';
 import {
