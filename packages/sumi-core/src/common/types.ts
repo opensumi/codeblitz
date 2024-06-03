@@ -217,7 +217,10 @@ export interface RuntimeConfig {
     /**
      * 提供注册 inline chat 按钮的列表
      */
-    providerInlineChat?: () => { operational: AIActionItem; handler: IEditorInlineChatHandler }[];
+    providerEditorInlineChat?: () => {
+      operational: AIActionItem;
+      handler: IEditorInlineChatHandler;
+    }[];
   };
 }
 

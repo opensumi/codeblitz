@@ -62,6 +62,7 @@ import { monacoTextModelServiceProxy } from './override/monacoOverride/textModel
 import { monacoBulkEditServiceProxy } from './override/monacoOverride/workspaceEditService';
 import { CodeBlitzConnectionHelper } from './override/webConnectionHelper';
 import { WebConnectionHelper } from '@opensumi/ide-core-browser/lib/application/runtime';
+import { CodeBlitzAINativeContribution } from './ai-native';
 export * from './override/monacoOverride/codeEditorService';
 
 export { ExtensionManagerModule as ExtensionClientManagerModule } from './extension-manager';
@@ -91,6 +92,7 @@ export class ClientModule extends BrowserModule {
     SearchContribution,
     PreferenceSettingContribution,
     LayoutRestoreContributation,
+    CodeBlitzAINativeContribution,
     ...MonacoOverrides,
     {
       token: IBreadCrumbService,
