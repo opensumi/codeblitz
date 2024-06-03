@@ -1,5 +1,7 @@
 import * as path from 'path';
+import fse from 'fs-extra';
 import { log } from './log';
+import { resolveCWDPkgJSON } from './path';
 
 export const PRODUCT = 'codeblitz';
 
@@ -28,9 +30,11 @@ const MARKETPLACE_CONFIG: IMarketplaceConfig = {
   masterKey: 't-6MbbT-9C15R_chQ8qUj78P',
 }
 
-export const resolveMarketplaceConfig = (pkgJSON: {
-  [EXTENSION_CONFIG_FIELD]: IMarketplaceConfig
-}): IMarketplaceConfig => {
+export const resolveMarketplaceConfig = (): IMarketplaceConfig => {
+  const pkgJSON: {
+    [EXTENSION_CONFIG_FIELD]: IMarketplaceConfig
+  } = fse.readJsonSync(resolveCWDPkgJSON());
+
   if (pkgJSON && pkgJSON[EXTENSION_CONFIG_FIELD]) {
     const config = pkgJSON[EXTENSION_CONFIG_FIELD];
     if (config.endpoint) {

@@ -18,6 +18,7 @@ import checkFramework from './util/check-framework';
 import { createServer, getHttpUri } from './util/serve-file';
 import { formatExtension } from './util';
 import { createMetadataType } from './extension/metadata-type';
+import { resolveCWDPkgJSON } from './util/path';
 
 let extensionInstaller: ExtensionInstaller;
 let shouldWriteConfig = false;
@@ -138,7 +139,7 @@ export const installLocalExtensions = async (dirs: string[], options?: IExtensio
 async function createInstaller() {
   const pkgJSON = fse.readJSONSync(path.join(__dirname, '../package.json'));
 
-  const marketplaceConfig = resolveMarketplaceConfig(pkgJSON);
+  const marketplaceConfig = resolveMarketplaceConfig();
 
   extensionInstaller = new ExtensionInstaller({
     api: marketplaceConfig.endpoint,
@@ -293,9 +294,4 @@ export async function uninstall(extensionId: string[]) {
   await setExtensionFromPackage(remainExtensions);
 
   log.success('卸载扩展成功');
-}
-
-function resolveCWDPkgJSON() {
-  const initCWD = process.env.INIT_CWD || process.cwd();
-  return path.resolve(initCWD, 'package.json');
 }
