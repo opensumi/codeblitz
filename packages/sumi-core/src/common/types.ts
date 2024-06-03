@@ -1,11 +1,12 @@
 import { Keybinding } from '@opensumi/ide-core-browser';
-import { IAINativeCapabilities, IReporter, MaybePromise } from '@opensumi/ide-core-common';
+import { IAIBackService, IAIBackServiceResponse, IAINativeCapabilities, IChatProgress, IReporter, MaybePromise } from '@opensumi/ide-core-common';
 import type {
   IAIMiddleware,
   IEditorInlineChatHandler,
 } from '@opensumi/ide-ai-native/lib/browser/types';
 import { FileSystemConfiguration, FileSystemInstance } from '../server/node';
 import { AIActionItem } from '@opensumi/ide-core-browser/lib/components/ai-native';
+import { SumiReadableStream } from '@opensumi/ide-utils/lib/stream';
 
 export { AppConfig } from '@opensumi/ide-core-browser';
 
@@ -221,6 +222,7 @@ export interface RuntimeConfig {
       operational: AIActionItem;
       handler: IEditorInlineChatHandler;
     }[];
+    service?: IAIBackService<IAIBackServiceResponse, SumiReadableStream<IChatProgress>>
   };
 }
 
