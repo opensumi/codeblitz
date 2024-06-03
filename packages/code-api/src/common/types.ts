@@ -346,12 +346,18 @@ export interface Iteration {
 }
 export enum IterationPlatform {}
 
+export interface ICodePlatformAPIProvider {
+  provider: ConstructorOf<ICodeAPIService>;
+  config: ICodePlatformConfig;
+  onCreate?: () => void;
+}
+
 export const ICodeAPIProvider = Symbol('ICodeAPIProvider');
 
 export interface ICodeAPIProvider {
   registerPlatformProvider(
     platform: ICodePlatform,
-    provider: { provider: ConstructorOf<ICodeAPIService>; onView?: () => void },
+    provider: ICodePlatformAPIProvider,
   ): void;
   asPlatform(platform: ICodePlatform): ICodeAPIService;
   getCodePlatformConfigs(): Record<string, ICodePlatformConfig>;

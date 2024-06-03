@@ -6,19 +6,19 @@ import { IIconService } from '@opensumi/ide-theme';
 import { AtomGitAPIService } from './atomgit/atomgit.service';
 import { CodeUPAPIService } from './codeup/codeup.service';
 import { CODE_PLATFORM_CONFIG, ICodePlatformConfig } from './common';
-import { CodePlatform, ICodeAPIProvider, ICodeAPIService, ICodePlatform } from './common/types';
+import {
+  CodePlatform,
+  ICodeAPIProvider,
+  ICodeAPIService,
+  ICodePlatform,
+  ICodePlatformAPIProvider,
+} from './common/types';
 import { GiteeAPIService } from './gitee/gitee.service';
 import { GitHubAPIService } from './github/github.service';
 import { GitHubView } from './github/github.view';
 import { GitLabAPIService } from './gitlab/gitlab.service';
 import { GitLabView } from './gitlab/gitlab.view';
 import { GitLinkAPIService } from './gitlink/gitlink.service';
-
-interface ICodePlatformAPIProvider {
-  provider: ConstructorOf<ICodeAPIService>;
-  config: ICodePlatformConfig;
-  onCreate?: () => void;
-}
 
 @Domain(ClientAppContribution)
 export class CodeAPIProvider implements ICodeAPIProvider, ClientAppContribution {
