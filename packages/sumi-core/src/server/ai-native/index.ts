@@ -1,12 +1,11 @@
 import { Injectable, Provider } from '@opensumi/di';
+import { ChatProxyServiceToken } from '@opensumi/ide-ai-native/lib/common';
 import { AIBackSerivcePath, AIBackSerivceToken } from '@opensumi/ide-core-common';
 import { NodeModule } from '../core/app';
-import { ChatProxyServiceToken } from '@opensumi/ide-ai-native/lib/common';
 import { AIBackService } from './ai-back-service';
 
-
 @Injectable()
-export class AINativeModule extends NodeModule {
+export class AINativeServerModule extends NodeModule {
   providers: Provider[] = [
     {
       token: AIBackSerivceToken,

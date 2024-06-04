@@ -16,6 +16,7 @@ import {
   IReporter,
 } from '@opensumi/ide-core-browser';
 import { BoxPanel, SplitPanel } from '@opensumi/ide-core-browser/lib/components';
+import { Injector } from '@opensumi/di';
 
 import '@opensumi/ide-core-browser/lib/style/entry.less';
 import '@opensumi/ide-core-browser/lib/style/codicons/codicon-animations.css';
@@ -75,7 +76,27 @@ export function createEditor({ appConfig, runtimeConfig }: IConfig): IAppInstanc
   }
   opts.workspaceDir = makeWorkspaceDir(opts.workspaceDir);
 
-  const app = new ClientApp(opts) as IAppInstance;
+  const injector = opts.injector || new Injector();
+  // 基于场景的运行时数据
+  injector.addProviders({
+    token: RuntimeConfig,
+    useValue: runtimeConfig,
+  });
+
+  injector.addProviders({
+    token: IPluginConfig,
+    useValue: appConfig.plugins,
+  });
+
+  if (runtimeConfig.reporter) {
+    injector.addProviders({
+      token: IReporter,
+      useValue: runtimeConfig.reporter,
+      override: true,
+    });
+  }
+
+  const app = new ClientApp({ ...opts, injector }) as IAppInstance;
 
   const _start = app.start;
   app.start = async (container: HTMLElement | IAppRenderer) => {
@@ -92,25 +113,6 @@ export function createEditor({ appConfig, runtimeConfig }: IConfig): IAppInstanc
     disposableCollection.forEach((d) => d(app.injector));
     app.injector.disposeAll();
   };
-
-  // 基于场景的运行时数据
-  app.injector.addProviders({
-    token: RuntimeConfig,
-    useValue: runtimeConfig,
-  });
-
-  app.injector.addProviders({
-    token: IPluginConfig,
-    useValue: appConfig.plugins,
-  });
-
-  if (runtimeConfig.reporter) {
-    app.injector.addProviders({
-      token: IReporter,
-      useValue: runtimeConfig.reporter,
-      override: true,
-    });
-  }
 
   return app;
 }

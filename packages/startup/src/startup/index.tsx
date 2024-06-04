@@ -10,7 +10,7 @@ import * as Alex from '@codeblitzjs/ide-core';
 import '@codeblitzjs/ide-core/languages';
 import { CodeServiceModule } from '@codeblitzjs/ide-code-service';
 import { CodeAPIModule, CodePlatform } from '@codeblitzjs/ide-code-api';
-import { isFilesystemReady } from '@codeblitzjs/ide-sumi-core';
+import { IEditorInlineChat, isFilesystemReady } from '@codeblitzjs/ide-sumi-core';
 import { StartupModule } from './startup.module';
 
 import css from '@codeblitzjs/ide-core/extensions/codeblitz.css-language-features-worker';
@@ -181,6 +181,35 @@ const App = () => (
     runtimeConfig={{
       scmFileTree: true,
       scenario: 'ALEX_TEST',
+      aiNative: {
+        enable: true,
+        providerEditorInlineChat(): IEditorInlineChat[] {
+            return [
+              {
+                operational: {
+                  id: 'test',
+                  name: 'test',
+                  codeAction: {},
+                  title: 'Test',
+                },
+                handler: {
+                  execute(editor, ...args) {
+                    editor.getModel()?.pushEditOperations(
+                      [],
+                      [
+                        {
+                          range: editor.getSelection()!,
+                          text: 'test',
+                        },
+                      ],
+                      () => null
+                    )
+                  },
+                }
+              }
+            ]
+        },
+      }
     }}
   />
 );

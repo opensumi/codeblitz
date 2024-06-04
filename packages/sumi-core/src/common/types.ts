@@ -1,12 +1,15 @@
+import type { IAIMiddleware, IEditorInlineChatHandler } from '@opensumi/ide-ai-native/lib/browser/types';
 import { Keybinding } from '@opensumi/ide-core-browser';
-import { IAIBackService, IAIBackServiceResponse, IAINativeCapabilities, IChatProgress, IReporter, MaybePromise } from '@opensumi/ide-core-common';
-import type {
-  IAIMiddleware,
-  IEditorInlineChatHandler,
-} from '@opensumi/ide-ai-native/lib/browser/types';
-import { FileSystemConfiguration, FileSystemInstance } from '../server/node';
 import { AIActionItem } from '@opensumi/ide-core-browser/lib/components/ai-native';
+import {
+  IAIBackService,
+  IAIBackServiceResponse,
+  IAINativeCapabilities,
+  IChatProgress,
+  IReporter,
+} from '@opensumi/ide-core-common';
 import { SumiReadableStream } from '@opensumi/ide-utils/lib/stream';
+import { FileSystemConfiguration, FileSystemInstance } from '../server/node';
 
 export { AppConfig } from '@opensumi/ide-core-browser';
 
@@ -20,6 +23,11 @@ export interface IServerApp {
 }
 
 export const RuntimeConfig = Symbol('RuntimeConfig');
+
+export interface IEditorInlineChat {
+  operational: AIActionItem;
+  handler: IEditorInlineChatHandler;
+}
 
 /**
  * 运行时相关配置
@@ -157,7 +165,7 @@ export interface RuntimeConfig {
     provideResults(
       query: TextSearchQuery,
       options: TextSearchOptions,
-      progress: Progress<TextSearchResult>
+      progress: Progress<TextSearchResult>,
     ): ProviderResult<void>;
   };
 
@@ -182,7 +190,7 @@ export interface RuntimeConfig {
      */
     provideResults(
       query: { pattern: string },
-      options: FileSearchOptions
+      options: FileSearchOptions,
     ): ProviderResult<string[]>;
   };
   /**
@@ -218,11 +226,8 @@ export interface RuntimeConfig {
     /**
      * 提供注册 inline chat 按钮的列表
      */
-    providerEditorInlineChat?: () => {
-      operational: AIActionItem;
-      handler: IEditorInlineChatHandler;
-    }[];
-    service?: IAIBackService<IAIBackServiceResponse, SumiReadableStream<IChatProgress>>
+    providerEditorInlineChat?: () => IEditorInlineChat[];
+    service?: IAIBackService<IAIBackServiceResponse, SumiReadableStream<IChatProgress>>;
   };
 }
 
