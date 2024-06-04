@@ -141,8 +141,6 @@ export class CodeAPIProvider implements ICodeAPIProvider, ClientAppContribution 
     return this.asPlatform(CodePlatform.codeup) as CodeUPAPIService;
   }
 
-
-
   onStart() {
     this.started.resolve();
   }

@@ -1,4 +1,4 @@
-import { ICodeAPIProvider, RequestFailed } from '@codeblitzjs/ide-code-api';
+import { RequestFailed } from '@codeblitzjs/ide-code-api';
 import {
   AppConfig,
   CODE_ROOT,
@@ -73,9 +73,6 @@ export class CodeContribution
 {
   @Autowired()
   codeModel: CodeModelService;
-
-  @Autowired(ICodeAPIProvider)
-  readonly codeAPI: ICodeAPIProvider;
 
   @Autowired(RuntimeConfig)
   runtimeConfig: RuntimeConfig;

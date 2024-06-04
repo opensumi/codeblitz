@@ -1,4 +1,4 @@
-import { CodePlatform } from './types';
+import { CodePlatform, ICodePlatform } from './types';
 
 export interface ICodePlatformConfig {
   platform: CodePlatform | string;
@@ -17,7 +17,7 @@ export interface ICodePlatformConfig {
 }
 
 // 代码托管平台配置
-const CODE_PLATFORM_CONFIG: Record<string, ICodePlatformConfig> = {
+const CODE_PLATFORM_CONFIG: Record<ICodePlatform, ICodePlatformConfig> = {
   [CodePlatform.github]: {
     platform: CodePlatform.github,
     hostname: ['github.com'],
@@ -174,7 +174,6 @@ const CODE_PLATFORM_CONFIG: Record<string, ICodePlatformConfig> = {
     createBranchAble: true,
   },
 };
-
 
 export class CodePlatformRegistry {
   protected platformMap = new Map<string, ICodePlatformConfig>();

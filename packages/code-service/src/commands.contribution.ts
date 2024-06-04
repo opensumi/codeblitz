@@ -1,11 +1,4 @@
-import {
-  CodeAPI,
-  CodePlatform,
-  CommitFileChange,
-  CommitParams,
-  CommitRecord,
-  ICodeAPIProvider,
-} from '@codeblitzjs/ide-code-api';
+import { CodeAPI, CodePlatform, CommitFileChange, CommitParams, CommitRecord } from '@codeblitzjs/ide-code-api';
 import { Autowired } from '@opensumi/di';
 import { IClipboardService, IOpenerService } from '@opensumi/ide-core-browser';
 import { Command, CommandContribution, CommandRegistry, Disposable, Domain } from '@opensumi/ide-core-common';
@@ -47,9 +40,6 @@ export type RemoteResource =
 export class CommandsContribution extends Disposable implements CommandContribution {
   @Autowired(CodeModelService)
   private readonly codeModel: CodeModelService;
-
-  @Autowired(ICodeAPIProvider)
-  readonly codeAPI: ICodeAPIProvider;
 
   @Autowired(IOpenerService)
   private readonly openerService: IOpenerService;

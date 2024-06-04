@@ -166,10 +166,6 @@ const App = () => (
             // for proxy
             endpoint: '/code-service',
           },
-          code: {
-            // for proxy
-            endpoint: '/code-service',
-          }
         }),
         CodeAPIModule,
         LocalExtensionModule,
