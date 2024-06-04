@@ -52,14 +52,12 @@ export type ICodeServiceConfig =
     hash?: string;
     /** 仓库id */
     projectId?: string;
+    [key: string]: any;
   }
   & {
     /** submodules 多平台配置 */
     [key in ICodePlatform]?: ICodePlatformConfig;
-  }
-  & Partial<
-    Record<string, ICodePlatformConfig>
-  >;
+  };
 
 export type InitializeState =
   | 'Uninitialized'
