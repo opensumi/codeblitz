@@ -1,27 +1,27 @@
 import { ServerCommonModule } from './core/common.module';
-import { OpenSumiExtensionModule } from './opensumi-extension';
-import { LogServiceModule } from './logs-core';
-import { FileServiceModule } from './file-service';
+import { ExtensionManagerModule } from './extension-manager';
 import { FileSchemeNodeModule } from './file-scheme';
 import { FileSearchModule } from './file-search';
+import { FileServiceModule } from './file-service';
+import { LogServiceModule } from './logs-core';
+import { OpenSumiExtensionModule } from './opensumi-extension';
 import { SearchModule } from './search';
-import { ExtensionManagerModule } from './extension-manager';
-import { AINativeModule } from '@opensumi/ide-ai-native/lib/browser';
 
+export * from './ai-native';
 export * from './core';
-export * from './opensumi-extension';
 export * from './logs-core';
 export * from './node';
+export * from './opensumi-extension';
 
 export {
-  ServerCommonModule,
-  OpenSumiExtensionModule,
-  LogServiceModule,
-  FileServiceModule,
+  ExtensionManagerModule,
   FileSchemeNodeModule,
   FileSearchModule,
+  FileServiceModule,
+  LogServiceModule,
+  OpenSumiExtensionModule,
   SearchModule,
-  ExtensionManagerModule,
+  ServerCommonModule,
 };
 
 export const ServerModuleCollection = [
@@ -33,5 +33,4 @@ export const ServerModuleCollection = [
   FileSearchModule,
   SearchModule,
   ExtensionManagerModule,
-  AINativeModule,
 ];

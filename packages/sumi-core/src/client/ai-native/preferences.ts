@@ -1,5 +1,11 @@
-import { Injector } from "@opensumi/di";
-import { AppConfig, RuntimeConfig } from "../../common";
+import { Injector } from '@opensumi/di';
+import { IAINativeCapabilities } from '@opensumi/ide-core-common';
+import { AppConfig, RuntimeConfig } from '../../common';
+
+const codeblitzDefaultCapabilities: IAINativeCapabilities = {
+  supportsTerminalCommandSuggest: false,
+  supportsTerminalDetection: false,
+};
 
 export const injectAINativePreferences = (injector: Injector): void => {
   const runtimeConfig: RuntimeConfig = injector.get(RuntimeConfig);
@@ -12,8 +18,8 @@ export const injectAINativePreferences = (injector: Injector): void => {
       capabilities: {
         ...appConfig.AINativeConfig?.capabilities,
         ...aiNativeCaps,
-      }
-    }
+        ...codeblitzDefaultCapabilities,
+      },
+    };
   }
-
-}
+};

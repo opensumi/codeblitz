@@ -15,10 +15,6 @@ import {
   FILES_DEFAULTS,
   IReporter,
   getPreferenceThemeId,
-  PreferenceProvider,
-  PreferenceScope,
-  registerExternalPreferenceProvider,
-  IClientAppOpts,
 } from '@opensumi/ide-core-browser';
 import { BoxPanel, SplitPanel } from '@opensumi/ide-core-browser/lib/components';
 
@@ -40,6 +36,7 @@ import { IConfig, IAppInstance } from './types';
 import { EXT_WORKER_HOST, WEBVIEW_ENDPOINT } from '../core/env';
 import { interceptAppOpts } from './opts';
 import { appName } from './constants';
+import { Injector } from '@opensumi/di';
 
 export { SlotLocation, SlotRenderer, BoxPanel, SplitPanel };
 
@@ -96,8 +93,31 @@ export function createApp({ appConfig, runtimeConfig }: IConfig): IAppInstance {
     );
   }
   opts.workspaceDir = makeWorkspaceDir(opts.workspaceDir);
+  const injector = opts.injector || new Injector();
 
-  const app = new ClientApp(opts) as IAppInstance;
+  // 基于场景的运行时数据
+  injector.addProviders({
+    token: RuntimeConfig,
+    useValue: runtimeConfig,
+  });
+
+  injector.addProviders({
+    token: IPluginConfig,
+    useValue: appConfig.plugins,
+  });
+
+  if (runtimeConfig.reporter) {
+    injector.addProviders({
+      token: IReporter,
+      useValue: runtimeConfig.reporter,
+      override: true,
+    });
+  }
+
+  const app = new ClientApp({
+    ...opts,
+    injector,
+  }) as IAppInstance;
 
   Object.defineProperty(app, 'currentThemeType', {
     get() {
@@ -121,25 +141,6 @@ export function createApp({ appConfig, runtimeConfig }: IConfig): IAppInstance {
     disposableCollection.forEach((d) => d(app.injector));
     app.injector.disposeAll();
   };
-
-  // 基于场景的运行时数据
-  app.injector.addProviders({
-    token: RuntimeConfig,
-    useValue: runtimeConfig,
-  });
-
-  app.injector.addProviders({
-    token: IPluginConfig,
-    useValue: appConfig.plugins,
-  });
-
-  if (runtimeConfig.reporter) {
-    app.injector.addProviders({
-      token: IReporter,
-      useValue: runtimeConfig.reporter,
-      override: true,
-    });
-  }
 
   return app;
 }
