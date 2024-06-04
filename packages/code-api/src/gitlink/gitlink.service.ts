@@ -2,7 +2,7 @@ import { request, RequestOptions } from '@codeblitzjs/ide-common';
 import { Autowired, Injectable } from '@opensumi/di';
 import { formatLocalize, IReporterService, MessageType } from '@opensumi/ide-core-common';
 import { DEFAULT_SEARCH_IN_WORKSPACE_LIMIT } from '@opensumi/ide-search';
-import { CODE_PLATFORM_CONFIG } from '../common/config';
+import { CodePlatformRegistry } from '../common/config';
 import { HelperService } from '../common/service';
 import type {
   BranchOrTag,
@@ -45,7 +45,7 @@ export class GitLinkAPIService implements ICodeAPIService {
   @Autowired()
   helper: HelperService;
 
-  private config = CODE_PLATFORM_CONFIG[CodePlatform.gitlink];
+  private config = CodePlatformRegistry.instance().getPlatformConfig(CodePlatform.gitlink);
 
   private _PRIVATE_TOKEN: string | null;
 

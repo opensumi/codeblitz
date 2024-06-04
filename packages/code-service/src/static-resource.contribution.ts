@@ -1,4 +1,4 @@
-import { CODE_PLATFORM_CONFIG, CodePlatform, ICodeAPIProvider } from '@codeblitzjs/ide-code-api';
+import { CodePlatform, CodePlatformRegistry, ICodeAPIProvider } from '@codeblitzjs/ide-code-api';
 import { AppConfig, RuntimeConfig } from '@codeblitzjs/ide-sumi-core';
 import { Autowired } from '@opensumi/di';
 import { Domain, URI } from '@opensumi/ide-core-browser';
@@ -24,6 +24,8 @@ export class CodeStaticResourceContribution implements StaticResourceContributio
   codeModel: CodeModelService;
 
   registerStaticResolver(staticService: StaticResourceService) {
+    const configs = CodePlatformRegistry.instance().getCodePlatformConfigs();
+
     staticService.registerStaticResourceProvider({
       scheme: 'file',
       resolveStaticResource: (uri: URI) => {
@@ -37,10 +39,10 @@ export class CodeStaticResourceContribution implements StaticResourceContributio
         return uri;
       },
       roots: [
-        CODE_PLATFORM_CONFIG[CodePlatform.github].origin,
-        CODE_PLATFORM_CONFIG[CodePlatform.gitlab].origin,
-        CODE_PLATFORM_CONFIG[CodePlatform.gitlink].origin,
-        CODE_PLATFORM_CONFIG[CodePlatform.atomgit].origin,
+        configs[CodePlatform.github].origin,
+        configs[CodePlatform.gitlab].origin,
+        configs[CodePlatform.gitlink].origin,
+        configs[CodePlatform.atomgit].origin,
       ],
     });
   }

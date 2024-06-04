@@ -5,7 +5,14 @@ import { IMainLayoutService } from '@opensumi/ide-main-layout';
 import { IIconService } from '@opensumi/ide-theme';
 import { AtomGitAPIService } from './atomgit/atomgit.service';
 import { CodeUPAPIService } from './codeup/codeup.service';
-import { CodePlatform, ICodeAPIProvider, ICodeAPIService, ICodePlatform } from './common/types';
+import { CodePlatformRegistry, ICodePlatformConfig } from './common';
+import {
+  CodePlatform,
+  ICodeAPIProvider,
+  ICodeAPIService,
+  ICodePlatform,
+  ICodePlatformAPIProvider,
+} from './common/types';
 import { GiteeAPIService } from './gitee/gitee.service';
 import { GitHubAPIService } from './github/github.service';
 import { GitHubView } from './github/github.view';
@@ -27,13 +34,10 @@ export class CodeAPIProvider implements ICodeAPIProvider, ClientAppContribution 
   private started = new Deferred<void>();
 
   private apiProviderMap = new Map<
-    ICodePlatform,
-    {
-      provider: ConstructorOf<ICodeAPIService>;
-      onCreate?: () => void;
-    }
+    string,
+    ICodePlatformAPIProvider
   >();
-  private apiServiceMap = new Map<ICodePlatform, ICodeAPIService>();
+  private apiServiceMap = new Map<string, ICodeAPIService>();
 
   constructor() {
     this.registerPlatformProvider(CodePlatform.github, {
@@ -95,8 +99,8 @@ export class CodeAPIProvider implements ICodeAPIProvider, ClientAppContribution 
   }
 
   registerPlatformProvider(
-    platform: ICodePlatform,
-    provider: { provider: ConstructorOf<ICodeAPIService>; onCreate?: () => void },
+    platform: string,
+    provider: ICodePlatformAPIProvider,
   ) {
     if (!this.apiProviderMap.has(platform)) {
       this.apiProviderMap.set(platform, provider);
@@ -136,6 +140,7 @@ export class CodeAPIProvider implements ICodeAPIProvider, ClientAppContribution 
   get codeup() {
     return this.asPlatform(CodePlatform.codeup) as CodeUPAPIService;
   }
+
   onStart() {
     this.started.resolve();
   }

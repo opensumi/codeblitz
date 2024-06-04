@@ -1,7 +1,7 @@
-import { CODE_PLATFORM_CONFIG } from '@codeblitzjs/ide-code-api';
+import { ICodePlatformConfig } from '@codeblitzjs/ide-code-api';
 import { getDebugLogger, Uri } from '@opensumi/ide-core-common';
 import { sep } from 'path';
-import { ICodePlatform, ProjectDesc, Submodule } from './types';
+import { ProjectDesc, Submodule } from './types';
 
 export const HEAD = 'HEAD';
 
@@ -66,7 +66,7 @@ export function parseGitmodules(raw: string): Submodule[] {
   return result;
 }
 
-export const parseSubmoduleUrl = (url: string): ProjectDesc | null => {
+export const parseSubmoduleUrl = (url: string, configs: Record<string, ICodePlatformConfig>): ProjectDesc | null => {
   let authority = '';
   let path = '';
   if (url.startsWith('git@')) {
@@ -78,8 +78,8 @@ export const parseSubmoduleUrl = (url: string): ProjectDesc | null => {
     authority = submoduleUri.authority;
     path = submoduleUri.path;
   }
-  const targetPlatform = Object.keys(CODE_PLATFORM_CONFIG).find((platform: ICodePlatform) => {
-    const config = CODE_PLATFORM_CONFIG[platform];
+  const targetPlatform = Object.keys(configs).find((platform: string) => {
+    const config = configs[platform];
     return config.hostname.some((item) => new RegExp(`\\b${item}$`).test(authority));
   });
   if (!targetPlatform) {
@@ -91,7 +91,7 @@ export const parseSubmoduleUrl = (url: string): ProjectDesc | null => {
   const [owner, name] = path.split('/').filter(Boolean);
 
   return {
-    platform: targetPlatform as ICodePlatform,
+    platform: targetPlatform as string,
     owner,
     name,
   };

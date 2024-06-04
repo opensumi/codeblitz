@@ -1,66 +1,63 @@
 import type {
-  ICodePlatform,
-  RefsParam,
+  EntryFileType,
   EntryInfo,
   EntryParam,
-  TreeEntry,
-  IRepositoryModel,
-  EntryFileType,
   ICodeAPIService,
+  ICodePlatform,
+  IRepositoryModel,
+  RefsParam,
+  TreeEntry,
 } from '@codeblitzjs/ide-code-api';
 
-export type {
-  ICodePlatform,
-  RefsParam,
-  EntryInfo,
-  EntryParam,
-  TreeEntry,
-  EntryFileType,
-  IRepositoryModel,
-};
+export type { EntryFileType, EntryInfo, EntryParam, ICodePlatform, IRepositoryModel, RefsParam, TreeEntry };
 
 export { CodePlatform } from '@codeblitzjs/ide-code-api';
 
 export const ICodeServiceConfig = Symbol('ICodeServiceConfig');
 
-export type ICodeServiceConfig = {
-  /** 平台 */
-  platform: ICodePlatform;
-  /** 群组或用户 */
-  owner: string;
-  /** 仓库名 */
-  name: string;
-  /** 从代码托管平台跳转过来的路径，解析出 ref 和默认打开的文件，如 blob/master/README.md  */
-  refPath?: string;
-  /** ref */
-  ref?: string;
-  /** tag */
-  tag?: string;
-  /** branch */
-  branch?: string;
-  /** commit sha */
-  commit?: string;
-  /** url hash */
-  hash?: string;
-  /** 仓库id */
-  projectId?: string;
-} & {
-  /** submodules 多平台配置 */
-  [key in ICodePlatform]?: {
-    hostname?: string[];
-    /** location.origin */
-    origin?: string;
-    /** 用于接口请求，不设置为 origin */
-    endpoint?: string;
-    /** api 请求 token，上层可预设 token */
-    token?: string;
-    /** 文件存储系统 默认 IndexedDB 全局缓存 */
-    isInMemory?: boolean;
-    /** 是否递归获取文件 只请求一次文件列表 */
-    recursive?: boolean;
+interface ICodePlatformConfig {
+  hostname?: string[];
+  /** location.origin */
+  origin?: string;
+  /** 用于接口请求，不设置为 origin */
+  endpoint?: string;
+  /** api 请求 token，上层可预设 token */
+  token?: string;
+  /** 文件存储系统 默认 IndexedDB 全局缓存 */
+  isInMemory?: boolean;
+  /** 是否递归获取文件 只请求一次文件列表 */
+  recursive?: boolean;
+  [key: string]: any;
+}
+
+export type ICodeServiceConfig =
+  & {
+    /** 平台 */
+    platform: ICodePlatform | string;
+    /** 群组或用户 */
+    owner: string;
+    /** 仓库名 */
+    name: string;
+    /** 从代码托管平台跳转过来的路径，解析出 ref 和默认打开的文件，如 blob/master/README.md  */
+    refPath?: string;
+    /** ref */
+    ref?: string;
+    /** tag */
+    tag?: string;
+    /** branch */
+    branch?: string;
+    /** commit sha */
+    commit?: string;
+    /** url hash */
+    hash?: string;
+    /** 仓库id */
+    projectId?: string;
     [key: string]: any;
+  }
+  & {
+    /** submodules 多平台配置 */
+    [key in ICodePlatform]?: ICodePlatformConfig;
   };
-};
 
 export type InitializeState =
   | 'Uninitialized'
@@ -70,7 +67,7 @@ export type InitializeState =
 /**
  * 无需 Remote
  */
-export const enum RefType {
+export enum RefType {
   Head,
   Tag,
 }
@@ -99,15 +96,14 @@ export interface Submodule {
 }
 
 export interface ProjectDesc {
-  platform: ICodePlatform;
+  platform: ICodePlatform | string;
   owner: string;
   name: string;
 }
 
 type Tail<T extends any[]> = T extends [IRepositoryModel, ...infer P] ? P : T;
 
-type Carry<F> = F extends (...args: any[]) => any
-  ? (...args: Tail<Parameters<F>>) => ReturnType<F>
+type Carry<F> = F extends (...args: any[]) => any ? (...args: Tail<Parameters<F>>) => ReturnType<F>
   : F;
 
 export type ICodeAPIProxy = {

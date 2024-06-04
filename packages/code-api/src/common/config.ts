@@ -1,7 +1,7 @@
 import { CodePlatform, ICodePlatform } from './types';
 
 export interface ICodePlatformConfig {
-  platform: CodePlatform;
+  platform: CodePlatform | string;
   origin: string;
   hostname: string[];
   endpoint: string;
@@ -17,7 +17,7 @@ export interface ICodePlatformConfig {
 }
 
 // 代码托管平台配置
-export const CODE_PLATFORM_CONFIG: Record<ICodePlatform, ICodePlatformConfig> = {
+const CODE_PLATFORM_CONFIG: Record<ICodePlatform, ICodePlatformConfig> = {
   [CodePlatform.github]: {
     platform: CodePlatform.github,
     hostname: ['github.com'],
@@ -175,29 +175,77 @@ export const CODE_PLATFORM_CONFIG: Record<ICodePlatform, ICodePlatformConfig> = 
   },
 };
 
-export const extendPlatformConfig = (
-  platform: ICodePlatform,
-  data: {
-    hostname?: string[];
-    origin?: string;
-    endpoint?: string;
-    token?: string;
-  },
-) => {
-  const config = CODE_PLATFORM_CONFIG[platform];
-  if (!config) {
-    return;
+export class CodePlatformRegistry {
+  protected platformMap = new Map<string, ICodePlatformConfig>();
+
+  protected constructor() {
+    this.load(CODE_PLATFORM_CONFIG);
   }
-  if (Array.isArray(data.hostname)) {
-    config.hostname.push(...data.hostname);
+
+  protected static _instance: CodePlatformRegistry;
+  static instance() {
+    if (!CodePlatformRegistry._instance) {
+      CodePlatformRegistry._instance = new CodePlatformRegistry();
+    }
+    return CodePlatformRegistry._instance;
   }
-  if (data.origin) {
-    config.origin = data.origin;
+
+  registerPlatformConfig(
+    platform: string,
+    provider: ICodePlatformConfig,
+  ) {
+    if (!this.platformMap.has(platform)) {
+      this.platformMap.set(platform, provider);
+    }
   }
-  if (data.endpoint) {
-    config.endpoint = data.endpoint;
+
+  getPlatformConfig(platform: string): ICodePlatformConfig {
+    if (this.platformMap.has(platform)) {
+      return this.platformMap.get(platform)!;
+    }
+    throw new Error(`[Code API]: no config found for ${platform}`);
   }
-  if (data.token) {
-    config.token = data.token;
+
+  extendPlatformConfig(
+    platform: string,
+    data: {
+      hostname?: string[] | undefined;
+      origin?: string | undefined;
+      endpoint?: string | undefined;
+      token?: string | undefined;
+    },
+  ): void {
+    const provider = this.platformMap.get(platform);
+    if (!provider) {
+      return;
+    }
+    if (Array.isArray(data.hostname)) {
+      provider.hostname.push(...data.hostname);
+    }
+    if (data.origin) {
+      provider.origin = data.origin;
+    }
+    if (data.endpoint) {
+      provider.endpoint = data.endpoint;
+    }
+    if (data.token) {
+      provider.token = data.token;
+    }
   }
-};
+
+  load(configs: Record<string, ICodePlatformConfig>) {
+    Object.keys(configs).forEach((key) => {
+      this.registerPlatformConfig(key, configs[key]);
+    });
+  }
+
+  getCodePlatformConfigs(): Record<string, ICodePlatformConfig> {
+    const result = {} as Record<string, ICodePlatformConfig>;
+
+    this.platformMap.forEach((config, key) => {
+      result[key] = config;
+    });
+
+    return result;
+  }
+}

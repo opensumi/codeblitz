@@ -1,4 +1,4 @@
-import { CODE_PLATFORM_CONFIG, RequestFailed } from '@codeblitzjs/ide-code-api';
+import { RequestFailed } from '@codeblitzjs/ide-code-api';
 import {
   AppConfig,
   CODE_ROOT,
@@ -276,7 +276,8 @@ export class CodeContribution
           await repo.refsInitialized;
           const getShortCommit = (commit: string) => (commit || '').substr(0, 8);
           const createBranch: { name: string; commit: string; type: PickBranch }[] = [];
-          if (CODE_PLATFORM_CONFIG[repo.platform].createBranchAble) {
+          const config = repo.platformConfig;
+          if (config.createBranchAble) {
             createBranch.push(
               {
                 name: localize('code-service.command.create-branch'),

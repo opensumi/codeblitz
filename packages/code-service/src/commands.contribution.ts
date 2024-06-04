@@ -1,11 +1,4 @@
-import {
-  CODE_PLATFORM_CONFIG,
-  CodeAPI,
-  CodePlatform,
-  CommitFileChange,
-  CommitParams,
-  CommitRecord,
-} from '@codeblitzjs/ide-code-api';
+import { CodeAPI, CodePlatform, CommitFileChange, CommitParams, CommitRecord } from '@codeblitzjs/ide-code-api';
 import { Autowired } from '@opensumi/di';
 import { IClipboardService, IOpenerService } from '@opensumi/ide-core-browser';
 import { Command, CommandContribution, CommandRegistry, Disposable, Domain } from '@opensumi/ide-core-common';
@@ -115,7 +108,8 @@ export class CommandsContribution extends Disposable implements CommandContribut
     const repo = this.codeModel.getRepository(filepath);
     if (repo) {
       if (res.type === RemoteResourceType.Commit) {
-        const { origin } = CODE_PLATFORM_CONFIG[repo.platform];
+        const { origin } = repo.platformConfig;
+
         if (repo.platform === CodePlatform.gitlink) {
           this.openerService.open(`${origin}/${repo.owner}/${repo.name}/commits/${res.sha}`);
         } else {
@@ -137,7 +131,8 @@ export class CommandsContribution extends Disposable implements CommandContribut
   }
 
   async repository() {
-    const { HEAD, commit, headLabel, name, owner, platform, ref, refs } = this.codeModel.rootRepository;
+    const { HEAD, commit, headLabel, name, owner, platform, ref, platformConfig } = this.codeModel.rootRepository;
+
     return {
       HEAD,
       commit,
@@ -146,7 +141,7 @@ export class CommandsContribution extends Disposable implements CommandContribut
       owner,
       platform,
       ref,
-      origin: CODE_PLATFORM_CONFIG[platform].origin,
+      origin: platformConfig.origin,
       // refs: refs
     };
   }
@@ -256,7 +251,7 @@ export class CommandsContribution extends Disposable implements CommandContribut
   async remoteUrl(repoPath: string): Promise<string | null> {
     const repo = this.codeModel.getRepository(repoPath);
     if (!repo) return null;
-    const { origin } = CODE_PLATFORM_CONFIG[repo.platform];
+    const { origin } = repo.platformConfig;
     return `${origin}/${repo.owner}/${repo.name}`;
   }
 

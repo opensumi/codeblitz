@@ -1,7 +1,7 @@
 import { request, RequestOptions } from '@codeblitzjs/ide-common';
 import { Autowired, Injectable } from '@opensumi/di';
 import { isObject, MessageType, URI } from '@opensumi/ide-core-common';
-import { CODE_PLATFORM_CONFIG, HelperService } from '../common';
+import { CodePlatformRegistry, HelperService } from '../common';
 import {
   Branch,
   BranchOrTag,
@@ -28,7 +28,7 @@ export class AtomGitAPIService implements ICodeAPIService {
   @Autowired(HelperService)
   helper: HelperService;
 
-  private config = CODE_PLATFORM_CONFIG[CodePlatform.atomgit];
+  private config = CodePlatformRegistry.instance().getPlatformConfig(CodePlatform.atomgit);
 
   private _PRIVATE_TOKEN: string | null;
 

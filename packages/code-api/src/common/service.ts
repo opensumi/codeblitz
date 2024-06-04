@@ -12,7 +12,7 @@ import {
 } from '@opensumi/ide-core-common';
 import { IDialogService, IMessageService } from '@opensumi/ide-overlay';
 import { DialogService } from '@opensumi/ide-overlay/lib/browser/dialog.service';
-import { CODE_PLATFORM_CONFIG } from './config';
+import { CodePlatformRegistry } from './config';
 import { ATOMGIT_PRIVATE_TOKEN, GITEE_PRIVATE_TOKEN, GITHUB_OAUTH_TOKEN, GITLAB_PRIVATE_TOKEN } from './constant';
 import { ICodePlatform } from './types';
 
@@ -121,19 +121,21 @@ export class HelperService {
   }
 
   showMessage(
-    platform: ICodePlatform,
+    platform: ICodePlatform | string,
     msg: { type: MessageType; status?: number; symbol?: string; args?: any[]; message?: string },
     config?: { buttons?: string[]; closable?: boolean },
   ) {
     const message = `${msg.status ? `${msg.status} - ` : ''}${
       msg.symbol ? localize(msg.symbol, ...(msg.args || [])) : msg.message
     }`;
+    const platformConfig = CodePlatformRegistry.instance().getPlatformConfig(platform);
+
     return this.messageService.open(
       message,
       msg.type,
       config?.buttons,
       config?.closable,
-      CODE_PLATFORM_CONFIG[platform].brand,
+      platformConfig.brand,
     );
   }
 

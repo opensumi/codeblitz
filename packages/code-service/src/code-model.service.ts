@@ -1,4 +1,4 @@
-import { CODE_PLATFORM_CONFIG, extendPlatformConfig, ICodeAPIProvider } from '@codeblitzjs/ide-code-api';
+import { CodePlatformRegistry, ICodeAPIProvider } from '@codeblitzjs/ide-code-api';
 import { AppConfig } from '@codeblitzjs/ide-sumi-core';
 import { Autowired, Injectable, Injector, INJECTOR_TOKEN } from '@opensumi/di';
 import { CommandService, Emitter, localize } from '@opensumi/ide-core-common';
@@ -40,15 +40,16 @@ export class CodeModelService {
   readonly onDidOpenRepository = this._onDidOpenRepository.event;
 
   constructor() {
-    const config = this.codeServiceConfig;
+    const codeServiceConfig = this.codeServiceConfig;
+    const configs = CodePlatformRegistry.instance().getCodePlatformConfigs();
 
     this._rootRepository = this.injector.get(RootRepository, [
       {
         root: this.appConfig.workspaceDir,
-        owner: config.owner,
-        name: config.name,
-        platform: config.platform,
-        projectId: config.projectId,
+        owner: codeServiceConfig.owner,
+        name: codeServiceConfig.name,
+        platform: codeServiceConfig.platform,
+        projectId: codeServiceConfig.projectId,
         commit: 'HEAD',
       },
     ]);
@@ -57,9 +58,9 @@ export class CodeModelService {
 
     this._onDidOpenRepository.fire(this._rootRepository);
 
-    Object.keys(CODE_PLATFORM_CONFIG).forEach((platform) => {
-      if (config[platform]) {
-        extendPlatformConfig(platform as ICodePlatform, config[platform]);
+    Object.keys(configs).forEach((platform) => {
+      if (codeServiceConfig[platform]) {
+        CodePlatformRegistry.instance().extendPlatformConfig(platform, codeServiceConfig[platform]!);
       }
     });
   }
@@ -107,7 +108,8 @@ export class CodeModelService {
       logger.error(`[Code Service] not submodule for ${path}`);
       return;
     }
-    const project = parseSubmoduleUrl(submodule.url);
+    const configs = CodePlatformRegistry.instance().getCodePlatformConfigs();
+    const project = parseSubmoduleUrl(submodule.url, configs);
     if (!project) {
       this.messageService.error(localize('code-service.submodules-parse-error', submodule.url));
       logger.error(`[Code Service] not support ${submodule.url}`);
@@ -188,13 +190,13 @@ export class CodeModelService {
   }
 
   replaceBrowserUrlLine(lineNumbers: [number, number]) {
-    const hash = CODE_PLATFORM_CONFIG[this.rootRepository.platform].line.format(lineNumbers);
+    const hash = this.rootRepository.platformConfig.line.format(lineNumbers);
     this.commandService.tryExecuteCommand('code-service.replace-browser-url-hash', hash);
   }
 
   parseLineHash(hash: string) {
     if (hash) {
-      return CODE_PLATFORM_CONFIG[this.rootRepository.platform].line.parse(hash);
+      return this.rootRepository.platformConfig.line.parse(hash);
     }
   }
 }

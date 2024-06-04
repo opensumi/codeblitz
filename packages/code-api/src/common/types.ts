@@ -1,3 +1,5 @@
+import { ICodePlatformConfig } from './config';
+
 export namespace CodeAPI {
   interface Entry {
     id: string;
@@ -209,7 +211,7 @@ export type ISearchResults = Array<{
 }>;
 
 export interface IRepositoryModel {
-  platform: ICodePlatform;
+  platform: ICodePlatform | string;
   owner: string;
   name: string;
   commit: string;
@@ -246,7 +248,7 @@ export interface CommitFileChange {
   deletions: number | null;
 }
 
-export const enum CommitFileStatus {
+export enum CommitFileStatus {
   Added = 'A',
   Modified = 'M',
   Deleted = 'D',
@@ -344,14 +346,19 @@ export interface Iteration {
 }
 export enum IterationPlatform {}
 
+export interface ICodePlatformAPIProvider {
+  provider: ConstructorOf<ICodeAPIService>;
+  onCreate?: () => void;
+}
+
 export const ICodeAPIProvider = Symbol('ICodeAPIProvider');
 
 export interface ICodeAPIProvider {
   registerPlatformProvider(
-    platform: ICodePlatform,
-    provider: { provider: ConstructorOf<ICodeAPIService>; onView?: () => void },
+    platform: string,
+    provider: ICodePlatformAPIProvider,
   ): void;
-  asPlatform(platform: ICodePlatform): ICodeAPIService;
+  asPlatform(platform: string): ICodeAPIService;
 }
 
 export interface RequestFailed {
