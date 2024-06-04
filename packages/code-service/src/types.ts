@@ -15,10 +15,25 @@ export { CodePlatform } from '@codeblitzjs/ide-code-api';
 
 export const ICodeServiceConfig = Symbol('ICodeServiceConfig');
 
+interface ICodePlatformConfig {
+  hostname?: string[];
+  /** location.origin */
+  origin?: string;
+  /** 用于接口请求，不设置为 origin */
+  endpoint?: string;
+  /** api 请求 token，上层可预设 token */
+  token?: string;
+  /** 文件存储系统 默认 IndexedDB 全局缓存 */
+  isInMemory?: boolean;
+  /** 是否递归获取文件 只请求一次文件列表 */
+  recursive?: boolean;
+  [key: string]: any;
+}
+
 export type ICodeServiceConfig =
   & {
     /** 平台 */
-    platform: ICodePlatform;
+    platform: ICodePlatform | string;
     /** 群组或用户 */
     owner: string;
     /** 仓库名 */
@@ -40,21 +55,11 @@ export type ICodeServiceConfig =
   }
   & {
     /** submodules 多平台配置 */
-    [key in ICodePlatform]?: {
-      hostname?: string[];
-      /** location.origin */
-      origin?: string;
-      /** 用于接口请求，不设置为 origin */
-      endpoint?: string;
-      /** api 请求 token，上层可预设 token */
-      token?: string;
-      /** 文件存储系统 默认 IndexedDB 全局缓存 */
-      isInMemory?: boolean;
-      /** 是否递归获取文件 只请求一次文件列表 */
-      recursive?: boolean;
-      [key: string]: any;
-    };
-  };
+    [key in ICodePlatform]?: ICodePlatformConfig;
+  }
+  & Partial<
+    Record<string, ICodePlatformConfig>
+  >;
 
 export type InitializeState =
   | 'Uninitialized'
@@ -93,7 +98,7 @@ export interface Submodule {
 }
 
 export interface ProjectDesc {
-  platform: ICodePlatform;
+  platform: ICodePlatform | string;
   owner: string;
   name: string;
 }

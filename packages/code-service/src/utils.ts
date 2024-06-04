@@ -1,7 +1,7 @@
 import { ICodePlatformConfig } from '@codeblitzjs/ide-code-api';
 import { getDebugLogger, Uri } from '@opensumi/ide-core-common';
 import { sep } from 'path';
-import { ICodePlatform, ProjectDesc, Submodule } from './types';
+import { ProjectDesc, Submodule } from './types';
 
 export const HEAD = 'HEAD';
 
@@ -78,7 +78,7 @@ export const parseSubmoduleUrl = (url: string, configs: Record<string, ICodePlat
     authority = submoduleUri.authority;
     path = submoduleUri.path;
   }
-  const targetPlatform = Object.keys(configs).find((platform: ICodePlatform) => {
+  const targetPlatform = Object.keys(configs).find((platform: string) => {
     const config = configs[platform];
     return config.hostname.some((item) => new RegExp(`\\b${item}$`).test(authority));
   });
@@ -91,7 +91,7 @@ export const parseSubmoduleUrl = (url: string, configs: Record<string, ICodePlat
   const [owner, name] = path.split('/').filter(Boolean);
 
   return {
-    platform: targetPlatform as ICodePlatform,
+    platform: targetPlatform as string,
     owner,
     name,
   };

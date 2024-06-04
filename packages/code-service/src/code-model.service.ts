@@ -60,7 +60,7 @@ export class CodeModelService {
 
     Object.keys(configs).forEach((platform) => {
       if (codeServiceConfig[platform]) {
-        this.codeAPI.extendPlatformConfig(platform as ICodePlatform, codeServiceConfig[platform]);
+        this.codeAPI.extendPlatformConfig(platform, codeServiceConfig[platform]!);
       }
     });
   }

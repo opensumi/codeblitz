@@ -211,7 +211,7 @@ export type ISearchResults = Array<{
 }>;
 
 export interface IRepositoryModel {
-  platform: ICodePlatform;
+  platform: ICodePlatform | string;
   owner: string;
   name: string;
   commit: string;
