@@ -118,8 +118,8 @@ export class CommandsContribution extends Disposable implements CommandContribut
     const repo = this.codeModel.getRepository(filepath);
     if (repo) {
       if (res.type === RemoteResourceType.Commit) {
-        const configs = this.codeAPI.getCodePlatformConfigs();
-        const { origin } = configs[repo.platform];
+        const { origin } = repo.platformConfig;
+
         if (repo.platform === CodePlatform.gitlink) {
           this.openerService.open(`${origin}/${repo.owner}/${repo.name}/commits/${res.sha}`);
         } else {
@@ -141,8 +141,7 @@ export class CommandsContribution extends Disposable implements CommandContribut
   }
 
   async repository() {
-    const { HEAD, commit, headLabel, name, owner, platform, ref, refs } = this.codeModel.rootRepository;
-    const configs = this.codeAPI.getCodePlatformConfigs();
+    const { HEAD, commit, headLabel, name, owner, platform, ref, platformConfig } = this.codeModel.rootRepository;
 
     return {
       HEAD,
@@ -152,7 +151,7 @@ export class CommandsContribution extends Disposable implements CommandContribut
       owner,
       platform,
       ref,
-      origin: configs[platform].origin,
+      origin: platformConfig.origin,
       // refs: refs
     };
   }
@@ -262,8 +261,7 @@ export class CommandsContribution extends Disposable implements CommandContribut
   async remoteUrl(repoPath: string): Promise<string | null> {
     const repo = this.codeModel.getRepository(repoPath);
     if (!repo) return null;
-    const configs = this.codeAPI.getCodePlatformConfigs();
-    const { origin } = configs[repo.platform];
+    const { origin } = repo.platformConfig;
     return `${origin}/${repo.owner}/${repo.name}`;
   }
 

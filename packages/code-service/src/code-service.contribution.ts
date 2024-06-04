@@ -279,9 +279,8 @@ export class CodeContribution
           await repo.refsInitialized;
           const getShortCommit = (commit: string) => (commit || '').substr(0, 8);
           const createBranch: { name: string; commit: string; type: PickBranch }[] = [];
-          const configs = this.codeAPI.getCodePlatformConfigs();
-
-          if (configs[repo.platform].createBranchAble) {
+          const config = repo.platformConfig;
+          if (config.createBranchAble) {
             createBranch.push(
               {
                 name: localize('code-service.command.create-branch'),

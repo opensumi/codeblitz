@@ -24,7 +24,7 @@ import {
 } from '../common/types';
 import type { IRepositoryModel, EntryParam } from '../common/types';
 import { CodePlatform, CommitFileStatus, CodeAPI as ConflictAPI } from '../common/types';
-import { CODE_PLATFORM_CONFIG } from '../common/config';
+import { CodePlatformRegistry } from '../common/config';
 
 const toType = (status: string) => {
   switch (status) {
@@ -52,7 +52,7 @@ export class GitHubAPIService implements ICodeAPIService {
   @Autowired(CommandService)
   commandService: CommandService;
 
-  private config = CODE_PLATFORM_CONFIG[CodePlatform.github];
+  private config = CodePlatformRegistry.instance().getPlatformConfig(CodePlatform.github);
 
   /** 资源限制信息 */
   @observable

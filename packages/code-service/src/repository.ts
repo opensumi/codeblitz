@@ -1,4 +1,4 @@
-import { ICodeAPIProvider } from '@codeblitzjs/ide-code-api';
+import { CodePlatformRegistry, ICodeAPIProvider } from '@codeblitzjs/ide-code-api';
 import { fsExtra } from '@codeblitzjs/ide-sumi-core';
 import { Autowired, Injectable } from '@opensumi/di';
 import { Deferred, Emitter } from '@opensumi/ide-core-common';
@@ -40,6 +40,10 @@ export class Repository implements IRepositoryModel {
   get platform() {
     return this._platform;
   }
+
+  get platformConfig() {
+    return CodePlatformRegistry.instance().getPlatformConfig(this.platform);
+  } 
 
   /**
    * 仓库群组或用户

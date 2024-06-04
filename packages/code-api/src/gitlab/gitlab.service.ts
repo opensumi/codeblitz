@@ -3,7 +3,7 @@ import { localize, IReporterService, formatLocalize, MessageType } from '@opensu
 import { request, RequestOptions } from '@codeblitzjs/ide-common';
 import { API } from './types';
 import { HelperService } from '../common/service';
-import { CODE_PLATFORM_CONFIG } from '../common/config';
+import { CodePlatformRegistry } from '../common/config';
 import type {
   TreeEntry,
   EntryParam,
@@ -51,7 +51,7 @@ export class GitLabAPIService implements ICodeAPIService {
   @Autowired()
   helper: HelperService;
 
-  private config = CODE_PLATFORM_CONFIG[CodePlatform.gitlab];
+  private config = CodePlatformRegistry.instance().getPlatformConfig(CodePlatform.gitlab);
 
   private _PRIVATE_TOKEN: string | null;
 

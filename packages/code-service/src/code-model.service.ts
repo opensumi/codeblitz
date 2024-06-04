@@ -1,4 +1,4 @@
-import { ICodeAPIProvider } from '@codeblitzjs/ide-code-api';
+import { CodePlatformRegistry, ICodeAPIProvider } from '@codeblitzjs/ide-code-api';
 import { AppConfig } from '@codeblitzjs/ide-sumi-core';
 import { Autowired, Injectable, Injector, INJECTOR_TOKEN } from '@opensumi/di';
 import { CommandService, Emitter, localize } from '@opensumi/ide-core-common';
@@ -41,7 +41,7 @@ export class CodeModelService {
 
   constructor() {
     const codeServiceConfig = this.codeServiceConfig;
-    const configs = this.codeAPI.getCodePlatformConfigs();
+    const configs = CodePlatformRegistry.instance().getCodePlatformConfigs();
 
     this._rootRepository = this.injector.get(RootRepository, [
       {
@@ -60,7 +60,7 @@ export class CodeModelService {
 
     Object.keys(configs).forEach((platform) => {
       if (codeServiceConfig[platform]) {
-        this.codeAPI.extendPlatformConfig(platform, codeServiceConfig[platform]!);
+        CodePlatformRegistry.instance().extendPlatformConfig(platform, codeServiceConfig[platform]!);
       }
     });
   }
@@ -108,7 +108,7 @@ export class CodeModelService {
       logger.error(`[Code Service] not submodule for ${path}`);
       return;
     }
-    const configs = this.codeAPI.getCodePlatformConfigs();
+    const configs = CodePlatformRegistry.instance().getCodePlatformConfigs();
     const project = parseSubmoduleUrl(submodule.url, configs);
     if (!project) {
       this.messageService.error(localize('code-service.submodules-parse-error', submodule.url));
@@ -190,16 +190,13 @@ export class CodeModelService {
   }
 
   replaceBrowserUrlLine(lineNumbers: [number, number]) {
-    const configs = this.codeAPI.getCodePlatformConfigs();
-
-    const hash = configs[this.rootRepository.platform].line.format(lineNumbers);
+    const hash = this.rootRepository.platformConfig.line.format(lineNumbers);
     this.commandService.tryExecuteCommand('code-service.replace-browser-url-hash', hash);
   }
 
   parseLineHash(hash: string) {
     if (hash) {
-      const configs = this.codeAPI.getCodePlatformConfigs();
-      return configs[this.rootRepository.platform].line.parse(hash);
+      return this.rootRepository.platformConfig.line.parse(hash);
     }
   }
 }

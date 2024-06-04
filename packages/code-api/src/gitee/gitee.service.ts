@@ -21,7 +21,7 @@ import {
   CodeAPI,
 } from '../common/types';
 import { request, RequestOptions } from '@codeblitzjs/ide-common';
-import { CODE_PLATFORM_CONFIG, HelperService } from '../common';
+import { CodePlatformRegistry, HelperService } from '../common';
 import { URI, MessageType, isObject } from '@opensumi/ide-core-common';
 import { API } from './types';
 
@@ -43,7 +43,7 @@ export class GiteeAPIService implements ICodeAPIService {
   @Autowired(HelperService)
   helper: HelperService;
 
-  private config = CODE_PLATFORM_CONFIG[CodePlatform.gitee];
+  private config = CodePlatformRegistry.instance().getPlatformConfig(CodePlatform.gitee);
 
   private _PRIVATE_TOKEN: string | null;
 

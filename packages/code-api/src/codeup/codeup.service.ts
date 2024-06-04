@@ -15,7 +15,7 @@ import {
   CommitParams,
   CommitFileStatus,
 } from '../common/types';
-import { CODE_PLATFORM_CONFIG } from '../common/config';
+import { CodePlatformRegistry } from '../common/config';
 import { HelperService } from '../common/service';
 import { DEFAULT_SEARCH_IN_WORKSPACE_LIMIT } from '@opensumi/ide-search';
 const toType = (d: API.ResponseCommitFileChange) => {
@@ -48,10 +48,7 @@ export class CodeUPAPIService implements ICodeAPIService {
   @Autowired(HelperService)
   helper: HelperService;
 
-
-
-  config = CODE_PLATFORM_CONFIG[CodePlatform.codeup];
-
+  config = CodePlatformRegistry.instance().getPlatformConfig(CodePlatform.codeup);
 
   // 只保留上一次的缓存，用于匹配过滤
   private readonly searchContentLRU = new LRUCache<string, ISearchResults>(1);

@@ -348,7 +348,6 @@ export enum IterationPlatform {}
 
 export interface ICodePlatformAPIProvider {
   provider: ConstructorOf<ICodeAPIService>;
-  config: ICodePlatformConfig;
   onCreate?: () => void;
 }
 
@@ -360,13 +359,6 @@ export interface ICodeAPIProvider {
     provider: ICodePlatformAPIProvider,
   ): void;
   asPlatform(platform: string): ICodeAPIService;
-  getCodePlatformConfigs(): Record<string, ICodePlatformConfig>;
-  extendPlatformConfig(platform: string, data: {
-    hostname?: string[];
-    origin?: string;
-    endpoint?: string;
-    token?: string;
-  }): void;
 }
 
 export interface RequestFailed {

@@ -1,4 +1,4 @@
-import { CodePlatform, ICodeAPIProvider } from '@codeblitzjs/ide-code-api';
+import { CodePlatform, CodePlatformRegistry, ICodeAPIProvider } from '@codeblitzjs/ide-code-api';
 import { AppConfig, RuntimeConfig } from '@codeblitzjs/ide-sumi-core';
 import { Autowired } from '@opensumi/di';
 import { Domain, URI } from '@opensumi/ide-core-browser';
@@ -24,7 +24,7 @@ export class CodeStaticResourceContribution implements StaticResourceContributio
   codeModel: CodeModelService;
 
   registerStaticResolver(staticService: StaticResourceService) {
-    const configs = this.codeAPI.getCodePlatformConfigs();
+    const configs = CodePlatformRegistry.instance().getCodePlatformConfigs();
 
     staticService.registerStaticResourceProvider({
       scheme: 'file',

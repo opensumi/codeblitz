@@ -5,7 +5,7 @@ import { IMainLayoutService } from '@opensumi/ide-main-layout';
 import { IIconService } from '@opensumi/ide-theme';
 import { AtomGitAPIService } from './atomgit/atomgit.service';
 import { CodeUPAPIService } from './codeup/codeup.service';
-import { CODE_PLATFORM_CONFIG, ICodePlatformConfig } from './common';
+import { CodePlatformRegistry, ICodePlatformConfig } from './common';
 import {
   CodePlatform,
   ICodeAPIProvider,
@@ -61,7 +61,6 @@ export class CodeAPIProvider implements ICodeAPIProvider, ClientAppContribution 
           );
         });
       },
-      config: CODE_PLATFORM_CONFIG[CodePlatform.github],
     });
     this.registerPlatformProvider(CodePlatform.gitlab, {
       provider: GitLabAPIService,
@@ -84,23 +83,18 @@ export class CodeAPIProvider implements ICodeAPIProvider, ClientAppContribution 
           );
         });
       },
-      config: CODE_PLATFORM_CONFIG[CodePlatform.gitlab],
     });
     this.registerPlatformProvider(CodePlatform.gitlink, {
       provider: GitLinkAPIService,
-      config: CODE_PLATFORM_CONFIG[CodePlatform.gitlink],
     });
     this.registerPlatformProvider(CodePlatform.atomgit, {
       provider: AtomGitAPIService,
-      config: CODE_PLATFORM_CONFIG[CodePlatform.atomgit],
     });
     this.registerPlatformProvider(CodePlatform.codeup, {
       provider: CodeUPAPIService,
-      config: CODE_PLATFORM_CONFIG[CodePlatform.codeup],
     });
     this.registerPlatformProvider(CodePlatform.gitee, {
       provider: GiteeAPIService,
-      config: CODE_PLATFORM_CONFIG[CodePlatform.gitee],
     });
   }
 
@@ -147,42 +141,7 @@ export class CodeAPIProvider implements ICodeAPIProvider, ClientAppContribution 
     return this.asPlatform(CodePlatform.codeup) as CodeUPAPIService;
   }
 
-  getCodePlatformConfigs(): Record<string, ICodePlatformConfig> {
-    const result = {} as Record<string, ICodePlatformConfig>;
 
-    this.apiProviderMap.forEach((provider, key) => {
-      result[key] = provider.config;
-    });
-
-    return result;
-  }
-
-  extendPlatformConfig(
-    platform: string,
-    data: {
-      hostname?: string[] | undefined;
-      origin?: string | undefined;
-      endpoint?: string | undefined;
-      token?: string | undefined;
-    },
-  ): void {
-    const provider = this.apiProviderMap.get(platform);
-    if (!provider) {
-      return;
-    }
-    if (Array.isArray(data.hostname)) {
-      provider.config.hostname.push(...data.hostname);
-    }
-    if (data.origin) {
-      provider.config.origin = data.origin;
-    }
-    if (data.endpoint) {
-      provider.config.endpoint = data.endpoint;
-    }
-    if (data.token) {
-      provider.config.token = data.token;
-    }
-  }
 
   onStart() {
     this.started.resolve();
