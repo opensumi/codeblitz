@@ -5,7 +5,10 @@
   "json": {},
   "markdown": {},
   "toml": {},
-  "excludes": ["**/node_modules", "**/*-lock.json"],
+  "includes": [
+    "packages/**/*.{ts,tsx,js,jsx,json}"
+  ],
+  "excludes": ["**/node_modules", "**/*-lock.json", "packages/core/extensions/**"],
   "plugins": [
     "https://plugins.dprint.dev/typescript-0.91.0.wasm",
     "https://plugins.dprint.dev/json-0.19.3.wasm",

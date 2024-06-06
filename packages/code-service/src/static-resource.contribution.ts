@@ -1,4 +1,4 @@
-import { CodePlatform, CodePlatformRegistry, ICodeAPIProvider } from '@codeblitzjs/ide-code-api';
+import { CodePlatformRegistry, ICodeAPIProvider } from '@codeblitzjs/ide-code-api';
 import { AppConfig, RuntimeConfig } from '@codeblitzjs/ide-sumi-core';
 import { Autowired } from '@opensumi/di';
 import { Domain, URI } from '@opensumi/ide-core-browser';
@@ -38,12 +38,7 @@ export class CodeStaticResourceContribution implements StaticResourceContributio
         }
         return uri;
       },
-      roots: [
-        configs[CodePlatform.github].origin,
-        configs[CodePlatform.gitlab].origin,
-        configs[CodePlatform.gitlink].origin,
-        configs[CodePlatform.atomgit].origin,
-      ],
+      roots: Object.values(configs).map((config) => config.origin),
     });
   }
 }

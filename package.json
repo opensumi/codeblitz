@@ -23,7 +23,7 @@
     "build:all": "yarn run bundle && yarn run generate && yarn run build",
     "bundle": "node scripts/bundle",
     "create": "node scripts/create",
-    "format": "dprint fmt \"packages/**/*.ts?(x)\"",
+    "format": "dprint fmt",
     "dev": "webpack serve --config packages/toolkit/webpack/config.dev.js",
     "clean": "rimraf packages/*/lib",
     "test": "jest --runInBand",
