@@ -31,7 +31,7 @@ import { RawMessageIO } from '@opensumi/ide-connection/lib/common/rpc/message-io
 import { rawSerializer } from '@opensumi/ide-connection/lib/common/serializer/raw';
 
 import { IServerApp, HOME_ROOT } from '../../common';
-import { initializeRootFileSystem, initializeHomeFileSystem } from './filesystem';
+import { initializeRootFileSystem, initializeHomeFileSystem, unmountRootFS } from './filesystem';
 import { fsExtra as fse } from '../node';
 import { WORKSPACE_ROOT, STORAGE_DIR } from '../../common/constant';
 import { RootFS, RuntimeConfig } from '../../common/types';
@@ -236,6 +236,10 @@ export class ServerApp implements IServerApp {
     });
 
     await this.startContribution();
+  }
+
+  unmountRootFS(): void {
+    unmountRootFS();
   }
 
   dispose() {

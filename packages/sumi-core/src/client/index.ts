@@ -207,6 +207,14 @@ export class ClientApp extends BasicClientApp {
       ]);
     }
   }
+
+  unmountRootFS() {
+    const serverApp: IServerApp = this.injector.get(IServerApp);
+    if (serverApp) {
+      serverApp.unmountRootFS();
+    }
+  }
+
   async dispose() {
     super.dispose();
     this.disposer.dispose();

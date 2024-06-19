@@ -19,6 +19,7 @@ export const IServerApp = Symbol('IServerApp');
 
 export interface IServerApp {
   start(): Promise<void>;
+  unmountRootFS(): void;
   rootFS: RootFS;
 }
 

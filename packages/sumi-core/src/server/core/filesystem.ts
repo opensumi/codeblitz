@@ -21,6 +21,13 @@ export const initializeRootFileSystem = async () => {
   return mountfs;
 };
 
+export const unmountRootFS = () => {
+  if (mountfs) {
+    // mountfs
+    mountfs = null;
+  }
+}
+
 export const initializeHomeFileSystem = async (rootFS: RootFS, scenario?: string | null) => {
   try {
     let homefs: FileSystem | null = null;
