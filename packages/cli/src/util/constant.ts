@@ -30,6 +30,18 @@ const MARKETPLACE_CONFIG: IMarketplaceConfig = {
   masterKey: 't-6MbbT-9C15R_chQ8qUj78P',
 }
 
+export const setMarketplaceConfig = (config: IMarketplaceConfig) => {
+  if (config.endpoint) {
+    MARKETPLACE_CONFIG.endpoint = config.endpoint;
+  }
+  if (config.accountId) {
+    MARKETPLACE_CONFIG.accountId = config.accountId;
+  }
+  if (config.masterKey) {
+    MARKETPLACE_CONFIG.masterKey = config.masterKey;
+  }
+}
+
 export const resolveMarketplaceConfig = (): IMarketplaceConfig => {
   const pkgJSON: {
     [EXTENSION_CONFIG_FIELD]: IMarketplaceConfig
