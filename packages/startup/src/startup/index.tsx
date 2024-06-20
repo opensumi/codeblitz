@@ -3,6 +3,7 @@ import * as Alex from '@codeblitzjs/ide-core';
 import React from 'react';
 import { createRoot } from 'react-dom/client';
 import '@codeblitzjs/ide-core/languages';
+import { SumiReadableStream } from '@opensumi/ide-utils/lib/stream';
 import { CodeAPIModule, CodePlatform } from '@codeblitzjs/ide-code-api';
 import { CodeServiceModule } from '@codeblitzjs/ide-code-service';
 import anycode from '@codeblitzjs/ide-core/extensions/codeblitz.anycode';
@@ -42,9 +43,9 @@ import {
   CancellationToken,
   ComponentRegistryImpl,
   IAIBackServiceOption,
+  IChatProgress,
   sleep,
 } from '@codeblitzjs/ide-core/lib/modules/opensumi__ide-core-browser';
-import { ChatReadableStream } from '@codeblitzjs/ide-sumi-core/lib/server/ai-native/ai-back-service';
 
 (window as any).alex = Alex;
 
@@ -224,8 +225,8 @@ const App = () => (
             input: string,
             options: IAIBackServiceOption,
             cancelToken?: CancellationToken,
-          ): Promise<ChatReadableStream> {
-            return new ChatReadableStream();
+          ): Promise<SumiReadableStream<IChatProgress>> {
+            return new SumiReadableStream();
           },
           async requestCompletion(input) {
             await sleep(500 + Math.random() * 500);
