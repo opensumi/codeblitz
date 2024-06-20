@@ -1,22 +1,41 @@
-import * as path from 'path';
 import fse from 'fs-extra';
+import * as path from 'path';
 import { log } from './log';
 import { resolveCWDPkgJSON } from './path';
 
-export const PRODUCT = 'codeblitz';
+export interface IExtensionConfig {
+  product: string;
+  frameworkPackageName: string;
+  extensionField: string;
+  marketplaceConfigField: string;
+  configurationDir: string;
+}
 
-export const FRAMEWORK_NAME = '@codeblitzjs/ide-core';
+export const kExtensionConfig: IExtensionConfig = {
+  product: 'codeblitz',
+  frameworkPackageName: '@codeblitzjs/ide-core',
+  extensionField: 'cloudideExtensions',
+  marketplaceConfigField: 'marketplaceConfig',
+  configurationDir: '.cloudide',
+};
 
-export const FRAMEWORK_PATH = resolveFramework();
-
-export const EXTENSION_DIR = path.join(FRAMEWORK_PATH, '.cloudide/extensions');
-
-export const EXTENSION_METADATA_DIR = path.join(FRAMEWORK_PATH, 'extensions');
-
-export const EXTENSION_METADATA_TYPE_PATH = path.join(FRAMEWORK_PATH, 'extensions.d.ts');
-
-export const EXTENSION_FIELD = 'cloudideExtensions';
-export const EXTENSION_CONFIG_FIELD = 'marketplaceConfig';
+export const setExtensionConfig = (config: Partial<IExtensionConfig>) => {
+  if (config.product) {
+    kExtensionConfig.product = config.product;
+  }
+  if (config.frameworkPackageName) {
+    kExtensionConfig.frameworkPackageName = config.frameworkPackageName;
+  }
+  if (config.extensionField) {
+    kExtensionConfig.extensionField = config.extensionField;
+  }
+  if (config.marketplaceConfigField) {
+    kExtensionConfig.marketplaceConfigField = config.marketplaceConfigField;
+  }
+  if (config.configurationDir) {
+    kExtensionConfig.configurationDir = config.configurationDir;
+  }
+}
 
 export interface IMarketplaceConfig {
   endpoint: string;
@@ -24,53 +43,77 @@ export interface IMarketplaceConfig {
   masterKey: string;
 }
 
-const MARKETPLACE_CONFIG: IMarketplaceConfig = {
+const kMarketplaceConfig: IMarketplaceConfig = {
   endpoint: 'https://marketplace.opentrs.cn',
   accountId: 'JL1k9cyrepomKpoSWXADGb9G',
   masterKey: 't-6MbbT-9C15R_chQ8qUj78P',
-}
+};
 
-export const setMarketplaceConfig = (config: IMarketplaceConfig) => {
+export const setMarketplaceConfig = (config: Partial<IMarketplaceConfig>) => {
   if (config.endpoint) {
-    MARKETPLACE_CONFIG.endpoint = config.endpoint;
+    kMarketplaceConfig.endpoint = config.endpoint;
   }
   if (config.accountId) {
-    MARKETPLACE_CONFIG.accountId = config.accountId;
+    kMarketplaceConfig.accountId = config.accountId;
   }
   if (config.masterKey) {
-    MARKETPLACE_CONFIG.masterKey = config.masterKey;
+    kMarketplaceConfig.masterKey = config.masterKey;
   }
-}
+};
 
 export const resolveMarketplaceConfig = (): IMarketplaceConfig => {
-  const pkgJSON: {
-    [EXTENSION_CONFIG_FIELD]: IMarketplaceConfig
-  } = fse.readJsonSync(resolveCWDPkgJSON());
+  const pkgJSON = fse.readJsonSync(resolveCWDPkgJSON());
 
-  if (pkgJSON && pkgJSON[EXTENSION_CONFIG_FIELD]) {
-    const config = pkgJSON[EXTENSION_CONFIG_FIELD];
+  const { marketplaceConfigField } = kExtensionConfig;
+
+  if (pkgJSON && pkgJSON[marketplaceConfigField]) {
+    const config = pkgJSON[marketplaceConfigField];
     if (config.endpoint) {
-      log.info('使用 package.json 中的定义的 marketplaceConfig.endpoint 配置: ' + pkgJSON[EXTENSION_CONFIG_FIELD].endpoint)
-      MARKETPLACE_CONFIG.endpoint = config.endpoint;
+      log.info(
+        '使用 package.json 中的定义的 marketplaceConfig.endpoint 配置: ' + pkgJSON[marketplaceConfigField].endpoint,
+      );
+      kMarketplaceConfig.endpoint = config.endpoint;
     }
     if (config.accountId) {
-      log.info('使用 package.json 中的定义的 marketplaceConfig.accountId 配置: ' + pkgJSON[EXTENSION_CONFIG_FIELD].accountId)
-      MARKETPLACE_CONFIG.accountId = config.accountId;
+      log.info(
+        '使用 package.json 中的定义的 marketplaceConfig.accountId 配置: ' + pkgJSON[marketplaceConfigField].accountId,
+      );
+      kMarketplaceConfig.accountId = config.accountId;
     }
     if (config.masterKey) {
-      log.info('使用 package.json 中的定义的 marketplaceConfig.masterKey 配置。')
-      MARKETPLACE_CONFIG.masterKey = config.masterKey;
+      log.info('使用 package.json 中的定义的 marketplaceConfig.masterKey 配置。');
+      kMarketplaceConfig.masterKey = config.masterKey;
     }
   }
 
-  return MARKETPLACE_CONFIG;
-}
+  return kMarketplaceConfig;
+};
 
-function resolveFramework() {
+export function resolveFrameworkPath() {
   try {
-    const pkgPath = require.resolve(`${FRAMEWORK_NAME}/package.json`);
+    const pkgPath = require.resolve(`${kExtensionConfig.frameworkPackageName}/package.json`);
     return path.resolve(pkgPath, '..');
   } catch (err) {
     return '';
   }
+}
+
+export interface IExtensionInstallationConfig {
+  extensionDir: string;
+  extensionMetadataDir: string;
+  extensionMetadataTypePath: string;
+}
+
+export function resolveExtensionInstallationConfig(): IExtensionInstallationConfig {
+  const frameworkPath = resolveFrameworkPath();
+
+  const extensionDir = path.join(frameworkPath, kExtensionConfig.configurationDir, 'extensions');
+  const extensionMetadataDir = path.join(frameworkPath, 'extensions');
+  const extensionMetadataTypePath = path.join(frameworkPath, 'extensions.d.ts');
+
+  return {
+    extensionDir: extensionDir,
+    extensionMetadataDir: extensionMetadataDir,
+    extensionMetadataTypePath: extensionMetadataTypePath,
+  };
 }

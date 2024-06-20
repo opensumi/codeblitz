@@ -1,9 +1,11 @@
 import program, { Option } from 'commander';
 import { install, uninstall, installLocalExtensions } from './extension';
-import { log } from './util/log';
+import { init, log } from './util/log';
+import { kExtensionConfig } from './util/constant'
 
-export const createCommand = (appName: string) => {
-  program.version(`${appName} ${require('../package').version}`).usage('<command> [options]');
+export const runCommand = () => {
+  init();
+  program.version(`${kExtensionConfig.product} ${require('../package').version}`).usage('<command> [options]');
 
   const extensionProgram = program
     .command('extension')

@@ -1,3 +1,3 @@
-import { createCommand } from "./factory";
+import { runCommand } from "./factory";
 
-createCommand('codeblitz')
+runCommand();
