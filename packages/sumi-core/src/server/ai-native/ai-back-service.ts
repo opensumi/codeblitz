@@ -11,10 +11,8 @@ import {
 import { SumiReadableStream } from "@opensumi/ide-utils/lib/stream";
 import { RuntimeConfig } from "../../common";
 
-export class ChatReadableStream extends SumiReadableStream<IChatProgress> {}
-
 @Injectable()
-export class AIBackService implements IAIBackService<IAIBackServiceResponse, ChatReadableStream> {
+export class AIBackService implements IAIBackService<IAIBackServiceResponse, SumiReadableStream<IChatProgress>> {
   @Autowired(RuntimeConfig)
   runtimeConfig: RuntimeConfig;
 
@@ -35,10 +33,10 @@ export class AIBackService implements IAIBackService<IAIBackServiceResponse, Cha
     input: string,
     options: IAIBackServiceOption,
     cancelToken?: CancellationToken,
-  ): Promise<ChatReadableStream> {
+  ): Promise<SumiReadableStream<IChatProgress>> {
     if (!this.runtimeConfig.aiNative?.service?.requestStream) {
       console.error(new Error("AIBackService.requestStream is not available"));
-      return new ChatReadableStream();
+      return new SumiReadableStream();
     }
 
     return this.runtimeConfig.aiNative?.service?.requestStream(input, options, cancelToken);

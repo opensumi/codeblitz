@@ -2,9 +2,9 @@ import * as path from 'path';
 import * as os from 'os';
 import * as fse from 'fs-extra';
 import { from, of } from 'rxjs';
-import { mergeMap, filter, map } from 'rxjs/operators';
+import { mergeMap, filter } from 'rxjs/operators';
 import { IExtensionMode } from '@codeblitzjs/ide-common';
-import { EXTENSION_DIR, EXTENSION_METADATA_DIR, EXTENSION_FIELD, resolveMarketplaceConfig } from './util/constant';
+import { IExtensionInstallationConfig, kExtensionConfig, resolveExtensionInstallationConfig, resolveMarketplaceConfig } from './util/constant';
 import { ExtensionInstaller, Extension } from './util/installer';
 import { getExtension } from './extension/scanner';
 import {
@@ -31,21 +31,23 @@ export const install = async (
 
   createInstaller();
 
+  const installationConfig = resolveExtensionInstallationConfig();
+
   let extensions: IExtensionDesc[] = [];
 
   if (extensionId?.length) {
     extensions = parseExtensionId(extensionId, options?.mode);
     shouldWriteConfig = true;
-    await Promise.all(extensions.map((ext) => removeExtensionById(ext)));
+    await Promise.all(extensions.map((ext) => removeExtensionById(installationConfig, ext)));
   } else {
     const extensionConfig = await getExtensionFromPackage();
     if (!extensionConfig.length && !options?.silent) {
-      log.warn(`当前未配置 ${EXTENSION_FIELD} npx alex ext -h 查看帮助`);
+      log.warn(`当前未配置 ${kExtensionConfig.extensionField} npx ${kExtensionConfig.product} ext -h 查看帮助`);
       return;
     }
     checkExtensionConfig(extensionConfig);
     extensions = extensionConfig;
-    await removeAllExtension();
+    await removeAllExtension(installationConfig);
   }
 
   if (!extensions.length) return;
@@ -67,7 +69,7 @@ export const install = async (
       ),
       mergeMap(([extPath, mode]) => getExtension(extPath, mode), 5),
       filter((data) => !!data),
-      mergeMap(writeMetadata)
+      mergeMap((meta) => writeMetadata(installationConfig, meta!))
     )
     .subscribe(
       (ext) => {
@@ -101,6 +103,8 @@ export const installLocalExtensions = async (dirs: string[], options?: IExtensio
     return;
   }
 
+  const installationConfig = resolveExtensionInstallationConfig();
+
   const absoluteDirs = dirs.map((dir) => path.resolve(dir));
 
   log.start('开始安装本地扩展\n');
@@ -119,7 +123,7 @@ export const installLocalExtensions = async (dirs: string[], options?: IExtensio
     .pipe(
       mergeMap((localExtPath) => getExtension(localExtPath, 'local', httpUri), 5),
       filter((data) => !!data),
-      mergeMap(writeMetadata)
+      mergeMap((meta) => writeMetadata(installationConfig, meta!))
     )
     .subscribe(
       (ext) => {
@@ -140,40 +144,40 @@ async function createInstaller() {
   const pkgJSON = fse.readJSONSync(path.join(__dirname, '../package.json'));
 
   const marketplaceConfig = resolveMarketplaceConfig();
-
+  const installConfig = resolveExtensionInstallationConfig();
   extensionInstaller = new ExtensionInstaller({
     api: marketplaceConfig.endpoint,
     accountId: marketplaceConfig.accountId,
     masterKey: marketplaceConfig.masterKey,
     frameworkVersion: pkgJSON.engines.opensumi,
-    dist: EXTENSION_DIR,
+    dist: installConfig.extensionDir,
     ignoreIncreaseCount: true,
     retry: 3, // 失败重试
   });
 }
 
-async function removeAllExtension() {
-  await fse.remove(EXTENSION_DIR);
-  await fse.remove(EXTENSION_METADATA_DIR);
-  await fse.ensureDir(EXTENSION_DIR);
-  await fse.ensureDir(EXTENSION_METADATA_DIR);
+async function removeAllExtension(installationConfig: IExtensionInstallationConfig) {
+  await fse.remove(installationConfig.extensionDir);
+  await fse.remove(installationConfig.extensionMetadataDir);
+  await fse.ensureDir(installationConfig.extensionDir);
+  await fse.ensureDir(installationConfig.extensionMetadataDir);
 }
 
-async function removeExtensionById(ext: IExtensionDesc) {
+async function removeExtensionById(installationConfig: IExtensionInstallationConfig, ext: IExtensionDesc) {
   const extensionId = `${ext.publisher}.${ext.name}`;
   return Promise.all([
     await fse.remove(
-      path.join(`${EXTENSION_DIR}`, `${extensionId}${ext.version ? `-${ext.version}` : ''}`)
+      path.join(`${installationConfig.extensionDir}`, `${extensionId}${ext.version ? `-${ext.version}` : ''}`)
     ),
-    await fse.remove(path.join(EXTENSION_METADATA_DIR, `${extensionId}.js`)),
-    await fse.remove(path.join(EXTENSION_METADATA_DIR, `${extensionId}.d.ts`)),
+    await fse.remove(path.join(installationConfig.extensionMetadataDir, `${extensionId}.js`)),
+    await fse.remove(path.join(installationConfig.extensionMetadataDir, `${extensionId}.d.ts`)),
   ]);
 }
 
 async function getExtensionFromPackage(): Promise<IExtensionDesc[]> {
   try {
     const projectPkgJSON = await fse.readJSON(resolveCWDPkgJSON());
-    return projectPkgJSON?.[EXTENSION_FIELD] ?? [];
+    return projectPkgJSON?.[kExtensionConfig.extensionField] ?? [];
   } catch (err) {
     return [];
   }
@@ -183,7 +187,7 @@ async function setExtensionFromPackage(config: any) {
   try {
     const pkgPath = resolveCWDPkgJSON();
     const projectPkgJSON = await fse.readJSON(pkgPath);
-    projectPkgJSON[EXTENSION_FIELD] = config;
+    projectPkgJSON[kExtensionConfig.extensionField] = config;
     await fse.writeJSON(pkgPath, projectPkgJSON, { spaces: 2 });
   } catch (err) {}
 }
@@ -233,13 +237,13 @@ async function installExtension(extension: IExtensionDesc) {
   return [extensionPath, extension.mode] as const;
 }
 
-async function writeMetadata(metadata: IExtensionBasicMetadata) {
-  await fse.ensureDir(EXTENSION_METADATA_DIR);
+async function writeMetadata(installationConfig: IExtensionInstallationConfig, metadata: IExtensionBasicMetadata) {
+  await fse.ensureDir(installationConfig.extensionMetadataDir);
 
   const { extension } = metadata;
   const extensionId = `${extension.publisher}.${extension.name}`;
   await fse.writeFile(
-    path.join(EXTENSION_METADATA_DIR, `${extensionId}.js`),
+    path.join(installationConfig.extensionMetadataDir, `${extensionId}.js`),
     `
 module.exports = ${JSON.stringify(metadata, null, 2)}
     `.trim() + '\n'
@@ -266,6 +270,8 @@ async function modifyPkgJSON(extensions: IExtensionIdentity[]) {
 
 // uninstall
 export async function uninstall(extensionId: string[]) {
+  const installationConfig = resolveExtensionInstallationConfig();
+
   const extensions = await getExtensionFromPackage();
   const removeExtensions: IExtensionDesc[] = [];
   const remainExtensions: IExtensionDesc[] = [];
@@ -290,7 +296,7 @@ export async function uninstall(extensionId: string[]) {
       throw new Error('error');
     });
   }
-  await Promise.all(removeExtensions.map((ext) => removeExtensionById(ext)));
+  await Promise.all(removeExtensions.map((ext) => removeExtensionById(installationConfig, ext)));
   await setExtensionFromPackage(remainExtensions);
 
   log.success('卸载扩展成功');

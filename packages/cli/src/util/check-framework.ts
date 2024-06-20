@@ -1,9 +1,10 @@
-import { FRAMEWORK_PATH, FRAMEWORK_NAME } from './constant';
+import { kExtensionConfig, resolveFrameworkPath } from './constant';
 import { log } from './log';
 
 export default function checkFramework() {
-  if (!FRAMEWORK_PATH) {
-    log.error(`cli 无法单独使用，请直接安装 ${FRAMEWORK_NAME}`);
+  const frameworkPath  = resolveFrameworkPath();
+  if (!frameworkPath) {
+    log.error(`cli 无法单独使用，需要与 ${kExtensionConfig.frameworkPackageName} 一起安装使用`);
     throw new Error('error');
   }
 }
