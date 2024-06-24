@@ -1,4 +1,5 @@
 const path = require('path');
+const webpack = require('webpack');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 const { WebpackManifestPlugin } = require('webpack-manifest-plugin');
 
@@ -28,6 +29,9 @@ module.exports = (option = {}) => {
         filename: `[name]${isDev ? '' : '.[contenthash:8]'}/index.html`,
         template: option.template || path.join(__dirname, '../public/webview.html'),
         inject: false,
+      }),
+      new webpack.optimize.LimitChunkCountPlugin({
+        maxChunks: 1,
       }),
     ],
   };

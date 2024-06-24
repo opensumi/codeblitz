@@ -10,6 +10,7 @@ exports.invoke = async (fn) => {
 };
 
 exports.exec = async (command, options, silent = false) => {
+  console.log(`[exec] ${command}`)
   try {
     return await execa.command(command, {
       stdio: 'inherit',

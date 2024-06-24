@@ -9,7 +9,7 @@ module.exports = () => {
   return {
     entry: {
       [config.workerEntry]: require.resolve(
-        '@opensumi/ide-extension/lib/hosted/worker.host-preload'
+        '@opensumi/ide-extension/lib/hosted/worker.host-preload',
       ),
     },
     output: {
@@ -35,6 +35,9 @@ module.exports = () => {
       }),
       new webpack.ProvidePlugin({
         ...nodePolyfill.provider,
+      }),
+      new webpack.optimize.LimitChunkCountPlugin({
+        maxChunks: 1,
       }),
     ],
     stats: 'errors-only',
