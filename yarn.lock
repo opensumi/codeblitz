@@ -523,7 +523,7 @@ __metadata:
   resolution: "@codeblitzjs/ide-cli@workspace:packages/cli"
   dependencies:
     "@codeblitzjs/ide-common": "npm:1.0.4"
-    "@opensumi/ide-extension": "npm:3.1.2-next-1718354423.0"
+    "@opensumi/ide-extension": "npm:3.1.2"
     "@types/commander": "npm:^2.12.2"
     "@types/fs-extra": "npm:^9.0.4"
     "@types/lodash.pick": "npm:^4.4.6"
@@ -588,48 +588,48 @@ __metadata:
     "@codeblitzjs/ide-plugin": "npm:1.0.4"
     "@codeblitzjs/ide-registry": "npm:1.0.4"
     "@codeblitzjs/ide-sumi-core": "npm:1.0.4"
-    "@opensumi/ide-addons": "npm:3.1.2-next-1718354423.0"
-    "@opensumi/ide-ai-native": "npm:3.1.2-next-1718354423.0"
-    "@opensumi/ide-comments": "npm:3.1.2-next-1718354423.0"
-    "@opensumi/ide-core-browser": "npm:3.1.2-next-1718354423.0"
-    "@opensumi/ide-core-common": "npm:3.1.2-next-1718354423.0"
-    "@opensumi/ide-debug": "npm:3.1.2-next-1718354423.0"
-    "@opensumi/ide-decoration": "npm:3.1.2-next-1718354423.0"
-    "@opensumi/ide-design": "npm:3.1.2-next-1718354423.0"
-    "@opensumi/ide-editor": "npm:3.1.2-next-1718354423.0"
-    "@opensumi/ide-explorer": "npm:3.1.2-next-1718354423.0"
-    "@opensumi/ide-express-file-server": "npm:3.1.2-next-1718354423.0"
-    "@opensumi/ide-extension": "npm:3.1.2-next-1718354423.0"
-    "@opensumi/ide-extension-storage": "npm:3.1.2-next-1718354423.0"
-    "@opensumi/ide-file-scheme": "npm:3.1.2-next-1718354423.0"
-    "@opensumi/ide-file-service": "npm:3.1.2-next-1718354423.0"
-    "@opensumi/ide-file-tree-next": "npm:3.1.2-next-1718354423.0"
-    "@opensumi/ide-i18n": "npm:3.1.2-next-1718354423.0"
-    "@opensumi/ide-keymaps": "npm:3.1.2-next-1718354423.0"
-    "@opensumi/ide-logs": "npm:3.1.2-next-1718354423.0"
-    "@opensumi/ide-main-layout": "npm:3.1.2-next-1718354423.0"
-    "@opensumi/ide-markdown": "npm:3.1.2-next-1718354423.0"
-    "@opensumi/ide-markers": "npm:3.1.2-next-1718354423.0"
-    "@opensumi/ide-menu-bar": "npm:3.1.2-next-1718354423.0"
-    "@opensumi/ide-monaco": "npm:3.1.2-next-1718354423.0"
-    "@opensumi/ide-monaco-enhance": "npm:3.1.2-next-1718354423.0"
-    "@opensumi/ide-opened-editor": "npm:3.1.2-next-1718354423.0"
-    "@opensumi/ide-outline": "npm:3.1.2-next-1718354423.0"
-    "@opensumi/ide-output": "npm:3.1.2-next-1718354423.0"
-    "@opensumi/ide-overlay": "npm:3.1.2-next-1718354423.0"
-    "@opensumi/ide-preferences": "npm:3.1.2-next-1718354423.0"
-    "@opensumi/ide-quick-open": "npm:3.1.2-next-1718354423.0"
-    "@opensumi/ide-scm": "npm:3.1.2-next-1718354423.0"
-    "@opensumi/ide-search": "npm:3.1.2-next-1718354423.0"
-    "@opensumi/ide-status-bar": "npm:3.1.2-next-1718354423.0"
-    "@opensumi/ide-storage": "npm:3.1.2-next-1718354423.0"
-    "@opensumi/ide-testing": "npm:3.1.2-next-1718354423.0"
-    "@opensumi/ide-theme": "npm:3.1.2-next-1718354423.0"
-    "@opensumi/ide-toolbar": "npm:3.1.2-next-1718354423.0"
-    "@opensumi/ide-variable": "npm:3.1.2-next-1718354423.0"
-    "@opensumi/ide-webview": "npm:3.1.2-next-1718354423.0"
-    "@opensumi/ide-workspace": "npm:3.1.2-next-1718354423.0"
-    "@opensumi/ide-workspace-edit": "npm:3.1.2-next-1718354423.0"
+    "@opensumi/ide-addons": "npm:3.1.2"
+    "@opensumi/ide-ai-native": "npm:3.1.2"
+    "@opensumi/ide-comments": "npm:3.1.2"
+    "@opensumi/ide-core-browser": "npm:3.1.2"
+    "@opensumi/ide-core-common": "npm:3.1.2"
+    "@opensumi/ide-debug": "npm:3.1.2"
+    "@opensumi/ide-decoration": "npm:3.1.2"
+    "@opensumi/ide-design": "npm:3.1.2"
+    "@opensumi/ide-editor": "npm:3.1.2"
+    "@opensumi/ide-explorer": "npm:3.1.2"
+    "@opensumi/ide-express-file-server": "npm:3.1.2"
+    "@opensumi/ide-extension": "npm:3.1.2"
+    "@opensumi/ide-extension-storage": "npm:3.1.2"
+    "@opensumi/ide-file-scheme": "npm:3.1.2"
+    "@opensumi/ide-file-service": "npm:3.1.2"
+    "@opensumi/ide-file-tree-next": "npm:3.1.2"
+    "@opensumi/ide-i18n": "npm:3.1.2"
+    "@opensumi/ide-keymaps": "npm:3.1.2"
+    "@opensumi/ide-logs": "npm:3.1.2"
+    "@opensumi/ide-main-layout": "npm:3.1.2"
+    "@opensumi/ide-markdown": "npm:3.1.2"
+    "@opensumi/ide-markers": "npm:3.1.2"
+    "@opensumi/ide-menu-bar": "npm:3.1.2"
+    "@opensumi/ide-monaco": "npm:3.1.2"
+    "@opensumi/ide-monaco-enhance": "npm:3.1.2"
+    "@opensumi/ide-opened-editor": "npm:3.1.2"
+    "@opensumi/ide-outline": "npm:3.1.2"
+    "@opensumi/ide-output": "npm:3.1.2"
+    "@opensumi/ide-overlay": "npm:3.1.2"
+    "@opensumi/ide-preferences": "npm:3.1.2"
+    "@opensumi/ide-quick-open": "npm:3.1.2"
+    "@opensumi/ide-scm": "npm:3.1.2"
+    "@opensumi/ide-search": "npm:3.1.2"
+    "@opensumi/ide-status-bar": "npm:3.1.2"
+    "@opensumi/ide-storage": "npm:3.1.2"
+    "@opensumi/ide-testing": "npm:3.1.2"
+    "@opensumi/ide-theme": "npm:3.1.2"
+    "@opensumi/ide-toolbar": "npm:3.1.2"
+    "@opensumi/ide-variable": "npm:3.1.2"
+    "@opensumi/ide-webview": "npm:3.1.2"
+    "@opensumi/ide-workspace": "npm:3.1.2"
+    "@opensumi/ide-workspace-edit": "npm:3.1.2"
     "@opensumi/textmate-languages": "npm:^2.7.0"
     "@types/react": "npm:^18.2.0"
     "@types/react-dom": "npm:^18.2.0"
@@ -699,14 +699,14 @@ __metadata:
     "@codeblitzjs/ide-common": "npm:1.0.4"
     "@codeblitzjs/ide-registry": "npm:1.0.4"
     "@opensumi/di": "npm:^1.0.0"
-    "@opensumi/ide-ai-native": "npm:3.1.2-next-1718354423.0"
-    "@opensumi/ide-core-browser": "npm:3.1.2-next-1718354423.0"
-    "@opensumi/ide-core-common": "npm:3.1.2-next-1718354423.0"
-    "@opensumi/ide-debug": "npm:3.1.2-next-1718354423.0"
-    "@opensumi/ide-extension": "npm:3.1.2-next-1718354423.0"
-    "@opensumi/ide-file-scheme": "npm:3.1.2-next-1718354423.0"
-    "@opensumi/ide-file-service": "npm:3.1.2-next-1718354423.0"
-    "@opensumi/ide-logs": "npm:3.1.2-next-1718354423.0"
+    "@opensumi/ide-ai-native": "npm:3.1.2"
+    "@opensumi/ide-core-browser": "npm:3.1.2"
+    "@opensumi/ide-core-common": "npm:3.1.2"
+    "@opensumi/ide-debug": "npm:3.1.2"
+    "@opensumi/ide-extension": "npm:3.1.2"
+    "@opensumi/ide-file-scheme": "npm:3.1.2"
+    "@opensumi/ide-file-service": "npm:3.1.2"
+    "@opensumi/ide-logs": "npm:3.1.2"
     "@types/fs-extra": "npm:^9.0.4"
     "@types/lodash.debounce": "npm:^4.0.6"
     "@types/md5": "npm:^2.2.1"
@@ -1401,61 +1401,61 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@opensumi/ide-addons@npm:3.1.2-next-1718354423.0":
-  version: 3.1.2-next-1718354423.0
-  resolution: "@opensumi/ide-addons@npm:3.1.2-next-1718354423.0"
+"@opensumi/ide-addons@npm:3.1.2":
+  version: 3.1.2
+  resolution: "@opensumi/ide-addons@npm:3.1.2"
   dependencies:
-    "@opensumi/ide-core-common": "npm:3.1.2-next-1718354423.0"
-    "@opensumi/ide-core-node": "npm:3.1.2-next-1718354423.0"
-  checksum: 10/bae2b453343ab0fd7cada8aad04a759b5812ee35a7bc717afd34c151a5ba18168d175f42ccce49f1a05504e4363aef571919b064e4305e0a05e8532f01c017d5
+    "@opensumi/ide-core-common": "npm:3.1.2"
+    "@opensumi/ide-core-node": "npm:3.1.2"
+  checksum: 10/4129c43f83037e53e10d442cd393c81149cb1db30865959d6bf9a6083a32eee98b4deec03d4a646fe39390d7e7eb6140f0939b1cac4fd7e73b78b7bcbb0f7fed
   languageName: node
   linkType: hard
 
-"@opensumi/ide-ai-native@npm:3.1.2-next-1718354423.0":
-  version: 3.1.2-next-1718354423.0
-  resolution: "@opensumi/ide-ai-native@npm:3.1.2-next-1718354423.0"
+"@opensumi/ide-ai-native@npm:3.1.2":
+  version: 3.1.2
+  resolution: "@opensumi/ide-ai-native@npm:3.1.2"
   dependencies:
-    "@opensumi/ide-components": "npm:3.1.2-next-1718354423.0"
-    "@opensumi/ide-core-common": "npm:3.1.2-next-1718354423.0"
-    "@opensumi/ide-core-node": "npm:3.1.2-next-1718354423.0"
-    "@opensumi/ide-debug": "npm:3.1.2-next-1718354423.0"
-    "@opensumi/ide-design": "npm:3.1.2-next-1718354423.0"
-    "@opensumi/ide-editor": "npm:3.1.2-next-1718354423.0"
-    "@opensumi/ide-file-service": "npm:3.1.2-next-1718354423.0"
-    "@opensumi/ide-file-tree-next": "npm:3.1.2-next-1718354423.0"
-    "@opensumi/ide-main-layout": "npm:3.1.2-next-1718354423.0"
-    "@opensumi/ide-markers": "npm:3.1.2-next-1718354423.0"
-    "@opensumi/ide-menu-bar": "npm:3.1.2-next-1718354423.0"
-    "@opensumi/ide-monaco": "npm:3.1.2-next-1718354423.0"
-    "@opensumi/ide-overlay": "npm:3.1.2-next-1718354423.0"
-    "@opensumi/ide-terminal-next": "npm:3.1.2-next-1718354423.0"
-    "@opensumi/ide-theme": "npm:3.1.2-next-1718354423.0"
-    "@opensumi/ide-workspace": "npm:3.1.2-next-1718354423.0"
+    "@opensumi/ide-components": "npm:3.1.2"
+    "@opensumi/ide-core-common": "npm:3.1.2"
+    "@opensumi/ide-core-node": "npm:3.1.2"
+    "@opensumi/ide-debug": "npm:3.1.2"
+    "@opensumi/ide-design": "npm:3.1.2"
+    "@opensumi/ide-editor": "npm:3.1.2"
+    "@opensumi/ide-file-service": "npm:3.1.2"
+    "@opensumi/ide-file-tree-next": "npm:3.1.2"
+    "@opensumi/ide-main-layout": "npm:3.1.2"
+    "@opensumi/ide-markers": "npm:3.1.2"
+    "@opensumi/ide-menu-bar": "npm:3.1.2"
+    "@opensumi/ide-monaco": "npm:3.1.2"
+    "@opensumi/ide-overlay": "npm:3.1.2"
+    "@opensumi/ide-terminal-next": "npm:3.1.2"
+    "@opensumi/ide-theme": "npm:3.1.2"
+    "@opensumi/ide-workspace": "npm:3.1.2"
     dom-align: "npm:^1.7.0"
     js-tiktoken: "npm:1.0.12"
     react-chat-elements: "npm:^12.0.10"
     react-highlight: "npm:^0.15.0"
     web-tree-sitter: "npm:0.22.6"
-  checksum: 10/7c1250ecc9a09f6fd0b6df68e440dd562ed278c4c3948ca0a947e9567d8dd0e4d677f86f5a4b8fcd602d6f53474d049db84f0307f84671c3243fd468d1938e8b
+  checksum: 10/960e98842192d2f845ddf3de82176386efb3224fa39a6f92fc91907e9043b3c2e4480c95fb2aeb72051cd161790364ff03ab2ca875cb02562ba17841934055fd
   languageName: node
   linkType: hard
 
-"@opensumi/ide-comments@npm:3.1.2-next-1718354423.0":
-  version: 3.1.2-next-1718354423.0
-  resolution: "@opensumi/ide-comments@npm:3.1.2-next-1718354423.0"
+"@opensumi/ide-comments@npm:3.1.2":
+  version: 3.1.2
+  resolution: "@opensumi/ide-comments@npm:3.1.2"
   dependencies:
-    "@opensumi/ide-core-common": "npm:3.1.2-next-1718354423.0"
+    "@opensumi/ide-core-common": "npm:3.1.2"
     react-mentions: "npm:^4.4.10"
-  checksum: 10/50f22d7369c7bfcd08179589d13d217a6f54cca666ecced2d124da741af2e0fbe5ae7f7bc06d5c9fb17cc4d75d72b8720dace26f98be06f02cb26cb173eddeb3
+  checksum: 10/3ae88754538dcbac2d4e214beb5c82d9be24f451985aad062789cba997ecd07e67ea129b44aa79a9491469efebe50e77c4535d6073ba293ac857a62d213062e6
   languageName: node
   linkType: hard
 
-"@opensumi/ide-components@npm:3.1.2-next-1718354423.0":
-  version: 3.1.2-next-1718354423.0
-  resolution: "@opensumi/ide-components@npm:3.1.2-next-1718354423.0"
+"@opensumi/ide-components@npm:3.1.2":
+  version: 3.1.2
+  resolution: "@opensumi/ide-components@npm:3.1.2"
   dependencies:
     "@ant-design/icons": "npm:^4.6.4"
-    "@opensumi/ide-utils": "npm:3.1.2-next-1718354423.0"
+    "@opensumi/ide-utils": "npm:3.1.2"
     fuzzy: "npm:^0.1.3"
     lodash: "npm:^4.17.21"
     marked: "npm:4.0.10"
@@ -1473,32 +1473,32 @@ __metadata:
     react-virtualized-auto-sizer: "npm:^1.0.2"
     react-virtuoso: "npm:^3.1.5"
     react-window: "npm:^1.8.5"
-  checksum: 10/92b4dc0230dbc36922afb1cf53428ab8f04faee08aad551aede220f8b790b5c5dbc88444d385a803bb216f166c040cc8bebe48244eddb9bbccedb7de1dcb4208
+  checksum: 10/da4b9c9bae36046bc6c9c05b5a7b59a5141936216ed03d66b90f55e638a00d99724c2925afb9fb6cf85a0cabdf738f42329fc36e625b0cbd40d5d02a0b194d40
   languageName: node
   linkType: hard
 
-"@opensumi/ide-connection@npm:3.1.2-next-1718354423.0":
-  version: 3.1.2-next-1718354423.0
-  resolution: "@opensumi/ide-connection@npm:3.1.2-next-1718354423.0"
+"@opensumi/ide-connection@npm:3.1.2":
+  version: 3.1.2
+  resolution: "@opensumi/ide-connection@npm:3.1.2"
   dependencies:
     "@furyjs/fury": "npm:0.5.9-beta"
     "@opensumi/events": "npm:^1.0.0"
-    "@opensumi/ide-core-common": "npm:3.1.2-next-1718354423.0"
+    "@opensumi/ide-core-common": "npm:3.1.2"
     "@opensumi/reconnecting-websocket": "npm:^4.4.0"
     "@opensumi/vscode-jsonrpc": "npm:^8.0.0-next.2"
     path-to-regexp: "npm:^6.2.1"
     ws: "npm:^8.16.0"
-  checksum: 10/bd2ca7959e47655716b5f8a244ad326615c047d2887ee05c24e59cec0698b8d5f6ac19486a89d8acb5f1f3d44dafffdf18f0e4db29a566ecb5eca78615078858
+  checksum: 10/657dc86b602c2d9b9bc708e1c13ac281312cdc13276385cefbd9f9197b97de305ab9f5ae3fd8565985f78a8396f93ad2a964069b65a4429709ae5a06433a2092
   languageName: node
   linkType: hard
 
-"@opensumi/ide-core-browser@npm:3.1.2-next-1718354423.0":
-  version: 3.1.2-next-1718354423.0
-  resolution: "@opensumi/ide-core-browser@npm:3.1.2-next-1718354423.0"
+"@opensumi/ide-core-browser@npm:3.1.2":
+  version: 3.1.2
+  resolution: "@opensumi/ide-core-browser@npm:3.1.2"
   dependencies:
-    "@opensumi/ide-components": "npm:3.1.2-next-1718354423.0"
-    "@opensumi/ide-connection": "npm:3.1.2-next-1718354423.0"
-    "@opensumi/ide-core-common": "npm:3.1.2-next-1718354423.0"
+    "@opensumi/ide-components": "npm:3.1.2"
+    "@opensumi/ide-connection": "npm:3.1.2"
+    "@opensumi/ide-core-common": "npm:3.1.2"
     "@opensumi/vscode-debugprotocol": "npm:1.49.0-beta.1"
     "@vscode/codicons": "npm:0.0.35"
     ajv: "npm:^6.10.0"
@@ -1523,134 +1523,134 @@ __metadata:
   peerDependencies:
     react: ^18.2.0
     react-dom: ^18.2.0
-  checksum: 10/d8ff0ba997e8af4bd85279c8d649914748443f8890e229ad2d6350efbe2389c6469388647879f23464bcd4b8a71617cfc4f5fee06cc84ea821a5c68c821a09c6
+  checksum: 10/9aaf6cb1c8336e8a3177a3c7442fbddf49a5579d24f257e84695b748e83af29e0f97ddc9c3b093cfd5c5fbbcecdd36a8decafb898ad70316dede99d2d9d0cc00
   languageName: node
   linkType: hard
 
-"@opensumi/ide-core-common@npm:3.1.2-next-1718354423.0":
-  version: 3.1.2-next-1718354423.0
-  resolution: "@opensumi/ide-core-common@npm:3.1.2-next-1718354423.0"
+"@opensumi/ide-core-common@npm:3.1.2":
+  version: 3.1.2
+  resolution: "@opensumi/ide-core-common@npm:3.1.2"
   dependencies:
     "@opensumi/di": "npm:^1.4.0"
-    "@opensumi/ide-utils": "npm:3.1.2-next-1718354423.0"
+    "@opensumi/ide-utils": "npm:3.1.2"
     jschardet: "npm:3.0.0"
-  checksum: 10/e4d260a38b8054a8143adcca2bd15f72f7371752feb3e206cfe5db30f28a3aaa0f8b28dc37984be319781b9e600517f2df6332e2921ed7b8c7bdf8dd1b7de6f9
+  checksum: 10/b780a668c7bd2970073d7496490ff6f9c943fffa93678674a625997f3382637533ba335d17f4bf8383ca459329d1266d318600d954835bd03829b872cd75536a
   languageName: node
   linkType: hard
 
-"@opensumi/ide-core-node@npm:3.1.2-next-1718354423.0":
-  version: 3.1.2-next-1718354423.0
-  resolution: "@opensumi/ide-core-node@npm:3.1.2-next-1718354423.0"
+"@opensumi/ide-core-node@npm:3.1.2":
+  version: 3.1.2
+  resolution: "@opensumi/ide-core-node@npm:3.1.2"
   dependencies:
-    "@opensumi/ide-connection": "npm:3.1.2-next-1718354423.0"
-    "@opensumi/ide-core-common": "npm:3.1.2-next-1718354423.0"
+    "@opensumi/ide-connection": "npm:3.1.2"
+    "@opensumi/ide-core-common": "npm:3.1.2"
     keytar: "npm:^7.7.0"
-  checksum: 10/d201477d9c589517c0b3e33df1731af811a63f3064eac43b6c9942ab0a134de37a396c39390a76ae3d07b0cfe001c6dd6ab0a29fa00347670a7fe1dcef7b34eb
+  checksum: 10/d49c22d351cb16a7ce7f9a1c645656f7c901b70e146eaa66385b02aa947a3cd2d5a53a86cd4cbfe1c33dc823601e15359e64affd7f90ccd3bbf62d9fa3c9030f
   languageName: node
   linkType: hard
 
-"@opensumi/ide-debug@npm:3.1.2-next-1718354423.0":
-  version: 3.1.2-next-1718354423.0
-  resolution: "@opensumi/ide-debug@npm:3.1.2-next-1718354423.0"
+"@opensumi/ide-debug@npm:3.1.2":
+  version: 3.1.2
+  resolution: "@opensumi/ide-debug@npm:3.1.2"
   dependencies:
-    "@opensumi/ide-connection": "npm:3.1.2-next-1718354423.0"
-    "@opensumi/ide-core-common": "npm:3.1.2-next-1718354423.0"
-    "@opensumi/ide-core-node": "npm:3.1.2-next-1718354423.0"
-    "@opensumi/ide-file-service": "npm:3.1.2-next-1718354423.0"
-    "@opensumi/ide-task": "npm:3.1.2-next-1718354423.0"
-    "@opensumi/ide-terminal-next": "npm:3.1.2-next-1718354423.0"
+    "@opensumi/ide-connection": "npm:3.1.2"
+    "@opensumi/ide-core-common": "npm:3.1.2"
+    "@opensumi/ide-core-node": "npm:3.1.2"
+    "@opensumi/ide-file-service": "npm:3.1.2"
+    "@opensumi/ide-task": "npm:3.1.2"
+    "@opensumi/ide-terminal-next": "npm:3.1.2"
     "@rjsf/core": "npm:5.5.2"
     "@rjsf/utils": "npm:5.5.2"
     "@rjsf/validator-ajv6": "npm:5.4.0"
     anser: "npm:^2.1.1"
     btoa: "npm:^1.2.1"
-  checksum: 10/19bcb2a88a91fb60baa9e9df11c851ec6e7ad2def40a278e2c06c9cb525f79895f0345be9cf3fb0c63f8ddeb3c1b0e813599aae7695b65f6c4d9221545881bf7
+  checksum: 10/6a047b84fba1132b4408a5155b3e988fbd8b8bc8869d2d42469462fb268abf9a9008a5166fdb978ca27f8ab7f6ea05073cc51d0eb5a935748b8d760a692e349d
   languageName: node
   linkType: hard
 
-"@opensumi/ide-decoration@npm:3.1.2-next-1718354423.0":
-  version: 3.1.2-next-1718354423.0
-  resolution: "@opensumi/ide-decoration@npm:3.1.2-next-1718354423.0"
+"@opensumi/ide-decoration@npm:3.1.2":
+  version: 3.1.2
+  resolution: "@opensumi/ide-decoration@npm:3.1.2"
   dependencies:
-    "@opensumi/ide-core-common": "npm:3.1.2-next-1718354423.0"
-    "@opensumi/ide-core-node": "npm:3.1.2-next-1718354423.0"
-  checksum: 10/c65ee228fcc11ae0439e2d7054ba8eb7af6619f9d520d7afe382a74859f179f765aef746c5f0a652b152a93f84f4cd1508fdcefbbf8c57e4dcb3e008e234547c
+    "@opensumi/ide-core-common": "npm:3.1.2"
+    "@opensumi/ide-core-node": "npm:3.1.2"
+  checksum: 10/70d5ce331316618b6b1fec57256e6fb7736300b028336153fe152ef4b001e46f5daf8c5146cd8a61892bbba4f9ffe81e3f17217f657f82dcef27de149d84c6aa
   languageName: node
   linkType: hard
 
-"@opensumi/ide-design@npm:3.1.2-next-1718354423.0":
-  version: 3.1.2-next-1718354423.0
-  resolution: "@opensumi/ide-design@npm:3.1.2-next-1718354423.0"
+"@opensumi/ide-design@npm:3.1.2":
+  version: 3.1.2
+  resolution: "@opensumi/ide-design@npm:3.1.2"
   dependencies:
-    "@opensumi/ide-core-common": "npm:3.1.2-next-1718354423.0"
-    "@opensumi/ide-core-node": "npm:3.1.2-next-1718354423.0"
-  checksum: 10/6f7115266861fe581490946f8322014f7a473be70045d7554d8f4b736e9ae3bc144d2de8382e0cf6d0ce251da83e2a0ab05c4d6bf73b1f9f9f9bdd16fdb03af5
+    "@opensumi/ide-core-common": "npm:3.1.2"
+    "@opensumi/ide-core-node": "npm:3.1.2"
+  checksum: 10/138557dd1d1b377694d81eb1428b01b350e5711e53e7820dfc4adac6ff9bce75f692c1c288ff37341831c78f4b4947224de8ee1f956fc0144c24d1565ca521e9
   languageName: node
   linkType: hard
 
-"@opensumi/ide-editor@npm:3.1.2-next-1718354423.0":
-  version: 3.1.2-next-1718354423.0
-  resolution: "@opensumi/ide-editor@npm:3.1.2-next-1718354423.0"
+"@opensumi/ide-editor@npm:3.1.2":
+  version: 3.1.2
+  resolution: "@opensumi/ide-editor@npm:3.1.2"
   dependencies:
-    "@opensumi/ide-core-common": "npm:3.1.2-next-1718354423.0"
-    "@opensumi/ide-core-node": "npm:3.1.2-next-1718354423.0"
-    "@opensumi/ide-file-service": "npm:3.1.2-next-1718354423.0"
-    "@opensumi/ide-monaco": "npm:3.1.2-next-1718354423.0"
-    "@opensumi/ide-utils": "npm:3.1.2-next-1718354423.0"
+    "@opensumi/ide-core-common": "npm:3.1.2"
+    "@opensumi/ide-core-node": "npm:3.1.2"
+    "@opensumi/ide-file-service": "npm:3.1.2"
+    "@opensumi/ide-monaco": "npm:3.1.2"
+    "@opensumi/ide-utils": "npm:3.1.2"
     vscode-oniguruma: "npm:1.5.1"
-  checksum: 10/ef86c425257309e03fffd5b09b87019f4d0f8b460eac9b012ce7a1c29b120c48a6c1a84173f5877dfc3a89b164f7727988553955cbc54d51e590688d81886add
+  checksum: 10/7674784cd0939ee6f6188cb644d5ba8c39af3ee7d1a70882ad73d7e0094ec7c8ff6944f9c4adc84312462bd8d70b9dda8474529964dc827dd2dee72aa7874bd0
   languageName: node
   linkType: hard
 
-"@opensumi/ide-explorer@npm:3.1.2-next-1718354423.0":
-  version: 3.1.2-next-1718354423.0
-  resolution: "@opensumi/ide-explorer@npm:3.1.2-next-1718354423.0"
+"@opensumi/ide-explorer@npm:3.1.2":
+  version: 3.1.2
+  resolution: "@opensumi/ide-explorer@npm:3.1.2"
   dependencies:
-    "@opensumi/ide-core-common": "npm:3.1.2-next-1718354423.0"
-    "@opensumi/ide-core-node": "npm:3.1.2-next-1718354423.0"
-  checksum: 10/8483c7e8c8e958a6da1b8cb224ad626a51974cc1e7e3285b3d1512cd12080103db06ef4f8d54bc6ccf9f6b337da3d34b9d9b2a690facead441592ab3e5b46d5a
+    "@opensumi/ide-core-common": "npm:3.1.2"
+    "@opensumi/ide-core-node": "npm:3.1.2"
+  checksum: 10/28b776568ee926b4b0107a233d99f5286407acbc9938135e850019a459dee6a918171087eced3350b1627041854db6f18599f0fc0801276ef91a39bb371e90ae
   languageName: node
   linkType: hard
 
-"@opensumi/ide-express-file-server@npm:3.1.2-next-1718354423.0":
-  version: 3.1.2-next-1718354423.0
-  resolution: "@opensumi/ide-express-file-server@npm:3.1.2-next-1718354423.0"
+"@opensumi/ide-express-file-server@npm:3.1.2":
+  version: 3.1.2
+  resolution: "@opensumi/ide-express-file-server@npm:3.1.2"
   dependencies:
-    "@opensumi/ide-core-browser": "npm:3.1.2-next-1718354423.0"
-    "@opensumi/ide-core-common": "npm:3.1.2-next-1718354423.0"
-    "@opensumi/ide-core-node": "npm:3.1.2-next-1718354423.0"
+    "@opensumi/ide-core-browser": "npm:3.1.2"
+    "@opensumi/ide-core-common": "npm:3.1.2"
+    "@opensumi/ide-core-node": "npm:3.1.2"
     koa-mount: "npm:^4.0.0"
-  checksum: 10/ed1261277f5608d82248ff1bda251c09d05daa5bbd0b259c3dc5e5dba55844010fbaf5d4e483fe3baed96e5a3a98857e9bf61b76a3da264e6fae39c1a23dd1ef
+  checksum: 10/8264f17ba0e43a107247029c02923d22d10e5fa9c44e91996d55c53d3e4d3eda495dd33577f61b99e675e690c979a14553c3cf3da1147a3671e512aaa3e435c1
   languageName: node
   linkType: hard
 
-"@opensumi/ide-extension-storage@npm:3.1.2-next-1718354423.0":
-  version: 3.1.2-next-1718354423.0
-  resolution: "@opensumi/ide-extension-storage@npm:3.1.2-next-1718354423.0"
+"@opensumi/ide-extension-storage@npm:3.1.2":
+  version: 3.1.2
+  resolution: "@opensumi/ide-extension-storage@npm:3.1.2"
   dependencies:
-    "@opensumi/ide-core-common": "npm:3.1.2-next-1718354423.0"
-    "@opensumi/ide-core-node": "npm:3.1.2-next-1718354423.0"
-    "@opensumi/ide-file-service": "npm:3.1.2-next-1718354423.0"
-    "@opensumi/ide-logs": "npm:3.1.2-next-1718354423.0"
-    "@opensumi/ide-workspace": "npm:3.1.2-next-1718354423.0"
-  checksum: 10/0121a73f44723aca1d75672f7af27f4d40756a7ef3e07d9f7aa6104a0294ac405b4079b072d4c5a945841486605469cf45f8b12d118f5bf0ec5ad77b72af3409
+    "@opensumi/ide-core-common": "npm:3.1.2"
+    "@opensumi/ide-core-node": "npm:3.1.2"
+    "@opensumi/ide-file-service": "npm:3.1.2"
+    "@opensumi/ide-logs": "npm:3.1.2"
+    "@opensumi/ide-workspace": "npm:3.1.2"
+  checksum: 10/e2e3f37df91769439f48cba67472f58dc6ea15600cbaf2376b48859db56f224587c3031550d9754d9c10f5d4be05748b892665238c530f7127a0a0df3c9217ed
   languageName: node
   linkType: hard
 
-"@opensumi/ide-extension@npm:3.1.2-next-1718354423.0":
-  version: 3.1.2-next-1718354423.0
-  resolution: "@opensumi/ide-extension@npm:3.1.2-next-1718354423.0"
+"@opensumi/ide-extension@npm:3.1.2":
+  version: 3.1.2
+  resolution: "@opensumi/ide-extension@npm:3.1.2"
   dependencies:
-    "@opensumi/ide-connection": "npm:3.1.2-next-1718354423.0"
-    "@opensumi/ide-core-browser": "npm:3.1.2-next-1718354423.0"
-    "@opensumi/ide-core-node": "npm:3.1.2-next-1718354423.0"
-    "@opensumi/ide-debug": "npm:3.1.2-next-1718354423.0"
-    "@opensumi/ide-file-search": "npm:3.1.2-next-1718354423.0"
-    "@opensumi/ide-file-service": "npm:3.1.2-next-1718354423.0"
-    "@opensumi/ide-logs": "npm:3.1.2-next-1718354423.0"
-    "@opensumi/ide-task": "npm:3.1.2-next-1718354423.0"
-    "@opensumi/ide-terminal-next": "npm:3.1.2-next-1718354423.0"
-    "@opensumi/ide-webview": "npm:3.1.2-next-1718354423.0"
+    "@opensumi/ide-connection": "npm:3.1.2"
+    "@opensumi/ide-core-browser": "npm:3.1.2"
+    "@opensumi/ide-core-node": "npm:3.1.2"
+    "@opensumi/ide-debug": "npm:3.1.2"
+    "@opensumi/ide-file-search": "npm:3.1.2"
+    "@opensumi/ide-file-service": "npm:3.1.2"
+    "@opensumi/ide-logs": "npm:3.1.2"
+    "@opensumi/ide-task": "npm:3.1.2"
+    "@opensumi/ide-terminal-next": "npm:3.1.2"
+    "@opensumi/ide-webview": "npm:3.1.2"
     "@opensumi/vscode-jsonrpc": "npm:^8.0.0-next.2"
     address: "npm:^1.1.2"
     glob-to-regexp: "npm:0.4.1"
@@ -1660,278 +1660,278 @@ __metadata:
     semver: "npm:^7.5.2"
     tree-kill: "npm:^1.2.2"
     v8-inspect-profiler: "npm:^0.0.20"
-  checksum: 10/ec5a5290c0d3ea2011afe04554dbcebd5b5562b5a844a51bfae34ff941ff4f345cfb30583af37b04fe0228ebd803a8af051d38200141659e0aeea593e92dc27f
+  checksum: 10/ddc29061650a2f2114a6dd141a18c364e3c944a3d928d34552765bae251d2d204e8e3de92a59c0619ed7a092d7ad680990013e23f14c33eb41fc1a80d19968b8
   languageName: node
   linkType: hard
 
-"@opensumi/ide-file-scheme@npm:3.1.2-next-1718354423.0":
-  version: 3.1.2-next-1718354423.0
-  resolution: "@opensumi/ide-file-scheme@npm:3.1.2-next-1718354423.0"
+"@opensumi/ide-file-scheme@npm:3.1.2":
+  version: 3.1.2
+  resolution: "@opensumi/ide-file-scheme@npm:3.1.2"
   dependencies:
-    "@opensumi/ide-core-common": "npm:3.1.2-next-1718354423.0"
-    "@opensumi/ide-core-node": "npm:3.1.2-next-1718354423.0"
-    "@opensumi/ide-file-service": "npm:3.1.2-next-1718354423.0"
-  checksum: 10/ab7c15be7ea6217408e9b02c11a497b0727cb8c9d955b5498c4758a1e26bc2ec422167875a7adbfd51fe63c273a06c6c5536cbc1958e42692a05334ccb0d5677
+    "@opensumi/ide-core-common": "npm:3.1.2"
+    "@opensumi/ide-core-node": "npm:3.1.2"
+    "@opensumi/ide-file-service": "npm:3.1.2"
+  checksum: 10/33fd611009540df77e9faf116b939b9a538f1996f9fd0833bb2bcd8746c15bd7ef6fbb9b5e26ee927c73dcd616bebde1ec52b23d2a4517cb0c2f217a97d9a26b
   languageName: node
   linkType: hard
 
-"@opensumi/ide-file-search@npm:3.1.2-next-1718354423.0":
-  version: 3.1.2-next-1718354423.0
-  resolution: "@opensumi/ide-file-search@npm:3.1.2-next-1718354423.0"
+"@opensumi/ide-file-search@npm:3.1.2":
+  version: 3.1.2
+  resolution: "@opensumi/ide-file-search@npm:3.1.2"
   dependencies:
-    "@opensumi/ide-core-common": "npm:3.1.2-next-1718354423.0"
-    "@opensumi/ide-core-node": "npm:3.1.2-next-1718354423.0"
-    "@opensumi/ide-process": "npm:3.1.2-next-1718354423.0"
+    "@opensumi/ide-core-common": "npm:3.1.2"
+    "@opensumi/ide-core-node": "npm:3.1.2"
+    "@opensumi/ide-process": "npm:3.1.2"
     "@opensumi/vscode-ripgrep": "npm:^1.4.0"
     fuzzy: "npm:^0.1.3"
-  checksum: 10/0c9639bc9d60f4bef287ab2b582d951c7ab7792e52847d4ab50c53640c51266a2ca6508515e4855aa7d937790a5c5bdaab7f9ffdac6f45052f843b15f60b6438
+  checksum: 10/3b8acf476dce324e71a8bc4b0e496a4ec0045acd840aa44040936477ee1e549c5f49ad5f018385606baf985a47c02feafea3a9c12ee9cf83ce67ebd9093a2601
   languageName: node
   linkType: hard
 
-"@opensumi/ide-file-service@npm:3.1.2-next-1718354423.0":
-  version: 3.1.2-next-1718354423.0
-  resolution: "@opensumi/ide-file-service@npm:3.1.2-next-1718354423.0"
+"@opensumi/ide-file-service@npm:3.1.2":
+  version: 3.1.2
+  resolution: "@opensumi/ide-file-service@npm:3.1.2"
   dependencies:
-    "@opensumi/ide-connection": "npm:3.1.2-next-1718354423.0"
-    "@opensumi/ide-core-common": "npm:3.1.2-next-1718354423.0"
-    "@opensumi/ide-core-node": "npm:3.1.2-next-1718354423.0"
-    "@opensumi/ide-logs": "npm:3.1.2-next-1718354423.0"
+    "@opensumi/ide-connection": "npm:3.1.2"
+    "@opensumi/ide-core-common": "npm:3.1.2"
+    "@opensumi/ide-core-node": "npm:3.1.2"
+    "@opensumi/ide-logs": "npm:3.1.2"
     "@parcel/watcher": "npm:2.1.0"
     file-type: "npm:^12.0.0"
     nsfw: "npm:2.2.0"
     trash: "npm:^5.2.0"
     vscode-languageserver-types: "npm:^3.16.0"
     write-file-atomic: "npm:^5.0.1"
-  checksum: 10/a259ae3fa0c29792b913054e995528a27b45d083f90cd862882799e762e8f40ad5deafc61f53cdb00ff59923d0a3f7d0ca534d98c1b6b2f74632bcf124ca96fb
+  checksum: 10/174bfd4939b9ce899bb4420b18d01d5252b8e0fefeab59862f8af5ae3b6d465f5ec041a415cd398c87148e115cd6c5457b9f9d2eb9372d9920b5522ae66d07ba
   languageName: node
   linkType: hard
 
-"@opensumi/ide-file-tree-next@npm:3.1.2-next-1718354423.0":
-  version: 3.1.2-next-1718354423.0
-  resolution: "@opensumi/ide-file-tree-next@npm:3.1.2-next-1718354423.0"
+"@opensumi/ide-file-tree-next@npm:3.1.2":
+  version: 3.1.2
+  resolution: "@opensumi/ide-file-tree-next@npm:3.1.2"
   dependencies:
-    "@opensumi/ide-core-node": "npm:3.1.2-next-1718354423.0"
-    "@opensumi/ide-file-service": "npm:3.1.2-next-1718354423.0"
-  checksum: 10/0b57c5dc0a15b7b859229165867705118acb202c6848f27191d3fe8b6476bf4139a3235d326c4fd88867d03cfcaa9c7332936885b258b50b51e12e71dbf4eb0a
+    "@opensumi/ide-core-node": "npm:3.1.2"
+    "@opensumi/ide-file-service": "npm:3.1.2"
+  checksum: 10/26816e95cc71e0261448094cf2e5a026fddb337e0a1e9ab4c21ffb9cf92e0683edb0e2ea470eedeba7b17101ce80d3e453884c08516a851785fea3f5f3146a67
   languageName: node
   linkType: hard
 
-"@opensumi/ide-i18n@npm:3.1.2-next-1718354423.0":
-  version: 3.1.2-next-1718354423.0
-  resolution: "@opensumi/ide-i18n@npm:3.1.2-next-1718354423.0"
+"@opensumi/ide-i18n@npm:3.1.2":
+  version: 3.1.2
+  resolution: "@opensumi/ide-i18n@npm:3.1.2"
   dependencies:
-    "@opensumi/ide-core-common": "npm:3.1.2-next-1718354423.0"
-  checksum: 10/035cdfd631b5e69eb16f492949746780a2840af891bcfbae5d4969c97419fb46aaee729703efd9cd03562e7ce1c299cd6202b2a9933bb65fec962283a6427cff
+    "@opensumi/ide-core-common": "npm:3.1.2"
+  checksum: 10/70b798f92b3a92cd093102abbf362d87dc418b82570500786d17d4b6c2779e08b8451616bad725e3918d7697b7371cfe684f0dcc318f1c34936b89ade44ef943
   languageName: node
   linkType: hard
 
-"@opensumi/ide-keymaps@npm:3.1.2-next-1718354423.0":
-  version: 3.1.2-next-1718354423.0
-  resolution: "@opensumi/ide-keymaps@npm:3.1.2-next-1718354423.0"
+"@opensumi/ide-keymaps@npm:3.1.2":
+  version: 3.1.2
+  resolution: "@opensumi/ide-keymaps@npm:3.1.2"
   dependencies:
-    "@opensumi/ide-core-common": "npm:3.1.2-next-1718354423.0"
-  checksum: 10/b5de3e8e324f1ff6c038a257ffc23177148b49dd2ead40b3f14f9a68f3093f6b716f6a3ab748c2c3b10134aac0814191c469a6a660579746aeffb97a0a7c18ce
+    "@opensumi/ide-core-common": "npm:3.1.2"
+  checksum: 10/fcc7446c03eae4fc5ad3a9e7fb58644beaec3ace72870afabdffa76e6853e0a535520ee39f38b478d00bb399f3b1e9adad2ecccb2d7f9cbbba1e427f2a432b09
   languageName: node
   linkType: hard
 
-"@opensumi/ide-logs@npm:3.1.2-next-1718354423.0":
-  version: 3.1.2-next-1718354423.0
-  resolution: "@opensumi/ide-logs@npm:3.1.2-next-1718354423.0"
+"@opensumi/ide-logs@npm:3.1.2":
+  version: 3.1.2
+  resolution: "@opensumi/ide-logs@npm:3.1.2"
   dependencies:
-    "@opensumi/ide-connection": "npm:3.1.2-next-1718354423.0"
-    "@opensumi/ide-core-common": "npm:3.1.2-next-1718354423.0"
-    "@opensumi/ide-core-node": "npm:3.1.2-next-1718354423.0"
+    "@opensumi/ide-connection": "npm:3.1.2"
+    "@opensumi/ide-core-common": "npm:3.1.2"
+    "@opensumi/ide-core-node": "npm:3.1.2"
     compressing: "npm:^1.6.2"
     spdlog: "npm:^0.9.0"
-  checksum: 10/f54763700eb89d5ee5c4a6930e457b0c181ae6bef70a7d9d1beecb5b08b487b05035c7f7b955f874e6670f13531ed724b234f2068c4fbcea3e56c36f57b9e53c
+  checksum: 10/66d65893835dc7d4f988cc21ba4e4912166d93335ca03b780721459f516f5dc26fcaa60cdd95d783d722a2529b2211e785497becf5d1cdb71c575e2a8e72930f
   languageName: node
   linkType: hard
 
-"@opensumi/ide-main-layout@npm:3.1.2-next-1718354423.0":
-  version: 3.1.2-next-1718354423.0
-  resolution: "@opensumi/ide-main-layout@npm:3.1.2-next-1718354423.0"
+"@opensumi/ide-main-layout@npm:3.1.2":
+  version: 3.1.2
+  resolution: "@opensumi/ide-main-layout@npm:3.1.2"
   dependencies:
-    "@opensumi/ide-components": "npm:3.1.2-next-1718354423.0"
-    "@opensumi/ide-core-common": "npm:3.1.2-next-1718354423.0"
-  checksum: 10/00af0790bf6cb1173a0ecf7bfc29194f5dd2dd242cab524db89240ad7c8d8ad6366f98ca35bed5fd722fac31743b375424fef000be13777393d73b352a2d21c6
+    "@opensumi/ide-components": "npm:3.1.2"
+    "@opensumi/ide-core-common": "npm:3.1.2"
+  checksum: 10/df0d114f521e5768b768502fd9f408ec938443cd02ab3fd6eb617697452257ce423ff775b0b9239747f1a159e532ab8a418c52fed9af69acb0412bee293ce96f
   languageName: node
   linkType: hard
 
-"@opensumi/ide-markdown@npm:3.1.2-next-1718354423.0":
-  version: 3.1.2-next-1718354423.0
-  resolution: "@opensumi/ide-markdown@npm:3.1.2-next-1718354423.0"
+"@opensumi/ide-markdown@npm:3.1.2":
+  version: 3.1.2
+  resolution: "@opensumi/ide-markdown@npm:3.1.2"
   dependencies:
-    "@opensumi/ide-core-common": "npm:3.1.2-next-1718354423.0"
-    "@opensumi/ide-core-node": "npm:3.1.2-next-1718354423.0"
-  checksum: 10/abeb23fd67b71949cf313efcc97376cf148824646fae0bfdd54d54e6d8d37bf38c4eeff50cae48621d92aa73289f3f06c37a03a00c0e507dd4001cd899c7be56
+    "@opensumi/ide-core-common": "npm:3.1.2"
+    "@opensumi/ide-core-node": "npm:3.1.2"
+  checksum: 10/fd95a9ec091ee40892f842cd128be99ec89e72c0ccee384812e25f8220c7bc46b998fc802c66be190c420ea4e185c65a752ab53a2cc65af0a7840c9eeb08e391
   languageName: node
   linkType: hard
 
-"@opensumi/ide-markers@npm:3.1.2-next-1718354423.0":
-  version: 3.1.2-next-1718354423.0
-  resolution: "@opensumi/ide-markers@npm:3.1.2-next-1718354423.0"
+"@opensumi/ide-markers@npm:3.1.2":
+  version: 3.1.2
+  resolution: "@opensumi/ide-markers@npm:3.1.2"
   dependencies:
-    "@opensumi/ide-core-common": "npm:3.1.2-next-1718354423.0"
-  checksum: 10/8323ccbc22360471cc0037fe31186be4f00f0b3ad26d62b1bd9bc50ad340046021c36d6dce208ec8545bd5cae4f4e5ee9db35b26ccea31b41f2f5f4c62a3c1ab
+    "@opensumi/ide-core-common": "npm:3.1.2"
+  checksum: 10/2788d78cf3ce78127f04408db964bc26be9d6a059d912d8acf922b6c73496823f06fb0249b460f5a6f1d1d4cb4cf3aa5a4fabba03db7513b5d4627faf3f6e0de
   languageName: node
   linkType: hard
 
-"@opensumi/ide-menu-bar@npm:3.1.2-next-1718354423.0":
-  version: 3.1.2-next-1718354423.0
-  resolution: "@opensumi/ide-menu-bar@npm:3.1.2-next-1718354423.0"
+"@opensumi/ide-menu-bar@npm:3.1.2":
+  version: 3.1.2
+  resolution: "@opensumi/ide-menu-bar@npm:3.1.2"
   dependencies:
-    "@opensumi/ide-core-common": "npm:3.1.2-next-1718354423.0"
-    "@opensumi/ide-theme": "npm:3.1.2-next-1718354423.0"
-  checksum: 10/1c5a7dbefb00c96715fbcc5d0237fd661aa04b659bd7a99fedb3c722a30fa266e9263cdb5b89d7a2806f223a86af586567c01070bd9bbc19ba246e8adc0696c4
+    "@opensumi/ide-core-common": "npm:3.1.2"
+    "@opensumi/ide-theme": "npm:3.1.2"
+  checksum: 10/de0e76108d8d4678343d0d21d62d3b1b6d5da20876b929d6944dc2775bc2c11d62826b198b4b7751e560deb36230d5a054fb3e5dc04c7b428a774794d8d6a6bc
   languageName: node
   linkType: hard
 
-"@opensumi/ide-monaco-enhance@npm:3.1.2-next-1718354423.0":
-  version: 3.1.2-next-1718354423.0
-  resolution: "@opensumi/ide-monaco-enhance@npm:3.1.2-next-1718354423.0"
+"@opensumi/ide-monaco-enhance@npm:3.1.2":
+  version: 3.1.2
+  resolution: "@opensumi/ide-monaco-enhance@npm:3.1.2"
   dependencies:
-    "@opensumi/ide-core-common": "npm:3.1.2-next-1718354423.0"
-  checksum: 10/97a4583adcd4c9e6469f036111230a4eb9adaad95eddc434d8d06e562ac7ac302dc778b016b5341c38346c828aebb9a723538a1f4b669ad955b7e29961495410
+    "@opensumi/ide-core-common": "npm:3.1.2"
+  checksum: 10/5bba84ff00798233d3621da6877493a3b18affdd632a6ca4512bf83d9bb4809be18e32692c9a5b808c59c141236b74bb50dba8a8ddc00dd482ab767f224e2ecb
   languageName: node
   linkType: hard
 
-"@opensumi/ide-monaco@npm:3.1.2-next-1718354423.0":
-  version: 3.1.2-next-1718354423.0
-  resolution: "@opensumi/ide-monaco@npm:3.1.2-next-1718354423.0"
+"@opensumi/ide-monaco@npm:3.1.2":
+  version: 3.1.2
+  resolution: "@opensumi/ide-monaco@npm:3.1.2"
   dependencies:
-    "@opensumi/ide-core-browser": "npm:3.1.2-next-1718354423.0"
-    "@opensumi/ide-core-common": "npm:3.1.2-next-1718354423.0"
-    "@opensumi/ide-theme": "npm:3.1.2-next-1718354423.0"
+    "@opensumi/ide-core-browser": "npm:3.1.2"
+    "@opensumi/ide-core-common": "npm:3.1.2"
+    "@opensumi/ide-theme": "npm:3.1.2"
     "@opensumi/monaco-editor-core": "npm:0.47.0-patch.15"
-  checksum: 10/4d94d47499e2e7c5eeb557f2a943a6c5654e8762ba2451ce92c9504100d18c5d25a636a23c623e7cef5991db9a20cfce342b94ab755bcd4fd834a8d0935ff376
+  checksum: 10/5d3504b458d4d5fbbe7d6ca91fcbef82a511cc8ee1a1ddae42e1ff4471c964b5f4144f496206109e6e4e32cb7b61af66aa04c2b8211578f4ea6cfe8437439827
   languageName: node
   linkType: hard
 
-"@opensumi/ide-opened-editor@npm:3.1.2-next-1718354423.0":
-  version: 3.1.2-next-1718354423.0
-  resolution: "@opensumi/ide-opened-editor@npm:3.1.2-next-1718354423.0"
-  checksum: 10/61fbc1d947dd6ee7e5837bffbf8a2c70a7001f5f8d247dd301f2f75758435a307cf2890f82fc134a95f658d6f93e54f00ef64e166068009cdf7e5f8860714333
+"@opensumi/ide-opened-editor@npm:3.1.2":
+  version: 3.1.2
+  resolution: "@opensumi/ide-opened-editor@npm:3.1.2"
+  checksum: 10/76c4b16fe53549e0171863a887bd38f7b288f62005ca8d015e980242be30b6d468538efde3eca87b6208baaf6a12b54039f99778e5dfad90cc785309b90261fe
   languageName: node
   linkType: hard
 
-"@opensumi/ide-outline@npm:3.1.2-next-1718354423.0":
-  version: 3.1.2-next-1718354423.0
-  resolution: "@opensumi/ide-outline@npm:3.1.2-next-1718354423.0"
-  checksum: 10/008cc3d1e5833cef8b63e07fb54b9c919e10c7d1212ba7cf4d1d71389599bc3519428ee6707d7165f5eb30401e9c66c253fca3b9ca2ec13f8368257e34453ecb
+"@opensumi/ide-outline@npm:3.1.2":
+  version: 3.1.2
+  resolution: "@opensumi/ide-outline@npm:3.1.2"
+  checksum: 10/860b9d22bcb060dc66fb9488ea19352cd15b79ffbfdcab105f7445a3a830add414ab509417d8063632db963983960b36cf0eb201fd45fa9627760966cb47f2d9
   languageName: node
   linkType: hard
 
-"@opensumi/ide-output@npm:3.1.2-next-1718354423.0":
-  version: 3.1.2-next-1718354423.0
-  resolution: "@opensumi/ide-output@npm:3.1.2-next-1718354423.0"
+"@opensumi/ide-output@npm:3.1.2":
+  version: 3.1.2
+  resolution: "@opensumi/ide-output@npm:3.1.2"
   dependencies:
-    "@opensumi/ide-core-common": "npm:3.1.2-next-1718354423.0"
+    "@opensumi/ide-core-common": "npm:3.1.2"
     escape-carriage: "npm:^1.3.0"
-  checksum: 10/fc98d28b3d162e8cd53645061e3292dc5ead469edcc513156a25979de2dc9955bfa704fe0cd2329c117238518e253c2276d0745873595a75b62208fda624980d
+  checksum: 10/e5f52366760f66f55b9c7892c0b843eae98f8282d70e9af8bdcb80001fe639e3e14af702cd240ceef798a9c61b09eb2dccf50efd5801a1d4436dfa231e89f5d6
   languageName: node
   linkType: hard
 
-"@opensumi/ide-overlay@npm:3.1.2-next-1718354423.0":
-  version: 3.1.2-next-1718354423.0
-  resolution: "@opensumi/ide-overlay@npm:3.1.2-next-1718354423.0"
+"@opensumi/ide-overlay@npm:3.1.2":
+  version: 3.1.2
+  resolution: "@opensumi/ide-overlay@npm:3.1.2"
   dependencies:
-    "@opensumi/ide-core-common": "npm:3.1.2-next-1718354423.0"
-    "@opensumi/ide-theme": "npm:3.1.2-next-1718354423.0"
-  checksum: 10/e046d4173f9d91e15431e85a26fd19f774db489f70b10d977aedab36e37c4cec85da7dc885fd3f87f190c517bea0ab1da369ee45bdc853f0800c49c194ba0904
+    "@opensumi/ide-core-common": "npm:3.1.2"
+    "@opensumi/ide-theme": "npm:3.1.2"
+  checksum: 10/55db4e2abec9f4cbfa22fac4e241f5d5c640a7956945eb4f9777db0bacd254616ee5efe9e78fb047609e1a7c3ed473d6f8fa127bccf79f0051931f9ceafc44ec
   languageName: node
   linkType: hard
 
-"@opensumi/ide-preferences@npm:3.1.2-next-1718354423.0":
-  version: 3.1.2-next-1718354423.0
-  resolution: "@opensumi/ide-preferences@npm:3.1.2-next-1718354423.0"
+"@opensumi/ide-preferences@npm:3.1.2":
+  version: 3.1.2
+  resolution: "@opensumi/ide-preferences@npm:3.1.2"
   dependencies:
-    "@opensumi/ide-core-common": "npm:3.1.2-next-1718354423.0"
-  checksum: 10/27f21593b7d951dff46c0fdc78912611285e5be151c49cf473071e9f723495ded7ca0e3a1a7f910e0dd2ac9fc0e577b15c8c95a057b57c2fd99d03a84ec1850a
+    "@opensumi/ide-core-common": "npm:3.1.2"
+  checksum: 10/d629d3707e7c6c1378bdf86874698d22d8ef960511dc107effdba2847b4452a7ca0bed478f12831b47ea4279fd48d5447f353503ac013a5e7f251909cd0e7540
   languageName: node
   linkType: hard
 
-"@opensumi/ide-process@npm:3.1.2-next-1718354423.0":
-  version: 3.1.2-next-1718354423.0
-  resolution: "@opensumi/ide-process@npm:3.1.2-next-1718354423.0"
+"@opensumi/ide-process@npm:3.1.2":
+  version: 3.1.2
+  resolution: "@opensumi/ide-process@npm:3.1.2"
   dependencies:
-    "@opensumi/ide-core-common": "npm:3.1.2-next-1718354423.0"
-    "@opensumi/ide-core-node": "npm:3.1.2-next-1718354423.0"
-  checksum: 10/eab7af1e6813c7b03ded77ac21eb8499fcdb96e29f30e67d1a0a0de572bc9650bbdb54e1a01ffb7261aff2521ce6190468499d4dec06094816696e3009bfcaf7
+    "@opensumi/ide-core-common": "npm:3.1.2"
+    "@opensumi/ide-core-node": "npm:3.1.2"
+  checksum: 10/1ef9b8f6d9081b246879ba499e34d64e55c6cd8cd9e7cddf6a0832ffc4bde3442bf6c0355c3d03882e2ac0d8928c8df11fc6b00e0219c1ea5ef911a230bfbe35
   languageName: node
   linkType: hard
 
-"@opensumi/ide-quick-open@npm:3.1.2-next-1718354423.0":
-  version: 3.1.2-next-1718354423.0
-  resolution: "@opensumi/ide-quick-open@npm:3.1.2-next-1718354423.0"
+"@opensumi/ide-quick-open@npm:3.1.2":
+  version: 3.1.2
+  resolution: "@opensumi/ide-quick-open@npm:3.1.2"
   dependencies:
-    "@opensumi/ide-core-common": "npm:3.1.2-next-1718354423.0"
-  checksum: 10/5124e9097ad2d8c5ac717b83f99f7c2d6265adf78495e69b342600b4034b1a9b37ce34441cd00d28665e152e9602c08eab269f831b231de96181cf8d1f185442
+    "@opensumi/ide-core-common": "npm:3.1.2"
+  checksum: 10/db6842505af6699eafa90a5f5e65cfc5c0d42224f8270da15e768c8fe61cc04755b023878b461c9546cbe6964fe984281fed17352662164737f8b92ca72975bb
   languageName: node
   linkType: hard
 
-"@opensumi/ide-scm@npm:3.1.2-next-1718354423.0":
-  version: 3.1.2-next-1718354423.0
-  resolution: "@opensumi/ide-scm@npm:3.1.2-next-1718354423.0"
+"@opensumi/ide-scm@npm:3.1.2":
+  version: 3.1.2
+  resolution: "@opensumi/ide-scm@npm:3.1.2"
   dependencies:
-    "@opensumi/ide-core-common": "npm:3.1.2-next-1718354423.0"
-  checksum: 10/3580ed575fe553b26618d6d28c9f4f4984275af0adb86ec97de3c085a7c705ac939324ad396d022e6d092a4a5310879730d64cf1067dd287f181532f0d02a667
+    "@opensumi/ide-core-common": "npm:3.1.2"
+  checksum: 10/35bf9b0301b8ae751e52100a704d5d6841e3775c67d9645f8ef9b125eea0057893b39ab9a12b6955fd00ec067011c0076f03bc2fa03645bafebd6853a850ddfd
   languageName: node
   linkType: hard
 
-"@opensumi/ide-search@npm:3.1.2-next-1718354423.0":
-  version: 3.1.2-next-1718354423.0
-  resolution: "@opensumi/ide-search@npm:3.1.2-next-1718354423.0"
+"@opensumi/ide-search@npm:3.1.2":
+  version: 3.1.2
+  resolution: "@opensumi/ide-search@npm:3.1.2"
   dependencies:
-    "@opensumi/ide-connection": "npm:3.1.2-next-1718354423.0"
-    "@opensumi/ide-core-common": "npm:3.1.2-next-1718354423.0"
-    "@opensumi/ide-core-node": "npm:3.1.2-next-1718354423.0"
-    "@opensumi/ide-logs": "npm:3.1.2-next-1718354423.0"
-    "@opensumi/ide-process": "npm:3.1.2-next-1718354423.0"
+    "@opensumi/ide-connection": "npm:3.1.2"
+    "@opensumi/ide-core-common": "npm:3.1.2"
+    "@opensumi/ide-core-node": "npm:3.1.2"
+    "@opensumi/ide-logs": "npm:3.1.2"
+    "@opensumi/ide-process": "npm:3.1.2"
     "@opensumi/vscode-ripgrep": "npm:^1.4.0"
-  checksum: 10/71353898088cddad980c184e8b9ec6540ee6eb4b3e0c56c4ed13f144c805a747d0f067f2d052ea6f4f7c2b1ed3f1f53fddf5f19929ff17c580c5b8239ea31448
+  checksum: 10/dc1e52a2dc4b56286cc7f0693ec97d26eae7b86b9e334be3b43036b9333c8e1d60aa9253c5483476133d6414684756b26f4aae66e00a63ab928f0f13509c9ccd
   languageName: node
   linkType: hard
 
-"@opensumi/ide-status-bar@npm:3.1.2-next-1718354423.0":
-  version: 3.1.2-next-1718354423.0
-  resolution: "@opensumi/ide-status-bar@npm:3.1.2-next-1718354423.0"
+"@opensumi/ide-status-bar@npm:3.1.2":
+  version: 3.1.2
+  resolution: "@opensumi/ide-status-bar@npm:3.1.2"
   dependencies:
-    "@opensumi/ide-components": "npm:3.1.2-next-1718354423.0"
-    "@opensumi/ide-core-common": "npm:3.1.2-next-1718354423.0"
-    "@opensumi/ide-core-node": "npm:3.1.2-next-1718354423.0"
-    "@opensumi/ide-theme": "npm:3.1.2-next-1718354423.0"
-  checksum: 10/5244faf8f7b320b553c59a9566172f73a9eeecc75d67b74eda4568b6358e3f4139def35f3e022fc9de3206a97788c80664e261386876572386cc220a44a5f314
+    "@opensumi/ide-components": "npm:3.1.2"
+    "@opensumi/ide-core-common": "npm:3.1.2"
+    "@opensumi/ide-core-node": "npm:3.1.2"
+    "@opensumi/ide-theme": "npm:3.1.2"
+  checksum: 10/c2798ff15c3902514f318c17320fdb5c65d88d0e0b9f2a3430cbecdb2d307e5c81d4879be9801bac48b895e0df596c0b0e518f59aa09d932dfb261e8f26f94b3
   languageName: node
   linkType: hard
 
-"@opensumi/ide-storage@npm:3.1.2-next-1718354423.0":
-  version: 3.1.2-next-1718354423.0
-  resolution: "@opensumi/ide-storage@npm:3.1.2-next-1718354423.0"
+"@opensumi/ide-storage@npm:3.1.2":
+  version: 3.1.2
+  resolution: "@opensumi/ide-storage@npm:3.1.2"
   dependencies:
-    "@opensumi/ide-core-common": "npm:3.1.2-next-1718354423.0"
-  checksum: 10/a33a1970c33473ddc30724fc0e7da0b92f3a971a8ef9f39d4be606d7ffa1bc30eb8115a8761b5cebcafe0a04c832e208db766e1cd60aa2d9524e08e9ef6ad033
+    "@opensumi/ide-core-common": "npm:3.1.2"
+  checksum: 10/5f1fafe76c1c9d4cd54b14088f7ae29201eb8a6c6d141e15d279ed489489b9d6deef10e2933e81a0a3baea7d8dd533dfc1b9e733707db2a9f48f4ad3cfe72051
   languageName: node
   linkType: hard
 
-"@opensumi/ide-task@npm:3.1.2-next-1718354423.0":
-  version: 3.1.2-next-1718354423.0
-  resolution: "@opensumi/ide-task@npm:3.1.2-next-1718354423.0"
+"@opensumi/ide-task@npm:3.1.2":
+  version: 3.1.2
+  resolution: "@opensumi/ide-task@npm:3.1.2"
   dependencies:
-    "@opensumi/ide-core-common": "npm:3.1.2-next-1718354423.0"
-    "@opensumi/ide-core-node": "npm:3.1.2-next-1718354423.0"
-    "@opensumi/ide-terminal-next": "npm:3.1.2-next-1718354423.0"
-  checksum: 10/720026286a7cf354c0166361c158a94dd95c6d5dffeb162dee78430e75d8ef8ec8c1792ab2f8131675eac0b7901c20ed39171b0a0694ddda9457650a74ad9dc5
+    "@opensumi/ide-core-common": "npm:3.1.2"
+    "@opensumi/ide-core-node": "npm:3.1.2"
+    "@opensumi/ide-terminal-next": "npm:3.1.2"
+  checksum: 10/81c6b0d7f8845dd33ead8cb27af63878883f5e7f14c4ee6ebdbe6c82947de93b89d8f9f89cd00cbc62bbd2147db7619c7dff2e59c28dfe9f274a0e13ae1c46a5
   languageName: node
   linkType: hard
 
-"@opensumi/ide-terminal-next@npm:3.1.2-next-1718354423.0":
-  version: 3.1.2-next-1718354423.0
-  resolution: "@opensumi/ide-terminal-next@npm:3.1.2-next-1718354423.0"
+"@opensumi/ide-terminal-next@npm:3.1.2":
+  version: 3.1.2
+  resolution: "@opensumi/ide-terminal-next@npm:3.1.2"
   dependencies:
-    "@opensumi/ide-connection": "npm:3.1.2-next-1718354423.0"
-    "@opensumi/ide-core-common": "npm:3.1.2-next-1718354423.0"
-    "@opensumi/ide-core-node": "npm:3.1.2-next-1718354423.0"
-    "@opensumi/ide-file-service": "npm:3.1.2-next-1718354423.0"
+    "@opensumi/ide-connection": "npm:3.1.2"
+    "@opensumi/ide-core-common": "npm:3.1.2"
+    "@opensumi/ide-core-node": "npm:3.1.2"
+    "@opensumi/ide-file-service": "npm:3.1.2"
     node-pty: "npm:1.0.0"
     os-locale: "npm:^4.0.0"
     xterm: "npm:5.3.0"
@@ -1939,88 +1939,88 @@ __metadata:
     xterm-addon-fit: "npm:0.7.0"
     xterm-addon-search: "npm:0.12.0"
     xterm-addon-webgl: "npm:0.15.0"
-  checksum: 10/33cbba1faa548d47e198393ccb3e414e9b78b2d46b891776d895fac71e81f124546d3a65f7bf0dfd628b91080bafaa7dccc6ad42201918e3abfefd2ed33c493e
+  checksum: 10/56bb65dff084b8d5378f73bf78d2cddeb061bb435364f991fc536c52b1e0b4eab20ef7610e3ea7130876f9d8307bf7563d942a9e20f610183b9c3485da47db1a
   languageName: node
   linkType: hard
 
-"@opensumi/ide-testing@npm:3.1.2-next-1718354423.0":
-  version: 3.1.2-next-1718354423.0
-  resolution: "@opensumi/ide-testing@npm:3.1.2-next-1718354423.0"
+"@opensumi/ide-testing@npm:3.1.2":
+  version: 3.1.2
+  resolution: "@opensumi/ide-testing@npm:3.1.2"
   dependencies:
-    "@opensumi/ide-core-common": "npm:3.1.2-next-1718354423.0"
-  checksum: 10/a610622f82036a6579d0aa801aa084e2c8d5344176eff8a080c63db8795e3196870508fb2a9046f2d35c4e1b229620e4e91afa56c02d3a9ae1c61f1b4038042b
+    "@opensumi/ide-core-common": "npm:3.1.2"
+  checksum: 10/e13079b57c99412f9486776e5b2347937fba66f72554469746c1be526277b820d0f3545334f7064817d2bbf6bc788ae5e43354edda02d4ab2527b3cf9b56fdf0
   languageName: node
   linkType: hard
 
-"@opensumi/ide-theme@npm:3.1.2-next-1718354423.0":
-  version: 3.1.2-next-1718354423.0
-  resolution: "@opensumi/ide-theme@npm:3.1.2-next-1718354423.0"
+"@opensumi/ide-theme@npm:3.1.2":
+  version: 3.1.2
+  resolution: "@opensumi/ide-theme@npm:3.1.2"
   dependencies:
-    "@opensumi/ide-core-common": "npm:3.1.2-next-1718354423.0"
-  checksum: 10/7386e2418d1cf993f39f585906f60769694b5522bdf6889ca5ec8b08a8e6bb1c69fb4df2a4cbbdff710dd3f8a3633a26fee8451faf029d895569ba0c26ce67c8
+    "@opensumi/ide-core-common": "npm:3.1.2"
+  checksum: 10/32d0d051c298e6d7d11fbb2b3925803afe1108f3f814db6706d845622d58a5569358b8cfb4c88b4a27a4b007e1bded8f54d07de66ffd2e37372c9d390ca56e95
   languageName: node
   linkType: hard
 
-"@opensumi/ide-toolbar@npm:3.1.2-next-1718354423.0":
-  version: 3.1.2-next-1718354423.0
-  resolution: "@opensumi/ide-toolbar@npm:3.1.2-next-1718354423.0"
+"@opensumi/ide-toolbar@npm:3.1.2":
+  version: 3.1.2
+  resolution: "@opensumi/ide-toolbar@npm:3.1.2"
   dependencies:
-    "@opensumi/ide-core-common": "npm:3.1.2-next-1718354423.0"
-  checksum: 10/646fa2e4257c584f6eac96cdb64261add87d451662289810a971099964051c1803186cfc566c3e6676b1ad6f9954e91ec58cfaad0c2b7af2339d2425298d1c16
+    "@opensumi/ide-core-common": "npm:3.1.2"
+  checksum: 10/1754390879a5a2c4322db824664b52264976d14a1534f2b15fbf0eadd0e0276d67a132e6a205b4d03344a48f3ac4d3c60435912e6d75368dadcb7dac5ab7527c
   languageName: node
   linkType: hard
 
-"@opensumi/ide-utils@npm:3.1.2-next-1718354423.0":
-  version: 3.1.2-next-1718354423.0
-  resolution: "@opensumi/ide-utils@npm:3.1.2-next-1718354423.0"
+"@opensumi/ide-utils@npm:3.1.2":
+  version: 3.1.2
+  resolution: "@opensumi/ide-utils@npm:3.1.2"
   dependencies:
     iconv-lite: "npm:^0.6.3"
     jschardet: "npm:3.0.0"
     mri: "npm:^1.2.0"
     nanoid: "npm:3.3.4"
     vscode-uri: "npm:3.0.2"
-  checksum: 10/2d1a771f54a39752f7222a5c48b095841f6249cf56f40ee0f88c4bd5f6d715e8c77b5a1df995bdd07e6d65e9cb7a42b1fb3aa708ae40adc78cb2d68deabd6a44
+  checksum: 10/e9184b5e2b4b231910e6cde7bfa138c0d9317c66c8b78dedd220a901e0a4e293952de5232c859238e56a1bea5d495cb633afa230d3caaef92936c29058dce028
   languageName: node
   linkType: hard
 
-"@opensumi/ide-variable@npm:3.1.2-next-1718354423.0":
-  version: 3.1.2-next-1718354423.0
-  resolution: "@opensumi/ide-variable@npm:3.1.2-next-1718354423.0"
+"@opensumi/ide-variable@npm:3.1.2":
+  version: 3.1.2
+  resolution: "@opensumi/ide-variable@npm:3.1.2"
   dependencies:
-    "@opensumi/ide-core-common": "npm:3.1.2-next-1718354423.0"
-  checksum: 10/c3082ddb97f1311a4f4c885b19804bdd4f7b242ce2f5cd25bfbfcfed8be1d7672677ec0ba670d815c169edf61d74b1a4edc68dae0eaba49945e47ef917c197bc
+    "@opensumi/ide-core-common": "npm:3.1.2"
+  checksum: 10/e2d7b69dae97e2b041ad9b7befeeabc050a6fcbbd48ba08fc58c9d565b63c8ea1077175deb3a167100b9182a87aed5ff7a7551c04bcae945fde99f2686ede7a9
   languageName: node
   linkType: hard
 
-"@opensumi/ide-webview@npm:3.1.2-next-1718354423.0":
-  version: 3.1.2-next-1718354423.0
-  resolution: "@opensumi/ide-webview@npm:3.1.2-next-1718354423.0"
+"@opensumi/ide-webview@npm:3.1.2":
+  version: 3.1.2
+  resolution: "@opensumi/ide-webview@npm:3.1.2"
   dependencies:
-    "@opensumi/ide-core-common": "npm:3.1.2-next-1718354423.0"
-    "@opensumi/ide-core-node": "npm:3.1.2-next-1718354423.0"
+    "@opensumi/ide-core-common": "npm:3.1.2"
+    "@opensumi/ide-core-node": "npm:3.1.2"
   peerDependencies:
     electron: "*"
-  checksum: 10/8d95bbb876eba9e8312d3fa020a70b8362dfe828a7d4ea5eb9c7437a96c0d1723ef85a0e0b82cb15fd98aca1f61e54757ea4a6ffa230bca12891109c6ea736ce
+  checksum: 10/92ee0d61f3c5856cfd7c39265eadb95d029d5300dc77914f54748302c6d411cd9b629115c2c1c77f7501e478c7c17bf0e3cf2c795a25605d9148b0de28fdd20e
   languageName: node
   linkType: hard
 
-"@opensumi/ide-workspace-edit@npm:3.1.2-next-1718354423.0":
-  version: 3.1.2-next-1718354423.0
-  resolution: "@opensumi/ide-workspace-edit@npm:3.1.2-next-1718354423.0"
+"@opensumi/ide-workspace-edit@npm:3.1.2":
+  version: 3.1.2
+  resolution: "@opensumi/ide-workspace-edit@npm:3.1.2"
   dependencies:
-    "@opensumi/ide-core-common": "npm:3.1.2-next-1718354423.0"
-    "@opensumi/ide-monaco": "npm:3.1.2-next-1718354423.0"
-  checksum: 10/cf7193ca1145a97def06f3330ba59da327ab604d75afeac2eaadf168646d725d6c692fbcb3cddbbfbd4bf6c276b50d24ee31cc8245ea8c886481fed836293afa
+    "@opensumi/ide-core-common": "npm:3.1.2"
+    "@opensumi/ide-monaco": "npm:3.1.2"
+  checksum: 10/cfe4f3cf1d28ac425d319d9f09ddf7c833cb2fccdca87741666ff876afd2bb7d2123038579cfe7a891a4ab1272a50068b516c0878b93f31f0cfc3724c29406a7
   languageName: node
   linkType: hard
 
-"@opensumi/ide-workspace@npm:3.1.2-next-1718354423.0":
-  version: 3.1.2-next-1718354423.0
-  resolution: "@opensumi/ide-workspace@npm:3.1.2-next-1718354423.0"
+"@opensumi/ide-workspace@npm:3.1.2":
+  version: 3.1.2
+  resolution: "@opensumi/ide-workspace@npm:3.1.2"
   dependencies:
-    "@opensumi/ide-core-common": "npm:3.1.2-next-1718354423.0"
-    "@opensumi/ide-file-service": "npm:3.1.2-next-1718354423.0"
-  checksum: 10/56f3ed124e042a493b0c56fee85732ef3d73d398b5c9e766b261cfe2858f1ff473fba81be4107c17ff68dcc6847369d27163a3ad0367cd02e2fee0cf65a75ac6
+    "@opensumi/ide-core-common": "npm:3.1.2"
+    "@opensumi/ide-file-service": "npm:3.1.2"
+  checksum: 10/3bd5347f9602a4e6845f3bebaa223aeffc970e0eccd9f78544548144d49bfb809cee6fef95c72a09a8a9396377427b5d896cda12015178d59d2454cd52895410
   languageName: node
   linkType: hard
 
