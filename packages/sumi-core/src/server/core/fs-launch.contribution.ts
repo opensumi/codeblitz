@@ -1,10 +1,10 @@
 import { Autowired } from '@opensumi/di';
-import { Domain, ContributionProvider, localize, Disposable } from '@opensumi/ide-core-common';
+import { ContributionProvider, Disposable, Domain, localize } from '@opensumi/ide-core-common';
 import { IMessageService } from '@opensumi/ide-overlay';
-import { IServerApp, RuntimeConfig, RootFS, AppConfig } from '../../common/types';
+import { AppConfig, IServerApp, RootFS, RuntimeConfig } from '../../common/types';
+import { BrowserFS } from '../node';
 import { LaunchContribution } from './app';
 import { FileSystemContribution } from './base';
-import { BrowserFS } from '../node';
 
 @Domain(LaunchContribution)
 export class FileSystemLaunchContribution implements LaunchContribution {
@@ -47,12 +47,12 @@ export class FileSystemConfigContribution extends Disposable implements FileSyst
       const workspaceFS = await BrowserFS.getFileSystem(fsConfig);
       rootFS.mount(workspaceDir, workspaceFS);
     } catch (err) {
-      console.error('[Alex ERROR]: ', err);
+      console.error('[CodeBlitz ERROR]: ', err);
       this.messageService.error(localize('workspace.initialize.failed'));
       // 使用内存作为回退文件系统
       rootFS.mount(
         workspaceDir,
-        await BrowserFS.createFileSystem(BrowserFS.FileSystem.InMemory, {})
+        await BrowserFS.createFileSystem(BrowserFS.FileSystem.InMemory, {}),
       );
     }
     this.addDispose({
