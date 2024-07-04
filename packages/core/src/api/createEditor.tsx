@@ -42,7 +42,7 @@ const getDefaultAppConfig = (): IAppOpts => ({
   extWorkerHost: EXT_WORKER_HOST,
   webviewEndpoint: WEBVIEW_ENDPOINT,
   defaultPreferences: {
-    'general.theme': 'opensumi-light',
+    'general.theme': 'opensumi-design-light',
     'application.confirmExit': 'never',
     'editor.autoSave': 'afterDelay',
     'editor.guides.bracketPairs': false,
@@ -97,11 +97,6 @@ export function createEditor({ appConfig, runtimeConfig }: IConfig): IAppInstanc
   }
 
   const app = new ClientApp({ ...opts, injector }) as IAppInstance;
-
-  const _start = app.start;
-  app.start = async (container: HTMLElement | IAppRenderer) => {
-    await _start.call(app, container);
-  };
 
   let destroyed = false;
   app.destroy = () => {
