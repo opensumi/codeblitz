@@ -155,7 +155,7 @@ const App = () => {
                 plugins: [editorPlugin],
                 workspaceDir: project,
                 defaultPreferences: {
-                  'general.theme': 'opensumi-light',
+                  'general.theme': 'opensumi-design-light',
                   'editor.scrollBeyondLastLine': false,
                   'lsif.documentScheme': 'file',
                   'lsif.enable': true,

@@ -30,7 +30,7 @@ import { disposeMode, disposableCollection } from '../core/patch';
 
 import { modules } from '../core/modules';
 import { IconSlim, IDETheme } from '../core/extension/metadata';
-import { mergeConfig, getThemeTypeByPreferenceThemeId } from '../core/utils';
+import { mergeConfig } from '../core/utils';
 import { LayoutComponent, getDefaultLayoutConfig } from '../core/layout';
 import { IConfig, IAppInstance } from './types';
 import { EXT_WORKER_HOST, WEBVIEW_ENDPOINT } from '../core/env';
@@ -118,18 +118,6 @@ export function createApp({ appConfig, runtimeConfig }: IConfig): IAppInstance {
     ...opts,
     injector,
   }) as IAppInstance;
-
-  Object.defineProperty(app, 'currentThemeType', {
-    get() {
-      const themeId = getPreferenceThemeId() || opts.defaultPreferences?.['general.theme'];
-      return getThemeTypeByPreferenceThemeId(themeId, opts.extensionMetadata);
-    },
-  });
-
-  const _start = app.start;
-  app.start = async (container: HTMLElement | IAppRenderer) => {
-    await _start.call(app, container);
-  };
 
   let destroyed = false;
   app.destroy = () => {

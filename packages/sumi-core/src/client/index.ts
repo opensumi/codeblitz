@@ -7,17 +7,18 @@ import {
   PreferenceScope,
   PreferenceProvider,
   IContextKeyService,
+  getPreferenceThemeId,
 } from '@opensumi/ide-core-browser';
 import { ClientApp as BasicClientApp } from '@opensumi/ide-core-browser/lib/bootstrap/app';
 
-import { Disposable } from '@opensumi/ide-core-common';
+import { Disposable, GeneralSettingsId } from '@opensumi/ide-core-common';
 
 import { OpenSumiExtFsProvider, KtExtFsProviderContribution } from './extension';
 import { TextmateLanguageGrammarContribution } from './textmate-language-grammar/index.contribution';
 import { ILanguageGrammarRegistrationService } from './textmate-language-grammar/base';
 import { LanguageGrammarRegistrationService } from './textmate-language-grammar/language-grammar.service';
 import { injectDebugPreferences } from './debug';
-import { IServerApp, RootFS, RuntimeConfig } from '../common';
+import { IServerApp, RootFS } from '../common';
 import { IServerAppOpts, ServerApp } from '../server/core/app';
 import {
   FileTreeCustomContribution,
@@ -43,14 +44,9 @@ import {
 } from './override/vscodeContributesService';
 
 import {
-  IMonacoCommandServiceProxy,
   monacoCommandServiceProxy,
 } from './override/monacoOverride/commandService';
-import { ICommandServiceToken } from '@opensumi/ide-monaco/lib/browser/contrib/command';
-import { MonacoCommandService } from '@opensumi/ide-editor/lib/browser/monaco-contrib/command/command.service';
 import {
-  IMonacoCodeService,
-  MonacoCodeService,
   monacoCodeServiceProxy,
 } from './override/monacoOverride/codeEditorService';
 import { MonacoContextKeyServiceOverride } from './override/monacoOverride/contextKeyService';
@@ -63,6 +59,7 @@ import { CodeBlitzConnectionHelper } from './override/webConnectionHelper';
 import { WebConnectionHelper } from '@opensumi/ide-core-browser/lib/application/runtime';
 import { CodeBlitzAINativeContribution } from './ai-native';
 import { injectAINativePreferences } from './ai-native/preferences';
+import { getThemeTypeByPreferenceThemeId } from '../common/theme';
 export * from './override/monacoOverride/codeEditorService';
 
 export { ExtensionManagerModule as ExtensionClientManagerModule } from './extension-manager';
@@ -213,6 +210,11 @@ export class ClientApp extends BasicClientApp {
     if (serverApp) {
       serverApp.unmountRootFS();
     }
+  }
+
+  get currentThemeType() {
+    const themeId = getPreferenceThemeId() || this.opts.defaultPreferences?.[GeneralSettingsId.Theme];
+    return getThemeTypeByPreferenceThemeId(themeId, (this.opts as IAppOpts).extensionMetadata);
   }
 
   async dispose() {
