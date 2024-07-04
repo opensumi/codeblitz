@@ -19,6 +19,7 @@
     "generate": "node scripts/generate",
     "editor": "INTEGRATION=editor npm run dev",
     "fs": "INTEGRATION=filesystem npm run dev",
+    "diff-viewer": "INTEGRATION=diff-viewer npm run dev",
     "build": "node scripts/build",
     "build:all": "yarn run bundle && yarn run generate && yarn run build",
     "bundle": "node scripts/bundle",
