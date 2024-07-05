@@ -12,10 +12,13 @@ export interface IDiffViewerService {
 export interface IDiffViewerHandle {
   openDiffInTab: (filePath: string, oldContent: string, newContent: string) => void;
   closeFile: (filePath: string) => void;
-  onConflictSolved: (fn: (event: IConflictSolvedEvent) => void) => void;
+  getFileContent: (filePath: string) => Promise<string>;
+  acceptAllPartialEdit: () => Promise<void>;
+  rejectAllPartialEdit: () => Promise<void>;
+  onPartialEditEvent: (fn: (event: IPartialEditEvent) => void) => void;
 }
 
-export interface IConflictSolvedEvent {
+export interface IPartialEditEvent {
   /**
    * 总冲突数
    */

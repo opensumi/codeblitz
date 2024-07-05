@@ -76,6 +76,7 @@ export const DiffViewerRenderer = (props: IDiffViewerProps) => {
       layoutConfig,
       defaultPreferences: {
         'general.theme': 'opensumi-design-light',
+        'ai.native.inlineDiff.preview.mode': 'inlineLive',
         ...defaultPreferences,
       },
       ...appConfig,
