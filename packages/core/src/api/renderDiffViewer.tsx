@@ -1,4 +1,11 @@
-import { ModuleConstructor, SlotLocation, SlotRenderer } from '@opensumi/ide-core-browser';
+import { deletionLogPath } from '@codeblitzjs/ide-browserfs/lib/backend/OverlayFS';
+import {
+  FILES_DEFAULTS,
+  ModuleConstructor,
+  randomString,
+  SlotLocation,
+  SlotRenderer,
+} from '@opensumi/ide-core-browser';
 import React from 'react';
 import { IDiffViewerProps } from '../core/diff-viewer';
 import { DiffViewerModule } from '../core/diff-viewer/module';
@@ -59,7 +66,7 @@ export const DiffViewerRenderer = (props: IDiffViewerProps) => {
   const defaultPreferences = appConfig?.defaultPreferences || {};
   delete appConfig?.defaultPreferences;
 
-  const workspaceDir = appConfig?.workspaceDir || 'workspace';
+  const workspaceDir = appConfig?.workspaceDir || 'workspace-' + randomString(8);
   delete appConfig?.workspaceDir;
 
   const layoutConfig = appConfig?.layoutConfig || defaultLayoutConfig;
@@ -76,12 +83,38 @@ export const DiffViewerRenderer = (props: IDiffViewerProps) => {
       layoutConfig,
       defaultPreferences: {
         'general.theme': 'opensumi-design-light',
+        'editor.minimap': false,
         'ai.native.inlineDiff.preview.mode': 'inlineLive',
+        'editor.autoSave': 'afterDelay',
+        'application.confirmExit': 'never',
+        'editor.guides.bracketPairs': false,
+        'editor.quickSuggestionsDelay': 10,
+        'editor.autoSaveDelay': 1000, // one second
+        'editor.fixedOverflowWidgets': true, // widget editor 默认改为 fixed
+        'files.exclude': {
+          ...FILES_DEFAULTS.filesExclude,
+          // browserfs OverlayFS 用来记录删除的文件
+          [`**${deletionLogPath}`]: true,
+        },
         ...defaultPreferences,
       },
+
       ...appConfig,
     },
     runtimeConfig: {
+      aiNative: {
+        enable: true,
+        capabilities: {
+          supportsInlineChat: true,
+        },
+      },
+      startupEditor: 'none',
+      workspace: {
+        filesystem: {
+          fs: 'InMemory',
+          options: {},
+        },
+      },
       ...props.runtimeConfig,
     },
   };

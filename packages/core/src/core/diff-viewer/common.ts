@@ -1,6 +1,7 @@
 import { IPluginConfig } from '@codeblitzjs/ide-plugin';
 import { IAppOpts, RuntimeConfig } from '@codeblitzjs/ide-sumi-core';
-import { IRange } from '@opensumi/ide-core-common';
+import { IPartialEditEvent } from '@opensumi/ide-ai-native/lib/browser/widget/inline-stream-diff/live-preview.decoration';
+import { Event } from '@opensumi/ide-core-common';
 import { IAppRendererProps } from '../../api/renderApp';
 import { IAppConfig, IAppInstance } from '../../editor';
 import { LandingProps } from '../types';
@@ -15,50 +16,7 @@ export interface IDiffViewerHandle {
   getFileContent: (filePath: string) => Promise<string>;
   acceptAllPartialEdit: () => Promise<void>;
   rejectAllPartialEdit: () => Promise<void>;
-  onPartialEditEvent: (fn: (event: IPartialEditEvent) => void) => void;
-}
-
-export interface IPartialEditEvent {
-  /**
-   * 总冲突数
-   */
-  totalConflictsCount: number;
-  /**
-   * 已解决冲突数
-   */
-  solvedConflictsCount: number;
-  /**
-   * 未解决冲突数
-   */
-  leftConflictsCount: number;
-  /**
-   * 已添加行数
-   */
-  totalAddedLines: number;
-  /**
-   * 已删除行数
-   */
-  totalRemovedLines: number;
-  /**
-   * 是否所有冲突已解决
-   */
-  isAllConflictsSolved: boolean;
-
-  /**
-   * 当前冲突信息
-   */
-  currentConflict: {
-    deletedLines: string[];
-    addedLines: string[];
-    isApplied: boolean;
-    original: {
-      range: IRange;
-    };
-    modified: {
-      range: IRange;
-    };
-  };
-  filePath: string;
+  onPartialEditEvent: Event<IPartialEditEvent>;
 }
 
 export interface IOverrideAppConfig extends Partial<IAppOpts> {
