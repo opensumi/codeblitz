@@ -2,7 +2,7 @@ import { isFilesystemReady } from '@codeblitzjs/ide-sumi-core';
 import { InlineChatHandler } from '@opensumi/ide-ai-native/lib/browser/widget/inline-chat/inline-chat.handler';
 import { IPartialEditEvent } from '@opensumi/ide-ai-native/lib/browser/widget/inline-stream-diff/live-preview.decoration';
 import { AppConfig, BrowserModule, ClientAppContribution, IClientApp } from '@opensumi/ide-core-browser';
-import { CommandContribution, Domain, Event, ReplyResponse, URI } from '@opensumi/ide-core-common';
+import { CommandContribution, Domain, Event, IChatProgress, ReplyResponse, URI, sleep } from '@opensumi/ide-core-common';
 import { EditorCollectionService, IResourceOpenOptions, WorkbenchEditorService } from '@opensumi/ide-editor';
 import { Selection, SelectionDirection } from '@opensumi/ide-monaco';
 import { addElement } from '@opensumi/ide-utils/lib/arrays';
@@ -10,6 +10,8 @@ import { requireModule } from '../../api/require';
 import { Autowired, Injectable } from '../../modules/opensumi__common-di';
 import { IDiffViewerProps } from './common';
 import { DiffViewerService } from './diff-viewer-service';
+import { SumiReadableStream } from '@opensumi/ide-utils/lib/stream'
+import { InlineChatController } from '@opensumi/ide-ai-native/lib/browser/widget/inline-chat/inline-chat-controller';
 
 const fse = requireModule('fs-extra');
 const path = requireModule('path');
@@ -56,28 +58,43 @@ export class DiffViewerContribution implements CommandContribution, ClientAppCon
           preview: false,
         });
 
+        await sleep(200);
+
         const editor = this.editorCollectionService.listEditors().find((editor) =>
           editor.currentUri?.toString() === uri.toString()
         )!;
 
         const monacoEditor = editor.monacoEditor;
         const fullRange = monacoEditor.getModel()!.getFullModelRange();
-        monacoEditor.setSelection(fullRange);
         try {
           this.inlineChatHandler.discardAllPartialEdits();
         } catch (error) {
-          console.log(`🚀 ~ DiffViewerContribution ~ openDiffInTab: ~ error:`, error);
         }
         monacoEditor.setValue(oldContent);
+        // monacoEditor.setSelection(fullRange);
         // await (this.inlineChatHandler as any).showInlineChat(editor);
+
+        const stream = new SumiReadableStream<IChatProgress>()
+        const controller = new InlineChatController()
+        controller.mountReadable(stream);
+
         this.inlineChatHandler.visibleDiffWidget(editor.monacoEditor, {
           crossSelection: Selection.fromRange(fullRange, SelectionDirection.LTR),
-          chatResponse: new ReplyResponse(newContent),
+          chatResponse: controller,
+          // chatResponse: new ReplyResponse(newContent),
         }, {
           isRetry: false,
           relationId: '-1',
           startTime: 0,
         });
+
+        stream.emitData({
+          kind: 'content',
+          content: newContent,
+        });
+
+        stream.end()
+
       },
       closeFile: async (filePath) => {
         await this.workbenchEditorService.close(URI.file(this.getFullPath(filePath)), false);

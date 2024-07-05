@@ -75,7 +75,14 @@ const App = () => {
   ), []);
 
   const header = useMemo(() => (
-    <div>
+    <div
+      style={{
+        height: 'fit-content',
+        width: 'fit-content',
+        display: 'flex',
+        flexDirection: 'column',
+      }}
+    >
       {ready ? 'ready' : 'not ready'}
       <button
         onClick={() => {
@@ -137,8 +144,6 @@ sad
             `
 词句注释
 ⑴满江红：词牌名，又名“上江虹”“念良游”“伤春曲”等。双调九十三字。
-
-            
             `,
             `
 词句注释
@@ -177,6 +182,7 @@ sad
       style={{
         height: '100%',
         width: '100%',
+        display: 'flex',
       }}
     >
       {header}
@@ -190,11 +196,3 @@ const root = createRoot(document.getElementById('main') as HTMLElement);
 const render = () => root.render(<App />);
 render();
 window.reset = (destroy = false) => (destroy ? root.render(<div>destroyed</div>) : render());
-
-declare global {
-  interface Window {
-    app: IAppInstance;
-    reset(destroyed?: boolean): void;
-    testPlugin(): void;
-  }
-}
