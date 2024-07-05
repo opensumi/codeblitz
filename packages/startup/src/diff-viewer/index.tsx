@@ -20,9 +20,11 @@ import markdown from '@codeblitzjs/ide-core/extensions/codeblitz.markdown-langua
 import referencesView from '@codeblitzjs/ide-core/extensions/codeblitz.references-view';
 import typescript from '@codeblitzjs/ide-core/extensions/codeblitz.typescript-language-features-worker';
 
+import { message } from 'antd';
+
 import { LocalExtensionModule } from '../common/local-extension.module';
 import * as Plugin from '../editor/plugin';
-
+import 'antd/lib/message/style/index.css';
 import '../index.css';
 import { DiffViewerRenderer } from '@codeblitzjs/ide-core/lib/api/renderDiffViewer';
 import { IDiffViewerHandle } from '@codeblitzjs/ide-core/lib/core/diff-viewer';
@@ -59,6 +61,7 @@ const App = () => {
         setReady(true);
         handle.onPartialEditEvent((e) => {
           console.log('onPartialEditEvent', e);
+          message.info(`onPartialEditEvent: ${JSON.stringify(e, null, 2)}`, 200);
         });
       }}
       onLoad={(app) => {
@@ -78,7 +81,7 @@ const App = () => {
     <div
       style={{
         height: 'fit-content',
-        width: 'fit-content',
+        width: '30vh',
         display: 'flex',
         flexDirection: 'column',
       }}
@@ -175,7 +178,7 @@ sad
         rejectAllPartialEdit
       </button>
     </div>
-  ), []);
+  ), [ready]);
 
   return (
     <div

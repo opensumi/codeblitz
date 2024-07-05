@@ -43,8 +43,6 @@ export class DiffViewerContribution implements CommandContribution, ClientAppCon
   async initialize(app: IClientApp): Promise<void> {
     await isFilesystemReady();
 
-    const callbacks = [] as ((e: IPartialEditEvent) => void)[];
-
     this.diffViewerProps.onRef({
       openDiffInTab: async (filePath, oldContent, newContent, options?: IResourceOpenOptions) => {
         const fullPath = this.getFullPath(filePath);
@@ -100,7 +98,7 @@ export class DiffViewerContribution implements CommandContribution, ClientAppCon
         await this.workbenchEditorService.close(URI.file(this.getFullPath(filePath)), false);
       },
       onPartialEditEvent: (cb) => {
-        return addElement(callbacks, cb);
+        return this.inlineChatHandler.onPartialEditEvent(cb);
       },
       getFileContent: async (filePath: string) => {
         const fullPath = this.getFullPath(filePath);
