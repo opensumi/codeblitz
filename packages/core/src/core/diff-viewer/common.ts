@@ -6,10 +6,6 @@ import { IResourceOpenOptions } from '@opensumi/ide-editor';
 import { IAppInstance } from '../../editor';
 import { LandingProps } from '../types';
 
-export const IDiffViewerService = Symbol('IDiffViewerService');
-export interface IDiffViewerService {
-}
-
 export interface IDiffViewerHandle {
   openDiffInTab: (filePath: string, oldContent: string, newContent: string) => void;
   openTab: (filePath: string, options?: IResourceOpenOptions) => void;

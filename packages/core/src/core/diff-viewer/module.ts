@@ -25,7 +25,6 @@ import { SumiReadableStream } from '@opensumi/ide-utils/lib/stream';
 import { requireModule } from '../../api/require';
 import { Autowired, Injectable } from '../../modules/opensumi__common-di';
 import { IDiffViewerProps } from './common';
-import { DiffViewerService } from './diff-viewer-service';
 
 const fse = requireModule('fs-extra');
 const path = requireModule('path');
@@ -36,9 +35,6 @@ export class DiffViewerContribution implements CommandContribution, ClientAppCon
 
   @Autowired(IDiffViewerProps)
   protected diffViewerProps: IDiffViewerProps;
-
-  @Autowired(DiffViewerService)
-  protected diffViewerService: DiffViewerService;
 
   @Autowired(WorkbenchEditorService)
   private readonly workbenchEditorService: WorkbenchEditorService;
@@ -89,6 +85,9 @@ export class DiffViewerContribution implements CommandContribution, ClientAppCon
 
         if (previewer) {
           try {
+            if (previewer) {
+              previewer.handleAction(EResultKind.DISCARD);
+            }
             previewer.dispose();
           } catch (error) {
             this.logger.log(`DiffViewerContribution ~ openDiffInTab: ~ error:`, error);
