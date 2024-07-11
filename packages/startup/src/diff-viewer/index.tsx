@@ -19,7 +19,7 @@ import json from '@codeblitzjs/ide-core/extensions/codeblitz.json-language-featu
 import markdown from '@codeblitzjs/ide-core/extensions/codeblitz.markdown-language-features-worker';
 import referencesView from '@codeblitzjs/ide-core/extensions/codeblitz.references-view';
 import typescript from '@codeblitzjs/ide-core/extensions/codeblitz.typescript-language-features-worker';
-
+import { IPartialEditEvent } from '@opensumi/ide-ai-native/lib/browser/widget/inline-stream-diff/live-preview.decoration';
 import { message } from 'antd';
 
 import { LocalExtensionModule } from '../common/local-extension.module';
@@ -53,6 +53,8 @@ const App = () => {
   const [ready, setReady] = React.useState(false);
   const handleRef = useRef<IDiffViewerHandle | null>(null);
 
+  const [eventInfo, setEventInfo] = React.useState<IPartialEditEvent | null>(null);
+
   const memo = useMemo(() => (
     <DiffViewerRenderer
       onRef={(handle) => {
@@ -61,7 +63,7 @@ const App = () => {
         setReady(true);
         handle.onPartialEditEvent((e) => {
           console.log('onPartialEditEvent', e);
-          message.info(`onPartialEditEvent: ${JSON.stringify(e, null, 2)}`, 2);
+          setEventInfo(e);
         });
       }}
       onLoad={(app) => {
@@ -167,7 +169,7 @@ sad
           handleRef.current.acceptAllPartialEdit();
         }}
       >
-        acceptAllPartialEdit
+        accept all
       </button>
       <button
         onClick={() => {
@@ -175,10 +177,13 @@ sad
           handleRef.current.rejectAllPartialEdit();
         }}
       >
-        rejectAllPartialEdit
+        reject all
       </button>
+      <p>
+        {eventInfo ? JSON.stringify(eventInfo, null, 2) : 'no event'}
+      </p>
     </div>
-  ), [ready]);
+  ), [ready, eventInfo]);
 
   return (
     <div
