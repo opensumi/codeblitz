@@ -2,8 +2,8 @@ import { IPluginConfig } from '@codeblitzjs/ide-plugin';
 import { IAppOpts, RuntimeConfig } from '@codeblitzjs/ide-sumi-core';
 import { IPartialEditEvent } from '@opensumi/ide-ai-native/lib/browser/widget/inline-stream-diff/live-preview.decoration';
 import { Event } from '@opensumi/ide-core-common';
-import { IAppRendererProps } from '../../api/renderApp';
-import { IAppConfig, IAppInstance } from '../../editor';
+import { IResourceOpenOptions } from '@opensumi/ide-editor';
+import { IAppInstance } from '../../editor';
 import { LandingProps } from '../types';
 
 export const IDiffViewerService = Symbol('IDiffViewerService');
@@ -12,7 +12,8 @@ export interface IDiffViewerService {
 
 export interface IDiffViewerHandle {
   openDiffInTab: (filePath: string, oldContent: string, newContent: string) => void;
-  closeFile: (filePath: string) => void;
+  openTab: (filePath: string, options?: IResourceOpenOptions) => void;
+  closeTab: (filePath: string) => void;
   getFileContent: (filePath: string) => Promise<string>;
   acceptAllPartialEdit: () => Promise<void>;
   rejectAllPartialEdit: () => Promise<void>;
