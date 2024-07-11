@@ -56,21 +56,22 @@ export class DiffViewerContribution implements CommandContribution, ClientAppCon
           preview: false,
         });
 
-        await sleep(200);
-
         const editor = this.editorCollectionService.listEditors().find((editor) =>
           editor.currentUri?.toString() === uri.toString()
         )!;
-
-        const monacoEditor = editor.monacoEditor;
-        const fullRange = monacoEditor.getModel()!.getFullModelRange();
+        
         try {
           this.inlineChatHandler.discardAllPartialEdits();
         } catch (error) {
         }
+
+        const monacoEditor = editor.monacoEditor;
         monacoEditor.setValue(oldContent);
-        // monacoEditor.setSelection(fullRange);
-        // await (this.inlineChatHandler as any).showInlineChat(editor);
+
+        const fullRange = monacoEditor.getModel()!.getFullModelRange();
+
+        monacoEditor.setSelection(fullRange);
+        await (this.inlineChatHandler as any).showInlineChat(editor);
 
         const stream = new SumiReadableStream<IChatProgress>()
         const controller = new InlineChatController()
@@ -79,7 +80,6 @@ export class DiffViewerContribution implements CommandContribution, ClientAppCon
         this.inlineChatHandler.visibleDiffWidget(editor.monacoEditor, {
           crossSelection: Selection.fromRange(fullRange, SelectionDirection.LTR),
           chatResponse: controller,
-          // chatResponse: new ReplyResponse(newContent),
         }, {
           isRetry: false,
           relationId: '-1',
@@ -90,9 +90,7 @@ export class DiffViewerContribution implements CommandContribution, ClientAppCon
           kind: 'content',
           content: newContent,
         });
-
         stream.end()
-
       },
       closeFile: async (filePath) => {
         await this.workbenchEditorService.close(URI.file(this.getFullPath(filePath)), false);

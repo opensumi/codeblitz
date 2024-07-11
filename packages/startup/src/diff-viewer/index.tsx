@@ -61,7 +61,7 @@ const App = () => {
         setReady(true);
         handle.onPartialEditEvent((e) => {
           console.log('onPartialEditEvent', e);
-          message.info(`onPartialEditEvent: ${JSON.stringify(e, null, 2)}`, 200);
+          message.info(`onPartialEditEvent: ${JSON.stringify(e, null, 2)}`, 2);
         });
       }}
       onLoad={(app) => {
@@ -81,7 +81,7 @@ const App = () => {
     <div
       style={{
         height: 'fit-content',
-        width: '30vh',
+        width: '30vw',
         display: 'flex',
         flexDirection: 'column',
       }}
