@@ -6,6 +6,7 @@ import {
   SlotLocation,
   SlotRenderer,
 } from '@opensumi/ide-core-browser';
+import merge from 'lodash/merge';
 import React from 'react';
 import { IDiffViewerProps } from '../core/diff-viewer';
 import { DiffViewerModule } from '../core/diff-viewer/module';
@@ -60,7 +61,9 @@ export const DiffViewerRenderer = (props: IDiffViewerProps) => {
   const appConfig = props.appConfig;
 
   const appModules: ModuleConstructor[] = appConfig?.modules || [];
-  appModules.unshift(DiffViewerModule);
+  if (!appModules.includes(DiffViewerModule)) {
+    appModules.unshift(DiffViewerModule);
+  }
   delete appConfig?.modules;
 
   const defaultPreferences = appConfig?.defaultPreferences || {};
@@ -75,14 +78,14 @@ export const DiffViewerRenderer = (props: IDiffViewerProps) => {
   const layoutComponent = appConfig?.layoutComponent || DiffViewerLayoutComponent;
   delete appConfig?.layoutComponent;
 
-  const diffViewerAppConfig: IAppRendererProps = {
+  const diffViewerAppConfig: IAppRendererProps = merge({
     appConfig: {
       modules: appModules,
       workspaceDir,
       layoutComponent,
       layoutConfig,
       defaultPreferences: {
-        'general.theme': 'opensumi-design-light',
+        'general.theme': 'opensumi-light',
         'editor.minimap': false,
         'ai.native.inlineDiff.preview.mode': 'inlineLive',
         'editor.autoSave': 'afterDelay',
@@ -91,6 +94,7 @@ export const DiffViewerRenderer = (props: IDiffViewerProps) => {
         'editor.quickSuggestionsDelay': 10,
         'editor.autoSaveDelay': 1000, // one second
         'editor.fixedOverflowWidgets': true, // widget editor 默认改为 fixed
+        'editor.unicodeHighlight.ambiguousCharacters': false,
         'files.exclude': {
           ...FILES_DEFAULTS.filesExclude,
           // browserfs OverlayFS 用来记录删除的文件
@@ -98,10 +102,9 @@ export const DiffViewerRenderer = (props: IDiffViewerProps) => {
         },
         ...defaultPreferences,
       },
-
       ...appConfig,
     },
-    runtimeConfig: {
+    runtimeConfig: merge({
       aiNative: {
         enable: true,
         capabilities: {
@@ -115,9 +118,8 @@ export const DiffViewerRenderer = (props: IDiffViewerProps) => {
           options: {},
         },
       },
-      ...props.runtimeConfig,
-    },
-  };
+    }, props.runtimeConfig),
+  });
 
   return (
     <AppRenderer

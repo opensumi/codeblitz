@@ -10,8 +10,6 @@ import {
   Event,
   IChatProgress,
   ILogger,
-  ReplyResponse,
-  sleep,
   URI,
 } from '@opensumi/ide-core-common';
 import { EditorCollectionService, IResourceOpenOptions, WorkbenchEditorService } from '@opensumi/ide-editor';
@@ -24,6 +22,7 @@ import { EResultKind } from '@opensumi/ide-ai-native/lib/common';
 import { SumiReadableStream } from '@opensumi/ide-utils/lib/stream';
 import { requireModule } from '../../api/require';
 import { Autowired, Injectable } from '../../modules/opensumi__common-di';
+import { ApplyDefaultThemeContribution } from '../theme';
 import { IDiffViewerProps } from './common';
 
 const fse = requireModule('fs-extra');
@@ -155,5 +154,6 @@ export class DiffViewerContribution implements CommandContribution, ClientAppCon
 export class DiffViewerModule extends BrowserModule {
   providers = [
     DiffViewerContribution,
+    ApplyDefaultThemeContribution,
   ];
 }
