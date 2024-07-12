@@ -1,4 +1,4 @@
-import { isFilesystemReady } from '@codeblitzjs/ide-sumi-core';
+import { WORKSPACE_ROOT, isFilesystemReady } from '@codeblitzjs/ide-sumi-core';
 import { InlineChatHandler } from '@opensumi/ide-ai-native/lib/browser/widget/inline-chat/inline-chat.handler';
 import { IPartialEditEvent } from '@opensumi/ide-ai-native/lib/browser/widget/inline-stream-diff/live-preview.decoration';
 import { AppConfig, BrowserModule, ClientAppContribution, EDITOR_COMMANDS, IClientApp } from '@opensumi/ide-core-browser';
@@ -70,6 +70,7 @@ export class DiffViewerContribution implements CommandContribution, ClientAppCon
       openDiffInTab: async (filePath, oldContent, newContent, options?: IResourceOpenOptions) => {
         const fullPath = this.getFullPath(filePath);
         if (!await fse.pathExists(fullPath)) {
+          await fse.ensureFile(fullPath);
           await fse.writeFile(fullPath, oldContent);
         }
 

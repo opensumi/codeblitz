@@ -91,7 +91,7 @@ const App = () => {
         onClick={() => {
           if (!handleRef.current) return;
           handleRef.current.openDiffInTab(
-            'test.txt',
+            'a/web/controller/invalidanalysis/InValidAssetsController.java',
             `
 词句注释
 ⑴满江红：词牌名，又名“上江虹”“念良游”“伤春曲”等。双调九十三字。
