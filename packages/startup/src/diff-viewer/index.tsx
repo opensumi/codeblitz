@@ -1,4 +1,3 @@
-import { IAppInstance } from '@codeblitzjs/ide-core';
 import React, { useMemo, useRef } from 'react';
 import { createRoot } from 'react-dom/client';
 import '@codeblitzjs/ide-core/languages';
@@ -20,7 +19,6 @@ import markdown from '@codeblitzjs/ide-core/extensions/codeblitz.markdown-langua
 import referencesView from '@codeblitzjs/ide-core/extensions/codeblitz.references-view';
 import typescript from '@codeblitzjs/ide-core/extensions/codeblitz.typescript-language-features-worker';
 import { IPartialEditEvent } from '@opensumi/ide-ai-native/lib/browser/widget/inline-stream-diff/live-preview.decoration';
-import { message } from 'antd';
 
 import { LocalExtensionModule } from '../common/local-extension.module';
 import * as Plugin from '../editor/plugin';
@@ -194,7 +192,31 @@ sad
       }}
     >
       {header}
-      {memo}
+      <div
+        style={{
+          overflow: 'scroll',
+          width: '100%',
+          height: '100%',
+        }}
+      >
+        <div
+          style={{
+            height: 300,
+            backgroundColor: 'salmon',
+          }}
+        >
+          height: 300px
+        </div>
+        {memo}
+        <div
+          style={{
+            height: 300,
+            backgroundColor: 'seagreen',
+          }}
+        >
+          height: 200px
+        </div>
+      </div>
     </div>
   );
 };
