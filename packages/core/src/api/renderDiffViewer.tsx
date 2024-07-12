@@ -95,6 +95,7 @@ export const DiffViewerRenderer = (props: IDiffViewerProps) => {
         'editor.autoSaveDelay': 1000, // one second
         'editor.fixedOverflowWidgets': true, // widget editor 默认改为 fixed
         'editor.unicodeHighlight.ambiguousCharacters': false,
+        'editor.preventScrollAfterFocused': true,
         'files.exclude': {
           ...FILES_DEFAULTS.filesExclude,
           // browserfs OverlayFS 用来记录删除的文件
