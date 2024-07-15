@@ -1,7 +1,13 @@
-import { WORKSPACE_ROOT, isFilesystemReady } from '@codeblitzjs/ide-sumi-core';
+import { isFilesystemReady, WORKSPACE_ROOT } from '@codeblitzjs/ide-sumi-core';
 import { InlineChatHandler } from '@opensumi/ide-ai-native/lib/browser/widget/inline-chat/inline-chat.handler';
 import { IPartialEditEvent } from '@opensumi/ide-ai-native/lib/browser/widget/inline-stream-diff/live-preview.decoration';
-import { AppConfig, BrowserModule, ClientAppContribution, EDITOR_COMMANDS, IClientApp } from '@opensumi/ide-core-browser';
+import {
+  AppConfig,
+  BrowserModule,
+  ClientAppContribution,
+  EDITOR_COMMANDS,
+  IClientApp,
+} from '@opensumi/ide-core-browser';
 import {
   CommandContribution,
   DisposableStore,
@@ -22,9 +28,10 @@ import { EResultKind } from '@opensumi/ide-ai-native/lib/common';
 import { SumiReadableStream } from '@opensumi/ide-utils/lib/stream';
 import { requireModule } from '../../api/require';
 import { Autowired, Injectable } from '../../modules/opensumi__common-di';
-import { ApplyDefaultThemeContribution } from '../theme';
-import { IDiffViewerProps } from './common';
 import { IMenuRegistry, MenuContribution } from '../../modules/opensumi__ide-core-browser';
+import { ApplyDefaultThemeContribution } from '../theme';
+import { IDiffViewerProps, IExtendPartialEditEvent } from './common';
+import { removeStart } from './utils';
 
 const fse = requireModule('fs-extra');
 const path = requireModule('path');
@@ -54,11 +61,19 @@ export class DiffViewerContribution implements CommandContribution, ClientAppCon
   @Autowired(ILogger)
   protected logger: ILogger;
 
-  private readonly _onPartialEditEvent = this._disposables.add(new Emitter<IPartialEditEvent>());
-  public readonly onPartialEditEvent: Event<IPartialEditEvent> = this._onPartialEditEvent.event;
+  private readonly _onPartialEditEvent = this._disposables.add(new Emitter<IExtendPartialEditEvent>());
+  public readonly onPartialEditEvent: Event<IExtendPartialEditEvent> = this._onPartialEditEvent.event;
 
   getFullPath(filePath: string) {
     return path.join(this.appConfig.workspaceDir, filePath);
+  }
+
+  stripDirectory(filePath: string) {
+    const result = removeStart(filePath, this.appConfig.workspaceDir);
+    if (result.startsWith('/')) {
+      return result.slice(1);
+    }
+    return result;
   }
 
   async initialize(app: IClientApp): Promise<void> {
@@ -110,7 +125,12 @@ export class DiffViewerContribution implements CommandContribution, ClientAppCon
         }) as LiveInlineDiffPreviewer;
 
         previewer.addDispose(previewer.onPartialEditEvent((e) => {
-          this._onPartialEditEvent.fire(e);
+          const fsPath = monacoEditor.getModel()!.uri.fsPath;
+
+          this._onPartialEditEvent.fire({
+            filePath: this.stripDirectory(fsPath),
+            ...e,
+          });
         }));
 
         stream.emitData({
@@ -151,8 +171,8 @@ export class DiffViewerContribution implements CommandContribution, ClientAppCon
   registerCommands() {
   }
   registerMenus(registry: IMenuRegistry) {
-    registry.unregisterMenuItem('editor/title', EDITOR_COMMANDS.SPLIT_TO_RIGHT.id)
-    registry.unregisterMenuItem('editor/title', EDITOR_COMMANDS.CLOSE_ALL_IN_GROUP.id)
+    registry.unregisterMenuItem('editor/title', EDITOR_COMMANDS.SPLIT_TO_RIGHT.id);
+    registry.unregisterMenuItem('editor/title', EDITOR_COMMANDS.CLOSE_ALL_IN_GROUP.id);
   }
 }
 

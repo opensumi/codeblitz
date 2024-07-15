@@ -47,6 +47,63 @@ const extensionMetadata = [
   anycode,
 ];
 
+const data = [
+  {
+    path: 'app/web/src/main/java/com/alipay/archcompass/web/controller/invalidanalysis/InValidAssetsController.java',
+    oldCode:
+      '@GetMapping(value = "/queryInvalidRpcTree")\n    public ArchCompassResponse queryInvalidRpcTree(String reportId, String invalidFlag) {\n        return ArchCompassServiceTemplate.execute(new ArchCompassServiceCallBack<InvalidResultInfo>() {\n\n            @Override\n            public void beforeProcess() {\n                ParamCheckHelper.notBlank(reportId, "reportId");\n                ParamCheckHelper.notBlank(invalidFlag, "invalidFlag");\n            }\n\n            @Override\n            public InvalidResultInfo process() {\n                return inValidAssetsAnalysisService.queryInvalidTree(reportId, invalidFlag, "RPC");\n            }\n\n            @Override\n            public void afterProcess() {\n\n            }\n        }, "queryInvalidRpcTree");\n    }',
+    newCode:
+      '@GetMapping(value = "/queryInvalidRpcTree")\n    public ArchCompassResponse queryInvalidRpcTree(String reportId) {\n        return ArchCompassServiceTemplate.execute(new ArchCompassServiceCallBack<InvalidResultInfo>() {\n\n            @Override\n            public void beforeProcess() {\n                ParamCheckHelper.notBlank(reportId, "reportId");\n            }\n\n            @Override\n            public InvalidResultInfo process() {\n                return inValidAssetsAnalysisService.queryInvalidTree(reportId, "RPC");\n            }\n\n            @Override\n            public void afterProcess() {\n\n            }\n        }, "queryInvalidRpcTree");\n    }',
+    fileName: 'InValidAssetsController.java',
+    type: 'modify',
+  },
+  {
+    path: '满江红.txt',
+    oldCode: `
+    词句注释
+    ⑴满江红：词牌名，又名“上江虹”“念良游”“伤春曲”等。双调九十三字。
+    ⑵怒发（fà）冲冠：气得头发竖起，以至于将帽子顶起，形容愤怒至极。
+    ⑶凭阑：身倚栏杆。阑，同“栏”。
+    ⑷潇潇：形容雨势急骤。
+    ⑸长啸：大声呼叫。啸，蹙口发出声音。
+    ⑹壮怀：奋发图强的志向。
+    ⑺“三十”句：谓自己年已三十，得到的功名如同尘土一样微不足道。三十，是概数。功名，或指岳飞攻克襄阳六郡以后建节晋升之事。
+    ⑻“八千”句：形容南征北战，路途遥远，披星戴月。八千，是概数，极言沙场征战行程之远。
+    ⑼等闲：轻易，随便。
+    ⑽空悲切：即白白地哀痛。
+    ⑾靖康耻：宋钦宗靖康二年（1127），金兵攻陷汴京，虏走徽、钦二帝。靖康，宋钦宗赵桓的年号。
+    ⑿贺兰山：贺兰山脉，中国境内有两座山脉名贺兰山，一座在河北一座在宁夏。一说指位于宁夏与内蒙古交界处的贺兰山，当时被金兵占领；一说指位于河北境内的贺兰山。据史料考证岳飞足迹未到过宁夏贺兰山，而岳飞抗金活动区域曾在河北贺兰山。 [21]
+    ⒀胡虏：对女真族入侵者的蔑称。
+    ⒁匈奴：古代北方民族之一，这里指金入侵者。
+    ⒂朝天阙（què）：朝见皇帝。天阙，本指宫殿前的楼观，此指皇帝居住的地方。明代王熙书《满江红》词碑作“朝金阙”。 [3-4]
+    白话译文
+    我怒发冲冠登高倚栏杆，一场潇潇急雨刚刚停歇。抬头放眼四望辽阔一片，仰天长声啸叹，壮怀激烈。三十年勋业如今成尘土，征战千里只有浮云明月。莫虚度年华白了少年头，只有独自悔恨悲悲切切。
+    靖康年的奇耻尚未洗雪，臣子愤恨何时才能泯灭。我只想驾御着一辆辆战车踏破贺兰山敌人营垒。壮志同仇饿吃敌军的肉，笑谈蔑敌渴饮敌军的血。我要从头彻底地收复旧日河山，再回京阙向皇帝报捷。 [5]
+      
+      `,
+    newCode: `
+      词句注释
+      ⑴满江红：词牌名，又名“上江虹”“念良游”“伤春曲”等。双调九十三字。
+      ⑵怒发（fà）冲冠：气得头发竖起，以至于将帽子顶起，形容愤怒至极。
+      ⑶凭阑：身倚栏杆。阑，同“栏”。
+      ⑷潇潇：形容雨势急骤。
+      ⑸长啸：大声呼叫。啸，蹙口发出声音。
+      ⑹壮怀：奋发图强的志向。
+      ⑻“八千”句：形容南征北战，路途遥远，披星戴月。八千，是概数，极言沙场征战行程之远。
+      ⑼等闲：轻易，随便。
+      sad
+      ⑽空悲切：即白白地哀痛。
+      ⑾靖康耻：宋钦宗靖康二年（1127），金兵攻陷汴京，虏走徽、钦二帝。靖康，宋钦宗赵桓的年号。
+      ⑿贺兰山：贺兰山脉，中国境内有两座山脉名贺兰山，一座在河北一座在宁夏。一说指位于宁夏与内蒙古交界处的贺兰山，当时被金兵占领；一说指位于河北境内的贺兰山。据史料考证岳飞足迹未到过宁夏贺兰山，而岳飞抗金活动区域曾在河北贺兰山。 [21]
+      ⒀胡虏：对女真族入侵者的蔑称。
+      ⒁匈奴：古代北方民族之一，这里指金入侵者。
+      ⒂朝天阙（què）：朝见皇帝。天阙，本指宫殿前的楼观，此指皇帝居住的地方。明代王熙书《满江红》词碑作“朝金阙”。 [3-4]
+      我怒发冲冠登高倚栏杆，一场潇潇急雨刚刚停歇。抬头放眼四望辽阔一片，仰天长声啸叹，壮怀激烈。三十年勋业如今成尘土，征战千里只有浮云明月。莫虚度年华白了少年头，只有独自悔恨悲悲切切。
+      靖康年的奇耻尚未洗雪，臣子愤恨何时才能泯灭。我只想驾御着一辆辆战车踏破贺兰山敌人营垒。壮志同仇饿吃敌军的肉，笑谈蔑敌渴饮敌军的血。我要从头彻底地收复旧日河山，再回京阙向皇帝报捷。 [5]
+          `,
+  },
+];
+
 const App = () => {
   const [ready, setReady] = React.useState(false);
   const handleRef = useRef<IDiffViewerHandle | null>(null);
@@ -91,74 +148,25 @@ const App = () => {
         onClick={() => {
           if (!handleRef.current) return;
           handleRef.current.openDiffInTab(
-            'a/web/controller/invalidanalysis/InValidAssetsController.java',
-            `
-词句注释
-⑴满江红：词牌名，又名“上江虹”“念良游”“伤春曲”等。双调九十三字。
-⑵怒发（fà）冲冠：气得头发竖起，以至于将帽子顶起，形容愤怒至极。
-⑶凭阑：身倚栏杆。阑，同“栏”。
-⑷潇潇：形容雨势急骤。
-⑸长啸：大声呼叫。啸，蹙口发出声音。
-⑹壮怀：奋发图强的志向。
-⑺“三十”句：谓自己年已三十，得到的功名如同尘土一样微不足道。三十，是概数。功名，或指岳飞攻克襄阳六郡以后建节晋升之事。
-⑻“八千”句：形容南征北战，路途遥远，披星戴月。八千，是概数，极言沙场征战行程之远。
-⑼等闲：轻易，随便。
-⑽空悲切：即白白地哀痛。
-⑾靖康耻：宋钦宗靖康二年（1127），金兵攻陷汴京，虏走徽、钦二帝。靖康，宋钦宗赵桓的年号。
-⑿贺兰山：贺兰山脉，中国境内有两座山脉名贺兰山，一座在河北一座在宁夏。一说指位于宁夏与内蒙古交界处的贺兰山，当时被金兵占领；一说指位于河北境内的贺兰山。据史料考证岳飞足迹未到过宁夏贺兰山，而岳飞抗金活动区域曾在河北贺兰山。 [21]
-⒀胡虏：对女真族入侵者的蔑称。
-⒁匈奴：古代北方民族之一，这里指金入侵者。
-⒂朝天阙（què）：朝见皇帝。天阙，本指宫殿前的楼观，此指皇帝居住的地方。明代王熙书《满江红》词碑作“朝金阙”。 [3-4]
-白话译文
-我怒发冲冠登高倚栏杆，一场潇潇急雨刚刚停歇。抬头放眼四望辽阔一片，仰天长声啸叹，壮怀激烈。三十年勋业如今成尘土，征战千里只有浮云明月。莫虚度年华白了少年头，只有独自悔恨悲悲切切。
-靖康年的奇耻尚未洗雪，臣子愤恨何时才能泯灭。我只想驾御着一辆辆战车踏破贺兰山敌人营垒。壮志同仇饿吃敌军的肉，笑谈蔑敌渴饮敌军的血。我要从头彻底地收复旧日河山，再回京阙向皇帝报捷。 [5]
-  
-  `,
-            `
-词句注释
-⑴满江红：词牌名，又名“上江虹”“念良游”“伤春曲”等。双调九十三字。
-⑵怒发（fà）冲冠：气得头发竖起，以至于将帽子顶起，形容愤怒至极。
-⑶凭阑：身倚栏杆。阑，同“栏”。
-⑷潇潇：形容雨势急骤。
-⑸长啸：大声呼叫。啸，蹙口发出声音。
-⑹壮怀：奋发图强的志向。
-⑻“八千”句：形容南征北战，路途遥远，披星戴月。八千，是概数，极言沙场征战行程之远。
-⑼等闲：轻易，随便。
-sad
-⑽空悲切：即白白地哀痛。
-⑾靖康耻：宋钦宗靖康二年（1127），金兵攻陷汴京，虏走徽、钦二帝。靖康，宋钦宗赵桓的年号。
-⑿贺兰山：贺兰山脉，中国境内有两座山脉名贺兰山，一座在河北一座在宁夏。一说指位于宁夏与内蒙古交界处的贺兰山，当时被金兵占领；一说指位于河北境内的贺兰山。据史料考证岳飞足迹未到过宁夏贺兰山，而岳飞抗金活动区域曾在河北贺兰山。 [21]
-⒀胡虏：对女真族入侵者的蔑称。
-⒁匈奴：古代北方民族之一，这里指金入侵者。
-⒂朝天阙（què）：朝见皇帝。天阙，本指宫殿前的楼观，此指皇帝居住的地方。明代王熙书《满江红》词碑作“朝金阙”。 [3-4]
-我怒发冲冠登高倚栏杆，一场潇潇急雨刚刚停歇。抬头放眼四望辽阔一片，仰天长声啸叹，壮怀激烈。三十年勋业如今成尘土，征战千里只有浮云明月。莫虚度年华白了少年头，只有独自悔恨悲悲切切。
-靖康年的奇耻尚未洗雪，臣子愤恨何时才能泯灭。我只想驾御着一辆辆战车踏破贺兰山敌人营垒。壮志同仇饿吃敌军的肉，笑谈蔑敌渴饮敌军的血。我要从头彻底地收复旧日河山，再回京阙向皇帝报捷。 [5]
-    `,
+            data[0].path,
+            data[0].oldCode,
+            data[0].newCode,
           );
         }}
       >
-        文件1
+        Java 代码
       </button>
       <button
         onClick={() => {
           if (!handleRef.current) return;
           handleRef.current.openDiffInTab(
-            'test2.txt',
-            `
-词句注释
-⑴满江红：词牌名，又名“上江虹”“念良游”“伤春曲”等。双调九十三字。
-            `,
-            `
-词句注释
-⑷潇潇：形容雨势急骤。
-⑸长啸：大声呼叫。啸，蹙口发出声音。
-⑹壮怀：奋发图强的志向。
-⑻“八千”句：形容南征北战，路途遥远，披星戴月。八千，是概数，极言沙场征战行程之远。
-              `,
+            data[1].path,
+            data[1].oldCode,
+            data[1].newCode,
           );
         }}
       >
-        文件2
+        满江红
       </button>
 
       <button
@@ -176,6 +184,23 @@ sad
         }}
       >
         reject all
+      </button>
+      <button
+        onClick={() => {
+          data.forEach((item) => {
+            if (!handleRef.current) return;
+            handleRef.current.openDiffInTab(
+              item.path,
+              item.oldCode,
+              item.newCode,
+              {
+                overwriteOldCode: true,
+              },
+            );
+          });
+        }}
+      >
+        reset
       </button>
       <p>
         {eventInfo ? JSON.stringify(eventInfo, null, 2) : 'no event'}
@@ -199,7 +224,8 @@ sad
           height: '100%',
         }}
       >
-        <div
+        {
+          <div
           style={{
             height: 300,
             backgroundColor: 'salmon',
@@ -207,6 +233,7 @@ sad
         >
           height: 300px
         </div>
+        }
         {memo}
         <div
           style={{

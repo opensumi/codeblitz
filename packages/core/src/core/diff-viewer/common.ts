@@ -6,14 +6,22 @@ import { IResourceOpenOptions } from '@opensumi/ide-editor';
 import { IAppInstance } from '../../editor';
 import { LandingProps } from '../types';
 
+export interface IResourceOpenDiffOptions extends IResourceOpenOptions {
+  overwriteOldCode?: boolean;
+}
+
+export interface IExtendPartialEditEvent extends IPartialEditEvent {
+  filePath: string;
+}
+
 export interface IDiffViewerHandle {
-  openDiffInTab: (filePath: string, oldContent: string, newContent: string) => void;
+  openDiffInTab: (filePath: string, oldContent: string, newContent: string, options?: IResourceOpenDiffOptions) => void;
   openTab: (filePath: string, options?: IResourceOpenOptions) => void;
   closeTab: (filePath: string) => void;
   getFileContent: (filePath: string) => Promise<string>;
   acceptAllPartialEdit: () => Promise<void>;
   rejectAllPartialEdit: () => Promise<void>;
-  onPartialEditEvent: Event<IPartialEditEvent>;
+  onPartialEditEvent: Event<IExtendPartialEditEvent>;
 }
 
 export interface IOverrideAppConfig extends Partial<IAppOpts> {

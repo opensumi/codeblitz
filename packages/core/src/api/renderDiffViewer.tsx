@@ -92,6 +92,7 @@ export const DiffViewerRenderer = (props: IDiffViewerProps) => {
         'application.confirmExit': 'never',
         'editor.guides.bracketPairs': false,
         'editor.quickSuggestionsDelay': 10,
+        'editor.previewMode': false,
         'editor.autoSaveDelay': 1000, // one second
         'editor.fixedOverflowWidgets': true, // widget editor 默认改为 fixed
         'editor.unicodeHighlight.ambiguousCharacters': false,
