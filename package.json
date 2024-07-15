@@ -8,7 +8,7 @@
   "description": "codeblitzjs",
   "main": "index.js",
   "engines": {
-    "opensumi": "3.1.4-next-1719380894.0"
+    "opensumi": "3.1.5-next-1720152351.0"
   },
   "scripts": {
     "prepare": "husky install",
