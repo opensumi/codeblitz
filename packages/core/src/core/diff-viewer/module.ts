@@ -10,6 +10,7 @@ import {
 } from '@opensumi/ide-core-browser';
 import {
   CommandContribution,
+  Disposable,
   DisposableStore,
   Domain,
   Emitter,
@@ -80,17 +81,23 @@ export class DiffViewerContribution implements CommandContribution, ClientAppCon
     await isFilesystemReady();
 
     let previewer: LiveInlineDiffPreviewer;
+    const disposable = new Disposable();
+
+    const openFileInTab = async (filePath: string, content: string, options?: IResourceOpenOptions) => {
+      const fullPath = this.getFullPath(filePath);
+      if (!await fse.pathExists(fullPath)) {
+        await fse.ensureFile(fullPath);
+        await fse.writeFile(fullPath, content);
+      }
+
+      const uri = URI.file(fullPath);
+      await this.workbenchEditorService.open(uri, options);
+      return uri;
+    };
 
     this.diffViewerProps.onRef({
       openDiffInTab: async (filePath, oldContent, newContent, options?: IResourceOpenOptions) => {
-        const fullPath = this.getFullPath(filePath);
-        if (!await fse.pathExists(fullPath)) {
-          await fse.ensureFile(fullPath);
-          await fse.writeFile(fullPath, oldContent);
-        }
-
-        const uri = URI.file(fullPath);
-        await this.workbenchEditorService.open(uri, {
+        const uri = await openFileInTab(filePath, oldContent, {
           ...options,
           preview: false,
         });
@@ -119,7 +126,7 @@ export class DiffViewerContribution implements CommandContribution, ClientAppCon
         const controller = new InlineChatController();
         controller.mountReadable(stream);
 
-        previewer = this.inlineDiffService.createDiffPreviewer(monacoEditor, {
+        previewer = this.inlineDiffService.showPreviewerByStream(monacoEditor, {
           crossSelection: Selection.fromRange(fullRange, SelectionDirection.LTR),
           chatResponse: controller,
         }) as LiveInlineDiffPreviewer;
@@ -139,6 +146,7 @@ export class DiffViewerContribution implements CommandContribution, ClientAppCon
         });
         stream.end();
       },
+      openFileInTab,
       openTab: async (filePath: string, options?: IResourceOpenOptions) => {
         const fullPath = this.getFullPath(filePath);
         const uri = URI.file(fullPath);
@@ -166,6 +174,9 @@ export class DiffViewerContribution implements CommandContribution, ClientAppCon
           previewer.handleAction(EResultKind.DISCARD);
         }
       },
+      dispose: () => {
+        disposable.dispose();
+      },
     });
   }
   registerCommands() {
@@ -173,6 +184,10 @@ export class DiffViewerContribution implements CommandContribution, ClientAppCon
   registerMenus(registry: IMenuRegistry) {
     registry.unregisterMenuItem('editor/title', EDITOR_COMMANDS.SPLIT_TO_RIGHT.id);
     registry.unregisterMenuItem('editor/title', EDITOR_COMMANDS.CLOSE_ALL_IN_GROUP.id);
+  }
+
+  dispose() {
+    this._disposables.dispose();
   }
 }
 

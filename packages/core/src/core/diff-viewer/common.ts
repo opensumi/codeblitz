@@ -1,7 +1,7 @@
 import { IPluginConfig } from '@codeblitzjs/ide-plugin';
 import { IAppOpts, RuntimeConfig } from '@codeblitzjs/ide-sumi-core';
 import { IPartialEditEvent } from '@opensumi/ide-ai-native/lib/browser/widget/inline-stream-diff/live-preview.decoration';
-import { Event } from '@opensumi/ide-core-common';
+import { Event, URI } from '@opensumi/ide-core-common';
 import { IResourceOpenOptions } from '@opensumi/ide-editor';
 import { IAppInstance } from '../../editor';
 import { LandingProps } from '../types';
@@ -15,13 +15,31 @@ export interface IExtendPartialEditEvent extends IPartialEditEvent {
 }
 
 export interface IDiffViewerHandle {
+  openFileInTab: (filePath: string, content: string, options?: IResourceOpenOptions) => Promise<URI>;
+  /**
+   * 展示 Inline Diff 预览
+   */
   openDiffInTab: (filePath: string, oldContent: string, newContent: string, options?: IResourceOpenDiffOptions) => void;
+  /**
+   * 打开标签页
+   */
   openTab: (filePath: string, options?: IResourceOpenOptions) => void;
+  /**
+   * 关闭标签页
+   */
   closeTab: (filePath: string) => void;
+  /**
+   * 获取指定路径的文件内容
+   */
   getFileContent: (filePath: string) => Promise<string>;
   acceptAllPartialEdit: () => Promise<void>;
   rejectAllPartialEdit: () => Promise<void>;
+  /**
+   * 监听采纳、拒绝部分编辑事件
+   */
   onPartialEditEvent: Event<IExtendPartialEditEvent>;
+
+  dispose(): void;
 }
 
 export interface IOverrideAppConfig extends Partial<IAppOpts> {
