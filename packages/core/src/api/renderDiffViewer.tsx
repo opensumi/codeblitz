@@ -42,10 +42,10 @@ export function DiffViewerLayoutComponent(): React.ReactElement {
   );
 }
 
-export const DiffViewerRenderer = (props: IDiffViewerProps) => {
-  if (!props.appConfig) {
-    props.appConfig = {};
-  }
+export const DiffViewerRenderer = (_props: IDiffViewerProps) => {
+  const props = merge({
+    appConfig: {},
+  }, _props);
 
   if (!props.appConfig.injector) {
     props.appConfig.injector = new Injector();
@@ -65,9 +65,6 @@ export const DiffViewerRenderer = (props: IDiffViewerProps) => {
     appModules.unshift(DiffViewerModule);
   }
   delete appConfig?.modules;
-
-  const defaultPreferences = appConfig?.defaultPreferences || {};
-  delete appConfig?.defaultPreferences;
 
   const workspaceDir = appConfig?.workspaceDir || 'workspace-' + randomString(8);
   delete appConfig?.workspaceDir;
@@ -102,11 +99,9 @@ export const DiffViewerRenderer = (props: IDiffViewerProps) => {
           // browserfs OverlayFS 用来记录删除的文件
           [`**${deletionLogPath}`]: true,
         },
-        ...defaultPreferences,
       },
-      ...appConfig,
     },
-    runtimeConfig: merge({
+    runtimeConfig: ({
       aiNative: {
         enable: true,
         capabilities: {
@@ -120,8 +115,8 @@ export const DiffViewerRenderer = (props: IDiffViewerProps) => {
           options: {},
         },
       },
-    }, props.runtimeConfig),
-  });
+    }),
+  }, props);
 
   return (
     <AppRenderer
