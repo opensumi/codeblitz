@@ -16,19 +16,21 @@ import {
   Emitter,
   Event,
   IChatProgress,
+  IDisposable,
   ILogger,
   URI,
 } from '@opensumi/ide-core-common';
 import { EditorCollectionService, IResourceOpenOptions, WorkbenchEditorService } from '@opensumi/ide-editor';
-import { Selection, SelectionDirection } from '@opensumi/ide-monaco';
+import { ICodeEditor, Selection, SelectionDirection } from '@opensumi/ide-monaco';
 
 import { InlineChatController } from '@opensumi/ide-ai-native/lib/browser/widget/inline-chat/inline-chat-controller';
 import { LiveInlineDiffPreviewer } from '@opensumi/ide-ai-native/lib/browser/widget/inline-diff/inline-diff-previewer';
-import { InlineDiffService } from '@opensumi/ide-ai-native/lib/browser/widget/inline-diff/inline-diff.service';
+import { InlineDiffHandler } from '@opensumi/ide-ai-native/lib/browser/widget/inline-diff/inline-diff.handler';
 import { EResultKind } from '@opensumi/ide-ai-native/lib/common';
+import { BrowserEditorContribution, IEditor, IEditorFeatureRegistry } from '@opensumi/ide-editor/lib/browser';
 import { SumiReadableStream } from '@opensumi/ide-utils/lib/stream';
 import { requireModule } from '../../api/require';
-import { Autowired, Injectable } from '../../modules/opensumi__common-di';
+import { Autowired, Injectable, Injector, INJECTOR_TOKEN } from '../../modules/opensumi__common-di';
 import { IMenuRegistry, MenuContribution } from '../../modules/opensumi__ide-core-browser';
 import { ApplyDefaultThemeContribution } from '../theme';
 import { IDiffViewerProps, IExtendPartialEditEvent } from './common';
@@ -38,7 +40,9 @@ const fse = requireModule('fs-extra');
 const path = requireModule('path');
 
 @Domain(CommandContribution, ClientAppContribution, MenuContribution)
-export class DiffViewerContribution implements CommandContribution, ClientAppContribution, MenuContribution {
+export class DiffViewerContribution
+  implements CommandContribution, ClientAppContribution, MenuContribution
+{
   private _disposables = new DisposableStore();
 
   @Autowired(IDiffViewerProps)
@@ -50,8 +54,8 @@ export class DiffViewerContribution implements CommandContribution, ClientAppCon
   @Autowired(InlineChatHandler)
   protected inlineChatHandler: InlineChatHandler;
 
-  @Autowired(InlineDiffService)
-  protected inlineDiffService: InlineDiffService;
+  @Autowired(InlineDiffHandler)
+  protected inlineDiffHandler: InlineDiffHandler;
 
   @Autowired(EditorCollectionService)
   private readonly editorCollectionService: EditorCollectionService;
@@ -126,19 +130,19 @@ export class DiffViewerContribution implements CommandContribution, ClientAppCon
         const controller = new InlineChatController();
         controller.mountReadable(stream);
 
-        previewer = this.inlineDiffService.showPreviewerByStream(monacoEditor, {
+        previewer = this.inlineDiffHandler.showPreviewerByStream(monacoEditor, {
           crossSelection: Selection.fromRange(fullRange, SelectionDirection.LTR),
           chatResponse: controller,
         }) as LiveInlineDiffPreviewer;
 
-        previewer.addDispose(previewer.onPartialEditEvent((e) => {
+        previewer.onPartialEditEvent((e) => {
           const fsPath = monacoEditor.getModel()!.uri.fsPath;
 
           this._onPartialEditEvent.fire({
             filePath: this.stripDirectory(fsPath),
             ...e,
           });
-        }));
+        })
 
         stream.emitData({
           kind: 'content',
@@ -185,7 +189,6 @@ export class DiffViewerContribution implements CommandContribution, ClientAppCon
     registry.unregisterMenuItem('editor/title', EDITOR_COMMANDS.SPLIT_TO_RIGHT.id);
     registry.unregisterMenuItem('editor/title', EDITOR_COMMANDS.CLOSE_ALL_IN_GROUP.id);
   }
-
   dispose() {
     this._disposables.dispose();
   }
