@@ -99,6 +99,16 @@ export class DiffViewerContribution
       return uri;
     };
 
+
+    this.inlineDiffHandler.onPartialEditEvent((e) => {
+      const fsPath = e.uri.fsPath;
+
+      this._onPartialEditEvent.fire({
+        filePath: this.stripDirectory(fsPath),
+        ...e,
+      });
+    })
+
     this.diffViewerProps.onRef({
       openDiffInTab: async (filePath, oldContent, newContent, options?: IResourceOpenOptions) => {
         const uri = await openFileInTab(filePath, oldContent, {
@@ -134,15 +144,6 @@ export class DiffViewerContribution
           crossSelection: Selection.fromRange(fullRange, SelectionDirection.LTR),
           chatResponse: controller,
         }) as LiveInlineDiffPreviewer;
-
-        previewer.onPartialEditEvent((e) => {
-          const fsPath = monacoEditor.getModel()!.uri.fsPath;
-
-          this._onPartialEditEvent.fire({
-            filePath: this.stripDirectory(fsPath),
-            ...e,
-          });
-        })
 
         stream.emitData({
           kind: 'content',

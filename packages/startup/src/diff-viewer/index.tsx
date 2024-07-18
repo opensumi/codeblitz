@@ -14,8 +14,11 @@ const data = [
       '@GetMapping(value = "/queryInvalidRpcTree")\n    public ArchCompassResponse queryInvalidRpcTree(String reportId, String invalidFlag) {\n        return ArchCompassServiceTemplate.execute(new ArchCompassServiceCallBack<InvalidResultInfo>() {\n\n            @Override\n            public void beforeProcess() {\n                ParamCheckHelper.notBlank(reportId, "reportId");\n                ParamCheckHelper.notBlank(invalidFlag, "invalidFlag");\n            }\n\n            @Override\n            public InvalidResultInfo process() {\n                return inValidAssetsAnalysisService.queryInvalidTree(reportId, invalidFlag, "RPC");\n            }\n\n            @Override\n            public void afterProcess() {\n\n            }\n        }, "queryInvalidRpcTree");\n    }',
     newCode:
       '@GetMapping(value = "/queryInvalidRpcTree")\n    public ArchCompassResponse queryInvalidRpcTree(String reportId) {\n        return ArchCompassServiceTemplate.execute(new ArchCompassServiceCallBack<InvalidResultInfo>() {\n\n            @Override\n            public void beforeProcess() {\n                ParamCheckHelper.notBlank(reportId, "reportId");\n            }\n\n            @Override\n            public InvalidResultInfo process() {\n                return inValidAssetsAnalysisService.queryInvalidTree(reportId, "RPC");\n            }\n\n            @Override\n            public void afterProcess() {\n\n            }\n        }, "queryInvalidRpcTree");\n    }',
-    fileName: 'InValidAssetsController.java',
-    type: 'modify',
+  },
+  {
+    path: 'src/index.ts',
+    oldCode: 'console.log("hello world");\nconsole.log("second line");\nconsole.log("third line");',
+    newCode: 'console.log("hello world");\nconsole.log("second line changed");\nconsole.log("third line");',
   },
 ];
 
@@ -45,7 +48,8 @@ const App = () => {
     <div
       style={{
         height: 'fit-content',
-        width: '30vw',
+        width: '20vw',
+        minWidth: '20vw',
         display: 'flex',
         flexDirection: 'column',
       }}
@@ -72,7 +76,7 @@ const App = () => {
           );
         }}
       >
-        满江红
+        TypeScript
       </button>
       <button
         onClick={() => {
@@ -121,7 +125,7 @@ const App = () => {
         display: 'flex',
       }}
     >
-      {/* {header} */}
+      {header}
       {memo}
     </div>
   );
