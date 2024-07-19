@@ -1,6 +1,5 @@
-import { isFilesystemReady, WORKSPACE_ROOT } from '@codeblitzjs/ide-sumi-core';
+import { isFilesystemReady } from '@codeblitzjs/ide-sumi-core';
 import { InlineChatHandler } from '@opensumi/ide-ai-native/lib/browser/widget/inline-chat/inline-chat.handler';
-import { IPartialEditEvent } from '@opensumi/ide-ai-native/lib/browser/widget/inline-stream-diff/live-preview.decoration';
 import {
   AppConfig,
   BrowserModule,
@@ -16,21 +15,21 @@ import {
   Emitter,
   Event,
   IChatProgress,
-  IDisposable,
   ILogger,
+  Sequencer,
   URI,
 } from '@opensumi/ide-core-common';
-import { EditorCollectionService, IResourceOpenOptions, WorkbenchEditorService } from '@opensumi/ide-editor';
-import { ICodeEditor, Selection, SelectionDirection } from '@opensumi/ide-monaco';
+import { IResourceOpenOptions, WorkbenchEditorService } from '@opensumi/ide-editor';
+import { Selection, SelectionDirection } from '@opensumi/ide-monaco';
 
 import { InlineChatController } from '@opensumi/ide-ai-native/lib/browser/widget/inline-chat/inline-chat-controller';
 import { LiveInlineDiffPreviewer } from '@opensumi/ide-ai-native/lib/browser/widget/inline-diff/inline-diff-previewer';
 import { InlineDiffHandler } from '@opensumi/ide-ai-native/lib/browser/widget/inline-diff/inline-diff.handler';
 import { EResultKind } from '@opensumi/ide-ai-native/lib/common';
-import { BrowserEditorContribution, IEditor, IEditorFeatureRegistry } from '@opensumi/ide-editor/lib/browser';
+import { IEditorDocumentModelService } from '@opensumi/ide-editor/lib/browser';
 import { SumiReadableStream } from '@opensumi/ide-utils/lib/stream';
 import { requireModule } from '../../api/require';
-import { Autowired, Injectable, Injector, INJECTOR_TOKEN } from '../../modules/opensumi__common-di';
+import { Autowired, Injectable } from '../../modules/opensumi__common-di';
 import { IMenuRegistry, MenuContribution } from '../../modules/opensumi__ide-core-browser';
 import { ApplyDefaultThemeContribution } from '../theme';
 import { IDiffViewerProps, IExtendPartialEditEvent } from './common';
@@ -40,9 +39,7 @@ const fse = requireModule('fs-extra');
 const path = requireModule('path');
 
 @Domain(CommandContribution, ClientAppContribution, MenuContribution)
-export class DiffViewerContribution
-  implements CommandContribution, ClientAppContribution, MenuContribution
-{
+export class DiffViewerContribution implements CommandContribution, ClientAppContribution, MenuContribution {
   private _disposables = new DisposableStore();
 
   @Autowired(IDiffViewerProps)
@@ -57,8 +54,8 @@ export class DiffViewerContribution
   @Autowired(InlineDiffHandler)
   protected inlineDiffHandler: InlineDiffHandler;
 
-  @Autowired(EditorCollectionService)
-  private readonly editorCollectionService: EditorCollectionService;
+  @Autowired(IEditorDocumentModelService)
+  private readonly editorCollectionService: IEditorDocumentModelService;
 
   @Autowired(AppConfig)
   protected appConfig: AppConfig;
@@ -84,21 +81,71 @@ export class DiffViewerContribution
   async initialize(app: IClientApp): Promise<void> {
     await isFilesystemReady();
 
-    let previewer: LiveInlineDiffPreviewer;
     const disposable = new Disposable();
 
     const openFileInTab = async (filePath: string, content: string, options?: IResourceOpenOptions) => {
       const fullPath = this.getFullPath(filePath);
-      if (!await fse.pathExists(fullPath)) {
-        await fse.ensureFile(fullPath);
-        await fse.writeFile(fullPath, content);
+      if (!fse.pathExistsSync(fullPath)) {
+        fse.ensureFileSync(fullPath);
+        fse.writeFileSync(fullPath, content);
       }
 
       const uri = URI.file(fullPath);
-      await this.workbenchEditorService.open(uri, options);
-      return uri;
+      return {
+        uri,
+        result: await this.workbenchEditorService.open(uri, options),
+      };
     };
 
+    const openDiffInTab = async (
+      filePath: string,
+      oldContent: string,
+      newContent: string,
+      options?: IResourceOpenOptions,
+    ) => {
+      const { uri, result: openResourceResult } = await openFileInTab(filePath, oldContent, {
+        ...options,
+        preview: false,
+      });
+
+      if (!openResourceResult) {
+        throw new Error('Failed to open file in tab: ' + filePath);
+      }
+
+      const editor = openResourceResult.group.codeEditor;
+
+      if (oldContent === newContent) {
+        return;
+      }
+
+      const model = this.editorCollectionService.getModelReference(uri);
+      if (!model || !model.instance) {
+        throw new Error('Failed to get model reference: ' + filePath);
+      }
+
+      const monacoModel = model.instance.getMonacoModel();
+
+      monacoModel.setValue(oldContent);
+      const fullRange = monacoModel.getFullModelRange();
+
+      const stream = new SumiReadableStream<IChatProgress>();
+      const controller = new InlineChatController();
+      controller.mountReadable(stream);
+
+      const previewer = this.inlineDiffHandler.showPreviewerByStream(editor.monacoEditor, {
+        crossSelection: Selection.fromRange(fullRange, SelectionDirection.LTR),
+        chatResponse: controller,
+      }) as LiveInlineDiffPreviewer;
+
+      stream.emitData({
+        kind: 'content',
+        content: newContent,
+      });
+      stream.end();
+
+      await Event.toPromise(previewer.getNode().onDidEditChange);
+      previewer.revealFirstDiff();
+    };
 
     this.inlineDiffHandler.onPartialEditEvent((e) => {
       const fsPath = e.uri.fsPath;
@@ -107,51 +154,18 @@ export class DiffViewerContribution
         filePath: this.stripDirectory(fsPath),
         ...e,
       });
-    })
+    });
+
+    const sequencer = new Sequencer();
 
     this.diffViewerProps.onRef({
       openDiffInTab: async (filePath, oldContent, newContent, options?: IResourceOpenOptions) => {
-        const uri = await openFileInTab(filePath, oldContent, {
-          ...options,
-          preview: false,
-        });
-
-        const editor = this.editorCollectionService.getEditorByUri(
-          uri,
-        )!;
-
-        if (previewer) {
-          try {
-            if (previewer) {
-              previewer.handleAction(EResultKind.DISCARD);
-            }
-            previewer.dispose();
-          } catch (error) {
-            this.logger.log(`DiffViewerContribution ~ openDiffInTab: ~ error:`, error);
-          }
-        }
-
-        const monacoEditor = editor.monacoEditor;
-        monacoEditor.setValue(oldContent);
-
-        const fullRange = monacoEditor.getModel()!.getFullModelRange();
-
-        const stream = new SumiReadableStream<IChatProgress>();
-        const controller = new InlineChatController();
-        controller.mountReadable(stream);
-
-        previewer = this.inlineDiffHandler.showPreviewerByStream(monacoEditor, {
-          crossSelection: Selection.fromRange(fullRange, SelectionDirection.LTR),
-          chatResponse: controller,
-        }) as LiveInlineDiffPreviewer;
-
-        stream.emitData({
-          kind: 'content',
-          content: newContent,
-        });
-        stream.end();
+        await sequencer.queue(() => openDiffInTab(filePath, oldContent, newContent, options));
       },
-      openFileInTab,
+      openFileInTab: async (filePath: string, content: string, options?: IResourceOpenOptions) => {
+        const { uri } = await openFileInTab(filePath, content, options);
+        return uri;
+      },
       openTab: async (filePath: string, options?: IResourceOpenOptions) => {
         const fullPath = this.getFullPath(filePath);
         const uri = URI.file(fullPath);
@@ -170,13 +184,19 @@ export class DiffViewerContribution
         return await fse.readFile(fullPath, 'utf-8');
       },
       acceptAllPartialEdit: async () => {
-        if (previewer) {
-          previewer.handleAction(EResultKind.ACCEPT);
+        if (this.inlineDiffHandler) {
+          this.inlineDiffHandler.handleAction(
+            this.workbenchEditorService.currentEditor!.monacoEditor,
+            EResultKind.ACCEPT,
+          );
         }
       },
       rejectAllPartialEdit: async () => {
-        if (previewer) {
-          previewer.handleAction(EResultKind.DISCARD);
+        if (this.inlineDiffHandler) {
+          this.inlineDiffHandler.handleAction(
+            this.workbenchEditorService.currentEditor!.monacoEditor,
+            EResultKind.DISCARD,
+          );
         }
       },
       dispose: () => {

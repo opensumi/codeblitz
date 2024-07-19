@@ -6,6 +6,7 @@ import { IPartialEditEvent } from '@opensumi/ide-ai-native/lib/browser/widget/in
 import '../index.css';
 import { DiffViewerRenderer } from '@codeblitzjs/ide-core/lib/api/renderDiffViewer';
 import { IDiffViewerHandle } from '@codeblitzjs/ide-core/lib/core/diff-viewer';
+import jsonData from './data.json'
 
 const data = [
   {
@@ -16,11 +17,21 @@ const data = [
       '@GetMapping(value = "/queryInvalidRpcTree")\n    public ArchCompassResponse queryInvalidRpcTree(String reportId) {\n        return ArchCompassServiceTemplate.execute(new ArchCompassServiceCallBack<InvalidResultInfo>() {\n\n            @Override\n            public void beforeProcess() {\n                ParamCheckHelper.notBlank(reportId, "reportId");\n            }\n\n            @Override\n            public InvalidResultInfo process() {\n                return inValidAssetsAnalysisService.queryInvalidTree(reportId, "RPC");\n            }\n\n            @Override\n            public void afterProcess() {\n\n            }\n        }, "queryInvalidRpcTree");\n    }',
   },
   {
+    path: 'app/web/src/main/java/com/alipay/archcompass/web/controller/invalidanalysis/InValidAssetsController1.java',
+    oldCode:
+      '@GetMapping(value = "/hahahhaha")\n    public ArchCompassResponse hahahhaha(String reportId, String invalidFlag) {\n        return ArchCompassServiceTemplate.execute(new ArchCompassServiceCallBack<InvalidResultInfo>() {\n\n            @Override\n            public void beforeProcess() {\n                ParamCheckHelper.notBlank(reportId, "reportId");\n                ParamCheckHelper.notBlank(invalidFlag, "invalidFlag");\n            }\n\n            @Override\n            public InvalidResultInfo process() {\n                return inValidAssetsAnalysisService.queryInvalidTree(reportId, invalidFlag, "RPC");\n            }\n\n            @Override\n            public void afterProcess() {\n\n            }\n        }, "hahahhaha");\n    }',
+    newCode:
+      '@GetMapping(value = "/hahahhaha")\n    public ArchCompassResponse hahahhaha(String reportId) {\n        return ArchCompassServiceTemplate.execute(new ArchCompassServiceCallBack<InvalidResultInfo>() {\n\n            @Override\n            public void beforeProcess() {\n                ParamCheckHelper.notBlank(reportId, "reportId");\n            }\n\n            @Override\n            public InvalidResultInfo process() {\n                return inValidAssetsAnalysisService.queryInvalidTree(reportId, "RPC");\n            }\n\n            @Override\n            public void afterProcess() {\n\n            }\n        }, "hahahhaha");\n    }',
+  },
+  {
     path: 'src/index.ts',
     oldCode: 'console.log("hello world");\nconsole.log("second line");\nconsole.log("third line");',
     newCode: 'console.log("hello world");\nconsole.log("second line changed");\nconsole.log("third line");',
   },
 ];
+
+data.push(...jsonData)
+
 
 const App = () => {
   const handleRef = useRef<IDiffViewerHandle | null>(null);
@@ -35,11 +46,14 @@ const App = () => {
           console.log('onPartialEditEvent', e);
           setEventInfo(e);
         });
-        handleRef.current.openDiffInTab(
-          data[0].path,
-          data[0].oldCode,
-          data[0].newCode,
-        );
+        data.forEach(v => {
+          handleRef.current!.openDiffInTab(
+          v.path,
+          v.oldCode,
+          v.newCode,
+          );
+        })
+
       }}
     />
   ), []);
@@ -111,6 +125,24 @@ const App = () => {
       >
         reset
       </button>
+
+      {
+        data.map((item, index) => {
+          return (
+            <button
+              key={index}
+              onClick={() => {
+                if (!handleRef.current) return;
+                handleRef.current.openTab(
+                  item.path,
+                );
+              }}
+            >
+              {item.path.split('/').pop()}
+            </button>
+          );
+        })
+      }
       <p>
         {eventInfo ? JSON.stringify(eventInfo, null, 2) : 'no event'}
       </p>

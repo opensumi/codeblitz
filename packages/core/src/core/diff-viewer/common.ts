@@ -19,15 +19,15 @@ export interface IDiffViewerHandle {
   /**
    * 展示 Inline Diff 预览
    */
-  openDiffInTab: (filePath: string, oldContent: string, newContent: string, options?: IResourceOpenDiffOptions) => void;
+  openDiffInTab: (filePath: string, oldContent: string, newContent: string, options?: IResourceOpenDiffOptions) => Promise<void>;
   /**
    * 打开标签页
    */
-  openTab: (filePath: string, options?: IResourceOpenOptions) => void;
+  openTab: (filePath: string, options?: IResourceOpenOptions) => Promise<void>;
   /**
    * 关闭标签页
    */
-  closeTab: (filePath: string) => void;
+  closeTab: (filePath: string) => Promise<void>;
   /**
    * 获取指定路径的文件内容
    */
