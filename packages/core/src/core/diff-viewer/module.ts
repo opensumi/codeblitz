@@ -115,6 +115,7 @@ export class DiffViewerContribution implements CommandContribution, ClientAppCon
       const editor = openResourceResult.group.codeEditor;
 
       if (oldContent === newContent) {
+        this.inlineDiffHandler.hidePreviewer(editor.monacoEditor);
         return;
       }
 
@@ -136,6 +137,7 @@ export class DiffViewerContribution implements CommandContribution, ClientAppCon
         crossSelection: Selection.fromRange(fullRange, SelectionDirection.LTR),
         chatResponse: controller,
       }) as LiveInlineDiffPreviewer;
+      const whenReady = Event.toPromise(previewer.getNode().onDidEditChange);
 
       stream.emitData({
         kind: 'content',
@@ -143,7 +145,7 @@ export class DiffViewerContribution implements CommandContribution, ClientAppCon
       });
       stream.end();
 
-      await Event.toPromise(previewer.getNode().onDidEditChange);
+      await whenReady;
       previewer.revealFirstDiff();
     };
 

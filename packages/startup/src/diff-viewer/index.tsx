@@ -6,7 +6,8 @@ import { IPartialEditEvent } from '@opensumi/ide-ai-native/lib/browser/widget/in
 import '../index.css';
 import { DiffViewerRenderer } from '@codeblitzjs/ide-core/lib/api/renderDiffViewer';
 import { IDiffViewerHandle } from '@codeblitzjs/ide-core/lib/core/diff-viewer';
-import jsonData from './data.json'
+import jsonData from './data.json';
+import { parsed } from './remote';
 
 const data = [
   {
@@ -28,10 +29,10 @@ const data = [
     oldCode: 'console.log("hello world");\nconsole.log("second line");\nconsole.log("third line");',
     newCode: 'console.log("hello world");\nconsole.log("second line changed");\nconsole.log("third line");',
   },
-];
+] as any[];
 
-data.push(...jsonData)
-
+data.push(...jsonData);
+data.push(...parsed);
 
 const App = () => {
   const handleRef = useRef<IDiffViewerHandle | null>(null);
@@ -48,12 +49,11 @@ const App = () => {
         });
         data.forEach(v => {
           handleRef.current!.openDiffInTab(
-          v.path,
-          v.oldCode,
-          v.newCode,
+            v.path,
+            v.oldCode,
+            v.newCode,
           );
-        })
-
+        });
       }}
     />
   ), []);
@@ -126,23 +126,21 @@ const App = () => {
         reset
       </button>
 
-      {
-        data.map((item, index) => {
-          return (
-            <button
-              key={index}
-              onClick={() => {
-                if (!handleRef.current) return;
-                handleRef.current.openTab(
-                  item.path,
-                );
-              }}
-            >
-              {item.path.split('/').pop()}
-            </button>
-          );
-        })
-      }
+      {data.map((item, index) => {
+        return (
+          <button
+            key={index}
+            onClick={() => {
+              if (!handleRef.current) return;
+              handleRef.current.openTab(
+                item.path,
+              );
+            }}
+          >
+            {item.path.split('/').pop()}
+          </button>
+        );
+      })}
       <p>
         {eventInfo ? JSON.stringify(eventInfo, null, 2) : 'no event'}
       </p>
