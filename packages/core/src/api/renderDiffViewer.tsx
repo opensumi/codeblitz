@@ -45,7 +45,7 @@ export function DiffViewerLayoutComponent(): React.ReactElement {
 export const DiffViewerRenderer = (_props: IDiffViewerProps) => {
   const props = merge({
     appConfig: {},
-  }, _props);
+  }, _props) as IAppRendererProps;
 
   if (!props.appConfig.injector) {
     props.appConfig.injector = new Injector();
@@ -67,7 +67,7 @@ export const DiffViewerRenderer = (_props: IDiffViewerProps) => {
   delete appConfig?.modules;
 
   const workspaceDir = appConfig?.workspaceDir || 'workspace-' + randomString(8);
-  delete appConfig?.workspaceDir;
+  delete (appConfig as Partial<IAppRendererProps['appConfig']>)?.workspaceDir;
 
   const layoutConfig = appConfig?.layoutConfig || defaultLayoutConfig;
   delete appConfig?.layoutConfig;
@@ -75,14 +75,15 @@ export const DiffViewerRenderer = (_props: IDiffViewerProps) => {
   const layoutComponent = appConfig?.layoutComponent || DiffViewerLayoutComponent;
   delete appConfig?.layoutComponent;
 
-  const diffViewerAppConfig: IAppRendererProps = merge({
+  const diffViewerAppConfig: IAppRendererProps = merge<IAppRendererProps, Partial<IAppRendererProps>>({
     appConfig: {
       modules: appModules,
       workspaceDir,
       layoutComponent,
       layoutConfig,
+      disableRestoreEditorGroupState: true,
       defaultPreferences: {
-        'general.theme': 'opensumi-light',
+        'general.theme': 'opensumi-design-light-theme',
         'editor.minimap': false,
         'ai.native.inlineDiff.preview.mode': 'inlineLive',
         'editor.autoSave': 'afterDelay',
