@@ -7,7 +7,6 @@ import '../index.css';
 import { DiffViewerRenderer } from '@codeblitzjs/ide-core/lib/api/renderDiffViewer';
 import { IDiffViewerHandle } from '@codeblitzjs/ide-core/lib/core/diff-viewer';
 import jsonData from './data.json';
-// import { parsed } from './remote';
 
 const data = [
   {
@@ -32,7 +31,6 @@ const data = [
 ] as any[];
 
 data.push(...jsonData);
-// data.push(...parsed);
 
 const App = () => {
   const handleRef = useRef<IDiffViewerHandle | null>(null);
