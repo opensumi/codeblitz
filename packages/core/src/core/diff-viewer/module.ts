@@ -26,13 +26,13 @@ import { InlineChatController } from '@opensumi/ide-ai-native/lib/browser/widget
 import { LiveInlineDiffPreviewer } from '@opensumi/ide-ai-native/lib/browser/widget/inline-diff/inline-diff-previewer';
 import { InlineDiffHandler } from '@opensumi/ide-ai-native/lib/browser/widget/inline-diff/inline-diff.handler';
 import { EResultKind } from '@opensumi/ide-ai-native/lib/common';
-import { IEditorDocumentModelService } from '@opensumi/ide-editor/lib/browser';
+import { IEditor, IEditorDocumentModelService } from '@opensumi/ide-editor/lib/browser';
 import { SumiReadableStream } from '@opensumi/ide-utils/lib/stream';
 import { requireModule } from '../../api/require';
 import { Autowired, Injectable } from '../../modules/opensumi__common-di';
 import { IMenuRegistry, MenuContribution } from '../../modules/opensumi__ide-core-browser';
 import { ApplyDefaultThemeContribution } from '../theme';
-import { IDiffViewerProps, IExtendPartialEditEvent } from './common';
+import { IDiffViewerProps, IDiffViewerTab, IExtendPartialEditEvent } from './common';
 import { removeStart } from './utils';
 
 const fse = requireModule('fs-extra');
@@ -149,6 +149,20 @@ export class DiffViewerContribution implements CommandContribution, ClientAppCon
       previewer.revealFirstDiff();
     };
 
+    const getFilePathForEditor = (editor: IEditor) => {
+      return this.stripDirectory(editor.currentUri!.codeUri.fsPath);
+    };
+
+    const getAllTabs = (): IDiffViewerTab[] => {
+      const editorGroup = this.workbenchEditorService.editorGroups[0];
+      const resources = editorGroup.resources;
+
+      return resources.map((editor, idx) => ({
+        index: idx,
+        filePath: this.stripDirectory(editor.uri.codeUri.fsPath),
+      }));
+    };
+
     this.inlineDiffHandler.onPartialEditEvent((e) => {
       const fsPath = e.uri.fsPath;
 
@@ -203,6 +217,27 @@ export class DiffViewerContribution implements CommandContribution, ClientAppCon
       },
       dispose: () => {
         disposable.dispose();
+      },
+      getCurrentTab: () => {
+        const allTabs = getAllTabs();
+        const currentEditorFilePath = getFilePathForEditor(this.workbenchEditorService.currentEditor!);
+        const currentTabIdx = allTabs.findIndex((tab) => {
+          return tab.filePath === currentEditorFilePath;
+        });
+        if (!currentTabIdx) {
+          return;
+        }
+        return {
+          index: currentTabIdx,
+          filePath: currentEditorFilePath,
+        };
+      },
+      getTabAtIndex: (index) => {
+        const allTabs = getAllTabs();
+        return allTabs[index];
+      },
+      getAllTabs: () => {
+        return getAllTabs();
       },
     });
   }

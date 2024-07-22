@@ -14,6 +14,11 @@ export interface IExtendPartialEditEvent extends IPartialEditEvent {
   filePath: string;
 }
 
+export interface IDiffViewerTab {
+  index: number;
+  filePath: string;
+}
+
 export interface IDiffViewerHandle {
   openFileInTab: (filePath: string, content: string, options?: IResourceOpenOptions) => Promise<URI>;
   /**
@@ -38,6 +43,10 @@ export interface IDiffViewerHandle {
    * 监听采纳、拒绝部分编辑事件
    */
   onPartialEditEvent: Event<IExtendPartialEditEvent>;
+
+  getCurrentTab: () => IDiffViewerTab | undefined;
+  getTabAtIndex: (index: number) => IDiffViewerTab | undefined;
+  getAllTabs: () => IDiffViewerTab[];
 
   dispose(): void;
 }

@@ -52,6 +52,17 @@ const App = () => {
             v.newCode,
           );
         });
+
+        setTimeout(() => {
+          const currentTab = handleRef.current!.getCurrentTab();
+          console.log(`🚀 ~ setTimeout ~ currentTab:`, currentTab);
+
+          const tab0 = handleRef.current!.getTabAtIndex(0);
+          console.log(`🚀 ~ setTimeout ~ tab0:`, tab0);
+
+          const allTabs = handleRef.current!.getAllTabs();
+          console.log(`🚀 ~ setTimeout ~ allTabs:`, allTabs);
+        }, 5000);
       }}
     />
   ), []);
