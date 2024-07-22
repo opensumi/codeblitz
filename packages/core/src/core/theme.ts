@@ -11,7 +11,7 @@ export class ApplyDefaultThemeContribution extends Disposable implements ClientA
   @Autowired(PreferenceProvider, { tag: PreferenceScope.Default })
   protected readonly defaultPreferenceProvider: PreferenceProvider;
 
-  async initialize() {
+  async onDidStart() {
     // 强制用集成设置的默认主题
     await this.themeService.applyTheme(
       this.defaultPreferenceProvider.get('general.theme') as string,

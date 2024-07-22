@@ -65,8 +65,6 @@ export const AppRenderer: React.FC<IAppRendererProps> = ({ onLoad, Landing, ...o
   const propsService = useConstant(() => new PropsServiceImpl<IAppRendererProps>());
   propsService.props = opts;
 
-  // 确保回调始终为最新
-  // TODO: 用 PropsService
   const runtimeConfig: RuntimeConfig = app.injector.get(RuntimeConfig);
   runtimeConfig.workspace = opts.runtimeConfig.workspace;
 
