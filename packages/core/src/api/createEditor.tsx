@@ -2,38 +2,32 @@ import '@opensumi/ide-i18n/lib/browser';
 import '@codeblitzjs/ide-i18n';
 import {
   ClientApp,
-  RuntimeConfig,
-  makeWorkspaceDir,
-  IAppOpts,
-  STORAGE_DIR,
   HOME_ROOT,
+  IAppOpts,
+  makeWorkspaceDir,
+  RuntimeConfig,
+  STORAGE_DIR,
 } from '@codeblitzjs/ide-sumi-core';
-import {
-  SlotRenderer,
-  SlotLocation,
-  IAppRenderer,
-  FILES_DEFAULTS,
-  IReporter,
-} from '@opensumi/ide-core-browser';
-import { BoxPanel, SplitPanel } from '@opensumi/ide-core-browser/lib/components';
 import { Injector } from '@opensumi/di';
+import { FILES_DEFAULTS, IAppRenderer, IReporter, SlotLocation, SlotRenderer } from '@opensumi/ide-core-browser';
+import { BoxPanel, SplitPanel } from '@opensumi/ide-core-browser/lib/components';
 
 import '@opensumi/ide-core-browser/lib/style/entry.less';
 import '@opensumi/ide-core-browser/lib/style/codicons/codicon-animations.css';
 
-import { IPluginConfig } from '@codeblitzjs/ide-plugin';
 import { deletionLogPath } from '@codeblitzjs/ide-browserfs/lib/backend/OverlayFS';
+import { IPluginConfig } from '@codeblitzjs/ide-plugin';
 
-import { disposeMode, disposableCollection } from '../core/patch';
 import { getModules } from '../core/editor/modules';
-import { mergeConfig } from '../core/utils';
-import { EditorLayoutComponent, getEditorLayoutConfig } from '../core/layout';
-import { IConfig, IAppInstance } from './types';
 import { EXT_WORKER_HOST, WEBVIEW_ENDPOINT } from '../core/env';
-import { interceptAppOpts } from './opts';
+import { EditorLayoutComponent, getEditorLayoutConfig } from '../core/layout';
+import { disposableCollection, disposeMode } from '../core/patch';
+import { mergeConfig } from '../core/utils';
 import { appName } from './constants';
+import { interceptAppOpts } from './opts';
+import { IAppInstance, IConfig } from './types';
 
-export { SlotLocation, SlotRenderer, BoxPanel, SplitPanel };
+export { BoxPanel, SlotLocation, SlotRenderer, SplitPanel };
 
 const getDefaultAppConfig = (): IAppOpts => ({
   modules: getModules(),
@@ -71,7 +65,7 @@ export function createEditor({ appConfig, runtimeConfig }: IConfig): IAppInstanc
 
   if (!opts.workspaceDir) {
     throw new Error(
-      '需工作空间目录，最好确保不同项目名称不同，如 group/repository 的形式，工作空间目录会挂载到 /workspace 目录下'
+      '需工作空间目录，最好确保不同项目名称不同，如 group/repository 的形式，工作空间目录会挂载到 /workspace 目录下',
     );
   }
   opts.workspaceDir = makeWorkspaceDir(opts.workspaceDir);

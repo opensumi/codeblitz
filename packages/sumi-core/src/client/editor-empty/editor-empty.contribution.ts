@@ -1,7 +1,7 @@
-import { Domain, ComponentContribution, ComponentRegistry } from '@opensumi/ide-core-browser';
+import { Autowired } from '@opensumi/di';
+import { ComponentContribution, ComponentRegistry, Domain } from '@opensumi/ide-core-browser';
 import { RuntimeConfig } from '../../common';
 import { EditorEmptyComponent } from './editor-empty.view';
-import { Autowired } from '@opensumi/di';
 
 @Domain(ComponentContribution)
 export class EditorEmptyContribution implements ComponentContribution {

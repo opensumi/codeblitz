@@ -67,8 +67,8 @@ export class FileChangeCollection {
 
   protected shouldSkip(current: FileChange, change: FileChange): boolean {
     return (
-      (current.type === FileChangeType.ADDED && change.type === FileChangeType.UPDATED) ||
-      (current.type === FileChangeType.UPDATED && change.type === FileChangeType.ADDED)
+      (current.type === FileChangeType.ADDED && change.type === FileChangeType.UPDATED)
+      || (current.type === FileChangeType.UPDATED && change.type === FileChangeType.ADDED)
     );
   }
 

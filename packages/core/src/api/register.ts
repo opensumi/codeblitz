@@ -1,5 +1,5 @@
-import { LanguagesContribution, GrammarsContribution } from '@opensumi/ide-monaco';
 import { Registry } from '@codeblitzjs/ide-registry';
+import { GrammarsContribution, LanguagesContribution } from '@opensumi/ide-monaco';
 
 export { Registry };
 

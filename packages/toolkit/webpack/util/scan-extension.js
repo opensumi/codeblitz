@@ -41,7 +41,7 @@ exports.getLocalExtensionsMetadata = async (host, basePath) => {
           }
         });
       }
-    })
+    }),
   );
   const httpUri = Uri.parse(host).with({ path: basePath });
   return Promise.all(dirList.map((localExtPath) => getExtension(localExtPath, 'local', httpUri)));

@@ -1,13 +1,13 @@
 import { Injectable, Injector } from '@opensumi/di';
+import * as monaco from '@opensumi/ide-monaco';
 import { ResourceEdit } from '@opensumi/monaco-editor-core/esm/vs/editor/browser/services/bulkEditService';
 import type {
+  IBulkEditOptions,
   IBulkEditPreviewHandler,
   IBulkEditResult,
   IBulkEditService,
-  IBulkEditOptions,
 } from '@opensumi/monaco-editor-core/esm/vs/editor/browser/services/bulkEditService';
 import { WorkspaceEdit } from '@opensumi/monaco-editor-core/esm/vs/editor/common/languages';
-import * as monaco from '@opensumi/ide-monaco';
 
 import { MonacoBulkEditService } from '@opensumi/ide-workspace-edit/lib/browser//bulk-edit.service';
 export { MonacoBulkEditService };
@@ -33,7 +33,7 @@ class MonacoBulkEditServiceProxy implements IBulkEditService {
 
   async apply(
     resourceEdits: ResourceEdit[] | WorkspaceEdit,
-    options?: IBulkEditOptions
+    options?: IBulkEditOptions,
   ): Promise<IBulkEditResult & { success: boolean }> {
     return this.injector!.get(IMonacoBulkEditServiceProxy).apply(resourceEdits, options);
   }

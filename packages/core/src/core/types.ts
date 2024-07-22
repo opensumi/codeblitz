@@ -1,5 +1,5 @@
-import { ComponentType } from 'react';
 import { ThemeType } from '@opensumi/ide-theme';
+import { ComponentType } from 'react';
 
 export interface LandingProps {
   status: 'loading' | 'success' | 'error';

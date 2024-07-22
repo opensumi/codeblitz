@@ -1,4 +1,4 @@
-import { Command } from "@opensumi/ide-core-common";
+import { Command } from '@opensumi/ide-core-common';
 
 // 对外暴露的服务命令
 export namespace CODE_SERVICE_COMMANDS {

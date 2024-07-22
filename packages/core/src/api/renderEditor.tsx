@@ -1,15 +1,15 @@
-import React, { useState, useEffect, useRef, useMemo } from 'react';
-import { createRoot } from 'react-dom/client';
-import { IReporterService, localize, getDebugLogger } from '@opensumi/ide-core-common';
 import { REPORT_NAME } from '@codeblitzjs/ide-sumi-core';
-import { createEditor } from './createEditor';
-import { Root } from '../core/Root';
-import { RootProps, LandingProps } from '../core/types';
-import { useConstant } from '../core/hooks';
-import { IConfig, IAppInstance } from './types';
+import { getDebugLogger, IReporterService, localize } from '@opensumi/ide-core-common';
+import React, { useEffect, useMemo, useRef, useState } from 'react';
+import { createRoot } from 'react-dom/client';
 import { EditorProps } from '../core/editor/types';
-import { PropsServiceImpl, IPropsService } from '../core/props.service';
+import { useConstant } from '../core/hooks';
+import { IPropsService, PropsServiceImpl } from '../core/props.service';
+import { Root } from '../core/Root';
 import styles from '../core/style.module.less';
+import { LandingProps, RootProps } from '../core/types';
+import { createEditor } from './createEditor';
+import { IAppInstance, IConfig } from './types';
 
 interface IEditorRendererProps extends IConfig, EditorProps {
   onLoad?(app: IAppInstance): void;
@@ -19,21 +19,19 @@ interface IEditorRendererProps extends IConfig, EditorProps {
 export const renderEditor = (domElement: HTMLElement, props: IEditorRendererProps) => {
   const { onLoad, Landing, ...opts } = props;
   const app = createEditor(opts);
-  const className = `codeblitz-editor ${
-    opts.runtimeConfig.hideEditorTab ? styles['hide-editor-tab'] : ''
-  }`;
+  const className = `codeblitz-editor ${opts.runtimeConfig.hideEditorTab ? styles['hide-editor-tab'] : ''}`;
 
   const root = createRoot(domElement);
 
-  root.render(<Root status="loading" Landing={Landing} className={className} />);
+  root.render(<Root status='loading' Landing={Landing} className={className} />);
 
   app
     .start((IDEApp) => {
       return new Promise((resolve) => {
         root.render(
-          <Root status="success" className={className}>
+          <Root status='success' className={className}>
             <IDEApp />
-          </Root>
+          </Root>,
         );
       });
     })
@@ -43,16 +41,16 @@ export const renderEditor = (domElement: HTMLElement, props: IEditorRendererProp
     .catch((err: Error) => {
       root.render(
         <Root
-          status="error"
+          status='error'
           error={err?.message || localize('error.unknown')}
           className={className}
-        />
+        />,
       );
 
       (app.injector.get(IReporterService) as IReporterService).point(
         REPORT_NAME.ALEX_APP_START_ERROR,
         err?.message,
-        { error: err }
+        { error: err },
       );
       getDebugLogger().error(err);
       setTimeout(() => {
@@ -100,7 +98,7 @@ export const EditorRenderer: React.FC<IEditorRendererProps> = ({ onLoad, Landing
           err?.message,
           {
             error: err,
-          }
+          },
         );
         getDebugLogger().error(err);
         setTimeout(() => {
@@ -115,7 +113,7 @@ export const EditorRenderer: React.FC<IEditorRendererProps> = ({ onLoad, Landing
 
   const rootClassName = useMemo(
     () => (opts.runtimeConfig.hideEditorTab ? styles['hide-editor-tab'] : ''),
-    [opts.runtimeConfig.hideEditorTab]
+    [opts.runtimeConfig.hideEditorTab],
   );
 
   return (

@@ -1,4 +1,4 @@
-import { Autowired, Injectable } from "@opensumi/di";
+import { Autowired, Injectable } from '@opensumi/di';
 import {
   CancellationToken,
   IAIBackService,
@@ -7,9 +7,9 @@ import {
   IAICompletionOption,
   IAIReportCompletionOption,
   IChatProgress,
-} from "@opensumi/ide-core-common";
-import { SumiReadableStream } from "@opensumi/ide-utils/lib/stream";
-import { RuntimeConfig } from "../../common";
+} from '@opensumi/ide-core-common';
+import { SumiReadableStream } from '@opensumi/ide-utils/lib/stream';
+import { RuntimeConfig } from '../../common';
 
 @Injectable()
 export class AIBackService implements IAIBackService<IAIBackServiceResponse, SumiReadableStream<IChatProgress>> {
@@ -22,7 +22,7 @@ export class AIBackService implements IAIBackService<IAIBackServiceResponse, Sum
     cancelToken?: CancellationToken,
   ): Promise<IAIBackServiceResponse<string>> {
     if (!this.runtimeConfig.aiNative?.service?.request) {
-      console.error(new Error("AIBackService.request is not available"));
+      console.error(new Error('AIBackService.request is not available'));
       return {};
     }
 
@@ -35,7 +35,7 @@ export class AIBackService implements IAIBackService<IAIBackServiceResponse, Sum
     cancelToken?: CancellationToken,
   ): Promise<SumiReadableStream<IChatProgress>> {
     if (!this.runtimeConfig.aiNative?.service?.requestStream) {
-      console.error(new Error("AIBackService.requestStream is not available"));
+      console.error(new Error('AIBackService.requestStream is not available'));
       return new SumiReadableStream();
     }
 
@@ -44,10 +44,10 @@ export class AIBackService implements IAIBackService<IAIBackServiceResponse, Sum
 
   async requestCompletion(input: IAICompletionOption, cancelToken?: CancellationToken) {
     if (!this.runtimeConfig.aiNative?.service?.requestCompletion) {
-      console.error(new Error("AIBackService.requestCompletion is not available"));
+      console.error(new Error('AIBackService.requestCompletion is not available'));
       return {
-        sessionId: "",
-        codeModelList: [{ content: "" }],
+        sessionId: '',
+        codeModelList: [{ content: '' }],
       };
     }
 
@@ -56,7 +56,7 @@ export class AIBackService implements IAIBackService<IAIBackServiceResponse, Sum
 
   async reportCompletion(input: IAIReportCompletionOption) {
     if (!this.runtimeConfig.aiNative?.service?.reportCompletion) {
-      console.error(new Error("AIBackService.reportCompletion is not available"));
+      console.error(new Error('AIBackService.reportCompletion is not available'));
       return;
     }
 

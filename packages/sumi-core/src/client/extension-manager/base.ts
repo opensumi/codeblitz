@@ -13,8 +13,7 @@ export type IExtension = Writeable<IExtensionProps> & {
   installed: boolean;
 };
 
-export const DEFAULT_ICON_URL =
-  'https://gw.alipayobjects.com/mdn/rms_d8fa74/afts/img/A*upJXQo96It8AAAAAAAAAAABkARQnAQ';
+export const DEFAULT_ICON_URL = 'https://gw.alipayobjects.com/mdn/rms_d8fa74/afts/img/A*upJXQo96It8AAAAAAAAAAABkARQnAQ';
 
 export interface BaseExtension {
   extensionId: string; // 插件市场 extensionId

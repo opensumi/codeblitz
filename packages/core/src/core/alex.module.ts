@@ -1,13 +1,8 @@
-import { Injectable, Provider, Autowired } from '@opensumi/di';
-import {
-  BrowserModule,
-  KeybindingContribution,
-  Domain,
-  KeybindingRegistry,
-} from '@opensumi/ide-core-browser';
 import { RuntimeConfig } from '@codeblitzjs/ide-sumi-core';
-import { ExtensionActivateContribution } from './extension/extension.contribution';
+import { Autowired, Injectable, Provider } from '@opensumi/di';
+import { BrowserModule, Domain, KeybindingContribution, KeybindingRegistry } from '@opensumi/ide-core-browser';
 import { AlexCommandContribution } from './commands';
+import { ExtensionActivateContribution } from './extension/extension.contribution';
 
 @Domain(KeybindingContribution)
 class AlexContribution implements KeybindingContribution {
@@ -22,8 +17,8 @@ class AlexContribution implements KeybindingContribution {
       });
     }
 
-    if(this.runtimeConfig.registerKeybindings?.length){
-      keybindings.registerKeybindings(this.runtimeConfig.registerKeybindings)
+    if (this.runtimeConfig.registerKeybindings?.length) {
+      keybindings.registerKeybindings(this.runtimeConfig.registerKeybindings);
     }
   }
 }

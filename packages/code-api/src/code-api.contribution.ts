@@ -1,9 +1,10 @@
 import { Autowired } from '@opensumi/di';
-import { CommandRegistry, SlotLocation, ClientAppContribution } from '@opensumi/ide-core-browser';
+import { ClientAppContribution, CommandRegistry, SlotLocation } from '@opensumi/ide-core-browser';
 import { CommandContribution, Domain } from '@opensumi/ide-core-common';
 import { IMainLayoutService } from '@opensumi/ide-main-layout';
-import { CodePlatform, ICodeAPIProvider } from './common/types';
 import { CodeAPIProvider } from './code-api.provider';
+import { CodePlatform, ICodeAPIProvider } from './common/types';
+
 @Domain(CommandContribution, ClientAppContribution)
 export class CodeAPIContribution implements CommandContribution, ClientAppContribution {
   @Autowired(ICodeAPIProvider)

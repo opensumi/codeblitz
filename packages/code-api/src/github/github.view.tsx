@@ -1,10 +1,10 @@
-import React, { useState, useEffect } from 'react';
+import { Button, Input } from '@opensumi/ide-components';
+import { getOctIcon, useInjectable } from '@opensumi/ide-core-browser';
 import { localize } from '@opensumi/ide-core-common';
-import { useInjectable, getOctIcon } from '@opensumi/ide-core-browser';
-import { Input, Button } from '@opensumi/ide-components';
 import { observer } from 'mobx-react-lite';
-import { ICodeAPIProvider } from '../common/types';
+import React, { useEffect, useState } from 'react';
 import type { CodeAPIProvider } from '../code-api.provider';
+import { ICodeAPIProvider } from '../common/types';
 import styles from './github.module.less';
 
 export const GitHubView: React.FC = observer(() => {
@@ -63,8 +63,8 @@ export const GitHubView: React.FC = observer(() => {
         <div className={styles.title}>
           {localize('github.auth-title')}
           <a
-            href="https://github.com/settings/tokens/new?scopes=repo&description=codeblitz"
-            target="_blank"
+            href='https://github.com/settings/tokens/new?scopes=repo&description=codeblitz'
+            target='_blank'
             style={{ marginLeft: 8 }}
           >
             <i className={getOctIcon('link')}></i> {localize('github.auth-goto')}
@@ -73,15 +73,15 @@ export const GitHubView: React.FC = observer(() => {
         <div className={styles.authTip}>
           {localize('github.auth-tip')}{' '}
           <a
-            href="https://docs.github.com/en/rest/overview/resources-in-the-rest-api#authentication"
-            target="_blank"
+            href='https://docs.github.com/en/rest/overview/resources-in-the-rest-api#authentication'
+            target='_blank'
           >
             {localize('common.ref-doc')}
           </a>
         </div>
         <div className={styles.authInput}>
           <Input
-            size="small"
+            size='small'
             placeholder={`${localize('github.auth-input')} OAuth Token`}
             value={tokenValue}
             onChange={(e) => setTokenValue(e.target.value)}
@@ -89,7 +89,7 @@ export const GitHubView: React.FC = observer(() => {
         </div>
         <div style={{ marginTop: 8 }}>
           <Button
-            size="small"
+            size='small'
             style={{ marginRight: 8 }}
             onClick={() => validateToken()}
             loading={validating}
@@ -97,10 +97,10 @@ export const GitHubView: React.FC = observer(() => {
             {localize('common.save')}
           </Button>
           <Button
-            size="small"
+            size='small'
             onClick={() => setTokenValue('')}
             loading={validating}
-            type="default"
+            type='default'
           >
             {localize('common.reset')}
           </Button>
@@ -120,7 +120,7 @@ export const GitHubView: React.FC = observer(() => {
           {token.slice(6).replace(/./g, '*')}
         </div>
         <div style={{ marginTop: 8 }}>
-          <Button onClick={() => github.clearToken()} type="default">
+          <Button onClick={() => github.clearToken()} type='default'>
             {localize('common.clear')}
           </Button>
         </div>
@@ -152,8 +152,10 @@ export const GitHubView: React.FC = observer(() => {
 function formateTime(n: number) {
   if (n <= 0) return '-';
   const date = new Date(n);
-  return `${date.getHours().toString().padStart(2, '0')}:${date
-    .getMinutes()
-    .toString()
-    .padStart(2, '0')}:${date.getSeconds().toString().padStart(2, '0')}`;
+  return `${date.getHours().toString().padStart(2, '0')}:${
+    date
+      .getMinutes()
+      .toString()
+      .padStart(2, '0')
+  }:${date.getSeconds().toString().padStart(2, '0')}`;
 }

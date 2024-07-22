@@ -1,13 +1,11 @@
 import { Injectable } from '@opensumi/di';
-import { ICommonServer, CommonServerPath } from '@opensumi/ide-core-common';
-import { NodeModule } from './app';
-import { CommonServer } from './common.server';
-import { FileSystemContribution } from './base';
 import { CommonServerProtocol } from '@opensumi/ide-connection/lib/common/protocols/common-server';
-import {
-  FileSystemLaunchContribution,
-  FileSystemConfigContribution,
-} from './fs-launch.contribution';
+import { CommonServerPath, ICommonServer } from '@opensumi/ide-core-common';
+import { NodeModule } from './app';
+import { FileSystemContribution } from './base';
+import { CommonServer } from './common.server';
+import { FileSystemConfigContribution, FileSystemLaunchContribution } from './fs-launch.contribution';
+
 @Injectable()
 export class ServerCommonModule extends NodeModule {
   providers = [

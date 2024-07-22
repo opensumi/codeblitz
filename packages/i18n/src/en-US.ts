@@ -23,8 +23,7 @@ export const localizationBundle = {
     'api.response.unknown-error': 'Unknown Error',
     'api.response.project-not-found': 'Project {0} not found',
     'api.response.project-no-access': 'No access to project',
-    'api.response.no-login-code':
-      'Login to Code is expired, please refresh page if you are logged in',
+    'api.response.no-login-code': 'Login to Code is expired, please refresh page if you are logged in',
     'api.login.goto': 'Go to login',
     'error.unknown': 'Unknown Error',
     'error.request': 'Request Error',
@@ -58,8 +57,7 @@ export const localizationBundle = {
     'github.rate-limit-reset': 'Reset Time: ',
     'github.rate-limit-used': 'Used: ',
     'github.auth-title': 'Set OAuth Token',
-    'github.auth-tip':
-      'Setting OAuth Token，Increase the limit to 5000 of GitHub requests per hour',
+    'github.auth-tip': 'Setting OAuth Token，Increase the limit to 5000 of GitHub requests per hour',
     'github.auth-goto': 'Go to generate',
     'github.auth-input': 'Input',
     'github.auth-has-token-title': 'Has set the OAuth Token',

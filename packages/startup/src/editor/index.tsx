@@ -1,19 +1,19 @@
+import { EditorRenderer, IAppInstance } from '@codeblitzjs/ide-core/lib/editor';
+import * as Alex from '@codeblitzjs/ide-core/lib/editor';
 import React, { useState } from 'react';
 import { createRoot } from 'react-dom/client';
-import { IAppInstance, EditorRenderer } from '@codeblitzjs/ide-core/lib/editor';
-import * as Alex from '@codeblitzjs/ide-core/lib/editor';
 // 引入 extension
 import '@codeblitzjs/ide-core/lib/editor.extension';
 import '@codeblitzjs/ide-core/languages';
 
 import 'antd/dist/antd.css';
-import Select from 'antd/lib/select';
-import Cascader from 'antd/lib/cascader';
 import Button from 'antd/lib/button';
+import Cascader from 'antd/lib/cascader';
+import Select from 'antd/lib/select';
 import './style.less';
-import * as editorPlugin from './plugin';
-import { LocalExtensionModule } from '../common/local-extension.module';
 import { request } from '@codeblitzjs/ide-common';
+import { LocalExtensionModule } from '../common/local-extension.module';
+import * as editorPlugin from './plugin';
 
 (window as any).alex = Alex;
 
@@ -54,7 +54,7 @@ const App = () => {
           Accept: 'application/vnd.github.v3.raw',
         },
         responseType: 'arrayBuffer',
-      }
+      },
     );
     if (res) {
       return res;
@@ -73,22 +73,22 @@ const App = () => {
       <div style={{ display: 'flex', marginBottom: 8 }}>
         <Cascader
           style={{ width: '100%' }}
-          size="small"
+          size='small'
           options={fileOptions}
           onChange={onFileChange}
-          placeholder="Please select"
+          placeholder='Please select'
         />
       </div>
       <div style={{ display: 'flex', marginBottom: 8 }}>
-        <Button onClick={() => setKey((k) => k + 1)} size="small" style={{ marginRight: 8 }}>
+        <Button onClick={() => setKey((k) => k + 1)} size='small' style={{ marginRight: 8 }}>
           RESET
         </Button>
         <Select
           value={encoding}
           onChange={setEncoding}
-          size="small"
+          size='small'
           style={{ width: 120, marginRight: 8 }}
-          placeholder="更改编码"
+          placeholder='更改编码'
         >
           {['utf8', 'gbk'].map((encoding) => (
             <Select.Option key={encoding} value={encoding}>
@@ -99,9 +99,9 @@ const App = () => {
         <Select
           value={JSON.stringify(lineNumber)}
           onChange={(value) => setLineNumber(JSON.parse(value))}
-          size="small"
+          size='small'
           style={{ width: 120, marginRight: 8 }}
-          placeholder="更改选中行"
+          placeholder='更改选中行'
         >
           {[
             10,
@@ -126,7 +126,7 @@ const App = () => {
               commands.executeCommand('plugin.command.add', 1);
             }
           }}
-          size="small"
+          size='small'
         >
           command test
         </Button>
@@ -137,65 +137,67 @@ const App = () => {
               commands.executeCommand('plugin.command.changeTheme', 'opensumi-design-dark');
             }
           }}
-          size="small"
+          size='small'
         >
           theme change
         </Button>
       </div>
       <div style={{ display: 'flex' }}>
         <div style={{ width: '80%', minHeight: 500 }}>
-          {project ? (
-            <EditorRenderer
-              key={`${project}-${key}`}
-              onLoad={(app) => {
-                window.app = app;
-              }}
-              appConfig={{
-                modules: [LocalExtensionModule],
-                plugins: [editorPlugin],
-                workspaceDir: project,
-                defaultPreferences: {
-                  'general.theme': 'opensumi-design-light',
-                  'editor.scrollBeyondLastLine': false,
-                  'lsif.documentScheme': 'file',
-                  'lsif.enable': true,
-                  'lsif.env': 'prod',
-                  // 'editor.forceReadOnly': true,
-                  // 'editor.wordWrap': 'on',
-                },
-              }}
-              runtimeConfig={{
-                scenario: null,
-                startupEditor: 'none',
-                // hideEditorTab: true,
-                resolveFileType(path) {
-                  return 'text';
-                },
-              }}
-              editorConfig={{
-                adjustFindWidgetTop: true,
-                disableCache: true,
-                // disableEditorSearch: true,
-                // stretchHeight: true,
-              }}
-              documentModel={{
-                type: 'code',
-                ref,
-                owner: project.split('/')[0],
-                name: project.split('/')[1],
-                filepath,
-                onFilepathChange(newFilepath) {
-                  setFilePath(newFilepath);
-                },
-                readFile,
-                encoding,
-                lineNumber,
-                onLineNumberChange(num) {
-                  setLineNumber(num);
-                },
-              }}
-            />
-          ) : null}
+          {project
+            ? (
+              <EditorRenderer
+                key={`${project}-${key}`}
+                onLoad={(app) => {
+                  window.app = app;
+                }}
+                appConfig={{
+                  modules: [LocalExtensionModule],
+                  plugins: [editorPlugin],
+                  workspaceDir: project,
+                  defaultPreferences: {
+                    'general.theme': 'opensumi-design-light',
+                    'editor.scrollBeyondLastLine': false,
+                    'lsif.documentScheme': 'file',
+                    'lsif.enable': true,
+                    'lsif.env': 'prod',
+                    // 'editor.forceReadOnly': true,
+                    // 'editor.wordWrap': 'on',
+                  },
+                }}
+                runtimeConfig={{
+                  scenario: null,
+                  startupEditor: 'none',
+                  // hideEditorTab: true,
+                  resolveFileType(path) {
+                    return 'text';
+                  },
+                }}
+                editorConfig={{
+                  adjustFindWidgetTop: true,
+                  disableCache: true,
+                  // disableEditorSearch: true,
+                  // stretchHeight: true,
+                }}
+                documentModel={{
+                  type: 'code',
+                  ref,
+                  owner: project.split('/')[0],
+                  name: project.split('/')[1],
+                  filepath,
+                  onFilepathChange(newFilepath) {
+                    setFilePath(newFilepath);
+                  },
+                  readFile,
+                  encoding,
+                  lineNumber,
+                  onLineNumberChange(num) {
+                    setLineNumber(num);
+                  },
+                }}
+              />
+            )
+            : null}
         </div>
       </div>
     </div>

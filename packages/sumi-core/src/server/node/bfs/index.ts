@@ -1,50 +1,41 @@
-import fs from '@codeblitzjs/ide-browserfs/lib/core/node_fs';
-import { checkOptions } from '@codeblitzjs/ide-browserfs/lib/core/util';
+import * as Errors from '@codeblitzjs/ide-browserfs/lib/core/api_error';
 import {
+  BFSCallback,
   FileSystem,
   FileSystemConstructor,
-  BFSCallback,
   FileSystemOptions,
 } from '@codeblitzjs/ide-browserfs/lib/core/file_system';
-import * as Errors from '@codeblitzjs/ide-browserfs/lib/core/api_error';
+import fs from '@codeblitzjs/ide-browserfs/lib/core/node_fs';
 import { FileType } from '@codeblitzjs/ide-browserfs/lib/core/node_fs_stats';
+import { checkOptions } from '@codeblitzjs/ide-browserfs/lib/core/util';
 
+import DynamicRequest, { DynamicRequestOptions } from '@codeblitzjs/ide-browserfs/lib/backend/DynamicRequest';
+import FolderAdapter, { FolderAdapterOptions } from '@codeblitzjs/ide-browserfs/lib/backend/FolderAdapter';
+import IndexedDB, { IndexedDBFileSystemOptions } from '@codeblitzjs/ide-browserfs/lib/backend/IndexedDB';
+import InMemory from '@codeblitzjs/ide-browserfs/lib/backend/InMemory';
 import MountableFileSystem, {
   MountableFileSystemOptions,
 } from '@codeblitzjs/ide-browserfs/lib/backend/MountableFileSystem';
-import IndexedDB, {
-  IndexedDBFileSystemOptions,
-} from '@codeblitzjs/ide-browserfs/lib/backend/IndexedDB';
-import InMemory from '@codeblitzjs/ide-browserfs/lib/backend/InMemory';
-import FolderAdapter, {
-  FolderAdapterOptions,
-} from '@codeblitzjs/ide-browserfs/lib/backend/FolderAdapter';
-import OverlayFS, {
-  OverlayFSOptions,
-  deletionLogPath,
-} from '@codeblitzjs/ide-browserfs/lib/backend/OverlayFS';
-import DynamicRequest, {
-  DynamicRequestOptions,
-} from '@codeblitzjs/ide-browserfs/lib/backend/DynamicRequest';
+import OverlayFS, { deletionLogPath, OverlayFSOptions } from '@codeblitzjs/ide-browserfs/lib/backend/OverlayFS';
 import ZipFS, { ZipFSOptions } from '@codeblitzjs/ide-browserfs/lib/backend/ZipFS';
-import { FileIndexSystem, FileIndexSystemOptions } from './FileIndex';
-import { Editor, EditorOptions } from './Editor';
 import { WORKSPACE_IDB_NAME } from '../../../common';
+import { Editor, EditorOptions } from './Editor';
+import { FileIndexSystem, FileIndexSystemOptions } from './FileIndex';
 
 export type {
-  MountableFileSystemOptions,
-  IndexedDBFileSystemOptions,
-  FolderAdapterOptions,
-  OverlayFSOptions,
-  FileIndexSystemOptions,
-  DynamicRequestOptions,
   deletionLogPath as browserfsDeletionLogPath,
+  DynamicRequestOptions,
+  FileIndexSystemOptions,
+  FolderAdapterOptions,
+  IndexedDBFileSystemOptions,
+  MountableFileSystemOptions,
+  OverlayFSOptions,
 };
 
 export { FileType as BrowserFSFileType };
 
-export type { FileIndex as FileIndexType } from './FileIndex';
 export type { EditorOptions } from './Editor';
+export type { FileIndex as FileIndexType } from './FileIndex';
 
 const Backends = {
   MountableFileSystem,
@@ -64,7 +55,7 @@ _;
 
 function patchCreateForCheck(fsType: FileSystemConstructor) {
   const create = fsType.Create;
-  fsType.Create = function (opts?: any, cb?: BFSCallback<FileSystem>): void {
+  fsType.Create = function(opts?: any, cb?: BFSCallback<FileSystem>): void {
     const oneArg = typeof opts === 'function';
     const normalizedCb = oneArg ? opts : cb;
     const normalizedOpts = oneArg ? {} : opts;
@@ -93,9 +84,9 @@ function initialize(rootfs: FileSystem) {
 export type FileSystemConfiguration =
   | { fs: 'MountableFileSystem'; options: { [mountPoint: string]: FileSystemConfiguration } }
   | {
-      fs: 'OverlayFS';
-      options: { writable: FileSystemConfiguration; readable: FileSystemConfiguration };
-    }
+    fs: 'OverlayFS';
+    options: { writable: FileSystemConfiguration; readable: FileSystemConfiguration };
+  }
   | { fs: 'IndexedDB'; options?: IndexedDBFileSystemOptions }
   | { fs: 'InMemory'; options?: FileSystemOptions }
   | { fs: 'FolderAdapter'; options: { folder: string; wrapped: FileSystemConfiguration } }
@@ -113,7 +104,7 @@ async function configure(config: FileSystemConfiguration) {
 
 function createFileSystem<T extends FileSystemConstructor>(
   FileSystemClass: T,
-  options: Parameters<T['Create']>[0]
+  options: Parameters<T['Create']>[0],
 ): Promise<FileSystem> {
   return new Promise((resolve, reject) => {
     FileSystemClass.Create(options, (err: any, fs: FileSystem) => {
@@ -134,7 +125,7 @@ async function getFileSystem({ fs, options }: FileSystemConfiguration): Promise<
   if (!fs) {
     throw new Errors.ApiError(
       Errors.ErrorCode.EPERM,
-      'Missing "fs" property on configuration object.'
+      'Missing "fs" property on configuration object.',
     );
   }
 
@@ -148,7 +139,7 @@ async function getFileSystem({ fs, options }: FileSystemConfiguration): Promise<
           if (d !== null && typeof d === 'object' && d.fs) {
             options[p] = await getFileSystem(d);
           }
-        })
+        }),
       );
     } catch (e) {
       throw e;
@@ -159,7 +150,7 @@ async function getFileSystem({ fs, options }: FileSystemConfiguration): Promise<
   if (!fsc) {
     throw new Errors.ApiError(
       Errors.ErrorCode.EPERM,
-      `File system ${fs} is not available in BrowserFS.`
+      `File system ${fs} is not available in BrowserFS.`,
     );
   } else {
     return createFileSystem(fsc, options || {});
@@ -171,7 +162,7 @@ function addFileSystemType(name: string, fsType: FileSystemConstructor) {
   Backends[name] = fsType;
 }
 
-export { fs, FileSystem };
+export { FileSystem, fs };
 
 export const BrowserFS = {
   initialize,
@@ -184,8 +175,7 @@ export const BrowserFS = {
 
 export type SupportFileSystem = keyof typeof Backends;
 
-type InstanceType<T> = T extends { Create(options: object, cb: BFSCallback<infer R>): void }
-  ? R
+type InstanceType<T> = T extends { Create(options: object, cb: BFSCallback<infer R>): void } ? R
   : any;
 
 export type FileSystemInstance<T extends SupportFileSystem> = InstanceType<(typeof Backends)[T]>;

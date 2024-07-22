@@ -1,10 +1,6 @@
-import React, { useState, useMemo } from 'react';
+import { AppRenderer, BrowserFSFileType as FileType, IAppRendererProps } from '@codeblitzjs/ide-core';
+import React, { useMemo, useState } from 'react';
 import { createRoot } from 'react-dom/client';
-import {
-  AppRenderer,
-  BrowserFSFileType as FileType,
-  IAppRendererProps,
-} from '@codeblitzjs/ide-core';
 import '@codeblitzjs/ide-core/languages';
 import Select from 'antd/lib/select';
 import 'antd/lib/select/style';
@@ -28,7 +24,7 @@ let zipData: Buffer;
 
 const zipDataPromise = (async () => {
   const res = await fetch(
-    'http://alipay-rmsdeploy-image.cn-hangzhou.alipay.aliyun-inc.com/green-trail-test/dc85f34d-2467-436b-a0fe-092133ead0d6/demo.zip'
+    'http://alipay-rmsdeploy-image.cn-hangzhou.alipay.aliyun-inc.com/green-trail-test/dc85f34d-2467-436b-a0fe-092133ead0d6/demo.zip',
   );
   const buf = await res.arrayBuffer();
   zipData = Buffer.from(new Uint8Array(buf));
@@ -76,7 +72,7 @@ const App = () => {
             },
             async readFile(p) {
               const res = await fetch(
-                `http://alipay-rmsdeploy-image.cn-hangzhou.alipay.aliyun-inc.com/green-trail-test/a87fb80d-3028-4b19-93a9-2da6f871f369/koa${p}`
+                `http://alipay-rmsdeploy-image.cn-hangzhou.alipay.aliyun-inc.com/green-trail-test/a87fb80d-3028-4b19-93a9-2da6f871f369/koa${p}`,
               );
               return Buffer.from(await res.arrayBuffer());
             },
@@ -115,7 +111,7 @@ const App = () => {
                 },
                 async readFile(p) {
                   const res = await fetch(
-                    `http://alipay-rmsdeploy-image.cn-hangzhou.alipay.aliyun-inc.com/green-trail-test/a87fb80d-3028-4b19-93a9-2da6f871f369/koa${p}`
+                    `http://alipay-rmsdeploy-image.cn-hangzhou.alipay.aliyun-inc.com/green-trail-test/a87fb80d-3028-4b19-93a9-2da6f871f369/koa${p}`,
                   );
                   return Buffer.from(await res.arrayBuffer());
                 },
@@ -128,36 +124,36 @@ const App = () => {
 
   const workspace = filesystem
     ? {
-        filesystem,
-        onDidChangeTextDocument(e) {
-          console.log('>>>onDidChangeTextDocument', e);
-        },
-        onDidSaveTextDocument(e) {
-          console.log('>>>onDidSaveTextDocument', e);
-        },
-        onDidCreateFiles(e) {
-          console.log('>>>onDidCreateFiles', e);
-        },
-        onDidChangeFiles(e) {
-          console.log('>>>onDidChangeFiles', e);
-        },
-        onDidDeleteFiles(e) {
-          console.log('>>>onDidDeleteFiles', e);
-        },
-      }
+      filesystem,
+      onDidChangeTextDocument(e) {
+        console.log('>>>onDidChangeTextDocument', e);
+      },
+      onDidSaveTextDocument(e) {
+        console.log('>>>onDidSaveTextDocument', e);
+      },
+      onDidCreateFiles(e) {
+        console.log('>>>onDidCreateFiles', e);
+      },
+      onDidChangeFiles(e) {
+        console.log('>>>onDidChangeFiles', e);
+      },
+      onDidDeleteFiles(e) {
+        console.log('>>>onDidDeleteFiles', e);
+      },
+    }
     : undefined;
 
   return (
     <div style={{ height: '100%' }}>
       <div style={{ height: 48, display: 'flex', alignItems: 'center' }}>
         <Select value={fsType} onChange={(e) => setFsType(e as string)} style={{ width: 200 }}>
-          <Select.Option value="IndexedDB">IndexedDB</Select.Option>
-          <Select.Option value="InMemory">InMemory</Select.Option>
-          <Select.Option value="FileIndexSystem">FileIndexSystem</Select.Option>
-          <Select.Option value="DynamicRequest">DynamicRequest</Select.Option>
-          <Select.Option value="ZipFS">ZipFS</Select.Option>
-          <Select.Option value="FolderAdapter">FolderAdapter</Select.Option>
-          <Select.Option value="OverlayFS">OverlayFS</Select.Option>
+          <Select.Option value='IndexedDB'>IndexedDB</Select.Option>
+          <Select.Option value='InMemory'>InMemory</Select.Option>
+          <Select.Option value='FileIndexSystem'>FileIndexSystem</Select.Option>
+          <Select.Option value='DynamicRequest'>DynamicRequest</Select.Option>
+          <Select.Option value='ZipFS'>ZipFS</Select.Option>
+          <Select.Option value='FolderAdapter'>FolderAdapter</Select.Option>
+          <Select.Option value='OverlayFS'>OverlayFS</Select.Option>
         </Select>
       </div>
       <div style={{ height: 'calc(100% - 48px)' }}>

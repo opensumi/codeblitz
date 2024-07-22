@@ -7,7 +7,7 @@ const submodules = [
     name: 'vscode',
     path: 'lib/vscode',
     url: 'https://github.com/microsoft/vscode.git',
-  }
+  },
 ];
 
 const submodulesContent = submodules.reduce((str, item) => {
@@ -26,7 +26,7 @@ describe(__filename, () => {
         name: item.name,
         path: item.path,
         url: item.url,
-      }))
+      })),
     );
   });
 

@@ -1,12 +1,12 @@
 import { Autowired } from '@opensumi/di';
-import { Event, IDisposable } from '@opensumi/ide-core-common';
 import {
-  IStatusBarService,
-  Domain,
   ClientAppContribution,
-  StatusBarAlignment,
+  Domain,
+  IStatusBarService,
   localize,
+  StatusBarAlignment,
 } from '@opensumi/ide-core-browser';
+import { Event, IDisposable } from '@opensumi/ide-core-common';
 import { CodeModelService } from './code-model.service';
 
 @Domain(ClientAppContribution)
@@ -21,8 +21,7 @@ export class StatusbarContribution implements ClientAppContribution {
 
   initialize() {
     const { rootRepository } = this.codeModel;
-    const getRefText = () =>
-      rootRepository.headLabel ? `$(git-branch) ${rootRepository.headLabel}` : '';
+    const getRefText = () => rootRepository.headLabel ? `$(git-branch) ${rootRepository.headLabel}` : '';
 
     this.statusbarService.addElement('code-service', {
       text: getRefText(),
@@ -39,7 +38,7 @@ export class StatusbarContribution implements ClientAppContribution {
         });
       },
       null,
-      this.disposables
+      this.disposables,
     );
   }
 

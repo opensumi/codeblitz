@@ -1,15 +1,15 @@
-import * as urllib from 'urllib';
-import * as yauzl from 'yauzl';
-import * as os from 'os';
-import * as contentDisposition from 'content-disposition';
-import { Readable } from 'stream';
-import * as path from 'path';
-import * as fs from 'fs-extra';
-import { v4 as uuidv4 } from 'uuid';
-import flatten from 'lodash.flatten';
-import awaitEvent from 'await-event';
 import retry from 'async-retry';
+import awaitEvent from 'await-event';
+import * as contentDisposition from 'content-disposition';
 import _debug from 'debug';
+import * as fs from 'fs-extra';
+import flatten from 'lodash.flatten';
+import * as os from 'os';
+import * as path from 'path';
+import { Readable } from 'stream';
+import * as urllib from 'urllib';
+import { v4 as uuidv4 } from 'uuid';
+import * as yauzl from 'yauzl';
 
 const debug = _debug('installer');
 
@@ -27,7 +27,6 @@ export function safeJsonParse<T = any>(jsonStr: string): T | undefined {
     console.warn(err);
   }
 }
-
 
 export interface RequestHeaders {
   [header: string]: string;
@@ -207,16 +206,16 @@ async function downloadExtension(
         'x-download-protocol': 'http',
       },
       ...options.frameworkVersion && {
-        'x-framework-version': options.frameworkVersion
+        'x-framework-version': options.frameworkVersion,
       },
       ...options.ignoreIncreaseCount && {
         'x-from': 'cli',
       },
-      ...options.request?.headers
+      ...options.request?.headers,
     },
     ...options.request?.beforeRequest && {
-      beforeRequest: options.request?.beforeRequest
-    }
+      beforeRequest: options.request?.beforeRequest,
+    },
   });
 
   if (data.status !== 200) {
@@ -237,41 +236,44 @@ async function downloadExtension(
 }
 
 function openZipStream(zipFile: yauzl.ZipFile, entry: yauzl.Entry): Promise<Readable> {
-	return new Promise((resolve, reject) => {
-		zipFile.openReadStream(entry, (error: Error | null, stream: Readable) => {
-			if (error) {
-				reject(error);
-			} else {
-				resolve(stream);
-			}
-		});
-	});
+  return new Promise((resolve, reject) => {
+    zipFile.openReadStream(entry, (error: Error | null, stream: Readable) => {
+      if (error) {
+        reject(error);
+      } else {
+        resolve(stream);
+      }
+    });
+  });
 }
 
 function modeFromEntry(entry: yauzl.Entry): number {
-	const attr = entry.externalFileAttributes >> 16 || 33188;
+  const attr = entry.externalFileAttributes >> 16 || 33188;
 
-	return [448 /* S_IRWXU */, 56 /* S_IRWXG */, 7 /* S_IRWXO */]
-		.map(mask => attr & mask)
-		.reduce((a, b) => a + b, attr & 61440 /* S_IFMT */);
+  return [448, /* S_IRWXU */ 56, /* S_IRWXG */ 7 /* S_IRWXO */]
+    .map(mask => attr & mask)
+    .reduce((a, b) => a + b, attr & 61440 /* S_IFMT */);
 }
 
 export class ExtensionInstaller implements IExtensionInstaller {
-
   constructor(private options: ExtensionInstallerOptions) {
   }
 
   private getURL(extension: Extension): string {
-    return `${this.options.api || DEFAULT_API}/openapi/ide/download/${extension.publisher}.${extension.name}${extension.version ? '?version=' + extension.version : ''}`;
-  };
+    return `${this.options.api || DEFAULT_API}/openapi/ide/download/${extension.publisher}.${extension.name}${
+      extension.version ? '?version=' + extension.version : ''
+    }`;
+  }
 
   private getReleaseURL(releaseId: string): string {
     return `${this.options.api || DEFAULT_API}/openapi/ide/download/release/${releaseId}`;
-  };
+  }
 
   private getOriginURL(extension: OriginExtension): string {
-    return `${this.options.api || DEFAULT_API}/openapi/ide/download/origin/${extension.originId}${extension.version ? '?version=' + extension.version : ''}`;
-  };
+    return `${this.options.api || DEFAULT_API}/openapi/ide/download/origin/${extension.originId}${
+      extension.version ? '?version=' + extension.version : ''
+    }`;
+  }
 
   private createZipFile(zipFilePath: string): Promise<yauzl.ZipFile> {
     return retry(() => createZipFile(zipFilePath), { retries: this.options.retry || 0 });
@@ -284,14 +286,18 @@ export class ExtensionInstaller implements IExtensionInstaller {
     const pkg = safeJsonParse(pkgStr);
     // const extensionPack = pkg?.extensionPack;
     const extensionPack = [];
-    return extensionPack ? await this.installExtensions(extensionPack?.map((id: string) => {
-      const [publisher, name] = id.split('.');
-      return {
-        publisher,
-        name,
-        dist,
-      };
-    })) : [];
+    return extensionPack
+      ? await this.installExtensions(
+        extensionPack?.map((id: string) => {
+          const [publisher, name] = id.split('.');
+          return {
+            publisher,
+            name,
+            dist,
+          };
+        }),
+      )
+      : [];
   }
 
   private async installExtensions(exts: Extension[]): Promise<string[]> {
@@ -358,23 +364,33 @@ export class ExtensionInstaller implements IExtensionInstaller {
     // 如果没传 extensionType 则去检查插件类型
     const type = this.options.extensionType || await this.checkExtensionType(tmpZipFile);
     debug(`${targetDirName} unzip start`);
-    const dirs = type === ExtensionType.OPENSUMI ? await this.unzipOpenSumiExtension(dist, targetDirName, tmpZipFile) : await this.unzipJetbrainsExtension(dist, targetDirName, tmpZipFile);
+    const dirs = type === ExtensionType.OPENSUMI
+      ? await this.unzipOpenSumiExtension(dist, targetDirName, tmpZipFile)
+      : await this.unzipJetbrainsExtension(dist, targetDirName, tmpZipFile);
     debug(`${targetDirName} unzip finish`);
     return dirs;
- }
-
-  private async unzipOpenSumiExtension(dist: string, targetDirName: string, tmpZipFile: string): Promise<string | string[]> {
-     // 解压插件
-     const targetPath = await this.unzipFile(dist, targetDirName, tmpZipFile);
-
-     const pkg = fs.readFileSync(path.resolve(targetPath, 'package.json'), 'utf-8');
- 
-     const childPaths =  await this.installExtensionsInPackFromPkg(pkg, dist);
- 
-     return childPaths?.length > 0 ? [targetPath, ...childPaths] : targetPath;
   }
 
-  private async unzipJetbrainsExtension(dist: string, targetDirName: string, tmpZipFile: string): Promise<string | string[]> {
+  private async unzipOpenSumiExtension(
+    dist: string,
+    targetDirName: string,
+    tmpZipFile: string,
+  ): Promise<string | string[]> {
+    // 解压插件
+    const targetPath = await this.unzipFile(dist, targetDirName, tmpZipFile);
+
+    const pkg = fs.readFileSync(path.resolve(targetPath, 'package.json'), 'utf-8');
+
+    const childPaths = await this.installExtensionsInPackFromPkg(pkg, dist);
+
+    return childPaths?.length > 0 ? [targetPath, ...childPaths] : targetPath;
+  }
+
+  private async unzipJetbrainsExtension(
+    dist: string,
+    targetDirName: string,
+    tmpZipFile: string,
+  ): Promise<string | string[]> {
     return new Promise<string>(async (resolve, reject) => {
       try {
         const isJarExtension = await this.checkJarExtension(tmpZipFile);
@@ -391,11 +407,11 @@ export class ExtensionInstaller implements IExtensionInstaller {
           zipFile.on('error', (e) => {
             reject(e);
           });
-  
+
           zipFile.on('close', () => {
             fs.remove(tmpZipFile).then(() => resolve(path.join(dist, extensionDirName)));
           });
-    
+
           zipFile.on('entry', (entry) => {
             const targetFileName = path.join(dist, entry.fileName);
             if (/\/$/.test(entry.fileName)) {
@@ -413,17 +429,19 @@ export class ExtensionInstaller implements IExtensionInstaller {
                   readStream.on('end', () => {
                     zipFile.readEntry();
                   });
-                  fs.mkdirp(path.dirname(targetFileName)).then(() => readStream.pipe(fs.createWriteStream(targetFileName)));
+                  fs.mkdirp(path.dirname(targetFileName)).then(() =>
+                    readStream.pipe(fs.createWriteStream(targetFileName))
+                  );
                 }
               });
             }
-          }); 
+          });
         }
       } catch (err) {
         reject(err);
       }
     });
- }
+  }
 
   private async _installByRelease(release: ExtensionRelease): Promise<string | string[]> {
     if (!release.releaseId) {
@@ -435,7 +453,11 @@ export class ExtensionInstaller implements IExtensionInstaller {
     }
 
     // 下载插件
-    const { targetDirName, tmpZipFile} = await downloadExtension(this.getReleaseURL(release.releaseId), this.options, release.releaseId);
+    const { targetDirName, tmpZipFile } = await downloadExtension(
+      this.getReleaseURL(release.releaseId),
+      this.options,
+      release.releaseId,
+    );
     return this.unzip(dist, targetDirName, tmpZipFile);
   }
 
@@ -448,7 +470,11 @@ export class ExtensionInstaller implements IExtensionInstaller {
       throw new Error('dist is required');
     }
     // 下载插件
-    const { targetDirName, tmpZipFile} = await downloadExtension(this.getOriginURL(extension), this.options, extension.originId);
+    const { targetDirName, tmpZipFile } = await downloadExtension(
+      this.getOriginURL(extension),
+      this.options,
+      extension.originId,
+    );
     return this.unzip(dist, targetDirName, tmpZipFile);
   }
 
@@ -459,7 +485,12 @@ export class ExtensionInstaller implements IExtensionInstaller {
     }
 
     // 下载插件
-    const { targetDirName, tmpZipFile} = await downloadExtension(this.getURL(extension), this.options, extension.name, extension);
+    const { targetDirName, tmpZipFile } = await downloadExtension(
+      this.getURL(extension),
+      this.options,
+      extension.name,
+      extension,
+    );
     return this.unzip(dist, targetDirName, tmpZipFile);
   }
 
@@ -490,7 +521,7 @@ export class ExtensionInstaller implements IExtensionInstaller {
     return this.retry(() => this._installByRelease(release));
   }
 
-  public installByOriginId(extension: OriginExtension): Promise<string | string[]>  {
+  public installByOriginId(extension: OriginExtension): Promise<string | string[]> {
     return this.retry(() => this._installByOriginId(extension));
   }
 
@@ -501,7 +532,7 @@ export class ExtensionInstaller implements IExtensionInstaller {
         const extensionDir = path.join(dist, targetDirName);
         // 创建插件目录
         await fs.mkdirp(extensionDir);
-  
+
         const zipFile = await createZipFile(tmpZipFile);
         zipFile.readEntry();
         zipFile.on('error', (e) => {
@@ -515,14 +546,14 @@ export class ExtensionInstaller implements IExtensionInstaller {
           }
           fs.remove(tmpZipFile).then(() => resolve(extensionDir));
         });
-  
+
         zipFile.on('entry', (entry) => {
           if (!sourcePathRegex.test(entry.fileName)) {
             zipFile.readEntry();
             return;
           }
           let fileName = entry.fileName.replace(sourcePathRegex, '');
-  
+
           if (/\/$/.test(fileName)) {
             const targetFileName = path.join(extensionDir, fileName);
             fs.mkdirp(targetFileName).then(() => zipFile.readEntry());
@@ -545,7 +576,7 @@ export class ExtensionInstaller implements IExtensionInstaller {
               throw new Error(`invalid file path ${targetDirName}`);
             }
             const targetFileName = path.join(extensionDir, fileName);
-    
+
             fs.mkdirp(targetDirName)
               .then(() => {
                 const writerStream = fs.createWriteStream(targetFileName, { mode });

@@ -1,5 +1,5 @@
-import { Autowired, Injectable } from '@opensumi/di';
 import { RuntimeConfig } from '@codeblitzjs/ide-sumi-core';
+import { Autowired, Injectable } from '@opensumi/di';
 
 import { CodeModelService } from './code-model.service';
 
@@ -31,7 +31,7 @@ export class Configure {
           query.pattern,
           {
             limit: options.maxResults,
-          }
+          },
         );
         if (!requestResults.length) return;
         const searchString = query.pattern.toLowerCase();

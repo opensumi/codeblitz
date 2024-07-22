@@ -1,10 +1,10 @@
+import { Uri } from '@opensumi/ide-core-common';
 import http from 'http';
-import url from 'url';
 import portfinder from 'portfinder';
 import send from 'send';
-import { Uri } from '@opensumi/ide-core-common';
-import { log } from './log';
+import url from 'url';
 import { IExtensionServerOptions } from '../extension/type';
+import { log } from './log';
 
 export const getHttpUri: (options?: IExtensionServerOptions) => Promise<Uri> = async (options) => {
   const port = await findPort();

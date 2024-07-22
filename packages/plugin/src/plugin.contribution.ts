@@ -1,6 +1,6 @@
 import { Autowired } from '@opensumi/di';
 import { ClientAppContribution, Domain } from '@opensumi/ide-core-browser';
-import { IPluginService, IPluginConfig } from './types';
+import { IPluginConfig, IPluginService } from './types';
 
 @Domain(ClientAppContribution)
 export class PluginContribution implements ClientAppContribution {

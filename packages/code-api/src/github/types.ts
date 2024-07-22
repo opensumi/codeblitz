@@ -1,4 +1,4 @@
-import { EntryFileType, TreeEntry } from "../common";
+import { EntryFileType, TreeEntry } from '../common';
 
 export namespace API {
   interface RateLimit {
@@ -49,11 +49,10 @@ export namespace API {
     };
   }>;
 
-
   // by https://docs.github.com/zh/rest/git/blobs?apiVersion=2022-11-28#create-a-blob
   export interface ResponseCreateBlob {
-    url: string,
-    sha: string
+    url: string;
+    sha: string;
   }
 
   export interface ResponseBlobCommitPath {
@@ -127,14 +126,14 @@ export namespace API {
 
   // by https://docs.github.com/zh/rest/git/refs?apiVersion=2022-11-28#create-a-reference
   export interface ResponseReference {
-    ref: string,
-    node_id: string,
-    url: string,
+    ref: string;
+    node_id: string;
+    url: string;
     object: {
-      type: string,
-      sha: string,
-      url: string
-    }
+      type: string;
+      sha: string;
+      url: string;
+    };
   }
 
   // by https://docs.github.com/zh/rest/users/users?apiVersion=2022-11-28#get-a-user
@@ -145,38 +144,38 @@ export namespace API {
   }
 
   export interface ResponseCreateCommit {
-    "sha": string,
-    "node_id": string,
-    "url": string,
-    "author": {
-      "date": string,
-      "name": string,
-      "email": string,
-    },
-    "committer": {
-      "date": string,
-      "name": string,
-      "email": string,
-    },
-    "message": string,
-    "tree": {
-      "url": string,
-      "sha": string,
-    },
-    "parents": [
+    'sha': string;
+    'node_id': string;
+    'url': string;
+    'author': {
+      'date': string;
+      'name': string;
+      'email': string;
+    };
+    'committer': {
+      'date': string;
+      'name': string;
+      'email': string;
+    };
+    'message': string;
+    'tree': {
+      'url': string;
+      'sha': string;
+    };
+    'parents': [
       {
-        "url": string,
-        "sha": string,
-        "html_url": string,
-      }
-    ],
-    "verification": {
-      "verified": boolean,
-      "reason": string,
-      "signature": string | null,
-      "payload": string | null
-    },
-    "html_url": string
+        'url': string;
+        'sha': string;
+        'html_url': string;
+      },
+    ];
+    'verification': {
+      'verified': boolean;
+      'reason': string;
+      'signature': string | null;
+      'payload': string | null;
+    };
+    'html_url': string;
   }
 
   export interface GraphQLBlame {
@@ -186,11 +185,11 @@ export namespace API {
         name: string;
         email: string;
         date: string;
-      }
+      };
       committedDate: string;
       message: string;
       oid: string;
-    }
+    };
     endingLine: number;
     startingLine: number;
   }

@@ -1,12 +1,12 @@
-import { Injectable, Autowired } from '@opensumi/di';
-import { Uri, path } from '@opensumi/ide-core-common';
 import { IExtensionBasicMetadata } from '@codeblitzjs/ide-common';
-import { IExtensionNodeClientService, IExtensionMetadata, ExtraMetadata } from './base';
-import { ServerConfig } from '../core/app';
-import { getExtensionPath } from '../../common/util';
-import { EXT_SCHEME } from '../../common/constant';
-import { AppConfig } from '../../common';
+import { Autowired, Injectable } from '@opensumi/di';
+import { path, Uri } from '@opensumi/ide-core-common';
 import { IExtensionLanguagePack } from '@opensumi/ide-extension/lib/common/vscode';
+import { AppConfig } from '../../common';
+import { EXT_SCHEME } from '../../common/constant';
+import { getExtensionPath } from '../../common/util';
+import { ServerConfig } from '../core/app';
+import { ExtraMetadata, IExtensionMetadata, IExtensionNodeClientService } from './base';
 
 const { posix } = path;
 
@@ -40,16 +40,14 @@ export class ExtensionServiceClientImpl implements IExtensionNodeClientService {
     scan: string[],
     extensionCandidate: string[],
     localization: string,
-    extraMetaData: ExtraMetadata
+    extraMetaData: ExtraMetadata,
   ): Promise<IExtensionMetadata[]> {
     const { extensionMetadata } = this.serverConfig;
     if (!extensionMetadata?.length) {
       return [];
     }
     const extensions: IExtensionMetadata[] = await Promise.all(
-      extensionMetadata.map((ext) =>
-        getExtension(ext, localization, undefined, this.appConfig.extensionOSSPath)
-      )
+      extensionMetadata.map((ext) => getExtension(ext, localization, undefined, this.appConfig.extensionOSSPath)),
     );
 
     return extensions;
@@ -57,7 +55,7 @@ export class ExtensionServiceClientImpl implements IExtensionNodeClientService {
   getExtension(
     extensionPath: string,
     localization: string,
-    extraMetaData?: ExtraMetadata
+    extraMetaData?: ExtraMetadata,
   ): Promise<IExtensionMetadata | undefined> {
     const { extensionMetadata } = this.serverConfig;
     if (!extensionMetadata?.length) {
@@ -66,8 +64,8 @@ export class ExtensionServiceClientImpl implements IExtensionNodeClientService {
 
     const ext = extensionMetadata.find(
       (ext) =>
-        (ext.mode === 'local' && ext.uri ? ext.uri : getExtensionPath(ext.extension, ext.mode)) ===
-        extensionPath
+        (ext.mode === 'local' && ext.uri ? ext.uri : getExtensionPath(ext.extension, ext.mode))
+          === extensionPath,
     );
     if (ext) {
       return getExtension(ext, localization, extraMetaData);
@@ -98,7 +96,7 @@ async function getExtraMetaData(
   webAssets: string[],
   extensionUri: Uri,
   localization: string,
-  extraMetaData?: ExtraMetadata
+  extraMetaData?: ExtraMetadata,
 ) {
   if (!extraMetaData) {
     return {};
@@ -150,10 +148,9 @@ async function getExtension(
   ext: IExtensionBasicMetadata,
   localization: string,
   extraMetaData?: ExtraMetadata,
-  OSSPath?: string
+  OSSPath?: string,
 ) {
-  const extensionPath =
-    ext.mode === 'local' && ext.uri ? ext.uri : getExtensionPath(ext.extension, ext.mode, OSSPath);
+  const extensionPath = ext.mode === 'local' && ext.uri ? ext.uri : getExtensionPath(ext.extension, ext.mode, OSSPath);
   const extensionUri = Uri.parse(extensionPath);
 
   let pkgNlsJSON: { [key: string]: string } | undefined;
@@ -165,12 +162,12 @@ async function getExtension(
     // 其它语言动态获取，估计基本用不到
     for (const { languageId, filename } of ext.nlsList) {
       const reg = new RegExp(
-        `^${localization}|${localization.toLowerCase()}|${localization.split('-')[0]}$`
+        `^${localization}|${localization.toLowerCase()}|${localization.split('-')[0]}$`,
       );
       if (reg.test(languageId)) {
         try {
           const res = await fetch(
-            extensionUri.with({ scheme: 'https' }).toString() + '/' + filename
+            extensionUri.with({ scheme: 'https' }).toString() + '/' + filename,
           );
           if (res.status >= 200 && res.status < 300) {
             pkgNlsJSON = await res.json();
@@ -185,7 +182,7 @@ async function getExtension(
     ext.webAssets,
     extensionUri,
     localization,
-    extraMetaData
+    extraMetaData,
   );
 
   return {

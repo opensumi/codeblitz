@@ -1,11 +1,8 @@
 import { Autowired } from '@opensumi/di';
 import { Domain } from '@opensumi/ide-core-browser';
-import {
-  EditorComponentRegistry,
-  BrowserEditorContribution,
-} from '@opensumi/ide-editor/lib/browser';
+import { IEditorOpenType, IResource } from '@opensumi/ide-editor';
+import { BrowserEditorContribution, EditorComponentRegistry } from '@opensumi/ide-editor/lib/browser';
 import { IFileServiceClient } from '@opensumi/ide-file-service/lib/common';
-import { IResource, IEditorOpenType } from '@opensumi/ide-editor';
 
 @Domain(BrowserEditorContribution)
 export class FileSchemeContribution implements BrowserEditorContribution {
@@ -23,7 +20,7 @@ export class FileSchemeContribution implements BrowserEditorContribution {
         if (results.length > 1 && results[0].componentId === 'image-preview') {
           results.shift();
         }
-      }
+      },
     );
   }
 }

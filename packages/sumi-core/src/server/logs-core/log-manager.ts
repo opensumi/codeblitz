@@ -1,15 +1,15 @@
-import { Injectable, Autowired, ConstructorOf } from '@opensumi/di';
+import { Autowired, ConstructorOf, Injectable } from '@opensumi/di';
+import { Emitter } from '@opensumi/ide-core-common';
 import {
+  BaseLogServiceOptions,
   ILogService,
+  LoggerManagerInitOptions,
   LogLevel,
   SupportLogNamespace,
-  BaseLogServiceOptions,
-  LoggerManagerInitOptions,
 } from '@opensumi/ide-logs/lib/common';
-import { ILogServiceManager } from '../core/base';
-import { Emitter } from '@opensumi/ide-core-common';
 import { ServerConfig } from '../core/app';
-import { LogService, DEFAULT_LOG_FOLDER } from './log.service';
+import { ILogServiceManager } from '../core/base';
+import { DEFAULT_LOG_FOLDER, LogService } from './log.service';
 
 @Injectable()
 export class LogServiceManager implements ILogServiceManager {
@@ -40,7 +40,7 @@ export class LogServiceManager implements ILogServiceManager {
 
   getLogger = (
     namespace: SupportLogNamespace,
-    loggerOptions?: BaseLogServiceOptions
+    loggerOptions?: BaseLogServiceOptions,
   ): ILogService => {
     if (this.logMap.get(namespace)) {
       const logger: ILogService = this.logMap.get(namespace)!;
@@ -56,8 +56,8 @@ export class LogServiceManager implements ILogServiceManager {
           logLevel: this.globalLogLevel,
           logServiceManager: this,
         },
-        loggerOptions
-      )
+        loggerOptions,
+      ),
     );
     this.logMap.set(namespace, logger);
     return logger;

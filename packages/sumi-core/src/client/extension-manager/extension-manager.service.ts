@@ -1,22 +1,13 @@
-import { Injectable, Autowired } from '@opensumi/di';
-import { replaceLocalizePlaceholder, URI, path } from '@opensumi/ide-core-browser';
-import { action, observable, computed, runInAction } from 'mobx';
-import {
-  IExtensionProps,
-  AbstractExtensionManagementService,
-} from '@opensumi/ide-extension/lib/common';
-import { AbstractExtInstanceManagementService } from '@opensumi/ide-extension/lib/browser/types';
+import { Autowired, Injectable } from '@opensumi/di';
+import { path, replaceLocalizePlaceholder, URI } from '@opensumi/ide-core-browser';
 import { StaticResourceService } from '@opensumi/ide-core-browser/lib/static-resource/static.definition';
 import { EditorPreferences, WorkbenchEditorService } from '@opensumi/ide-editor/lib/browser';
+import { AbstractExtInstanceManagementService } from '@opensumi/ide-extension/lib/browser/types';
+import { AbstractExtensionManagementService, IExtensionProps } from '@opensumi/ide-extension/lib/common';
+import { action, computed, observable, runInAction } from 'mobx';
 
-import {
-  IExtension,
-  DEFAULT_ICON_URL,
-  RawExtension,
-  ExtensionDetail,
-  OpenExtensionOptions,
-} from './base';
 import { EXT_SCHEME } from '../../common/constant';
+import { DEFAULT_ICON_URL, ExtensionDetail, IExtension, OpenExtensionOptions, RawExtension } from './base';
 
 const { posix } = path;
 
@@ -64,11 +55,11 @@ export class ExtensionManagerService {
    * @param extensionProps
    */
   private async transformFromExtensionProp(
-    extensionProps: IExtensionProps[]
+    extensionProps: IExtensionProps[],
   ): Promise<IExtension[]>;
   private async transformFromExtensionProp(extensionProps: IExtensionProps): Promise<IExtension>;
   private async transformFromExtensionProp(
-    extensionProps: IExtensionProps[] | IExtensionProps
+    extensionProps: IExtensionProps[] | IExtensionProps,
   ): Promise<IExtension[] | IExtension> {
     if (Array.isArray(extensionProps)) {
       return await Promise.all(
@@ -77,7 +68,7 @@ export class ExtensionManagerService {
             ...extension,
             installed: true,
           };
-        })
+        }),
       );
     }
     return {
@@ -130,16 +121,14 @@ export class ExtensionManagerService {
     let displayName;
     let description;
 
-    displayName =
-      replaceLocalizePlaceholder(extension.packageJSON.displayName, extension.id) ||
-      (extension.packageNlsJSON && extension.packageNlsJSON.displayName) ||
-      (extension.defaultPkgNlsJSON && extension.defaultPkgNlsJSON.displayName) ||
-      extension.packageJSON.displayName;
-    description =
-      replaceLocalizePlaceholder(extension.packageJSON.description, extension.id) ||
-      (extension.packageNlsJSON && extension.packageNlsJSON.description) ||
-      (extension.defaultPkgNlsJSON && extension.defaultPkgNlsJSON.description) ||
-      extension.packageJSON.description;
+    displayName = replaceLocalizePlaceholder(extension.packageJSON.displayName, extension.id)
+      || (extension.packageNlsJSON && extension.packageNlsJSON.displayName)
+      || (extension.defaultPkgNlsJSON && extension.defaultPkgNlsJSON.displayName)
+      || extension.packageJSON.displayName;
+    description = replaceLocalizePlaceholder(extension.packageJSON.description, extension.id)
+      || (extension.packageNlsJSON && extension.packageNlsJSON.description)
+      || (extension.defaultPkgNlsJSON && extension.defaultPkgNlsJSON.description)
+      || extension.packageJSON.description;
 
     return {
       description,
@@ -183,9 +172,9 @@ export class ExtensionManagerService {
   }
 
   openExtensionDetail(options: OpenExtensionOptions) {
-    const query = `extensionId=${options.publisher}.${options.name}&version=${
-      options.version
-    }&name=${options.displayName || options.name}&icon=${options.icon}`;
+    const query = `extensionId=${options.publisher}.${options.name}&version=${options.version}&name=${
+      options.displayName || options.name
+    }&icon=${options.icon}`;
     // 当打开模式为双击同时预览模式生效时，默认单击为预览
     const editorOptions = {
       preview: this.editorPreferences['editor.previewMode'] && options.preview,

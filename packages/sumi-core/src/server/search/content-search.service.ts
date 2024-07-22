@@ -1,22 +1,17 @@
-import { getMapForWordSeparators } from '@opensumi/monaco-editor-core/esm/vs/editor/common/core/wordCharacterClassifier';
-import { isValidMatch } from '@opensumi/monaco-editor-core/esm/vs/editor/common/model/textModelSearch';
-import { Injectable, Autowired } from '@opensumi/di';
+import { Autowired, Injectable } from '@opensumi/di';
+import { ILogService, parseGlob as parse, SupportLogNamespace, URI } from '@opensumi/ide-core-common';
+import { IContentSearchClientService } from '@opensumi/ide-search';
 import {
-  SupportLogNamespace,
-  ILogService,
-  URI,
-  parseGlob as parse,
-} from '@opensumi/ide-core-common';
-import {
-  IContentSearchServer,
+  anchorGlob,
   ContentSearchOptions,
   ContentSearchResult,
-  SEARCH_STATE,
   cutShortSearchResult,
   DEFAULT_SEARCH_IN_WORKSPACE_LIMIT,
-  anchorGlob,
+  IContentSearchServer,
+  SEARCH_STATE,
 } from '@opensumi/ide-search/lib/common';
-import { IContentSearchClientService } from '@opensumi/ide-search';
+import { getMapForWordSeparators } from '@opensumi/monaco-editor-core/esm/vs/editor/common/core/wordCharacterClassifier';
+import { isValidMatch } from '@opensumi/monaco-editor-core/esm/vs/editor/common/model/textModelSearch';
 import * as paths from 'path';
 import { AppConfig, RuntimeConfig } from '../../common';
 import { ILogServiceManager } from '../core/base';
@@ -79,7 +74,7 @@ export class ContentSearchService implements IContentSearchServer {
     what: string,
     rootUris: string[],
     opts?: ContentSearchOptions,
-    cb?: (data: any) => {}
+    cb?: (data: any) => {},
   ): Promise<number> {
     const searchInfo: SearchInfo = {
       searchId: searchId,
@@ -108,7 +103,7 @@ export class ContentSearchService implements IContentSearchServer {
     data: ContentSearchResult[],
     id: number,
     searchState?: SEARCH_STATE,
-    error?: string
+    error?: string,
   ) {
     if (this.requestMap.has(id)) {
       // @ts-ignore
@@ -132,18 +127,15 @@ export class ContentSearchService implements IContentSearchServer {
 
       const config = this.runtimeConfig.textSearch?.config ?? {};
 
-      const includeMatcherList =
-        (config.include === 'local' &&
-          opts?.include?.map((str: string) => parse(anchorGlob(str)))) ||
-        [];
-      const excludeMatcherList =
-        (config.exclude === 'local' &&
-          opts?.exclude?.map((str: string) => parse(anchorGlob(str)))) ||
-        [];
-      const wordSeparators =
-        config.wordMatch === 'local' && opts?.matchWholeWord
-          ? getMapForWordSeparators('`~!@#$%^&*()-=+[{]}\\|;:\'",.<>/? \n')
-          : null;
+      const includeMatcherList = (config.include === 'local'
+        && opts?.include?.map((str: string) => parse(anchorGlob(str))))
+        || [];
+      const excludeMatcherList = (config.exclude === 'local'
+        && opts?.exclude?.map((str: string) => parse(anchorGlob(str))))
+        || [];
+      const wordSeparators = config.wordMatch === 'local' && opts?.matchWholeWord
+        ? getMapForWordSeparators('`~!@#$%^&*()-=+[{]}\\|;:\'",.<>/? \n')
+        : null;
 
       const maxResults = opts?.maxResults || DEFAULT_SEARCH_IN_WORKSPACE_LIMIT;
 
@@ -174,29 +166,31 @@ export class ContentSearchService implements IContentSearchServer {
             const fileUri = URI.file(paths.join(this.appConfig.workspaceDir, path)).toString();
 
             if (
-              includeMatcherList.length > 0 &&
-              !includeMatcherList.some((matcher) => matcher(fileUri))
-            )
+              includeMatcherList.length > 0
+              && !includeMatcherList.some((matcher) => matcher(fileUri))
+            ) {
               return;
+            }
 
             if (
-              excludeMatcherList.length > 0 &&
-              excludeMatcherList.some((matcher) => matcher(fileUri))
-            )
+              excludeMatcherList.length > 0
+              && excludeMatcherList.some((matcher) => matcher(fileUri))
+            ) {
               return;
+            }
 
             matches.forEach(([start, end]) => {
               const matchString = text.slice(start, end);
               if (
-                config.caseSensitive === 'local' &&
-                opts?.matchCase &&
-                searchString !== matchString
+                config.caseSensitive === 'local'
+                && opts?.matchCase
+                && searchString !== matchString
               ) {
                 return;
               }
               if (
-                wordSeparators &&
-                !isValidMatch(wordSeparators, text, text.length, start, end - start)
+                wordSeparators
+                && !isValidMatch(wordSeparators, text, text.length, start, end - start)
               ) {
                 return;
               }
@@ -211,14 +205,14 @@ export class ContentSearchService implements IContentSearchServer {
                   matchLength: end - start,
                   lineText: text.replace(/[\r\n]+$/, ''),
                 }),
-                1
+                1,
               );
               if (collector.total >= maxResults) {
                 limitHit = true;
               }
             });
           },
-        }
+        },
       );
 
       collector!.flush();

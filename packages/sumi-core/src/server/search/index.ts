@@ -1,7 +1,7 @@
 import { Injectable } from '@opensumi/di';
 import { NodeModule } from '../core/app';
+import { ContentSearchServerPath, IContentSearchServer } from './base';
 import { ContentSearchService } from './content-search.service';
-import { IContentSearchServer, ContentSearchServerPath } from './base';
 
 @Injectable()
 export class SearchModule extends NodeModule {

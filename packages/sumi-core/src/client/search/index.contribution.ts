@@ -1,20 +1,12 @@
 import { Autowired } from '@opensumi/di';
-import { Domain, Disposable } from '@opensumi/ide-core-common';
-import { SEARCH_COMMANDS, CommandContribution, CommandRegistry } from '@opensumi/ide-core-browser';
-import {
-  MenuId,
-  MenuContribution,
-  IMenuRegistry,
-  IMenuItem,
-} from '@opensumi/ide-core-browser/lib/menu/next';
+import { CommandContribution, CommandRegistry, SEARCH_COMMANDS } from '@opensumi/ide-core-browser';
+import { IMenuItem, IMenuRegistry, MenuContribution, MenuId } from '@opensumi/ide-core-browser/lib/menu/next';
+import { Disposable, Domain } from '@opensumi/ide-core-common';
 
 import { RuntimeConfig } from '../../common/types';
 
 @Domain(MenuContribution, CommandContribution)
-export class SearchContribution
-  extends Disposable
-  implements MenuContribution, CommandContribution
-{
+export class SearchContribution extends Disposable implements MenuContribution, CommandContribution {
   @Autowired(RuntimeConfig)
   runtimeConfig: RuntimeConfig;
 
@@ -39,9 +31,8 @@ export class SearchContribution
     }
 
     const rule = selectors.reduce(
-      (css, selector) =>
-        css + `[data-viewlet-id="search"] ${selector} { display: none !important; }`,
-      ''
+      (css, selector) => css + `[data-viewlet-id="search"] ${selector} { display: none !important; }`,
+      '',
     );
 
     const head = document.head || document.getElementsByTagName('head')[0];
@@ -64,8 +55,8 @@ export class SearchContribution
     const searchItems = registry.getMenuItems(MenuId.SearchContext);
     searchItems.forEach((item: IMenuItem) => {
       if (
-        item.command === SEARCH_COMMANDS.MENU_REPLACE.id ||
-        item.command === SEARCH_COMMANDS.MENU_REPLACE_ALL.id
+        item.command === SEARCH_COMMANDS.MENU_REPLACE.id
+        || item.command === SEARCH_COMMANDS.MENU_REPLACE_ALL.id
       ) {
         item.when = 'false';
       }

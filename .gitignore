@@ -116,4 +116,3 @@ generated-parser
 .husky
 
 scripts/utils/_upload.js
-packages/startup/src/diff-viewer/remote.ts

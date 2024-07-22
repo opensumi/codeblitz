@@ -226,50 +226,50 @@ module.exports = (option) => {
       ...(option.copy ? [new CopyPlugin(option.copy)] : []),
       !process.env.TS_NO_EMIT
         ? new ForkTsCheckerWebpackPlugin({
-            typescript: {
-              configFile: option.tsconfigPath,
-            },
-          })
+          typescript: {
+            configFile: option.tsconfigPath,
+          },
+        })
         : null,
       ...(isDev
         ? [
-            new HtmlWebpackPlugin({
-              filename: 'index.html',
-              template: option.template || path.join(__dirname, '../public/index.html'),
-              publicPath: './',
-              integration: process.env.INTEGRATION,
-            }),
-            new FriendlyErrorsWebpackPlugin({
-              compilationSuccessInfo: {
-                messages: [`Your application is running here: ${baseURL}`],
-                notes: [],
-              },
-              onErrors: (severity, errors) => {
-                if (severity !== 'error') {
-                  return;
-                }
-                /** @type {*} */
-                const error = errors[0];
-                notifier.notify({
-                  title: 'Webpack error',
-                  message: severity + ': ' + error.name,
-                  subtitle: error.file || '',
-                });
-              },
-              clearConsole: true,
-            }),
-          ]
+          new HtmlWebpackPlugin({
+            filename: 'index.html',
+            template: option.template || path.join(__dirname, '../public/index.html'),
+            publicPath: './',
+            integration: process.env.INTEGRATION,
+          }),
+          new FriendlyErrorsWebpackPlugin({
+            compilationSuccessInfo: {
+              messages: [`Your application is running here: ${baseURL}`],
+              notes: [],
+            },
+            onErrors: (severity, errors) => {
+              if (severity !== 'error') {
+                return;
+              }
+              /** @type {*} */
+              const error = errors[0];
+              notifier.notify({
+                title: 'Webpack error',
+                message: severity + ': ' + error.name,
+                subtitle: error.file || '',
+              });
+            },
+            clearConsole: true,
+          }),
+        ]
         : [
-            new MiniCssExtractPlugin({
-              filename: '[name].css',
-              chunkFilename: '[id].css',
-            }),
-            ...(process.env.ANALYZE === '1' ? [new BundleAnalyzerPlugin()] : []),
-            // 打 bundle 包不分 chunks
-            new webpack.optimize.LimitChunkCountPlugin({
-              maxChunks: 1,
-            }),
-          ]),
+          new MiniCssExtractPlugin({
+            filename: '[name].css',
+            chunkFilename: '[id].css',
+          }),
+          ...(process.env.ANALYZE === '1' ? [new BundleAnalyzerPlugin()] : []),
+          // 打 bundle 包不分 chunks
+          new webpack.optimize.LimitChunkCountPlugin({
+            maxChunks: 1,
+          }),
+        ]),
     ].filter(Boolean),
     devServer: {
       port,

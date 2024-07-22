@@ -1,4 +1,4 @@
-import { Injector, Injectable, INJECTOR_TOKEN, Autowired, Optional } from '@opensumi/di';
+import { Autowired, Injectable, Injector, INJECTOR_TOKEN, Optional } from '@opensumi/di';
 import {
   ContextKeyChangeEvent,
   Disposable,
@@ -8,16 +8,14 @@ import {
   IContextKey,
   IScopedContextKeyService,
 } from '@opensumi/ide-core-browser';
+import { IConfigurationService } from '@opensumi/monaco-editor-core/esm/vs/platform/configuration/common/configuration';
 import { ContextKeyService } from '@opensumi/monaco-editor-core/esm/vs/platform/contextkey/browser/contextKeyService';
 import {
-  ContextKeyValue,
   ContextKeyExpr,
-  IContextKeyServiceTarget,
   ContextKeyExpression,
+  ContextKeyValue,
+  IContextKeyServiceTarget,
 } from '@opensumi/monaco-editor-core/esm/vs/platform/contextkey/common/contextkey';
-import {
-  IConfigurationService,
-} from '@opensumi/monaco-editor-core/esm/vs/platform/configuration/common/configuration';
 export const IScopedContextKeyServiceProxy = Symbol('IScopedContextKeyServiceProxy');
 import { IContextKeyService } from '@opensumi/ide-core-browser';
 import { isContextKeyService } from '@opensumi/ide-monaco/lib/browser/monaco.context-key.service';
@@ -49,13 +47,13 @@ abstract class BaseContextKeyService extends Disposable implements IContextKeySe
     this.addDispose(
       this.contextKeyService.onDidChangeContext((payload) => {
         this._onDidChangeContext.fire(new ContextKeyChangeEvent(payload));
-      })
+      }),
     );
   }
 
   createKey<T extends ContextKeyValue = any>(
     key: string,
-    defaultValue: T | undefined
+    defaultValue: T | undefined,
   ): IContextKey<T> {
     return this.contextKeyService.createKey(key, defaultValue);
   }
@@ -84,7 +82,7 @@ abstract class BaseContextKeyService extends Disposable implements IContextKeySe
       // https://github.com/microsoft/vscode/commit/c88888aa9bcc76b05779edb21c19eb8c7ebac787
       const domNode = target || document.createElement('div');
       const scopedContextKeyService = this.contextKeyService.createScoped(
-        domNode as IContextKeyServiceTarget
+        domNode as IContextKeyServiceTarget,
       );
       return this.injector.get(ScopedContextKeyServiceProxy, [
         scopedContextKeyService as ContextKeyService,
@@ -117,10 +115,7 @@ abstract class BaseContextKeyService extends Disposable implements IContextKeySe
 }
 
 @Injectable({ multiple: true })
-export class ScopedContextKeyServiceProxy
-  extends BaseContextKeyService
-  implements IScopedContextKeyService
-{
+export class ScopedContextKeyServiceProxy extends BaseContextKeyService implements IScopedContextKeyService {
   constructor(@Optional() public readonly contextKeyService: ContextKeyService) {
     super();
     this.listenToContextChanges();
@@ -132,7 +127,7 @@ export class ScopedContextKeyServiceProxy
     this.contextKeyService['_domNode'] = domNode;
     this.contextKeyService['_domNode'].setAttribute(
       KEYBINDING_CONTEXT_ATTR,
-      String(this.contextKeyService['_myContextId'])
+      String(this.contextKeyService['_myContextId']),
     );
   }
 
@@ -154,10 +149,7 @@ export class ScopedContextKeyServiceProxy
 }
 
 @Injectable()
-export class MonacoContextKeyServiceOverride
-  extends BaseContextKeyService
-  implements IContextKeyService
-{
+export class MonacoContextKeyServiceOverride extends BaseContextKeyService implements IContextKeyService {
   @Autowired(IConfigurationService)
   protected readonly configurationService: IConfigurationService;
 
@@ -166,9 +158,8 @@ export class MonacoContextKeyServiceOverride
   match(expression: string | ContextKeyExpression | undefined, context?: HTMLElement): boolean {
     try {
       // keybinding 将 html target 传递过来完成激活区域的 context 获取和匹配
-      const ctx =
-        context ||
-        (window.document.activeElement instanceof HTMLElement
+      const ctx = context
+        || (window.document.activeElement instanceof HTMLElement
           ? window.document.activeElement
           : undefined);
       let parsed: ContextKeyExpression | undefined;
@@ -200,7 +191,7 @@ export class MonacoContextKeyServiceOverride
     super();
     this.contextKeyService = (window as any).contextService || new ContextKeyService(this.configurationService);
     this.listenToContextChanges();
-    (window as any).contextService = this.contextKeyService
+    (window as any).contextService = this.contextKeyService;
   }
 
   dispose(): void {
@@ -214,7 +205,7 @@ export class MonacoScopedContextKeyService implements IScopedContextKeyService {
   injector: Injector;
   constructor(
     @Optional() public readonly contextKeyService: ContextKeyService,
-    injector: Injector
+    injector: Injector,
   ) {
     this.injector = injector;
   }
@@ -232,7 +223,7 @@ export class MonacoScopedContextKeyService implements IScopedContextKeyService {
   }
   createKey<T extends ContextKeyValue = any>(
     key: string,
-    defaultValue: T | undefined
+    defaultValue: T | undefined,
   ): IContextKey<T> {
     throw new Error('Method not implemented.');
   }
@@ -243,7 +234,7 @@ export class MonacoScopedContextKeyService implements IScopedContextKeyService {
     throw new Error('Method not implemented.');
   }
   createScoped(
-    target?: ContextKeyService | IContextKeyServiceTarget | undefined
+    target?: ContextKeyService | IContextKeyServiceTarget | undefined,
   ): IScopedContextKeyService {
     throw new Error('Method not implemented.');
   }

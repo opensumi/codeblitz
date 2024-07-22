@@ -1,5 +1,5 @@
-import { SettingContribution, PreferenceSettingId } from '@opensumi/ide-preferences';
 import { Domain, ISettingGroup } from '@opensumi/ide-core-browser';
+import { PreferenceSettingId, SettingContribution } from '@opensumi/ide-preferences';
 
 @Domain(SettingContribution)
 export class PreferenceSettingContribution implements SettingContribution {

@@ -1,21 +1,19 @@
 import { Autowired } from '@opensumi/di';
-import { Domain, URI, FsProviderContribution, Schemes } from '@opensumi/ide-core-browser';
+import { Domain, FsProviderContribution, Schemes, URI } from '@opensumi/ide-core-browser';
 import {
   StaticResourceContribution,
   StaticResourceService,
 } from '@opensumi/ide-core-browser/lib/static-resource/static.definition';
 import { IFileServiceClient } from '@opensumi/ide-file-service';
 
-import { OpenSumiExtFsProvider } from './extension-fs.provider';
 import { EXT_SCHEME } from '../../common/constant';
+import { OpenSumiExtFsProvider } from './extension-fs.provider';
 
 /**
  * @class 扩展静态资源转换
  */
 @Domain(StaticResourceContribution, FsProviderContribution)
-export class KtExtFsProviderContribution
-  implements StaticResourceContribution, FsProviderContribution
-{
+export class KtExtFsProviderContribution implements StaticResourceContribution, FsProviderContribution {
   @Autowired()
   private readonly ktExtFsProvider: OpenSumiExtFsProvider;
 

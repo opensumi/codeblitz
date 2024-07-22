@@ -1,18 +1,18 @@
-import { Injectable, Autowired } from '@opensumi/di';
+import { Autowired, Injectable } from '@opensumi/di';
 import {
+  BasicTextLines,
+  IEditorDocumentChange,
   IEditorDocumentModelSaveResult,
+  isEditChange,
   SaveTaskResponseState,
   URI,
-  IEditorDocumentChange,
-  BasicTextLines,
-  isEditChange,
 } from '@opensumi/ide-core-common';
-import { IFileService } from '../file-service/base';
+import { IContentChange, ISavingContent } from '@opensumi/ide-file-scheme/lib/common';
 import md5 from 'md5';
-import { ISavingContent, IContentChange } from '@opensumi/ide-file-scheme/lib/common';
-import { IFileSchemeDocNodeService } from './base';
+import { IFileService } from '../file-service/base';
+import { decode, encode } from '../file-service/encoding';
 import { fsExtra as fse } from '../node';
-import { encode, decode } from '../file-service/encoding';
+import { IFileSchemeDocNodeService } from './base';
 
 @Injectable()
 export class FileSchemeDocNodeServiceImpl implements IFileSchemeDocNodeService {
@@ -25,7 +25,7 @@ export class FileSchemeDocNodeServiceImpl implements IFileSchemeDocNodeService {
     uri: string,
     change: IContentChange,
     encoding?: string | undefined,
-    force: boolean = false
+    force: boolean = false,
   ): Promise<IEditorDocumentModelSaveResult> {
     try {
       const fsPath = new URI(uri).codeUri.path;
@@ -66,7 +66,7 @@ export class FileSchemeDocNodeServiceImpl implements IFileSchemeDocNodeService {
     uri: string,
     content: ISavingContent,
     encoding?: string | undefined,
-    force: boolean = false
+    force: boolean = false,
   ): Promise<IEditorDocumentModelSaveResult> {
     try {
       const stat = await this.fileService.getFileStat(uri);
@@ -112,7 +112,7 @@ export class FileSchemeDocNodeServiceImpl implements IFileSchemeDocNodeService {
 export function applyChanges(
   content: string,
   changes: IEditorDocumentChange[],
-  eol: '\n' | '\r\n'
+  eol: '\n' | '\r\n',
 ): string {
   const textLines = new BasicTextLines(content.split(eol), eol);
   changes.forEach((change) => {

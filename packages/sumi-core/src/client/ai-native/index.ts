@@ -1,7 +1,11 @@
-import { Autowired, Injector } from "@opensumi/di";
-import { AINativeCoreContribution, IAIMiddleware, IInlineChatFeatureRegistry } from "@opensumi/ide-ai-native/lib/browser/types";
-import { Disposable, Domain, IEventBus } from "@opensumi/ide-core-common";
-import { RuntimeConfig } from "../../common";
+import { Autowired, Injector } from '@opensumi/di';
+import {
+  AINativeCoreContribution,
+  IAIMiddleware,
+  IInlineChatFeatureRegistry,
+} from '@opensumi/ide-ai-native/lib/browser/types';
+import { Disposable, Domain, IEventBus } from '@opensumi/ide-core-common';
+import { RuntimeConfig } from '../../common';
 
 @Domain(AINativeCoreContribution)
 export class CodeBlitzAINativeContribution extends Disposable implements AINativeCoreContribution {
@@ -25,7 +29,7 @@ export class CodeBlitzAINativeContribution extends Disposable implements AINativ
 
       providerValues.forEach(({ operational, handler }) => {
         registry.registerEditorInlineChat(operational, handler);
-      })
+      });
     }
   }
 }

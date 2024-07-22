@@ -1,9 +1,9 @@
-import { Provider, ConstructorOf } from '@opensumi/di';
-import { BackService } from '@opensumi/ide-core-common';
-import { BrowserModule } from '@opensumi/ide-core-browser';
 import { IExtensionIdentity, IExtensionMode } from '@codeblitzjs/ide-common';
+import { ConstructorOf, Provider } from '@opensumi/di';
+import { BrowserModule } from '@opensumi/ide-core-browser';
+import { BackService } from '@opensumi/ide-core-common';
 import * as paths from 'path';
-import { EXT_SCHEME, WORKSPACE_ROOT, OSSBucket } from './constant';
+import { EXT_SCHEME, OSSBucket, WORKSPACE_ROOT } from './constant';
 
 /**
  * 获取对象上所有函数的 property
@@ -36,7 +36,7 @@ export const getFunctionProps = (obj: Record<string, any>): string[] => {
 export const getExtensionPath = (
   ext: IExtensionIdentity,
   mode?: IExtensionMode,
-  OSSPath?: string
+  OSSPath?: string,
 ) => {
   if (!!OSSPath) {
     return [OSSPath, '/', `${ext.publisher}.${ext.name}-${ext.version}`].join('');

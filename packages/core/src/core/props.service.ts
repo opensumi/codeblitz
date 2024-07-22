@@ -1,5 +1,5 @@
-import { useEffect, useRef, useState } from 'react';
 import { Emitter, Event } from '@opensumi/ide-core-common';
+import { useEffect, useRef, useState } from 'react';
 
 interface PropsChangeEvent<P> {
   prevProps: P;
@@ -9,24 +9,24 @@ interface PropsChangeEvent<P> {
   affect<K1 extends keyof P, K2 extends keyof P[K1], K3 extends keyof P[K1][K2]>(
     k1: K1,
     k2: K2,
-    k3: K3
+    k3: K3,
   ): boolean;
   affect<
     K1 extends keyof P,
     K2 extends keyof P[K1],
     K3 extends keyof P[K1][K2],
-    K4 extends keyof P[K1][K2][K3]
+    K4 extends keyof P[K1][K2][K3],
   >(
     k1: K1,
     k2: K2,
     k3: K3,
-    k4: K4
+    k4: K4,
   ): boolean;
   affect<
     K1 extends keyof P,
     K2 extends keyof P[K1],
     K3 extends keyof P[K1][K2],
-    K4 extends keyof P[K1][K2][K3]
+    K4 extends keyof P[K1][K2][K3],
   >(
     k1: K1,
     k2: K2,
@@ -87,12 +87,12 @@ function usePropsSelector<P>(service: IPropsService<P>): P;
 function usePropsSelector<S, P>(
   service: IPropsService<P>,
   selector: (props: P) => S,
-  isEqual?: (s1: S, s2: S) => boolean
+  isEqual?: (s1: S, s2: S) => boolean,
 ): S;
 function usePropsSelector<S, P>(
   service: IPropsService<P>,
   selector?: (props: P) => S,
-  isEqual: (s1: S, s2: S) => boolean = refEquality
+  isEqual: (s1: S, s2: S) => boolean = refEquality,
 ): typeof selector extends undefined ? P : S {
   const lastSelector = useRef(selector);
   lastSelector.current = selector;

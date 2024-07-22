@@ -1,15 +1,15 @@
-import { MonacoTextModelService } from '@opensumi/ide-editor/lib/browser/doc-model/override';
 import { Injector } from '@opensumi/di';
+import { MonacoTextModelService } from '@opensumi/ide-editor/lib/browser/doc-model/override';
 
+import { Event } from '@opensumi/ide-monaco';
 import {
-  ICommandServiceToken,
-  IMonacoActionRegistry,
-  IMonacoCommandsRegistry,
-  IMonacoCommandService,
   ICommandEvent,
   ICommandService,
+  ICommandServiceToken,
+  IMonacoActionRegistry,
+  IMonacoCommandService,
+  IMonacoCommandsRegistry,
 } from '@opensumi/ide-monaco/lib/browser/contrib/command';
-import { Event } from '@opensumi/ide-monaco';
 
 export const IMonacoCommandServiceProxy = Symbol('IMonacoCommandServiceProxy');
 export { MonacoTextModelService };

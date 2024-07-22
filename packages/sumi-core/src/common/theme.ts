@@ -1,15 +1,15 @@
-import { IExtensionBasicMetadata } from "@codeblitzjs/ide-common";
-import { BuiltinTheme, IThemeContribution, getThemeId, getThemeType } from "@opensumi/ide-theme";
+import { IExtensionBasicMetadata } from '@codeblitzjs/ide-common';
+import { BuiltinTheme, getThemeId, getThemeType, IThemeContribution } from '@opensumi/ide-theme';
 
 export const getThemeTypeByPreferenceThemeId = (
   themeId: string,
-  extensionMetadata: IExtensionBasicMetadata[] | undefined
+  extensionMetadata: IExtensionBasicMetadata[] | undefined,
 ) => {
   let uiTheme: BuiltinTheme | undefined;
   if (themeId && extensionMetadata) {
     for (const ext of extensionMetadata) {
       const theme: IThemeContribution | undefined = ext.packageJSON.contributes?.themes?.find(
-        (contrib: IThemeContribution) => contrib && getThemeId(contrib) === themeId
+        (contrib: IThemeContribution) => contrib && getThemeId(contrib) === themeId,
       );
 
       if (theme?.uiTheme) {

@@ -14,7 +14,7 @@ const configureFileSystem = async (
   model: CodeModelService,
   scenario?: string | null,
   isInMemory?: boolean,
-  recursive?: boolean
+  recursive?: boolean,
 ) => {
   const {
     createFileSystem,

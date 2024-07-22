@@ -1,8 +1,8 @@
-import { Provider, Injectable } from '@opensumi/di';
+import { Injectable, Provider } from '@opensumi/di';
 import { BrowserModule } from '@opensumi/ide-core-browser';
-import { IPluginService } from './types';
-import { PluginService } from './plugin.service';
 import { PluginContribution } from './plugin.contribution';
+import { PluginService } from './plugin.service';
+import { IPluginService } from './types';
 
 export * from './types';
 

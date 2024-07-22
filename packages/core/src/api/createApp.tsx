@@ -2,19 +2,19 @@ import '@opensumi/ide-i18n/lib/browser';
 import '@codeblitzjs/ide-i18n';
 import {
   ClientApp,
-  RuntimeConfig,
-  makeWorkspaceDir,
-  IAppOpts,
-  STORAGE_DIR,
   HOME_ROOT,
+  IAppOpts,
+  makeWorkspaceDir,
+  RuntimeConfig,
+  STORAGE_DIR,
 } from '@codeblitzjs/ide-sumi-core';
 import {
-  SlotRenderer,
-  SlotLocation,
-  IAppRenderer,
   FILES_DEFAULTS,
-  IReporter,
   getPreferenceThemeId,
+  IAppRenderer,
+  IReporter,
+  SlotLocation,
+  SlotRenderer,
 } from '@opensumi/ide-core-browser';
 import { BoxPanel, SplitPanel } from '@opensumi/ide-core-browser/lib/components';
 
@@ -22,23 +22,23 @@ import '@opensumi/ide-core-browser/lib/style/entry.less';
 import '@opensumi/ide-core-browser/lib/style/codicons/codicon-animations.css';
 import './normalize.less';
 
-import { IPluginConfig } from '@codeblitzjs/ide-plugin';
 import { deletionLogPath } from '@codeblitzjs/ide-browserfs/lib/backend/OverlayFS';
+import { IPluginConfig } from '@codeblitzjs/ide-plugin';
 
 import '../core/extension/extension.patch';
-import { disposeMode, disposableCollection } from '../core/patch';
+import { disposableCollection, disposeMode } from '../core/patch';
 
-import { modules } from '../core/modules';
-import { IconSlim, IDETheme } from '../core/extension/metadata';
-import { mergeConfig } from '../core/utils';
-import { LayoutComponent, getDefaultLayoutConfig } from '../core/layout';
-import { IConfig, IAppInstance } from './types';
-import { EXT_WORKER_HOST, WEBVIEW_ENDPOINT } from '../core/env';
-import { interceptAppOpts } from './opts';
-import { appName } from './constants';
 import { Injector } from '@opensumi/di';
+import { EXT_WORKER_HOST, WEBVIEW_ENDPOINT } from '../core/env';
+import { IconSlim, IDETheme } from '../core/extension/metadata';
+import { getDefaultLayoutConfig, LayoutComponent } from '../core/layout';
+import { modules } from '../core/modules';
+import { mergeConfig } from '../core/utils';
+import { appName } from './constants';
+import { interceptAppOpts } from './opts';
+import { IAppInstance, IConfig } from './types';
 
-export { SlotLocation, SlotRenderer, BoxPanel, SplitPanel };
+export { BoxPanel, SlotLocation, SlotRenderer, SplitPanel };
 
 export const getDefaultAppConfig = (): IAppOpts => ({
   modules,
@@ -89,7 +89,7 @@ export function createApp({ appConfig, runtimeConfig }: IConfig): IAppInstance {
 
   if (!opts.workspaceDir) {
     throw new Error(
-      '需工作空间目录，最好确保不同项目名称不同，如 group/repository 的形式，工作空间目录会挂载到 /workspace 目录下'
+      '需工作空间目录，最好确保不同项目名称不同，如 group/repository 的形式，工作空间目录会挂载到 /workspace 目录下',
     );
   }
   opts.workspaceDir = makeWorkspaceDir(opts.workspaceDir);

@@ -1,21 +1,16 @@
+import { ApiError, ErrorCode } from '@codeblitzjs/ide-browserfs/lib/core/api_error';
+import { File } from '@codeblitzjs/ide-browserfs/lib/core/file';
+import { ActionType, FileFlag } from '@codeblitzjs/ide-browserfs/lib/core/file_flag';
 import {
   BaseFileSystem,
-  FileSystem,
   BFSCallback,
+  FileSystem,
   FileSystemOptions,
 } from '@codeblitzjs/ide-browserfs/lib/core/file_system';
-import { ApiError, ErrorCode } from '@codeblitzjs/ide-browserfs/lib/core/api_error';
-import { FileFlag, ActionType } from '@codeblitzjs/ide-browserfs/lib/core/file_flag';
-import { copyingSlice } from '@codeblitzjs/ide-browserfs/lib/core/util';
-import { File } from '@codeblitzjs/ide-browserfs/lib/core/file';
 import Stats, { FileType } from '@codeblitzjs/ide-browserfs/lib/core/node_fs_stats';
+import { copyingSlice } from '@codeblitzjs/ide-browserfs/lib/core/util';
+import { FileIndex, FileInode, isDirInode, isFileInode } from '@codeblitzjs/ide-browserfs/lib/generic/file_index';
 import { NoSyncFile } from '@codeblitzjs/ide-browserfs/lib/generic/preload_file';
-import {
-  FileIndex,
-  FileInode,
-  isFileInode,
-  isDirInode,
-} from '@codeblitzjs/ide-browserfs/lib/generic/file_index';
 
 /**
  * Try to convert the given buffer into a string, and pass it to the callback.
@@ -36,11 +31,11 @@ const stripLeadingSlash = (path: string) => (path.charAt(0) === '/' ? path.subst
 interface Thenable<T> {
   then<TResult>(
     onfulfilled?: (value: T) => TResult | Thenable<TResult>,
-    onrejected?: (reason: any) => TResult | Thenable<TResult>
+    onrejected?: (reason: any) => TResult | Thenable<TResult>,
   ): Thenable<TResult>;
   then<TResult>(
     onfulfilled?: (value: T) => TResult | Thenable<TResult>,
-    onrejected?: (reason: any) => void
+    onrejected?: (reason: any) => void,
   ): Thenable<TResult>;
 }
 
@@ -55,7 +50,7 @@ function asPromise<T>(value: T | Thenable<T>): Promise<T> {
     return new Promise((resolve, reject) => {
       value.then(
         (resolved) => resolve(resolved),
-        (error) => reject(error)
+        (error) => reject(error),
       );
     });
   } else {
@@ -109,7 +104,7 @@ export class Editor extends BaseFileSystem implements FileSystem {
   }
 
   public empty(): void {
-    this._index.fileIterator(function (file: Stats) {
+    this._index.fileIterator(function(file: Stats) {
       file.fileData = null;
     });
   }
@@ -224,25 +219,25 @@ export class Editor extends BaseFileSystem implements FileSystem {
     fname: string,
     encoding: string,
     flag: FileFlag,
-    cb: BFSCallback<string | Buffer>
+    cb: BFSCallback<string | Buffer>,
   ): void {
     // Wrap cb in file closing code.
     const oldCb = cb;
     // Get file.
-    this.open(fname, flag, 0x1a4, function (err: ApiError, fd?: File) {
+    this.open(fname, flag, 0x1a4, function(err: ApiError, fd?: File) {
       if (err) {
         return cb(err);
       }
-      cb = function (err: ApiError, arg?: Buffer) {
-        fd!.close(function (err2: any) {
+      cb = function(err: ApiError, arg?: Buffer) {
+        fd!.close(function(err2: any) {
           if (!err) {
             err = err2;
           }
           return oldCb(err, arg);
         });
       };
-      const fdCast = <NoSyncFile<Editor>>fd;
-      const fdBuff = <Buffer>fdCast.getBuffer();
+      const fdCast = <NoSyncFile<Editor>> fd;
+      const fdBuff = <Buffer> fdCast.getBuffer();
       if (encoding === null) {
         cb(err, copyingSlice(fdBuff));
       } else {

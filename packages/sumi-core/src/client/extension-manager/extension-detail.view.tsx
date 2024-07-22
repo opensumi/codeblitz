@@ -1,13 +1,13 @@
-import { useInjectable, localize } from '@opensumi/ide-core-browser';
+import { Tabs } from '@opensumi/ide-components';
+import { localize, useInjectable } from '@opensumi/ide-core-browser';
 import { ReactEditorComponent } from '@opensumi/ide-editor/lib/browser';
 import { Markdown } from '@opensumi/ide-markdown';
+import clx from 'classnames';
 import { observer } from 'mobx-react-lite';
 import * as React from 'react';
 import { ExtensionDetail, IExtensionManagerService } from './base';
-import clx from 'classnames';
-import * as styles from './extension-detail.module.less';
 import * as commonStyles from './common.module.less';
-import { Tabs } from '@opensumi/ide-components';
+import * as styles from './extension-detail.module.less';
 import { ExtensionManagerService } from './extension-manager.service';
 
 const tabMap = [
@@ -45,16 +45,20 @@ export const ExtensionDetailView: ReactEditorComponent<null> = observer((props) 
               <span className={styles.name}>
                 {currentExtension.displayName || currentExtension.name}
               </span>
-              {currentExtension.isBuiltin ? (
-                <span className={commonStyles.tag}>
-                  {localize('marketplace.extension.builtin')}
-                </span>
-              ) : null}
-              {currentExtension.isDevelopment ? (
-                <span className={clx(commonStyles.tag, commonStyles.developmentMode)}>
-                  {localize('marketplace.extension.development')}
-                </span>
-              ) : null}
+              {currentExtension.isBuiltin
+                ? (
+                  <span className={commonStyles.tag}>
+                    {localize('marketplace.extension.builtin')}
+                  </span>
+                )
+                : null}
+              {currentExtension.isDevelopment
+                ? (
+                  <span className={clx(commonStyles.tag, commonStyles.developmentMode)}>
+                    {localize('marketplace.extension.development')}
+                  </span>
+                )
+                : null}
             </div>
             <div className={styles.subtitle}>
               <span className={styles.subtitle_item}>{currentExtension.publisher}</span>
@@ -75,11 +79,9 @@ export const ExtensionDetailView: ReactEditorComponent<null> = observer((props) 
           <div className={styles.content}>
             {tabMap[tabIndex].key === 'readme' && (
               <Markdown
-                content={
-                  currentExtension.readme
-                    ? currentExtension.readme
-                    : `# ${currentExtension.displayName}\n${currentExtension.description}`
-                }
+                content={currentExtension.readme
+                  ? currentExtension.readme
+                  : `# ${currentExtension.displayName}\n${currentExtension.description}`}
               />
             )}
             {tabMap[tabIndex].key === 'changelog' && (

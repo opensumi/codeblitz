@@ -1,14 +1,14 @@
-import { Provider, Injectable, Autowired } from '@opensumi/di';
+import { CodeModelService } from '@codeblitzjs/ide-code-service';
+import { Autowired, Injectable, Provider } from '@opensumi/di';
 import {
-  Domain,
   BrowserModule,
   CommandContribution,
   CommandRegistry,
-  getLanguageId,
-  Disposable,
   CommandService,
+  Disposable,
+  Domain,
+  getLanguageId,
 } from '@opensumi/ide-core-browser';
-import { CodeModelService } from '@codeblitzjs/ide-code-service';
 
 @Domain(CommandContribution)
 export class AlexAppContribution extends Disposable implements CommandContribution {
@@ -43,14 +43,14 @@ export class AlexAppContribution extends Disposable implements CommandContributi
             }
             return val;
           },
-        }
+        },
       ),
 
       commands.registerCommand(
         { id: 'alex.env.language' },
         {
           execute: () => getLanguageId(),
-        }
+        },
       ),
 
       commands.registerCommand(
@@ -65,7 +65,7 @@ export class AlexAppContribution extends Disposable implements CommandContributi
               commit: rootRepository.commit,
             };
           },
-        }
+        },
       ),
 
       commands.registerCommand(
@@ -76,7 +76,7 @@ export class AlexAppContribution extends Disposable implements CommandContributi
             this.tickets.push(this.ticket);
             return this.ticket;
           },
-        }
+        },
       ),
 
       commands.registerCommand(
@@ -86,7 +86,7 @@ export class AlexAppContribution extends Disposable implements CommandContributi
             const fullPath = `/${this.codeModel.rootRepository.platform}${path}`;
             window.history.replaceState(null, '', fullPath);
           },
-        }
+        },
       ),
 
       commands.registerCommand(
@@ -101,7 +101,7 @@ export class AlexAppContribution extends Disposable implements CommandContributi
               window.location.replace(`${url}${hash}`);
             }
           },
-        }
+        },
       ),
     ]);
 

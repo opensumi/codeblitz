@@ -1,11 +1,11 @@
 import { Autowired } from '@opensumi/di';
 import {
-  Domain,
+  Command,
   CommandContribution,
   CommandRegistry,
-  Command,
-  PreferenceScope,
+  Domain,
   PreferenceProvider,
+  PreferenceScope,
 } from '@opensumi/ide-core-browser';
 
 /**
@@ -47,7 +47,7 @@ export class AlexCommandContribution implements CommandContribution {
 
     // TODO OpenSumi 内加入命令
     ['workbench.action.closePanel', 'workbench.action.closeSidebar', 'vscode.setEditorLayout'].map(
-      (id) => registry.registerCommand({ id }, { execute: () => {} })
+      (id) => registry.registerCommand({ id }, { execute: () => {} }),
     );
   }
 }

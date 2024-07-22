@@ -2,18 +2,18 @@
  * copy from @opensumi/ide-extension/src/node/extension.scanner.ts
  */
 
-import * as path from 'path';
-import * as fse from 'fs-extra';
-import { mergeContributes } from '@opensumi/ide-extension/lib/node/merge-contributes';
 import { Uri } from '@opensumi/ide-core-common';
+import { mergeContributes } from '@opensumi/ide-extension/lib/node/merge-contributes';
+import * as fse from 'fs-extra';
 import pick from 'lodash.pick';
+import * as path from 'path';
 
-import { NLSInfo, IExtensionBasicMetadata, IExtensionMode } from './type';
+import { IExtensionBasicMetadata, IExtensionMode, NLSInfo } from './type';
 
 export async function getExtension(
   extensionPath: string,
   mode?: IExtensionMode,
-  localUri?: Uri
+  localUri?: Uri,
 ): Promise<IExtensionBasicMetadata | undefined> {
   if (!(await fse.pathExists(extensionPath))) {
     return undefined;
@@ -77,13 +77,13 @@ export async function getExtension(
     'package.nls',
     extensionPath,
     'zh-CN',
-    '.json'
+    '.json',
   );
   const enLocalizedPath = await getLocalizedExtraMetadataPath(
     'package.nls',
     extensionPath,
     'en-US',
-    '.json'
+    '.json',
   );
   if (zhLocalizedPath) {
     pkgNlsJSON['zh-CN'] = await fse.readJSON(zhLocalizedPath);
@@ -113,13 +113,12 @@ export async function getExtension(
   // merge for `sumiContributes` and `contributes`
   packageJSON.contributes = mergeContributes(
     packageJSON.sumiContributes,
-    packageJSON.contributes
+    packageJSON.contributes,
   );
 
   // 本地扩展的 publisher 和 name 从 package.json 获取，
   // 远程扩展的 publisher 和 name 从目录名获取
-  const { publisher, name } =
-    mode === 'local' ? packageJSON : getExtensionIdByPath(extensionPath, packageJSON.version);
+  const { publisher, name } = mode === 'local' ? packageJSON : getExtensionIdByPath(extensionPath, packageJSON.version);
 
   let uri: string | undefined;
   if (mode === 'local' && localUri) {
@@ -160,7 +159,7 @@ async function getLocalizedExtraMetadataPath(
   prefix: string,
   extensionPath: string,
   localization: string,
-  suffix: string
+  suffix: string,
 ): Promise<string | undefined> {
   const lowerCasePrefix = prefix.toLowerCase();
   const lowerCaseLocalization = localization.toLowerCase();
@@ -188,7 +187,7 @@ async function getLocalizedExtraMetadataPath(
 export async function getAllLocalized(
   extensionPath: string,
   prefix: string,
-  suffix: string
+  suffix: string,
 ): Promise<NLSInfo[]> {
   const fileList = await fse.readdir(extensionPath);
   const result: NLSInfo[] = [];
@@ -197,7 +196,7 @@ export async function getAllLocalized(
     const fileStat = await fse.stat(filePath);
     if (fileStat.isFile()) {
       const matched = file.match(
-        new RegExp(`^(?:${prefix}|${prefix.toLocaleLowerCase()})(.+)${suffix}$`)
+        new RegExp(`^(?:${prefix}|${prefix.toLocaleLowerCase()})(.+)${suffix}$`),
       );
       if (matched) {
         result.push({

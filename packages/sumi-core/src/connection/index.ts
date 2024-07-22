@@ -2,8 +2,8 @@
  * Function Call Service Connection
  * 连接 Cline 和 Server, RPC 的模拟实现
  */
-import { SimpleConnection } from '@opensumi/ide-connection/lib/common/connection/drivers/simple';
 import { IRuntimeSocketConnection } from '@opensumi/ide-connection';
+import { SimpleConnection } from '@opensumi/ide-connection/lib/common/connection/drivers/simple';
 import { Disposable, IDisposable } from '@opensumi/ide-core-common';
 
 export interface Port {

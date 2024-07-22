@@ -1,9 +1,9 @@
-import * as React from 'react';
 import { localize } from '@opensumi/ide-core-browser';
+import { AccordionContainer } from '@opensumi/ide-main-layout/lib/browser/accordion/accordion.view';
+import * as React from 'react';
 import { enableExtensionsContainerId, enableExtensionsTarbarHandlerId } from './base';
 import { ExtensionEnableAccordion } from './extension-panel-accordion.view';
 import * as styles from './extension-panel.module.less';
-import { AccordionContainer } from '@opensumi/ide-main-layout/lib/browser/accordion/accordion.view';
 
 export default () => {
   return (

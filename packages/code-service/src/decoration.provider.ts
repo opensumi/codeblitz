@@ -1,11 +1,7 @@
 import { Autowired } from '@opensumi/di';
-import { ClientAppContribution, Domain, Disposable } from '@opensumi/ide-core-browser';
-import {
-  IDecorationsService,
-  IDecorationsProvider,
-  IDecorationData,
-} from '@opensumi/ide-decoration';
-import { Uri, Emitter } from '@opensumi/ide-core-browser';
+import { ClientAppContribution, Disposable, Domain } from '@opensumi/ide-core-browser';
+import { Emitter, Uri } from '@opensumi/ide-core-browser';
+import { IDecorationData, IDecorationsProvider, IDecorationsService } from '@opensumi/ide-decoration';
 import { IThemeService } from '@opensumi/ide-theme';
 import * as path from 'path';
 import { CodeModelService } from './code-model.service';
@@ -33,7 +29,7 @@ export class GitDecorationProvider extends Disposable implements IDecorationsPro
   private onDidAddSubmodules(submodulePath: string) {
     this.decorations.set(
       Uri.file(path.join(this.repo.root, submodulePath)).toString(),
-      GitDecorationProvider.SubmoduleDecorationData
+      GitDecorationProvider.SubmoduleDecorationData,
     );
     this._onDidChange.fire([...this.decorations.keys()].map((value) => Uri.parse(value)));
   }

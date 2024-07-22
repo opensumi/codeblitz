@@ -34,7 +34,7 @@ class RegistryImpl {
     id: string,
     fn: (e: T) => any,
     context?: any,
-    disposables?: IDisposable[]
+    disposables?: IDisposable[],
   ): IDisposable {
     const listener: Listener<T> = !context ? fn : [fn, context];
     const listeners = this.eventsMap.get(id);

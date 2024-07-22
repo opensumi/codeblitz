@@ -10,6 +10,6 @@ const error = (msg) => {
 
 export const init = () => {
   log.scope(kExtensionConfig.product);
-}
+};
 
-export { log, error };
+export { error, log };

@@ -1,20 +1,20 @@
 import {
-  IDisposable,
   Disposable,
   DisposableCollection,
-  Uri,
   FileChangeType,
   FileSystemWatcherClient,
+  IDisposable,
   IFileSystemWatcherServer,
-  WatchOptions,
-  URI,
-  parseGlob as parse,
   ParsedPattern,
+  parseGlob as parse,
+  URI,
+  Uri,
+  WatchOptions,
 } from '@opensumi/ide-core-common';
 import debounce from 'lodash.debounce';
 import path from 'path';
+import { fsExtra as fse, fsWatcher } from '../node';
 import { FileChangeCollection } from './file-change-collection';
-import { fsWatcher, fsExtra as fse } from '../node';
 
 export interface WatcherOptions {
   excludesPattern: ParsedPattern[];
@@ -35,7 +35,7 @@ export class FWFileSystemWatcherServer implements IFileSystemWatcherServer {
   protected readonly watchers = new Map<number, { path: string; disposable: IDisposable }>();
 
   protected readonly toDispose = new DisposableCollection(
-    Disposable.create(() => this.setClient(undefined))
+    Disposable.create(() => this.setClient(undefined)),
   );
 
   protected changes = new FileChangeCollection();
@@ -156,7 +156,7 @@ export class FWFileSystemWatcherServer implements IFileSystemWatcherServer {
     basePath: string,
     rawOptions: WatchOptions | undefined,
     toDisposeWatcher: DisposableCollection,
-    rawFile?: string
+    rawFile?: string,
   ): Promise<void> {
     const options: WatchOptions = {
       excludes: [],
@@ -205,7 +205,7 @@ export class FWFileSystemWatcherServer implements IFileSystemWatcherServer {
           watcher.stop();
           this.options.info('Stopped watching:', basePath);
         }
-      })
+      }),
     );
     this.watcherOptions.set(watcherId, {
       excludesPattern: options.excludes.map((pattern) => parse(pattern)),
@@ -265,7 +265,7 @@ export class FWFileSystemWatcherServer implements IFileSystemWatcherServer {
    */
   protected readonly fireDidFilesChanged: () => void = debounce(
     () => this.doFireDidFilesChanged(),
-    100
+    100,
   );
   protected doFireDidFilesChanged(): void {
     const changes = this.changes.values();

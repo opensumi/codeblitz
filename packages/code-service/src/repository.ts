@@ -43,7 +43,7 @@ export class Repository implements IRepositoryModel {
 
   get platformConfig() {
     return CodePlatformRegistry.instance().getPlatformConfig(this.platform);
-  } 
+  }
 
   /**
    * 仓库群组或用户

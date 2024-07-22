@@ -1,6 +1,6 @@
-import { Injectable, Autowired } from '@opensumi/di';
+import { Autowired, Injectable } from '@opensumi/di';
+import { MaybeNull, URI } from '@opensumi/ide-core-browser';
 import { BreadCrumbServiceImpl } from '@opensumi/ide-editor/lib/browser/breadcrumb';
-import { URI, MaybeNull } from '@opensumi/ide-core-browser';
 import { IEditor } from '@opensumi/ide-editor/lib/common';
 import { RuntimeConfig } from '../../common/types';
 

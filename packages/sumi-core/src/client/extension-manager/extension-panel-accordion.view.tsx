@@ -1,9 +1,9 @@
-import React from 'react';
-import { observer } from 'mobx-react-lite';
 import { useInjectable, ViewState } from '@opensumi/ide-core-browser';
+import { observer } from 'mobx-react-lite';
+import React from 'react';
 
-import { ExtensionList } from './extension-list';
 import { IExtensionManagerService } from './base';
+import { ExtensionList } from './extension-list';
 import { ExtensionManagerService } from './extension-manager.service';
 
 export const ExtensionEnableAccordion: React.FC<{

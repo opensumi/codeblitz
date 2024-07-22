@@ -40,7 +40,7 @@ export namespace API {
   export interface ResponseContentObject {
     current_page: number;
     keyword: string;
-    matched_file_list: ResponseContentSearch
+    matched_file_list: ResponseContentSearch;
   }
 
   export interface ResponseCommit {

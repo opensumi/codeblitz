@@ -1,5 +1,5 @@
-import path from 'path';
 import fs from 'fs';
+import path from 'path';
 
 const baseDir = path.resolve(__dirname, '..', '..');
 console.log(`🚀 ~ baseDir:`, baseDir);
@@ -32,13 +32,13 @@ const data = [
   {
     path: filePath,
     oldCode: content,
-    newCode: interceptCode(content)
+    newCode: interceptCode(content),
   },
   {
     path: file2,
     oldCode: content2,
-    newCode: content2
-  }
-]
+    newCode: content2,
+  },
+];
 
 fs.writeFileSync(path.join(baseDir, 'src/diff-viewer/data.json'), JSON.stringify(data, null, 2));

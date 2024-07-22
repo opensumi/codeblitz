@@ -1,6 +1,6 @@
+import CopyWebpackPlugin from 'copy-webpack-plugin';
 import { Configuration } from 'webpack';
 import { Configuration as DevServerConfiguration } from 'webpack-dev-server';
-import CopyWebpackPlugin from 'copy-webpack-plugin';
 
 export interface WebpackConfiguration extends Configuration {
   devServer?: DevServerConfiguration;

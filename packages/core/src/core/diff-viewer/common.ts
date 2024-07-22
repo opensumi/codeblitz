@@ -24,7 +24,12 @@ export interface IDiffViewerHandle {
   /**
    * 展示 Inline Diff 预览
    */
-  openDiffInTab: (filePath: string, oldContent: string, newContent: string, options?: IResourceOpenDiffOptions) => Promise<void>;
+  openDiffInTab: (
+    filePath: string,
+    oldContent: string,
+    newContent: string,
+    options?: IResourceOpenDiffOptions,
+  ) => Promise<void>;
   /**
    * 打开标签页
    */

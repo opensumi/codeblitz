@@ -1,23 +1,22 @@
-
-import { Injectable, Autowired } from '@opensumi/di';
-import { localize, IReporterService, MessageType, LRUCache } from '@opensumi/ide-core-common';
+import { isResponseError, request, RequestOptions } from '@codeblitzjs/ide-common';
 import { REPORT_NAME } from '@codeblitzjs/ide-sumi-core';
-import { request, RequestOptions, isResponseError } from '@codeblitzjs/ide-common';
-import { API } from './types';
-import { Branch, FileAction, FileActionHeader, FileActionResult, Project } from '../common/types';
-import {
-  ICodeAPIService,
-  ISearchResults,
-  EntryParam,
-  CodePlatform,
-  IRepositoryModel,
-  BranchOrTag,
-  CommitParams,
-  CommitFileStatus,
-} from '../common/types';
+import { Autowired, Injectable } from '@opensumi/di';
+import { IReporterService, localize, LRUCache, MessageType } from '@opensumi/ide-core-common';
+import { DEFAULT_SEARCH_IN_WORKSPACE_LIMIT } from '@opensumi/ide-search';
 import { CodePlatformRegistry } from '../common/config';
 import { HelperService } from '../common/service';
-import { DEFAULT_SEARCH_IN_WORKSPACE_LIMIT } from '@opensumi/ide-search';
+import { Branch, FileAction, FileActionHeader, FileActionResult, Project } from '../common/types';
+import {
+  BranchOrTag,
+  CodePlatform,
+  CommitFileStatus,
+  CommitParams,
+  EntryParam,
+  ICodeAPIService,
+  IRepositoryModel,
+  ISearchResults,
+} from '../common/types';
+import { API } from './types';
 const toType = (d: API.ResponseCommitFileChange) => {
   if (d.new_file) return CommitFileStatus.Added;
   else if (d.deleted_file) return CommitFileStatus.Deleted;
@@ -36,7 +35,7 @@ const toChangeLines = (diff: string) => {
       }
       return obj;
     },
-    { additions: 0, deletions: 0 }
+    { additions: 0, deletions: 0 },
   );
 };
 
@@ -67,7 +66,7 @@ export class CodeUPAPIService implements ICodeAPIService {
   protected async request<T>(
     path: string,
     options?: RequestOptions,
-    responseOptions?: API.RequestResponseOptions
+    responseOptions?: API.RequestResponseOptions,
   ): Promise<T> {
     const { platform, origin, endpoint } = this.config;
     try {
@@ -78,7 +77,7 @@ export class CodeUPAPIService implements ICodeAPIService {
         ...options,
         headers: {
           ...options?.headers,
-        }
+        },
       });
       return data;
     } catch (err: any) {
@@ -101,7 +100,7 @@ export class CodeUPAPIService implements ICodeAPIService {
               },
               {
                 buttons: [goto],
-              }
+              },
             )
             .then((value) => {
               if (value === goto) {
@@ -138,7 +137,7 @@ export class CodeUPAPIService implements ICodeAPIService {
   async getCommit(repo: IRepositoryModel, ref: string) {
     return (
       await this.request<API.ResponseGetCommit>(
-        `/api/v3/projects/${this.getProjectId(repo)}/repository/commits/${encodeURIComponent(ref)}`
+        `/api/v3/projects/${this.getProjectId(repo)}/repository/commits/${encodeURIComponent(ref)}`,
       )
     ).id;
   }
@@ -152,42 +151,45 @@ export class CodeUPAPIService implements ICodeAPIService {
           ref_name: repo.commit,
           path,
         },
-      }
+      },
     );
   }
 
   async getBlob(repo: IRepositoryModel, entry: EntryParam) {
     const res = await this.request<API.ResponseBlobs>(
-      `/api/v4/projects/${this.getProjectId(
-        repo
-      )}/repository/blobs`,
+      `/api/v4/projects/${
+        this.getProjectId(
+          repo,
+        )
+      }/repository/blobs`,
       {
         params: {
           filepath: entry.path,
           ref: repo.commit,
         },
-      }
+      },
     );
     return new Uint8Array(new TextEncoder().encode(res.content));
   }
-
 
   async getBlobByCommitPath(
     repo: IRepositoryModel,
     commit: string,
     path: string,
-    options?: API.RequestResponseOptions
+    options?: API.RequestResponseOptions,
   ) {
     const infoAndBlobs = await this.request<API.ResponseInfoAndBlobs>(
-      `/api/v4/projects/${this.getProjectId(
-        repo
-      )}/repository/blobs/${commit}/general_info_and_blobs`,
+      `/api/v4/projects/${
+        this.getProjectId(
+          repo,
+        )
+      }/repository/blobs/${commit}/general_info_and_blobs`,
       {
         params: {
           file_path: path,
         },
       },
-      options
+      options,
     );
     return new Uint8Array(new TextEncoder().encode(infoAndBlobs?.content || ''));
   }
@@ -216,7 +218,7 @@ export class CodeUPAPIService implements ICodeAPIService {
           page: 1,
           per_page: 1000,
         },
-      }
+      },
     );
   }
 
@@ -233,7 +235,7 @@ export class CodeUPAPIService implements ICodeAPIService {
           page: 1,
           per_page: 1000,
         },
-      }
+      },
     );
   }
 
@@ -250,9 +252,9 @@ export class CodeUPAPIService implements ICodeAPIService {
           keyword: searchString,
           page_num: 1,
           page_size: 1000,
-          type: 'sha'
+          type: 'sha',
         },
-      }
+      },
     );
     const res = reqRes.matched_file_list.reduce<ISearchResults>((list, item) => {
       item.block_list.forEach((line) => {
@@ -278,10 +280,10 @@ export class CodeUPAPIService implements ICodeAPIService {
             ref_name: repo.commit,
             search: searchString,
           },
-        }
+        },
       );
       // 默认做个限制，防止请求过多
-      return res.map(r=> r.path).slice(0, DEFAULT_SEARCH_IN_WORKSPACE_LIMIT);
+      return res.map(r => r.path).slice(0, DEFAULT_SEARCH_IN_WORKSPACE_LIMIT);
     }
     const reqRes = await this.request<API.ResponseFileNames[]>(
       `/api/v4/projects/${this.getProjectId(repo)}/repository/filenames`,
@@ -290,9 +292,9 @@ export class CodeUPAPIService implements ICodeAPIService {
           ref_name: repo.commit,
           search: searchString,
         },
-      }
+      },
     );
-    return reqRes.map(r=> r.path);
+    return reqRes.map(r => r.path);
   }
 
   async getFileBlame(repo: IRepositoryModel, path: string) {
@@ -304,9 +306,9 @@ export class CodeUPAPIService implements ICodeAPIService {
           params: {
             ref: repo.commit,
             file_path: path,
-          }
-        }
-      )
+          },
+        },
+      ),
     );
   }
 
@@ -320,7 +322,7 @@ export class CodeUPAPIService implements ICodeAPIService {
           page: params.page,
           per_page: params.pageSize,
         },
-      }
+      },
     );
     return data.map((c) => ({
       id: c.id,
@@ -338,7 +340,7 @@ export class CodeUPAPIService implements ICodeAPIService {
 
   async getCommitDiff(repo: IRepositoryModel, sha: string) {
     const data = await this.request<API.ResponseCommitFileChange[]>(
-      `/api/v3/projects/${this.getProjectId(repo)}/repository/commits/${sha}/diff`
+      `/api/v3/projects/${this.getProjectId(repo)}/repository/commits/${sha}/diff`,
     );
     return data.map((d) => ({
       oldFilePath: d.old_path,
@@ -353,7 +355,7 @@ export class CodeUPAPIService implements ICodeAPIService {
       `/api/v4/projects/${this.getProjectId(repo)}/repository/commits/compare`,
       {
         params: { from, to },
-      }
+      },
     );
     return (data.diffs || []).map((d) => ({
       oldFilePath: d.old_path,
@@ -363,43 +365,53 @@ export class CodeUPAPIService implements ICodeAPIService {
     }));
   }
 
-  async bulkChangeFiles(repo: IRepositoryModel, actions: FileAction[], header: FileActionHeader): Promise<FileActionResult[]> {
-    const res = await this.request<API.ResponseCommit>(`/api/v4/projects/${this.getProjectId(repo)}/repository/commit/files`, {
-      data: {
-        actions: actions.map((action)=> ({
-          action: action.action_type.toLocaleLowerCase(),
-          file_path: action.file_path,
-          content: action.content,
-          previous_path: action.file_path,
-        })),
-        projectId: this.getProjectId(repo),
-        // codeup 分支为当前分支
-        branch: header.branch,
-        commit_message: header.commit_message,
+  async bulkChangeFiles(
+    repo: IRepositoryModel,
+    actions: FileAction[],
+    header: FileActionHeader,
+  ): Promise<FileActionResult[]> {
+    const res = await this.request<API.ResponseCommit>(
+      `/api/v4/projects/${this.getProjectId(repo)}/repository/commit/files`,
+      {
+        data: {
+          actions: actions.map((action) => ({
+            action: action.action_type.toLocaleLowerCase(),
+            file_path: action.file_path,
+            content: action.content,
+            previous_path: action.file_path,
+          })),
+          projectId: this.getProjectId(repo),
+          // codeup 分支为当前分支
+          branch: header.branch,
+          commit_message: header.commit_message,
+        },
+        method: 'post',
       },
-      method: 'post',
-    });
+    );
     const resCommit = {
       branch_created: false,
       branch: header.branch,
       commit_id: res.id,
       file_name: '',
-      ...res
-    }
+      ...res,
+    };
     // 没有提交ID 说明提交失败
-    if(res.id) {
-      return   [resCommit]  as FileActionResult[]
+    if (res.id) {
+      return [resCommit] as FileActionResult[];
     }
-    return [] 
+    return [];
   }
 
   async getFiles(repo: IRepositoryModel): Promise<string[]> {
-    const fileList = await this.request<API.ResponseFileNames[]>(`/api/v4/projects/${this.getProjectId(repo)}/repository/filenames`, {
-      params: {
-        ref_name: repo.commit,
-        search: '*'
+    const fileList = await this.request<API.ResponseFileNames[]>(
+      `/api/v4/projects/${this.getProjectId(repo)}/repository/filenames`,
+      {
+        params: {
+          ref_name: repo.commit,
+          search: '*',
+        },
       },
-    });
+    );
     return fileList.map((f) => f.path);
   }
 
@@ -419,7 +431,7 @@ export class CodeUPAPIService implements ICodeAPIService {
   }
   async getProject(repo: IRepositoryModel): Promise<Project> {
     return await this.request<Project>(
-      `/api/v3/projects/info?identity=${this.getProjectId(repo)}`
+      `/api/v3/projects/info?identity=${this.getProjectId(repo)}`,
     );
   }
 
@@ -427,7 +439,7 @@ export class CodeUPAPIService implements ICodeAPIService {
     repo: IRepositoryModel,
     sourceBranch: string,
     targetBranch: string,
-    prId?: string
+    prId?: string,
   ): Promise<API.CanResolveConflictResponse> {
     throw new Error('Method not implemented.');
   }
@@ -437,7 +449,7 @@ export class CodeUPAPIService implements ICodeAPIService {
     content: API.ResolveConflict,
     sourceBranch: string,
     targetBranch: string,
-    prId?: string
+    prId?: string,
   ): Promise<API.ResolveConflictResponse> {
     throw new Error('Method not implemented.');
   }
@@ -445,7 +457,7 @@ export class CodeUPAPIService implements ICodeAPIService {
   async getConflict(
     repo: IRepositoryModel,
     sourceBranch: string,
-    targetBranch: string
+    targetBranch: string,
   ): Promise<API.ConflictResponse> {
     throw new Error('Method not implemented.');
   }
@@ -458,7 +470,7 @@ export class CodeUPAPIService implements ICodeAPIService {
   async mergeBase(
     repo: IRepositoryModel,
     target: string,
-    source: string
+    source: string,
   ): Promise<API.ResponseCommit> {
     throw new Error('Method not implemented.');
   }
@@ -468,7 +480,7 @@ export class CodeUPAPIService implements ICodeAPIService {
     sourceBranch: string,
     targetBranch: string,
     title: string,
-    autoMerge?: boolean
+    autoMerge?: boolean,
   ): Promise<API.ResponseCreatePR> {
     throw new Error('Method not implemented.');
   }

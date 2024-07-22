@@ -1,36 +1,36 @@
-import { RuntimeConfig } from '../../common';
+import { Autowired, Injectable } from '@opensumi/di';
 import {
+  DebugLog,
+  DidFilesChangedParams,
+  DisposableCollection,
+  Emitter,
   Event,
   IDisposable,
-  URI,
-  Emitter,
   isUndefined,
-  DebugLog,
-  DisposableCollection,
-  DidFilesChangedParams,
-  Uri,
-  UriComponents,
   ParsedPattern,
   parseGlob as parse,
+  URI,
+  Uri,
+  UriComponents,
 } from '@opensumi/ide-core-common';
 import {
+  FileAccess,
   FileChangeEvent,
-  FileStat,
-  FileType,
-  FileSystemError,
   FileMoveOptions,
+  FileStat,
+  FileSystemError,
+  FileSystemProviderCapabilities,
+  FileType,
   isErrnoException,
   notEmpty,
-  FileAccess,
-  FileSystemProviderCapabilities,
 } from '@opensumi/ide-file-service/lib/common';
-import { Autowired, Injectable } from '@opensumi/di';
 import * as path from 'path';
+import { RuntimeConfig } from '../../common';
 import { HOME_ROOT } from '../../common';
-import { IDiskFileProvider } from './base';
 import { RPCService } from '../../connection';
-import { FWFileSystemWatcherServer } from './file-service-watcher';
 import { fsExtra as fse, writeFileAtomic } from '../node';
+import { IDiskFileProvider } from './base';
+import { FWFileSystemWatcherServer } from './file-service-watcher';
 
 const debugLog = new DebugLog();
 
@@ -168,7 +168,7 @@ export class DiskFileSystemProvider extends RPCService implements IDiskFileProvi
       }
       throw FileSystemError.FileExists(
         uri.path,
-        'Error occurred while creating the directory: path is a file.'
+        'Error occurred while creating the directory: path is a file.',
       );
     }
     await fse.ensureDir(uri.path);
@@ -192,14 +192,14 @@ export class DiskFileSystemProvider extends RPCService implements IDiskFileProvi
         if (error.code === 'EISDIR') {
           throw FileSystemError.FileIsADirectory(
             uri.path,
-            'Error occurred while reading file: path is a directory.'
+            'Error occurred while reading file: path is a directory.',
           );
         }
 
         if (error.code === 'EPERM') {
           throw FileSystemError.FileIsNoPermissions(
             uri.path,
-            'Error occurred while reading file: path is a directory.'
+            'Error occurred while reading file: path is a directory.',
           );
         }
       }
@@ -211,7 +211,7 @@ export class DiskFileSystemProvider extends RPCService implements IDiskFileProvi
   async writeFile(
     uri: UriComponents,
     content: Uint8Array,
-    options: { create: boolean; overwrite: boolean; encoding?: string }
+    options: { create: boolean; overwrite: boolean; encoding?: string },
   ): Promise<void | FileStat> {
     const _uri = Uri.revive(uri);
     const exists = await this.access(uri);
@@ -236,7 +236,7 @@ export class DiskFileSystemProvider extends RPCService implements IDiskFileProvi
 
   async delete(
     uri: UriComponents,
-    options: { recursive?: boolean; moveToTrash?: boolean }
+    options: { recursive?: boolean; moveToTrash?: boolean },
   ): Promise<void> {
     const _uri = Uri.revive(uri);
     const stat = await this.doGetStat(_uri, 0);
@@ -256,7 +256,7 @@ export class DiskFileSystemProvider extends RPCService implements IDiskFileProvi
   async rename(
     sourceUri: UriComponents,
     targetUri: UriComponents,
-    options: { overwrite: boolean }
+    options: { overwrite: boolean },
   ): Promise<FileStat> {
     return this.doMove(sourceUri, targetUri, options);
   }
@@ -264,7 +264,7 @@ export class DiskFileSystemProvider extends RPCService implements IDiskFileProvi
   async copy(
     sourceUri: UriComponents,
     targetUri: UriComponents,
-    options: { overwrite: boolean; recursive?: boolean }
+    options: { overwrite: boolean; recursive?: boolean },
   ): Promise<FileStat> {
     const _sourceUri = Uri.revive(sourceUri);
     const _targetUri = Uri.revive(targetUri);
@@ -278,12 +278,12 @@ export class DiskFileSystemProvider extends RPCService implements IDiskFileProvi
       throw FileSystemError.FileNotFound(sourceUri.path);
     }
     if (targetStat && !overwrite) {
-      throw FileSystemError.FileExists(targetUri.path, "Did you set the 'overwrite' flag to true?");
+      throw FileSystemError.FileExists(targetUri.path, 'Did you set the \'overwrite\' flag to true?');
     }
     if (targetStat && targetStat.uri === sourceStat.uri) {
       throw FileSystemError.FileExists(
         targetUri.path,
-        'Cannot perform copy, source and destination are the same.'
+        'Cannot perform copy, source and destination are the same.',
       );
     }
     await fse.copy(_sourceUri.path, _targetUri.path, {
@@ -296,7 +296,7 @@ export class DiskFileSystemProvider extends RPCService implements IDiskFileProvi
     }
     throw FileSystemError.FileNotFound(
       targetUri.path,
-      `Error occurred while copying ${sourceUri} to ${targetUri}.`
+      `Error occurred while copying ${sourceUri} to ${targetUri}.`,
     );
   }
 
@@ -386,7 +386,7 @@ export class DiskFileSystemProvider extends RPCService implements IDiskFileProvi
   protected async doMove(
     sourceUri: UriComponents,
     targetUri: UriComponents,
-    options: FileMoveOptions
+    options: FileMoveOptions,
   ): Promise<FileStat> {
     const _sourceUri = Uri.revive(sourceUri);
     const _targetUri = Uri.revive(targetUri);
@@ -399,7 +399,7 @@ export class DiskFileSystemProvider extends RPCService implements IDiskFileProvi
       throw FileSystemError.FileNotFound(sourceUri.path);
     }
     if (targetStat && !overwrite) {
-      throw FileSystemError.FileExists(targetUri.path, "Did you set the 'overwrite' flag to true?");
+      throw FileSystemError.FileExists(targetUri.path, 'Did you set the \'overwrite\' flag to true?');
     }
 
     // Different types. Files <-> Directory.
@@ -407,12 +407,12 @@ export class DiskFileSystemProvider extends RPCService implements IDiskFileProvi
       if (targetStat.isDirectory) {
         throw FileSystemError.FileIsADirectory(
           targetStat.uri,
-          `Cannot move '${sourceStat.uri}' file to an existing location.`
+          `Cannot move '${sourceStat.uri}' file to an existing location.`,
         );
       }
       throw FileSystemError.FileNotADirectory(
         targetStat.uri,
-        `Cannot move '${sourceStat.uri}' directory to an existing location.`
+        `Cannot move '${sourceStat.uri}' directory to an existing location.`,
       );
     }
     const [sourceMightHaveChildren, targetMightHaveChildren] = await Promise.all([
@@ -420,12 +420,12 @@ export class DiskFileSystemProvider extends RPCService implements IDiskFileProvi
       this.mayHaveChildren(_targetUri),
     ]);
     if (
-      overwrite &&
-      targetStat &&
-      targetStat.isDirectory &&
-      sourceStat.isDirectory &&
-      !sourceMightHaveChildren &&
-      !targetMightHaveChildren
+      overwrite
+      && targetStat
+      && targetStat.isDirectory
+      && sourceStat.isDirectory
+      && !sourceMightHaveChildren
+      && !targetMightHaveChildren
     ) {
       await fse.rmdir(_sourceUri.path);
       const newStat = await this.doGetStat(_targetUri, 1);
@@ -434,15 +434,15 @@ export class DiskFileSystemProvider extends RPCService implements IDiskFileProvi
       }
       throw FileSystemError.FileNotFound(
         targetUri.path,
-        `Error occurred when moving resource from '${sourceUri}' to '${targetUri}'.`
+        `Error occurred when moving resource from '${sourceUri}' to '${targetUri}'.`,
       );
     } else if (
-      overwrite &&
-      targetStat &&
-      targetStat.isDirectory &&
-      sourceStat.isDirectory &&
-      !targetMightHaveChildren &&
-      sourceMightHaveChildren
+      overwrite
+      && targetStat
+      && targetStat.isDirectory
+      && sourceStat.isDirectory
+      && !targetMightHaveChildren
+      && sourceMightHaveChildren
     ) {
       // Copy source to target, since target is empty. Then wipe the source content.
       const newStat = await this.copy(sourceUri, targetUri, { overwrite });
@@ -499,10 +499,10 @@ export class DiskFileSystemProvider extends RPCService implements IDiskFileProvi
     } catch (error) {
       if (isErrnoException(error)) {
         if (
-          error.code === 'ENOENT' ||
-          error.code === 'EACCES' ||
-          error.code === 'EBUSY' ||
-          error.code === 'EPERM'
+          error.code === 'ENOENT'
+          || error.code === 'EACCES'
+          || error.code === 'EBUSY'
+          || error.code === 'EPERM'
         ) {
           return undefined;
         }
@@ -554,7 +554,7 @@ export class DiskFileSystemProvider extends RPCService implements IDiskFileProvi
     const children = await Promise.all(
       files
         .map((fileName) => _uri.resolve(fileName))
-        .map((childUri) => this.doGetStat(childUri.codeUri, depth - 1))
+        .map((childUri) => this.doGetStat(childUri.codeUri, depth - 1)),
     );
     return children.filter(notEmpty);
   }
@@ -587,10 +587,10 @@ export class DiskFileSystemProvider extends RPCService implements IDiskFileProvi
     } catch (error) {
       if (isErrnoException(error)) {
         if (
-          error.code === 'ENOENT' ||
-          error.code === 'EACCES' ||
-          error.code === 'EBUSY' ||
-          error.code === 'EPERM'
+          error.code === 'ENOENT'
+          || error.code === 'EACCES'
+          || error.code === 'EBUSY'
+          || error.code === 'EPERM'
         ) {
           return undefined;
         }

@@ -3,19 +3,19 @@ export namespace API {
     start: number;
     contents: string[];
     commit: {
-      author_email: string,
-      author_name: string,
-      author_username: string,
-      created_at: string,
-      id: string,
-      title:  string,
+      author_email: string;
+      author_name: string;
+      author_username: string;
+      created_at: string;
+      id: string;
+      title: string;
       user: {
-        avatar_url: string
-        email: string,
-        id: string,
-        username: string
-      }
-    }
+        avatar_url: string;
+        email: string;
+        id: string;
+        username: string;
+      };
+    };
   }
 
   export interface ResponseBranchesInfo {
@@ -23,26 +23,26 @@ export namespace API {
     commit: {
       sha: string;
     };
-    protected: boolean
+    protected: boolean;
   }
 
   export interface ResponseContentBlob {
     content: string;
     type: 'file';
-    encoding: 'base64'
+    encoding: 'base64';
   }
 
   export interface ResponseFileTree {
     mode: string;
     path: string;
     sha: string;
-    type: 'blob' | 'tree' | 'symlink' | 'commit'
+    type: 'blob' | 'tree' | 'symlink' | 'commit';
   }
 
   export interface ResponseCommit {
     commit: {
-      sha: string
-    }
+      sha: string;
+    };
   }
 
   export interface ResponseRepoInfo {

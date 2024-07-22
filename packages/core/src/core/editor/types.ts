@@ -89,7 +89,7 @@ export interface EditorProps {
 }
 
 export const isCodeDocumentModel = (
-  model: EditorProps['documentModel']
+  model: EditorProps['documentModel'],
 ): model is CodeDocumentModel => {
   return 'type' in model && model.type === 'code';
 };

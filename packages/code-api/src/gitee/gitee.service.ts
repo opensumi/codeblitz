@@ -1,28 +1,28 @@
+import { request, RequestOptions } from '@codeblitzjs/ide-common';
 import { Autowired, Injectable } from '@opensumi/di';
+import { isObject, MessageType, URI } from '@opensumi/ide-core-common';
+import { CodePlatformRegistry, HelperService } from '../common';
 import {
-  TreeEntry,
-  EntryParam,
-  ICodeAPIService,
-  IRepositoryModel,
-  BranchOrTag,
-  CommitParams,
   Branch,
-  Project,
+  BranchOrTag,
+  CodeAPI,
+  CodePlatform,
   CommitFileChange,
+  CommitFileStatus,
+  CommitParams,
   CommitRecord,
+  EntryInfo,
+  EntryParam,
   FileAction,
   FileActionHeader,
-  ISearchResults,
-  CodePlatform,
-  GitlensBlame,
-  EntryInfo,
   FileActionResult,
-  CommitFileStatus,
-  CodeAPI,
+  GitlensBlame,
+  ICodeAPIService,
+  IRepositoryModel,
+  ISearchResults,
+  Project,
+  TreeEntry,
 } from '../common/types';
-import { request, RequestOptions } from '@codeblitzjs/ide-common';
-import { CodePlatformRegistry, HelperService } from '../common';
-import { URI, MessageType, isObject } from '@opensumi/ide-core-common';
 import { API } from './types';
 
 const toType = (d: API.ResponseCommitFileChange) => {
@@ -63,17 +63,28 @@ export class GiteeAPIService implements ICodeAPIService {
   constructor() {
     this._PRIVATE_TOKEN = this.config.token || this.helper.GITEE_TOKEN || '';
   }
-  
+
   getEntryInfo?(repo: IRepositoryModel, entry: EntryParam): Promise<EntryInfo> {
     throw new Error('Method not implemented.');
   }
   getBranchNames?(repo: IRepositoryModel): Promise<string[]> {
     throw new Error('Method not implemented.');
   }
-  canResolveConflict(repo: IRepositoryModel, sourceBranch: string, targetBranch: string, prId: string): Promise<CodeAPI.CanResolveConflictResponse> {
+  canResolveConflict(
+    repo: IRepositoryModel,
+    sourceBranch: string,
+    targetBranch: string,
+    prId: string,
+  ): Promise<CodeAPI.CanResolveConflictResponse> {
     throw new Error('Method not implemented.');
   }
-  resolveConflict(repo: IRepositoryModel, content: CodeAPI.ResolveConflict, sourceBranch: string, targetBranch: string, prId?: string | undefined): Promise<CodeAPI.ResolveConflictResponse> {
+  resolveConflict(
+    repo: IRepositoryModel,
+    content: CodeAPI.ResolveConflict,
+    sourceBranch: string,
+    targetBranch: string,
+    prId?: string | undefined,
+  ): Promise<CodeAPI.ResolveConflictResponse> {
     throw new Error('Method not implemented.');
   }
   getConflict(repo: IRepositoryModel, sourceBranch: string, targetBranch: string): Promise<CodeAPI.ConflictResponse> {
@@ -82,7 +93,13 @@ export class GiteeAPIService implements ICodeAPIService {
   mergeBase(repo: IRepositoryModel, target: string, source: string): Promise<CodeAPI.ResponseCommit> {
     throw new Error('Method not implemented.');
   }
-  createPullRequest(repo: IRepositoryModel, sourceBranch: string, targetBranch: string, title: string, autoMerge?: boolean | undefined): Promise<CodeAPI.ResponseCreatePR> {
+  createPullRequest(
+    repo: IRepositoryModel,
+    sourceBranch: string,
+    targetBranch: string,
+    title: string,
+    autoMerge?: boolean | undefined,
+  ): Promise<CodeAPI.ResponseCreatePR> {
     throw new Error('Method not implemented.');
   }
 
@@ -103,7 +120,7 @@ export class GiteeAPIService implements ICodeAPIService {
   protected async request<T>(
     path: string,
     options?: RequestOptions,
-    responseOptions?: API.RequestResponseOptions
+    responseOptions?: API.RequestResponseOptions,
   ): Promise<T> {
     try {
       const { headers, ...rest } = options || {};
@@ -157,7 +174,7 @@ export class GiteeAPIService implements ICodeAPIService {
 
   async getCommit(repo: IRepositoryModel, ref: string): Promise<string> {
     const commitInfo = await this.request<API.ResponseCommit>(
-      `/api/v5/repos/${this.getProjectPath(repo)}/commits/${encodeURIComponent(ref)}`
+      `/api/v5/repos/${this.getProjectPath(repo)}/commits/${encodeURIComponent(ref)}`,
     );
     return commitInfo.sha;
   }
@@ -169,17 +186,17 @@ export class GiteeAPIService implements ICodeAPIService {
           recursive: 1,
           // file_path: path,
         },
-      }
+      },
     );
 
     return Array.isArray(res.tree)
       ? res.tree.map((data) => {
-          const name = URI.parse(data.path).displayName;
-          return {
-            ...data,
-            name,
-          } as TreeEntry;
-        })
+        const name = URI.parse(data.path).displayName;
+        return {
+          ...data,
+          name,
+        } as TreeEntry;
+      })
       : [];
   }
   async getBlob(repo: IRepositoryModel, entry: EntryParam): Promise<Uint8Array> {
@@ -191,7 +208,7 @@ export class GiteeAPIService implements ICodeAPIService {
         params: {
           ref: ref || commit,
         },
-      }
+      },
     );
 
     const { content, encoding, type } = res;
@@ -208,7 +225,7 @@ export class GiteeAPIService implements ICodeAPIService {
   async getBlobByCommitPath(
     repo: IRepositoryModel,
     commit: string,
-    path: string
+    path: string,
   ): Promise<Uint8Array> {
     const res = await this.request<API.ResponseContentBlob>(
       `/api/v5/repos/${this.getProjectPath(repo)}/contents/${path}`,
@@ -216,7 +233,7 @@ export class GiteeAPIService implements ICodeAPIService {
         params: {
           ref: commit,
         },
-      }
+      },
     );
 
     const { content, encoding, type } = res;
@@ -236,7 +253,7 @@ export class GiteeAPIService implements ICodeAPIService {
     }
 
     const branches = await this.request<API.ResponseBranchesInfo[]>(
-      `/api/v5/repos/${this.getProjectPath(repo)}/branches`
+      `/api/v5/repos/${this.getProjectPath(repo)}/branches`,
     );
     if (!Array.isArray(branches)) {
       throw new Error('[can not find branch list]');
@@ -256,7 +273,7 @@ export class GiteeAPIService implements ICodeAPIService {
     }
 
     const tags = await this.request<API.ResponseBranchesInfo[]>(
-      `/api/v5/repos/${this.getProjectPath(repo)}/tags`
+      `/api/v5/repos/${this.getProjectPath(repo)}/tags`,
     );
     if (!Array.isArray(tags)) {
       throw new Error('[can not find tag list]');
@@ -278,7 +295,7 @@ export class GiteeAPIService implements ICodeAPIService {
   async searchContent(
     repo: IRepositoryModel,
     searchString: string,
-    options: { limit: number }
+    options: { limit: number },
   ): Promise<ISearchResults> {
     return [];
   }
@@ -287,7 +304,7 @@ export class GiteeAPIService implements ICodeAPIService {
   async searchFile(
     repo: IRepositoryModel,
     searchString: string,
-    options: { limit?: number | undefined }
+    options: { limit?: number | undefined },
   ): Promise<string[]> {
     const key = `${repo.owner}-${repo.name}-${repo.commit}`;
     if (!this.treeMap.has(key)) {
@@ -324,7 +341,7 @@ export class GiteeAPIService implements ICodeAPIService {
           page: params.page,
           per_page: params.pageSize,
         },
-      }
+      },
     );
     return data.map((c) => ({
       id: c.sha,
@@ -341,7 +358,7 @@ export class GiteeAPIService implements ICodeAPIService {
   }
   async getCommitDiff(repo: IRepositoryModel, sha: string): Promise<CommitFileChange[]> {
     const data = await this.request<API.ResponseCommit>(
-      `/api/v5/repos/${this.getProjectPath(repo)}/commits/${sha}`
+      `/api/v5/repos/${this.getProjectPath(repo)}/commits/${sha}`,
     );
     return data.files.map((d) => ({
       oldFilePath: d.filename,
@@ -355,10 +372,10 @@ export class GiteeAPIService implements ICodeAPIService {
   async getCommitCompare(
     repo: IRepositoryModel,
     from: string,
-    to: string
+    to: string,
   ): Promise<CommitFileChange[]> {
     const data = await this.request<API.ResponseCommitCompare>(
-      `/api/v5/repos/${this.getProjectPath(repo)}/compare/${from}...${to}`
+      `/api/v5/repos/${this.getProjectPath(repo)}/compare/${from}...${to}`,
     );
     return (data.files || []).map((d) => ({
       oldFilePath: d.filename,
@@ -376,7 +393,7 @@ export class GiteeAPIService implements ICodeAPIService {
         params: {
           recursive: 1,
         },
-      }
+      },
     );
     return res.tree.map((t) => t.path);
   }
@@ -401,7 +418,7 @@ export class GiteeAPIService implements ICodeAPIService {
           },
         },
         method: 'post',
-      }
+      },
     );
 
     let branchCreated = header.start_branch === header.branch ? false : true;
@@ -425,7 +442,7 @@ export class GiteeAPIService implements ICodeAPIService {
           branch_name: newBranch,
           refs: ref,
         },
-      }
+      },
     );
     return {
       name: res.name,
@@ -442,7 +459,7 @@ export class GiteeAPIService implements ICodeAPIService {
 
   public async getProject(repo: IRepositoryModel): Promise<Project> {
     const repoInfo = await this.request<API.ResponseRepoInfo>(
-      `/api/v5/repos/${this.getProjectPath(repo)}`
+      `/api/v5/repos/${this.getProjectPath(repo)}`,
     );
     return {
       id: repoInfo.full_name,
