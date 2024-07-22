@@ -31,7 +31,7 @@ import {
 } from '@opensumi/ide-core-browser';
 import { LayoutViewSizeConfig } from '@opensumi/ide-core-browser/lib/layout/constants';
 import { RawContextKey } from '@opensumi/ide-core-browser/lib/raw-context-key';
-import { uuid } from '@opensumi/ide-core-common';
+import { GeneralSettingsId, uuid } from '@opensumi/ide-core-common';
 import {
   BrowserEditorContribution,
   EditorCollectionService,
@@ -147,7 +147,7 @@ class ThemeContribution extends Disposable implements ClientAppContribution {
     );
     // 强制用集成设置的默认主题
     await this.themeService.applyTheme(
-      this.defaultPreferenceProvider.get('general.theme') as string,
+      this.defaultPreferenceProvider.get(GeneralSettingsId.Theme) as string,
     );
   }
 }

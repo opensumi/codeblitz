@@ -199,7 +199,7 @@ export class ClientApp extends BasicClientApp {
   }
 
   get currentThemeType() {
-    const themeId = getPreferenceThemeId() || this.opts.defaultPreferences?.['general.theme'];
+    const themeId = getPreferenceThemeId() || this.opts.defaultPreferences?.[GeneralSettingsId.Theme];
     return getThemeTypeByPreferenceThemeId(themeId, (this.opts as IAppOpts).extensionMetadata);
   }
 

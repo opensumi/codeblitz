@@ -182,7 +182,7 @@ const App = () => (
       layoutComponent: AILayout,
       layoutConfig,
       defaultPreferences: {
-        'general.theme': 'opensumi-design-dark',
+        'general.theme': 'opensumi-design-dark-theme',
       },
     }}
     runtimeConfig={{

@@ -47,7 +47,7 @@ export const getDefaultAppConfig = (): IAppOpts => ({
   extWorkerHost: EXT_WORKER_HOST,
   webviewEndpoint: WEBVIEW_ENDPOINT,
   defaultPreferences: {
-    'general.theme': 'opensumi-design-dark',
+    'general.theme': 'opensumi-design-dark-theme',
     'general.icon': 'vsicons-slim',
     'application.confirmExit': 'never',
     'editor.quickSuggestionsDelay': 10,

@@ -1,5 +1,5 @@
 import { ClientAppContribution, PreferenceProvider } from '@opensumi/ide-core-browser';
-import { Disposable, Domain, PreferenceScope } from '@opensumi/ide-core-common';
+import { Disposable, Domain, GeneralSettingsId, PreferenceScope } from '@opensumi/ide-core-common';
 import { IThemeService } from '@opensumi/ide-theme';
 import { Autowired } from '../modules/opensumi__common-di';
 
@@ -14,7 +14,7 @@ export class ApplyDefaultThemeContribution extends Disposable implements ClientA
   async onDidStart() {
     // 强制用集成设置的默认主题
     await this.themeService.applyTheme(
-      this.defaultPreferenceProvider.get('general.theme') as string,
+      this.defaultPreferenceProvider.get(GeneralSettingsId.Theme) as string,
     );
   }
 }

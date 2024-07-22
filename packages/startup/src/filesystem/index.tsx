@@ -162,7 +162,7 @@ const App = () => {
           appConfig={{
             workspaceDir: 'filesystem',
             defaultPreferences: {
-              'general.theme': 'opensumi-design-light',
+              'general.theme': 'opensumi-design-light-theme',
             },
           }}
           runtimeConfig={{
