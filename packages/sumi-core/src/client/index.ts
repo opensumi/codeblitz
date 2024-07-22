@@ -136,7 +136,7 @@ export interface IAppOpts extends IClientAppOpts, IServerAppOpts {}
 
 export { IClientAppOpts };
 
-// FIXME: 默认 dispose 会调用 disposeSideEffect，因为实例已销户，会重新生成实例导致报错
+// FIXME: 默认 dispose 会调用 disposeSideEffect，因为实例已销毁，会重新生成实例导致报错
 // 先 dispose，待 opensumi 修复
 // @ts-ignore
 export class ClientApp extends BasicClientApp {
@@ -213,7 +213,7 @@ export class ClientApp extends BasicClientApp {
   }
 
   get currentThemeType() {
-    const themeId = getPreferenceThemeId() || this.opts.defaultPreferences?.[GeneralSettingsId.Theme];
+    const themeId = getPreferenceThemeId() || this.opts.defaultPreferences?.['general.theme'];
     return getThemeTypeByPreferenceThemeId(themeId, (this.opts as IAppOpts).extensionMetadata);
   }
 

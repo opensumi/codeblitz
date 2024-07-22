@@ -19,11 +19,6 @@ export const disposeMode = () => {
   // 需要把 LanguageRegistry dispose，否则二次加载会重复触发事件，导致加载越来越慢
   modeService._registry?.dispose?.();
 
-  // opensumi 内使用 onlanguage 触发语法插件激活事件 onlanguage 只会触发一次
-  // 所以 dispose 之后清除 monaco 注册的 languages 以便下次重新触发
-  // https://github.com/opensumi/core/blob/e2bdbeaaf46bdd94474fe164593af098d4f3bb9f/packages/editor/src/browser/monaco-contrib/tokenizer/textmate.service.ts#L202-L204
-  modeService._encounteredLanguages?.clear();
-
   (<any>ModesRegistry)._languages = [];
 };
 

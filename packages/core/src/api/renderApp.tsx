@@ -3,6 +3,7 @@ import { getDebugLogger, IReporterService, localize } from '@opensumi/ide-core-c
 import React, { useEffect, useMemo, useRef, useState } from 'react';
 import { createRoot } from 'react-dom/client';
 import { useConstant } from '../core/hooks';
+import { IPropsService, PropsServiceImpl } from '../core/props.service';
 import { Root } from '../core/Root';
 import styles from '../core/style.module.less';
 import { LandingProps, RootProps } from '../core/types';
@@ -61,9 +62,9 @@ export const AppRenderer: React.FC<IAppRendererProps> = ({ onLoad, Landing, ...o
   const app = useConstant(() => createApp(opts));
   const themeType = useConstant(() => app.currentThemeType);
   const appElementRef = useRef<React.FC | null>(null);
+  const propsService = useConstant(() => new PropsServiceImpl<IAppRendererProps>());
+  propsService.props = opts;
 
-  // 确保回调始终为最新
-  // TODO: 用 PropsService
   const runtimeConfig: RuntimeConfig = app.injector.get(RuntimeConfig);
   runtimeConfig.workspace = opts.runtimeConfig.workspace;
 
@@ -71,6 +72,13 @@ export const AppRenderer: React.FC<IAppRendererProps> = ({ onLoad, Landing, ...o
     status: RootProps['status'];
     error?: RootProps['error'];
   }>(() => ({ status: 'loading' }));
+
+  useMemo(() => {
+    app.injector.addProviders({
+      token: IPropsService,
+      useValue: propsService,
+    });
+  }, []);
 
   useEffect(() => {
     app

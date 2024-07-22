@@ -1,68 +1,68 @@
-import * as monaco from '@opensumi/ide-monaco';
-import { FindController } from '@opensumi/monaco-editor-core/esm/vs/editor/contrib/find/browser/findController';
-import { FindWidget } from '@opensumi/monaco-editor-core/esm/vs/editor/contrib/find/browser/findWidget';
-import * as monacoKeybindings from '@opensumi/monaco-editor-core/esm/vs/platform/keybinding/common/keybindingsRegistry';
-import { ContextKeyDefinedExpr } from '@opensumi/monaco-editor-core/esm/vs/platform/contextkey/common/contextkey';
-import { LayoutViewSizeConfig } from '@opensumi/ide-core-browser/lib/layout/constants';
-import { Provider, Injectable, Autowired } from '@opensumi/di';
-import debounce from 'lodash.debounce';
 import {
-  BrowserModule,
-  ClientAppContribution,
-  URI,
-  Domain,
-  CommandService,
-  PreferenceProvider,
-  PreferenceScope,
-  CommandContribution,
-  CommandRegistry,
-  Disposable,
-  IDisposable,
-  KeybindingContribution,
-  KeybindingRegistry,
-  MonacoContribution,
-  MonacoService,
-  ServiceNames,
-  IContextKeyService,
-  KeybindingRegistryImpl,
-  QUICK_OPEN_COMMANDS,
-} from '@opensumi/ide-core-browser';
-import { RawContextKey } from '@opensumi/ide-core-browser/lib/raw-context-key';
-import { uuid } from '@opensumi/ide-core-common';
-import { IThemeService, ICSSStyleService } from '@opensumi/ide-theme';
-import {
-  getExtensionPath,
   AppConfig,
   BrowserFS,
   FileSystemContribution,
   FileSystemInstance,
-  SCM_ROOT,
+  getExtensionPath,
   RuntimeConfig,
+  SCM_ROOT,
 } from '@codeblitzjs/ide-sumi-core';
+import { Autowired, Injectable, Provider } from '@opensumi/di';
 import {
-  WorkbenchEditorService,
+  BrowserModule,
+  ClientAppContribution,
+  CommandContribution,
+  CommandRegistry,
+  CommandService,
+  Disposable,
+  Domain,
+  IContextKeyService,
+  IDisposable,
+  KeybindingContribution,
+  KeybindingRegistry,
+  KeybindingRegistryImpl,
+  MonacoContribution,
+  MonacoService,
+  PreferenceProvider,
+  PreferenceScope,
+  QUICK_OPEN_COMMANDS,
+  ServiceNames,
+  URI,
+} from '@opensumi/ide-core-browser';
+import { LayoutViewSizeConfig } from '@opensumi/ide-core-browser/lib/layout/constants';
+import { RawContextKey } from '@opensumi/ide-core-browser/lib/raw-context-key';
+import { uuid } from '@opensumi/ide-core-common';
+import {
   BrowserEditorContribution,
+  EditorCollectionService,
   EditorPreferences,
   IEditor,
-  EditorCollectionService,
+  WorkbenchEditorService,
 } from '@opensumi/ide-editor/lib/browser';
-import { ICodeEditor } from '@opensumi/ide-editor/lib/common';
 import { BreadCrumbServiceImpl } from '@opensumi/ide-editor/lib/browser/breadcrumb';
-import { IBreadCrumbService } from '@opensumi/ide-editor/lib/browser/types';
-import { EditorHistoryService, EditorHistoryState } from '@opensumi/ide-editor/lib/browser/history';
 import { IEditorDocumentModelService } from '@opensumi/ide-editor/lib/browser/doc-model/types';
+import { EditorHistoryService, EditorHistoryState } from '@opensumi/ide-editor/lib/browser/history';
+import { IBreadCrumbService } from '@opensumi/ide-editor/lib/browser/types';
+import { ICodeEditor } from '@opensumi/ide-editor/lib/common';
 import { FileSchemeDocumentProvider } from '@opensumi/ide-file-scheme/lib/browser/file-doc';
+import * as monaco from '@opensumi/ide-monaco';
+import { ICSSStyleService, IThemeService } from '@opensumi/ide-theme';
+import { FindController } from '@opensumi/monaco-editor-core/esm/vs/editor/contrib/find/browser/findController';
+import { FindWidget } from '@opensumi/monaco-editor-core/esm/vs/editor/contrib/find/browser/findWidget';
+import { ContextKeyDefinedExpr } from '@opensumi/monaco-editor-core/esm/vs/platform/contextkey/common/contextkey';
+import * as monacoKeybindings from '@opensumi/monaco-editor-core/esm/vs/platform/keybinding/common/keybindingsRegistry';
+import debounce from 'lodash.debounce';
 
-import * as path from 'path';
-import md5 from 'md5';
-import { IWorkspaceService } from '@opensumi/ide-workspace';
-import { SCMService } from '@opensumi/ide-scm';
-import { IDETheme } from '../extension/metadata';
-import { isCodeDocumentModel, CodeDocumentModel, EditorProps } from './types';
-import styles from '../style.module.less';
-import { IPropsService } from '../props.service';
-import { AlexCommandContribution } from '../commands';
 import { monacoBrowser } from '@opensumi/ide-monaco/lib/browser';
+import { SCMService } from '@opensumi/ide-scm';
+import { IWorkspaceService } from '@opensumi/ide-workspace';
+import md5 from 'md5';
+import * as path from 'path';
+import { AlexCommandContribution } from '../commands';
+import { IDETheme } from '../extension/metadata';
+import { IPropsService } from '../props.service';
+import styles from '../style.module.less';
+import { CodeDocumentModel, EditorProps, isCodeDocumentModel } from './types';
 
 const ContextTrue = new RawContextKey('alex.context.true', undefined);
 const ContextFalse = new RawContextKey('alex.context.false', undefined);
@@ -143,11 +143,11 @@ class ThemeContribution extends Disposable implements ClientAppContribution {
   async initialize() {
     this.themeService.registerThemes(
       IDETheme.packageJSON.contributes!.themes,
-      URI.parse(getExtensionPath(IDETheme.extension, 'public'))
+      URI.parse(getExtensionPath(IDETheme.extension, 'public')),
     );
     // 强制用集成设置的默认主题
     await this.themeService.applyTheme(
-      this.defaultPreferenceProvider.get('general.theme') as string
+      this.defaultPreferenceProvider.get('general.theme') as string,
     );
   }
 }
@@ -209,10 +209,9 @@ class EditorHistoryServiceOverride extends EditorHistoryService {
   BrowserEditorContribution,
   ClientAppContribution,
   CommandContribution,
-  KeybindingContribution
+  KeybindingContribution,
 )
-class EditorSpecialContribution
-  extends Disposable
+class EditorSpecialContribution extends Disposable
   implements
     FileSystemContribution,
     BrowserEditorContribution,
@@ -326,7 +325,7 @@ class EditorSpecialContribution
         codeEditor.onDispose(() => {
           disposer.dispose();
         });
-      })
+      }),
     );
   }
 
@@ -343,7 +342,7 @@ class EditorSpecialContribution
           if (newModel.filepath !== oldModel.filepath || newModel.ref !== oldModel.ref) {
             this.openEditorForCode(newModel.ref, newModel.filepath);
           }
-        })
+        }),
       );
     } else {
       this.openEditorForFs(documentModel.filepath);
@@ -353,7 +352,7 @@ class EditorSpecialContribution
           if (e.affect('documentModel', 'filepath')) {
             this.openEditorForFs(e.props.documentModel.filepath);
           }
-        })
+        }),
       );
     }
 
@@ -370,7 +369,7 @@ class EditorSpecialContribution
             }
           }
         }
-      })
+      }),
     );
   }
 
@@ -402,11 +401,11 @@ class EditorSpecialContribution
             project: `${documentModel.owner}/${documentModel.name}`,
             commit: documentModel.ref,
             rootUri: URI.file(this.appConfig.workspaceDir).resolve(
-              encodeURIComponent(documentModel.ref)
+              encodeURIComponent(documentModel.ref),
             ).codeUri,
           };
         },
-      }
+      },
     );
 
     // 注销命令
@@ -436,8 +435,8 @@ class EditorSpecialContribution
           }
           const type = event?.target?.type;
           if (
-            type === monacoBrowser.editor.MouseTargetType.GUTTER_LINE_NUMBERS ||
-            type === monacoBrowser.editor.MouseTargetType.GUTTER_GLYPH_MARGIN
+            type === monacoBrowser.editor.MouseTargetType.GUTTER_LINE_NUMBERS
+            || type === monacoBrowser.editor.MouseTargetType.GUTTER_GLYPH_MARGIN
           ) {
             const lineNumber = event.target.position!.lineNumber;
             oldHoverDecorations = editor.monacoEditor.deltaDecorations(oldHoverDecorations, [
@@ -453,8 +452,8 @@ class EditorSpecialContribution
           } else {
             oldHoverDecorations = editor.monacoEditor.deltaDecorations(oldHoverDecorations, []);
           }
-        }, 10)
-      )
+        }, 10),
+      ),
     );
     let oldClickDecorations: string[] = [];
     const highlightLine = (lineNumber: number | [number, number] | Array<[number, number]>) => {
@@ -477,10 +476,8 @@ class EditorSpecialContribution
           };
         });
       } else {
-        const startLineNumber =
-          typeof lineNumber === 'number' ? lineNumber : (lineNumber[0] as number);
-        const endLineNumber =
-          typeof lineNumber === 'number' ? lineNumber : (lineNumber[1] as number);
+        const startLineNumber = typeof lineNumber === 'number' ? lineNumber : (lineNumber[0] as number);
+        const endLineNumber = typeof lineNumber === 'number' ? lineNumber : (lineNumber[1] as number);
         centerLine = startLineNumber;
         newDecorations = [
           {
@@ -498,7 +495,7 @@ class EditorSpecialContribution
       // 延迟高亮，否则不居中
       oldClickDecorations = editor.monacoEditor.deltaDecorations(
         oldClickDecorations,
-        newDecorations
+        newDecorations,
       );
       setTimeout(() => {
         if (this.propsService.props.editorConfig?.stretchHeight) {
@@ -517,8 +514,8 @@ class EditorSpecialContribution
         const type = event?.target?.type;
 
         if (
-          type === monacoBrowser.editor.MouseTargetType.GUTTER_LINE_NUMBERS ||
-          type === monacoBrowser.editor.MouseTargetType.GUTTER_GLYPH_MARGIN
+          type === monacoBrowser.editor.MouseTargetType.GUTTER_LINE_NUMBERS
+          || type === monacoBrowser.editor.MouseTargetType.GUTTER_GLYPH_MARGIN
         ) {
           const lineNumber = event.target.position!.lineNumber;
           const lastLineNumber = this.propsService.props.documentModel.lineNumber;
@@ -541,7 +538,7 @@ class EditorSpecialContribution
           }
           this.propsService.props.documentModel.onLineNumberChange?.(nextLineNumber);
         }
-      })
+      }),
     );
 
     disposer.addDispose(
@@ -550,7 +547,7 @@ class EditorSpecialContribution
         if (initialLineNumber) {
           highlightLine(initialLineNumber);
         }
-      })
+      }),
     );
 
     disposer.addDispose(
@@ -561,7 +558,7 @@ class EditorSpecialContribution
             highlightLine(newLineNumber);
           }
         }
-      })
+      }),
     );
 
     if (this.propsService.props.editorConfig?.stretchHeight) {
@@ -603,8 +600,7 @@ class EditorSpecialContribution
             const widget: FindWidget = (findController as any)._widget;
             const dom = widget.getDomNode();
             const { top } = dom.parentElement!.getBoundingClientRect();
-            const offsetTop =
-              typeof adjustFindWidgetTop === 'number' ? top - adjustFindWidgetTop : top;
+            const offsetTop = typeof adjustFindWidgetTop === 'number' ? top - adjustFindWidgetTop : top;
             const className = `find-widget-top-${uuid()}`;
             dom.classList.add(className);
             if (offsetTop < 0) {
@@ -618,7 +614,7 @@ class EditorSpecialContribution
         } catch (err) {
           console.error(err);
         }
-      })
+      }),
     );
   }
 
@@ -653,7 +649,7 @@ class EditorSpecialContribution
     // 通过设置 when 为 false 来禁用快捷键
     if (this.propsService.props.editorConfig?.disableEditorSearch) {
       const findCommand = monacoKeybindings.KeybindingsRegistry.getDefaultKeybindings().find(
-        (item) => item.command === 'actions.find'
+        (item) => item.command === 'actions.find',
       );
       if (findCommand) {
         findCommand.when = ContextKeyDefinedExpr.create('alex.context.false');
@@ -665,7 +661,7 @@ class EditorSpecialContribution
           command: KeybindingRegistryImpl.PASSTHROUGH_PSEUDO_COMMAND,
           keybinding: 'ctrlcmd+f',
           when: '!editorFocus',
-        })
+        }),
       );
     }
   }
@@ -676,13 +672,13 @@ class EditorSpecialContribution
     codeEditorService.openCodeEditor = (
       input: any,
       source?: monaco.editor.ICodeEditor,
-      sideBySide?: boolean
+      sideBySide?: boolean,
     ) => {
       return this.openCodeEditor(
         () => _openCodeEditor.call(codeEditorService, input, source, sideBySide),
         input,
         source,
-        sideBySide
+        sideBySide,
       );
     };
   }
@@ -694,7 +690,7 @@ class EditorSpecialContribution
     raw: Function,
     input: any,
     source?: monaco.editor.ICodeEditor,
-    sideBySide?: boolean
+    sideBySide?: boolean,
   ) {
     // 非 file 协议路径设置为空，以触发 props 变化
     const documentModel = this.propsService.props.documentModel;
