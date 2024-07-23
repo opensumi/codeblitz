@@ -15,7 +15,7 @@ export class Plugin implements IPluginModule {
       commands.registerCommand('plugin.command.add', (x: number) => {
         commands.executeCommand('plugin.command.say', 'alex is great');
         return x + x;
-      })
+      }),
     );
   }
 }

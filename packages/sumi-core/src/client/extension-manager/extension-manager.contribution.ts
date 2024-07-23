@@ -1,20 +1,20 @@
 import { Autowired } from '@opensumi/di';
-import { Domain, localize } from '@opensumi/ide-core-common';
 import { getIcon } from '@opensumi/ide-core-browser';
 import { ComponentContribution, ComponentRegistry } from '@opensumi/ide-core-browser/lib/layout';
-import { MainLayoutContribution, IMainLayoutService } from '@opensumi/ide-main-layout';
+import { Domain, localize } from '@opensumi/ide-core-common';
 import {
   BrowserEditorContribution,
   EditorComponentRegistry,
-  ResourceService,
   EditorOpenType,
+  ResourceService,
 } from '@opensumi/ide-editor/lib/browser';
+import { IMainLayoutService, MainLayoutContribution } from '@opensumi/ide-main-layout';
 
-import { EXTENSION_SCHEME, enableExtensionsContainerId, IExtensionManagerService } from './base';
-import { ExtensionResourceProvider } from './extension-resource-provider';
-import ExtensionPanelView from './extension-panel.view';
+import { enableExtensionsContainerId, EXTENSION_SCHEME, IExtensionManagerService } from './base';
 import { ExtensionDetailView } from './extension-detail.view';
 import { ExtensionManagerService } from './extension-manager.service';
+import ExtensionPanelView from './extension-panel.view';
+import { ExtensionResourceProvider } from './extension-resource-provider';
 
 @Domain(ComponentContribution, MainLayoutContribution, BrowserEditorContribution)
 export class ExtensionManagerContribution

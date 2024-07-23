@@ -35,7 +35,7 @@ export const setExtensionConfig = (config: Partial<IExtensionConfig>) => {
   if (config.configurationDir) {
     kExtensionConfig.configurationDir = config.configurationDir;
   }
-}
+};
 
 export interface IMarketplaceConfig {
   endpoint: string;

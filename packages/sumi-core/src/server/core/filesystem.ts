@@ -1,7 +1,7 @@
 import { Deferred, getDebugLogger } from '@opensumi/ide-core-common';
-import { BrowserFS, FileSystem } from '../node';
-import { HOME_ROOT, HOME_IDB_NAME } from '../../common';
+import { HOME_IDB_NAME, HOME_ROOT } from '../../common';
 import { RootFS } from '../../common/types';
+import { BrowserFS, FileSystem } from '../node';
 
 const { createFileSystem, FileSystem, initialize } = BrowserFS;
 
@@ -26,7 +26,7 @@ export const unmountRootFS = () => {
     // mountfs
     mountfs = null;
   }
-}
+};
 
 export const initializeHomeFileSystem = async (rootFS: RootFS, scenario?: string | null) => {
   try {

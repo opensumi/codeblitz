@@ -1,8 +1,8 @@
-import { Injectable, Autowired, Injector, INJECTOR_TOKEN } from '@opensumi/di';
+import { Autowired, Injectable, Injector, INJECTOR_TOKEN } from '@opensumi/di';
 import { Deferred } from '@opensumi/ide-core-common';
-import { IPluginModule, IPluginAPI } from './types';
 import { createAPIFactory } from './api/plugin.api.impl';
 import { PluginContext } from './api/plugin.context';
+import { IPluginAPI, IPluginModule } from './types';
 
 interface ActivatorPlugin {
   subscriptions: { dispose(): any }[];
@@ -38,7 +38,7 @@ export class PluginService {
         plugin.deactivate?.();
       } catch (err: any) {
         console.error(`
-          [Alex Plugin]: deactivate plugin module error ${err.message} \n\n
+          [CodeBlitz Plugin]: deactivate plugin module error ${err.message} \n\n
           Stack: ${err.stack && err.stack}
         `);
         return err;

@@ -1,18 +1,19 @@
 import { Autowired, Injectable, Injector, INJECTOR_TOKEN } from '@opensumi/di';
 import {
-  MonacoContribution,
   Domain,
-  MonacoOverrideServiceRegistry,
   IContextKeyService,
+  MonacoContribution,
+  MonacoOverrideServiceRegistry,
 } from '@opensumi/ide-core-browser';
 import { StandaloneKeybindingServiceProxy } from './monacoOverride/standaloneKeybindingService';
 
+import { MonacoCommandService } from '@opensumi/ide-editor/lib/browser/monaco-contrib/command/command.service';
 import { ICommandServiceToken } from '@opensumi/ide-monaco/lib/browser/contrib/command';
 import { MonacoCodeService } from './monacoOverride/codeEditorService';
-import { MonacoCommandService } from '@opensumi/ide-editor/lib/browser/monaco-contrib/command/command.service';
 // import { MonacoCodeService, monacoCodeServiceProxy } from './codeEditorService';
 
 export const IMonacoOverrideService = Symbol('IMonacoOverrideService');
+
 @Domain(MonacoContribution)
 export class MonacoOverrideService implements MonacoContribution {
   @Autowired(ICommandServiceToken)
@@ -25,12 +26,15 @@ export class MonacoOverrideService implements MonacoContribution {
   private readonly globalContextKeyService: IContextKeyService;
 
   registerOverrideService(registry: MonacoOverrideServiceRegistry) {
-
     // TODO opensumi ServiceNames
     registry.registerOverrideService(
       // @ts-ignore
       'keybindingService',
-      new StandaloneKeybindingServiceProxy(this.globalContextKeyService.contextKeyService, this.monacoCodeService, this.monacoCommandService)
+      new StandaloneKeybindingServiceProxy(
+        this.globalContextKeyService.contextKeyService,
+        this.monacoCodeService,
+        this.monacoCommandService,
+      ),
     );
   }
 }

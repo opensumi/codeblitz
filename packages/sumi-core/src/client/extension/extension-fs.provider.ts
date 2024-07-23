@@ -1,11 +1,11 @@
 import { Injectable } from '@opensumi/di';
-import { Uri, Event } from '@opensumi/ide-core-browser';
+import { Event, Uri } from '@opensumi/ide-core-browser';
 import {
-  FileSystemProvider,
-  FileStat,
-  FileType,
   FileChangeEvent,
+  FileStat,
+  FileSystemProvider,
   FileSystemProviderCapabilities,
+  FileType,
 } from '@opensumi/ide-file-service';
 
 /**

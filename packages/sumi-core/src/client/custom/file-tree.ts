@@ -1,42 +1,39 @@
-import React from 'react';
 import { Autowired } from '@opensumi/di';
-import { Domain, localize, Throttler, URI, IClipboardService } from '@opensumi/ide-core-common';
 import {
-  CommandContribution,
-  KeybindingContribution,
-  FILE_COMMANDS,
-  CommandRegistry,
-  KeybindingRegistry,
-  Command,
   AppConfig,
+  Command,
+  CommandContribution,
+  CommandRegistry,
+  ComponentRegistryInfo,
+  FILE_COMMANDS,
+  KeybindingContribution,
+  KeybindingRegistry,
   SlotRendererContribution,
   SlotRendererRegistry,
-  ComponentRegistryInfo,
   useInjectable,
 } from '@opensumi/ide-core-browser';
-import {
-  MenuContribution,
-  IMenuRegistry,
-  MenuId,
-  ExplorerContextCallback,
-} from '@opensumi/ide-core-browser/lib/menu/next';
-import { WorkbenchEditorService } from '@opensumi/ide-editor/lib/browser';
-import { TabRendererBase } from '@opensumi/ide-main-layout/lib/browser/tabbar/renderer.view';
-import { LeftTabPanelRenderer } from '@opensumi/ide-main-layout/lib/browser/tabbar/panel.view';
-import {
-  TabbarServiceFactory,
-  TabbarService,
-} from '@opensumi/ide-main-layout/lib/browser/tabbar/tabbar.service';
-import { RuntimeConfig } from '../../common/types';
-import { FileTreeModelService } from '@opensumi/ide-file-tree-next/lib/browser/services/file-tree-model.service';
-import { Directory } from '@opensumi/ide-file-tree-next/lib/common/file-tree-node.define';
-import { IFileTreeService, PasteTypes } from '@opensumi/ide-file-tree-next';
-import { FileTreeService } from '@opensumi/ide-file-tree-next/lib/browser/file-tree.service';
 import {
   FilesExplorerFocusedContext,
   FilesExplorerInputFocusedContext,
 } from '@opensumi/ide-core-browser/lib/contextkey/explorer';
 import { FilesExplorerFilteredContext } from '@opensumi/ide-core-browser/lib/contextkey/explorer';
+import {
+  ExplorerContextCallback,
+  IMenuRegistry,
+  MenuContribution,
+  MenuId,
+} from '@opensumi/ide-core-browser/lib/menu/next';
+import { Domain, IClipboardService, localize, Throttler, URI } from '@opensumi/ide-core-common';
+import { WorkbenchEditorService } from '@opensumi/ide-editor/lib/browser';
+import { IFileTreeService, PasteTypes } from '@opensumi/ide-file-tree-next';
+import { FileTreeService } from '@opensumi/ide-file-tree-next/lib/browser/file-tree.service';
+import { FileTreeModelService } from '@opensumi/ide-file-tree-next/lib/browser/services/file-tree-model.service';
+import { Directory } from '@opensumi/ide-file-tree-next/lib/common/file-tree-node.define';
+import { LeftTabPanelRenderer } from '@opensumi/ide-main-layout/lib/browser/tabbar/panel.view';
+import { TabRendererBase } from '@opensumi/ide-main-layout/lib/browser/tabbar/renderer.view';
+import { TabbarService, TabbarServiceFactory } from '@opensumi/ide-main-layout/lib/browser/tabbar/tabbar.service';
+import React from 'react';
+import { RuntimeConfig } from '../../common/types';
 
 /**
  * TODO SCM 完善文件系统
@@ -44,11 +41,7 @@ import { FilesExplorerFilteredContext } from '@opensumi/ide-core-browser/lib/con
  */
 @Domain(MenuContribution, CommandContribution, KeybindingContribution, SlotRendererContribution)
 export class FileTreeCustomContribution
-  implements
-    MenuContribution,
-    CommandContribution,
-    KeybindingContribution,
-    SlotRendererContribution
+  implements MenuContribution, CommandContribution, KeybindingContribution, SlotRendererContribution
 {
   @Autowired(WorkbenchEditorService)
   workbenchEditorService: WorkbenchEditorService;
@@ -88,21 +81,21 @@ export class FileTreeCustomContribution
 
     const isContextMenuFile = () => {
       return (
-        !!this.fileTreeModelService.contextMenuFile &&
-        !this.fileTreeModelService.contextMenuFile.uri.isEqual(
-          (this.fileTreeModelService.treeModel.root as Directory).uri
-        ) &&
-        !Directory.is(this.fileTreeModelService.contextMenuFile)
+        !!this.fileTreeModelService.contextMenuFile
+        && !this.fileTreeModelService.contextMenuFile.uri.isEqual(
+          (this.fileTreeModelService.treeModel.root as Directory).uri,
+        )
+        && !Directory.is(this.fileTreeModelService.contextMenuFile)
       );
     };
 
     const isFocusedFile = () => {
       return (
-        !!this.fileTreeModelService.focusedFile &&
-        !this.fileTreeModelService.focusedFile.uri.isEqual(
-          (this.fileTreeModelService.treeModel.root as Directory).uri
-        ) &&
-        !Directory.is(this.fileTreeModelService.focusedFile)
+        !!this.fileTreeModelService.focusedFile
+        && !this.fileTreeModelService.focusedFile.uri.isEqual(
+          (this.fileTreeModelService.treeModel.root as Directory).uri,
+        )
+        && !Directory.is(this.fileTreeModelService.focusedFile)
       );
     };
 
@@ -141,11 +134,11 @@ export class FileTreeCustomContribution
             if (this.fileTreeModelService.focusedFile) {
               this.willDeleteUris.push(this.fileTreeModelService.focusedFile.uri);
             } else if (
-              this.fileTreeModelService.selectedFiles &&
-              this.fileTreeModelService.selectedFiles.length > 0
+              this.fileTreeModelService.selectedFiles
+              && this.fileTreeModelService.selectedFiles.length > 0
             ) {
               this.willDeleteUris = this.willDeleteUris.concat(
-                this.fileTreeModelService.selectedFiles.map((file) => file.uri)
+                this.fileTreeModelService.selectedFiles.map((file) => file.uri),
               );
             } else {
               return;
@@ -206,9 +199,9 @@ export class FileTreeCustomContribution
         },
         isVisible: () => !Directory.is(this.fileTreeModelService.contextMenuFile),
         isEnabled: () =>
-          (this.fileTreeModelService.pasteStore &&
-            this.fileTreeModelService.pasteStore.type !== PasteTypes.NONE) ||
-          !!this.clipboardService.hasResources(),
+          (this.fileTreeModelService.pasteStore
+            && this.fileTreeModelService.pasteStore.type !== PasteTypes.NONE)
+          || !!this.clipboardService.hasResources(),
       });
     }
     if (!this.runtimeConfig.disableModifyFileTree) return;
@@ -227,27 +220,32 @@ export class FileTreeCustomContribution
       {
         command: FILE_COMMANDS.COPY_FILE.id,
         keybinding: 'ctrlcmd+c',
-        when: `${FilesExplorerFocusedContext.raw} && !${FilesExplorerInputFocusedContext.raw} && !${FilesExplorerFilteredContext.raw}`,
+        when:
+          `${FilesExplorerFocusedContext.raw} && !${FilesExplorerInputFocusedContext.raw} && !${FilesExplorerFilteredContext.raw}`,
       },
       {
         command: FILE_COMMANDS.PASTE_FILE.id,
         keybinding: 'ctrlcmd+v',
-        when: `${FilesExplorerFocusedContext.raw} && !${FilesExplorerInputFocusedContext.raw} && !${FilesExplorerFilteredContext.raw}`,
+        when:
+          `${FilesExplorerFocusedContext.raw} && !${FilesExplorerInputFocusedContext.raw} && !${FilesExplorerFilteredContext.raw}`,
       },
       {
         command: FILE_COMMANDS.CUT_FILE.id,
         keybinding: 'ctrlcmd+x',
-        when: `${FilesExplorerFocusedContext.raw} && !${FilesExplorerInputFocusedContext.raw} && !${FilesExplorerFilteredContext.raw}`,
+        when:
+          `${FilesExplorerFocusedContext.raw} && !${FilesExplorerInputFocusedContext.raw} && !${FilesExplorerFilteredContext.raw}`,
       },
       {
         command: FILE_COMMANDS.RENAME_FILE.id,
         keybinding: 'enter',
-        when: `${FilesExplorerFocusedContext.raw} && !${FilesExplorerInputFocusedContext.raw} && !${FilesExplorerFilteredContext.raw}`,
+        when:
+          `${FilesExplorerFocusedContext.raw} && !${FilesExplorerInputFocusedContext.raw} && !${FilesExplorerFilteredContext.raw}`,
       },
       {
         command: FILE_COMMANDS.DELETE_FILE.id,
         keybinding: 'ctrlcmd+backspace',
-        when: `${FilesExplorerFocusedContext.raw} && !${FilesExplorerInputFocusedContext.raw} && !${FilesExplorerFilteredContext.raw}`,
+        when:
+          `${FilesExplorerFocusedContext.raw} && !${FilesExplorerInputFocusedContext.raw} && !${FilesExplorerFilteredContext.raw}`,
       },
     ];
     keybinding.forEach((binding) => {

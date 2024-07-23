@@ -1,7 +1,7 @@
 {
   "compilerOptions": {
     "checkJs": true,
-    "resolveJsonModule": true,
+    "resolveJsonModule": true
   },
   "include": [
     "./webpack",

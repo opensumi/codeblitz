@@ -56,6 +56,6 @@ exports.createHash = function createHash(alg) {
   return new MD5();
 };
 
-exports.randomBytes = function () {
+exports.randomBytes = function() {
   throw new Error('crypto.randomBytes is not implemented');
 };

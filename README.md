@@ -18,7 +18,7 @@ English | [简体中文](./README-zh_CN.md)
 ## Project Startup
 
 ### Preparation
-Need to install yarn >= 1.0 and use yarn's [workspaces](https://classic.yarnpkg.com/en/docs/workspaces/) to manage packages
+Need to install yarn >= 1.22 and use yarn's [workspaces](https://classic.yarnpkg.com/en/docs/workspaces/) to manage packages
 ### Start the project
 ```bash
 1. yarn

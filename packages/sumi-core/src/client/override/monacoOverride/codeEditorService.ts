@@ -8,8 +8,8 @@
 import { Injector } from '@opensumi/di';
 import { MonacoCodeService } from '@opensumi/ide-editor/lib/browser/editor.override';
 import { AbstractCodeEditorService } from '@opensumi/monaco-editor-core/esm/vs/editor/browser/services/abstractCodeEditorService';
-import { IStandaloneThemeService } from '@opensumi/monaco-editor-core/esm/vs/editor/standalone/common/standaloneTheme';
 import { StandaloneServices } from '@opensumi/monaco-editor-core/esm/vs/editor/standalone/browser/standaloneServices';
+import { IStandaloneThemeService } from '@opensumi/monaco-editor-core/esm/vs/editor/standalone/common/standaloneTheme';
 
 export const IMonacoCodeService = Symbol('IMonacoCodeService');
 

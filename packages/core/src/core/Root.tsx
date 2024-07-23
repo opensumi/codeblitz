@@ -1,7 +1,7 @@
 import React, { FC } from 'react';
+import { VERSION } from './env';
 import { Landing } from './Landing';
 import { RootProps } from './types';
-import { VERSION } from './env';
 
 // TODO: 后续考虑用 shadow DOM
 export class AlexRoot extends HTMLElement {}

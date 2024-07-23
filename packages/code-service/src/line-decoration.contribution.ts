@@ -1,24 +1,16 @@
 import * as monaco from '@opensumi/ide-monaco';
 
+import { RuntimeConfig } from '@codeblitzjs/ide-sumi-core';
 import { Autowired } from '@opensumi/di';
-import {
-  Domain,
-  Disposable,
-  CommandContribution,
-  CommandRegistry,
-} from '@opensumi/ide-core-common';
-import { IEditor, EditorType } from '@opensumi/ide-editor/lib/common';
+import { CommandContribution, CommandRegistry, Disposable, Domain } from '@opensumi/ide-core-common';
 import { WorkbenchEditorService } from '@opensumi/ide-editor/lib/browser';
-import {
-  BrowserEditorContribution,
-  IEditorFeatureRegistry,
-} from '@opensumi/ide-editor/lib/browser/types';
+import { BrowserEditorContribution, IEditorFeatureRegistry } from '@opensumi/ide-editor/lib/browser/types';
+import { EditorType, IEditor } from '@opensumi/ide-editor/lib/common';
+import { monacoBrowser } from '@opensumi/ide-monaco/lib/browser';
 import { IThemeService } from '@opensumi/ide-theme';
 import debounce from 'lodash.debounce';
 import { CodeModelService } from './code-model.service';
 import styles from './style.module.less';
-import { RuntimeConfig } from '@codeblitzjs/ide-sumi-core';
-import { monacoBrowser } from '@opensumi/ide-monaco/lib/browser';
 
 @Domain(BrowserEditorContribution, CommandContribution)
 export class LineDecorationContribution implements BrowserEditorContribution, CommandContribution {
@@ -48,16 +40,16 @@ export class LineDecorationContribution implements BrowserEditorContribution, Co
           editor.monacoEditor.onMouseMove(
             debounce((event) => {
               if (
-                this.editorService.currentEditor !== editor ||
-                this.runtimeConfig.disableHighlightLine
+                this.editorService.currentEditor !== editor
+                || this.runtimeConfig.disableHighlightLine
               ) {
                 return;
               }
 
               const type = event?.target?.type;
               if (
-                type === monacoBrowser.editor.MouseTargetType.GUTTER_LINE_NUMBERS ||
-                type === monacoBrowser.editor.MouseTargetType.GUTTER_GLYPH_MARGIN
+                type === monacoBrowser.editor.MouseTargetType.GUTTER_LINE_NUMBERS
+                || type === monacoBrowser.editor.MouseTargetType.GUTTER_GLYPH_MARGIN
               ) {
                 const lineNumber = event.target.position!.lineNumber;
                 oldHoverDecorations = editor.monacoEditor.deltaDecorations(oldHoverDecorations, [
@@ -75,8 +67,8 @@ export class LineDecorationContribution implements BrowserEditorContribution, Co
               } else {
                 oldHoverDecorations = editor.monacoEditor.deltaDecorations(oldHoverDecorations, []);
               }
-            }, 10)
-          )
+            }, 10),
+          ),
         );
 
         disposer.addDispose(
@@ -87,8 +79,8 @@ export class LineDecorationContribution implements BrowserEditorContribution, Co
 
             const type = event?.target?.type;
             if (
-              type === monacoBrowser.editor.MouseTargetType.GUTTER_LINE_NUMBERS ||
-              type === monacoBrowser.editor.MouseTargetType.GUTTER_GLYPH_MARGIN
+              type === monacoBrowser.editor.MouseTargetType.GUTTER_LINE_NUMBERS
+              || type === monacoBrowser.editor.MouseTargetType.GUTTER_GLYPH_MARGIN
             ) {
               const clickedLineNumber = event.target.position!.lineNumber;
               const lastLineNumber = this.lineNumbers;
@@ -104,13 +96,13 @@ export class LineDecorationContribution implements BrowserEditorContribution, Co
               this.lineNumbers = nextLineNumbers;
               this.highlightLine(editor);
             }
-          })
+          }),
         );
 
         disposer.addDispose(
           editor.monacoEditor.onDidChangeModel(() => {
             this.lineNumbers = null;
-          })
+          }),
         );
 
         return disposer;
@@ -136,7 +128,7 @@ export class LineDecorationContribution implements BrowserEditorContribution, Co
             this.highlightLine(currentEditor);
           }
         },
-      }
+      },
     );
   }
 
@@ -171,8 +163,8 @@ export class LineDecorationContribution implements BrowserEditorContribution, Co
         group.name,
         group.currentEditor.monacoEditor.deltaDecorations(
           this.lineDecorations.get(group.name) || [],
-          group.currentEditor !== editor ? [] : newDecorations
-        )
+          group.currentEditor !== editor ? [] : newDecorations,
+        ),
       );
     });
     this.codeModel.replaceBrowserUrlLine(this.lineNumbers);

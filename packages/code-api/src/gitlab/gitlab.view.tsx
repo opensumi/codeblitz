@@ -1,10 +1,10 @@
-import React, { useState, useReducer } from 'react';
+import { Button, Input } from '@opensumi/ide-components';
+import { getOctIcon, useInjectable } from '@opensumi/ide-core-browser';
 import { localize } from '@opensumi/ide-core-common';
-import { useInjectable, getOctIcon } from '@opensumi/ide-core-browser';
-import { Input, Button } from '@opensumi/ide-components';
 import { observer } from 'mobx-react-lite';
-import { ICodeAPIProvider } from '../common/types';
+import React, { useReducer, useState } from 'react';
 import type { CodeAPIProvider } from '../code-api.provider';
+import { ICodeAPIProvider } from '../common/types';
 import styles from './gitlab.module.less';
 
 const updateReducer = (num: number): number => (num + 1) % 1_000_000;
@@ -43,17 +43,17 @@ export const GitLabView: React.FC = observer(() => {
         <div className={styles.title}>
           {localize('gitlab.auth-title')}
           <a
-            href="https://gitlab.cn"
-            target="_blank"
+            href='https://gitlab.cn'
+            target='_blank'
             style={{ marginLeft: 8 }}
           >
             <i className={getOctIcon('link')}></i> {localize('gitlab.auth-goto')}
           </a>
         </div>
-        <div className={styles.authTip}>{localize('gitlab.auth-tip')} </div>
+        <div className={styles.authTip}>{localize('gitlab.auth-tip')}</div>
         <div className={styles.authInput}>
           <Input
-            size="small"
+            size='small'
             placeholder={`${localize('gitlab.auth-input')} Private Token`}
             value={tokenValue}
             onChange={(e) => setTokenValue(e.target.value)}
@@ -61,7 +61,7 @@ export const GitLabView: React.FC = observer(() => {
         </div>
         <div style={{ marginTop: 8 }}>
           <Button
-            size="small"
+            size='small'
             style={{ marginRight: 8 }}
             onClick={validateToken}
             loading={validating}
@@ -69,8 +69,8 @@ export const GitLabView: React.FC = observer(() => {
             {localize('common.save')}
           </Button>
           <Button
-            size="small"
-            type="default"
+            size='small'
+            type='default'
             onClick={() => setTokenValue('')}
             loading={validating}
           >
@@ -92,7 +92,7 @@ export const GitLabView: React.FC = observer(() => {
           {token.slice(6).replace(/./g, '*')}
         </div>
         <div style={{ marginTop: 8 }}>
-          <Button onClick={clearToken} type="default">
+          <Button onClick={clearToken} type='default'>
             {localize('common.clear')}
           </Button>
         </div>

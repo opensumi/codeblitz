@@ -1,16 +1,16 @@
 import { Autowired } from '@opensumi/di';
 import {
-  CommandRegistry,
-  SlotLocation,
-  ClientAppContribution,
   AppConfig,
+  ClientAppContribution,
+  CommandRegistry,
   ComponentRegistry,
+  SlotLocation,
 } from '@opensumi/ide-core-browser';
 import { Domain } from '@opensumi/ide-core-common';
 import { IMainLayoutService } from '@opensumi/ide-main-layout';
 
 @Domain(ClientAppContribution)
-//TODO 组件卸载重新渲染 渲染时注册container 会有时序问题 临时修复
+// TODO 组件卸载重新渲染 渲染时注册container 会有时序问题 临时修复
 export class LayoutRestoreContributation implements ClientAppContribution {
   @Autowired(AppConfig)
   private appConfig: AppConfig;
@@ -28,7 +28,7 @@ export class LayoutRestoreContributation implements ClientAppContribution {
         if (componentRegistry) {
           tabbarService.registerContainer(
             componentRegistry.options!.containerId,
-            componentRegistry
+            componentRegistry,
           );
         }
       });

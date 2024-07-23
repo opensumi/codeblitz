@@ -1,7 +1,7 @@
-import type { IPluginAPI } from '@codeblitzjs/ide-core/lib/editor';
-import * as localforage from 'localforage';
 import type { Uri } from '@codeblitzjs/ide-core';
+import type { IPluginAPI } from '@codeblitzjs/ide-core/lib/editor';
 import { Deferred } from '@codeblitzjs/ide-core/lib/modules/opensumi__ide-core-browser';
+import * as localforage from 'localforage';
 
 export const PLUGIN_ID = 'web-scm';
 
@@ -76,7 +76,7 @@ export const activate = ({ commands }: IPluginAPI) => {
   // TODO 待 OpenSumi内增加 getEncoding api
   // https://github.com/opensumi/core/issues/3104
   commands.registerCommand('code-service.getEncoding', (uri: Uri) => {
-    return 'utf8'
+    return 'utf8';
   });
 
   commands.registerCommand('web-scm.windowOpen', async (path) => {

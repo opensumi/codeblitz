@@ -1,10 +1,10 @@
-import { Autowired } from '@opensumi/di';
-import { Disposable, URI, Domain } from '@opensumi/ide-core-common';
-import { LanguagesContribution, GrammarsContribution } from '@opensumi/ide-monaco';
 import { Registry } from '@codeblitzjs/ide-registry';
-import { TextmateKey } from './base';
+import { Autowired } from '@opensumi/di';
+import { Disposable, Domain, URI } from '@opensumi/ide-core-common';
+import { GrammarsContribution, LanguagesContribution } from '@opensumi/ide-monaco';
 import { ITextmateTokenizer } from '@opensumi/ide-monaco/lib/browser/contrib/tokenizer';
 import type { ITextmateTokenizerService } from '@opensumi/ide-monaco/lib/browser/contrib/tokenizer';
+import { TextmateKey } from './base';
 
 @Domain()
 export class LanguageGrammarRegistrationService extends Disposable {
@@ -18,13 +18,13 @@ export class LanguageGrammarRegistrationService extends Disposable {
     this.addDispose(
       Registry.onRegister<LanguagesContribution>(TextmateKey.language, (contrib) => {
         this.textMateService.registerLanguage(contrib, uri);
-      })
+      }),
     );
 
     this.addDispose(
       Registry.onRegister<GrammarsContribution>(TextmateKey.grammar, (contrib) => {
         this.textMateService.registerGrammar(contrib, uri);
-      })
+      }),
     );
 
     const languageContrib = Registry.getData<LanguagesContribution>(TextmateKey.language) || [];

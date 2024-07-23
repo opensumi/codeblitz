@@ -13,7 +13,7 @@ module.exports = {
   moduleNameMapper: {
     '^@codeblitzjs/ide-core-(?!browserfs)(.*?)$': '<rootDir>/packages/$1/src',
     '^@codeblitzjs/ide-core$': '<rootDir>/packages/core/src',
-    '\\.(css|less)$': '<rootDir>/mocks/styleMock.js',
+    '\\.(css|less)$': '<rootDir>/scripts/jest/mocks/styleMock.js',
   },
   rootDir: __dirname,
   testMatch: ['<rootDir>/packages/**/__tests__/**/*@(test|spec).[jt]s?(x)'],

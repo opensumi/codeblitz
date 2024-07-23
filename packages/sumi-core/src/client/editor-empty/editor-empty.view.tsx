@@ -1,7 +1,7 @@
-import React from 'react';
 import { KeybindingRegistry } from '@opensumi/ide-core-browser';
-import { useInjectable, localize } from '@opensumi/ide-core-browser';
-import { AppConfig, AppCommonConfig } from '../../common';
+import { localize, useInjectable } from '@opensumi/ide-core-browser';
+import React from 'react';
+import { AppCommonConfig, AppConfig } from '../../common';
 
 import styles from './editor-empty.module.less';
 
@@ -18,7 +18,7 @@ export const EditorEmptyComponent: React.FC = () => {
       }
       return [];
     },
-    [keybindingRegistry]
+    [keybindingRegistry],
   );
 
   const keyList = [
@@ -35,7 +35,7 @@ export const EditorEmptyComponent: React.FC = () => {
   return (
     <section className={styles.emptyContainer}>
       <div>
-        <img src={appConfig.app?.logo} alt="logo" />
+        <img src={appConfig.app?.logo} alt='logo' />
       </div>
       <p>{appConfig.app?.brandName}</p>
       <ul>
@@ -46,9 +46,7 @@ export const EditorEmptyComponent: React.FC = () => {
               {item.value.map((keybinding, index) => {
                 return (
                   <span key={index}>
-                    {keybinding.split('+').map((char) => (
-                      <i key={char}>{char.toUpperCase()}</i>
-                    ))}
+                    {keybinding.split('+').map((char) => <i key={char}>{char.toUpperCase()}</i>)}
                   </span>
                 );
               })}

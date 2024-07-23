@@ -1,4 +1,4 @@
-import type { IDisposable, Deferred } from '@opensumi/ide-core-common';
+import type { Deferred, IDisposable } from '@opensumi/ide-core-common';
 
 export const IPluginConfig = Symbol('IPluginConfig');
 

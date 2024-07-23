@@ -1,11 +1,5 @@
-import { Injectable, Autowired } from '@opensumi/di';
-import {
-  getDebugLogger,
-  isFunction,
-  CommandRegistry,
-  Disposable,
-  IDisposable,
-} from '@opensumi/ide-core-common';
+import { Autowired, Injectable } from '@opensumi/di';
+import { CommandRegistry, Disposable, getDebugLogger, IDisposable, isFunction } from '@opensumi/ide-core-common';
 import { ICommandServiceToken } from '@opensumi/ide-monaco/lib/browser/contrib/command';
 import type { IMonacoCommandService } from '@opensumi/ide-monaco/lib/browser/contrib/command';
 type Handler<T = any> = (...args: any[]) => T | Promise<T>;

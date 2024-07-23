@@ -1,11 +1,11 @@
 {
-	"Print to console": {
-		"prefix": "log",
-		"body": [
+  "Print to console": {
+    "prefix": "log",
+    "body": [
       "// snippet log",
-			"console.log('$1');",
-			"$2"
-		],
-		"description": "Log output to console"
-	}
+      "console.log('$1');",
+      "$2"
+    ],
+    "description": "Log output to console"
+  }
 }

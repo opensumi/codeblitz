@@ -60,7 +60,7 @@ export namespace API {
       sha: string;
       url: string;
     }>;
-    files: Array<ResponseCommitFileChange>
+    files: Array<ResponseCommitFileChange>;
   }
 
   export interface ResponseCommitAuthor {
@@ -110,7 +110,7 @@ export namespace API {
     additions: number;
     deletions: number;
     changes: number;
-    patch: string
+    patch: string;
   }
 
   export interface FileActionResult {
@@ -119,8 +119,7 @@ export namespace API {
       author: ResponseCommitAuthor;
       committer: ResponseCommitAuthor;
       message: string;
-    }
+    };
     files: ResponseCommitFileChange[];
-
   }
 }

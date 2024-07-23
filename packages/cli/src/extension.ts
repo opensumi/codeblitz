@@ -1,31 +1,31 @@
-import * as path from 'path';
-import * as os from 'os';
-import * as fse from 'fs-extra';
-import { from, of } from 'rxjs';
-import { mergeMap, filter } from 'rxjs/operators';
 import { IExtensionMode } from '@codeblitzjs/ide-common';
-import { IExtensionInstallationConfig, kExtensionConfig, resolveExtensionInstallationConfig, resolveMarketplaceConfig } from './util/constant';
-import { ExtensionInstaller, Extension } from './util/installer';
-import { getExtension } from './extension/scanner';
-import {
-  IExtensionBasicMetadata,
-  IExtensionDesc,
-  IExtensionIdentity,
-  IExtensionServerOptions,
-} from './extension/type';
-import { log, error } from './util/log';
-import checkFramework from './util/check-framework';
-import { createServer, getHttpUri } from './util/serve-file';
-import { formatExtension } from './util';
+import { Extension, ExtensionInstaller } from '@opensumi/extension-installer';
+import * as fse from 'fs-extra';
+import * as os from 'os';
+import * as path from 'path';
+import { from, of } from 'rxjs';
+import { filter, mergeMap } from 'rxjs/operators';
 import { createMetadataType } from './extension/metadata-type';
+import { getExtension } from './extension/scanner';
+import { IExtensionBasicMetadata, IExtensionDesc, IExtensionIdentity, IExtensionServerOptions } from './extension/type';
+import { formatExtension } from './util';
+import checkFramework from './util/check-framework';
+import {
+  IExtensionInstallationConfig,
+  kExtensionConfig,
+  resolveExtensionInstallationConfig,
+  resolveMarketplaceConfig,
+} from './util/constant';
+import { error, log } from './util/log';
 import { resolveCWDPkgJSON } from './util/path';
+import { createServer, getHttpUri } from './util/serve-file';
 
 let extensionInstaller: ExtensionInstaller;
 let shouldWriteConfig = false;
 
 export const install = async (
   extensionId?: string[],
-  options?: { silent: boolean; mode?: 'public' | 'internal' }
+  options?: { silent: boolean; mode?: 'public' | 'internal' },
 ) => {
   checkFramework();
 
@@ -69,7 +69,7 @@ export const install = async (
       ),
       mergeMap(([extPath, mode]) => getExtension(extPath, mode), 5),
       filter((data) => !!data),
-      mergeMap((meta) => writeMetadata(installationConfig, meta!))
+      mergeMap((meta) => writeMetadata(installationConfig, meta!)),
     )
     .subscribe(
       (ext) => {
@@ -88,7 +88,7 @@ export const install = async (
           modifyPkgJSON(installedExtensions);
         }
         log.success('扩展安装成功');
-      }
+      },
     );
 };
 
@@ -123,7 +123,7 @@ export const installLocalExtensions = async (dirs: string[], options?: IExtensio
     .pipe(
       mergeMap((localExtPath) => getExtension(localExtPath, 'local', httpUri), 5),
       filter((data) => !!data),
-      mergeMap((meta) => writeMetadata(installationConfig, meta!))
+      mergeMap((meta) => writeMetadata(installationConfig, meta!)),
     )
     .subscribe(
       (ext) => {
@@ -136,7 +136,7 @@ export const installLocalExtensions = async (dirs: string[], options?: IExtensio
       () => {
         log.success('本地扩展安装成功');
         createServer(absoluteDirs, httpUri);
-      }
+      },
     );
 };
 
@@ -146,7 +146,7 @@ async function createInstaller() {
   const marketplaceConfig = resolveMarketplaceConfig();
   const installConfig = resolveExtensionInstallationConfig();
   extensionInstaller = new ExtensionInstaller({
-    api: marketplaceConfig.endpoint,
+    endpoint: marketplaceConfig.endpoint,
     accountId: marketplaceConfig.accountId,
     masterKey: marketplaceConfig.masterKey,
     frameworkVersion: pkgJSON.engines.opensumi,
@@ -167,7 +167,7 @@ async function removeExtensionById(installationConfig: IExtensionInstallationCon
   const extensionId = `${ext.publisher}.${ext.name}`;
   return Promise.all([
     await fse.remove(
-      path.join(`${installationConfig.extensionDir}`, `${extensionId}${ext.version ? `-${ext.version}` : ''}`)
+      path.join(`${installationConfig.extensionDir}`, `${extensionId}${ext.version ? `-${ext.version}` : ''}`),
     ),
     await fse.remove(path.join(installationConfig.extensionMetadataDir, `${extensionId}.js`)),
     await fse.remove(path.join(installationConfig.extensionMetadataDir, `${extensionId}.d.ts`)),
@@ -246,7 +246,7 @@ async function writeMetadata(installationConfig: IExtensionInstallationConfig, m
     path.join(installationConfig.extensionMetadataDir, `${extensionId}.js`),
     `
 module.exports = ${JSON.stringify(metadata, null, 2)}
-    `.trim() + '\n'
+    `.trim() + '\n',
   );
   await createMetadataType(extensionId);
   return extension;
@@ -257,7 +257,7 @@ async function modifyPkgJSON(extensions: IExtensionIdentity[]) {
   const newConfig = [...extConfig];
   extensions.forEach((ext) => {
     const obj = extConfig.find(
-      (item) => item.publisher === ext.publisher && item.name === ext.name
+      (item) => item.publisher === ext.publisher && item.name === ext.name,
     );
     if (obj) {
       obj.version = ext.version;

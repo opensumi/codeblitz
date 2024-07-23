@@ -1,10 +1,10 @@
+import { IPluginService } from '@codeblitzjs/ide-plugin';
 import { Autowired, Injectable, Provider } from '@opensumi/di';
 import { BrowserModule } from '@opensumi/ide-core-browser';
+import { IExtensionStorageService } from '@opensumi/ide-extension-storage';
 import { ExtensionServiceImpl } from '@opensumi/ide-extension/lib/browser/extension.service';
-import { IPluginService } from '@codeblitzjs/ide-plugin';
 import { ExtensionService } from '@opensumi/ide-extension/lib/common';
 import { ExtensionActivateContribution } from '../extension/extension.contribution';
-import { IExtensionStorageService } from '@opensumi/ide-extension-storage';
 
 @Injectable()
 class ExtensionServiceImplOverride extends ExtensionServiceImpl {

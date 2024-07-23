@@ -19,7 +19,7 @@ module.exports = class TsconfigPathsPluginPatch extends TsconfigPathsPlugin.defa
         this.absoluteBaseUrl,
         loadResult.paths,
         options.mainFields,
-        false
+        false,
       );
     }
   }

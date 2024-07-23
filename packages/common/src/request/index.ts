@@ -2,11 +2,9 @@ export type ResponseType = 'json' | 'text' | 'blob' | 'arrayBuffer' | 'formData'
 
 export const stripLeadingSlash = (path: string) => (path.charAt(0) === '/' ? path.substr(1) : path);
 
-export const stripTrailingSlash = (path: string) =>
-  path.charAt(path.length - 1) === '/' ? path.slice(0, -1) : path;
+export const stripTrailingSlash = (path: string) => path.charAt(path.length - 1) === '/' ? path.slice(0, -1) : path;
 
-export const createUrl = (origin: string, path: string) =>
-  `${stripTrailingSlash(origin)}/${stripLeadingSlash(path)}`;
+export const createUrl = (origin: string, path: string) => `${stripTrailingSlash(origin)}/${stripLeadingSlash(path)}`;
 
 export interface RequestOptions extends RequestInit {
   baseURL?: string;
@@ -34,7 +32,7 @@ export class ResponseError extends Error {
     message: string,
     public name: string,
     public request: RequestOptions & { url: string },
-    public response: Response
+    public response: Response,
   ) {
     super(message);
   }
@@ -102,7 +100,7 @@ const requestImpl: any = async (url: string, options?: RequestOptions) => {
       resMsg?.message || response.statusText || 'Request Error',
       'ResponseError',
       { url: urlInstance.toString(), ...opts },
-      response
+      response,
     );
   }
 
@@ -111,8 +109,7 @@ const requestImpl: any = async (url: string, options?: RequestOptions) => {
 
 const METHODS = ['get', 'post', 'delete', 'put', 'patch', 'head', 'options'];
 METHODS.forEach((method) => {
-  requestImpl[method] = (url: string, options: RequestOptions) =>
-    request(url, { ...options, method });
+  requestImpl[method] = (url: string, options: RequestOptions) => request(url, { ...options, method });
 });
 
 export const request: Request = requestImpl;

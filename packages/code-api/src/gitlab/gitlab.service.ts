@@ -1,21 +1,21 @@
-import { Injectable, Autowired } from '@opensumi/di';
-import { localize, IReporterService, formatLocalize, MessageType } from '@opensumi/ide-core-common';
 import { request, RequestOptions } from '@codeblitzjs/ide-common';
-import { API } from './types';
-import { HelperService } from '../common/service';
+import { Autowired, Injectable } from '@opensumi/di';
+import { formatLocalize, IReporterService, localize, MessageType } from '@opensumi/ide-core-common';
 import { CodePlatformRegistry } from '../common/config';
+import { HelperService } from '../common/service';
 import type {
-  TreeEntry,
+  Branch,
+  BranchOrTag,
+  CommitParams,
+  EntryInfo,
   EntryParam,
   ICodeAPIService,
   IRepositoryModel,
-  BranchOrTag,
-  CommitParams,
-  Branch,
   Project,
-  EntryInfo,
+  TreeEntry,
 } from '../common/types';
-import { CodePlatform, CommitFileStatus, CodeAPI as ConflictAPI } from '../common/types';
+import { CodeAPI as ConflictAPI, CodePlatform, CommitFileStatus } from '../common/types';
+import { API } from './types';
 
 const toType = (d: API.ResponseCommitFileChange) => {
   if (d.new_file) return CommitFileStatus.Added;
@@ -35,7 +35,7 @@ const toChangeLines = (diff: string) => {
       }
       return obj;
     },
-    { additions: 0, deletions: 0 }
+    { additions: 0, deletions: 0 },
   );
 };
 
@@ -64,13 +64,19 @@ export class GitLabAPIService implements ICodeAPIService {
   constructor() {
     this._PRIVATE_TOKEN = this.config.token || this.helper.GITLAB_TOKEN;
   }
-  createPullRequest(repo: IRepositoryModel, sourceBranch: string, targetBranch: string, title: string, autoMerge?: boolean | undefined): Promise<ConflictAPI.ResponseCreatePR> {
+  createPullRequest(
+    repo: IRepositoryModel,
+    sourceBranch: string,
+    targetBranch: string,
+    title: string,
+    autoMerge?: boolean | undefined,
+  ): Promise<ConflictAPI.ResponseCreatePR> {
     throw new Error('Method not implemented.');
   }
   mergeBase(
     repo: IRepositoryModel,
     target: string,
-    source: string
+    source: string,
   ): Promise<ConflictAPI.ResponseCommit> {
     throw new Error('Method not implemented.');
   }
@@ -82,7 +88,7 @@ export class GitLabAPIService implements ICodeAPIService {
   }
   canResolveConflict(
     repo: IRepositoryModel,
-    prId: string
+    prId: string,
   ): Promise<ConflictAPI.CanResolveConflictResponse> {
     throw new Error('Method not implemented.');
   }
@@ -92,7 +98,7 @@ export class GitLabAPIService implements ICodeAPIService {
   getConflict(
     repo: IRepositoryModel,
     sourceBranch: string,
-    targetBranch: string
+    targetBranch: string,
   ): Promise<ConflictAPI.ConflictResponse> {
     throw new Error('Method not implemented.');
   }
@@ -133,7 +139,7 @@ export class GitLabAPIService implements ICodeAPIService {
     if (!this.projectIdMap.has(projectPath)) {
       this.projectIdMap.set(
         projectPath,
-        this.getProject(repo).then(({ id }) => id)
+        this.getProject(repo).then(({ id }) => id),
       );
     }
     return this.projectIdMap.get(projectPath)!;
@@ -144,9 +150,9 @@ export class GitLabAPIService implements ICodeAPIService {
   }
 
   transformStaticResource(repo: IRepositoryModel, path: string) {
-    return `${this.config.origin}/${this.getProjectPath(repo)}/raw/${
-      repo.commit
-    }/${path}?private_token=${this.PRIVATE_TOKEN}`;
+    return `${this.config.origin}/${
+      this.getProjectPath(repo)
+    }/raw/${repo.commit}/${path}?private_token=${this.PRIVATE_TOKEN}`;
   }
 
   async validateToken(token: string) {
@@ -177,8 +183,8 @@ export class GitLabAPIService implements ICodeAPIService {
         headers: {
           ...(privateToken
             ? {
-                'PRIVATE-TOKEN': privateToken,
-              }
+              'PRIVATE-TOKEN': privateToken,
+            }
             : {}),
           ...headers,
         },
@@ -232,9 +238,11 @@ export class GitLabAPIService implements ICodeAPIService {
   async getCommit(repo: IRepositoryModel, ref: string) {
     return (
       await this.request<API.ResponseGetCommit>(
-        `/api/v3/projects/${await this.getProjectId(repo)}/repository/commits/${encodeURIComponent(
-          ref
-        )}`
+        `/api/v3/projects/${await this.getProjectId(repo)}/repository/commits/${
+          encodeURIComponent(
+            ref,
+          )
+        }`,
       )
     ).id;
   }
@@ -247,7 +255,7 @@ export class GitLabAPIService implements ICodeAPIService {
           ref_name: repo.commit,
           path,
         },
-      }
+      },
     );
     return data.map<TreeEntry>((item) => {
       const entry: TreeEntry = {
@@ -266,7 +274,7 @@ export class GitLabAPIService implements ICodeAPIService {
         params: {
           filepath: entry.path,
         },
-      }
+      },
     );
     return Buffer.from(buf);
   }
@@ -279,20 +287,20 @@ export class GitLabAPIService implements ICodeAPIService {
         params: {
           filepath: path,
         },
-      }
+      },
     );
     return Buffer.from(buf);
   }
 
   async getBranches(repo: IRepositoryModel): Promise<BranchOrTag[]> {
     return this.request<API.ResponseGetRefs>(
-      `/api/v3/projects/${await this.getProjectId(repo)}/repository/branches`
+      `/api/v3/projects/${await this.getProjectId(repo)}/repository/branches`,
     );
   }
 
   async getTags(repo: IRepositoryModel): Promise<BranchOrTag[]> {
     return this.request<API.ResponseGetRefs>(
-      `/api/v3/projects/${await this.getProjectId(repo)}/repository/tags`
+      `/api/v3/projects/${await this.getProjectId(repo)}/repository/tags`,
     );
   }
 
@@ -342,7 +350,7 @@ export class GitLabAPIService implements ICodeAPIService {
 
   async getCommitDiff(repo: IRepositoryModel, sha: string) {
     const data = await this.request<API.ResponseCommitFileChange[]>(
-      `/api/v3/projects/${this.getProjectId(repo)}/repository/commits/${sha}/diff`
+      `/api/v3/projects/${this.getProjectId(repo)}/repository/commits/${sha}/diff`,
     );
 
     return data.map((d) => ({
@@ -358,7 +366,7 @@ export class GitLabAPIService implements ICodeAPIService {
       `/api/v3/projects/${this.getProjectId(repo)}/repository/compare`,
       {
         params: { from, to },
-      }
+      },
     );
 
     return data.map((d) => ({

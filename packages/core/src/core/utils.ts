@@ -1,14 +1,14 @@
-import { ModuleConstructor } from '@opensumi/ide-core-browser';
-import { IAppOpts } from '@codeblitzjs/ide-sumi-core';
-import { getThemeId, getThemeType, IThemeContribution, BuiltinTheme } from '@opensumi/ide-theme';
 import { IExtensionBasicMetadata } from '@codeblitzjs/ide-common';
+import { IAppOpts } from '@codeblitzjs/ide-sumi-core';
+import { ModuleConstructor } from '@opensumi/ide-core-browser';
+import { BuiltinTheme, getThemeId, getThemeType, IThemeContribution } from '@opensumi/ide-theme';
 
 import { IAppConfig } from '../api/types';
 
 export const flatModules = (modules: Record<string, ModuleConstructor | ModuleConstructor[]>) => {
   return Object.keys(modules).reduce<ModuleConstructor[]>(
     (arr, key) => arr.concat(modules[key]),
-    []
+    [],
   );
 };
 
@@ -47,22 +47,24 @@ export const mergeConfig = (target: IAppOpts, source: IAppConfig) => {
   return target;
 };
 
-export const getThemeTypeByPreferenceThemeId = (
-  themeId: string,
-  extensionMetadata: IExtensionBasicMetadata[] | undefined
-) => {
-  let uiTheme: BuiltinTheme | undefined;
-  if (themeId && extensionMetadata) {
-    for (const ext of extensionMetadata) {
-      const theme: IThemeContribution | undefined = ext.packageJSON.contributes?.themes?.find(
-        (contrib: IThemeContribution) => contrib && getThemeId(contrib) === themeId
-      );
-
-      if (theme?.uiTheme) {
-        uiTheme = theme.uiTheme;
-        break;
-      }
+export function createHook(obj: any, targetFunction: string, options: {
+  before: (args: any[]) => void;
+  // after?: (value: any, args: any[]) => void;
+}) {
+  let temp = obj[targetFunction];
+  const beforeHook = options.before;
+  // const afterHook = options.after;
+  obj[targetFunction] = function(...args) {
+    beforeHook(args);
+    let ret = temp.apply(this, args);
+    if (ret && typeof ret.then === 'function') {
+      return ret.then((value) => {
+        // afterHook(value, args);
+        return value;
+      });
+    } else {
+      // afterHook(ret, args);
+      return ret;
     }
-  }
-  return getThemeType(uiTheme || 'vs-dark');
-};
+  };
+}

@@ -1,9 +1,9 @@
 import { Injectable } from '@opensumi/di';
-import { LogServiceManager } from './log-manager';
-import { LogServiceForClientPath, ILogServiceForClient } from './base';
-import { ILogServiceManager } from '../core/base';
-import { LogServiceForClient } from './log.service';
 import { NodeModule } from '../core/app';
+import { ILogServiceManager } from '../core/base';
+import { ILogServiceForClient, LogServiceForClientPath } from './base';
+import { LogServiceManager } from './log-manager';
+import { LogServiceForClient } from './log.service';
 
 export * from './base';
 

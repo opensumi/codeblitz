@@ -1,7 +1,7 @@
-import type * as vscode from 'vscode';
 import { Injector } from '@opensumi/di';
+import type * as vscode from 'vscode';
+import { IPluginAPI, IPluginModule } from '../types';
 import { PluginCommands } from './plugin.commands';
-import { IPluginModule, IPluginAPI } from '../types';
 
 export const createAPIFactory = (injector: Injector) => {
   let pluginCommands: PluginCommands = injector.get(PluginCommands);
@@ -11,7 +11,7 @@ export const createAPIFactory = (injector: Injector) => {
       registerCommand(
         id: string,
         command: <T>(...args: any[]) => T | Thenable<T>,
-        thisArgs?: any
+        thisArgs?: any,
       ): vscode.Disposable {
         return pluginCommands.registerCommand(true, id, command, thisArgs);
       },
@@ -24,7 +24,7 @@ export const createAPIFactory = (injector: Injector) => {
 
       afterExecuteCommand<T>(id: string, callback: (result: T) => void): vscode.Disposable {
         return pluginCommands.afterExecuteCommand<T>(id, callback);
-      }
+      },
     };
 
     return {

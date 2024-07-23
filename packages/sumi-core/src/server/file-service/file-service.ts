@@ -1,38 +1,38 @@
-import { Injectable, Autowired, Injector, INJECTOR_TOKEN } from '@opensumi/di';
+import { Autowired, Injectable, Injector, INJECTOR_TOKEN } from '@opensumi/di';
 import { Uri } from '@opensumi/ide-core-common';
-import { TextDocumentContentChangeEvent, TextDocument } from 'vscode-languageserver-types';
 import {
-  URI,
+  DisposableCollection,
   Emitter,
   Event,
   IDisposable,
-  DisposableCollection,
   isArray,
   isEmptyObject,
-  parseGlob as parse,
-  ParsedPattern,
   match,
+  ParsedPattern,
+  parseGlob as parse,
+  URI,
 } from '@opensumi/ide-core-common';
 import { FileChangeEvent } from '@opensumi/ide-core-common';
-import { decode, encode, UTF8, getEncodingInfo } from './encoding';
 import {
-  FileSystemError,
-  FileStat,
-  FileMoveOptions,
-  FileDeleteOptions,
-  FileAccess,
   DidFilesChangedParams,
-  FileSetContentOptions,
-  FileCreateOptions,
+  FileAccess,
   FileCopyOptions,
+  FileCreateOptions,
+  FileDeleteOptions,
+  FileMoveOptions,
+  FileSetContentOptions,
+  FileStat,
+  FileSystemError,
 } from '@opensumi/ide-file-service/lib/common';
 import * as path from 'path';
+import { TextDocument, TextDocumentContentChangeEvent } from 'vscode-languageserver-types';
 import { HOME_ROOT } from '../../common';
-import { IDiskFileProvider, IFileService } from './base';
 import { RPCService } from '../../connection';
-import { fsExtra as fse } from '../node';
 import { ServerConfig } from '../core/app';
 import { INodeLogger } from '../core/node-logger';
+import { fsExtra as fse } from '../node';
+import { IDiskFileProvider, IFileService } from './base';
+import { decode, encode, getEncodingInfo, UTF8 } from './encoding';
 
 export abstract class FileSystemNodeOptions {
   public static DEFAULT: FileSystemNodeOptions = {
@@ -143,14 +143,14 @@ export class FileService extends RPCService implements IFileService {
 
   async exists(uri: string): Promise<boolean> {
     this.logger.warn(
-      'Deprecated Warning: fileService.exists is deprecated, please use fileService.access instead!'
+      'Deprecated Warning: fileService.exists is deprecated, please use fileService.access instead!',
     );
     return this.access(uri);
   }
 
   async resolveContent(
     uri: string,
-    options?: FileSetContentOptions
+    options?: FileSetContentOptions,
   ): Promise<{ stat: FileStat; content: string }> {
     const _uri = this.getUri(uri);
     const stat = await this.diskService.stat(_uri.codeUri);
@@ -168,7 +168,7 @@ export class FileService extends RPCService implements IFileService {
   async setContent(
     file: FileStat,
     content: string,
-    options?: FileSetContentOptions
+    options?: FileSetContentOptions,
   ): Promise<FileStat> {
     const _uri = this.getUri(file.uri);
     const stat = await this.diskService.stat(_uri.codeUri);
@@ -198,7 +198,7 @@ export class FileService extends RPCService implements IFileService {
   async updateContent(
     file: FileStat,
     contentChanges: TextDocumentContentChangeEvent[],
-    options?: FileSetContentOptions
+    options?: FileSetContentOptions,
   ): Promise<FileStat> {
     const _uri = this.getUri(file.uri);
     const stat = await this.diskService.stat(_uri.codeUri);
@@ -344,7 +344,6 @@ export class FileService extends RPCService implements IFileService {
   }
 
   /**
-   *
    * Only support scheme `file`
    */
   async getFsPath(uri: string): Promise<string | undefined> {
@@ -378,10 +377,10 @@ export class FileService extends RPCService implements IFileService {
     } catch (error) {
       if (isErrnoException(error)) {
         if (
-          error.code === 'ENOENT' ||
-          error.code === 'EACCES' ||
-          error.code === 'EBUSY' ||
-          error.code === 'EPERM'
+          error.code === 'ENOENT'
+          || error.code === 'EACCES'
+          || error.code === 'EBUSY'
+          || error.code === 'EPERM'
         ) {
           return undefined;
         }
@@ -490,7 +489,7 @@ export class FileService extends RPCService implements IFileService {
 
   protected applyContentChanges(
     content: string,
-    contentChanges: TextDocumentContentChangeEvent[]
+    contentChanges: TextDocumentContentChangeEvent[],
   ): string {
     let document = TextDocument.create('', '', 1, content);
     for (const change of contentChanges) {
@@ -498,14 +497,13 @@ export class FileService extends RPCService implements IFileService {
       if (change.range) {
         const start = document.offsetAt(change.range.start);
         const end = document.offsetAt(change.range.end);
-        newContent =
-          document.getText().substr(0, start) + change.text + document.getText().substr(end);
+        newContent = document.getText().substr(0, start) + change.text + document.getText().substr(end);
       }
       document = TextDocument.create(
         document.uri,
         document.languageId,
         document.version,
-        newContent
+        newContent,
       );
     }
     return document.getText();
@@ -586,7 +584,7 @@ export function getSafeFileService(injector: Injector) {
       'move',
       'copy',
     ],
-    serverConfig.blockPatterns || []
+    serverConfig.blockPatterns || [],
   );
   return fileService;
 }
@@ -594,8 +592,8 @@ export function getSafeFileService(injector: Injector) {
 // tslint:disable-next-line:no-any
 function isErrnoException(error: any | NodeJS.ErrnoException): error is NodeJS.ErrnoException {
   return (
-    (error as NodeJS.ErrnoException).code !== undefined &&
-    (error as NodeJS.ErrnoException).errno !== undefined
+    (error as NodeJS.ErrnoException).code !== undefined
+    && (error as NodeJS.ErrnoException).errno !== undefined
   );
 }
 
@@ -603,7 +601,7 @@ function isErrnoException(error: any | NodeJS.ErrnoException): error is NodeJS.E
 function fileServiceInterceptor(
   fileService: IFileService,
   blackList: string[],
-  blockPatterns: string[]
+  blockPatterns: string[],
 ) {
   for (const method of blackList) {
     if (typeof fileService[method] === 'function') {

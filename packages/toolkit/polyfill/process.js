@@ -1,30 +1,41 @@
 exports.nextTick = function nextTick(fn) {
   var args = Array.prototype.slice.call(arguments);
   args.shift();
-  setTimeout(function () {
+  setTimeout(function() {
     fn.apply(null, args);
   }, 0);
 };
 
-exports.platform = exports.arch = exports.execPath = exports.title = 'browser';
+exports.platform =
+  exports.arch =
+  exports.execPath =
+  exports.title =
+    'browser';
 exports.pid = 1;
 exports.browser = true;
 exports.env = {};
 exports.argv = [];
 
-exports.binding = function (name) {
+exports.binding = function(name) {
   throw new Error('No such module. (Possibly not yet loaded)');
 };
 
 var cwd = '/';
 var path;
-exports.cwd = function () {
+exports.cwd = function() {
   return cwd;
 };
-exports.chdir = function (dir) {
+exports.chdir = function(dir) {
   if (!path) path = require('path');
   cwd = path.resolve(dir, cwd);
 };
 
-exports.exit = exports.kill = exports.umask = exports.dlopen = exports.uptime = exports.memoryUsage = exports.uvCounters = function () {};
+exports.exit =
+  exports.kill =
+  exports.umask =
+  exports.dlopen =
+  exports.uptime =
+  exports.memoryUsage =
+  exports.uvCounters =
+    function() {};
 exports.features = {};

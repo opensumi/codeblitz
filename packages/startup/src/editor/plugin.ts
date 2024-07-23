@@ -21,7 +21,7 @@ export const activate = ({ context, commands }: IPluginAPI) => {
       commands.executeCommand('alex.setDefaultPreference', 'general.theme', value, 1);
     }),
     commands.afterExecuteCommand('plugin.command.add', (result) => {
-      console.log('afterExecuteCommand plugin.command.add',result)
-    })
+      console.log('afterExecuteCommand plugin.command.add', result);
+    }),
   );
 };

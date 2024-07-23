@@ -1,25 +1,20 @@
-import { Domain, URI, localize, CommandService, arrays } from '@opensumi/ide-core-browser';
+import { Autowired } from '@opensumi/di';
+import { arrays, CommandService, Domain, localize, URI } from '@opensumi/ide-core-browser';
+import { LabelService } from '@opensumi/ide-core-browser/lib/services';
+import { EditorOpenType, IResource, ResourceService, WorkbenchEditorService } from '@opensumi/ide-editor';
 import {
   BrowserEditorContribution,
   EditorComponentRegistry,
   EditorComponentRenderMode,
 } from '@opensumi/ide-editor/lib/browser';
-import { LabelService } from '@opensumi/ide-core-browser/lib/services';
-import {
-  ResourceService,
-  IResource,
-  WorkbenchEditorService,
-  EditorOpenType,
-} from '@opensumi/ide-editor';
-import { IIconService, IconType } from '@opensumi/ide-theme';
-import { Autowired } from '@opensumi/di';
-import { IWorkspaceService } from '@opensumi/ide-workspace';
 import { IFileServiceClient } from '@opensumi/ide-file-service/lib/common';
-import { RuntimeConfig, AppConfig, AppCommonConfig } from '../../common';
+import { IconType, IIconService } from '@opensumi/ide-theme';
+import { IWorkspaceService } from '@opensumi/ide-workspace';
+import { AppCommonConfig, AppConfig, RuntimeConfig } from '../../common';
 import { EditorWelcomeComponent } from './welcome.view';
 
-import styles from './welcome.module.less';
 import * as path from 'path';
+import styles from './welcome.module.less';
 
 const { coalesce } = arrays;
 
@@ -114,23 +109,22 @@ export class WelcomeContribution implements BrowserEditorContribution {
             .catch(() => undefined);
           const files = folderStat?.children
             ? folderStat.children
-                .map((child) => {
-                  const uri = new URI(child.uri);
-                  return {
-                    uri,
-                    name: uri.displayName,
-                  };
-                })
-                .sort((x, y) => x.name.localeCompare(y.name))
+              .map((child) => {
+                const uri = new URI(child.uri);
+                return {
+                  uri,
+                  name: uri.displayName,
+                };
+              })
+              .sort((x, y) => x.name.localeCompare(y.name))
             : [];
-          const file =
-            files.find((file) => file.name.toLowerCase() === 'readme.md') ||
-            files.find((file) => file.name.toLowerCase().startsWith('readme'));
+          const file = files.find((file) => file.name.toLowerCase() === 'readme.md')
+            || files.find((file) => file.name.toLowerCase().startsWith('readme'));
           if (file) {
             return file.uri;
           }
-        })
-      )
+        }),
+      ),
     );
 
     if (readmes.length) {
@@ -140,7 +134,7 @@ export class WelcomeContribution implements BrowserEditorContribution {
           'markdown.showPreview',
           null,
           readmes.filter(isMarkDown),
-          { locked: true }
+          { locked: true },
         ),
         this.editorService.openUris(readmes.filter((readme) => !isMarkDown(readme))),
       ]);

@@ -1,13 +1,8 @@
-import * as paths from 'path';
-import { Injectable, Autowired } from '@opensumi/di';
-import {
-  CancellationToken,
-  CancellationTokenSource,
-  URI,
-  parseGlob as parse,
-} from '@opensumi/ide-core-common';
+import { Autowired, Injectable } from '@opensumi/di';
+import { CancellationToken, CancellationTokenSource, parseGlob as parse, URI } from '@opensumi/ide-core-common';
 import { IFileSearchService } from '@opensumi/ide-file-search/lib/common';
 import { anchorGlob } from '@opensumi/ide-search/lib/common';
+import * as paths from 'path';
 import { AppConfig, RuntimeConfig } from '../../common';
 import { INodeLogger } from '../core/node-logger';
 
@@ -30,15 +25,13 @@ export class FileSearchService implements IFileSearchService {
   }
 
   private asyncExecute(callback) {
-    return new Promise((resolve) =>
-      (window.requestIdleCallback || window.setTimeout)(() => resolve(callback()))
-    );
+    return new Promise((resolve) => (window.requestIdleCallback || window.setTimeout)(() => resolve(callback())));
   }
 
   async find(
     searchPattern: string,
     options: IFileSearchService.Options,
-    clientToken?: CancellationToken
+    clientToken?: CancellationToken,
   ): Promise<string[]> {
     if (!this.runtimeConfig.fileSearch?.provideResults) {
       return [];
@@ -65,7 +58,7 @@ export class FileSearchService implements IFileSearchService {
           maxResults: options.limit,
           includes: options.includePatterns || [],
           excludes: options.excludePatterns || [],
-        }
+        },
       );
 
       if (token.isCancellationRequested) {
@@ -76,14 +69,12 @@ export class FileSearchService implements IFileSearchService {
         return [];
       }
 
-      const includeMatcherList =
-        (config.include === 'local' &&
-          options?.includePatterns?.map((str: string) => parse(anchorGlob(str)))) ||
-        [];
-      const excludeMatcherList =
-        (config.exclude === 'local' &&
-          options?.excludePatterns?.map((str: string) => parse(anchorGlob(str)))) ||
-        [];
+      const includeMatcherList = (config.include === 'local'
+        && options?.includePatterns?.map((str: string) => parse(anchorGlob(str))))
+        || [];
+      const excludeMatcherList = (config.exclude === 'local'
+        && options?.excludePatterns?.map((str: string) => parse(anchorGlob(str))))
+        || [];
       let resCount = 0;
       const result = await Promise.all(
         res.map(async (filepath) => {
@@ -92,25 +83,21 @@ export class FileSearchService implements IFileSearchService {
           }
           const fileUri = URI.file(paths.join(this.appConfig.workspaceDir, filepath)).toString();
           if (
-            includeMatcherList.length > 0 &&
-            !(await this.asyncSome(includeMatcherList, (matcher) =>
-              this.asyncExecute(() => matcher(fileUri))
-            ))
+            includeMatcherList.length > 0
+            && !(await this.asyncSome(includeMatcherList, (matcher) => this.asyncExecute(() => matcher(fileUri))))
           ) {
             return;
           }
 
           if (
-            excludeMatcherList.length > 0 &&
-            (await this.asyncSome(excludeMatcherList, (matcher) =>
-              this.asyncExecute(() => matcher(fileUri))
-            ))
+            excludeMatcherList.length > 0
+            && (await this.asyncSome(excludeMatcherList, (matcher) => this.asyncExecute(() => matcher(fileUri))))
           ) {
             return;
           }
           resCount++;
           return fileUri;
-        })
+        }),
       );
       if (token.isCancellationRequested) {
         return [];

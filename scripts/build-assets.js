@@ -8,6 +8,7 @@ const signale = require('signale');
 const { invoke, exec } = require('./utils/utils');
 const pkg = require('../package.json');
 const { upload } = require('./utils/upload');
+const args = require('minimist')(process.argv.slice(2));
 
 const assetsKeyMap = {
   __WORKER_HOST__: 'worker-host',
@@ -21,7 +22,6 @@ invoke(async () => {
   await exec('npx rimraf ./packages/toolkit/dist');
   await exec(`yarn workspace @codeblitzjs/ide-toolkit build:host`);
 
-  signale.info('构建成功，开始上传 cdn');
 
   const distDir = path.resolve(__dirname, '../packages/toolkit/dist');
   const manifest = require(path.join(distDir, 'manifest.json'));
@@ -32,6 +32,11 @@ invoke(async () => {
     };
     return obj;
   }, {});
+  if (args['disable-upload']) {
+    return;
+  }
+
+  signale.info('构建成功，开始上传 cdn');
   const cdnResult = await upload(fileJSON);
   signale.info('上传成功，生成 define.json');
 

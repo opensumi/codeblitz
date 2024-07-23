@@ -1,8 +1,8 @@
 // TODO: iconv-lite-umd 和 jschardet 使用异步加载，加快主应用启动速度
 // import { fs } from '../node';
 // import * as jschardet from 'jschardet';
-import * as iconv from 'iconv-lite-umd';
 import { SUPPORTED_ENCODINGS } from '@opensumi/ide-core-common';
+import * as iconv from 'iconv-lite-umd';
 
 import { EncodingInfo } from './base';
 
@@ -19,10 +19,10 @@ function isUtf8(buffer: Buffer) {
   while (i < buffer.length) {
     if (
       // ASCII
-      buffer[i] === 0x09 ||
-      buffer[i] === 0x0a ||
-      buffer[i] === 0x0d ||
-      (0x20 <= buffer[i] && buffer[i] <= 0x7e)
+      buffer[i] === 0x09
+      || buffer[i] === 0x0a
+      || buffer[i] === 0x0d
+      || (0x20 <= buffer[i] && buffer[i] <= 0x7e)
     ) {
       i += 1;
       continue;
@@ -30,10 +30,10 @@ function isUtf8(buffer: Buffer) {
 
     if (
       // non-overlong 2-byte
-      0xc2 <= buffer[i] &&
-      buffer[i] <= 0xdf &&
-      0x80 <= buffer[i + 1] &&
-      buffer[i + 1] <= 0xbf
+      0xc2 <= buffer[i]
+      && buffer[i] <= 0xdf
+      && 0x80 <= buffer[i + 1]
+      && buffer[i + 1] <= 0xbf
     ) {
       i += 2;
       continue;
@@ -41,21 +41,21 @@ function isUtf8(buffer: Buffer) {
 
     if (
       // excluding overlongs
-      (buffer[i] === 0xe0 &&
-        0xa0 <= buffer[i + 1] &&
-        buffer[i + 1] <= 0xbf &&
-        0x80 <= buffer[i + 2] &&
-        buffer[i + 2] <= 0xbf) || // straight 3-byte
-      (((0xe1 <= buffer[i] && buffer[i] <= 0xec) || buffer[i] === 0xee || buffer[i] === 0xef) &&
-        0x80 <= buffer[i + 1] &&
-        buffer[i + 1] <= 0xbf &&
-        0x80 <= buffer[i + 2] &&
-        buffer[i + 2] <= 0xbf) || // excluding surrogates
-      (buffer[i] === 0xed &&
-        0x80 <= buffer[i + 1] &&
-        buffer[i + 1] <= 0x9f &&
-        0x80 <= buffer[i + 2] &&
-        buffer[i + 2] <= 0xbf)
+      (buffer[i] === 0xe0
+        && 0xa0 <= buffer[i + 1]
+        && buffer[i + 1] <= 0xbf
+        && 0x80 <= buffer[i + 2]
+        && buffer[i + 2] <= 0xbf) // straight 3-byte
+      || (((0xe1 <= buffer[i] && buffer[i] <= 0xec) || buffer[i] === 0xee || buffer[i] === 0xef)
+        && 0x80 <= buffer[i + 1]
+        && buffer[i + 1] <= 0xbf
+        && 0x80 <= buffer[i + 2]
+        && buffer[i + 2] <= 0xbf) // excluding surrogates
+      || (buffer[i] === 0xed
+        && 0x80 <= buffer[i + 1]
+        && buffer[i + 1] <= 0x9f
+        && 0x80 <= buffer[i + 2]
+        && buffer[i + 2] <= 0xbf)
     ) {
       i += 3;
       continue;
@@ -63,28 +63,28 @@ function isUtf8(buffer: Buffer) {
 
     if (
       // planes 1-3
-      (buffer[i] === 0xf0 &&
-        0x90 <= buffer[i + 1] &&
-        buffer[i + 1] <= 0xbf &&
-        0x80 <= buffer[i + 2] &&
-        buffer[i + 2] <= 0xbf &&
-        0x80 <= buffer[i + 3] &&
-        buffer[i + 3] <= 0xbf) || // planes 4-15
-      (0xf1 <= buffer[i] &&
-        buffer[i] <= 0xf3 &&
-        0x80 <= buffer[i + 1] &&
-        buffer[i + 1] <= 0xbf &&
-        0x80 <= buffer[i + 2] &&
-        buffer[i + 2] <= 0xbf &&
-        0x80 <= buffer[i + 3] &&
-        buffer[i + 3] <= 0xbf) || // plane 16
-      (buffer[i] === 0xf4 &&
-        0x80 <= buffer[i + 1] &&
-        buffer[i + 1] <= 0x8f &&
-        0x80 <= buffer[i + 2] &&
-        buffer[i + 2] <= 0xbf &&
-        0x80 <= buffer[i + 3] &&
-        buffer[i + 3] <= 0xbf)
+      (buffer[i] === 0xf0
+        && 0x90 <= buffer[i + 1]
+        && buffer[i + 1] <= 0xbf
+        && 0x80 <= buffer[i + 2]
+        && buffer[i + 2] <= 0xbf
+        && 0x80 <= buffer[i + 3]
+        && buffer[i + 3] <= 0xbf) // planes 4-15
+      || (0xf1 <= buffer[i]
+        && buffer[i] <= 0xf3
+        && 0x80 <= buffer[i + 1]
+        && buffer[i + 1] <= 0xbf
+        && 0x80 <= buffer[i + 2]
+        && buffer[i + 2] <= 0xbf
+        && 0x80 <= buffer[i + 3]
+        && buffer[i + 3] <= 0xbf) // plane 16
+      || (buffer[i] === 0xf4
+        && 0x80 <= buffer[i + 1]
+        && buffer[i + 1] <= 0x8f
+        && 0x80 <= buffer[i + 2]
+        && buffer[i + 2] <= 0xbf
+        && 0x80 <= buffer[i + 3]
+        && buffer[i + 3] <= 0xbf)
     ) {
       i += 4;
       continue;
@@ -192,7 +192,7 @@ export function decode(buffer: Buffer, encoding: string): string {
 export function encode(content: string, encoding: string, options?: { addBOM?: boolean }): Buffer {
   // 直接使用 iconv.encode ArrayBuffer 内存
   return Buffer.from(
-    iconv.encode(content, toNodeEncoding(encoding), toNodeEncodeOptions(encoding, options)).buffer
+    iconv.encode(content, toNodeEncoding(encoding), toNodeEncodeOptions(encoding, options)).buffer,
   );
 }
 
@@ -214,6 +214,6 @@ function toNodeEncodeOptions(encoding: string, options?: { addBOM?: boolean }) {
       // Set iconv write utf8 with bom
       addBOM: encoding === UTF8_WITH_BOM,
     },
-    options
+    options,
   );
 }

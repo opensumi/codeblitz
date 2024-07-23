@@ -1,30 +1,30 @@
-import { Injectable, Autowired } from '@opensumi/di';
+import { isResponseError, request, RequestOptions } from '@codeblitzjs/ide-common';
+import { Autowired, Injectable } from '@opensumi/di';
 import { AppConfig } from '@opensumi/ide-core-browser';
 import { localize, MessageType } from '@opensumi/ide-core-common';
-import { request, isResponseError, RequestOptions } from '@codeblitzjs/ide-common';
 import { CommandService } from '@opensumi/ide-core-common';
 import { observable } from 'mobx';
-import { API } from './types';
+import { CodePlatformRegistry } from '../common/config';
 import { HelperService } from '../common/service';
-import { retry, RetryError } from '../common/utils';
 import {
-  ICodeAPIService,
-  TreeEntry,
-  BranchOrTag,
-  CommitParams,
-  CommitFileChange,
   Branch,
-  Project,
+  BranchOrTag,
+  CommitFileChange,
+  CommitParams,
   EntryInfo,
-  User,
   FileAction,
   FileActionHeader,
-  FileOperateResult,
   FileActionType,
+  FileOperateResult,
+  ICodeAPIService,
+  Project,
+  TreeEntry,
+  User,
 } from '../common/types';
-import type { IRepositoryModel, EntryParam } from '../common/types';
-import { CodePlatform, CommitFileStatus, CodeAPI as ConflictAPI } from '../common/types';
-import { CodePlatformRegistry } from '../common/config';
+import type { EntryParam, IRepositoryModel } from '../common/types';
+import { CodeAPI as ConflictAPI, CodePlatform, CommitFileStatus } from '../common/types';
+import { retry, RetryError } from '../common/utils';
+import { API } from './types';
 
 const toType = (status: string) => {
   switch (status) {
@@ -81,14 +81,14 @@ export class GitHubAPIService implements ICodeAPIService {
     sourceBranch: string,
     targetBranch: string,
     title: string,
-    autoMerge?: boolean | undefined
+    autoMerge?: boolean | undefined,
   ): Promise<ConflictAPI.ResponseCreatePR> {
     throw new Error('Method not implemented.');
   }
   mergeBase(
     repo: IRepositoryModel,
     target: string,
-    source: string
+    source: string,
   ): Promise<ConflictAPI.ResponseCommit> {
     throw new Error('Method not implemented.');
   }
@@ -100,7 +100,7 @@ export class GitHubAPIService implements ICodeAPIService {
   }
   canResolveConflict(
     repo: IRepositoryModel,
-    prId: string
+    prId: string,
   ): Promise<ConflictAPI.CanResolveConflictResponse> {
     throw new Error('Method not implemented.');
   }
@@ -110,7 +110,7 @@ export class GitHubAPIService implements ICodeAPIService {
   getConflict(
     repo: IRepositoryModel,
     sourceBranch: string,
-    targetBranch: string
+    targetBranch: string,
   ): Promise<ConflictAPI.ConflictResponse> {
     throw new Error('Method not implemented.');
   }
@@ -199,8 +199,8 @@ export class GitHubAPIService implements ICodeAPIService {
       headers: {
         ...(token
           ? {
-              Authorization: `token ${token}`,
-            }
+            Authorization: `token ${token}`,
+          }
           : {}),
         Accept: 'application/vnd.github.v3+json',
         ...headers,
@@ -259,7 +259,7 @@ export class GitHubAPIService implements ICodeAPIService {
     repo: IRepositoryModel,
     type: 'Commit' | 'Tree' | 'Blob',
     query: string,
-    expression: string
+    expression: string,
   ) {
     const data = await this.requestGraphQL({
       data: {
@@ -290,10 +290,10 @@ export class GitHubAPIService implements ICodeAPIService {
         baseURL: this.config.endpoint,
         ...(token
           ? {
-              headers: {
-                Authorization: `token ${token}`,
-              },
-            }
+            headers: {
+              Authorization: `token ${token}`,
+            },
+          }
           : {}),
       });
       const data: API.ResponseGetRateLimit = await response.json();
@@ -349,7 +349,7 @@ export class GitHubAPIService implements ICodeAPIService {
     createTree: async (
       repo: IRepositoryModel,
       trees: API.RequestCreateTree[],
-      base_tree?: string
+      base_tree?: string,
     ) => {
       const data = await this.requestByREST<API.ResponseGetTree>(
         `/repos/${this.getProjectPath(repo)}/git/trees`,
@@ -363,7 +363,7 @@ export class GitHubAPIService implements ICodeAPIService {
             base_tree,
             tree: trees,
           },
-        }
+        },
       );
 
       return data;
@@ -374,7 +374,7 @@ export class GitHubAPIService implements ICodeAPIService {
         `/repos/${this.getProjectPath(repo)}/git/trees/${repo.commit}:${path}`,
         {
           responseType: 'json',
-        }
+        },
       );
       return data.tree.map((item) => {
         const entry: TreeEntry = {
@@ -395,14 +395,14 @@ export class GitHubAPIService implements ICodeAPIService {
           params: {
             recursive: 1,
           },
-        }
+        },
       );
       return data.tree.filter((item) => item.type === 'blob').map((item) => item.path);
     },
 
     createBlob: async (
       repo: IRepositoryModel,
-      blob: { content: string; encoding?: 'utf-8' | 'base64' }
+      blob: { content: string; encoding?: 'utf-8' | 'base64' },
     ) => {
       const data = await this.requestByREST<API.ResponseCreateBlob>(
         `/repos/${this.getProjectPath(repo)}/git/blobs`,
@@ -416,7 +416,7 @@ export class GitHubAPIService implements ICodeAPIService {
             content: blob.content,
             encoding: blob.encoding || 'utf-8',
           },
-        }
+        },
       );
 
       return data;
@@ -430,7 +430,7 @@ export class GitHubAPIService implements ICodeAPIService {
             Accept: 'application/vnd.github.v3.raw',
           },
           responseType: 'arrayBuffer',
-        }
+        },
       );
       return Buffer.from(buf);
     },
@@ -438,7 +438,7 @@ export class GitHubAPIService implements ICodeAPIService {
     getBlobByCommitPath: async (
       repo: IRepositoryModel,
       commit: string,
-      path: string
+      path: string,
     ): Promise<Uint8Array> => {
       const data = await this.requestByREST<API.ResponseBlobCommitPath>(
         `/repos/${this.getProjectPath(repo)}/contents/${path}?ref=${commit}`,
@@ -447,7 +447,7 @@ export class GitHubAPIService implements ICodeAPIService {
             Accept: 'application/vnd.github.v3.json',
           },
           responseType: 'json',
-        }
+        },
       );
       // Buffer toJSON 为 { type: 'Buffer', data: [] }，通过 rpc 传输后无法自动恢复，ArrayBufferView 额外处理了，可以恢复
       return new Uint8Array(Buffer.from(data.content, data.encoding));
@@ -463,7 +463,7 @@ export class GitHubAPIService implements ICodeAPIService {
             ref: `refs/heads/${ref}`,
             sha,
           },
-        }
+        },
       );
 
       return data;
@@ -473,7 +473,7 @@ export class GitHubAPIService implements ICodeAPIService {
       repo: IRepositoryModel,
       ref: string,
       sha: string,
-      force: boolean = false
+      force: boolean = false,
     ) => {
       // 去掉开头的 refs/
       ref = ref.replace(/^refs\//, '');
@@ -488,7 +488,7 @@ export class GitHubAPIService implements ICodeAPIService {
             sha,
             force,
           },
-        }
+        },
       );
 
       return data;
@@ -504,7 +504,7 @@ export class GitHubAPIService implements ICodeAPIService {
           },
           responseType: 'json',
           method: 'get',
-        }
+        },
       );
 
       return data;
@@ -515,7 +515,7 @@ export class GitHubAPIService implements ICodeAPIService {
         `/repos/${this.getProjectPath(repo)}/git/matching-refs/heads`,
         {
           responseType: 'json',
-        }
+        },
       );
       return data.map((item) => ({
         name: item.ref.slice(11),
@@ -535,7 +535,7 @@ export class GitHubAPIService implements ICodeAPIService {
           params: {
             per_page: 100,
           },
-        }
+        },
       );
       if (data.length === 100) {
         data = data.concat(
@@ -547,8 +547,8 @@ export class GitHubAPIService implements ICodeAPIService {
                 per_page: 100,
                 page: 2,
               },
-            }
-          )
+            },
+          ),
         );
       }
       return data.map((item) => ({
@@ -570,7 +570,7 @@ export class GitHubAPIService implements ICodeAPIService {
             page: params.page,
             per_page: params.pageSize,
           },
-        }
+        },
       );
       return data.map((c) => ({
         id: c.sha,
@@ -590,7 +590,7 @@ export class GitHubAPIService implements ICodeAPIService {
         `/repos/${this.getProjectPath(repo)}/commits/${sha}`,
         {
           responseType: 'json',
-        }
+        },
       );
 
       return data.files.map((f) => ({
@@ -605,13 +605,13 @@ export class GitHubAPIService implements ICodeAPIService {
     getCommitCompare: async (
       repo: IRepositoryModel,
       from: string,
-      to: string
+      to: string,
     ): Promise<CommitFileChange[]> => {
       const data = await this.requestByREST<API.ResponseCommitDetail>(
         `/repos/${this.getProjectPath(repo)}/compare/${from}...${to}`,
         {
           responseType: 'json',
-        }
+        },
       );
 
       return data.files.map((f) => ({
@@ -648,7 +648,7 @@ export class GitHubAPIService implements ICodeAPIService {
             }
           }
         `,
-        `${repo.commit}:${path}`
+        `${repo.commit}:${path}`,
       );
       return data.entries.map((item: any) => {
         const entry: TreeEntry = {
@@ -672,7 +672,7 @@ export class GitHubAPIService implements ICodeAPIService {
           isBinary
           text
         `,
-        `${repo.commit}:${entry.path}`
+        `${repo.commit}:${entry.path}`,
       );
       const text = data.text || '';
       return Buffer.from(text);
@@ -703,9 +703,7 @@ export class GitHubAPIService implements ICodeAPIService {
           }
         `;
         return `
-          refs(refPrefix: "${map[type].refPrefix}", first: 100, ${
-          endCursor ? `after: "${endCursor}"` : ''
-        }) {
+          refs(refPrefix: "${map[type].refPrefix}", first: 100, ${endCursor ? `after: "${endCursor}"` : ''}) {
             ${dataQuery}
           }
         `;
@@ -918,7 +916,7 @@ export class GitHubAPIService implements ICodeAPIService {
     // 先获取分支名
     // by CODE_SERVICE_COMMANDS
     const repositoryInfo: IRepositoryModel | undefined = await this.commandService.executeCommand(
-      'code-service.repository'
+      'code-service.repository',
     );
     if (!repositoryInfo || !repositoryInfo.ref) {
       return [];
@@ -958,7 +956,7 @@ export class GitHubAPIService implements ICodeAPIService {
           tree: treeData.sha,
           parents: [latestCommit],
         },
-      }
+      },
     );
 
     // 将其关联分支的引用，此时才成功 push

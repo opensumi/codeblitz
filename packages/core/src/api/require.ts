@@ -12,12 +12,12 @@ import * as Debug from '../modules/opensumi__ide-debug';
 import * as Decoration from '../modules/opensumi__ide-decoration';
 import * as Editor from '../modules/opensumi__ide-editor';
 import * as Explorer from '../modules/opensumi__ide-explorer';
+import * as OpenSumiExtension from '../modules/opensumi__ide-extension';
 import * as ExtensionStorage from '../modules/opensumi__ide-extension-storage';
 import * as FileScheme from '../modules/opensumi__ide-file-scheme';
 import * as FileSearch from '../modules/opensumi__ide-file-search';
 import * as FileService from '../modules/opensumi__ide-file-service';
 import * as FileTreeNext from '../modules/opensumi__ide-file-tree-next';
-import * as OpenSumiExtension from '../modules/opensumi__ide-extension';
 import * as Keymaps from '../modules/opensumi__ide-keymaps';
 import * as Logs from '../modules/opensumi__ide-logs';
 import * as MainLayout from '../modules/opensumi__ide-main-layout';
@@ -44,16 +44,16 @@ import * as Workspace from '../modules/opensumi__ide-workspace';
 import * as WorkspaceEdit from '../modules/opensumi__ide-workspace-edit';
 
 // others
-import * as CommonDI from '../modules/opensumi__common-di';
-import * as SumiCore from '../modules/codeblitz__ide-sumi-core';
-import * as CodeService from '../modules/codeblitz__code-service';
 import * as CodeApi from '../modules/codeblitz__code-api';
+import * as CodeService from '../modules/codeblitz__code-service';
+import * as SumiCore from '../modules/codeblitz__ide-sumi-core';
+import * as CommonDI from '../modules/opensumi__common-di';
 
 // node
-import * as os from 'os';
-import * as crypto from 'crypto';
-import * as buffer from 'buffer';
 import * as assert from 'assert';
+import * as buffer from 'buffer';
+import * as crypto from 'crypto';
+import * as os from 'os';
 import * as path from 'path';
 
 export function requireModule(module: '@opensumi/ide-addons'): typeof Addons;

@@ -1,6 +1,6 @@
 import { Injectable } from '@opensumi/di';
-import { IFileSchemeDocNodeService, FileSchemeDocNodeServicePath } from './base';
 import { NodeModule } from '../core/app';
+import { FileSchemeDocNodeServicePath, IFileSchemeDocNodeService } from './base';
 
 import { FileSchemeDocNodeServiceImpl } from './file-scheme-doc.service';
 

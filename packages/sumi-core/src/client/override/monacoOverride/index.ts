@@ -1,22 +1,13 @@
 import { Provider } from '@opensumi/di';
-import { IMonacoCodeService, MonacoCodeService, monacoCodeServiceProxy } from './codeEditorService';
-import {
-  MonacoTextModelService,
-  monacoCommandServiceProxy,
-  IMonacoCommandServiceProxy,
-} from './commandService';
-import {
-  IMonacoBulkEditServiceProxy,
-  MonacoBulkEditService,
-  monacoBulkEditServiceProxy,
-} from './workspaceEditService';
 import { IBulkEditServiceShape } from '@opensumi/ide-workspace-edit';
+import { IMonacoCodeService, MonacoCodeService, monacoCodeServiceProxy } from './codeEditorService';
+import { IMonacoCommandServiceProxy, monacoCommandServiceProxy, MonacoTextModelService } from './commandService';
+import { IMonacoBulkEditServiceProxy, MonacoBulkEditService, monacoBulkEditServiceProxy } from './workspaceEditService';
 
 import { MonacoCommandService } from '@opensumi/ide-editor/lib/browser/monaco-contrib/command/command.service';
 import { ICommandServiceToken } from '@opensumi/ide-monaco/lib/browser/contrib/command';
 import { IMonacoTextModelService, monacoTextModelServiceProxy } from './textModelService';
 
-// monaco override 暂时用不到
 export const MonacoOverrides: Provider[] = [
   {
     token: MonacoCodeService,

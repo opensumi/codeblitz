@@ -1,14 +1,14 @@
 import { Autowired } from '@opensumi/di';
 import { ClientAppContribution } from '@opensumi/ide-core-browser';
-import { OnEvent, WithEventBus, BasicEvent, Domain, URI } from '@opensumi/ide-core-common';
+import { BasicEvent, Domain, OnEvent, URI, WithEventBus } from '@opensumi/ide-core-common';
 import {
-  EditorDocumentModelSavedEvent,
   EditorDocumentModelContentChangedEvent,
+  EditorDocumentModelSavedEvent,
   IEditorDocumentModelService,
 } from '@opensumi/ide-editor/lib/browser';
-import { IFileServiceClient, FileChangeType } from '@opensumi/ide-file-service/lib/common';
-import { AppConfig, RuntimeConfig } from '../../common/types';
+import { FileChangeType, IFileServiceClient } from '@opensumi/ide-file-service/lib/common';
 import * as path from 'path';
+import { AppConfig, RuntimeConfig } from '../../common/types';
 
 export class FileChangeEvent extends BasicEvent<{
   filepath: string;
@@ -78,7 +78,7 @@ export class EditorActionEventContribution extends WithEventBus implements Clien
                 filepath,
                 content,
               };
-            })
+            }),
           )
             .then((data) => {
               onDidChangeFiles(data);
@@ -87,7 +87,7 @@ export class EditorActionEventContribution extends WithEventBus implements Clien
               console.error(err);
             });
         }
-      })
+      }),
     );
   }
 

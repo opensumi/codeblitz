@@ -3,7 +3,6 @@ import * as Alex from '@codeblitzjs/ide-core';
 import React from 'react';
 import { createRoot } from 'react-dom/client';
 import '@codeblitzjs/ide-core/languages';
-import { SumiReadableStream } from '@opensumi/ide-utils/lib/stream';
 import { CodeAPIModule, CodePlatform } from '@codeblitzjs/ide-code-api';
 import { CodeServiceModule } from '@codeblitzjs/ide-code-service';
 import anycode from '@codeblitzjs/ide-core/extensions/codeblitz.anycode';
@@ -32,6 +31,7 @@ import webSCM from '@codeblitzjs/ide-core/extensions/codeblitz.web-scm';
 import { IEditorInlineChat, isFilesystemReady } from '@codeblitzjs/ide-sumi-core';
 import { AILayout } from '@opensumi/ide-ai-native/lib/browser/layout/ai-layout';
 import { DESIGN_MENUBAR_CONTAINER_VIEW_ID } from '@opensumi/ide-design';
+import { SumiReadableStream } from '@opensumi/ide-utils/lib/stream';
 import { StartupModule } from './startup.module';
 
 import { LocalExtensionModule } from '../common/local-extension.module';
@@ -182,7 +182,7 @@ const App = () => (
       layoutComponent: AILayout,
       layoutConfig,
       defaultPreferences: {
-        'general.theme': 'opensumi-design-dark',
+        'general.theme': 'opensumi-design-dark-theme',
       },
     }}
     runtimeConfig={{

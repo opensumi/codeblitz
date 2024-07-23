@@ -1,7 +1,7 @@
-import * as React from 'react';
 import { localize } from '@opensumi/ide-core-browser';
 import clx from 'classnames';
 import { observer } from 'mobx-react-lite';
+import * as React from 'react';
 import { RawExtension } from '../base';
 import * as commonStyles from '../common.module.less';
 import * as styles from './index.module.less';
@@ -40,16 +40,20 @@ export const RawExtensionView: React.FC<RawExtensionProps> = observer(
             <div className={styles.info_header}>
               <div className={clx(styles.name_wrapper)}>
                 <div className={styles.name}>{extension.displayName || extension.name}</div>
-                {extension.isBuiltin ? (
-                  <span className={commonStyles.tag}>
-                    {localize('marketplace.extension.builtin')}
-                  </span>
-                ) : null}
-                {extension.isDevelopment ? (
-                  <span className={clx(commonStyles.tag, commonStyles.developmentMode)}>
-                    {localize('marketplace.extension.development')}
-                  </span>
-                ) : null}
+                {extension.isBuiltin
+                  ? (
+                    <span className={commonStyles.tag}>
+                      {localize('marketplace.extension.builtin')}
+                    </span>
+                  )
+                  : null}
+                {extension.isDevelopment
+                  ? (
+                    <span className={clx(commonStyles.tag, commonStyles.developmentMode)}>
+                      {localize('marketplace.extension.development')}
+                    </span>
+                  )
+                  : null}
               </div>
             </div>
             <div className={clx(styles.extension_props)}>
@@ -63,5 +67,5 @@ export const RawExtensionView: React.FC<RawExtensionProps> = observer(
         </div>
       </div>
     );
-  }
+  },
 );

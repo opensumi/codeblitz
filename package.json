@@ -8,7 +8,7 @@
   "description": "codeblitzjs",
   "main": "index.js",
   "engines": {
-    "opensumi": "3.1.4-next-1719380894.0"
+    "opensumi": "3.1.5-next-1721574303.0"
   },
   "scripts": {
     "prepare": "husky install",
@@ -19,6 +19,7 @@
     "generate": "node scripts/generate",
     "editor": "INTEGRATION=editor npm run dev",
     "fs": "INTEGRATION=filesystem npm run dev",
+    "diff-viewer": "INTEGRATION=diff-viewer npm run dev",
     "build": "node scripts/build",
     "build:all": "yarn run bundle && yarn run generate && yarn run build",
     "bundle": "node scripts/bundle",
@@ -30,7 +31,8 @@
     "changelog": "conventional-changelog -p angular -i CHANGELOG.md -s",
     "update-package": "node scripts/utils/update-package",
     "release": "node scripts/release",
-    "release:next": "node scripts/release --tag=next"
+    "release:next": "node scripts/release --tag=next",
+    "ci": "yarn type-check && yarn test"
   },
   "author": "antgroup",
   "license": "MIT",
@@ -77,10 +79,10 @@
     "typescript": "^4.2.3"
   },
   "resolutions": {
-    "node-gyp": "10.1.0"
+    "node-gyp": "npm:@favware/skip-dependency@latest",
+    "nsfw": "npm:@favware/skip-dependency@latest",
+    "spdlog": "npm:@favware/skip-dependency@latest",
+    "node-pty": "npm:@favware/skip-dependency@latest"
   },
-  "packageManager": "yarn@4.2.2",
-  "dependencies": {
-    "node-gyp": "10.1.0"
-  }
+  "packageManager": "yarn@4.2.2"
 }

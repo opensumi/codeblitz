@@ -1,19 +1,10 @@
-import { useState, useEffect } from 'react';
-import { Provider, Injectable, Autowired } from '@opensumi/di';
-import {
-  Domain,
-  URI,
-  AppConfig,
-  BrowserModule,
-  FsProviderContribution,
-} from '@opensumi/ide-core-browser';
-import {
-  ExtensionServiceClientImpl,
-  IExtensionNodeClientService,
-} from '@codeblitzjs/ide-sumi-core';
-import { IExtensionMetadata, IExtensionBasicMetadata } from '@codeblitzjs/ide-common';
-import { IFileServiceClient } from '@opensumi/ide-file-service';
+import { IExtensionBasicMetadata, IExtensionMetadata } from '@codeblitzjs/ide-common';
+import { ExtensionServiceClientImpl, IExtensionNodeClientService } from '@codeblitzjs/ide-sumi-core';
 import { OpenSumiExtFsProvider } from '@codeblitzjs/ide-sumi-core';
+import { Autowired, Injectable, Provider } from '@opensumi/di';
+import { AppConfig, BrowserModule, Domain, FsProviderContribution, URI } from '@opensumi/ide-core-browser';
+import { IFileServiceClient } from '@opensumi/ide-file-service';
+import { useEffect, useState } from 'react';
 
 import {
   StaticResourceContribution,

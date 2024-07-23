@@ -29,7 +29,7 @@
     },
     {
       "path": "./startup/tsconfig.build.json"
-    },
+    }
   ],
   "files": [],
   "include": []

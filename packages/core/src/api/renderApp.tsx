@@ -1,22 +1,14 @@
-import React, { useState, useEffect, useRef, useMemo } from 'react';
-import { createRoot } from 'react-dom/client';
-import { IReporterService, localize, getDebugLogger } from '@opensumi/ide-core-common';
 import { REPORT_NAME, RuntimeConfig } from '@codeblitzjs/ide-sumi-core';
-import { createApp } from './createApp';
+import { getDebugLogger, IReporterService, localize } from '@opensumi/ide-core-common';
+import React, { useEffect, useMemo, useRef, useState } from 'react';
+import { createRoot } from 'react-dom/client';
+import { useConstant } from '../core/hooks';
+import { IPropsService, PropsServiceImpl } from '../core/props.service';
 import { Root } from '../core/Root';
-import { RootProps, LandingProps } from '../core/types';
-import {
-  setSingleInjector,
-  singleInjector,
-  useConstant,
-  isRendered,
-  setRendered,
-  setSingleApp,
-  singleApp,
-} from '../core/hooks';
-import { IConfig, IAppInstance } from './types';
 import styles from '../core/style.module.less';
-import { IAppRenderer } from '@opensumi/ide-core-browser';
+import { LandingProps, RootProps } from '../core/types';
+import { createApp } from './createApp';
+import { IAppInstance, IConfig } from './types';
 
 export interface IAppRendererProps extends IConfig {
   onLoad?(app: IAppInstance): void;
@@ -30,15 +22,15 @@ export const renderApp = (domElement: HTMLElement, props: IAppRendererProps) => 
   const className = opts.runtimeConfig.hideEditorTab ? styles['hide-editor-tab'] : '';
   const root = createRoot(domElement);
 
-  root.render(<Root status="loading" theme={themeType} Landing={Landing} className={className} />);
+  root.render(<Root status='loading' theme={themeType} Landing={Landing} className={className} />);
 
   app
     .start((Children) => {
       return new Promise((resolve) => {
         root.render(
-          <Root status="success" theme={themeType} className={className}>
+          <Root status='success' theme={themeType} className={className}>
             <Children />
-          </Root>
+          </Root>,
         );
       });
     })
@@ -47,13 +39,13 @@ export const renderApp = (domElement: HTMLElement, props: IAppRendererProps) => 
     })
     .catch((err: Error) => {
       root.render(
-        <Root status="error" error={err?.message || localize('error.unknown')} theme={themeType} />
+        <Root status='error' error={err?.message || localize('error.unknown')} theme={themeType} />,
       );
 
       (app.injector.get(IReporterService) as IReporterService).point(
-        REPORT_NAME.ALEX_APP_START_ERROR,
+        REPORT_NAME.APP_START_ERROR,
         err?.message,
-        { error: err }
+        { error: err },
       );
       getDebugLogger().error(err);
       setTimeout(() => {
@@ -70,9 +62,9 @@ export const AppRenderer: React.FC<IAppRendererProps> = ({ onLoad, Landing, ...o
   const app = useConstant(() => createApp(opts));
   const themeType = useConstant(() => app.currentThemeType);
   const appElementRef = useRef<React.FC | null>(null);
+  const propsService = useConstant(() => new PropsServiceImpl<IAppRendererProps>());
+  propsService.props = opts;
 
-  // 确保回调始终为最新
-  // TODO: 用 PropsService
   const runtimeConfig: RuntimeConfig = app.injector.get(RuntimeConfig);
   runtimeConfig.workspace = opts.runtimeConfig.workspace;
 
@@ -80,6 +72,13 @@ export const AppRenderer: React.FC<IAppRendererProps> = ({ onLoad, Landing, ...o
     status: RootProps['status'];
     error?: RootProps['error'];
   }>(() => ({ status: 'loading' }));
+
+  useMemo(() => {
+    app.injector.addProviders({
+      token: IPropsService,
+      useValue: propsService,
+    });
+  }, []);
 
   useEffect(() => {
     app
@@ -95,11 +94,11 @@ export const AppRenderer: React.FC<IAppRendererProps> = ({ onLoad, Landing, ...o
         setState({ error: err?.message || localize('error.unknown'), status: 'error' });
 
         (app.injector.get(IReporterService) as IReporterService).point(
-          REPORT_NAME.ALEX_APP_START_ERROR,
+          REPORT_NAME.APP_START_ERROR,
           err?.message,
           {
             error: err,
-          }
+          },
         );
         getDebugLogger().error(err);
         setTimeout(() => {
@@ -114,7 +113,7 @@ export const AppRenderer: React.FC<IAppRendererProps> = ({ onLoad, Landing, ...o
 
   const rootClassName = useMemo(
     () => (opts.runtimeConfig.hideEditorTab ? styles['hide-editor-tab'] : ''),
-    [opts.runtimeConfig.hideEditorTab]
+    [opts.runtimeConfig.hideEditorTab],
   );
 
   return (

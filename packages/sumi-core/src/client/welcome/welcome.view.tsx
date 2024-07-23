@@ -1,8 +1,8 @@
-import React from 'react';
+import { useInjectable } from '@opensumi/ide-core-browser';
 import { localize } from '@opensumi/ide-core-common';
 import { ReactEditorComponent } from '@opensumi/ide-editor/lib/browser';
-import { useInjectable } from '@opensumi/ide-core-browser';
-import { AppConfig, AppCommonConfig } from '../../common';
+import React from 'react';
+import { AppCommonConfig, AppConfig } from '../../common';
 
 import styles from './welcome.module.less';
 export const EditorWelcomeComponent: ReactEditorComponent = () => {

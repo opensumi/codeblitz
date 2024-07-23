@@ -1,3 +1,3 @@
-import { runCommand } from "./factory";
+import { runCommand } from './factory';
 
 runCommand();

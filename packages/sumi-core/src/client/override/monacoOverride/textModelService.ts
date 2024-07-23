@@ -1,11 +1,11 @@
-import {
-  ITextModelService,
-  ITextModelContentProvider,
-} from '@opensumi/monaco-editor-core/esm/vs/editor/common/services/resolverService';
 import * as monaco from '@opensumi/ide-monaco';
+import {
+  ITextModelContentProvider,
+  ITextModelService,
+} from '@opensumi/monaco-editor-core/esm/vs/editor/common/services/resolverService';
 
-import { MonacoTextModelService } from '@opensumi/ide-editor/lib/browser/doc-model/override';
 import { Injector } from '@opensumi/di';
+import { MonacoTextModelService } from '@opensumi/ide-editor/lib/browser/doc-model/override';
 export const IMonacoTextModelService = Symbol('IMonacoTextModelService');
 export { MonacoTextModelService };
 
@@ -42,11 +42,11 @@ class MonacoTextModelServiceProxy implements ITextModelService {
 
   registerTextModelContentProvider(
     scheme: string,
-    provider: ITextModelContentProvider
+    provider: ITextModelContentProvider,
   ): monaco.IDisposable {
     return this.injector!.get(IMonacoTextModelService).registerTextModelContentProvider(
       scheme,
-      provider
+      provider,
     );
   }
 }
