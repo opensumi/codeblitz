@@ -63,7 +63,7 @@ export const getModules: () => ModuleConstructor[] = () => [
 
   ...extensionModules,
 
-  // Alex
+  // CodeBlitz
   ClientModule,
   PluginModule,
   ...ServerModuleCollection,

@@ -42,7 +42,7 @@ import { WorkspaceModule } from '@opensumi/ide-workspace/lib/browser';
 
 import { PluginModule } from '@codeblitzjs/ide-plugin';
 import { ClientModule, ExtensionClientManagerModule, ServerModuleCollection } from '@codeblitzjs/ide-sumi-core';
-import { AlexModule } from './alex.module';
+import { CodeBlitzModule } from './alex.module';
 
 // TODO: 部分模块需要注意顺序，否则会报错，待框架侧调整修复
 export const modules: ModuleConstructor[] = [
@@ -94,9 +94,9 @@ export const modules: ModuleConstructor[] = [
   CommentsModule,
   // TaskModule,
 
-  // Alex
+  // CodeBlitz
   ClientModule,
   PluginModule,
   ...ServerModuleCollection,
-  AlexModule,
+  CodeBlitzModule,
 ];

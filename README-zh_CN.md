@@ -10,8 +10,9 @@
 [https://codeblitz.cloud.alipay.com/](https://codeblitz.cloud.alipay.com/)
 
 ## 项目启动
+
 ### 准备
-需要安装 yarn >= 1.0，使用 yarn 的 [workspaces](https://classic.yarnpkg.com/en/docs/workspaces/) 来管理 packages
+需要安装 yarn >= 1.22，使用 yarn 的 [workspaces](https://classic.yarnpkg.com/en/docs/workspaces/) 来管理 packages
 
 ### 启动项目
 ```bash

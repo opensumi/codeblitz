@@ -78,10 +78,10 @@
     "typescript": "^4.2.3"
   },
   "resolutions": {
-    "node-gyp": "10.1.0"
+    "node-gyp": "npm:@favware/skip-dependency@latest",
+    "nsfw": "npm:@favware/skip-dependency@latest",
+    "spdlog": "npm:@favware/skip-dependency@latest",
+    "node-pty": "npm:@favware/skip-dependency@latest"
   },
-  "packageManager": "yarn@4.2.2",
-  "dependencies": {
-    "node-gyp": "10.1.0"
-  }
+  "packageManager": "yarn@4.2.2"
 }
