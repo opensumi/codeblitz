@@ -8,6 +8,7 @@ import {
   IContextKey,
   IScopedContextKeyService,
 } from '@opensumi/ide-core-browser';
+import { StandaloneServices } from '@opensumi/monaco-editor-core/esm/vs/editor/standalone/browser/standaloneServices';
 import { IConfigurationService } from '@opensumi/monaco-editor-core/esm/vs/platform/configuration/common/configuration';
 import { ContextKeyService } from '@opensumi/monaco-editor-core/esm/vs/platform/contextkey/browser/contextKeyService';
 import {
@@ -189,66 +190,16 @@ export class MonacoContextKeyServiceOverride extends BaseContextKeyService imple
 
   constructor() {
     super();
-    this.contextKeyService = (window as any).contextService || new ContextKeyService(this.configurationService);
+    this.contextKeyService = (StandaloneServices as any)?.contextKeyService?.get()
+      || new ContextKeyService(this.configurationService);
     this.listenToContextChanges();
-    (window as any).contextService = this.contextKeyService;
+    (StandaloneServices as any).contextKeyService = {
+      get: () => this.contextKeyService,
+    };
   }
 
   dispose(): void {
     // context 不需要dispose
     // super.dispose();
-  }
-}
-
-@Injectable({ multiple: true })
-export class MonacoScopedContextKeyService implements IScopedContextKeyService {
-  injector: Injector;
-  constructor(
-    @Optional() public readonly contextKeyService: ContextKeyService,
-    injector: Injector,
-  ) {
-    this.injector = injector;
-  }
-  listenToContextChanges() {
-    this.injector.get(ScopedContextKeyServiceProxy).listenToContextChanges();
-  }
-  get onDidChangeContext(): Event<ContextKeyChangeEvent> {
-    return this.injector.get(ScopedContextKeyServiceProxy).onDidChangeContext;
-  }
-  bufferChangeEvents(callback: Function): void {
-    throw new Error('Method not implemented.');
-  }
-  getValue<T>(key: string): T | undefined {
-    throw new Error('Method not implemented.');
-  }
-  createKey<T extends ContextKeyValue = any>(
-    key: string,
-    defaultValue: T | undefined,
-  ): IContextKey<T> {
-    throw new Error('Method not implemented.');
-  }
-  getKeysInWhen(when: string | ContextKeyExpr | undefined): string[] {
-    throw new Error('Method not implemented.');
-  }
-  getContextValue<T>(key: string): T | undefined {
-    throw new Error('Method not implemented.');
-  }
-  createScoped(
-    target?: ContextKeyService | IContextKeyServiceTarget | undefined,
-  ): IScopedContextKeyService {
-    throw new Error('Method not implemented.');
-  }
-  parse(when: string | undefined): ContextKeyExpr | undefined {
-    throw new Error('Method not implemented.');
-  }
-  dispose(): void {
-    throw new Error('Method not implemented.');
-  }
-  attachToDomNode(domNode: HTMLElement): void {
-    throw new Error('Method not implemented.');
-  }
-
-  match(expression: string | ContextKeyExpression | undefined): boolean {
-    return this.injector.get(ScopedContextKeyServiceProxy).match(expression);
   }
 }

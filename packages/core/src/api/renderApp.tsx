@@ -43,7 +43,7 @@ export const renderApp = (domElement: HTMLElement, props: IAppRendererProps) => 
       );
 
       (app.injector.get(IReporterService) as IReporterService).point(
-        REPORT_NAME.ALEX_APP_START_ERROR,
+        REPORT_NAME.APP_START_ERROR,
         err?.message,
         { error: err },
       );
@@ -94,7 +94,7 @@ export const AppRenderer: React.FC<IAppRendererProps> = ({ onLoad, Landing, ...o
         setState({ error: err?.message || localize('error.unknown'), status: 'error' });
 
         (app.injector.get(IReporterService) as IReporterService).point(
-          REPORT_NAME.ALEX_APP_START_ERROR,
+          REPORT_NAME.APP_START_ERROR,
           err?.message,
           {
             error: err,

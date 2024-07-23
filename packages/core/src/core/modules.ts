@@ -36,13 +36,9 @@ import { WebviewModule } from '@opensumi/ide-webview/lib/browser';
 import { WorkspaceEditModule } from '@opensumi/ide-workspace-edit/lib/browser';
 import { WorkspaceModule } from '@opensumi/ide-workspace/lib/browser';
 
-/**
- * alex
- */
-
 import { PluginModule } from '@codeblitzjs/ide-plugin';
 import { ClientModule, ExtensionClientManagerModule, ServerModuleCollection } from '@codeblitzjs/ide-sumi-core';
-import { AlexModule } from './alex.module';
+import { CodeBlitzModule } from './internal/codeblitz.module';
 
 // TODO: 部分模块需要注意顺序，否则会报错，待框架侧调整修复
 export const modules: ModuleConstructor[] = [
@@ -94,9 +90,9 @@ export const modules: ModuleConstructor[] = [
   CommentsModule,
   // TaskModule,
 
-  // Alex
+  // CodeBlitz
   ClientModule,
   PluginModule,
   ...ServerModuleCollection,
-  AlexModule,
+  CodeBlitzModule,
 ];

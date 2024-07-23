@@ -150,10 +150,6 @@ module.exports = (option) => {
               options: {
                 lessOptions: {
                   javascriptEnabled: true,
-                  modifyVars: {
-                    'html-selector': 'alex-root',
-                    'body-selector': 'alex-root',
-                  },
                 },
               },
             },

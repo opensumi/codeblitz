@@ -1,10 +1,10 @@
-import { Autowired, Injector } from '@opensumi/di';
+import { Autowired } from '@opensumi/di';
 import {
   AINativeCoreContribution,
   IAIMiddleware,
   IInlineChatFeatureRegistry,
 } from '@opensumi/ide-ai-native/lib/browser/types';
-import { Disposable, Domain, IEventBus } from '@opensumi/ide-core-common';
+import { Disposable, Domain } from '@opensumi/ide-core-common';
 import { RuntimeConfig } from '../../common';
 
 @Domain(AINativeCoreContribution)

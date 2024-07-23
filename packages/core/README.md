@@ -1,4 +1,4 @@
-# Codeblitz
+# CodeBlitz
 
 > 基于 OpenSumi 的纯前端版本 IDE 框架
 
@@ -10,4 +10,7 @@
 
 ## 开发文档
 
+* CodeBlitz: [https://codeblitz.opensumi.com/](https://codeblitz.opensumi.com/)
 * OpenSumi: [https://opensumi.com/zh](https://opensumi.com/zh)
+
+## 示例 [codeblitz-sample](https://github.com/opensumi/codeblitz-sample)

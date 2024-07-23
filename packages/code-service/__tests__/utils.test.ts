@@ -1,3 +1,4 @@
+import { CodePlatformRegistry } from '../../code-api/src/common/config';
 import { parseGitmodules, parseSubmoduleUrl } from '../src/utils';
 
 const submodules = [
@@ -31,8 +32,9 @@ describe(__filename, () => {
   });
 
   it('parseSubmoduleUrl', () => {
+    const configs = CodePlatformRegistry.instance().getCodePlatformConfigs();
     submodules.forEach((item) => {
-      expect(parseSubmoduleUrl(item.url)).toEqual({
+      expect(parseSubmoduleUrl(item.url, configs)).toEqual({
         owner: item.owner,
         name: item.name,
         platform: item.platform,

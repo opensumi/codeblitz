@@ -48,7 +48,7 @@ export const renderEditor = (domElement: HTMLElement, props: IEditorRendererProp
       );
 
       (app.injector.get(IReporterService) as IReporterService).point(
-        REPORT_NAME.ALEX_APP_START_ERROR,
+        REPORT_NAME.APP_START_ERROR,
         err?.message,
         { error: err },
       );
@@ -94,7 +94,7 @@ export const EditorRenderer: React.FC<IEditorRendererProps> = ({ onLoad, Landing
         setState({ error: err?.message || localize('error.unknown'), status: 'error' });
 
         (app.injector.get(IReporterService) as IReporterService).point(
-          REPORT_NAME.ALEX_APP_START_ERROR,
+          REPORT_NAME.APP_START_ERROR,
           err?.message,
           {
             error: err,
@@ -117,7 +117,7 @@ export const EditorRenderer: React.FC<IEditorRendererProps> = ({ onLoad, Landing
   );
 
   return (
-    <Root {...state} Landing={Landing} className={`alex-editor ${rootClassName}`}>
+    <Root {...state} Landing={Landing} className={`codeblitz-editor ${rootClassName}`}>
       {ideAppRef.current ? <ideAppRef.current /> : null}
     </Root>
   );

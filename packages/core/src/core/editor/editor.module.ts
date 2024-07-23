@@ -58,7 +58,7 @@ import { SCMService } from '@opensumi/ide-scm';
 import { IWorkspaceService } from '@opensumi/ide-workspace';
 import md5 from 'md5';
 import * as path from 'path';
-import { AlexCommandContribution } from '../commands';
+import { CodeBlitzCommandContribution } from '../commands';
 import { IDETheme } from '../extension/metadata';
 import { IPropsService } from '../props.service';
 import styles from '../style.module.less';
@@ -569,7 +569,7 @@ class EditorSpecialContribution extends Disposable
         const tabHeight = this.runtimeConfig.hideEditorTab
           ? 0
           : this.layoutViewSize.editorTabsHeight;
-        const root = document.querySelector('.alex-root') as HTMLElement;
+        const root = document.querySelector('.codeblitz-root') as HTMLElement;
         root.style.height = `${contentHeight + tabHeight}px`;
         monacoEditor.layout();
       };
@@ -761,6 +761,6 @@ export class EditorSpecialModule extends BrowserModule {
     },
     ThemeContribution,
     EditorSpecialContribution,
-    AlexCommandContribution,
+    CodeBlitzCommandContribution,
   ];
 }
