@@ -8,7 +8,6 @@ import { MonacoCommandService } from '@opensumi/ide-editor/lib/browser/monaco-co
 import { ICommandServiceToken } from '@opensumi/ide-monaco/lib/browser/contrib/command';
 import { IMonacoTextModelService, monacoTextModelServiceProxy } from './textModelService';
 
-// monaco override 暂时用不到
 export const MonacoOverrides: Provider[] = [
   {
     token: MonacoCodeService,

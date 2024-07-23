@@ -3,7 +3,7 @@ import React from 'react';
 import { createRoot } from 'react-dom/client';
 import 'antd/lib/button/style/index.css';
 
-// #region alex
+// #region codeblitz
 import {
   AppRenderer,
   BoxPanel,

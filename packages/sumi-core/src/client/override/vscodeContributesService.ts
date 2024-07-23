@@ -1,3 +1,4 @@
+import { VSCodeContributePoint } from '@opensumi/ide-extension';
 import {
   VSCodeContributesService,
   VSCodeContributesServiceToken,
@@ -13,15 +14,13 @@ const OUTSIDE_POINT = [
   TerminalContributionPoint,
   DebuggersContributionPoint,
   BreakpointsContributionPoint,
-];
+] as (typeof VSCodeContributePoint)[];
 
 export class VSCodeContributesServiceOverride extends VSCodeContributesService {
   constructor() {
     super();
+    this.ContributionPoints = this.ContributionPoints.filter((t) => {
+      return !OUTSIDE_POINT.includes(t);
+    });
   }
-  ContributionPoints = [
-    ...this.ContributionPoints.filter((contributtion) => {
-      return !OUTSIDE_POINT.includes(contributtion);
-    }),
-  ];
 }

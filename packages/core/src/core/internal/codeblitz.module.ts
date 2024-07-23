@@ -1,8 +1,8 @@
 import { RuntimeConfig } from '@codeblitzjs/ide-sumi-core';
 import { Autowired, Injectable, Provider } from '@opensumi/di';
 import { BrowserModule, Domain, KeybindingContribution, KeybindingRegistry } from '@opensumi/ide-core-browser';
-import { CodeBlitzCommandContribution } from './commands';
-import { ExtensionActivateContribution } from './extension/extension.contribution';
+import { CodeBlitzCommandContribution } from '../commands';
+import { ExtensionActivateContribution } from '../extension/extension.contribution';
 
 @Domain(KeybindingContribution)
 class CodeBlitzContribution implements KeybindingContribution {

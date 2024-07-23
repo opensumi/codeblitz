@@ -193,7 +193,6 @@ export class MonacoContextKeyServiceOverride extends BaseContextKeyService imple
     this.contextKeyService = (StandaloneServices as any)?.contextKeyService?.get()
       || new ContextKeyService(this.configurationService);
     this.listenToContextChanges();
-    // Store contextKeyService https://github.com/opensumi/core/blob/main/packages/monaco/src/browser/monaco.contribution.ts#L247
     (StandaloneServices as any).contextKeyService = {
       get: () => this.contextKeyService,
     };

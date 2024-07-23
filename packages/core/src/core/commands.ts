@@ -16,12 +16,12 @@ namespace CODEBLITZ_COMMANDS {
   const CATEGORY = 'alex';
 
   // 提供更改和获取默认偏好设置的能力，这个无法通过 extension 实现
-  export const ALEX_GET_DEFAULT_PREFERENCE: Command = {
+  export const GET_DEFAULT_PREFERENCE: Command = {
     id: 'alex.getDefaultPreference',
     category: CATEGORY,
   };
 
-  export const ALEX_SET_DEFAULT_PREFERENCE: Command = {
+  export const SET_DEFAULT_PREFERENCE: Command = {
     id: 'alex.setDefaultPreference',
     category: CATEGORY,
   };
@@ -33,13 +33,13 @@ export class CodeBlitzCommandContribution implements CommandContribution {
   private readonly defaultPreference: PreferenceProvider;
 
   registerCommands(registry: CommandRegistry) {
-    registry.registerCommand(CODEBLITZ_COMMANDS.ALEX_GET_DEFAULT_PREFERENCE, {
+    registry.registerCommand(CODEBLITZ_COMMANDS.GET_DEFAULT_PREFERENCE, {
       execute: (preferenceName: string, resourceUri?: string, language?: string) => {
         return this.defaultPreference.get(preferenceName, resourceUri, language);
       },
     });
 
-    registry.registerCommand(CODEBLITZ_COMMANDS.ALEX_SET_DEFAULT_PREFERENCE, {
+    registry.registerCommand(CODEBLITZ_COMMANDS.SET_DEFAULT_PREFERENCE, {
       execute: (preferenceName: string, value: any, resourceUri?: string, language?: string) => {
         return this.defaultPreference.setPreference(preferenceName, value, resourceUri, language);
       },
