@@ -31,7 +31,8 @@
     "changelog": "conventional-changelog -p angular -i CHANGELOG.md -s",
     "update-package": "node scripts/utils/update-package",
     "release": "node scripts/release",
-    "release:next": "node scripts/release --tag=next"
+    "release:next": "node scripts/release --tag=next",
+    "ci": "yarn type-check && yarn test"
   },
   "author": "antgroup",
   "license": "MIT",
