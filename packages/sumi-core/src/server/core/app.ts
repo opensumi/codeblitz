@@ -20,7 +20,7 @@ import {
   SupportLogNamespace,
 } from '@opensumi/ide-core-common';
 import * as path from 'path';
-import { CodeBlitzConnection, ServerPort } from '../../connection';
+import { CodeBlitzConnection, InMemoryMessageChannel, Port } from '../../connection';
 import { ILogServiceManager } from './base';
 import { INodeLogger, NodeLogger } from './node-logger';
 
@@ -220,7 +220,9 @@ export class ServerApp implements IServerApp {
     await this.launch();
     await this.initializeContribution();
     const handler = new CodeblitzCommonChannelHandler('codeblitz-server');
-    handler.receiveConnection(new CodeBlitzConnection(ServerPort));
+
+    const channel = this.injector.get(InMemoryMessageChannel) as InMemoryMessageChannel;
+    handler.receiveConnection(new CodeBlitzConnection(channel.port2));
 
     commonChannelPathHandler.register(RPCServiceChannelPath, {
       handler: (channel: WSChannel, clientId: string) => {
