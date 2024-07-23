@@ -1,4 +1,5 @@
 import { IExtensionMode } from '@codeblitzjs/ide-common';
+import { Extension, ExtensionInstaller } from '@opensumi/extension-installer';
 import * as fse from 'fs-extra';
 import * as os from 'os';
 import * as path from 'path';
@@ -15,7 +16,6 @@ import {
   resolveExtensionInstallationConfig,
   resolveMarketplaceConfig,
 } from './util/constant';
-import { Extension, ExtensionInstaller } from './util/installer';
 import { error, log } from './util/log';
 import { resolveCWDPkgJSON } from './util/path';
 import { createServer, getHttpUri } from './util/serve-file';
@@ -146,7 +146,7 @@ async function createInstaller() {
   const marketplaceConfig = resolveMarketplaceConfig();
   const installConfig = resolveExtensionInstallationConfig();
   extensionInstaller = new ExtensionInstaller({
-    api: marketplaceConfig.endpoint,
+    endpoint: marketplaceConfig.endpoint,
     accountId: marketplaceConfig.accountId,
     masterKey: marketplaceConfig.masterKey,
     frameworkVersion: pkgJSON.engines.opensumi,
