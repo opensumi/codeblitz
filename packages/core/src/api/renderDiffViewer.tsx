@@ -14,6 +14,13 @@ import { BoxPanel, SplitPanel } from '../editor';
 import { Injector } from '../modules/opensumi__common-di';
 import { AppRenderer, IAppRendererProps } from './renderApp';
 
+export {
+  IDiffViewerHandle,
+  IDiffViewerProps,
+  IDiffViewerTab,
+  IExtendPartialEditEvent,
+} from '../core/diff-viewer/common';
+
 export const defaultLayoutConfig = {
   [SlotLocation.action]: {
     modules: [''],

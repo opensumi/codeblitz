@@ -36,6 +36,7 @@ import { SearchContribution } from './search/index.contribution';
 import { WebConnectionHelper } from '@opensumi/ide-core-browser/lib/application/runtime';
 import { IExtensionStorageService } from '@opensumi/ide-extension-storage';
 import { getThemeTypeByPreferenceThemeId } from '../common/theme';
+import { createChannel, InMemoryMessageChannel } from '../connection';
 import { CodeBlitzAINativeContribution } from './ai-native';
 import { injectAINativePreferences } from './ai-native/preferences';
 import { ExtensionStorageServiceOverride } from './override/extensionStorageService';
@@ -135,6 +136,11 @@ export class ClientApp extends BasicClientApp {
   constructor(opts: IAppOpts) {
     super(opts);
     this.modules = opts.modules;
+
+    this.injector.addProviders({
+      token: InMemoryMessageChannel,
+      useValue: createChannel(),
+    });
     this.initServer(opts);
     this.initMonacoProxy();
   }
