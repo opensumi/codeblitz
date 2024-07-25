@@ -63,7 +63,7 @@ invoke(async () => {
       }
       return obj;
     },
-    { __OPENSUMI_VERSION__: pkg.engines.opensumi }
+    { __OPENSUMI_VERSION__: pkg.engines.opensumi, manifest }
   );
 
   fs.writeFileSync(
