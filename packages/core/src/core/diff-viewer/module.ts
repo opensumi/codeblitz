@@ -136,6 +136,9 @@ export class DiffViewerContribution implements CommandContribution, ClientAppCon
       const previewer = this.inlineDiffHandler.showPreviewerByStream(editor.monacoEditor, {
         crossSelection: Selection.fromRange(fullRange, SelectionDirection.LTR),
         chatResponse: controller,
+        previewerOptions: {
+          disposeWhenEditorClosed: false,
+        }
       }) as LiveInlineDiffPreviewer;
       const whenReady = Event.toPromise(previewer.getNode().onDidEditChange);
 
