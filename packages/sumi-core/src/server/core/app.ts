@@ -224,11 +224,19 @@ export class ServerApp implements IServerApp {
     const channel = this.injector.get(InMemoryMessageChannel) as InMemoryMessageChannel;
     handler.receiveConnection(new CodeBlitzConnection(channel.port2));
 
-    commonChannelPathHandler.register(RPCServiceChannelPath, {
+    const channelHandler = {
       handler: (channel: WSChannel, clientId: string) => {
         handleClientChannel(this.injector, this.modules, channel, clientId, this.logger);
       },
       dispose: () => {},
+    };
+
+    commonChannelPathHandler.register(RPCServiceChannelPath, channelHandler);
+
+    this.disposeCollection.push({
+      dispose: () => {
+        commonChannelPathHandler.removeHandler(RPCServiceChannelPath, channelHandler);
+      },
     });
 
     await this.startContribution();
