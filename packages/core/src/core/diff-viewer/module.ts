@@ -242,6 +242,9 @@ export class DiffViewerContribution implements CommandContribution, ClientAppCon
       getAllTabs: () => {
         return getAllTabs();
       },
+      closeAllTab: async () => {
+        return this.workbenchEditorService.closeAll();
+      }
     });
   }
   registerCommands() {
