@@ -38,6 +38,7 @@ export interface IDiffViewerHandle {
    * 关闭标签页
    */
   closeTab: (filePath: string) => Promise<void>;
+  closeAllTab: () => Promise<void>;
   /**
    * 获取指定路径的文件内容
    */

@@ -8,7 +8,7 @@
   "description": "codeblitzjs",
   "main": "index.js",
   "engines": {
-    "opensumi": "3.1.5-next-1721574303.0"
+    "opensumi": "3.1.5-next-1722006339.0"
   },
   "scripts": {
     "prepare": "husky install",
@@ -82,7 +82,9 @@
     "node-gyp": "npm:@favware/skip-dependency@latest",
     "nsfw": "npm:@favware/skip-dependency@latest",
     "spdlog": "npm:@favware/skip-dependency@latest",
-    "node-pty": "npm:@favware/skip-dependency@latest"
+    "node-pty": "npm:@favware/skip-dependency@latest",
+    "@parcel/watcher": "npm:@favware/skip-dependency@latest",
+    "keytar": "npm:@favware/skip-dependency@latest"
   },
   "packageManager": "yarn@4.2.2"
 }

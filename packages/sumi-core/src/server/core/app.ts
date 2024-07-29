@@ -5,8 +5,8 @@ import { RawMessageIO } from '@opensumi/ide-connection/lib/common/rpc/message-io
 import { rawSerializer } from '@opensumi/ide-connection/lib/common/serializer/raw';
 import {
   BaseCommonChannelHandler,
-  commonChannelPathHandler,
   RPCServiceChannelPath,
+  CommonChannelPathHandler,
 } from '@opensumi/ide-connection/lib/common/server-handler';
 import { AppConfig, BrowserModule } from '@opensumi/ide-core-browser';
 import {
@@ -168,6 +168,10 @@ export class ServerApp implements IServerApp {
       token: INodeLogger,
       useClass: NodeLogger,
     });
+    injector.addProviders({
+      token: CommonChannelPathHandler,
+      useValue: new CommonChannelPathHandler(),
+    });
   }
 
   private async runContributionsPhase(phaseName: keyof ServerAppContribution, ...args: any[]) {
@@ -219,16 +223,25 @@ export class ServerApp implements IServerApp {
   async start() {
     await this.launch();
     await this.initializeContribution();
-    const handler = new CodeblitzCommonChannelHandler('codeblitz-server');
+    const commonChannelPathHandler = this.injector.get(CommonChannelPathHandler);
+    const handler = new CodeblitzCommonChannelHandler('codeblitz-server', commonChannelPathHandler);
 
     const channel = this.injector.get(InMemoryMessageChannel) as InMemoryMessageChannel;
     handler.receiveConnection(new CodeBlitzConnection(channel.port2));
 
-    commonChannelPathHandler.register(RPCServiceChannelPath, {
+    const channelHandler = {
       handler: (channel: WSChannel, clientId: string) => {
         handleClientChannel(this.injector, this.modules, channel, clientId, this.logger);
       },
       dispose: () => {},
+    };
+
+    commonChannelPathHandler.register(RPCServiceChannelPath, channelHandler);
+
+    this.disposeCollection.push({
+      dispose: () => {
+        commonChannelPathHandler.removeHandler(RPCServiceChannelPath, channelHandler);
+      },
     });
 
     await this.startContribution();
