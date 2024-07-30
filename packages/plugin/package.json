@@ -11,8 +11,8 @@
     "opensumi codeblitzjs"
   ],
   "dependencies": {
-    "@codeblitzjs/ide-common": "1.2.0",
-    "@codeblitzjs/ide-sumi-core": "1.2.0",
+    "@codeblitzjs/ide-common": "workspace:*",
+    "@codeblitzjs/ide-sumi-core": "workspace:*",
     "tslib": "^2.2.0"
   }
 }

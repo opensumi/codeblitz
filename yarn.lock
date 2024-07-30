@@ -517,11 +517,11 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@codeblitzjs/ide-cli@npm:1.0.4, @codeblitzjs/ide-cli@workspace:packages/cli":
+"@codeblitzjs/ide-cli@workspace:*, @codeblitzjs/ide-cli@workspace:packages/cli":
   version: 0.0.0-use.local
   resolution: "@codeblitzjs/ide-cli@workspace:packages/cli"
   dependencies:
-    "@codeblitzjs/ide-common": "npm:1.0.4"
+    "@codeblitzjs/ide-common": "workspace:*"
     "@opensumi/extension-installer": "npm:^0.0.1"
     "@opensumi/ide-extension": "npm:3.1.5-next-1722006339.0"
     "@types/commander": "npm:^2.12.2"
@@ -543,44 +543,44 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"@codeblitzjs/ide-code-api@npm:1.0.4, @codeblitzjs/ide-code-api@workspace:packages/code-api":
+"@codeblitzjs/ide-code-api@workspace:*, @codeblitzjs/ide-code-api@workspace:packages/code-api":
   version: 0.0.0-use.local
   resolution: "@codeblitzjs/ide-code-api@workspace:packages/code-api"
   dependencies:
-    "@codeblitzjs/ide-common": "npm:1.0.4"
-    "@codeblitzjs/ide-sumi-core": "npm:1.0.4"
+    "@codeblitzjs/ide-common": "workspace:*"
+    "@codeblitzjs/ide-sumi-core": "workspace:*"
     tslib: "npm:^2.2.0"
   languageName: unknown
   linkType: soft
 
-"@codeblitzjs/ide-code-service@npm:1.0.4, @codeblitzjs/ide-code-service@workspace:packages/code-service":
+"@codeblitzjs/ide-code-service@workspace:*, @codeblitzjs/ide-code-service@workspace:packages/code-service":
   version: 0.0.0-use.local
   resolution: "@codeblitzjs/ide-code-service@workspace:packages/code-service"
   dependencies:
-    "@codeblitzjs/ide-code-api": "npm:1.0.4"
-    "@codeblitzjs/ide-sumi-core": "npm:1.0.4"
+    "@codeblitzjs/ide-code-api": "workspace:*"
+    "@codeblitzjs/ide-sumi-core": "workspace:*"
     tslib: "npm:^2.2.0"
   languageName: unknown
   linkType: soft
 
-"@codeblitzjs/ide-common@npm:1.0.4, @codeblitzjs/ide-common@workspace:packages/common":
+"@codeblitzjs/ide-common@workspace:*, @codeblitzjs/ide-common@workspace:packages/common":
   version: 0.0.0-use.local
   resolution: "@codeblitzjs/ide-common@workspace:packages/common"
   languageName: unknown
   linkType: soft
 
-"@codeblitzjs/ide-core@npm:1.0.4, @codeblitzjs/ide-core@workspace:packages/core":
+"@codeblitzjs/ide-core@workspace:*, @codeblitzjs/ide-core@workspace:packages/core":
   version: 0.0.0-use.local
   resolution: "@codeblitzjs/ide-core@workspace:packages/core"
   dependencies:
-    "@codeblitzjs/ide-cli": "npm:1.0.4"
-    "@codeblitzjs/ide-code-api": "npm:1.0.4"
-    "@codeblitzjs/ide-code-service": "npm:1.0.4"
-    "@codeblitzjs/ide-common": "npm:1.0.4"
-    "@codeblitzjs/ide-i18n": "npm:1.0.4"
-    "@codeblitzjs/ide-plugin": "npm:1.0.4"
-    "@codeblitzjs/ide-registry": "npm:1.0.4"
-    "@codeblitzjs/ide-sumi-core": "npm:1.0.4"
+    "@codeblitzjs/ide-cli": "workspace:*"
+    "@codeblitzjs/ide-code-api": "workspace:*"
+    "@codeblitzjs/ide-code-service": "workspace:*"
+    "@codeblitzjs/ide-common": "workspace:*"
+    "@codeblitzjs/ide-i18n": "workspace:*"
+    "@codeblitzjs/ide-plugin": "workspace:*"
+    "@codeblitzjs/ide-registry": "workspace:*"
+    "@codeblitzjs/ide-sumi-core": "workspace:*"
     "@opensumi/ide-addons": "npm:3.1.5-next-1722006339.0"
     "@opensumi/ide-ai-native": "npm:3.1.5-next-1722006339.0"
     "@opensumi/ide-comments": "npm:3.1.5-next-1722006339.0"
@@ -635,27 +635,27 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"@codeblitzjs/ide-i18n@npm:1.0.4, @codeblitzjs/ide-i18n@workspace:packages/i18n":
+"@codeblitzjs/ide-i18n@workspace:*, @codeblitzjs/ide-i18n@workspace:packages/i18n":
   version: 0.0.0-use.local
   resolution: "@codeblitzjs/ide-i18n@workspace:packages/i18n"
   dependencies:
-    "@codeblitzjs/ide-common": "npm:1.0.4"
-    "@codeblitzjs/ide-sumi-core": "npm:1.0.4"
+    "@codeblitzjs/ide-common": "workspace:*"
+    "@codeblitzjs/ide-sumi-core": "workspace:*"
     tslib: "npm:^2.2.0"
   languageName: unknown
   linkType: soft
 
-"@codeblitzjs/ide-plugin@npm:1.0.4, @codeblitzjs/ide-plugin@workspace:packages/plugin":
+"@codeblitzjs/ide-plugin@workspace:*, @codeblitzjs/ide-plugin@workspace:packages/plugin":
   version: 0.0.0-use.local
   resolution: "@codeblitzjs/ide-plugin@workspace:packages/plugin"
   dependencies:
-    "@codeblitzjs/ide-common": "npm:1.0.4"
-    "@codeblitzjs/ide-sumi-core": "npm:1.0.4"
+    "@codeblitzjs/ide-common": "workspace:*"
+    "@codeblitzjs/ide-sumi-core": "workspace:*"
     tslib: "npm:^2.2.0"
   languageName: unknown
   linkType: soft
 
-"@codeblitzjs/ide-registry@npm:1.0.4, @codeblitzjs/ide-registry@workspace:packages/registry":
+"@codeblitzjs/ide-registry@workspace:*, @codeblitzjs/ide-registry@workspace:packages/registry":
   version: 0.0.0-use.local
   resolution: "@codeblitzjs/ide-registry@workspace:packages/registry"
   languageName: unknown
@@ -666,13 +666,13 @@ __metadata:
   resolution: "@codeblitzjs/ide-startup@workspace:packages/startup"
   dependencies:
     "@ant-design/icons": "npm:^4.0.0"
-    "@codeblitzjs/ide-cli": "npm:1.0.4"
-    "@codeblitzjs/ide-code-api": "npm:1.0.4"
-    "@codeblitzjs/ide-code-service": "npm:1.0.4"
-    "@codeblitzjs/ide-common": "npm:1.0.4"
-    "@codeblitzjs/ide-core": "npm:1.0.4"
-    "@codeblitzjs/ide-i18n": "npm:1.0.4"
-    "@codeblitzjs/ide-sumi-core": "npm:1.0.4"
+    "@codeblitzjs/ide-cli": "workspace:*"
+    "@codeblitzjs/ide-code-api": "workspace:*"
+    "@codeblitzjs/ide-code-service": "workspace:*"
+    "@codeblitzjs/ide-common": "workspace:*"
+    "@codeblitzjs/ide-core": "workspace:*"
+    "@codeblitzjs/ide-i18n": "workspace:*"
+    "@codeblitzjs/ide-sumi-core": "workspace:*"
     "@types/react": "npm:^18.2.0"
     "@types/react-dom": "npm:^18.2.0"
     antd: "npm:^4.0.0"
@@ -684,13 +684,13 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"@codeblitzjs/ide-sumi-core@npm:1.0.4, @codeblitzjs/ide-sumi-core@workspace:packages/sumi-core":
+"@codeblitzjs/ide-sumi-core@workspace:*, @codeblitzjs/ide-sumi-core@workspace:packages/sumi-core":
   version: 0.0.0-use.local
   resolution: "@codeblitzjs/ide-sumi-core@workspace:packages/sumi-core"
   dependencies:
     "@codeblitzjs/ide-browserfs": "npm:1.0.0"
-    "@codeblitzjs/ide-common": "npm:1.0.4"
-    "@codeblitzjs/ide-registry": "npm:1.0.4"
+    "@codeblitzjs/ide-common": "workspace:*"
+    "@codeblitzjs/ide-registry": "workspace:*"
     "@opensumi/di": "npm:^1.0.0"
     "@opensumi/ide-ai-native": "npm:3.1.5-next-1722006339.0"
     "@opensumi/ide-core-browser": "npm:3.1.5-next-1722006339.0"

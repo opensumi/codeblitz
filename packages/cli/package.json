@@ -14,7 +14,7 @@
     "node": ">=10.0.0"
   },
   "dependencies": {
-    "@codeblitzjs/ide-common": "1.2.0",
+    "@codeblitzjs/ide-common": "workspace:*",
     "@opensumi/extension-installer": "^0.0.1",
     "@opensumi/ide-extension": "3.1.5-next-1722006339.0",
     "commander": "^7.2.0",
