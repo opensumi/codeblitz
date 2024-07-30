@@ -1,6 +1,6 @@
 {
   "name": "@codeblitzjs/ide-sumi-core",
-  "version": "1.0.4",
+  "version": "1.2.0",
   "description": "core",
   "main": "lib/index.js",
   "typings": "lib/index.d.ts",
@@ -12,8 +12,8 @@
   ],
   "dependencies": {
     "@codeblitzjs/ide-browserfs": "1.0.0",
-    "@codeblitzjs/ide-common": "1.0.4",
-    "@codeblitzjs/ide-registry": "1.0.4",
+    "@codeblitzjs/ide-common": "workspace:*",
+    "@codeblitzjs/ide-registry": "workspace:*",
     "@opensumi/di": "^1.0.0",
     "@opensumi/ide-ai-native": "3.1.5-next-1722006339.0",
     "@opensumi/ide-core-browser": "3.1.5-next-1722006339.0",
