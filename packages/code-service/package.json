@@ -1,6 +1,6 @@
 {
   "name": "@codeblitzjs/ide-code-service",
-  "version": "1.0.4",
+  "version": "1.2.0",
   "description": "@codeblitzjs/ide-code-service",
   "main": "lib/index.js",
   "typings": "lib/index.d.ts",
@@ -11,8 +11,8 @@
     "opensumi codeblitzjs"
   ],
   "dependencies": {
-    "@codeblitzjs/ide-code-api": "1.0.4",
-    "@codeblitzjs/ide-sumi-core": "1.0.4",
+    "@codeblitzjs/ide-code-api": "1.2.0",
+    "@codeblitzjs/ide-sumi-core": "1.2.0",
     "tslib": "^2.2.0"
   }
 }
