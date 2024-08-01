@@ -15,6 +15,9 @@ export class PluginContribution implements ClientAppContribution {
   }
 
   dispose() {
-    this.pluginService.deactivate();
+    // dispose 阶段不保证顺序，
+    if (this.pluginService) {
+      this.pluginService.deactivate();
+    }
   }
 }
