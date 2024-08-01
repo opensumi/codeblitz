@@ -27,7 +27,7 @@ import { INodeLogger, NodeLogger } from './node-logger';
 import { HOME_ROOT, IServerApp } from '../../common';
 import { STORAGE_DIR, WORKSPACE_ROOT } from '../../common/constant';
 import { RootFS, RuntimeConfig } from '../../common/types';
-import { isBackServicesInServer } from '../../common/util';
+import { isBackServicesInServer, tryCatchPromise } from '../../common/util';
 import { fsExtra as fse } from '../node';
 import { initializeHomeFileSystem, initializeRootFileSystem, unmountRootFS } from './filesystem';
 
@@ -283,7 +283,7 @@ export function bindModuleBackService(
         serviceCenter.loadProtocol(service.protocol);
       }
 
-      logger.log('back service', serviceToken);
+      logger.log('bind back service', serviceToken);
       const serviceInstance = childInjector.get(serviceToken);
       const proxyService = createRPCService(servicePath, serviceInstance);
       if (!serviceInstance.client) {
@@ -319,9 +319,9 @@ function handleClientChannel(
   );
 
   channel.onceClose(() => {
-    remove.dispose();
-    serviceChildInjector.disposeAll();
-
     logger.log(`Remove RPC connection ${clientId}`);
+
+    remove.dispose();
+    tryCatchPromise(() => serviceChildInjector.disposeAll());
   });
 }

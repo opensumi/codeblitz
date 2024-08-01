@@ -200,6 +200,5 @@ export class MonacoContextKeyServiceOverride extends BaseContextKeyService imple
 
   dispose(): void {
     // context 不需要dispose
-    // super.dispose();
   }
 }

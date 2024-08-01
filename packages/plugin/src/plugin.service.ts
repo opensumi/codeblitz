@@ -75,4 +75,8 @@ export class PluginService {
       this.pluginActivator.set(plugin.PLUGIN_ID, { subscriptions: context.subscriptions });
     }
   }
+
+  dispose() {
+    this.deactivate();
+  }
 }
