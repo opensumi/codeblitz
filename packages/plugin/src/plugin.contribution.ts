@@ -15,7 +15,7 @@ export class PluginContribution implements ClientAppContribution {
   }
 
   dispose() {
-    // dispose 阶段不保证顺序，
+    // dispose 阶段不保证顺序，如果 IPluginService 比 PluginContribution 先 dispose，会导致此时 `this.pluginService` 为空
     if (this.pluginService) {
       this.pluginService.deactivate();
     }
