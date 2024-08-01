@@ -7,6 +7,7 @@ import {
   makeWorkspaceDir,
   RuntimeConfig,
   STORAGE_DIR,
+  tryCatchPromise,
 } from '@codeblitzjs/ide-sumi-core';
 import {
   FILES_DEFAULTS,
@@ -127,7 +128,7 @@ export function createApp({ appConfig, runtimeConfig }: IConfig): IAppInstance {
     destroyed = true;
     disposeMode();
     disposableCollection.forEach((d) => d(app.injector));
-    app.injector.disposeAll();
+    tryCatchPromise(() => app.injector.disposeAll());
   };
 
   return app;

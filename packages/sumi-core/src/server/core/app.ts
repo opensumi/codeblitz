@@ -27,7 +27,7 @@ import { INodeLogger, NodeLogger } from './node-logger';
 import { HOME_ROOT, IServerApp } from '../../common';
 import { STORAGE_DIR, WORKSPACE_ROOT } from '../../common/constant';
 import { RootFS, RuntimeConfig } from '../../common/types';
-import { isBackServicesInServer } from '../../common/util';
+import { isBackServicesInServer, tryCatchPromise } from '../../common/util';
 import { fsExtra as fse } from '../node';
 import { initializeHomeFileSystem, initializeRootFileSystem, unmountRootFS } from './filesystem';
 
@@ -320,7 +320,8 @@ function handleClientChannel(
 
   channel.onceClose(() => {
     remove.dispose();
-    serviceChildInjector.disposeAll();
+
+    tryCatchPromise(() => serviceChildInjector.disposeAll());
 
     logger.log(`Remove RPC connection ${clientId}`);
   });

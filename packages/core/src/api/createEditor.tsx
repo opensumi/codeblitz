@@ -7,6 +7,7 @@ import {
   makeWorkspaceDir,
   RuntimeConfig,
   STORAGE_DIR,
+  tryCatchPromise,
 } from '@codeblitzjs/ide-sumi-core';
 import { Injector } from '@opensumi/di';
 import { FILES_DEFAULTS, IAppRenderer, IReporter, SlotLocation, SlotRenderer } from '@opensumi/ide-core-browser';
@@ -100,7 +101,7 @@ export function createEditor({ appConfig, runtimeConfig }: IConfig): IAppInstanc
     destroyed = true;
     disposeMode();
     disposableCollection.forEach((d) => d(app.injector));
-    app.injector.disposeAll();
+    tryCatchPromise(() => app.injector.disposeAll());
   };
 
   return app;

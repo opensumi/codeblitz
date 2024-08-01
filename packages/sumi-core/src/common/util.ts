@@ -1,7 +1,7 @@
 import { IExtensionIdentity, IExtensionMode } from '@codeblitzjs/ide-common';
 import { ConstructorOf, Provider } from '@opensumi/di';
 import { BrowserModule } from '@opensumi/ide-core-browser';
-import { BackService } from '@opensumi/ide-core-common';
+import { BackService, MaybePromise } from '@opensumi/ide-core-common';
 import * as paths from 'path';
 import { EXT_SCHEME, OSSBucket, WORKSPACE_ROOT } from './constant';
 
@@ -100,3 +100,13 @@ export const extendModule = ({
     }
   };
 };
+
+export const tryCatchPromise = (fn: () => MaybePromise<void>): Promise<void> => {
+  const run = async () => {
+    return await fn();
+  }
+
+  return run().catch((e) => {
+    console.error("dispose injector error", e);
+  });
+}
