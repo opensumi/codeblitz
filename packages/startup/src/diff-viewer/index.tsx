@@ -37,6 +37,14 @@ const App = () => {
 
   const memo = useMemo(() => (
     <DiffViewerRenderer
+      tabBarRightExtraContent={{
+        component: () => <div>heelo</div>,
+      }}
+      onWillApplyTheme={() => {
+        return {
+          'editorGroupHeader.tabsBackground': '#fff',
+        };
+      }}
       onRef={(handle) => {
         handleRef.current = handle;
         console.log('=====', handle);
@@ -47,7 +55,7 @@ const App = () => {
         handle.onDidTabChange((e) => {
           console.log('onDidTabChange', e.newPath);
           setEventInfo(e);
-        })
+        });
         data.forEach(v => {
           handleRef.current!.openDiffInTab(
             v.path,

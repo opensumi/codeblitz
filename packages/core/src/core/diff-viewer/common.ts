@@ -105,10 +105,15 @@ export interface IOverrideAppRendererProps extends IOverrideAppRendererConfig {
   Landing?: React.ComponentType<LandingProps>;
 }
 
+export interface IExtraContent {
+  component?: React.ComponentType<any>;
+  initialProps?: any;
+}
+
 export const IDiffViewerProps = Symbol('IDiffViewerProps');
 export interface IDiffViewerProps extends Partial<IOverrideAppRendererProps> {
   onRef: (handle: IDiffViewerHandle) => void;
 
   onWillApplyTheme?: (theme: ITheme) => Record<string, string | undefined>;
-  tabBarRightExtraContent?: React.ReactNode;
+  tabBarRightExtraContent?: IExtraContent;
 }
