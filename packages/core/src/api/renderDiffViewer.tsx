@@ -13,54 +13,8 @@ import { DiffViewerModule } from '../core/diff-viewer/module';
 import { BoxPanel, SplitPanel } from '../editor';
 import { Injector } from '../modules/opensumi__common-di';
 import { AppRenderer, IAppRendererProps } from './renderApp';
-
-// import '../../languages/bat';
-// import '../../languages/clojure';
-// import '../../languages/coffeescript';
-// import '../../languages/cpp';
-// import '../../languages/csharp';
-import '../../languages/css';
-// import '../../languages/docker';
-import '../../languages/fsharp';
-import '../../languages/go';
-import '../../languages/groovy';
-// import '../../languages/handlebars';
-// import '../../languages/hlsl';
-import '../../languages/html';
-// import '../../languages/ini';
-import '../../languages/java';
-import '../../languages/javascript';
-import '../../languages/json';
-import '../../languages/kotlin';
-import '../../languages/less';
-import '../../languages/log';
-import '../../languages/lua';
-import '../../languages/make';
-import '../../languages/markdown';
-// import '../../languages/objective-c';
-import '../../languages/perl';
-import '../../languages/php';
-import '../../languages/powershell';
-// import '../../languages/pug';
-import '../../languages/python';
-// import '../../languages/r';
-// import '../../languages/razor';
-// import '../../languages/ruby';
-import '../../languages/rust';
-import '../../languages/scheme';
-// import '../../languages/scss';
-// import '../../languages/shaderlab';
-// import '../../languages/shellscript';
-// import '../../languages/solidity-lang';
-import '../../languages/sql';
-// import '../../languages/swift';
-import '../../languages/typescript';
-// import '../../languages/vb';
-// import '../../languages/velocity';
-// import '../../languages/vscode-proto3';
-// import '../../languages/vue';
-import '../../languages/xml';
-import '../../languages/yaml';
+import '../core/diff-viewer/languages-patch';
+import { extensionMetadata } from '../core/diff-viewer/extension-patch';
 
 export {
   IDiffViewerHandle,
@@ -137,6 +91,7 @@ export const DiffViewerRenderer = (_props: IDiffViewerProps) => {
       layoutComponent,
       layoutConfig,
       disableRestoreEditorGroupState: true,
+      extensionMetadata,
       defaultPreferences: {
         'general.theme': 'opensumi-design-light-theme',
         'editor.minimap': false,
