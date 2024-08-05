@@ -5,6 +5,7 @@ import { Event, URI } from '@opensumi/ide-core-common';
 import { IResourceOpenOptions } from '@opensumi/ide-editor';
 import { IAppInstance } from '../../editor';
 import { LandingProps } from '../types';
+import { ITheme } from '@opensumi/ide-theme';
 
 export interface IResourceOpenDiffOptions extends IResourceOpenOptions {
   overwriteOldCode?: boolean;
@@ -92,4 +93,7 @@ export interface IOverrideAppRendererProps extends IOverrideAppRendererConfig {
 export const IDiffViewerProps = Symbol('IDiffViewerProps');
 export interface IDiffViewerProps extends Partial<IOverrideAppRendererProps> {
   onRef: (handle: IDiffViewerHandle) => void;
+
+  onWillApplyTheme?: (theme: ITheme) => Record<string, string | undefined>;
+  tabBarRightExtraContent?: React.ReactNode;
 }

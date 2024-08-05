@@ -93,7 +93,7 @@ export const DiffViewerRenderer = (_props: IDiffViewerProps) => {
       disableRestoreEditorGroupState: true,
       extensionMetadata,
       defaultPreferences: {
-        'general.theme': 'opensumi-design-light-theme',
+        'general.theme': 'opensumi-light',
         'editor.minimap': false,
         'ai.native.inlineDiff.preview.mode': 'inlineLive',
         'editor.autoSave': 'afterDelay',
