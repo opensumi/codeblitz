@@ -167,14 +167,16 @@ export class DiffViewerContribution implements CommandContribution, ClientAppCon
     }));
 
     disposable.addDispose(this.workbenchEditorService.onActiveResourceChange((e) => {
-      const newPath = e?.uri.codeUri.fsPath;
+      const _newPath = e?.uri.codeUri.fsPath;
+      let newPath = _newPath;
       let currentIndex = -1;
       if (newPath) {
         currentIndex = getFileIndex(newPath);
+        newPath = this.stripDirectory(newPath);
       }
 
       this._onDidTabChange.fire({
-        newPath: e?.uri.codeUri.fsPath,
+        newPath,
         currentIndex,
       });
     }));
