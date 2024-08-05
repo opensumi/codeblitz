@@ -3,9 +3,9 @@ import { IAppOpts, RuntimeConfig } from '@codeblitzjs/ide-sumi-core';
 import { IPartialEditEvent } from '@opensumi/ide-ai-native/lib/browser/widget/inline-stream-diff/live-preview.decoration';
 import { Event, URI } from '@opensumi/ide-core-common';
 import { IResourceOpenOptions } from '@opensumi/ide-editor';
+import { ITheme } from '@opensumi/ide-theme';
 import { IAppInstance } from '../../editor';
 import { LandingProps } from '../types';
-import { ITheme } from '@opensumi/ide-theme';
 
 export interface IResourceOpenDiffOptions extends IResourceOpenOptions {
   overwriteOldCode?: boolean;
@@ -18,6 +18,20 @@ export interface IExtendPartialEditEvent extends IPartialEditEvent {
 export interface IDiffViewerTab {
   index: number;
   filePath: string;
+}
+
+export interface ITabChangedEvent {
+  /**
+   * 为空则表示当前没有标签页
+   * 否则为当前标签页的路径
+   */
+  newPath?: string;
+  /**
+   * zero-based index
+   * 0 为第一个标签页
+   * -1 为没有标签页
+   */
+  currentIndex: number;
 }
 
 export interface IDiffViewerHandle {
@@ -50,6 +64,7 @@ export interface IDiffViewerHandle {
    * 监听采纳、拒绝部分编辑事件
    */
   onPartialEditEvent: Event<IExtendPartialEditEvent>;
+  onDidTabChange: Event<ITabChangedEvent>;
 
   getCurrentTab: () => IDiffViewerTab | undefined;
   getTabAtIndex: (index: number) => IDiffViewerTab | undefined;

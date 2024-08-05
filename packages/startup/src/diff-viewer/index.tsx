@@ -44,6 +44,10 @@ const App = () => {
           console.log('onPartialEditEvent', e);
           setEventInfo(e);
         });
+        handle.onDidTabChange((e) => {
+          console.log('onDidTabChange', e.newPath);
+          setEventInfo(e);
+        })
         data.forEach(v => {
           handleRef.current!.openDiffInTab(
             v.path,

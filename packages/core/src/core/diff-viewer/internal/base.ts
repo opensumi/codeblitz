@@ -22,7 +22,7 @@ import { IEditor, IEditorDocumentModelService } from '@opensumi/ide-editor/lib/b
 import { requireModule } from '../../../api/require';
 import { Autowired, Injectable } from '../../../modules/opensumi__common-di';
 import { IMenuRegistry, MenuContribution } from '../../../modules/opensumi__ide-core-browser';
-import { IDiffViewerProps, IDiffViewerTab, IExtendPartialEditEvent } from '../common';
+import { IDiffViewerProps, IDiffViewerTab, IExtendPartialEditEvent, ITabChangedEvent } from '../common';
 import { removeStart } from '../utils';
 
 const fse = requireModule('fs-extra');
@@ -55,6 +55,9 @@ export class DiffViewerContribution implements CommandContribution, ClientAppCon
 
   private readonly _onPartialEditEvent = this._disposables.add(new Emitter<IExtendPartialEditEvent>());
   public readonly onPartialEditEvent: Event<IExtendPartialEditEvent> = this._onPartialEditEvent.event;
+
+  private readonly _onDidTabChange = this._disposables.add(new Emitter<ITabChangedEvent>());
+  public readonly onDidTabChange: Event<ITabChangedEvent> = this._onDidTabChange.event;
 
   getFullPath(filePath: string) {
     return path.join(this.appConfig.workspaceDir, filePath);
@@ -149,14 +152,32 @@ export class DiffViewerContribution implements CommandContribution, ClientAppCon
       }));
     };
 
-    this.inlineDiffHandler.onPartialEditEvent((e) => {
+    const getFileIndex = (filePath: string) => {
+      const aPath = this.stripDirectory(filePath);
+      return getAllTabs().findIndex((tab) => tab.filePath === aPath);
+    };
+
+    disposable.addDispose(this.inlineDiffHandler.onPartialEditEvent((e) => {
       const fsPath = e.uri.fsPath;
 
       this._onPartialEditEvent.fire({
         filePath: this.stripDirectory(fsPath),
         ...e,
       });
-    });
+    }));
+
+    disposable.addDispose(this.workbenchEditorService.onActiveResourceChange((e) => {
+      const newPath = e?.uri.codeUri.fsPath;
+      let currentIndex = -1;
+      if (newPath) {
+        currentIndex = getFileIndex(newPath);
+      }
+
+      this._onDidTabChange.fire({
+        newPath: e?.uri.codeUri.fsPath,
+        currentIndex,
+      });
+    }));
 
     const sequencer = new Sequencer();
 
@@ -227,6 +248,9 @@ export class DiffViewerContribution implements CommandContribution, ClientAppCon
       },
       closeAllTab: async () => {
         return this.workbenchEditorService.closeAll();
+      },
+      onDidTabChange: (cb) => {
+        return this.onDidTabChange(cb);
       },
     });
   }
