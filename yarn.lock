@@ -489,7 +489,7 @@ __metadata:
     fs-extra: "npm:^9.0.1"
     glob: "npm:^7.1.6"
     gulp: "npm:^4.0.2"
-    husky: "npm:^5.0.4"
+    husky: "npm:^9.1.4"
     inquirer: "npm:^7.3.3"
     jest: "npm:^26.6.3"
     jsdom: "npm:^16.5.3"
@@ -8138,12 +8138,12 @@ __metadata:
   languageName: node
   linkType: hard
 
-"husky@npm:^5.0.4":
-  version: 5.2.0
-  resolution: "husky@npm:5.2.0"
+"husky@npm:^9.1.4":
+  version: 9.1.4
+  resolution: "husky@npm:9.1.4"
   bin:
-    husky: lib/bin.js
-  checksum: 10/1f40760bc231eb2a50f142c46deb67608c1c786fd8c023500178716314d1055ac73ad6c0199ac44444d2630d651aea17418ce3126e4ceda9e0c366fd89901951
+    husky: bin.js
+  checksum: 10/c43aa7cbf98246d4f347bc3da807049555b5003af7c6e1658c5cea44a9743b4d0683c72973a4fe02a4ccceb81031a664ecaa7a1a86efe4d37a80a0af17c988ea
   languageName: node
   linkType: hard
 
