@@ -129,26 +129,15 @@ export class DiffViewerContribution implements CommandContribution, ClientAppCon
       monacoModel.setValue(oldContent);
       const fullRange = monacoModel.getFullModelRange();
 
-      const stream = new SumiReadableStream<IChatProgress>();
-      const controller = new InlineChatController();
-      controller.mountReadable(stream);
-
-      const previewer = this.inlineDiffHandler.showPreviewerByStream(editor.monacoEditor, {
-        crossSelection: Selection.fromRange(fullRange, SelectionDirection.LTR),
-        chatResponse: controller,
-        previewerOptions: {
-          disposeWhenEditorClosed: false,
-        }
+      const previewer = this.inlineDiffHandler.createDiffPreviewer(editor.monacoEditor, Selection.fromRange(fullRange, SelectionDirection.LTR), {
+        disposeWhenEditorClosed: false,
       }) as LiveInlineDiffPreviewer;
       const whenReady = Event.toPromise(previewer.getNode().onDidEditChange);
 
-      stream.emitData({
-        kind: 'content',
-        content: newContent,
-      });
-      stream.end();
+      previewer.setValue(newContent);
 
       await whenReady;
+      previewer.layout();
       previewer.revealFirstDiff();
     };
 
