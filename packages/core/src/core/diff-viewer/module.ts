@@ -216,7 +216,7 @@ export class DiffViewerContribution implements CommandContribution, ClientAppCon
         const currentTabIdx = allTabs.findIndex((tab) => {
           return tab.filePath === currentEditorFilePath;
         });
-        if (!currentTabIdx) {
+        if (currentTabIdx === -1) {
           return;
         }
         return {

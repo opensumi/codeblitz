@@ -1,6 +1,6 @@
+import { IPartialEditEvent } from '@opensumi/ide-ai-native/lib/browser/widget/inline-stream-diff/live-preview.decoration';
 import React, { useMemo, useRef } from 'react';
 import { createRoot } from 'react-dom/client';
-import { IPartialEditEvent } from '@opensumi/ide-ai-native/lib/browser/widget/inline-stream-diff/live-preview.decoration';
 
 import '../index.css';
 import { DiffViewerRenderer } from '@codeblitzjs/ide-core/lib/api/renderDiffViewer';
@@ -33,7 +33,7 @@ data.push(...jsonData);
 
 const App = () => {
   const handleRef = useRef<IDiffViewerHandle | null>(null);
-  const [eventInfo, setEventInfo] = React.useState<IPartialEditEvent | null>(null);
+  const [eventInfo, setEventInfo] = React.useState<any | null>(null);
 
   const memo = useMemo(() => (
     <DiffViewerRenderer
@@ -149,6 +149,16 @@ const App = () => {
           </button>
         );
       })}
+      <button
+        onClick={() => {
+          if (!handleRef.current) return;
+          const currentTab = handleRef.current.getCurrentTab();
+          console.log(`🚀 ~ setTimeout ~ currentTab:`, currentTab);
+          setEventInfo(currentTab);
+        }}
+      >
+        Current Tab
+      </button>
       <p>
         {eventInfo ? JSON.stringify(eventInfo, null, 2) : 'no event'}
       </p>
