@@ -13,6 +13,8 @@ import { DiffViewerModule } from '../core/diff-viewer/module';
 import { BoxPanel, SplitPanel } from '../editor';
 import { Injector } from '../modules/opensumi__common-di';
 import { AppRenderer, IAppRendererProps } from './renderApp';
+import '../core/diff-viewer/languages-patch';
+import { extensionMetadata } from '../core/diff-viewer/extension-patch';
 
 export {
   IDiffViewerHandle,
@@ -89,8 +91,9 @@ export const DiffViewerRenderer = (_props: IDiffViewerProps) => {
       layoutComponent,
       layoutConfig,
       disableRestoreEditorGroupState: true,
+      extensionMetadata,
       defaultPreferences: {
-        'general.theme': 'opensumi-design-light-theme',
+        'general.theme': 'opensumi-light',
         'editor.minimap': false,
         'ai.native.inlineDiff.preview.mode': 'inlineLive',
         'editor.autoSave': 'afterDelay',

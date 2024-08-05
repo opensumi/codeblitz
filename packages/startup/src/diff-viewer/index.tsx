@@ -1,7 +1,6 @@
+import { IPartialEditEvent } from '@opensumi/ide-ai-native/lib/browser/widget/inline-stream-diff/live-preview.decoration';
 import React, { useMemo, useRef } from 'react';
 import { createRoot } from 'react-dom/client';
-import '@codeblitzjs/ide-core/languages';
-import { IPartialEditEvent } from '@opensumi/ide-ai-native/lib/browser/widget/inline-stream-diff/live-preview.decoration';
 
 import '../index.css';
 import { DiffViewerRenderer } from '@codeblitzjs/ide-core/lib/api/renderDiffViewer';
@@ -34,15 +33,27 @@ data.push(...jsonData);
 
 const App = () => {
   const handleRef = useRef<IDiffViewerHandle | null>(null);
-  const [eventInfo, setEventInfo] = React.useState<IPartialEditEvent | null>(null);
+  const [eventInfo, setEventInfo] = React.useState<any | null>(null);
 
   const memo = useMemo(() => (
     <DiffViewerRenderer
+      tabBarRightExtraContent={{
+        component: () => <div>heelo</div>,
+      }}
+      onWillApplyTheme={() => {
+        return {
+          'editorGroupHeader.tabsBackground': '#fff',
+        };
+      }}
       onRef={(handle) => {
         handleRef.current = handle;
         console.log('=====', handle);
         handle.onPartialEditEvent((e) => {
           console.log('onPartialEditEvent', e);
+          setEventInfo(e);
+        });
+        handle.onDidTabChange((e) => {
+          console.log('onDidTabChange', e.newPath);
           setEventInfo(e);
         });
         data.forEach(v => {
@@ -150,6 +161,16 @@ const App = () => {
           </button>
         );
       })}
+      <button
+        onClick={() => {
+          if (!handleRef.current) return;
+          const currentTab = handleRef.current.getCurrentTab();
+          console.log(`🚀 ~ setTimeout ~ currentTab:`, currentTab);
+          setEventInfo(currentTab);
+        }}
+      >
+        Current Tab
+      </button>
       <p>
         {eventInfo ? JSON.stringify(eventInfo, null, 2) : 'no event'}
       </p>
