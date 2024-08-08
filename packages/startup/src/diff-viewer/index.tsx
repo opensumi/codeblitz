@@ -40,9 +40,14 @@ const App = () => {
       tabBarRightExtraContent={{
         component: () => <div>heelo</div>,
       }}
+      appConfig={{
+        defaultPreferences: {
+          "editor.showActionWhenGroupEmpty": true
+        }
+      }}
       onWillApplyTheme={() => {
         return {
-          'editorGroupHeader.tabsBackground': '#fff',
+          // 'editorGroupHeader.tabsBackground': '#fff',
         };
       }}
       onRef={(handle) => {
