@@ -38,16 +38,20 @@ const App = () => {
   const memo = useMemo(() => (
     <DiffViewerRenderer
       tabBarRightExtraContent={{
-        component: () => <div>heelo</div>,
+        component: () => <div>hello</div>,
       }}
       appConfig={{
-        defaultPreferences: {
-          "editor.showActionWhenGroupEmpty": true
+        layoutViewSize: {
+          editorTabsHeight: 50
         }
       }}
       onWillApplyTheme={() => {
         return {
           // 'editorGroupHeader.tabsBackground': '#fff',
+          'aiNative.inlineDiffAddedRange': '#26bf6d1f',
+          'aiNative.inlineDiffRemovedRange': "#ff4d4f1e",
+          'aiNative.inlineDiffAcceptPartialEdit': '#26bf6d80',
+          'aiNative.inlineDiffDiscardPartialEdit': '#ff4d4f80',
         };
       }}
       onRef={(handle) => {

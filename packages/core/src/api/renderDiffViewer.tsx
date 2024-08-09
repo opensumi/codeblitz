@@ -96,6 +96,7 @@ export const DiffViewerRenderer = (_props: IDiffViewerProps) => {
         'general.theme': 'opensumi-light',
         'editor.minimap': false,
         'ai.native.inlineDiff.preview.mode': 'inlineLive',
+        "editor.showActionWhenGroupEmpty": true,
         'editor.autoSave': 'afterDelay',
         'application.confirmExit': 'never',
         'editor.guides.bracketPairs': false,

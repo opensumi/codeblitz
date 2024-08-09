@@ -5,3 +5,19 @@ body {
   color: var(--foreground);
   background-color: var(--editor-background);
 }
+
+
+.inline_diff_accept_partial_widget_container .btn {
+  padding-left: 8px !important;
+  padding-right: 8px !important;
+}
+
+.inline_diff_accept_partial_widget_container .content {
+  flex-direction: row-reverse !important;
+  background: #ffffff;
+  box-shadow: 0px 0px 4px 0px #0000000a;
+}
+
+.navigation_container {
+  box-shadow: inset 0px -1px 0 0px #0000000f;
+}
