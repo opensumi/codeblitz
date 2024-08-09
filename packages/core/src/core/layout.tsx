@@ -1,16 +1,18 @@
 import { SlotLocation, SlotRenderer } from '@opensumi/ide-core-browser';
-import { BoxPanel, SplitPanel } from '@opensumi/ide-core-browser/lib/components';
+import { BoxPanel, getStorageValue, SplitPanel } from '@opensumi/ide-core-browser/lib/components';
 import * as React from 'react';
 
 export function LayoutComponent(): React.ReactElement {
+  const { layout } = getStorageValue();
+
   return (
     <BoxPanel direction='top-to-bottom'>
       <SlotRenderer slot='top' />
       <SplitPanel overflow='hidden' id='main-horizontal' flex={1}>
-        <SlotRenderer slot='left' defaultSize={310} minResize={204} minSize={49} />
+          <SlotRenderer slot='left' defaultSize={layout.left?.currentId ? layout.left?.size || 310 : 49}  minResize={204} minSize={49} />
         <SplitPanel id='main-vertical' minResize={300} flexGrow={1} direction='top-to-bottom'>
           <SlotRenderer flex={2} flexGrow={1} minResize={200} slot='main' />
-          <SlotRenderer flex={1} minResize={160} slot='bottom' />
+          <SlotRenderer flex={1} minResize={160} slot='bottom' defaultSize={layout.bottom?.currentId ? layout.bottom?.size : 24} />
         </SplitPanel>
       </SplitPanel>
       <SlotRenderer slot='statusBar' />
