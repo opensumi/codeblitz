@@ -119,7 +119,15 @@ export class ClientModule extends BrowserModule {
   };
 }
 
-export interface IAppOpts extends IClientAppOpts, IServerAppOpts {}
+export interface IAppOpts extends IClientAppOpts, IServerAppOpts {
+  /**
+   * @default false
+   *
+   * CodeBlitz will use the OpenSumi Design layout by default.
+   * If you want to use the legacy design, set this to true.
+   */
+  useLegacyDesign?: boolean;
+}
 
 export { IClientAppOpts };
 
