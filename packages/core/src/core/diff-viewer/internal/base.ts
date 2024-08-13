@@ -45,7 +45,7 @@ export class DiffViewerContribution implements CommandContribution, ClientAppCon
   protected inlineDiffHandler: InlineDiffHandler;
 
   @Autowired(IEditorDocumentModelService)
-  private readonly editorCollectionService: IEditorDocumentModelService;
+  private readonly editorDocumentModelService: IEditorDocumentModelService;
 
   @Autowired(AppConfig)
   protected appConfig: AppConfig;
@@ -112,7 +112,7 @@ export class DiffViewerContribution implements CommandContribution, ClientAppCon
         return;
       }
 
-      const model = this.editorCollectionService.getModelReference(uri);
+      const model = this.editorDocumentModelService.getModelReference(uri);
       if (!model || !model.instance) {
         throw new Error('Failed to get model reference: ' + filePath);
       }

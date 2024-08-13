@@ -31,7 +31,7 @@ const zipDataPromise = (async () => {
 })();
 
 const App = () => {
-  const [fsType, setFsType] = useState<string>('');
+  const [fsType, setFsType] = useState<string>('ZipFS');
 
   const filesystem = useMemo<
     NonNullable<IAppRendererProps['runtimeConfig']['workspace']>['filesystem'] | undefined
