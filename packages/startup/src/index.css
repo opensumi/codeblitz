@@ -5,3 +5,18 @@ body {
   color: var(--foreground);
   background-color: var(--editor-background);
 }
+
+.kt-inline-diff-accept-partial-widget-container > div > span {
+  padding-left: 8px !important;
+  padding-right: 8px !important;
+}
+
+.kt-inline-diff-accept-partial-widget-container > div {
+  flex-direction: row-reverse !important;
+  background: #ffffff;
+  box-shadow: 0px 0px 4px 0px #0000000a;
+}
+
+.kt-navigation-container {
+  box-shadow: inset 0px -1px 0 0px #0000000f;
+}

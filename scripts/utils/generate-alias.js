@@ -45,22 +45,34 @@ exports.generateModules = async () => {
   const targetDir = path.join(__dirname, '../../packages/core/modules');
   await fse.remove(targetDir);
   await fse.ensureDir(targetDir);
+
+
   fse.readdirSync(modulesDir).forEach((mod) => {
     const [scope, name] = path.basename(mod, '.ts').split('__');
+
+    if (name === 'common-di') {
+      writeModule(scope, 'di', 'common-di');
+    } else {
+      writeModule(scope, name, name);
+    }
+  });
+
+
+  function writeModule(scope, packageName, fileName) {
     fse.writeFileSync(
-      path.join(targetDir, `${name}.js`),
+      path.join(targetDir, `${fileName}.js`),
       `
 const { requireModule } = ${lib};
-module.exports = requireModule("@${scope}/${name}");
+module.exports = requireModule("@${scope}/${packageName}");
         `.trim() + '\n'
     );
     fse.writeFileSync(
-      path.join(targetDir, `${name}.d.ts`),
+      path.join(targetDir, `${fileName}.d.ts`),
       `
-export * from "../lib/modules/${scope}__${name}";
+export * from "../lib/modules/${scope}__${packageName}";
         `.trim() + '\n'
     );
-  });
+  }
 };
 
 exports.generateShims = async () => {
