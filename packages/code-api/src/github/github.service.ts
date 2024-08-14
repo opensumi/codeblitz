@@ -3,7 +3,7 @@ import { Autowired, Injectable } from '@opensumi/di';
 import { AppConfig } from '@opensumi/ide-core-browser';
 import { localize, MessageType } from '@opensumi/ide-core-common';
 import { CommandService } from '@opensumi/ide-core-common';
-import { observable } from 'mobx';
+import { observable, makeObservable } from 'mobx';
 import { CodePlatformRegistry } from '../common/config';
 import { HelperService } from '../common/service';
 import {
@@ -74,6 +74,7 @@ export class GitHubAPIService implements ICodeAPIService {
   }
 
   constructor() {
+    makeObservable(this);
     this._OAUTH_TOKEN = this.config.token || this.helper.GITHUB_TOKEN;
   }
   createPullRequest(

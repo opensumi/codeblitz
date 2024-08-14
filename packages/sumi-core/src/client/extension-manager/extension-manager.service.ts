@@ -4,7 +4,7 @@ import { StaticResourceService } from '@opensumi/ide-core-browser/lib/static-res
 import { EditorPreferences, WorkbenchEditorService } from '@opensumi/ide-editor/lib/browser';
 import { AbstractExtInstanceManagementService } from '@opensumi/ide-extension/lib/browser/types';
 import { AbstractExtensionManagementService, IExtensionProps } from '@opensumi/ide-extension/lib/common';
-import { action, computed, observable, runInAction } from 'mobx';
+import { action, computed, observable, runInAction, makeObservable } from 'mobx';
 
 import { EXT_SCHEME } from '../../common/constant';
 import { DEFAULT_ICON_URL, ExtensionDetail, IExtension, OpenExtensionOptions, RawExtension } from './base';
@@ -48,6 +48,10 @@ export class ExtensionManagerService {
       this.extensions = extensions;
       this.isInit = true;
     });
+  }
+
+  constructor() {
+    makeObservable(this);
   }
 
   /**
