@@ -66,7 +66,8 @@ export class ExtensionManagerContribution
     });
   }
 
-  onDidRender() {
+  async onDidRender() {
+    await this.mainLayoutService.viewReady.promise;
     const handler = this.mainLayoutService.getTabbarHandler(enableExtensionsContainerId);
     if (handler) {
       // 在激活的时候获取数据
