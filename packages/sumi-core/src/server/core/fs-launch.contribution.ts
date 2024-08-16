@@ -2,7 +2,7 @@ import { Autowired } from '@opensumi/di';
 import { ContributionProvider, Disposable, Domain, localize } from '@opensumi/ide-core-common';
 import { IMessageService } from '@opensumi/ide-overlay';
 import { AppConfig, IServerApp, RootFS, RuntimeConfig } from '../../common/types';
-import { BrowserFS } from '../node';
+import { BrowserFS, isPathMounted } from '../node';
 import { LaunchContribution } from './app';
 import { FileSystemContribution } from './base';
 
@@ -39,8 +39,7 @@ export class FileSystemConfigContribution extends Disposable implements FileSyst
     const fsConfig = this.runtimeConfig.workspace?.filesystem;
     if (!fsConfig) return;
     const { workspaceDir } = this.appConfig;
-    // @ts-ignore
-    if (rootFS && rootFS.mountList.includes(workspaceDir)) {
+    if (isPathMounted(rootFS, workspaceDir)) {
       return;
     }
     try {

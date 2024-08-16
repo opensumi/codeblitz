@@ -4,6 +4,7 @@ import {
   CODE_ROOT,
   IDB_ROOT,
   IServerApp,
+  isPathMounted,
   LaunchContribution,
   RootFS,
   RuntimeConfig,
@@ -220,6 +221,10 @@ export class CodeContribution
       );
 
       this._unmount?.();
+
+      if (isPathMounted(rootFS, workspaceDir)) {
+        rootFS.umount(workspaceDir);
+      }
 
       rootFS.mount(workspaceDir, overlayFileSystem);
       // 将只读文件系统挂载到 /code 上
