@@ -5,8 +5,8 @@ import { RawMessageIO } from '@opensumi/ide-connection/lib/common/rpc/message-io
 import { rawSerializer } from '@opensumi/ide-connection/lib/common/serializer/raw';
 import {
   BaseCommonChannelHandler,
-  RPCServiceChannelPath,
   CommonChannelPathHandler,
+  RPCServiceChannelPath,
 } from '@opensumi/ide-connection/lib/common/server-handler';
 import { AppConfig, BrowserModule } from '@opensumi/ide-core-browser';
 import {

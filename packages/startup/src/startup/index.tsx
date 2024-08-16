@@ -187,7 +187,12 @@ const App = () => (
     }}
     runtimeConfig={{
       scmFileTree: true,
-      scenario: 'ALEX_TEST',
+      scenario: 'startup',
+      workspace: {
+        filesystem: {
+          fs: 'InMemory'
+        }
+      },
       aiNative: {
         enable: true,
         providerEditorInlineChat(): IEditorInlineChat[] {

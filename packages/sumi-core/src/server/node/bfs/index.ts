@@ -18,7 +18,7 @@ import MountableFileSystem, {
 } from '@codeblitzjs/ide-browserfs/lib/backend/MountableFileSystem';
 import OverlayFS, { deletionLogPath, OverlayFSOptions } from '@codeblitzjs/ide-browserfs/lib/backend/OverlayFS';
 import ZipFS, { ZipFSOptions } from '@codeblitzjs/ide-browserfs/lib/backend/ZipFS';
-import { WORKSPACE_IDB_NAME } from '../../../common';
+import { RootFS, WORKSPACE_IDB_NAME } from '../../../common';
 import { Editor, EditorOptions } from './Editor';
 import { FileIndexSystem, FileIndexSystemOptions } from './FileIndex';
 
@@ -179,3 +179,12 @@ type InstanceType<T> = T extends { Create(options: object, cb: BFSCallback<infer
   : any;
 
 export type FileSystemInstance<T extends SupportFileSystem> = InstanceType<(typeof Backends)[T]>;
+
+export function isPathMounted(fs: RootFS, path: string): boolean {
+  // @ts-ignore
+  if (fs && fs.mountList.includes(path)) {
+    return true;
+  }
+
+  return false;
+}
