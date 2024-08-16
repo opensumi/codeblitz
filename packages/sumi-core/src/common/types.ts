@@ -51,7 +51,7 @@ export interface RuntimeConfig {
     /**
      * 文件系统配置
      */
-    filesystem: FileSystemConfiguration;
+    filesystem?: FileSystemConfiguration;
     /**
      * 文档保存事件
      * @param data.filepath 文档相对工作空间路径
