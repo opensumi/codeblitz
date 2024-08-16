@@ -129,10 +129,11 @@ class StartupContribution implements MainLayoutContribution {
 
   async onDidRender(): Promise<void> {
     await this.layoutService.viewReady.promise;
-    const leftTabBarHandler = this.layoutService.getTabbarService('left');
-    leftTabBarHandler.updateCurrentContainerId('');
-
-    console.log("hide left tabbar by default")
+    if (process.env.HIDE_LEFT_TABBAR) {
+      const leftTabBarHandler = this.layoutService.getTabbarService('left');
+      leftTabBarHandler.updateCurrentContainerId('');
+      console.log("hide left tabbar by default")
+    }
   }
 }
 

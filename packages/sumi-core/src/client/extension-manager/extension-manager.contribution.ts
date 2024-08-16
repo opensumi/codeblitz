@@ -1,7 +1,7 @@
 import { Autowired } from '@opensumi/di';
 import { getIcon } from '@opensumi/ide-core-browser';
 import { ComponentContribution, ComponentRegistry } from '@opensumi/ide-core-browser/lib/layout';
-import { Domain, localize } from '@opensumi/ide-core-common';
+import { DisposableStore, Domain, localize } from '@opensumi/ide-core-common';
 import {
   BrowserEditorContribution,
   EditorComponentRegistry,
@@ -20,6 +20,8 @@ import { ExtensionResourceProvider } from './extension-resource-provider';
 export class ExtensionManagerContribution
   implements ComponentContribution, MainLayoutContribution, BrowserEditorContribution
 {
+  protected _disposables = new DisposableStore();
+
   @Autowired()
   private readonly resourceProvider: ExtensionResourceProvider;
 
@@ -30,25 +32,27 @@ export class ExtensionManagerContribution
   private readonly extensionManagerService: ExtensionManagerService;
 
   registerResource(resourceService: ResourceService) {
-    resourceService.registerResourceProvider(this.resourceProvider);
+    this._disposables.add(resourceService.registerResourceProvider(this.resourceProvider));
   }
 
   registerEditorComponent(editorComponentRegistry: EditorComponentRegistry) {
     const EXTENSIONS_DETAIL_COMPONENT_ID = `${EXTENSION_SCHEME}_detail`;
-    editorComponentRegistry.registerEditorComponent({
+    this._disposables.add(editorComponentRegistry.registerEditorComponent({
       component: ExtensionDetailView,
       uid: EXTENSIONS_DETAIL_COMPONENT_ID,
       scheme: EXTENSION_SCHEME,
-    });
+    }));
 
-    editorComponentRegistry.registerEditorComponentResolver(EXTENSION_SCHEME, (_, __, resolve) => {
-      resolve([
-        {
-          type: EditorOpenType.component,
-          componentId: EXTENSIONS_DETAIL_COMPONENT_ID,
-        },
-      ]);
-    });
+    this._disposables.add(
+      editorComponentRegistry.registerEditorComponentResolver(EXTENSION_SCHEME, (_, __, resolve) => {
+        resolve([
+          {
+            type: EditorOpenType.component,
+            componentId: EXTENSIONS_DETAIL_COMPONENT_ID,
+          },
+        ]);
+      }),
+    );
   }
 
   registerComponent(registry: ComponentRegistry): void {
@@ -62,13 +66,22 @@ export class ExtensionManagerContribution
     });
   }
 
-  onDidRender() {
+  async onDidRender() {
+    await this.mainLayoutService.viewReady.promise;
     const handler = this.mainLayoutService.getTabbarHandler(enableExtensionsContainerId);
     if (handler) {
       // 在激活的时候获取数据
-      handler.onActivate(() => {
+      if (handler.isActivated()) {
         this.extensionManagerService.init();
-      });
+      } else {
+        this._disposables.add(handler.onActivate(() => {
+          this.extensionManagerService.init();
+        }));
+      }
     }
+  }
+
+  dispose() {
+    this._disposables.dispose();
   }
 }
