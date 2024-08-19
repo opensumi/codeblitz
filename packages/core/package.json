@@ -51,7 +51,7 @@
     "@opensumi/ide-file-tree-next": "3.2.4-next-1723531705.0",
     "@opensumi/ide-i18n": "3.2.4-next-1723531705.0",
     "@opensumi/ide-keymaps": "3.2.4-next-1723531705.0",
-    "@opensumi/ide-logs": "3.2.4-next-1723531705.0",
+    "@opensumi/ide-logs": "3.2.4",
     "@opensumi/ide-main-layout": "3.2.4-next-1723531705.0",
     "@opensumi/ide-markdown": "3.2.4-next-1723531705.0",
     "@opensumi/ide-markers": "3.2.4-next-1723531705.0",

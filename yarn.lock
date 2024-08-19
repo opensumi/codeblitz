@@ -599,7 +599,7 @@ __metadata:
     "@opensumi/ide-file-tree-next": "npm:3.2.4-next-1723531705.0"
     "@opensumi/ide-i18n": "npm:3.2.4-next-1723531705.0"
     "@opensumi/ide-keymaps": "npm:3.2.4-next-1723531705.0"
-    "@opensumi/ide-logs": "npm:3.2.4-next-1723531705.0"
+    "@opensumi/ide-logs": "npm:3.2.4"
     "@opensumi/ide-main-layout": "npm:3.2.4-next-1723531705.0"
     "@opensumi/ide-markdown": "npm:3.2.4-next-1723531705.0"
     "@opensumi/ide-markers": "npm:3.2.4-next-1723531705.0"
@@ -699,7 +699,7 @@ __metadata:
     "@opensumi/ide-extension": "npm:3.2.4-next-1723531705.0"
     "@opensumi/ide-file-scheme": "npm:3.2.4-next-1723531705.0"
     "@opensumi/ide-file-service": "npm:3.2.4-next-1723531705.0"
-    "@opensumi/ide-logs": "npm:3.2.4-next-1723531705.0"
+    "@opensumi/ide-logs": "npm:3.2.4"
     "@types/fs-extra": "npm:^9.0.4"
     "@types/lodash.debounce": "npm:^4.0.6"
     "@types/md5": "npm:^2.2.1"
@@ -1453,6 +1453,21 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@opensumi/ide-connection@npm:3.2.4":
+  version: 3.2.4
+  resolution: "@opensumi/ide-connection@npm:3.2.4"
+  dependencies:
+    "@furyjs/fury": "npm:0.5.9-beta"
+    "@opensumi/events": "npm:^1.0.0"
+    "@opensumi/ide-core-common": "npm:3.2.4"
+    "@opensumi/reconnecting-websocket": "npm:^4.4.0"
+    "@opensumi/vscode-jsonrpc": "npm:^8.0.0-next.2"
+    path-to-regexp: "npm:^6.2.1"
+    ws: "npm:^8.16.0"
+  checksum: 10/fe070edadff216437f90ec900d4380a716df897bbbe281fb15ab3711f0f5e6af8ed2d65eef8aa3cc2b4030c197aee877ff74a159afb4ca0d7ece12a9465504a7
+  languageName: node
+  linkType: hard
+
 "@opensumi/ide-connection@npm:3.2.4-next-1723531705.0":
   version: 3.2.4-next-1723531705.0
   resolution: "@opensumi/ide-connection@npm:3.2.4-next-1723531705.0"
@@ -1500,6 +1515,17 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@opensumi/ide-core-common@npm:3.2.4":
+  version: 3.2.4
+  resolution: "@opensumi/ide-core-common@npm:3.2.4"
+  dependencies:
+    "@opensumi/di": "npm:^1.4.0"
+    "@opensumi/ide-utils": "npm:3.2.4"
+    jschardet: "npm:3.0.0"
+  checksum: 10/00f5f1a85bfafe483de44bddf23b85c8971567852af26b3bde677c7d77eafe3fa974002a5fcb0d82667912c30f0a22df7c2303fe10d052e4727327841c0de6ca
+  languageName: node
+  linkType: hard
+
 "@opensumi/ide-core-common@npm:3.2.4-next-1723531705.0":
   version: 3.2.4-next-1723531705.0
   resolution: "@opensumi/ide-core-common@npm:3.2.4-next-1723531705.0"
@@ -1507,6 +1533,17 @@ __metadata:
     "@opensumi/di": "npm:^1.4.0"
     "@opensumi/ide-utils": "npm:3.2.4-next-1723531705.0"
   checksum: 10/bad9d403a866b26506d0a07b5555f4992918092c755b5d7740ad0bcd10fa462121adcf705486acaae2e8e0ec9f740b0fb144812e028582050d1b12033c44f8e8
+  languageName: node
+  linkType: hard
+
+"@opensumi/ide-core-node@npm:3.2.4":
+  version: 3.2.4
+  resolution: "@opensumi/ide-core-node@npm:3.2.4"
+  dependencies:
+    "@opensumi/ide-connection": "npm:3.2.4"
+    "@opensumi/ide-core-common": "npm:3.2.4"
+    keytar: "npm:^7.7.0"
+  checksum: 10/deba83d7a7b6a080f490371350335c36a471154b0b05f090ebcb86df12d0c16120ca6c7dca659852b4dee55148913494f76b727e0b9d2fbe2394d10d8ae6392c
   languageName: node
   linkType: hard
 
@@ -1703,6 +1740,19 @@ __metadata:
   dependencies:
     "@opensumi/ide-core-common": "npm:3.2.4-next-1723531705.0"
   checksum: 10/8bba95511754a4c670c9cf35b83358379b26e1a8d0467da757676ddcd58c52e999295469b3ab3433301f1b9c819f4f4761245d7bf4ef3c154d41ce37e9508c40
+  languageName: node
+  linkType: hard
+
+"@opensumi/ide-logs@npm:3.2.4":
+  version: 3.2.4
+  resolution: "@opensumi/ide-logs@npm:3.2.4"
+  dependencies:
+    "@opensumi/ide-connection": "npm:3.2.4"
+    "@opensumi/ide-core-common": "npm:3.2.4"
+    "@opensumi/ide-core-node": "npm:3.2.4"
+    compressing: "npm:^1.6.2"
+    spdlog: "npm:^0.9.0"
+  checksum: 10/1dc651661c4d08bd44a8d2c1e92a1ec0eef1370e90eea7846666d1d3e6bd01c77521708e91ab7957ac086c276f34d1b25397e2a6563c03e6c6fb61f1e3383df0
   languageName: node
   linkType: hard
 
@@ -1938,6 +1988,19 @@ __metadata:
   dependencies:
     "@opensumi/ide-core-common": "npm:3.2.4-next-1723531705.0"
   checksum: 10/b27c05d718ba7b9f9fff81c879d7fc7ba8373c325ee124b2e77a26e394bf3260e6ff0f940d4ceda0e82bd028ccf9d32373292eadb4412895153f4e8587573eaa
+  languageName: node
+  linkType: hard
+
+"@opensumi/ide-utils@npm:3.2.4":
+  version: 3.2.4
+  resolution: "@opensumi/ide-utils@npm:3.2.4"
+  dependencies:
+    iconv-lite: "npm:^0.6.3"
+    jschardet: "npm:3.0.0"
+    mri: "npm:^1.2.0"
+    nanoid: "npm:3.3.4"
+    vscode-uri: "npm:3.0.2"
+  checksum: 10/5b68131e8ebdb01adae1739b97c01f396e094a41bb51592d3861f846098fa5d1fe7cf8444f46299d14f0406e26b82ff1b91884b15ee75a854d15508c4769d0d5
   languageName: node
   linkType: hard
 
