@@ -19,7 +19,7 @@
     "@codeblitzjs/ide-core": "workspace:*",
     "@codeblitzjs/ide-i18n": "workspace:*",
     "@codeblitzjs/ide-sumi-core": "workspace:*",
-    "antd": "^4.0.0",
+    "antd": "^5.20.2",
     "lodash": "^4.17.21",
     "tslib": "^2.2.0"
   },
