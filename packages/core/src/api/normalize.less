@@ -1,21 +1,18 @@
-// @opensumi/ide-core-browser/lib/style/normilize.less
+@scrollbarwidth: 10px;
+
 codeblitz-root {
   margin: 0;
   padding: 0;
-  // 使用该字体获取与vscode一致的图标表现
-  // 仅mac下可用，windows待区分
-  // https://stackoverflow.com/questions/32660748/how-to-use-apples-new-san-francisco-font-on-a-webpage
-  font-family: -apple-system, BlinkMacSystemFont, sans-serif;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe WPC', 'Segoe UI', system-ui, 'Ubuntu', 'Droid Sans', sans-serif;
   // 全局默认字体颜色
   color: var(--foreground);
   background-color: var(--editor-background);
-  font-size: var(--base-font-size);
-  // 设置 antialiased 会导致整体清晰度降低
-  -webkit-font-smoothing: antialiased;
+}
 
+codeblitz-root {
   /* 防止 overlay/modal 撑开页面元素 */
   overflow: hidden;
-  /* 防止mac上的回退手势 */
+  /* 防止 mac 上的回退手势 */
   overscroll-behavior-x: none;
 
   input::placeholder,
@@ -25,16 +22,22 @@ codeblitz-root {
 
   // 全局设置滚动条样式
   ::-webkit-scrollbar {
+    -webkit-appearance: none;
+
     background: transparent;
-    width: 10px;
-    height: 10px;
+    width: @scrollbarwidth;
+    height: @scrollbarwidth;
   }
 
   ::-webkit-scrollbar:hover {
     background: transparent;
+    width: @scrollbarwidth;
+    height: @scrollbarwidth;
   }
 
   ::-webkit-scrollbar-thumb {
+    transition: all 1s;
+
     background: var(--scrollbarSlider-background);
   }
 
@@ -52,6 +55,7 @@ codeblitz-root {
 
   a {
     color: var(--textLink-foreground);
+
     &:hover,
     &:active,
     &:focus {
@@ -63,7 +67,6 @@ codeblitz-root {
     background-color: var(--textBlockQuote-background);
     border-color: var(--textBlockQuote-border);
   }
-
   code {
     background-color: var(--textCodeBlock-background);
   }
@@ -71,18 +74,26 @@ codeblitz-root {
   li {
     list-style: none;
   }
-  /* ---- 该样式主要用于让带 tabindex='-1' 的元素焦点态时拥有高亮边框，以便于实现如Tree，List组件焦点态时的自动高亮边框效果  ---- */
-  [tabindex='-1'] {
-    &:focus {
-      outline-width: 1px;
-      outline-style: solid;
-      outline-offset: -1px;
-    }
+}
+
+/* ---- 该样式主要用于让带 tabindex='-1' 的元素焦点态时拥有高亮边框，以便于实现如Tree，List组件焦点态时的自动高亮边框效果  ---- */
+[tabindex='-1'] {
+  &:focus {
+    outline-width: 1px;
+    outline-style: solid;
+    outline-offset: -1px;
   }
-  /* -------- */
+}
+/* -------- */
+
+::selection {
+  color: inherit;
+  background-color: var(--selection-background);
 }
 
 :root {
   --base-font-size: 13px;
   --tabBar-height: 35px;
+  overflow-x: overlay;
+  overflow-y: overlay;
 }

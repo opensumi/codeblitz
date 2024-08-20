@@ -1,8 +1,8 @@
+import { Autowired } from '@opensumi/di';
 import { PreferenceProvider } from '@opensumi/ide-core-browser';
 import { Domain, GeneralSettingsId, PreferenceScope } from '@opensumi/ide-core-common';
 import { ITheme, ThemeContributionProvider } from '@opensumi/ide-theme';
 import { IThemeService } from '@opensumi/ide-theme';
-import { Autowired } from '../../../modules/opensumi__common-di';
 import { IDiffViewerProps } from '../common';
 
 @Domain(ThemeContributionProvider)

@@ -1,5 +1,8 @@
 import { CodeModelService } from '@codeblitzjs/ide-code-service';
-import { IMainLayoutService, MainLayoutContribution } from '@codeblitzjs/ide-core/lib/modules/opensumi__ide-main-layout';
+import {
+  IMainLayoutService,
+  MainLayoutContribution,
+} from '@codeblitzjs/ide-core/lib/modules/opensumi__ide-main-layout';
 import { Autowired, Injectable, Provider } from '@opensumi/di';
 import {
   BrowserModule,
@@ -94,13 +97,13 @@ export class AlexAppContribution extends Disposable implements CommandContributi
         { id: 'code-service.replace-browser-url-hash' },
         {
           execute: (hash: string) => {
-            if (hash !== location.hash) {
-              this.ignoreHash = hash;
-              const { href } = window.location;
-              const hashIndex = href.indexOf('#');
-              const url = hashIndex === -1 ? href : href.slice(0, hashIndex);
-              window.location.replace(`${url}${hash}`);
-            }
+            // if (hash !== location.hash) {
+            //   this.ignoreHash = hash;
+            //   const { href } = window.location;
+            //   const hashIndex = href.indexOf('#');
+            //   const url = hashIndex === -1 ? href : href.slice(0, hashIndex);
+            //   window.location.replace(`${url}${hash}`);
+            // }
           },
         },
       ),
@@ -121,7 +124,6 @@ export class AlexAppContribution extends Disposable implements CommandContributi
   }
 }
 
-
 @Domain(MainLayoutContribution)
 class StartupContribution implements MainLayoutContribution {
   @Autowired(IMainLayoutService)
@@ -132,11 +134,10 @@ class StartupContribution implements MainLayoutContribution {
     if (process.env.HIDE_LEFT_TABBAR) {
       const leftTabBarHandler = this.layoutService.getTabbarService('left');
       leftTabBarHandler.updateCurrentContainerId('');
-      console.log("hide left tabbar by default")
+      console.log('hide left tabbar by default');
     }
   }
 }
-
 
 @Injectable()
 export class StartupModule extends BrowserModule {

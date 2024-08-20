@@ -1,6 +1,6 @@
 import { IPluginConfig } from '@codeblitzjs/ide-plugin';
 import { IAppOpts, RuntimeConfig } from '@codeblitzjs/ide-sumi-core';
-import { IPartialEditEvent } from '@opensumi/ide-ai-native/lib/browser/widget/inline-stream-diff/live-preview.decoration';
+import { IPartialEditEvent } from '@opensumi/ide-ai-native/lib/browser/widget/inline-stream-diff/live-preview.component';
 import { Event, URI } from '@opensumi/ide-core-common';
 import { IResourceOpenOptions } from '@opensumi/ide-editor';
 import { ITheme } from '@opensumi/ide-theme';

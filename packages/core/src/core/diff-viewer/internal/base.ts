@@ -1,4 +1,4 @@
-import { isFilesystemReady } from '@codeblitzjs/ide-sumi-core';
+import { fsExtra, isFilesystemReady } from '@codeblitzjs/ide-sumi-core';
 import { InlineChatHandler } from '@opensumi/ide-ai-native/lib/browser/widget/inline-chat/inline-chat.handler';
 import { AppConfig, ClientAppContribution, EDITOR_COMMANDS, IClientApp } from '@opensumi/ide-core-browser';
 import {
@@ -15,18 +15,15 @@ import {
 import { IResourceOpenOptions, WorkbenchEditorService } from '@opensumi/ide-editor';
 import { Selection, SelectionDirection } from '@opensumi/ide-monaco';
 
+import { Autowired } from '@opensumi/di';
 import { LiveInlineDiffPreviewer } from '@opensumi/ide-ai-native/lib/browser/widget/inline-diff/inline-diff-previewer';
 import { InlineDiffHandler } from '@opensumi/ide-ai-native/lib/browser/widget/inline-diff/inline-diff.handler';
 import { EResultKind } from '@opensumi/ide-ai-native/lib/common';
+import { IMenuRegistry, MenuContribution } from '@opensumi/ide-core-browser/lib/menu/next';
 import { IEditor, IEditorDocumentModelService } from '@opensumi/ide-editor/lib/browser';
-import { requireModule } from '../../../api/require';
-import { Autowired, Injectable } from '../../../modules/opensumi__common-di';
-import { IMenuRegistry, MenuContribution } from '../../../modules/opensumi__ide-core-browser';
+import path from 'path';
 import { IDiffViewerProps, IDiffViewerTab, IExtendPartialEditEvent, ITabChangedEvent } from '../common';
 import { removeStart } from '../utils';
-
-const fse = requireModule('fs-extra');
-const path = requireModule('path');
 
 @Domain(CommandContribution, ClientAppContribution, MenuContribution)
 export class DiffViewerContribution implements CommandContribution, ClientAppContribution, MenuContribution {
@@ -78,9 +75,9 @@ export class DiffViewerContribution implements CommandContribution, ClientAppCon
 
     const openFileInTab = async (filePath: string, content: string, options?: IResourceOpenOptions) => {
       const fullPath = this.getFullPath(filePath);
-      if (!fse.pathExistsSync(fullPath)) {
-        fse.ensureFileSync(fullPath);
-        fse.writeFileSync(fullPath, content);
+      if (!fsExtra.pathExistsSync(fullPath)) {
+        fsExtra.ensureFileSync(fullPath);
+        fsExtra.writeFileSync(fullPath, content);
       }
 
       const uri = URI.file(fullPath);
@@ -108,7 +105,7 @@ export class DiffViewerContribution implements CommandContribution, ClientAppCon
       const editor = openResourceResult.group.codeEditor;
 
       if (oldContent === newContent) {
-        this.inlineDiffHandler.hidePreviewer(editor.monacoEditor);
+        this.inlineDiffHandler.destroyPreviewer();
         return;
       }
 
@@ -129,7 +126,7 @@ export class DiffViewerContribution implements CommandContribution, ClientAppCon
           disposeWhenEditorClosed: false,
         },
       ) as LiveInlineDiffPreviewer;
-      const whenReady = Event.toPromise(previewer.getNode().onDidEditChange);
+      const whenReady = Event.toPromise(previewer.getNode()!.onDidEditChange);
 
       previewer.setValue(newContent);
 
@@ -206,12 +203,11 @@ export class DiffViewerContribution implements CommandContribution, ClientAppCon
       },
       getFileContent: async (filePath: string) => {
         const fullPath = this.getFullPath(filePath);
-        return await fse.readFile(fullPath, 'utf-8');
+        return await fsExtra.readFile(fullPath, 'utf-8');
       },
       acceptAllPartialEdit: async () => {
         if (this.inlineDiffHandler) {
           this.inlineDiffHandler.handleAction(
-            this.workbenchEditorService.currentEditor!.monacoEditor,
             EResultKind.ACCEPT,
           );
         }
@@ -219,7 +215,6 @@ export class DiffViewerContribution implements CommandContribution, ClientAppCon
       rejectAllPartialEdit: async () => {
         if (this.inlineDiffHandler) {
           this.inlineDiffHandler.handleAction(
-            this.workbenchEditorService.currentEditor!.monacoEditor,
             EResultKind.DISCARD,
           );
         }
