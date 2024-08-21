@@ -11,14 +11,16 @@ import React from 'react';
 import { IDiffViewerProps } from '../core/diff-viewer';
 import { DiffViewerModule } from '../core/diff-viewer/module';
 import { BoxPanel, SplitPanel } from '../editor';
-import { Injector } from '../modules/opensumi__common-di';
+import { Injector } from '@opensumi/di';
 import { AppRenderer, IAppRendererProps } from './renderApp';
 import '../core/diff-viewer/languages-patch';
 import { extensionMetadata } from '../core/diff-viewer/extension-patch';
 
 export {
-  IDiffViewerHandle,
   IDiffViewerProps,
+} from '../core/diff-viewer/common';
+export type {
+  IDiffViewerHandle,
   IDiffViewerTab,
   IExtendPartialEditEvent,
 } from '../core/diff-viewer/common';

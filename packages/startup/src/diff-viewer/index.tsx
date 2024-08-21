@@ -1,4 +1,3 @@
-import { IPartialEditEvent } from '@opensumi/ide-ai-native/lib/browser/widget/inline-stream-diff/live-preview.decoration';
 import React, { useMemo, useRef } from 'react';
 import { createRoot } from 'react-dom/client';
 
