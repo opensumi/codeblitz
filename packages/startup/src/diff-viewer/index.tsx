@@ -4,6 +4,8 @@ import { createRoot } from 'react-dom/client';
 import '../index.css';
 import { DiffViewerRenderer } from '@codeblitzjs/ide-core/lib/api/renderDiffViewer';
 import { IDiffViewerHandle } from '@codeblitzjs/ide-core/lib/core/diff-viewer';
+import { SumiReadableStream } from '@opensumi/ide-utils/lib/stream';
+import splitRetain from 'split-retain';
 import jsonData from './data.json';
 
 const data = [
@@ -30,6 +32,24 @@ const data = [
 
 data.push(...jsonData);
 
+function createMockStream(data: string) {
+  const streamData = splitRetain(data, '\n');
+  const length = streamData.length;
+  const chatReadableStream = new SumiReadableStream<string>();
+
+  streamData.forEach((chunk, index) => {
+    setTimeout(() => {
+      chatReadableStream.emitData(chunk.toString());
+
+      if (length - 1 === index) {
+        chatReadableStream.end();
+      }
+    }, index * 100);
+  });
+
+  return chatReadableStream;
+}
+
 const App = () => {
   const handleRef = useRef<IDiffViewerHandle | null>(null);
   const [eventInfo, setEventInfo] = React.useState<any | null>(null);
@@ -37,19 +57,17 @@ const App = () => {
   const memo = useMemo(() => (
     <DiffViewerRenderer
       tabBarRightExtraContent={{
-        component: () => <div>hello</div>,
+        // component: () => <div>代码生成中</div>,
       }}
       appConfig={{
-        layoutViewSize: {
-          editorTabsHeight: 50
-        }
+        layoutViewSize: {},
       }}
       onWillApplyTheme={() => {
         return {
           'editorGroupHeader.tabsBackground': '#ECF1FE',
           'editor.background': '#fff',
           'aiNative.inlineDiffAddedRange': '#26bf6d1f',
-          'aiNative.inlineDiffRemovedRange': "#ff4d4f1e",
+          'aiNative.inlineDiffRemovedRange': '#ff4d4f1e',
           'aiNative.inlineDiffAcceptPartialEdit': '#26bf6d80',
           'aiNative.inlineDiffDiscardPartialEdit': '#ff4d4f80',
           'aiNative.inlineDiffAcceptPartialEdit.foreground': '#000',
@@ -154,6 +172,15 @@ const App = () => {
         }}
       >
         reset
+      </button>
+      <button
+        onClick={() => {
+          if (!handleRef.current) return;
+          const item = data[data.length - 1];
+          handleRef.current.openDiffInTabByStream(item.path, item.oldCode, createMockStream(item.newCode));
+        }}
+      >
+        流式
       </button>
 
       {data.map((item, index) => {

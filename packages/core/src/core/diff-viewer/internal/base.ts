@@ -8,6 +8,7 @@ import {
   Domain,
   Emitter,
   Event,
+  IChatProgress,
   ILogger,
   Sequencer,
   URI,
@@ -16,11 +17,13 @@ import { IResourceOpenOptions, WorkbenchEditorService } from '@opensumi/ide-edit
 import { Selection, SelectionDirection } from '@opensumi/ide-monaco';
 
 import { Autowired } from '@opensumi/di';
+import { InlineChatController } from '@opensumi/ide-ai-native/lib/browser/widget/inline-chat/inline-chat-controller';
 import { LiveInlineDiffPreviewer } from '@opensumi/ide-ai-native/lib/browser/widget/inline-diff/inline-diff-previewer';
 import { InlineDiffHandler } from '@opensumi/ide-ai-native/lib/browser/widget/inline-diff/inline-diff.handler';
 import { EResultKind } from '@opensumi/ide-ai-native/lib/common';
 import { IMenuRegistry, MenuContribution } from '@opensumi/ide-core-browser/lib/menu/next';
 import { IEditor, IEditorDocumentModelService } from '@opensumi/ide-editor/lib/browser';
+import { listenReadable, SumiReadableStream } from '@opensumi/ide-utils/lib/stream';
 import path from 'path';
 import { IDiffViewerProps, IDiffViewerTab, IExtendPartialEditEvent, ITabChangedEvent } from '../common';
 import { removeStart } from '../utils';
@@ -135,6 +138,63 @@ export class DiffViewerContribution implements CommandContribution, ClientAppCon
       previewer.revealFirstDiff();
     };
 
+    const openDiffInTabByStream = async (
+      filePath: string,
+      oldContent: string,
+      stream: SumiReadableStream<string>,
+      options?: IResourceOpenOptions,
+    ) => {
+      const { uri, result: openResourceResult } = await openFileInTab(filePath, oldContent, {
+        ...options,
+        preview: false,
+      });
+
+      if (!openResourceResult) {
+        throw new Error('Failed to open file in tab: ' + filePath);
+      }
+
+      const editor = openResourceResult.group.codeEditor;
+
+      const model = this.editorDocumentModelService.getModelReference(uri);
+      if (!model || !model.instance) {
+        throw new Error('Failed to get model reference: ' + filePath);
+      }
+
+      const monacoModel = model.instance.getMonacoModel();
+
+      monacoModel.setValue(oldContent);
+      const fullRange = monacoModel.getFullModelRange();
+
+      const controller = new InlineChatController();
+      const newStream = new SumiReadableStream<IChatProgress>();
+      controller.mountReadable(newStream);
+      listenReadable<string>(stream, {
+        onData(data) {
+          newStream.emitData({
+            kind: 'content',
+            content: data,
+          });
+        },
+        onEnd() {
+          newStream.end();
+        },
+        onError(error) {
+          newStream.emitError(error);
+        },
+      });
+
+      this.inlineDiffHandler.showPreviewerByStream(
+        editor.monacoEditor,
+        {
+          crossSelection: Selection.fromRange(fullRange, SelectionDirection.LTR),
+          chatResponse: controller,
+          previewerOptions: {
+            disposeWhenEditorClosed: false,
+          },
+        },
+      ) as LiveInlineDiffPreviewer;
+    };
+
     const getFilePathForEditor = (editor: IEditor) => {
       return this.stripDirectory(editor.currentUri!.codeUri.fsPath);
     };
@@ -184,6 +244,7 @@ export class DiffViewerContribution implements CommandContribution, ClientAppCon
       openDiffInTab: async (filePath, oldContent, newContent, options?: IResourceOpenOptions) => {
         await sequencer.queue(() => openDiffInTab(filePath, oldContent, newContent, options));
       },
+      openDiffInTabByStream,
       openFileInTab: async (filePath: string, content: string, options?: IResourceOpenOptions) => {
         const { uri } = await openFileInTab(filePath, content, options);
         return uri;

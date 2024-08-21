@@ -4,6 +4,7 @@ import { IPartialEditEvent } from '@opensumi/ide-ai-native/lib/browser/widget/in
 import { Event, URI } from '@opensumi/ide-core-common';
 import { IResourceOpenOptions } from '@opensumi/ide-editor';
 import { ITheme } from '@opensumi/ide-theme';
+import { SumiReadableStream } from '@opensumi/ide-utils/lib/stream';
 import { IAppInstance } from '../../editor';
 import { LandingProps } from '../types';
 
@@ -44,6 +45,12 @@ export interface IDiffViewerHandle {
     oldContent: string,
     newContent: string,
     options?: IResourceOpenDiffOptions,
+  ) => Promise<void>;
+  openDiffInTabByStream: (
+    filePath: string,
+    oldContent: string,
+    stream: SumiReadableStream<string>,
+    options?: IResourceOpenOptions,
   ) => Promise<void>;
   /**
    * 打开标签页
