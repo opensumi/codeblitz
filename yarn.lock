@@ -706,6 +706,7 @@ __metadata:
     "@types/react-dom": "npm:^18.2.0"
     antd: "npm:^4.0.0"
     lodash: "npm:^4.17.21"
+    split-retain: "npm:^1.0.1"
     tslib: "npm:^2.2.0"
   peerDependencies:
     react: ^18.2.0
@@ -14762,6 +14763,13 @@ __metadata:
     select-hose: "npm:^2.0.0"
     spdy-transport: "npm:^3.0.0"
   checksum: 10/d29b89e48e7d762e505a2f83b1bc2c92268bd518f1b411864ab42a9e032e387d10467bbce0d8dbf8647bf4914a063aa1d303dff85e248f7a57f81a7b18ac34ef
+  languageName: node
+  linkType: hard
+
+"split-retain@npm:^1.0.1":
+  version: 1.0.1
+  resolution: "split-retain@npm:1.0.1"
+  checksum: 10/8fe5217e0e2953141ddbce755cc68a5bb2db4f071e2a56991c57b9aabb999ea2d74868e166e288e9247d1920b611d4477bb81fab666157db433066de0d787631
   languageName: node
   linkType: hard
 
