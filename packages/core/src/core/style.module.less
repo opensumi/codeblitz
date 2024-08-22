@@ -16,24 +16,25 @@ codeblitz-root {
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  color: var(--codeblitz-landing-color);
+  color: var(--codeblitz-landing-foreground);
   background-color: var(--codeblitz-landing-background);
 }
 
 :root {
-  --codeblitz-landing-background-dark: #202224;
+  --codeblitz-landing-dark-foreground: #D7DBDE;
+  --codeblitz-landing-dark-background: #202224;
 
+  --codeblitz-landing-foreground: #4D4D4D;
   --codeblitz-landing-background: #FFF;
-  --codeblitz-landing-color: #4D4D4D;
-}
-
-:global(.codeblitz-dark) .landing {
-  color: #D7DBDE;
-  background-color: var(--codeblitz-landing-background-dark);
 }
 
 :global(.codeblitz-dark) {
-  background-color: var(--codeblitz-landing-background-dark);
+  background-color: var(--codeblitz-landing-dark-background);
+
+  & .landing {
+    color: var(--codeblitz-landing-dark-foreground);
+    background-color: var(--codeblitz-landing-dark-background);
+  }
 }
 
 .loading {
