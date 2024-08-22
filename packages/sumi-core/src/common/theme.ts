@@ -1,6 +1,11 @@
 import { IExtensionBasicMetadata } from '@codeblitzjs/ide-common';
 import { BuiltinTheme, getThemeId, getThemeType, IThemeContribution } from '@opensumi/ide-theme';
 
+const builtinTheme = {
+  "opensumi-design-dark-theme": "vs-dark",
+  "opensumi-design-light-theme": "vs",
+} as Record<string, BuiltinTheme>
+
 export const getThemeTypeByPreferenceThemeId = (
   themeId: string,
   extensionMetadata: IExtensionBasicMetadata[] | undefined,
@@ -18,5 +23,9 @@ export const getThemeTypeByPreferenceThemeId = (
       }
     }
   }
+  if (builtinTheme[themeId]) {
+    uiTheme = builtinTheme[themeId];
+  }
+
   return getThemeType(uiTheme || 'vs-dark');
 };

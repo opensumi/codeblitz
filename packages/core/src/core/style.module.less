@@ -16,17 +16,24 @@ codeblitz-root {
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  color: #4D4D4D;
-  background-color: #FFF;
+  color: var(--codeblitz-landing-color);
+  background-color: var(--codeblitz-landing-background);
+}
+
+:root {
+  --codeblitz-landing-background-dark: #202224;
+
+  --codeblitz-landing-background: #FFF;
+  --codeblitz-landing-color: #4D4D4D;
 }
 
 :global(.codeblitz-dark) .landing {
   color: #D7DBDE;
-  background-color: #202224;
+  background-color: var(--codeblitz-landing-background-dark);
 }
 
 :global(.codeblitz-dark) {
-  background-color: #202224;
+  background-color: var(--codeblitz-landing-background-dark);
 }
 
 .loading {
