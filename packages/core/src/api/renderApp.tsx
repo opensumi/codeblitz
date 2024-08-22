@@ -1,6 +1,7 @@
 import { REPORT_NAME, RuntimeConfig } from '@codeblitzjs/ide-sumi-core';
 import { getDebugLogger, IReporterService, localize } from '@opensumi/ide-core-common';
-import React, { useEffect, useMemo, useRef, useState } from 'react';
+import cls from 'classnames';
+import React, { CSSProperties, useEffect, useMemo, useRef, useState } from 'react';
 import { createRoot } from 'react-dom/client';
 import { useConstant } from '../core/hooks';
 import { IPropsService, PropsServiceImpl } from '../core/props.service';
@@ -13,6 +14,9 @@ import { IAppInstance, IConfig } from './types';
 export interface IAppRendererProps extends IConfig {
   onLoad?(app: IAppInstance): void;
   Landing?: React.ComponentType<LandingProps>;
+
+  style?: CSSProperties;
+  className?: string;
 }
 
 export const renderApp = (domElement: HTMLElement, props: IAppRendererProps) => {
@@ -117,7 +121,13 @@ export const AppRenderer: React.FC<IAppRendererProps> = ({ onLoad, Landing, ...o
   );
 
   return (
-    <Root {...state} theme={themeType} Landing={Landing} className={rootClassName}>
+    <Root
+      {...state}
+      theme={themeType}
+      Landing={Landing}
+      className={cls(rootClassName, opts.className)}
+      style={opts.style}
+    >
       {appElementRef.current ? <appElementRef.current /> : null}
     </Root>
   );

@@ -1,9 +1,9 @@
-import { AppRenderer, getDefaultLayoutConfig, IAppInstance, SlotLocation } from '@codeblitzjs/ide-core';
+import { AppRenderer, SlotLocation } from '@codeblitzjs/ide-core';
 import * as Alex from '@codeblitzjs/ide-core';
 import React, { useMemo } from 'react';
 import { createRoot } from 'react-dom/client';
 import '@codeblitzjs/ide-core/languages';
-import { CodeAPIModule, CodePlatform } from '@codeblitzjs/ide-code-api';
+import { CodeAPIModule } from '@codeblitzjs/ide-code-api';
 import { CodeServiceModule } from '@codeblitzjs/ide-code-service';
 import anycode from '@codeblitzjs/ide-core/extensions/codeblitz.anycode';
 import anycodeCSharp from '@codeblitzjs/ide-core/extensions/codeblitz.anycode-c-sharp';
@@ -22,9 +22,9 @@ import json from '@codeblitzjs/ide-core/extensions/codeblitz.json-language-featu
 import markdown from '@codeblitzjs/ide-core/extensions/codeblitz.markdown-language-features-worker';
 import referencesView from '@codeblitzjs/ide-core/extensions/codeblitz.references-view';
 import typescript from '@codeblitzjs/ide-core/extensions/codeblitz.typescript-language-features-worker';
-import { IEditorInlineChat, isFilesystemReady } from '@codeblitzjs/ide-sumi-core';
+import { isFilesystemReady } from '@codeblitzjs/ide-sumi-core';
 import Modal from 'antd/lib/modal';
-import 'antd/lib/modal/style/index.css';
+
 import { StartupModule } from './startup.module';
 
 import { LocalExtensionModule } from '../common/local-extension.module';
@@ -32,8 +32,6 @@ import { LocalExtensionModule } from '../common/local-extension.module';
 import '../index.css';
 import { LayoutComponent } from '@codeblitzjs/ide-core/lib/core/layout';
 import styles from './code.module.less';
-
-(window as any).alex = Alex;
 
 isFilesystemReady().then(() => {
   console.log('filesystem ready');
@@ -155,6 +153,9 @@ const ModelWrapper = () => {
 
   const app = useMemo(() => (
     <AppRenderer
+      style={{
+        borderRadius: '8px',
+      }}
       appConfig={{
         modules: [
           CodeServiceModule.Config({
@@ -219,15 +220,48 @@ const ModelWrapper = () => {
       <Modal
         open={modalOpen}
         centered={true}
-        forceRender={true}
-        zIndex={1000}
         width='90vw'
-        style={{
-          height: '80vh',
+        maskClosable={false}
+        styles={{
+          header: {
+            height: '56px',
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'space-between',
+            marginBottom: '0',
+          },
         }}
         className={styles['codeblitz-dialog']}
         footer={null}
-        title='查看代码文件'
+        // closable={false}
+        title={
+          <div
+            style={{
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'space-between',
+              width: '100%',
+            }}
+          >
+            <div
+              style={{
+                fontSize: '16px',
+                color: '#000000d9',
+                lineHeight: '24px',
+                marginLeft: '24px',
+                fontWeight: 500,
+              }}
+            >
+              查看代码文件
+            </div>
+            <div
+              style={{
+                flex: 1,
+              }}
+            >
+            </div>
+          </div>
+        }
         onCancel={() => {
           setModalOpen(false);
         }}

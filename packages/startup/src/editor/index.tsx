@@ -6,7 +6,7 @@ import { createRoot } from 'react-dom/client';
 import '@codeblitzjs/ide-core/lib/editor.extension';
 import '@codeblitzjs/ide-core/languages';
 
-import 'antd/dist/antd.css';
+import 'antd/dist/reset.css';
 import Button from 'antd/lib/button';
 import Cascader from 'antd/lib/cascader';
 import Select from 'antd/lib/select';

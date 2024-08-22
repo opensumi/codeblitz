@@ -1,6 +1,15 @@
 .codeblitz-dialog {
-
-  height: 75vh;
+  :global(.right-slot) {
+    div[class^='tab_panel'] {
+      border-right: 1px solid #00000000 !important;
+    }
+    div[class^='tab_panel'] {
+      border-left: 1px solid #00000000 !important;
+    }
+    #explorer div[class^='file_tree'] {
+      font-size: 14px;
+    }
+  }
 
   :global {
     .ant-modal-content {
@@ -8,13 +17,17 @@
       overflow: hidden;
     }
 
-    .ant-modal-close {
-      top: 5px;
-      right: 5px;
+    .kt-scrollbar .scrollbar-decoration-vertical {
+      display: none;
     }
   }
 
   :global {
+    div[class*='tab_panel'] {
+      &::before {
+        content: none;
+      }
+    }
     #main-horizontal-ai {
       padding-top: 40px !important;
       padding-right: 10px !important;

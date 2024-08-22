@@ -16,7 +16,7 @@ export const Root: FC<RootProps> = (props) => {
   return (
     <codeblitz-root
       class={`codeblitz-root ${themeType ? `codeblitz-${themeType}` : ''} ${props.className ?? ''}`}
-      style={{ width: '100%', height: '100%' }}
+      style={{ width: '100%', height: '100%', ...props.style }}
       data-meta-version={VERSION}
     >
       {(props.status === 'loading' || props.status === 'error') && <LandingComponent {...props} />}

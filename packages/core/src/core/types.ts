@@ -11,4 +11,5 @@ export interface LandingProps {
 export interface RootProps extends LandingProps {
   Landing?: ComponentType<LandingProps>;
   children?: React.ReactNode;
+  style?: React.CSSProperties;
 }
