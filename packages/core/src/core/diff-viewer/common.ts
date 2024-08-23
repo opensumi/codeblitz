@@ -1,5 +1,5 @@
 import { IPluginConfig } from '@codeblitzjs/ide-plugin';
-import { IAppOpts, RuntimeConfig } from '@codeblitzjs/ide-sumi-core';
+import { IAppOpts, IExtraContent, RuntimeConfig } from '@codeblitzjs/ide-sumi-core';
 import { IPartialEditEvent } from '@opensumi/ide-ai-native/lib/browser/widget/inline-stream-diff/live-preview.component';
 import { Event, URI } from '@opensumi/ide-core-common';
 import { IResourceOpenOptions } from '@opensumi/ide-editor';
@@ -110,11 +110,6 @@ export interface IOverrideAppRendererConfig {
 export interface IOverrideAppRendererProps extends IOverrideAppRendererConfig {
   onLoad?(app: IAppInstance): void;
   Landing?: React.ComponentType<LandingProps>;
-}
-
-export interface IExtraContent {
-  component?: React.ComponentType<any>;
-  initialProps?: any;
 }
 
 export const IDiffViewerProps = Symbol('IDiffViewerProps');
