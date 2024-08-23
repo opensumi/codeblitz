@@ -42,7 +42,7 @@ import { IAppInstance, IConfig } from './types';
 export { BoxPanel, SlotLocation, SlotRenderer, SplitPanel };
 
 export const getDefaultAppConfig = (): IAppOpts => ({
-  modules,
+  modules: modules.slice(),
   useCdnIcon: true,
   noExtHost: true,
   extWorkerHost: EXT_WORKER_HOST,

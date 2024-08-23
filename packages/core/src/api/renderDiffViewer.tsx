@@ -70,10 +70,14 @@ export const DiffViewerRenderer = (_props: IDiffViewerProps) => {
 
   const appConfig = props.appConfig;
 
-  const appModules: ModuleConstructor[] = appConfig?.modules || [];
+  let appModules: ModuleConstructor[] = appConfig?.modules || [];
   if (!appModules.includes(DiffViewerModule)) {
-    appModules.unshift(DiffViewerModule);
+    appModules = [
+      DiffViewerModule,
+      ...appModules,
+    ];
   }
+
   delete appConfig?.modules;
 
   const workspaceDir = appConfig?.workspaceDir || 'workspace-' + randomString(8);
