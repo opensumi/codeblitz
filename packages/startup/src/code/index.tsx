@@ -1,5 +1,4 @@
 import { AppRenderer, SlotLocation } from '@codeblitzjs/ide-core';
-import * as Alex from '@codeblitzjs/ide-core';
 import React, { useMemo } from 'react';
 import { createRoot } from 'react-dom/client';
 import '@codeblitzjs/ide-core/languages';
@@ -124,37 +123,12 @@ const root = createRoot(document.getElementById('main') as HTMLElement);
 
 const ModelWrapper = () => {
   const [modalOpen, setModalOpen] = React.useState<boolean>(true);
-  const [dialogStyle, setDialogStyle] = React.useState<{
-    width: number;
-    height: number;
-  }>(() => {
-    return {
-      width: window.innerWidth - 300,
-      height: window.innerHeight - 150,
-    };
-  });
-
-  React.useEffect(() => {
-    let timeout: any;
-    const onHandleResize = () => {
-      clearTimeout(timeout);
-      timeout = setTimeout(() => {
-        setDialogStyle({
-          width: window.innerWidth - 100,
-          height: window.innerHeight - 150,
-        });
-      }, 250);
-    };
-    window.addEventListener('resize', onHandleResize);
-    return () => {
-      window.removeEventListener('resize', onHandleResize);
-    };
-  }, []);
 
   const app = useMemo(() => (
     <AppRenderer
       style={{
         borderRadius: '8px',
+        height: '100%',
       }}
       appConfig={{
         modules: [
@@ -197,6 +171,7 @@ const ModelWrapper = () => {
           'editor.previewMode': false,
           'general.theme': 'opensumi-design-dark-theme',
         },
+        useSimplifyExplorerPanel: true,
       }}
       runtimeConfig={{
         scenario: 'code-component',
@@ -211,71 +186,65 @@ const ModelWrapper = () => {
     />
   ), []);
   return (
-    <div
+    <Modal
+      open={modalOpen}
+      centered={true}
+      width='90vw'
+      height='90vh'
+      maskClosable={false}
+      forceRender
       style={{
-        width: '100%',
         height: '100%',
       }}
-    >
-      <Modal
-        open={modalOpen}
-        centered={true}
-        width='90vw'
-        maskClosable={false}
-        styles={{
-          header: {
-            height: '56px',
+      styles={{
+        header: {
+          height: '56px',
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'space-between',
+          marginBottom: '0',
+          borderBottom: '1px solid #0000000f',
+        },
+        content: {
+          height: '100%',
+        },
+        body: {
+          height: '100%',
+        },
+        wrapper: {
+          height: '100%',
+        },
+      }}
+      className={styles['codeblitz-dialog']}
+      footer={null}
+      title={
+        <div
+          style={{
             display: 'flex',
             alignItems: 'center',
             justifyContent: 'space-between',
-            marginBottom: '0',
-          },
-        }}
-        className={styles['codeblitz-dialog']}
-        footer={null}
-        // closable={false}
-        title={
-          <div
-            style={{
-              display: 'flex',
-              alignItems: 'center',
-              justifyContent: 'space-between',
-              width: '100%',
-            }}
-          >
-            <div
-              style={{
-                fontSize: '16px',
-                color: '#000000d9',
-                lineHeight: '24px',
-                marginLeft: '24px',
-                fontWeight: 500,
-              }}
-            >
-              查看代码文件
-            </div>
-            <div
-              style={{
-                flex: 1,
-              }}
-            >
-            </div>
-          </div>
-        }
-        onCancel={() => {
-          setModalOpen(false);
-        }}
-      >
-        <div
-          className={styles.codeblitz}
-          style={{
-            height: dialogStyle.height,
+            width: '100%',
           }}
         >
-          {app}
+          <div
+            style={{
+              fontSize: '16px',
+              color: '#000000d9',
+              lineHeight: '24px',
+              marginLeft: '24px',
+              fontWeight: 500,
+            }}
+          >
+            查看代码文件
+          </div>
         </div>
-      </Modal>
-    </div>
+      }
+      onCancel={() => {
+        setModalOpen(false);
+      }}
+    >
+      {app}
+    </Modal>
   );
 };
 
