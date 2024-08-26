@@ -650,7 +650,7 @@ __metadata:
     send: "npm:^0.17.1"
     signale: "npm:^1.4.0"
     tslib: "npm:^2.2.0"
-    uuid: "npm:^7.0.2"
+    uuid: "npm:^10.0.0"
   languageName: unknown
   linkType: soft
 
@@ -815,7 +815,7 @@ __metadata:
     "@types/fs-extra": "npm:^9.0.4"
     "@types/lodash.debounce": "npm:^4.0.6"
     "@types/md5": "npm:^2.2.1"
-    "@types/uuid": "npm:^3"
+    "@types/uuid": "npm:^10"
     assert: "npm:^2.0.0"
     fs-extra-factory: "npm:^0.2.1"
     iconv-lite-umd: "npm:^0.6.8"
@@ -824,7 +824,7 @@ __metadata:
     md5: "npm:^2.3.0"
     mobx-react-lite: "npm:^4.0.7"
     tslib: "npm:^2.2.0"
-    uuid: "npm:^3.3.2"
+    uuid: "npm:^10.0.0"
     vscode: "npm:^1.1.37"
     vscode-languageserver-types: "npm:~3.14.0"
   languageName: unknown
@@ -2957,10 +2957,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@types/uuid@npm:^3":
-  version: 3.4.13
-  resolution: "@types/uuid@npm:3.4.13"
-  checksum: 10/906c4bc29711b0fcdca4303a66a58c611a195b782b33e194ab80b4453a0aee26416bb04596a6e34a97dafa28e25fac9d5be5fcc0b5eae422e850200981d78f18
+"@types/uuid@npm:^10":
+  version: 10.0.0
+  resolution: "@types/uuid@npm:10.0.0"
+  checksum: 10/e3958f8b0fe551c86c14431f5940c3470127293280830684154b91dc7eb3514aeb79fe3216968833cf79d4d1c67f580f054b5be2cd562bebf4f728913e73e944
   languageName: node
   linkType: hard
 
@@ -16329,21 +16329,21 @@ __metadata:
   languageName: node
   linkType: hard
 
+"uuid@npm:^10.0.0":
+  version: 10.0.0
+  resolution: "uuid@npm:10.0.0"
+  bin:
+    uuid: dist/bin/uuid
+  checksum: 10/35aa60614811a201ff90f8ca5e9ecb7076a75c3821e17f0f5ff72d44e36c2d35fcbc2ceee9c4ac7317f4cc41895da30e74f3885e30313bee48fda6338f250538
+  languageName: node
+  linkType: hard
+
 "uuid@npm:^3.3.2":
   version: 3.4.0
   resolution: "uuid@npm:3.4.0"
   bin:
     uuid: ./bin/uuid
   checksum: 10/4f2b86432b04cc7c73a0dd1bcf11f1fc18349d65d2e4e32dd0fc658909329a1e0cc9244aa93f34c0cccfdd5ae1af60a149251a5f420ec3ac4223a3dab198fb2e
-  languageName: node
-  linkType: hard
-
-"uuid@npm:^7.0.2":
-  version: 7.0.3
-  resolution: "uuid@npm:7.0.3"
-  bin:
-    uuid: dist/bin/uuid
-  checksum: 10/b2a4d30ecd6581015175487426558aafd7f7b4013a2e30802c128cc28cad9abe46ecd36c02f7fbcde7908fd4672334818d56a441c0871963d6bd89d911bef2ea
   languageName: node
   linkType: hard
 
