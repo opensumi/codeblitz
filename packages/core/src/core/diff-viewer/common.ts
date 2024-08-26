@@ -33,6 +33,8 @@ export interface ITabChangedEvent {
    * -1 为没有标签页
    */
   currentIndex: number;
+
+  diffNum: number;
 }
 
 export interface IDiffViewerHandle {
