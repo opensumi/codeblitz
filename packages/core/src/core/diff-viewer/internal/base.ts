@@ -22,7 +22,7 @@ import { LiveInlineDiffPreviewer } from '@opensumi/ide-ai-native/lib/browser/wid
 import { InlineDiffHandler } from '@opensumi/ide-ai-native/lib/browser/widget/inline-diff/inline-diff.handler';
 import { InlineStreamDiffHandler } from '@opensumi/ide-ai-native/lib/browser/widget/inline-stream-diff/inline-stream-diff.handler';
 import { EResultKind } from '@opensumi/ide-ai-native/lib/common';
-import { IMenuRegistry, MenuContribution } from '@opensumi/ide-core-browser/lib/menu/next';
+import { IMenuRegistry, MenuContribution, MenuId } from '@opensumi/ide-core-browser/lib/menu/next';
 import { IEditor, IEditorDocumentModelService } from '@opensumi/ide-editor/lib/browser';
 import { listenReadable, SumiReadableStream } from '@opensumi/ide-utils/lib/stream';
 import path from 'path';
@@ -331,8 +331,10 @@ export class DiffViewerContribution implements CommandContribution, ClientAppCon
   registerCommands() {
   }
   registerMenus(registry: IMenuRegistry) {
-    registry.unregisterMenuItem('editor/title', EDITOR_COMMANDS.SPLIT_TO_RIGHT.id);
-    registry.unregisterMenuItem('editor/title', EDITOR_COMMANDS.CLOSE_ALL_IN_GROUP.id);
+    registry.unregisterMenuItem(MenuId.EditorTitle, EDITOR_COMMANDS.SPLIT_TO_RIGHT.id);
+    registry.unregisterMenuItem(MenuId.EditorTitle, EDITOR_COMMANDS.CLOSE_ALL_IN_GROUP.id);
+    registry.unregisterMenuId(MenuId.EditorTitle);
+    registry.unregisterMenuId(MenuId.EditorTitleRun);
   }
   dispose() {
     this._disposables.dispose();
