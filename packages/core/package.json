@@ -72,7 +72,7 @@
     "@opensumi/ide-theme": "3.2.5-next-1724135016.0",
     "@opensumi/ide-toolbar": "3.2.5-next-1724135016.0",
     "@opensumi/ide-variable": "3.2.5-next-1724135016.0",
-    "@opensumi/ide-webview": "3.2.5-next-1724135016.0",
+    "@opensumi/ide-webview": "3.2.5-next-1724676350.0",
     "@opensumi/ide-workspace": "3.2.5-next-1724135016.0",
     "@opensumi/ide-workspace-edit": "3.2.5-next-1724135016.0",
     "@opensumi/textmate-languages": "^2.7.0",
