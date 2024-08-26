@@ -8,6 +8,7 @@ import {
   IChatProgress,
   IReporter,
 } from '@opensumi/ide-core-common';
+import { ITheme } from '@opensumi/ide-theme';
 import { SumiReadableStream } from '@opensumi/ide-utils/lib/stream';
 import { FileSystemConfiguration, FileSystemInstance } from '../server/node';
 
@@ -235,6 +236,9 @@ export interface RuntimeConfig {
     providerEditorInlineChat?: () => IEditorInlineChat[];
     service?: IAIBackService<IAIBackServiceResponse, SumiReadableStream<IChatProgress>>;
   };
+
+  onWillApplyTheme?: (theme: ITheme) => Record<string, string | undefined>;
+  tabBarRightExtraContent?: IExtraContent;
 }
 
 export interface AppCommonConfig {
@@ -334,4 +338,9 @@ export interface FileSearchOptions extends SearchOptions {
    * 要返回的最大结果数
    */
   maxResults?: number;
+}
+
+export interface IExtraContent {
+  component?: React.ComponentType<any>;
+  initialProps?: any;
 }

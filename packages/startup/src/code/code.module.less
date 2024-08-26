@@ -1,0 +1,54 @@
+.codeblitz-dialog {
+  background: #ffffff;
+  border-radius: 4px;
+  box-shadow: 0px 12px 48px 16px #00000008, 0px 9px 28px 0px #0000000d, 0px 6px 16px -8px #00000014;
+  & > div:nth-child(2) {
+    height: 100%;
+  }
+  :global(.right-slot) {
+    div[class^='tab_panel'] {
+      border-right: 1px solid #00000000 !important;
+    }
+    div[class^='tab_panel'] {
+      border-left: 1px solid #00000000 !important;
+    }
+    #explorer div[class^='file_tree'] {
+      font-size: 14px;
+    }
+  }
+
+  :global {
+    .ant-modal-content {
+      padding: 0;
+      overflow: hidden;
+    }
+
+    .kt-scrollbar .scrollbar-decoration-vertical {
+      display: none;
+    }
+  }
+
+  :global {
+    div[class*='tab_panel'] {
+      &::before {
+        content: none;
+      }
+    }
+    #main-horizontal-ai {
+      padding-top: 40px !important;
+      padding-right: 10px !important;
+    }
+
+    .codeblitz-dark {
+      background-color: transparent !important;
+    }
+    
+    div[data-menu-id='activityBar/extra'] {
+      display: none;
+    }
+
+    #opensumi-quickpick {
+      margin-top: 110px;
+    }
+  }
+}

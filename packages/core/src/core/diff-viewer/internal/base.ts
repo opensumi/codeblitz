@@ -20,6 +20,7 @@ import { Autowired } from '@opensumi/di';
 import { InlineChatController } from '@opensumi/ide-ai-native/lib/browser/widget/inline-chat/inline-chat-controller';
 import { LiveInlineDiffPreviewer } from '@opensumi/ide-ai-native/lib/browser/widget/inline-diff/inline-diff-previewer';
 import { InlineDiffHandler } from '@opensumi/ide-ai-native/lib/browser/widget/inline-diff/inline-diff.handler';
+import { InlineStreamDiffHandler } from '@opensumi/ide-ai-native/lib/browser/widget/inline-stream-diff/inline-stream-diff.handler';
 import { EResultKind } from '@opensumi/ide-ai-native/lib/common';
 import { IMenuRegistry, MenuContribution } from '@opensumi/ide-core-browser/lib/menu/next';
 import { IEditor, IEditorDocumentModelService } from '@opensumi/ide-editor/lib/browser';
@@ -232,10 +233,25 @@ export class DiffViewerContribution implements CommandContribution, ClientAppCon
         newPath = this.stripDirectory(newPath);
       }
 
-      this._onDidTabChange.fire({
+      const event = {
         newPath,
         currentIndex,
-      });
+        diffNum: 0,
+      };
+
+      if (e?.uri) {
+        const resourceDiff = (this.inlineDiffHandler as any)._previewerNodeStore.get(e?.uri.toString()) as
+          | InlineStreamDiffHandler
+          | null;
+
+        if (resourceDiff) {
+          const snapshot = resourceDiff.createSnapshot();
+          const unresolved = snapshot.decorationSnapshotData.partialEditWidgetList.filter(v => v.status === 'pending');
+          event.diffNum = unresolved.length;
+        }
+      }
+
+      this._onDidTabChange.fire(event);
     }));
 
     const sequencer = new Sequencer();

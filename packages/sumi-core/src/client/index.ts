@@ -127,6 +127,14 @@ export interface IAppOpts extends IClientAppOpts, IServerAppOpts {
    * If you want to use the legacy design, set this to true.
    */
   useLegacyDesign?: boolean;
+
+  /**
+   * @default false
+   *
+   * Simplify the explorer panel.
+   * Will remove outline and opened editor tabs.
+   */
+  useSimplifyExplorerPanel?: boolean;
 }
 
 export { IClientAppOpts };

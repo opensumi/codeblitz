@@ -75,11 +75,9 @@ export const modules: ModuleConstructor[] = [
   DebugModule,
   VariableModule,
   KeymapsModule,
-  // TerminalNextModule,
 
   // Extension Modules
   ExtensionModule,
-  // FeatureExtensionModule,
   ExtensionClientManagerModule,
   MonacoEnhanceModule,
 
@@ -88,7 +86,6 @@ export const modules: ModuleConstructor[] = [
   // addons
   ClientAddonModule,
   CommentsModule,
-  // TaskModule,
 
   // CodeBlitz
   ClientModule,

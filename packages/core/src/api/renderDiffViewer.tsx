@@ -1,4 +1,5 @@
 import { deletionLogPath } from '@codeblitzjs/ide-browserfs/lib/backend/OverlayFS';
+import { Injector } from '@opensumi/di';
 import {
   FILES_DEFAULTS,
   ModuleConstructor,
@@ -11,19 +12,13 @@ import React from 'react';
 import { IDiffViewerProps } from '../core/diff-viewer';
 import { DiffViewerModule } from '../core/diff-viewer/module';
 import { BoxPanel, SplitPanel } from '../editor';
-import { Injector } from '@opensumi/di';
 import { AppRenderer, IAppRendererProps } from './renderApp';
 import '../core/diff-viewer/languages-patch';
+import { RuntimeConfig } from '@codeblitzjs/ide-sumi-core';
 import { extensionMetadata } from '../core/diff-viewer/extension-patch';
 
-export {
-  IDiffViewerProps,
-} from '../core/diff-viewer/common';
-export type {
-  IDiffViewerHandle,
-  IDiffViewerTab,
-  IExtendPartialEditEvent,
-} from '../core/diff-viewer/common';
+export { IDiffViewerProps } from '../core/diff-viewer/common';
+export type { IDiffViewerHandle, IDiffViewerTab, IExtendPartialEditEvent } from '../core/diff-viewer/common';
 
 export const defaultLayoutConfig = {
   [SlotLocation.action]: {
@@ -56,6 +51,10 @@ export function DiffViewerLayoutComponent(): React.ReactElement {
 export const DiffViewerRenderer = (_props: IDiffViewerProps) => {
   const props = merge({
     appConfig: {},
+    runtimeConfig: {
+      onWillApplyTheme: _props.onWillApplyTheme,
+      tabBarRightExtraContent: _props.tabBarRightExtraContent,
+    } as RuntimeConfig,
   }, _props) as IAppRendererProps;
 
   if (!props.appConfig.injector) {
@@ -71,10 +70,14 @@ export const DiffViewerRenderer = (_props: IDiffViewerProps) => {
 
   const appConfig = props.appConfig;
 
-  const appModules: ModuleConstructor[] = appConfig?.modules || [];
+  let appModules: ModuleConstructor[] = appConfig?.modules || [];
   if (!appModules.includes(DiffViewerModule)) {
-    appModules.unshift(DiffViewerModule);
+    appModules = [
+      DiffViewerModule,
+      ...appModules,
+    ];
   }
+
   delete appConfig?.modules;
 
   const workspaceDir = appConfig?.workspaceDir || 'workspace-' + randomString(8);
@@ -98,7 +101,7 @@ export const DiffViewerRenderer = (_props: IDiffViewerProps) => {
         'general.theme': 'opensumi-light',
         'editor.minimap': false,
         'ai.native.inlineDiff.preview.mode': 'inlineLive',
-        "editor.showActionWhenGroupEmpty": true,
+        'editor.showActionWhenGroupEmpty': true,
         'editor.autoSave': 'afterDelay',
         'application.confirmExit': 'never',
         'editor.guides.bracketPairs': false,

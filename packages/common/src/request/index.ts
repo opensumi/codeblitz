@@ -86,7 +86,13 @@ const requestImpl: any = async (url: string, options?: RequestOptions) => {
     opts.headers = headers;
   }
 
-  const response = await fetch(urlInstance.toString(), opts);
+  let inputUrl = urlInstance.toString();
+  if (url.startsWith('/')) {
+    // 如果是相对路径，则移除掉 origin, 不破坏用户的期望输出
+    inputUrl = urlInstance.pathname + urlInstance.search + urlInstance.hash;
+  }
+
+  const response = await fetch(inputUrl, opts);
 
   const validateStatus = options.validateStatus || defaultValidateStatus;
 
@@ -99,7 +105,7 @@ const requestImpl: any = async (url: string, options?: RequestOptions) => {
     throw new ResponseError(
       resMsg?.message || response.statusText || 'Request Error',
       'ResponseError',
-      { url: urlInstance.toString(), ...opts },
+      { url: inputUrl, ...opts },
       response,
     );
   }
