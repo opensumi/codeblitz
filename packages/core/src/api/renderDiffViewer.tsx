@@ -48,27 +48,27 @@ export function DiffViewerLayoutComponent(): React.ReactElement {
   );
 }
 
-export const DiffViewerRenderer = (_props: IDiffViewerProps) => {
-  const props = merge({
+export const DiffViewerRenderer = (props: IDiffViewerProps) => {
+  const mergedProps = merge({
     appConfig: {},
     runtimeConfig: {
-      onWillApplyTheme: _props.onWillApplyTheme,
-      tabBarRightExtraContent: _props.tabBarRightExtraContent,
+      onWillApplyTheme: props.onWillApplyTheme,
+      tabBarRightExtraContent: props.tabBarRightExtraContent,
     } as RuntimeConfig,
-  }, _props) as IAppRendererProps;
+  }, props) as IAppRendererProps;
 
-  if (!props.appConfig.injector) {
-    props.appConfig.injector = new Injector();
+  if (!mergedProps.appConfig.injector) {
+    mergedProps.appConfig.injector = new Injector();
   }
 
-  const injector = props.appConfig.injector;
+  const injector = mergedProps.appConfig.injector;
 
   injector.addProviders({
     token: IDiffViewerProps,
-    useValue: props,
+    useValue: mergedProps,
   });
 
-  const appConfig = props.appConfig;
+  const appConfig = mergedProps.appConfig;
 
   let appModules: ModuleConstructor[] = appConfig?.modules || [];
   if (!appModules.includes(DiffViewerModule)) {
@@ -133,7 +133,7 @@ export const DiffViewerRenderer = (_props: IDiffViewerProps) => {
         },
       },
     }),
-  }, props);
+  }, mergedProps);
 
   return (
     <AppRenderer
@@ -141,3 +141,5 @@ export const DiffViewerRenderer = (_props: IDiffViewerProps) => {
     />
   );
 };
+
+export const DiffPreviewer = DiffViewerRenderer;

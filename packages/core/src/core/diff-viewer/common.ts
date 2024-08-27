@@ -115,7 +115,16 @@ export interface IOverrideAppRendererProps extends IOverrideAppRendererConfig {
 }
 
 export const IDiffViewerProps = Symbol('IDiffViewerProps');
+
+export interface IDiffItem {
+  path: string;
+  oldCode: string;
+  newCode: string;
+}
+
 export interface IDiffViewerProps extends Partial<IOverrideAppRendererProps> {
+  data?: IDiffItem[];
+
   onRef: (handle: IDiffViewerHandle) => void;
 
   onWillApplyTheme?: (theme: ITheme) => Record<string, string | undefined>;
