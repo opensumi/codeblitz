@@ -64,6 +64,10 @@ export class DiffViewerContribution implements CommandContribution, ClientAppCon
     return path.join(this.appConfig.workspaceDir, filePath);
   }
 
+  getFullPathUri(filePath: string) {
+    return URI.file(this.getFullPath(filePath));
+  }
+
   stripDirectory(filePath: string) {
     const result = removeStart(filePath, this.appConfig.workspaceDir);
     if (result.startsWith('/')) {
@@ -215,6 +219,32 @@ export class DiffViewerContribution implements CommandContribution, ClientAppCon
       return getAllTabs().findIndex((tab) => tab.filePath === aPath);
     };
 
+    const getDiffInfoForUri = (uri: URI) => {
+      const result = {
+        unresolved: 0,
+        total: 0,
+        toAddedLines: 0,
+      };
+      const resourceDiff = (this.inlineDiffHandler as any)._previewerNodeStore.get(uri.toString()) as
+        | InlineStreamDiffHandler
+        | null;
+
+      if (resourceDiff) {
+        const snapshot = resourceDiff.createSnapshot();
+        const list = snapshot.decorationSnapshotData.partialEditWidgetList;
+        const unresolved = list.filter(v => v.status === 'pending');
+        result.total = list.length;
+        result.unresolved = unresolved.length;
+        result.toAddedLines = snapshot.decorationSnapshotData.addedDecList.filter(v => !v.isHidden).reduce(
+          (acc, item) => {
+            return acc + item.length;
+          },
+          0,
+        );
+      }
+      return result;
+    };
+
     disposable.addDispose(this.inlineDiffHandler.onPartialEditEvent((e) => {
       const fsPath = e.uri.fsPath;
 
@@ -240,15 +270,8 @@ export class DiffViewerContribution implements CommandContribution, ClientAppCon
       };
 
       if (e?.uri) {
-        const resourceDiff = (this.inlineDiffHandler as any)._previewerNodeStore.get(e?.uri.toString()) as
-          | InlineStreamDiffHandler
-          | null;
-
-        if (resourceDiff) {
-          const snapshot = resourceDiff.createSnapshot();
-          const unresolved = snapshot.decorationSnapshotData.partialEditWidgetList.filter(v => v.status === 'pending');
-          event.diffNum = unresolved.length;
-        }
+        const diffInfo = getDiffInfoForUri(e.uri);
+        event.diffNum = diffInfo.total - diffInfo.unresolved;
       }
 
       this._onDidTabChange.fire(event);
@@ -308,9 +331,15 @@ export class DiffViewerContribution implements CommandContribution, ClientAppCon
         if (currentTabIdx === -1) {
           return;
         }
+        const uri = this.getFullPathUri(currentEditorFilePath);
+        const diffInfo = getDiffInfoForUri(uri);
+
+        const fileName = path.basename(currentEditorFilePath);
         return {
           index: currentTabIdx,
           filePath: currentEditorFilePath,
+          fileName,
+          ...diffInfo,
         };
       },
       getTabAtIndex: (index) => {
