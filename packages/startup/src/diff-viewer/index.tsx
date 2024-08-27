@@ -57,7 +57,7 @@ const App = () => {
   const memo = useMemo(() => (
     <DiffViewerRenderer
       tabBarRightExtraContent={{
-        // component: () => <div>代码生成中</div>,
+        component: () => <div>代码生成中</div>,
       }}
       appConfig={{
         layoutViewSize: {},
