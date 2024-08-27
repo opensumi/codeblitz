@@ -31,14 +31,12 @@
     "md5": "^2.3.0",
     "mobx-react-lite": "^4.0.7",
     "tslib": "^2.2.0",
-    "uuid": "^10.0.0",
     "vscode-languageserver-types": "~3.14.0"
   },
   "devDependencies": {
     "@types/fs-extra": "^9.0.4",
     "@types/lodash.debounce": "^4.0.6",
     "@types/md5": "^2.2.1",
-    "@types/uuid": "^10",
     "vscode": "^1.1.37"
   }
 }
