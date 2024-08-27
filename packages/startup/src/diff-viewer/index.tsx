@@ -56,6 +56,7 @@ const App = () => {
 
   const memo = useMemo(() => (
     <DiffViewerRenderer
+      data={data}
       tabBarRightExtraContent={{
         component: () => <div>代码生成中</div>,
       }}
@@ -83,13 +84,6 @@ const App = () => {
         handle.onDidTabChange((e) => {
           console.log('onDidTabChange', e.newPath);
           setEventInfo(e);
-        });
-        data.forEach(v => {
-          handleRef.current!.openDiffInTab(
-            v.path,
-            v.oldCode,
-            v.newCode,
-          );
         });
 
         setTimeout(() => {
