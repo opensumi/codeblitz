@@ -271,7 +271,7 @@ export class DiffViewerContribution implements CommandContribution, ClientAppCon
 
       if (e?.uri) {
         const diffInfo = getDiffInfoForUri(e.uri);
-        event.diffNum = diffInfo.total - diffInfo.unresolved;
+        event.diffNum = diffInfo.unresolved;
       }
 
       this._onDidTabChange.fire(event);
