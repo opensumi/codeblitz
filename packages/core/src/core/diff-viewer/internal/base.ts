@@ -107,6 +107,7 @@ export class DiffViewerContribution implements ClientAppContribution, MenuContri
     }
 
     const editor = openResourceResult.group.codeEditor;
+    const index = openResourceResult.group.resources.indexOf(openResourceResult.resource);
 
     if (oldContent === newContent) {
       this.inlineDiffHandler.destroyPreviewer();
@@ -135,6 +136,16 @@ export class DiffViewerContribution implements ClientAppContribution, MenuContri
     previewer.setValue(newContent);
 
     await whenReady;
+    const diffInfo = this.getDiffInfoForUri(uri);
+    if (diffInfo) {
+      // 因为 onTabChange 时机早于应用上 diff 的时机，这里补发一个 onDidTabChange 事件
+      this._onDidTabChange.fire({
+        currentIndex: index,
+        diffNum: diffInfo.unresolved,
+        newPath: filePath,
+      });
+    }
+
     previewer.layout();
     previewer.revealFirstDiff();
   };
@@ -226,9 +237,16 @@ export class DiffViewerContribution implements ClientAppContribution, MenuContri
       total: 0,
       toAddedLines: 0,
     };
-    const resourceDiff = (this.inlineDiffHandler as any)._previewerNodeStore.get(uri.toString()) as
+    let resourceDiff = (this.inlineDiffHandler as any)._previewerNodeStore.get(uri.toString()) as
       | InlineStreamDiffHandler
-      | null;
+      | undefined;
+
+    if (!resourceDiff) {
+      const previewer = this.inlineDiffHandler.getPreviewer() as LiveInlineDiffPreviewer;
+      if (previewer && previewer.isModel(uri.toString())) {
+        resourceDiff = previewer.getNode();
+      }
+    }
 
     if (resourceDiff) {
       const snapshot = resourceDiff.createSnapshot();
