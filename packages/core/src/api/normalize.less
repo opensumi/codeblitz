@@ -1,19 +1,16 @@
 @scrollbarwidth: 10px;
 
 codeblitz-root {
+  /* 防止 overlay/modal 撑开页面元素 */
+  overflow: hidden;
+  /* 防止 mac 上的回退手势 */
+  overscroll-behavior-x: none;
   margin: 0;
   padding: 0;
   font-family: -apple-system, BlinkMacSystemFont, 'Segoe WPC', 'Segoe UI', system-ui, 'Ubuntu', 'Droid Sans', sans-serif;
   // 全局默认字体颜色
   color: var(--foreground);
   background-color: var(--editor-background);
-}
-
-codeblitz-root {
-  /* 防止 overlay/modal 撑开页面元素 */
-  overflow: hidden;
-  /* 防止 mac 上的回退手势 */
-  overscroll-behavior-x: none;
 
   input::placeholder,
   textarea::placeholder {
@@ -74,26 +71,13 @@ codeblitz-root {
   li {
     list-style: none;
   }
-}
 
-/* ---- 该样式主要用于让带 tabindex='-1' 的元素焦点态时拥有高亮边框，以便于实现如Tree，List组件焦点态时的自动高亮边框效果  ---- */
-[tabindex='-1'] {
-  &:focus {
-    outline-width: 1px;
-    outline-style: solid;
-    outline-offset: -1px;
+  /* ---- 该样式主要用于让带 tabindex='-1' 的元素焦点态时拥有高亮边框，以便于实现如Tree，List组件焦点态时的自动高亮边框效果  ---- */
+  [tabindex='-1'] {
+    &:focus {
+      outline-width: 1px;
+      outline-style: solid;
+      outline-offset: -1px;
+    }
   }
-}
-/* -------- */
-
-::selection {
-  color: inherit;
-  background-color: var(--selection-background);
-}
-
-:root {
-  --base-font-size: 13px;
-  --tabBar-height: 35px;
-  overflow-x: overlay;
-  overflow-y: overlay;
 }
