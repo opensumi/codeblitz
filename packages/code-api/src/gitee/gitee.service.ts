@@ -16,6 +16,7 @@ import {
   FileAction,
   FileActionHeader,
   FileActionResult,
+  GetEntryInfoParam,
   GitlensBlame,
   ICodeAPIService,
   IRepositoryModel,
@@ -64,7 +65,7 @@ export class GiteeAPIService implements ICodeAPIService {
     this._PRIVATE_TOKEN = this.config.token || this.helper.GITEE_TOKEN || '';
   }
 
-  getEntryInfo?(repo: IRepositoryModel, entry: EntryParam): Promise<EntryInfo> {
+  getEntryInfo(repo: IRepositoryModel, entry: GetEntryInfoParam): Promise<EntryInfo> {
     throw new Error('Method not implemented.');
   }
   getBranchNames?(repo: IRepositoryModel): Promise<string[]> {

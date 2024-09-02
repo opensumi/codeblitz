@@ -45,7 +45,7 @@ import {
   IAIBackServiceOption,
   IChatProgress,
   sleep,
-} from '@codeblitzjs/ide-core/lib/modules/opensumi__ide-core-browser';
+} from '@opensumi/ide-core-browser';
 
 (window as any).alex = Alex;
 

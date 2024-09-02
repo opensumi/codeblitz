@@ -21,7 +21,7 @@ import {
   TreeEntry,
   User,
 } from '../common/types';
-import type { EntryParam, IRepositoryModel } from '../common/types';
+import type { EntryParam, GetEntryInfoParam, IRepositoryModel } from '../common/types';
 import { CodeAPI as ConflictAPI, CodePlatform, CommitFileStatus } from '../common/types';
 import { retry, RetryError } from '../common/utils';
 import { API } from './types';
@@ -93,7 +93,7 @@ export class GitHubAPIService implements ICodeAPIService {
   ): Promise<ConflictAPI.ResponseCommit> {
     throw new Error('Method not implemented.');
   }
-  getEntryInfo?(repo: IRepositoryModel, entry: EntryParam): Promise<EntryInfo> {
+  getEntryInfo(repo: IRepositoryModel, entry: GetEntryInfoParam): Promise<EntryInfo> {
     throw new Error('Method not implemented.');
   }
   getBranchNames?(repo: IRepositoryModel): Promise<string[]> {

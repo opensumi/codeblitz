@@ -2,7 +2,7 @@ import { CodeModelService } from '@codeblitzjs/ide-code-service';
 import {
   IMainLayoutService,
   MainLayoutContribution,
-} from '@codeblitzjs/ide-core/lib/modules/opensumi__ide-main-layout';
+} from '@opensumi/ide-main-layout';
 import { Autowired, Injectable, Provider } from '@opensumi/di';
 import {
   BrowserModule,

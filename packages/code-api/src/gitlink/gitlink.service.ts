@@ -11,6 +11,7 @@ import type {
   EntryParam,
   FileAction,
   FileActionHeader,
+  GetEntryInfoParam,
   GitlensBlame,
   ICodeAPIService,
   IRepositoryModel,
@@ -74,7 +75,7 @@ export class GitLinkAPIService implements ICodeAPIService {
   ): Promise<ConflictAPI.ResponseCommit> {
     throw new Error('Method not implemented.');
   }
-  getEntryInfo?(_repo: IRepositoryModel, _entry: EntryParam): Promise<EntryInfo> {
+  getEntryInfo(_repo: IRepositoryModel, _entry: GetEntryInfoParam): Promise<EntryInfo> {
     throw new Error('Method not implemented.');
   }
   getBranchNames?(_repo: IRepositoryModel): Promise<string[]> {

@@ -9,6 +9,7 @@ import type {
   CommitParams,
   EntryInfo,
   EntryParam,
+  GetEntryInfoParam,
   ICodeAPIService,
   IRepositoryModel,
   Project,
@@ -80,7 +81,7 @@ export class GitLabAPIService implements ICodeAPIService {
   ): Promise<ConflictAPI.ResponseCommit> {
     throw new Error('Method not implemented.');
   }
-  getEntryInfo?(repo: IRepositoryModel, entry: EntryParam): Promise<EntryInfo> {
+  getEntryInfo(repo: IRepositoryModel, entry: GetEntryInfoParam): Promise<EntryInfo> {
     throw new Error('Method not implemented.');
   }
   getBranchNames?(repo: IRepositoryModel): Promise<string[]> {

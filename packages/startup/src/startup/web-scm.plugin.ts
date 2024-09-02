@@ -1,6 +1,6 @@
 import type { Uri } from '@codeblitzjs/ide-core';
 import type { IPluginAPI } from '@codeblitzjs/ide-core/lib/editor';
-import { Deferred } from '@codeblitzjs/ide-core/lib/modules/opensumi__ide-core-browser';
+import { Deferred } from '@opensumi/ide-utils';
 import * as localforage from 'localforage';
 
 export const PLUGIN_ID = 'web-scm';

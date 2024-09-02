@@ -1,4 +1,4 @@
-import { CodeAPI, CodePlatform, CommitFileChange, CommitParams, CommitRecord } from '@codeblitzjs/ide-code-api';
+import { CodeAPI, CodePlatform, CommitFileChange, CommitParams, CommitRecord, EntryInfo } from '@codeblitzjs/ide-code-api';
 import { Autowired } from '@opensumi/di';
 import { IClipboardService, IOpenerService } from '@opensumi/ide-core-browser';
 import { Command, CommandContribution, CommandRegistry, Disposable, Domain } from '@opensumi/ide-core-common';
@@ -58,6 +58,7 @@ export class CommandsContribution extends Disposable implements CommandContribut
       CODE_SERVICE_COMMANDS.COMMIT_DETAIL,
       CODE_SERVICE_COMMANDS.COMMIT_COMPARE,
       CODE_SERVICE_COMMANDS.COMMIT_FILE,
+      CODE_SERVICE_COMMANDS.GET_ENTRY_INFO,
       CODE_SERVICE_COMMANDS.REMOTE_URL,
       CODE_SERVICE_COMMANDS.CHECKOUT_BRANCH,
       CODE_SERVICE_COMMANDS.CHECKOUT_COMMIT,
@@ -244,8 +245,20 @@ export class CommandsContribution extends Disposable implements CommandContribut
     options?: any,
   ): Promise<Uint8Array> {
     const repo = this.codeModel.getRepository(repoPath);
-    if (!repo) throw new Error(`${filePath} not exists`);
+    if (!repo) throw new Error(`repo ${repoPath} not exists`);
     return repo.request.getBlobByCommitPath(commitHash, filePath, options);
+  }
+  async getEntryInfo(
+    repoPath: string,
+    refName: string,
+    filePath: string,
+  ): Promise<EntryInfo> {
+    const repo = this.codeModel.getRepository(repoPath);
+    if (!repo) throw new Error(`repo ${repoPath} not exists`);
+    return repo.request.getEntryInfo({
+      ref_name: refName,
+      path: filePath,
+    });
   }
 
   async remoteUrl(repoPath: string): Promise<string | null> {
