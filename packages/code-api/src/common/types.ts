@@ -183,6 +183,7 @@ export interface EntryInfo {
    * file size
    */
   size: number;
+  mode: string;
   /**
    * file type
    */
