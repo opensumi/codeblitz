@@ -41,7 +41,7 @@
     "@opensumi/ide-debug": "3.2.5-next-1724743242.0",
     "@opensumi/ide-decoration": "3.2.5-next-1724743242.0",
     "@opensumi/ide-design": "3.2.5-next-1724743242.0",
-    "@opensumi/ide-editor": "3.2.5-next-1724743242.0",
+    "@opensumi/ide-editor": "3.3.0",
     "@opensumi/ide-explorer": "3.2.5-next-1724743242.0",
     "@opensumi/ide-express-file-server": "3.2.5-next-1724743242.0",
     "@opensumi/ide-extension": "3.2.5-next-1724743242.0",
