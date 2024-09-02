@@ -183,6 +183,7 @@ export interface EntryInfo {
    * file size
    */
   size: number;
+  mode: string;
   /**
    * file type
    */
@@ -306,6 +307,11 @@ export interface Branch {
   };
 }
 
+export interface GetEntryInfoParam {
+  ref_name: string;
+  path: string;
+}
+
 export interface User {
   email: string;
   name: string;
@@ -404,7 +410,7 @@ export interface ICodeAPIService {
   /**
    * 获取 entry 相关信息
    */
-  getEntryInfo?(repo: IRepositoryModel, entry: EntryParam): Promise<EntryInfo>;
+  getEntryInfo(repo: IRepositoryModel, entry: GetEntryInfoParam): Promise<EntryInfo>;
   /**
    * 获取所有分支
    */

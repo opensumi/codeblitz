@@ -5,7 +5,7 @@ import { IReporterService, localize, LRUCache, MessageType } from '@opensumi/ide
 import { DEFAULT_SEARCH_IN_WORKSPACE_LIMIT } from '@opensumi/ide-search';
 import { CodePlatformRegistry } from '../common/config';
 import { HelperService } from '../common/service';
-import { Branch, FileAction, FileActionHeader, FileActionResult, Project } from '../common/types';
+import { Branch, FileAction, FileActionHeader, FileActionResult, GetEntryInfoParam, Project } from '../common/types';
 import {
   BranchOrTag,
   CodePlatform,
@@ -194,21 +194,21 @@ export class CodeUPAPIService implements ICodeAPIService {
     return new Uint8Array(new TextEncoder().encode(infoAndBlobs?.content || ''));
   }
 
-  // async getEntryInfo(repo: IRepositoryModel, entry: EntryParam) {
-  //   const data = await this.request<API.ResponseGetEntry>(
-  //     `/api/v3/projects/${this.getProjectId(repo)}/repository/tree_entry`,
-  //     {
-  //       params: {
-  //         ref_name: repo.commit,
-  //         path: entry.path,
-  //       },
-  //     }
-  //   );
-  //   return {
-  //     size: data.size,
-  //     fileType: data.render === 'download' ? 'binary' : data.render,
-  //   } as const;
-  // }
+  async getEntryInfo(repo: IRepositoryModel, entry: GetEntryInfoParam) {
+    const data = await this.request<API.ResponseGetEntry>(
+      `/api/v3/projects/${this.getProjectId(repo)}/repository/tree_entry`,
+      {
+        params: {
+          ref_name: repo.commit,
+          path: entry.path,
+        },
+      }
+    );
+    return {
+      ...data,
+      fileType: data.render === 'download' ? 'binary' : data.render,
+    } as const;
+  }
 
   async getBranches(repo: IRepositoryModel): Promise<BranchOrTag[]> {
     return this.request<API.ResponseGetRefs>(

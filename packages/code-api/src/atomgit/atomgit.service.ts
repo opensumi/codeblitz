@@ -13,6 +13,7 @@ import {
   EntryParam,
   FileAction,
   FileActionHeader,
+  GetEntryInfoParam,
   GitlensBlame,
   ICodeAPIService,
   IRepositoryModel,
@@ -44,7 +45,7 @@ export class AtomGitAPIService implements ICodeAPIService {
   constructor() {
     this._PRIVATE_TOKEN = this.config.token || this.helper.ATOMGIT_TOKEN || '';
   }
-  getEntryInfo?(repo: IRepositoryModel, entry: EntryParam): Promise<EntryInfo> {
+  getEntryInfo(repo: IRepositoryModel, entry: GetEntryInfoParam): Promise<EntryInfo> {
     throw new Error('Method not implemented.');
   }
   getBranchNames?(repo: IRepositoryModel): Promise<string[]> {

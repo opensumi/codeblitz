@@ -49,6 +49,11 @@ export namespace CODE_SERVICE_COMMANDS {
     category: CATEGORY,
   };
 
+  export const GET_ENTRY_INFO: Command = {
+    id: 'code-service.getEntryInfo',
+    category: CATEGORY,
+  };
+
   export const REMOTE_URL: Command = {
     id: 'code-service.remoteUrl',
     category: CATEGORY,

@@ -3,11 +3,11 @@ import {
   ComponentContribution,
   ComponentRegistry,
   getIcon,
-} from '@codeblitzjs/ide-core/lib/modules/opensumi__ide-core-browser';
+} from '@opensumi/ide-core-browser';
 import {
   IMainLayoutService,
   MainLayoutContribution,
-} from '@codeblitzjs/ide-core/lib/modules/opensumi__ide-main-layout';
+} from '@opensumi/ide-main-layout';
 import { Autowired, Injectable, Provider } from '@opensumi/di';
 import {
   BrowserModule,
