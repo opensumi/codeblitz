@@ -65,7 +65,7 @@
     "@opensumi/ide-preferences": "3.2.5-next-1724743242.0",
     "@opensumi/ide-quick-open": "3.2.5-next-1724743242.0",
     "@opensumi/ide-scm": "3.2.5-next-1724743242.0",
-    "@opensumi/ide-search": "3.2.5-next-1724743242.0",
+    "@opensumi/ide-search": "3.3.0",
     "@opensumi/ide-status-bar": "3.2.5-next-1724743242.0",
     "@opensumi/ide-storage": "3.2.5-next-1724743242.0",
     "@opensumi/ide-testing": "3.2.5-next-1724743242.0",
