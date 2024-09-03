@@ -21,7 +21,7 @@ import { Autowired } from '@opensumi/di';
 import { InlineChatController } from '@opensumi/ide-ai-native/lib/browser/widget/inline-chat/inline-chat-controller';
 import { LiveInlineDiffPreviewer } from '@opensumi/ide-ai-native/lib/browser/widget/inline-diff/inline-diff-previewer';
 import { InlineDiffHandler } from '@opensumi/ide-ai-native/lib/browser/widget/inline-diff/inline-diff.handler';
-import { InlineStreamDiffHandler } from '@opensumi/ide-ai-native/lib/browser/widget/inline-stream-diff/inline-stream-diff.handler';
+import { IInlineStreamDiffSnapshotData, InlineStreamDiffHandler } from '@opensumi/ide-ai-native/lib/browser/widget/inline-stream-diff/inline-stream-diff.handler';
 import { AcceptPartialEditWidget } from '@opensumi/ide-ai-native/lib/browser/widget/inline-stream-diff/live-preview.component';
 import { EResultKind } from '@opensumi/ide-ai-native/lib/common';
 import { IMenuRegistry, MenuContribution, MenuId } from '@opensumi/ide-core-browser/lib/menu/next';
@@ -246,12 +246,28 @@ export class DiffViewerContribution implements ClientAppContribution, MenuContri
    * 1. 已经采纳的代码信息
    * 2. 还未处理的代码信息
    */
-  getTotalCodeInfo(partialEditWidgetList: AcceptPartialEditWidget[]): ITotalCodeInfo {
-    const resolvedList = partialEditWidgetList.filter((w) => w.isAccepted);
-    const unresolvedList = partialEditWidgetList.filter((w) => w.status === 'pending');
+  getTotalCodeInfo(snapshot: IInlineStreamDiffSnapshotData): ITotalCodeInfo {
+    const partialEditWidgetList = snapshot.decorationSnapshotData.partialEditWidgetList;
 
-    const resolvedStatus = caculate(resolvedList);
-    const unresolvedStatus = caculate(unresolvedList);
+    // 代码除了新增和删除行，还需要统计变更行
+    // 1. 新增 N 行 => N
+    // 2. 删除 N 行 => N
+    // 3. 新增 M 行，删除 N 行 => max(M, N)
+    // 综上所述，变更行数 = sum(list.map(item => max(新增行数, 删除行数)))
+    const resolvedStatus = caculate(partialEditWidgetList);
+    const unresolvedStatus = { added: 0, deleted: 0, changed: 0 };
+
+    partialEditWidgetList.forEach((v, idx) => {
+      if (v.status === 'pending') {
+        const addedDec =  snapshot.decorationSnapshotData.addedDecList[idx];
+        const removedWidget = snapshot.decorationSnapshotData.removedWidgetList[idx];
+        const addedLinesCount = addedDec?.length || 0;
+        const deletedLinesCount = removedWidget?.height || 0;
+        unresolvedStatus.added += addedLinesCount;
+        unresolvedStatus.deleted += deletedLinesCount;
+        unresolvedStatus.changed += Math.max(addedLinesCount, deletedLinesCount);
+      }
+    });
 
     return {
       totalAddedLinesCount: resolvedStatus.added,
@@ -261,12 +277,6 @@ export class DiffViewerContribution implements ClientAppContribution, MenuContri
       unresolvedDeletedLinesCount: unresolvedStatus.deleted,
       unresolvedChangedLinesCount: unresolvedStatus.changed,
     };
-
-    // 代码除了新增和删除行，还需要统计变更行
-    // 1. 新增 N 行 => N
-    // 2. 删除 N 行 => N
-    // 3. 新增 M 行，删除 N 行 => max(M, N)
-    // 综上所述，变更行数 = sum(list.map(item => max(新增行数, 删除行数)))
     function caculate(list: AcceptPartialEditWidget[]) {
       const result = { added: 0, deleted: 0, changed: 0 };
       list.forEach((widget) => {
@@ -304,7 +314,7 @@ export class DiffViewerContribution implements ClientAppContribution, MenuContri
       const unresolved = list.filter(v => v.status === 'pending');
       result.total = list.length;
       result.unresolved = unresolved.length;
-      const codeInfo = this.getTotalCodeInfo(list);
+      const codeInfo = this.getTotalCodeInfo(snapshot);
       result.toAddedLines = codeInfo.unresolvedAddedLinesCount;
       result.toChangedLines = codeInfo.unresolvedChangedLinesCount;
     }
