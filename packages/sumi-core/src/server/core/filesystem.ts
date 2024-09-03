@@ -11,11 +11,15 @@ export const filesystemDeferred = new Deferred<void>();
 export const isFilesystemReady = () => filesystemDeferred.promise;
 
 let mountfs: RootFS | null = null;
+let mountfsDeferred: Deferred<RootFS> | null = null;
 
 export const initializeRootFileSystem = async () => {
-  if (mountfs) return mountfs;
+  if (mountfsDeferred) return mountfsDeferred.promise;
 
+  mountfsDeferred = new Deferred<RootFS>();
   mountfs = (await createFileSystem(FileSystem.MountableFileSystem, {})) as RootFS;
+  mountfsDeferred.resolve(mountfs);
+
   initialize(mountfs);
   filesystemDeferred.resolve();
   return mountfs;
