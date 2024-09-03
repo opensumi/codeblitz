@@ -22,6 +22,7 @@ import { InlineChatController } from '@opensumi/ide-ai-native/lib/browser/widget
 import { LiveInlineDiffPreviewer } from '@opensumi/ide-ai-native/lib/browser/widget/inline-diff/inline-diff-previewer';
 import { InlineDiffHandler } from '@opensumi/ide-ai-native/lib/browser/widget/inline-diff/inline-diff.handler';
 import { InlineStreamDiffHandler } from '@opensumi/ide-ai-native/lib/browser/widget/inline-stream-diff/inline-stream-diff.handler';
+import { AcceptPartialEditWidget } from '@opensumi/ide-ai-native/lib/browser/widget/inline-stream-diff/live-preview.component';
 import { EResultKind } from '@opensumi/ide-ai-native/lib/common';
 import { IMenuRegistry, MenuContribution, MenuId } from '@opensumi/ide-core-browser/lib/menu/next';
 import { IEditor, IEditorDocumentModelService } from '@opensumi/ide-editor/lib/browser';
@@ -29,6 +30,15 @@ import { listenReadable, SumiReadableStream } from '@opensumi/ide-utils/lib/stre
 import path from 'path';
 import { IDiffViewerProps, IDiffViewerTab, IExtendPartialEditEvent, ITabChangedEvent } from '../common';
 import { removeStart } from '../utils';
+
+export interface ITotalCodeInfo {
+  totalAddedLinesCount: number;
+  totalDeletedLinesCount: number;
+  totalChangedLinesCount: number;
+  unresolvedAddedLinesCount: number;
+  unresolvedDeletedLinesCount: number;
+  unresolvedChangedLinesCount: number;
+}
 
 @Domain(ClientAppContribution, MenuContribution)
 export class DiffViewerContribution implements ClientAppContribution, MenuContribution {
@@ -231,11 +241,51 @@ export class DiffViewerContribution implements ClientAppContribution, MenuContri
     return this.getAllTabs().findIndex((tab) => tab.filePath === aPath);
   };
 
+  /**
+   * 获取当前编辑器的代码采纳状态
+   * 1. 已经采纳的代码信息
+   * 2. 还未处理的代码信息
+   */
+  getTotalCodeInfo(partialEditWidgetList: AcceptPartialEditWidget[]): ITotalCodeInfo {
+    const resolvedList = partialEditWidgetList.filter((w) => w.isAccepted);
+    const unresolvedList = partialEditWidgetList.filter((w) => w.status === 'pending');
+
+    const resolvedStatus = caculate(resolvedList);
+    const unresolvedStatus = caculate(unresolvedList);
+
+    return {
+      totalAddedLinesCount: resolvedStatus.added,
+      totalDeletedLinesCount: resolvedStatus.deleted,
+      totalChangedLinesCount: resolvedStatus.changed,
+      unresolvedAddedLinesCount: unresolvedStatus.added,
+      unresolvedDeletedLinesCount: unresolvedStatus.deleted,
+      unresolvedChangedLinesCount: unresolvedStatus.changed,
+    };
+
+    // 代码除了新增和删除行，还需要统计变更行
+    // 1. 新增 N 行 => N
+    // 2. 删除 N 行 => N
+    // 3. 新增 M 行，删除 N 行 => max(M, N)
+    // 综上所述，变更行数 = sum(list.map(item => max(新增行数, 删除行数)))
+    function caculate(list: AcceptPartialEditWidget[]) {
+      const result = { added: 0, deleted: 0, changed: 0 };
+      list.forEach((widget) => {
+        const addedLinesCount = widget.addedLinesCount;
+        const deletedLinesCount = widget.deletedLinesCount;
+        result.added += addedLinesCount;
+        result.deleted += deletedLinesCount;
+        result.changed += Math.max(addedLinesCount, deletedLinesCount);
+      });
+      return result;
+    }
+  }
+
   getDiffInfoForUri = (uri: URI) => {
     const result = {
       unresolved: 0,
       total: 0,
       toAddedLines: 0,
+      toChangedLines: 0,
     };
     let resourceDiff = (this.inlineDiffHandler as any)._previewerNodeStore.get(uri.toString()) as
       | InlineStreamDiffHandler
@@ -254,12 +304,9 @@ export class DiffViewerContribution implements ClientAppContribution, MenuContri
       const unresolved = list.filter(v => v.status === 'pending');
       result.total = list.length;
       result.unresolved = unresolved.length;
-      result.toAddedLines = snapshot.decorationSnapshotData.addedDecList.filter(v => !v.isHidden).reduce(
-        (acc, item) => {
-          return acc + item.length;
-        },
-        0,
-      );
+      const codeInfo = this.getTotalCodeInfo(list);
+      result.toAddedLines = codeInfo.unresolvedAddedLinesCount;
+      result.toChangedLines = codeInfo.unresolvedChangedLinesCount;
     }
     return result;
   };
@@ -297,6 +344,7 @@ export class DiffViewerContribution implements ClientAppContribution, MenuContri
       if (e?.uri) {
         const diffInfo = this.getDiffInfoForUri(e.uri);
         event.diffNum = diffInfo.unresolved;
+        Object.assign(event, diffInfo);
       }
 
       this._onDidTabChange.fire(event);
