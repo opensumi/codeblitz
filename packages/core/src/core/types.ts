@@ -2,7 +2,7 @@ import { ThemeType } from '@opensumi/ide-theme';
 import { ComponentType } from 'react';
 
 export interface LandingProps {
-  status: 'loading' | 'success' | 'error';
+  status: 'loading' | 'success' | 'error' | 'pending';
   error?: string;
   theme?: ThemeType;
   className?: string;
