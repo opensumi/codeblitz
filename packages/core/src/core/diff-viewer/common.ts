@@ -129,4 +129,6 @@ export interface IDiffViewerProps extends Partial<IOverrideAppRendererProps> {
 
   onWillApplyTheme?: (theme: ITheme) => Record<string, string | undefined>;
   tabBarRightExtraContent?: IExtraContent;
+
+  isolatePreference?: boolean;
 }

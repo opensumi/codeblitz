@@ -1,12 +1,12 @@
 import { Autowired } from '@opensumi/di';
-import { PreferenceProvider } from '@opensumi/ide-core-browser';
+import { ClientAppContribution, PreferenceProvider } from '@opensumi/ide-core-browser';
 import { Domain, GeneralSettingsId, PreferenceScope } from '@opensumi/ide-core-common';
 import { ITheme, ThemeContributionProvider } from '@opensumi/ide-theme';
 import { IThemeService } from '@opensumi/ide-theme';
 import { IDiffViewerProps } from '../common';
 
-@Domain(ThemeContributionProvider)
-export class DiffViewerThemeProvider implements ThemeContributionProvider {
+@Domain(ThemeContributionProvider, ClientAppContribution)
+export class DiffViewerThemeProvider implements ThemeContributionProvider, ClientAppContribution {
   @Autowired(IDiffViewerProps)
   protected diffViewerProps: IDiffViewerProps;
 
@@ -16,7 +16,7 @@ export class DiffViewerThemeProvider implements ThemeContributionProvider {
   @Autowired(PreferenceProvider, { tag: PreferenceScope.Default })
   protected readonly defaultPreferenceProvider: PreferenceProvider;
 
-  async onDidStart() {
+  async onStart() {
     // 强制用集成设置的默认主题
     await this.themeService.applyTheme(
       this.defaultPreferenceProvider.get(GeneralSettingsId.Theme) as string,

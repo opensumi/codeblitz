@@ -6,6 +6,8 @@ import { DiffViewerRenderer } from '@codeblitzjs/ide-core/lib/api/renderDiffView
 import { IDiffViewerHandle } from '@codeblitzjs/ide-core/lib/core/diff-viewer';
 import { SumiReadableStream } from '@opensumi/ide-utils/lib/stream';
 import splitRetain from 'split-retain';
+import { ModelWrapper } from '../code/code';
+import { overrideColorTokens } from '../common/constants';
 import jsonData from './data.json';
 
 const data = [
@@ -64,15 +66,7 @@ const App = () => {
         layoutViewSize: {},
       }}
       onWillApplyTheme={() => {
-        return {
-          'editorGroupHeader.tabsBackground': '#ECF1FE',
-          'editor.background': '#fff',
-          'aiNative.inlineDiffAddedRange': '#26bf6d1f',
-          'aiNative.inlineDiffRemovedRange': '#ff4d4f1e',
-          'aiNative.inlineDiffAcceptPartialEdit': '#26bf6d80',
-          'aiNative.inlineDiffDiscardPartialEdit': '#ff4d4f80',
-          'aiNative.inlineDiffAcceptPartialEdit.foreground': '#000',
-        };
+        return overrideColorTokens;
       }}
       onRef={(handle) => {
         handleRef.current = handle;
@@ -99,6 +93,7 @@ const App = () => {
       }}
     />
   ), []);
+  let [modalOpen, setModalOpen] = React.useState<boolean>(false);
 
   const header = useMemo(() => (
     <div
@@ -202,6 +197,13 @@ const App = () => {
       >
         Current Tab
       </button>
+      <button
+        onClick={() => {
+          setModalOpen(true);
+        }}
+      >
+        打开弹层
+      </button>
       <p>
         {eventInfo ? JSON.stringify(eventInfo, null, 2) : 'no event'}
       </p>
@@ -218,6 +220,12 @@ const App = () => {
     >
       {header}
       {memo}
+      <ModelWrapper
+        value={modalOpen}
+        onChange={(v) => {
+          setModalOpen(v);
+        }}
+      />
     </div>
   );
 };

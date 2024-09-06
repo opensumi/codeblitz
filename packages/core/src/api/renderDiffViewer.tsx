@@ -2,13 +2,15 @@ import { deletionLogPath } from '@codeblitzjs/ide-browserfs/lib/backend/OverlayF
 import { Injector } from '@opensumi/di';
 import {
   FILES_DEFAULTS,
+  GeneralSettingsId,
   ModuleConstructor,
   randomString,
+  registerLocalStorageProvider,
   SlotLocation,
   SlotRenderer,
 } from '@opensumi/ide-core-browser';
 import merge from 'lodash/merge';
-import React from 'react';
+import React, { useEffect } from 'react';
 import { IDiffViewerProps } from '../core/diff-viewer';
 import { DiffViewerModule } from '../core/diff-viewer/module';
 import { BoxPanel, SplitPanel } from '../editor';
@@ -16,6 +18,7 @@ import { AppRenderer, IAppRendererProps } from './renderApp';
 import '../core/diff-viewer/languages-patch';
 import { RuntimeConfig } from '@codeblitzjs/ide-sumi-core';
 import { extensionMetadata } from '../core/diff-viewer/extension-patch';
+import { useConstant } from '../core/hooks';
 
 export { IDiffViewerProps } from '../core/diff-viewer/common';
 export type { IDiffViewerHandle, IDiffViewerTab, IExtendPartialEditEvent } from '../core/diff-viewer/common';
@@ -89,6 +92,19 @@ export const DiffViewerRenderer = (props: IDiffViewerProps) => {
   const layoutComponent = appConfig?.layoutComponent || DiffViewerLayoutComponent;
   delete appConfig?.layoutComponent;
 
+  useEffect(() => {
+    const prefix = randomString(8);
+    registerLocalStorageProvider(GeneralSettingsId.Theme, workspaceDir, prefix);
+    return () => {
+      for (var i = 0; i < localStorage.length; i++) {
+        const key = localStorage.key(i)!;
+        if (key.startsWith(prefix)) {
+          localStorage.removeItem(key);
+        }
+      }
+    };
+  }, []);
+
   const diffViewerAppConfig: IAppRendererProps = merge<IAppRendererProps, Partial<IAppRendererProps>>({
     appConfig: {
       modules: appModules,
@@ -120,9 +136,9 @@ export const DiffViewerRenderer = (props: IDiffViewerProps) => {
     },
     runtimeConfig: ({
       aiNative: {
-        enable: true,
+        enable: false,
         capabilities: {
-          supportsInlineChat: true,
+          supportsInlineChat: false,
         },
       },
       startupEditor: 'none',
