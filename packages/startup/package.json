@@ -1,6 +1,6 @@
 {
   "name": "@codeblitzjs/ide-startup",
-  "version": "1.2.0",
+  "version": "2.0.0",
   "description": "@codeblitzjs/ide-startup",
   "main": "lib/index.js",
   "typing": "types/index.d.ts",
@@ -12,13 +12,13 @@
   ],
   "dependencies": {
     "@ant-design/icons": "^5.4.0",
-    "@codeblitzjs/ide-cli": "workspace:*",
-    "@codeblitzjs/ide-code-api": "workspace:*",
-    "@codeblitzjs/ide-code-service": "workspace:*",
-    "@codeblitzjs/ide-common": "workspace:*",
-    "@codeblitzjs/ide-core": "workspace:*",
-    "@codeblitzjs/ide-i18n": "workspace:*",
-    "@codeblitzjs/ide-sumi-core": "workspace:*",
+    "@codeblitzjs/ide-cli": "2.0.0",
+    "@codeblitzjs/ide-code-api": "2.0.0",
+    "@codeblitzjs/ide-code-service": "2.0.0",
+    "@codeblitzjs/ide-common": "2.0.0",
+    "@codeblitzjs/ide-core": "2.0.0",
+    "@codeblitzjs/ide-i18n": "2.0.0",
+    "@codeblitzjs/ide-sumi-core": "2.0.0",
     "antd": "^5.20.2",
     "lodash": "^4.17.21",
     "tslib": "^2.2.0"
