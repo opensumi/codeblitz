@@ -82,7 +82,6 @@
     "typescript": "^4.2.3"
   },
   "resolutions": {
-    "node-gyp": "npm:@favware/skip-dependency@latest",
     "nsfw": "npm:@favware/skip-dependency@latest",
     "spdlog": "npm:@favware/skip-dependency@latest",
     "node-pty": "npm:@favware/skip-dependency@latest",
