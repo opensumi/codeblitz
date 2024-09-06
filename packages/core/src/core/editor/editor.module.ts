@@ -3,7 +3,6 @@ import {
   BrowserFS,
   FileSystemContribution,
   FileSystemInstance,
-  getExtensionPath,
   RuntimeConfig,
   SCM_ROOT,
 } from '@codeblitzjs/ide-sumi-core';
@@ -21,7 +20,6 @@ import {
   KeybindingContribution,
   KeybindingRegistry,
   KeybindingRegistryImpl,
-  MonacoContribution,
   MonacoService,
   PreferenceProvider,
   PreferenceScope,
@@ -31,7 +29,7 @@ import {
 } from '@opensumi/ide-core-browser';
 import { LayoutViewSizeConfig } from '@opensumi/ide-core-browser/lib/layout/constants';
 import { RawContextKey } from '@opensumi/ide-core-browser/lib/raw-context-key';
-import { GeneralSettingsId, uuid } from '@opensumi/ide-core-common';
+import { uuid } from '@opensumi/ide-core-common';
 import {
   BrowserEditorContribution,
   EditorCollectionService,
@@ -46,7 +44,7 @@ import { IBreadCrumbService } from '@opensumi/ide-editor/lib/browser/types';
 import { ICodeEditor } from '@opensumi/ide-editor/lib/common';
 import { FileSchemeDocumentProvider } from '@opensumi/ide-file-scheme/lib/browser/file-doc';
 import * as monaco from '@opensumi/ide-monaco';
-import { ICSSStyleService, IThemeService } from '@opensumi/ide-theme';
+import { ICSSStyleService } from '@opensumi/ide-theme';
 import { FindController } from '@opensumi/monaco-editor-core/esm/vs/editor/contrib/find/browser/findController';
 import { FindWidget } from '@opensumi/monaco-editor-core/esm/vs/editor/contrib/find/browser/findWidget';
 import { ContextKeyDefinedExpr } from '@opensumi/monaco-editor-core/esm/vs/platform/contextkey/common/contextkey';
@@ -59,10 +57,10 @@ import { IWorkspaceService } from '@opensumi/ide-workspace';
 import md5 from 'md5';
 import * as path from 'path';
 import { CodeBlitzCommandContribution } from '../commands';
-import { IDETheme } from '../extension/metadata';
 import { IPropsService } from '../props.service';
 import styles from '../style.module.less';
 import { CodeDocumentModel, EditorProps, isCodeDocumentModel } from './types';
+import { DefaultThemeGuardContribution } from '../providers';
 
 const ContextTrue = new RawContextKey('alex.context.true', undefined);
 const ContextFalse = new RawContextKey('alex.context.false', undefined);
@@ -129,26 +127,6 @@ class FoldersPreferenceProvider extends PreferenceProvider {
 
   doSetPreference() {
     return Promise.resolve(false);
-  }
-}
-
-@Domain(ClientAppContribution)
-class ThemeContribution extends Disposable implements ClientAppContribution {
-  @Autowired(IThemeService)
-  private readonly themeService: IThemeService;
-
-  @Autowired(PreferenceProvider, { tag: PreferenceScope.Default })
-  protected readonly defaultPreferenceProvider: PreferenceProvider;
-
-  async initialize() {
-    this.themeService.registerThemes(
-      IDETheme.packageJSON.contributes!.themes,
-      URI.parse(getExtensionPath(IDETheme.extension, 'public')),
-    );
-    // 强制用集成设置的默认主题
-    await this.themeService.applyTheme(
-      this.defaultPreferenceProvider.get(GeneralSettingsId.Theme) as string,
-    );
   }
 }
 
@@ -759,7 +737,7 @@ export class EditorSpecialModule extends BrowserModule {
       useClass: EditorHistoryServiceOverride,
       override: true,
     },
-    ThemeContribution,
+    DefaultThemeGuardContribution,
     EditorSpecialContribution,
     CodeBlitzCommandContribution,
   ];
