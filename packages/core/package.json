@@ -45,7 +45,7 @@
     "@opensumi/ide-explorer": "3.3.1",
     "@opensumi/ide-express-file-server": "3.3.1",
     "@opensumi/ide-extension": "3.3.1",
-    "@opensumi/ide-extension-storage": "3.3.1",
+    "@opensumi/ide-extension-storage": "3.3.2",
     "@opensumi/ide-file-scheme": "3.3.1",
     "@opensumi/ide-file-service": "3.3.1",
     "@opensumi/ide-file-tree-next": "3.3.1",
