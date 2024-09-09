@@ -67,7 +67,7 @@
     "@opensumi/ide-scm": "3.3.1",
     "@opensumi/ide-search": "3.3.1",
     "@opensumi/ide-status-bar": "3.3.1",
-    "@opensumi/ide-storage": "3.3.1",
+    "@opensumi/ide-storage": "3.3.2",
     "@opensumi/ide-testing": "3.3.1",
     "@opensumi/ide-theme": "3.3.1",
     "@opensumi/ide-toolbar": "3.3.1",

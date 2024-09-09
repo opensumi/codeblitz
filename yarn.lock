@@ -726,7 +726,7 @@ __metadata:
     "@opensumi/ide-scm": "npm:3.3.1"
     "@opensumi/ide-search": "npm:3.3.1"
     "@opensumi/ide-status-bar": "npm:3.3.1"
-    "@opensumi/ide-storage": "npm:3.3.1"
+    "@opensumi/ide-storage": "npm:3.3.2"
     "@opensumi/ide-testing": "npm:3.3.1"
     "@opensumi/ide-theme": "npm:3.3.1"
     "@opensumi/ide-toolbar": "npm:3.3.1"
@@ -2212,6 +2212,16 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@opensumi/ide-core-common@npm:3.3.2":
+  version: 3.3.2
+  resolution: "@opensumi/ide-core-common@npm:3.3.2"
+  dependencies:
+    "@opensumi/di": "npm:^1.8.0"
+    "@opensumi/ide-utils": "npm:3.3.2"
+  checksum: 10/8af022506fe352da14b6d99be6a65ee928b611819b2cebc3d2935a75c814698a65e0a898cb0f5497268ef7320f16b9e5e4ee61b02c22efd70a247aadb4245a82
+  languageName: node
+  linkType: hard
+
 "@opensumi/ide-core-node@npm:3.3.1":
   version: 3.3.1
   resolution: "@opensumi/ide-core-node@npm:3.3.1"
@@ -2594,12 +2604,12 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@opensumi/ide-storage@npm:3.3.1":
-  version: 3.3.1
-  resolution: "@opensumi/ide-storage@npm:3.3.1"
+"@opensumi/ide-storage@npm:3.3.2":
+  version: 3.3.2
+  resolution: "@opensumi/ide-storage@npm:3.3.2"
   dependencies:
-    "@opensumi/ide-core-common": "npm:3.3.1"
-  checksum: 10/4b550aad3a6c1fd36f51a5330c3cb314799e5341401c109af687aa3f5ad94caa8dd3c74bba1ee87a5b8cff0609679c4f9ed2e8eefbe648429d3d6f7da0597d2c
+    "@opensumi/ide-core-common": "npm:3.3.2"
+  checksum: 10/828a7abfa0ac75d4bbc649f7fc13569e116ef135f502e326ec4b6d5ab0dcd0609461d8473ab3252b42820e2f5c3757311c34f6f8d1c8eac0ced11a0eecb83f0c
   languageName: node
   linkType: hard
 
@@ -2672,6 +2682,19 @@ __metadata:
     nanoid: "npm:3.3.4"
     vscode-uri: "npm:3.0.2"
   checksum: 10/a4d1672833653b69f79b72e654974da2bf1dfa130fc67877ebbeb92fd752fd305cbfcd919beb3ee2030145b499840c21ecb0cd313bb9044a5df3bbe4b351cdfa
+  languageName: node
+  linkType: hard
+
+"@opensumi/ide-utils@npm:3.3.2":
+  version: 3.3.2
+  resolution: "@opensumi/ide-utils@npm:3.3.2"
+  dependencies:
+    iconv-lite: "npm:^0.6.3"
+    jschardet: "npm:3.0.0"
+    mri: "npm:^1.2.0"
+    nanoid: "npm:3.3.4"
+    vscode-uri: "npm:3.0.2"
+  checksum: 10/fdab280d4c41ed4bc2adc3f879c78ccad239ab2b85ffd14cde8bd396c69cacc4a76770fae13b472cc715b026a045835930d11ff6d60b2f3cdeacf8ed11729047
   languageName: node
   linkType: hard
 
