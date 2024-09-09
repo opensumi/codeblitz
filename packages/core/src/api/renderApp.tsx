@@ -136,7 +136,7 @@ export const AppRenderer: React.FC<IAppRendererProps> = ({ onLoad, Landing, ...o
 
 export const AppProvider: React.FC<React.PropsWithChildren<IAppRendererProps>> = ({ onLoad, children, ...opts }) => {
   const app = useConstant(() => {
-    opts.appConfig.layoutComponent = () => <Fragment></Fragment>
+    opts.appConfig.layoutComponent = () => null;
     return createApp(opts)
   });
   const [clientApp, setClientApp] = useState<IAppInstance | null>(null);
@@ -150,7 +150,7 @@ export const AppProvider: React.FC<React.PropsWithChildren<IAppRendererProps>> =
   const [state, setState] = useState<{
     status: RootProps['status'];
     error?: RootProps['error'];
-  }>(() => ({ status: 'pending' }));
+  }>(() => ({ status: 'loading' }));
 
   useMemo(() => {
     app.injector.addProviders({
@@ -191,7 +191,7 @@ export const AppProvider: React.FC<React.PropsWithChildren<IAppRendererProps>> =
     };
   }, []);
 
-  const contextValue = useMemo(() => ({ app: clientApp }), [clientApp])
+  const contextValue = useMemo(() => ({ app: clientApp, startState: state }), [clientApp, state])
 
   return (
     <AppContext.Provider value={contextValue}>

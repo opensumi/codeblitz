@@ -1,4 +1,4 @@
-import React, { useContext, useEffect, useMemo, useRef, useCallback } from 'react';
+import React, { useContext, useEffect, useMemo, useRef } from 'react';
 
 import * as path from 'path'
 import { URI, useInjectable } from '@opensumi/ide-core-browser';
@@ -6,14 +6,10 @@ import { ConfigProvider, AppConfig } from '@opensumi/ide-core-browser/lib/react-
 import { EditorCollectionService, ICodeEditor, IEditorDocumentModelRef } from '@opensumi/ide-editor/lib/common'
 import { IEditorDocumentModelService } from '@opensumi/ide-editor/lib/browser/doc-model/types'
 import { AppContext } from './context'
+import { useMemorizeFn } from '../hooks'
+import { parseUri } from './util'
 
 const noop = () => {}
-
-export function useMemorizeFn<T extends (...args: any[]) => any>(fn: T) {
-  const fnRef = useRef<T>(fn);
-  fnRef.current = useMemo(() => fn, [fn]);
-  return useCallback((...args: any) => fnRef.current(...args), []) as T;
-}
 
 export interface ICodeEditorProps extends React.HTMLAttributes<HTMLDivElement> {
   uri: URI | string;
@@ -29,12 +25,7 @@ export const CodeEditorComponent = ({ uri, editorOptions, onEditorCreate, ...pro
   const appConfig: AppConfig = useInjectable(AppConfig);
 
   const containerRef = React.useRef<HTMLDivElement | null>(null);
-  const uriStr = useMemo(() => {
-    if (typeof uri === 'string') {
-      return URI.file(path.join(appConfig.workspaceDir, uri)).toString()
-    }
-    return uri.toString()
-  }, [uri])
+  const uriStr = useMemo(() => parseUri(uri, appConfig.workspaceDir), [uri])
   const fetchingUriRef = useRef<string>('');
   const documentModelRef = useRef<IEditorDocumentModelRef>();
   const editorRef = useRef<ICodeEditor>()
