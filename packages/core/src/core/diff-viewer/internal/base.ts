@@ -21,7 +21,10 @@ import { Autowired } from '@opensumi/di';
 import { InlineChatController } from '@opensumi/ide-ai-native/lib/browser/widget/inline-chat/inline-chat-controller';
 import { LiveInlineDiffPreviewer } from '@opensumi/ide-ai-native/lib/browser/widget/inline-diff/inline-diff-previewer';
 import { InlineDiffHandler } from '@opensumi/ide-ai-native/lib/browser/widget/inline-diff/inline-diff.handler';
-import { IInlineStreamDiffSnapshotData, InlineStreamDiffHandler } from '@opensumi/ide-ai-native/lib/browser/widget/inline-stream-diff/inline-stream-diff.handler';
+import {
+  IInlineStreamDiffSnapshotData,
+  InlineStreamDiffHandler,
+} from '@opensumi/ide-ai-native/lib/browser/widget/inline-stream-diff/inline-stream-diff.handler';
 import { AcceptPartialEditWidget } from '@opensumi/ide-ai-native/lib/browser/widget/inline-stream-diff/live-preview.component';
 import { EResultKind } from '@opensumi/ide-ai-native/lib/common';
 import { IMenuRegistry, MenuContribution, MenuId } from '@opensumi/ide-core-browser/lib/menu/next';
@@ -146,14 +149,16 @@ export class DiffViewerContribution implements ClientAppContribution, MenuContri
     previewer.setValue(newContent);
 
     await whenReady;
-    const diffInfo = this.getDiffInfoForUri(uri);
-    if (diffInfo) {
-      // 因为 onTabChange 时机早于应用上 diff 的时机，这里补发一个 onDidTabChange 事件
-      this._onDidTabChange.fire({
-        currentIndex: index,
-        diffNum: diffInfo.unresolved,
-        newPath: filePath,
-      });
+    if (previewer && previewer.isModel(uri.toString())) {
+      const diffInfo = this.computeDiffInfo(previewer.getNode());
+      if (diffInfo) {
+        // 因为 onTabChange 时机早于应用上 diff 的时机，这里补发一个 onDidTabChange 事件
+        this._onDidTabChange.fire({
+          currentIndex: index,
+          diffNum: diffInfo.unresolved,
+          newPath: filePath,
+        });
+      }
     }
 
     previewer.layout();
@@ -259,7 +264,7 @@ export class DiffViewerContribution implements ClientAppContribution, MenuContri
 
     partialEditWidgetList.forEach((v, idx) => {
       if (v.status === 'pending') {
-        const addedDec =  snapshot.decorationSnapshotData.addedDecList[idx];
+        const addedDec = snapshot.decorationSnapshotData.addedDecList[idx];
         const removedWidget = snapshot.decorationSnapshotData.removedWidgetList[idx];
         const addedLinesCount = addedDec?.length || 0;
         const deletedLinesCount = removedWidget?.height || 0;
@@ -290,13 +295,28 @@ export class DiffViewerContribution implements ClientAppContribution, MenuContri
     }
   }
 
+  computeDiffInfo(resourceDiff: InlineStreamDiffHandler | undefined) {
+    if (resourceDiff) {
+      const result = {
+        unresolved: 0,
+        total: 0,
+        toAddedLines: 0,
+        toChangedLines: 0,
+      };
+
+      const snapshot = resourceDiff.createSnapshot();
+      const list = snapshot.decorationSnapshotData.partialEditWidgetList;
+      const unresolved = list.filter(v => v.status === 'pending');
+      result.total = list.length;
+      result.unresolved = unresolved.length;
+      const codeInfo = this.getTotalCodeInfo(snapshot);
+      result.toAddedLines = codeInfo.unresolvedAddedLinesCount;
+      result.toChangedLines = codeInfo.unresolvedChangedLinesCount;
+      return result;
+    }
+  }
+
   getDiffInfoForUri = (uri: URI) => {
-    const result = {
-      unresolved: 0,
-      total: 0,
-      toAddedLines: 0,
-      toChangedLines: 0,
-    };
     let resourceDiff = (this.inlineDiffHandler as any)._previewerNodeStore.get(uri.toString()) as
       | InlineStreamDiffHandler
       | undefined;
@@ -308,17 +328,12 @@ export class DiffViewerContribution implements ClientAppContribution, MenuContri
       }
     }
 
-    if (resourceDiff) {
-      const snapshot = resourceDiff.createSnapshot();
-      const list = snapshot.decorationSnapshotData.partialEditWidgetList;
-      const unresolved = list.filter(v => v.status === 'pending');
-      result.total = list.length;
-      result.unresolved = unresolved.length;
-      const codeInfo = this.getTotalCodeInfo(snapshot);
-      result.toAddedLines = codeInfo.unresolvedAddedLinesCount;
-      result.toChangedLines = codeInfo.unresolvedChangedLinesCount;
-    }
-    return result;
+    return this.computeDiffInfo(resourceDiff) || {
+      unresolved: 0,
+      total: 0,
+      toAddedLines: 0,
+      toChangedLines: 0,
+    };
   };
 
   async initialize(): Promise<void> {

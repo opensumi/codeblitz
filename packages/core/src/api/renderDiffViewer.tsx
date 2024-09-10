@@ -136,9 +136,9 @@ export const DiffViewerRenderer = (props: IDiffViewerProps) => {
     },
     runtimeConfig: ({
       aiNative: {
-        enable: false,
+        enable: true,
         capabilities: {
-          supportsInlineChat: false,
+          supportsInlineChat: true,
         },
       },
       startupEditor: 'none',
