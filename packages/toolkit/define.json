@@ -1,6 +1,6 @@
 {
-  "__OPENSUMI_VERSION__": "3.3.1",
-  "__WORKER_HOST__": "https://gw.alipayobjects.com/os/cloud-ide/codeblitz/worker-host.0cd9942a.js",
+  "__OPENSUMI_VERSION__": "3.3.2",
+  "__WORKER_HOST__": "https://gw.alipayobjects.com/os/cloud-ide/codeblitz/worker-host.490aafa0.js",
   "__WEBVIEW_ENDPOINT__": "https://gw.alipayobjects.com/os/cloud-ide/codeblitz/webview.805ab470",
   "__WEBVIEW_SCRIPT__": "https://gw.alipayobjects.com/os/cloud-ide/codeblitz/webview.66e57793.js"
 }
