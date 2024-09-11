@@ -314,7 +314,7 @@ export class DiffViewerContribution implements ClientAppContribution, MenuContri
         toChangedLines: 0,
       };
 
-      const snapshot = resourceDiff.createSnapshot();
+      const snapshot = resourceDiff.currentSnapshotStore || resourceDiff.createSnapshot();
       const list = snapshot.decorationSnapshotData.partialEditWidgetList;
       const unresolved = list.filter(v => v.status === 'pending');
       result.total = list.length;
@@ -327,15 +327,17 @@ export class DiffViewerContribution implements ClientAppContribution, MenuContri
   }
 
   getDiffInfoForUri = (uri: URI) => {
-    let resourceDiff = (this.inlineDiffHandler as any)._previewerNodeStore.get(uri.toString()) as
-      | InlineStreamDiffHandler
-      | undefined;
+    let resourceDiff: InlineStreamDiffHandler | undefined;
+
+    const previewer = this.inlineDiffHandler.getPreviewer() as LiveInlineDiffPreviewer;
+    if (previewer && previewer.isModel(uri.toString())) {
+      resourceDiff = previewer.getNode();
+    }
 
     if (!resourceDiff) {
-      const previewer = this.inlineDiffHandler.getPreviewer() as LiveInlineDiffPreviewer;
-      if (previewer && previewer.isModel(uri.toString())) {
-        resourceDiff = previewer.getNode();
-      }
+      resourceDiff = (this.inlineDiffHandler as any)._previewerNodeStore.get(uri.toString()) as
+        | InlineStreamDiffHandler
+        | undefined;
     }
 
     return this.computeDiffInfo(resourceDiff) || {
