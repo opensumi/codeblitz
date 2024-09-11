@@ -12,18 +12,18 @@ export const filesystemDeferred = new Deferred<void>();
 export const isFilesystemReady = () => filesystemDeferred.promise;
 
 let mountfs: RootFS | null = null;
-let mountfsDeferred: Deferred<RootFS> | null = null;
+let mountRootFsMutex = new Mutex();
 
 export const initializeRootFileSystem = async () => {
-  if (mountfsDeferred) return mountfsDeferred.promise;
+  return mountRootFsMutex.dispatch(async () => {
+    if (mountfs) return mountfs;
 
-  mountfsDeferred = new Deferred<RootFS>();
-  mountfs = (await createFileSystem(FileSystem.MountableFileSystem, {})) as RootFS;
-  mountfsDeferred.resolve(mountfs);
+    mountfs = (await createFileSystem(FileSystem.MountableFileSystem, {})) as RootFS;
 
-  initialize(mountfs);
-  filesystemDeferred.resolve();
-  return mountfs;
+    initialize(mountfs);
+    filesystemDeferred.resolve();
+    return mountfs;
+  });
 };
 
 export const unmountRootFS = () => {
@@ -36,12 +36,12 @@ export const unmountRootFS = () => {
 const initHomeFsMutex = new Mutex();
 
 export const initializeHomeFileSystem = async (rootFS: RootFS, scenario?: string | null) => {
-  // 如果用户使用了多个 codeblitz 实例，第一个挂载的先生效
-  if (isPathMounted(rootFS, HOME_ROOT)) {
-    return Disposable.NULL;
-  }
+  return await initHomeFsMutex.dispatch(async () => {
+    // 如果用户使用了多个 codeblitz 实例，第一个挂载的先生效
+    if (isPathMounted(rootFS, HOME_ROOT)) {
+      return Disposable.NULL;
+    }
 
-  await initHomeFsMutex.dispatch(async () => {
     try {
       let homefs: FileSystem | null = null;
       // scenario 为 null 时 或者 browser 隐身模式时无法使用 indexedDB 时，回退到 memory
@@ -64,11 +64,11 @@ export const initializeHomeFileSystem = async (rootFS: RootFS, scenario?: string
     } catch (err) {
       getDebugLogger().error(`初始化 home 目录失败 ${(err as Error)?.message || ''}`);
     }
-  });
 
-  return {
-    dispose() {
-      rootFS.umount(HOME_ROOT);
-    },
-  };
+    return {
+      dispose() {
+        rootFS.umount(HOME_ROOT);
+      },
+    };
+  });
 };
