@@ -74,6 +74,8 @@ export class DiffViewerContribution implements ClientAppContribution, MenuContri
   private readonly _onDidTabChange = this._disposables.add(new Emitter<ITabChangedEvent>());
   public readonly onDidTabChange: Event<ITabChangedEvent> = this._onDidTabChange.event;
 
+  private sequencer = new Sequencer();
+
   getFullPath(filePath: string) {
     return path.join(this.appConfig.workspaceDir, filePath);
   }
@@ -90,11 +92,11 @@ export class DiffViewerContribution implements ClientAppContribution, MenuContri
     return result;
   }
 
-  openFileInTab = async (filePath: string, content: string, options?: IResourceOpenOptions) => {
+  private async _openFileInTab(filePath: string, content: string, options?: IResourceOpenOptions) {
     const fullPath = this.getFullPath(filePath);
-    if (!fsExtra.pathExistsSync(fullPath)) {
-      fsExtra.ensureFileSync(fullPath);
-      fsExtra.writeFileSync(fullPath, content);
+    if (!await fsExtra.pathExists(fullPath)) {
+      await fsExtra.ensureFile(fullPath);
+      await fsExtra.writeFile(fullPath, content);
     }
 
     const uri = URI.file(fullPath);
@@ -102,6 +104,10 @@ export class DiffViewerContribution implements ClientAppContribution, MenuContri
       uri,
       result: await this.workbenchEditorService.open(uri, options),
     };
+  }
+
+  openFileInTab = async (filePath: string, content: string, options?: IResourceOpenOptions) => {
+    return this.sequencer.queue(() => this._openFileInTab(filePath, content, options));
   };
 
   private _openDiffInTab = async (
@@ -165,8 +171,12 @@ export class DiffViewerContribution implements ClientAppContribution, MenuContri
     previewer.revealFirstDiff();
   };
 
-  private sequencer = new Sequencer();
-  openDiffInTab = async (filePath, oldContent, newContent, options?: IResourceOpenOptions) => {
+  openDiffInTab = async (
+    filePath: string,
+    oldContent: string,
+    newContent: string,
+    options?: IResourceOpenOptions,
+  ) => {
     await this.sequencer.queue(() => this._openDiffInTab(filePath, oldContent, newContent, options));
   };
 
