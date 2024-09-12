@@ -75,6 +75,7 @@ export class DiffViewerContribution implements ClientAppContribution, MenuContri
   public readonly onDidTabChange: Event<ITabChangedEvent> = this._onDidTabChange.event;
 
   private sequencer = new Sequencer();
+  private fileSequencer = new Sequencer();
 
   getFullPath(filePath: string) {
     return path.join(this.appConfig.workspaceDir, filePath);
@@ -107,7 +108,7 @@ export class DiffViewerContribution implements ClientAppContribution, MenuContri
   }
 
   openFileInTab = async (filePath: string, content: string, options?: IResourceOpenOptions) => {
-    return this.sequencer.queue(() => this._openFileInTab(filePath, content, options));
+    return this.fileSequencer.queue(() => this._openFileInTab(filePath, content, options));
   };
 
   private _openDiffInTab = async (
