@@ -1,18 +1,9 @@
 import { Autowired, Injectable, Provider } from '@opensumi/di';
 import { BrowserModule } from '@opensumi/ide-core-browser';
 import { IEditorDocumentModelContentProvider, BrowserEditorContribution, IEditorDocumentModelContentRegistry } from '@opensumi/ide-editor/lib/browser'
-import { URI, Emitter, Event, Domain } from '@opensumi/ide-core-common'
+import { URI, Emitter, Event, Domain, Deferred } from '@opensumi/ide-core-common'
 
-const contentMap = {
-  'a1.js': `const add = (x, y) => {
-  return x + y
-}
-`,
-  'a2.js': `const add = (x, y) => {
-  return x + y + 1
-}
-`,
-}
+export const diffsDeferred = new Deferred<{filePath: string, oldFileContent: string | null, newFileContent: string }[]>()
 
 @Injectable()
 export class SampleSchemeDocumentProvider implements IEditorDocumentModelContentProvider {
@@ -21,11 +12,15 @@ export class SampleSchemeDocumentProvider implements IEditorDocumentModelContent
   }
 
   async provideEditorDocumentModelContent(uri: URI): Promise<string> {
-    return contentMap[uri.codeUri.path.slice(1)]
+    const diffs = await diffsDeferred.promise
+    const diff = diffs.find(item => item.filePath === uri.codeUri.path.slice(1))
+    if (!diff) return ''
+    if (uri.authority === 'new') return diff.newFileContent
+    return diff.oldFileContent || ''
   }
 
   isReadonly() {
-    return true;
+    return false;
   }
 
   private _onDidChangeContent: Emitter<URI> = new Emitter();
