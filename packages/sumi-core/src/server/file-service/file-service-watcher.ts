@@ -140,12 +140,12 @@ export class FWFileSystemWatcherServer implements IFileSystemWatcherServer {
   protected async lookup(path: string, count: number = 3) {
     let uri = new URI(path);
     let times = 0;
-    while (!(await fse.pathExists(uri.codeUri.fsPath)) && times <= count) {
+    while (!(await fse.pathExists(uri.codeUri.path)) && times <= count) {
       uri = uri.parent;
       times++;
     }
-    if (await fse.pathExists(uri.codeUri.fsPath)) {
-      return uri.codeUri.fsPath;
+    if (await fse.pathExists(uri.codeUri.path)) {
+      return uri.codeUri.path;
     } else {
       return '';
     }
