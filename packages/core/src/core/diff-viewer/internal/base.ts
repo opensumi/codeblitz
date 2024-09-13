@@ -10,12 +10,14 @@ import {
   IChatProgress,
   ILogger,
   isArray,
+  isWindows,
   MaybePromise,
   Sequencer,
   URI,
 } from '@opensumi/ide-core-common';
 import { IResourceOpenOptions, WorkbenchEditorService } from '@opensumi/ide-editor';
 import { Selection, SelectionDirection } from '@opensumi/ide-monaco';
+import { toSlashes } from '@opensumi/ide-utils/lib/path';
 
 import { Autowired } from '@opensumi/di';
 import { InlineChatController } from '@opensumi/ide-ai-native/lib/browser/widget/inline-chat/inline-chat-controller';
@@ -85,8 +87,12 @@ export class DiffViewerContribution implements ClientAppContribution, MenuContri
     return URI.file(this.getFullPath(filePath));
   }
 
-  stripDirectory(filePath: string) {
-    const result = removeStart(filePath, this.appConfig.workspaceDir);
+  normalizePath(filePath: string) {
+    let result = removeStart(filePath, this.appConfig.workspaceDir);
+    if (isWindows) {
+      result = toSlashes(result);
+    }
+
     if (result.startsWith('/')) {
       return result.slice(1);
     }
@@ -239,7 +245,7 @@ export class DiffViewerContribution implements ClientAppContribution, MenuContri
   };
 
   getFilePathForEditor = (editor: IEditor) => {
-    return this.stripDirectory(editor.currentUri!.codeUri.fsPath);
+    return this.normalizePath(editor.currentUri!.codeUri.fsPath);
   };
 
   getAllTabs = (): IDiffViewerTab[] => {
@@ -248,12 +254,12 @@ export class DiffViewerContribution implements ClientAppContribution, MenuContri
 
     return resources.map((editor, idx) => ({
       index: idx,
-      filePath: this.stripDirectory(editor.uri.codeUri.fsPath),
+      filePath: this.normalizePath(editor.uri.codeUri.fsPath),
     }));
   };
 
   getFileIndex = (filePath: string) => {
-    const aPath = this.stripDirectory(filePath);
+    const aPath = this.normalizePath(filePath);
     return this.getAllTabs().findIndex((tab) => tab.filePath === aPath);
   };
 
@@ -359,7 +365,7 @@ export class DiffViewerContribution implements ClientAppContribution, MenuContri
       const fsPath = e.uri.fsPath;
 
       this._onPartialEditEvent.fire({
-        filePath: this.stripDirectory(fsPath),
+        filePath: this.normalizePath(fsPath),
         ...e,
       });
     }));
@@ -370,7 +376,7 @@ export class DiffViewerContribution implements ClientAppContribution, MenuContri
       let currentIndex = -1;
       if (newPath) {
         currentIndex = this.getFileIndex(newPath);
-        newPath = this.stripDirectory(newPath);
+        newPath = this.normalizePath(newPath);
       }
 
       const event = {

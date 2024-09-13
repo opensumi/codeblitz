@@ -10,7 +10,7 @@ import {
   SlotRenderer,
 } from '@opensumi/ide-core-browser';
 import merge from 'lodash/merge';
-import React, { useEffect } from 'react';
+import React, { useEffect, useLayoutEffect, useMemo } from 'react';
 import { IDiffViewerProps } from '../core/diff-viewer';
 import { DiffViewerModule } from '../core/diff-viewer/module';
 import { BoxPanel, SplitPanel } from '../editor';
@@ -52,105 +52,100 @@ export function DiffViewerLayoutComponent(): React.ReactElement {
 }
 
 export const DiffViewerRenderer = (props: IDiffViewerProps) => {
-  const mergedProps = merge({
-    appConfig: {},
-    runtimeConfig: {
-      onWillApplyTheme: props.onWillApplyTheme,
-      tabBarRightExtraContent: props.tabBarRightExtraContent,
-    } as RuntimeConfig,
-  }, props) as IAppRendererProps;
+  const workspaceDir = useConstant(() => props?.appConfig?.workspaceDir || 'workspace-' + randomString(8));
 
-  if (!mergedProps.appConfig.injector) {
-    mergedProps.appConfig.injector = new Injector();
-  }
-
-  const injector = mergedProps.appConfig.injector;
-
-  injector.addProviders({
-    token: IDiffViewerProps,
-    useValue: mergedProps,
-  });
-
-  const appConfig = mergedProps.appConfig;
-
-  let appModules: ModuleConstructor[] = appConfig?.modules || [];
-  if (!appModules.includes(DiffViewerModule)) {
-    appModules = [
-      DiffViewerModule,
-      ...appModules,
-    ];
-  }
-
-  delete appConfig?.modules;
-
-  const workspaceDir = appConfig?.workspaceDir || 'workspace-' + randomString(8);
-  delete (appConfig as Partial<IAppRendererProps['appConfig']>)?.workspaceDir;
-
-  const layoutConfig = appConfig?.layoutConfig || defaultLayoutConfig;
-  delete appConfig?.layoutConfig;
-
-  const layoutComponent = appConfig?.layoutComponent || DiffViewerLayoutComponent;
-  delete appConfig?.layoutComponent;
-
-  useEffect(() => {
-    const prefix = randomString(8);
-    registerLocalStorageProvider(GeneralSettingsId.Theme, workspaceDir, prefix);
+  useLayoutEffect(() => {
+    registerLocalStorageProvider(GeneralSettingsId.Theme, workspaceDir, workspaceDir);
     return () => {
       for (var i = 0; i < localStorage.length; i++) {
         const key = localStorage.key(i)!;
-        if (key.startsWith(prefix)) {
+        if (key.startsWith(workspaceDir)) {
           localStorage.removeItem(key);
         }
       }
     };
-  }, []);
+  }, [workspaceDir]);
 
-  const diffViewerAppConfig: IAppRendererProps = merge<IAppRendererProps, Partial<IAppRendererProps>>({
-    appConfig: {
-      modules: appModules,
-      workspaceDir,
-      layoutComponent,
-      layoutConfig,
-      disableRestoreEditorGroupState: true,
-      extensionMetadata,
-      defaultPreferences: {
-        'general.theme': 'opensumi-light',
-        'editor.minimap': false,
-        'ai.native.inlineDiff.preview.mode': 'inlineLive',
-        'editor.showActionWhenGroupEmpty': true,
-        'editor.autoSave': 'afterDelay',
-        'application.confirmExit': 'never',
-        'editor.guides.bracketPairs': false,
-        'editor.quickSuggestionsDelay': 10,
-        'editor.previewMode': false,
-        'editor.autoSaveDelay': 1000, // one second
-        'editor.fixedOverflowWidgets': true, // widget editor 默认改为 fixed
-        'editor.unicodeHighlight.ambiguousCharacters': false,
-        'editor.preventScrollAfterFocused': true,
-        'files.exclude': {
-          ...FILES_DEFAULTS.filesExclude,
-          // browserfs OverlayFS 用来记录删除的文件
-          [`**${deletionLogPath}`]: true,
-        },
-      },
-    },
-    runtimeConfig: ({
-      aiNative: {
-        enable: true,
-        capabilities: {
-          supportsInlineChat: true,
-        },
-      },
-      startupEditor: 'none',
-      workspace: {
-        filesystem: {
-          fs: 'InMemory',
-          options: {},
-        },
-      },
-    }),
-  }, mergedProps);
+  const diffViewerAppConfig: IAppRendererProps = useMemo(() => {
+    const mergedProps = merge({
+      appConfig: {},
+      runtimeConfig: {
+        onWillApplyTheme: props.onWillApplyTheme,
+        tabBarRightExtraContent: props.tabBarRightExtraContent,
+      } as RuntimeConfig,
+    }, props) as IAppRendererProps;
 
+    if (!mergedProps.appConfig.injector) {
+      mergedProps.appConfig.injector = new Injector();
+    }
+
+    const injector = mergedProps.appConfig.injector;
+
+    injector.addProviders({
+      token: IDiffViewerProps,
+      useValue: mergedProps,
+    });
+
+    const appConfig = mergedProps.appConfig;
+
+    let appModules: ModuleConstructor[] = appConfig?.modules || [];
+    if (!appModules.includes(DiffViewerModule)) {
+      appModules = [
+        DiffViewerModule,
+        ...appModules,
+      ];
+    }
+
+    delete props?.appConfig?.modules;
+    delete props?.appConfig?.workspaceDir;
+
+    return merge<IAppRendererProps, Partial<IAppRendererProps>>({
+      appConfig: {
+        modules: appModules,
+        workspaceDir,
+        layoutComponent: DiffViewerLayoutComponent,
+        layoutConfig: defaultLayoutConfig,
+        disableRestoreEditorGroupState: true,
+        extensionMetadata,
+        defaultPreferences: {
+          'general.theme': 'opensumi-light',
+          'editor.minimap': false,
+          'ai.native.inlineDiff.preview.mode': 'inlineLive',
+          'editor.showActionWhenGroupEmpty': true,
+          'editor.autoSave': 'afterDelay',
+          'application.confirmExit': 'never',
+          'editor.guides.bracketPairs': false,
+          'editor.quickSuggestionsDelay': 10,
+          'editor.previewMode': false,
+          'editor.autoSaveDelay': 1000, // one second
+          'editor.fixedOverflowWidgets': true, // widget editor 默认改为 fixed
+          'editor.unicodeHighlight.ambiguousCharacters': false,
+          'editor.preventScrollAfterFocused': true,
+          'files.exclude': {
+            ...FILES_DEFAULTS.filesExclude,
+            // browserfs OverlayFS 用来记录删除的文件
+            [`**${deletionLogPath}`]: true,
+          },
+        },
+      },
+      runtimeConfig: ({
+        aiNative: {
+          enable: true,
+          capabilities: {
+            // 必须要开，否则采纳按钮不可用
+            supportsInlineChat: true,
+          },
+        },
+        startupEditor: 'none',
+        workspace: {
+          filesystem: {
+            fs: 'InMemory',
+            options: {},
+          },
+        },
+      }),
+    }, mergedProps);
+  }, [props]);
   return (
     <AppRenderer
       {...diffViewerAppConfig}
