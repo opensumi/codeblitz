@@ -14,7 +14,7 @@ module.exports = () => {
     },
     output: {
       filename: `[name].${isDev ? 'js' : '[contenthash:8].js'}`,
-      path: path.resolve(__dirname, '../dist'),
+      path: path.resolve(__dirname, '../../sumi-core/resources'),
     },
     target: 'webworker',
     devtool: isDev ? 'inline-source-map' : false,

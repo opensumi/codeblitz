@@ -22,7 +22,7 @@ const BannerPlugin = require('./util/banner-plugin');
 const { nodePolyfill } = require('./util');
 const { findPortSync } = require('./util/find-porter');
 const { config } = require('./util');
-const pkg = require('../../../package.json');
+const pkg = require('../../../lerna.json');
 
 const defaultHost = 'localhost';
 const HOST = process.env.HOST || defaultHost;
