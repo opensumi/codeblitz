@@ -52,7 +52,7 @@ export function DiffViewerLayoutComponent(): React.ReactElement {
 }
 
 export const DiffViewerRenderer = (props: IDiffViewerProps) => {
-  const workspaceDir = useConstant(() => 'workspace-' + randomString(8));
+  const workspaceDir = useConstant(() => props?.appConfig?.workspaceDir || 'workspace-' + randomString(8));
 
   useLayoutEffect(() => {
     registerLocalStorageProvider(GeneralSettingsId.Theme, workspaceDir, workspaceDir);
@@ -96,20 +96,15 @@ export const DiffViewerRenderer = (props: IDiffViewerProps) => {
       ];
     }
 
-    delete appConfig?.modules;
-
-    const layoutConfig = appConfig?.layoutConfig || defaultLayoutConfig;
-    delete appConfig?.layoutConfig;
-
-    const layoutComponent = appConfig?.layoutComponent || DiffViewerLayoutComponent;
-    delete appConfig?.layoutComponent;
+    delete props?.appConfig?.modules;
+    delete props?.appConfig?.workspaceDir;
 
     return merge<IAppRendererProps, Partial<IAppRendererProps>>({
       appConfig: {
         modules: appModules,
         workspaceDir,
-        layoutComponent,
-        layoutConfig,
+        layoutComponent: DiffViewerLayoutComponent,
+        layoutConfig: defaultLayoutConfig,
         disableRestoreEditorGroupState: true,
         extensionMetadata,
         defaultPreferences: {
@@ -137,6 +132,7 @@ export const DiffViewerRenderer = (props: IDiffViewerProps) => {
         aiNative: {
           enable: true,
           capabilities: {
+            // 必须要开，否则采纳按钮不可用
             supportsInlineChat: true,
           },
         },
@@ -149,7 +145,7 @@ export const DiffViewerRenderer = (props: IDiffViewerProps) => {
         },
       }),
     }, mergedProps);
-  }, []);
+  }, [props]);
   return (
     <AppRenderer
       {...diffViewerAppConfig}
