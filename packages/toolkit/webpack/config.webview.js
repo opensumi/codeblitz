@@ -14,7 +14,7 @@ module.exports = (option = {}) => {
     },
     output: {
       filename: `[name].${isDev ? 'js' : '[contenthash:8].js'}`,
-      path: path.resolve(__dirname, `../dist`),
+      path: path.resolve(__dirname, '../../sumi-core/resources'),
     },
     devtool: isDev ? 'inline-source-map' : false,
     mode: isDev ? 'development' : 'production',
