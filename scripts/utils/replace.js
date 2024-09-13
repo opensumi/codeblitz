@@ -4,7 +4,7 @@
 
 const fse = require('fs-extra');
 const path = require('path');
-const pkg = require('../../package.json');
+const pkg = require('../../lerna.json');
 
 /**
  * @param {string[]} files
