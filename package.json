@@ -75,7 +75,7 @@
     "minimist": "^1.2.5",
     "signale": "^1.4.0",
     "ts-jest": "^26.4.4",
-    "ts-node": "^9.0.0",
+    "ts-node": "^10.9.2",
     "tslib": "^2.2.0",
     "typescript": "^4.2.3"
   },
