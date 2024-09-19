@@ -159,19 +159,6 @@ export function detectEncodingByBuffer(buffer: Buffer): string | null {
   return mapped || normalizedEncodingName;
 }
 
-// export function detectEncodingByURI(uri: URI): string | null {
-//   const filePath = FileUri.fsPath(uri);
-//   const fd = fs.openSync(filePath, 'r');
-//   const maxLength = 100;
-//   let buffer = Buffer.allocUnsafe(maxLength);
-//   const readLength = fs.readSync(fd, buffer, 0, maxLength, null);
-
-//   // Reset real length
-//   buffer = buffer.slice(0, readLength);
-//   fs.closeSync(fd);
-//   return detectEncodingByBuffer(buffer);
-// }
-
 export function getEncodingInfo(encoding: string | null): null | EncodingInfo {
   if (!encoding) {
     return null;

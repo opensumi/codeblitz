@@ -1,6 +1,6 @@
 import { fsExtra, isFilesystemReady } from '@codeblitzjs/ide-sumi-core';
 import { InlineChatHandler } from '@opensumi/ide-ai-native/lib/browser/widget/inline-chat/inline-chat.handler';
-import { AppConfig, ClientAppContribution, EDITOR_COMMANDS, IClientApp } from '@opensumi/ide-core-browser';
+import { AppConfig, ClientAppContribution, EDITOR_COMMANDS } from '@opensumi/ide-core-browser';
 import {
   Disposable,
   DisposableStore,
@@ -10,14 +10,12 @@ import {
   IChatProgress,
   ILogger,
   isArray,
-  isWindows,
   MaybePromise,
   Sequencer,
   URI,
 } from '@opensumi/ide-core-common';
 import { IResourceOpenOptions, WorkbenchEditorService } from '@opensumi/ide-editor';
 import { Selection, SelectionDirection } from '@opensumi/ide-monaco';
-import { toSlashes } from '@opensumi/ide-utils/lib/path';
 
 import { Autowired } from '@opensumi/di';
 import { InlineChatController } from '@opensumi/ide-ai-native/lib/browser/widget/inline-chat/inline-chat-controller';
@@ -87,12 +85,8 @@ export class DiffViewerContribution implements ClientAppContribution, MenuContri
     return URI.file(this.getFullPath(filePath));
   }
 
-  normalizePath(filePath: string) {
-    let result = removeStart(filePath, this.appConfig.workspaceDir);
-    if (isWindows) {
-      result = toSlashes(result);
-    }
-
+  normalizePath(path: string) {
+    let result = removeStart(path, this.appConfig.workspaceDir);
     if (result.startsWith('/')) {
       return result.slice(1);
     }
@@ -245,7 +239,7 @@ export class DiffViewerContribution implements ClientAppContribution, MenuContri
   };
 
   getFilePathForEditor = (editor: IEditor) => {
-    return this.normalizePath(editor.currentUri!.codeUri.fsPath);
+    return this.normalizePath(editor.currentUri!.codeUri.path);
   };
 
   getAllTabs = (): IDiffViewerTab[] => {
@@ -254,7 +248,7 @@ export class DiffViewerContribution implements ClientAppContribution, MenuContri
 
     return resources.map((editor, idx) => ({
       index: idx,
-      filePath: this.normalizePath(editor.uri.codeUri.fsPath),
+      filePath: this.normalizePath(editor.uri.codeUri.path),
     }));
   };
 
@@ -362,17 +356,16 @@ export class DiffViewerContribution implements ClientAppContribution, MenuContri
     this._disposables.add(disposable);
 
     disposable.addDispose(this.inlineDiffHandler.onPartialEditEvent((e) => {
-      const fsPath = e.uri.fsPath;
+      const path = e.uri.path;
 
       this._onPartialEditEvent.fire({
-        filePath: this.normalizePath(fsPath),
+        filePath: this.normalizePath(path),
         ...e,
       });
     }));
 
     disposable.addDispose(this.workbenchEditorService.onActiveResourceChange((e) => {
-      const _newPath = e?.uri.codeUri.fsPath;
-      let newPath = _newPath;
+      let newPath = e?.uri.codeUri.path;
       let currentIndex = -1;
       if (newPath) {
         currentIndex = this.getFileIndex(newPath);
