@@ -30,7 +30,7 @@ import { IAppInstance, IConfig } from './types';
 
 export { BoxPanel, SlotLocation, SlotRenderer, SplitPanel };
 
-const getDefaultAppConfig = (): IAppOpts => ({
+const getDefaultEditorAppConfig = (): IAppOpts => ({
   modules: getModules(),
   useCdnIcon: true,
   noExtHost: true,
@@ -62,7 +62,7 @@ const getDefaultAppConfig = (): IAppOpts => ({
 });
 
 export function createEditor({ appConfig, runtimeConfig }: IConfig): IAppInstance {
-  const opts = interceptAppOpts(mergeConfig(getDefaultAppConfig(), appConfig), runtimeConfig);
+  const opts = interceptAppOpts(mergeConfig(getDefaultEditorAppConfig(), appConfig), runtimeConfig);
 
   if (!opts.workspaceDir) {
     throw new Error(

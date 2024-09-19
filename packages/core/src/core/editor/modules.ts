@@ -26,7 +26,7 @@ import { WorkspaceModule } from '@opensumi/ide-workspace/lib/browser';
  * alex
  */
 import { PluginModule } from '@codeblitzjs/ide-plugin';
-import { ClientModule, ServerModuleCollection } from '@codeblitzjs/ide-sumi-core';
+import { ClientModule, EditorServerModuleCollection } from '@codeblitzjs/ide-sumi-core';
 
 /**
  * editor special
@@ -66,7 +66,7 @@ export const getModules: () => ModuleConstructor[] = () => [
   // CodeBlitz
   ClientModule,
   PluginModule,
-  ...ServerModuleCollection,
+  ...EditorServerModuleCollection,
 
   // Editor Special
   EditorSpecialModule,
