@@ -7,7 +7,7 @@ export {
   SendClientResult,
 } from '@opensumi/ide-search/lib/common';
 
-export const IContentSearchServer = Symbol('ContentSearchService');
+export const IContentSearchServer = Symbol('IContentSearchServer');
 
 export interface IContentSearchServer extends _IContentSearchServer {}
 

@@ -1,3 +1,4 @@
+import { ModuleConstructor } from '@opensumi/ide-core-browser';
 import { ServerCommonModule } from './core/common.module';
 import { ExtensionManagerModule } from './extension-manager';
 import { FileSchemeNodeModule } from './file-scheme';
@@ -33,4 +34,10 @@ export const ServerModuleCollection = [
   FileSearchModule,
   SearchModule,
   ExtensionManagerModule,
-];
+] as ModuleConstructor[];
+
+const editorDisabledModules = new Set([SearchModule] as ModuleConstructor[]);
+
+export const EditorServerModuleCollection = ServerModuleCollection.filter((m) => {
+  return !editorDisabledModules.has(m);
+});
