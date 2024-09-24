@@ -1,3 +1,5 @@
+import { URI } from '@opensumi/ide-core-common';
+
 export interface DocumentModel {
   /**
    * 打开的文件路径
@@ -48,6 +50,8 @@ export interface CodeDocumentModel extends DocumentModel {
    * 仓库名
    */
   name: string;
+
+  resolveStaticResourcePath?(documentModel: CodeDocumentModel): URI;
 }
 
 export interface EditorConfig {
