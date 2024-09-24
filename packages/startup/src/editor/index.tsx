@@ -12,6 +12,10 @@ import Cascader from 'antd/lib/cascader';
 import Select from 'antd/lib/select';
 import './style.less';
 import { request } from '@codeblitzjs/ide-common';
+import { URI } from '@opensumi/ide-core-common';
+
+import { CodeDocumentModel } from '@codeblitzjs/ide-core/lib/core/editor/types';
+import { getFileTypeByExt } from '@codeblitzjs/ide-core/lib/modules/opensumi__ide-file-service';
 import { LocalExtensionModule } from '../common/local-extension.module';
 import * as editorPlugin from './plugin';
 
@@ -29,7 +33,7 @@ const fileOptions = (function transform(obj) {
   });
 })({
   'opensumi/core': {
-    main: ['README.md', 'package.json'],
+    main: ['README.md', 'package.json', 'packages/design/src/browser/style/images/design-background-light.png'],
   },
 });
 
@@ -45,6 +49,8 @@ const App = () => {
     [10, 20],
     [30, 40],
   ]);
+
+  const staticServicePath = `https://raw.githubusercontent.com`;
 
   const readFile = async (filepath: string) => {
     const res = await request(
@@ -170,7 +176,11 @@ const App = () => {
                   startupEditor: 'none',
                   // hideEditorTab: true,
                   resolveFileType(path) {
-                    return 'text';
+                    const ext = path.split('.').pop();
+                    if (!ext) {
+                      return 'text';
+                    }
+                    return getFileTypeByExt(ext);
                   },
                 }}
                 editorConfig={{
@@ -193,6 +203,11 @@ const App = () => {
                   lineNumber,
                   onLineNumberChange(num) {
                     setLineNumber(num);
+                  },
+                  resolveStaticResourcePath(documentModel: CodeDocumentModel) {
+                    return URI.parse(
+                      `${staticServicePath}/${documentModel.owner}/${documentModel.name}/${documentModel.ref}/${documentModel.filepath}`,
+                    );
                   },
                 }}
               />

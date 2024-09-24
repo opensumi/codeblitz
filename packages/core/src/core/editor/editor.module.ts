@@ -58,9 +58,10 @@ import md5 from 'md5';
 import * as path from 'path';
 import { CodeBlitzCommandContribution } from '../commands';
 import { IPropsService } from '../props.service';
-import styles from '../style.module.less';
-import { CodeDocumentModel, EditorProps, isCodeDocumentModel } from './types';
 import { DefaultThemeGuardContribution } from '../providers';
+import styles from '../style.module.less';
+import { EditorStaticResourceContribution } from './contributions/static-resource.contribution';
+import { CodeDocumentModel, EditorProps, isCodeDocumentModel } from './types';
 
 const ContextTrue = new RawContextKey('alex.context.true', undefined);
 const ContextFalse = new RawContextKey('alex.context.false', undefined);
@@ -740,5 +741,6 @@ export class EditorSpecialModule extends BrowserModule {
     DefaultThemeGuardContribution,
     EditorSpecialContribution,
     CodeBlitzCommandContribution,
+    EditorStaticResourceContribution,
   ];
 }

@@ -1,7 +1,6 @@
-import { IExtensionBasicMetadata } from '@codeblitzjs/ide-common';
 import { IAppOpts } from '@codeblitzjs/ide-sumi-core';
 import { ModuleConstructor } from '@opensumi/ide-core-browser';
-import { BuiltinTheme, getThemeId, getThemeType, IThemeContribution } from '@opensumi/ide-theme';
+import { URI } from '@opensumi/ide-core-common';
 
 import { IAppConfig } from '../api/types';
 
@@ -67,4 +66,49 @@ export function createHook(obj: any, targetFunction: string, options: {
       return ret;
     }
   };
+}
+
+interface SCMUriQueryParams {
+  ref: string; // commitId
+  branch?: string; // 分支名
+}
+
+interface SCMUriParams extends SCMUriQueryParams {
+  platform: string; // 例如 gitlab/gitlab 等
+  repo: string; // groupName/repoName 项目名称
+  path: string; // 文件路径
+}
+
+export function fromSCMUri(uri: URI): SCMUriParams {
+  const query = uri.getParsedQuery();
+
+  const result: SCMUriParams = {
+    platform: query.scheme,
+    repo: query.authority,
+    path: query.path,
+    ref: query.ref,
+  };
+
+  if (query.branch) {
+    result.branch = query.branch;
+  }
+
+  return result;
+}
+
+export function toSCMUri(uriParams: SCMUriParams) {
+  const query: SCMUriQueryParams = {
+    ref: uriParams.ref,
+  };
+
+  if (uriParams.branch) {
+    query.branch = uriParams.branch;
+  }
+
+  return URI.from({
+    scheme: uriParams.platform,
+    authority: uriParams.repo,
+    path: uriParams.path,
+    query: JSON.stringify(query),
+  });
 }
