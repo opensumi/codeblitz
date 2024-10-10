@@ -8,6 +8,7 @@ import {
   IChatProgress,
   IReporter,
 } from '@opensumi/ide-core-common';
+import { EditorFileType } from '@opensumi/ide-file-service/lib/common';
 import { ITheme } from '@opensumi/ide-theme';
 import { SumiReadableStream } from '@opensumi/ide-utils/lib/stream';
 import { FileSystemConfiguration, FileSystemInstance } from '../server/node';
@@ -212,7 +213,7 @@ export interface RuntimeConfig {
    * 当文件后缀名判断格式 不满足条件时，可通过此配置项进行自定义
    * 优先会从语法服务中获取类型
    */
-  resolveFileType?: (path: string) => 'image' | 'text' | 'video' | undefined;
+  resolveFileType?: (path: string) => 'image' | 'text' | 'video' | undefined | EditorFileType;
 
   /**
    * AI Native 相关配置

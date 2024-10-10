@@ -111,7 +111,7 @@ export class ServerApp implements IServerApp {
 
   public rootFS: RootFS;
 
-  private disposeCollection = new DisposableCollection();
+  private _disposables = new DisposableCollection();
 
   constructor(
     opts: IServerAppOpts & {
@@ -149,7 +149,7 @@ export class ServerApp implements IServerApp {
     };
     window.addEventListener('unload', handleUnload);
 
-    this.disposeCollection.push({
+    this._disposables.push({
       dispose: () => {
         window.removeEventListener('unload', handleUnload);
       },
@@ -191,7 +191,7 @@ export class ServerApp implements IServerApp {
     try {
       const runtimeConfig: RuntimeConfig = this.injector.get(RuntimeConfig);
       this.rootFS = await initializeRootFileSystem();
-      this.disposeCollection.push(
+      this._disposables.push(
         await initializeHomeFileSystem(this.rootFS, runtimeConfig.scenario),
       );
 
@@ -223,8 +223,8 @@ export class ServerApp implements IServerApp {
   async start() {
     await this.launch();
     await this.initializeContribution();
-    const commonChannelPathHandler = this.injector.get(CommonChannelPathHandler);
-    const handler = new CodeblitzCommonChannelHandler('codeblitz-server', commonChannelPathHandler);
+    const pathHandler = this.injector.get(CommonChannelPathHandler);
+    const handler = new CodeblitzCommonChannelHandler('codeblitz-server', pathHandler);
 
     const channel = this.injector.get(InMemoryMessageChannel) as InMemoryMessageChannel;
     handler.receiveConnection(new CodeBlitzConnection(channel.port2));
@@ -236,11 +236,11 @@ export class ServerApp implements IServerApp {
       dispose: () => {},
     };
 
-    commonChannelPathHandler.register(RPCServiceChannelPath, channelHandler);
+    pathHandler.register(RPCServiceChannelPath, channelHandler);
 
-    this.disposeCollection.push({
+    this._disposables.push({
       dispose: () => {
-        commonChannelPathHandler.removeHandler(RPCServiceChannelPath, channelHandler);
+        pathHandler.removeHandler(RPCServiceChannelPath, channelHandler);
       },
     });
 
@@ -252,7 +252,7 @@ export class ServerApp implements IServerApp {
   }
 
   dispose() {
-    this.disposeCollection.dispose();
+    this._disposables.dispose();
   }
 }
 
