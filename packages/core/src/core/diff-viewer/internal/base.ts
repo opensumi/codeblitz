@@ -1,5 +1,4 @@
 import { fsExtra, isFilesystemReady } from '@codeblitzjs/ide-sumi-core';
-import { InlineChatHandler } from '@opensumi/ide-ai-native/lib/browser/widget/inline-chat/inline-chat.handler';
 import { AppConfig, ClientAppContribution, EDITOR_COMMANDS } from '@opensumi/ide-core-browser';
 import {
   Disposable,
@@ -20,7 +19,7 @@ import { Selection, SelectionDirection } from '@opensumi/ide-monaco';
 import { Autowired } from '@opensumi/di';
 import { InlineChatController } from '@opensumi/ide-ai-native/lib/browser/widget/inline-chat/inline-chat-controller';
 import { LiveInlineDiffPreviewer } from '@opensumi/ide-ai-native/lib/browser/widget/inline-diff/inline-diff-previewer';
-import { InlineDiffHandler } from '@opensumi/ide-ai-native/lib/browser/widget/inline-diff/inline-diff.handler';
+import {  InlineDiffController } from '@opensumi/ide-ai-native/lib/browser/widget/inline-diff/inline-diff.controller';
 import {
   IInlineStreamDiffSnapshotData,
   InlineStreamDiffHandler,
@@ -52,12 +51,6 @@ export class DiffViewerContribution implements ClientAppContribution, MenuContri
 
   @Autowired(WorkbenchEditorService)
   private readonly workbenchEditorService: WorkbenchEditorService;
-
-  @Autowired(InlineChatHandler)
-  protected inlineChatHandler: InlineChatHandler;
-
-  @Autowired(InlineDiffHandler)
-  protected inlineDiffHandler: InlineDiffHandler;
 
   @Autowired(IEditorDocumentModelService)
   private readonly editorDocumentModelService: IEditorDocumentModelService;
@@ -128,9 +121,9 @@ export class DiffViewerContribution implements ClientAppContribution, MenuContri
 
     const editor = openResourceResult.group.codeEditor;
     const index = openResourceResult.group.resources.indexOf(openResourceResult.resource);
-
+    const inlineDiffHandler = InlineDiffController.get(editor.monacoEditor)!;
     if (oldContent === newContent) {
-      this.inlineDiffHandler.destroyPreviewer();
+      inlineDiffHandler.destroyPreviewer();
       return;
     }
 
@@ -144,7 +137,7 @@ export class DiffViewerContribution implements ClientAppContribution, MenuContri
     monacoModel.setValue(oldContent);
     const fullRange = monacoModel.getFullModelRange();
 
-    const previewer = this.inlineDiffHandler.createDiffPreviewer(
+    const previewer = inlineDiffHandler.createDiffPreviewer(
       editor.monacoEditor,
       Selection.fromRange(fullRange, SelectionDirection.LTR),
       {
@@ -226,7 +219,8 @@ export class DiffViewerContribution implements ClientAppContribution, MenuContri
       },
     });
 
-    this.inlineDiffHandler.showPreviewerByStream(
+    const inlineDiffHandler = InlineDiffController.get(editor.monacoEditor)!;
+    inlineDiffHandler.showPreviewerByStream(
       editor.monacoEditor,
       {
         crossSelection: Selection.fromRange(fullRange, SelectionDirection.LTR),
