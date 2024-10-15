@@ -1,6 +1,6 @@
 {
-  "__OPENSUMI_VERSION__": "3.3.3",
-  "__WORKER_HOST__": "https://gw.alipayobjects.com/os/cloud-ide/codeblitz/worker-host.490aafa0.js",
-  "__WEBVIEW_ENDPOINT__": "https://gw.alipayobjects.com/os/cloud-ide/codeblitz/webview.805ab470",
-  "__WEBVIEW_SCRIPT__": "https://gw.alipayobjects.com/os/cloud-ide/codeblitz/webview.66e57793.js"
+  "__OPENSUMI_VERSION__": "3.4.4-next-1728882643.0",
+  "__WORKER_HOST__": "https://gw.alipayobjects.com/os/cloud-ide/codeblitz/worker-host.d80be369.js",
+  "__WEBVIEW_ENDPOINT__": "https://gw.alipayobjects.com/os/cloud-ide/codeblitz/webview.25aac54e",
+  "__WEBVIEW_SCRIPT__": "https://gw.alipayobjects.com/os/cloud-ide/codeblitz/webview.9ae5c833.js"
 }

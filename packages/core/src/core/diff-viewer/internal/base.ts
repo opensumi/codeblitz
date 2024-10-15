@@ -1,5 +1,4 @@
 import { fsExtra, isFilesystemReady } from '@codeblitzjs/ide-sumi-core';
-import { InlineChatHandler } from '@opensumi/ide-ai-native/lib/browser/widget/inline-chat/inline-chat.handler';
 import { AppConfig, ClientAppContribution, EDITOR_COMMANDS } from '@opensumi/ide-core-browser';
 import {
   Disposable,
@@ -15,12 +14,13 @@ import {
   URI,
 } from '@opensumi/ide-core-common';
 import { IResourceOpenOptions, WorkbenchEditorService } from '@opensumi/ide-editor';
-import { Selection, SelectionDirection } from '@opensumi/ide-monaco';
+import { ICodeEditor, Selection, SelectionDirection } from '@opensumi/ide-monaco';
 
 import { Autowired } from '@opensumi/di';
 import { InlineChatController } from '@opensumi/ide-ai-native/lib/browser/widget/inline-chat/inline-chat-controller';
 import { LiveInlineDiffPreviewer } from '@opensumi/ide-ai-native/lib/browser/widget/inline-diff/inline-diff-previewer';
-import { InlineDiffHandler } from '@opensumi/ide-ai-native/lib/browser/widget/inline-diff/inline-diff.handler';
+import { InlineDiffController } from '@opensumi/ide-ai-native/lib/browser/widget/inline-diff/inline-diff.controller';
+import { InlineDiffService } from '@opensumi/ide-ai-native/lib/browser/widget/inline-diff/inline-diff.service';
 import {
   IInlineStreamDiffSnapshotData,
   InlineStreamDiffHandler,
@@ -53,12 +53,6 @@ export class DiffViewerContribution implements ClientAppContribution, MenuContri
   @Autowired(WorkbenchEditorService)
   private readonly workbenchEditorService: WorkbenchEditorService;
 
-  @Autowired(InlineChatHandler)
-  protected inlineChatHandler: InlineChatHandler;
-
-  @Autowired(InlineDiffHandler)
-  protected inlineDiffHandler: InlineDiffHandler;
-
   @Autowired(IEditorDocumentModelService)
   private readonly editorDocumentModelService: IEditorDocumentModelService;
 
@@ -67,6 +61,9 @@ export class DiffViewerContribution implements ClientAppContribution, MenuContri
 
   @Autowired(ILogger)
   protected logger: ILogger;
+
+  @Autowired(InlineDiffService)
+  protected inlineDiffService: InlineDiffService;
 
   private readonly _onPartialEditEvent = this._disposables.add(new Emitter<IExtendPartialEditEvent>());
   public readonly onPartialEditEvent: Event<IExtendPartialEditEvent> = this._onPartialEditEvent.event;
@@ -128,9 +125,9 @@ export class DiffViewerContribution implements ClientAppContribution, MenuContri
 
     const editor = openResourceResult.group.codeEditor;
     const index = openResourceResult.group.resources.indexOf(openResourceResult.resource);
-
+    const inlineDiffHandler = InlineDiffController.get(editor.monacoEditor)!;
     if (oldContent === newContent) {
-      this.inlineDiffHandler.destroyPreviewer();
+      inlineDiffHandler.destroyPreviewer();
       return;
     }
 
@@ -144,7 +141,7 @@ export class DiffViewerContribution implements ClientAppContribution, MenuContri
     monacoModel.setValue(oldContent);
     const fullRange = monacoModel.getFullModelRange();
 
-    const previewer = this.inlineDiffHandler.createDiffPreviewer(
+    const previewer = inlineDiffHandler.createDiffPreviewer(
       editor.monacoEditor,
       Selection.fromRange(fullRange, SelectionDirection.LTR),
       {
@@ -226,7 +223,8 @@ export class DiffViewerContribution implements ClientAppContribution, MenuContri
       },
     });
 
-    this.inlineDiffHandler.showPreviewerByStream(
+    const inlineDiffHandler = InlineDiffController.get(editor.monacoEditor)!;
+    inlineDiffHandler.showPreviewerByStream(
       editor.monacoEditor,
       {
         crossSelection: Selection.fromRange(fullRange, SelectionDirection.LTR),
@@ -327,16 +325,17 @@ export class DiffViewerContribution implements ClientAppContribution, MenuContri
     }
   }
 
-  getDiffInfoForUri = (uri: URI) => {
+  getDiffInfoForUri = (uri: URI, editor: ICodeEditor) => {
     let resourceDiff: InlineStreamDiffHandler | undefined;
+    const controller = InlineDiffController.get(editor)!;
 
-    const previewer = this.inlineDiffHandler.getPreviewer() as LiveInlineDiffPreviewer;
+    const previewer = controller.getPreviewer() as LiveInlineDiffPreviewer;
     if (previewer && previewer.isModel(uri.toString())) {
       resourceDiff = previewer.getNode();
     }
 
     if (!resourceDiff) {
-      resourceDiff = (this.inlineDiffHandler as any)._previewerNodeStore.get(uri.toString()) as
+      resourceDiff = controller.getStoredState(uri.toString()) as
         | InlineStreamDiffHandler
         | undefined;
     }
@@ -349,13 +348,22 @@ export class DiffViewerContribution implements ClientAppContribution, MenuContri
     };
   };
 
+  getCurrentInlineDiffHandler() {
+    const editor = this.workbenchEditorService.currentEditor;
+    if (!editor) {
+      throw new Error('No active editor');
+    }
+
+    return InlineDiffController.get(editor.monacoEditor)!;
+  }
+
   async initialize(): Promise<void> {
     await isFilesystemReady();
 
     const disposable = new Disposable();
     this._disposables.add(disposable);
 
-    disposable.addDispose(this.inlineDiffHandler.onPartialEditEvent((e) => {
+    disposable.addDispose(this.inlineDiffService.onPartialEdit((e) => {
       const path = e.uri.path;
 
       this._onPartialEditEvent.fire({
@@ -379,7 +387,8 @@ export class DiffViewerContribution implements ClientAppContribution, MenuContri
       };
 
       if (e?.uri) {
-        const diffInfo = this.getDiffInfoForUri(e.uri);
+        const editor = this.workbenchEditorService.currentEditor!;
+        const diffInfo = this.getDiffInfoForUri(e.uri, editor.monacoEditor);
         event.diffNum = diffInfo.unresolved;
         Object.assign(event, diffInfo);
       }
@@ -414,15 +423,17 @@ export class DiffViewerContribution implements ClientAppContribution, MenuContri
         return await fsExtra.readFile(fullPath, 'utf-8');
       },
       acceptAllPartialEdit: async () => {
-        if (this.inlineDiffHandler) {
-          this.inlineDiffHandler.handleAction(
+        const handler = this.getCurrentInlineDiffHandler();
+        if (handler) {
+          handler.handleAction(
             EResultKind.ACCEPT,
           );
         }
       },
       rejectAllPartialEdit: async () => {
-        if (this.inlineDiffHandler) {
-          this.inlineDiffHandler.handleAction(
+        const handler = this.getCurrentInlineDiffHandler();
+        if (handler) {
+          handler.handleAction(
             EResultKind.DISCARD,
           );
         }
@@ -432,7 +443,8 @@ export class DiffViewerContribution implements ClientAppContribution, MenuContri
       },
       getCurrentTab: () => {
         const allTabs = this.getAllTabs();
-        const currentEditorFilePath = this.getFilePathForEditor(this.workbenchEditorService.currentEditor!);
+        const editor = this.workbenchEditorService.currentEditor!;
+        const currentEditorFilePath = this.getFilePathForEditor(editor);
         const currentTabIdx = allTabs.findIndex((tab) => {
           return tab.filePath === currentEditorFilePath;
         });
@@ -440,7 +452,7 @@ export class DiffViewerContribution implements ClientAppContribution, MenuContri
           return;
         }
         const uri = this.getFullPathUri(currentEditorFilePath);
-        const diffInfo = this.getDiffInfoForUri(uri);
+        const diffInfo = this.getDiffInfoForUri(uri, editor.monacoEditor);
 
         const fileName = path.basename(currentEditorFilePath);
         return {
