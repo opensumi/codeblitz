@@ -802,7 +802,7 @@ __metadata:
     "@codeblitzjs/ide-browserfs": "npm:1.0.0"
     "@codeblitzjs/ide-common": "workspace:*"
     "@codeblitzjs/ide-registry": "workspace:*"
-    "@opensumi/di": "npm:^1.0.0"
+    "@opensumi/di": "npm:^2.1.0"
     "@opensumi/ide-ai-native": "npm:3.4.4-next-1728882643.0"
     "@opensumi/ide-core-browser": "npm:3.4.4-next-1728882643.0"
     "@opensumi/ide-core-common": "npm:3.4.4-next-1728882643.0"
@@ -2081,12 +2081,19 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@opensumi/di@npm:^1.0.0, @opensumi/di@npm:^1.8.0":
+"@opensumi/di@npm:^1.8.0":
   version: 1.10.1
   resolution: "@opensumi/di@npm:1.10.1"
   dependencies:
     reflect-metadata: "npm:^0.1.13"
   checksum: 10/1c4b4ad4df43c314624abbfbee90589cd81973b8f27ea9770ac779734e36d6f38f79f89830710c22dc81c6443c2ee45b26035b3f4b2845e42da36a8a1d90d378
+  languageName: node
+  linkType: hard
+
+"@opensumi/di@npm:^2.1.0":
+  version: 2.1.0
+  resolution: "@opensumi/di@npm:2.1.0"
+  checksum: 10/876404ed1815d9b74a9f2707f9887e196918aada227e9ffda8c58ab3205c0a8cfee6ae396444f6ccd4c7c4764ad20f099c40ba460b7de5b800b270cf001a884c
   languageName: node
   linkType: hard
 

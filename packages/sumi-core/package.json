@@ -14,7 +14,7 @@
     "@codeblitzjs/ide-browserfs": "1.0.0",
     "@codeblitzjs/ide-common": "workspace:*",
     "@codeblitzjs/ide-registry": "workspace:*",
-    "@opensumi/di": "^1.0.0",
+    "@opensumi/di": "^2.1.0",
     "@opensumi/ide-ai-native": "3.4.4-next-1728882643.0",
     "@opensumi/ide-core-browser": "3.4.4-next-1728882643.0",
     "@opensumi/ide-core-common": "3.4.4-next-1728882643.0",
