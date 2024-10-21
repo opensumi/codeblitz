@@ -1,5 +1,4 @@
 const path = require('path');
-const fs = require('fs');
 const TerserPlugin = require('terser-webpack-plugin');
 const CssMinimizerPlugin = require('css-minimizer-webpack-plugin');
 const createWebpackConfig = require('./config.integration');

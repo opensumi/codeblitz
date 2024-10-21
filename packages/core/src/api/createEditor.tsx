@@ -20,7 +20,7 @@ import { deletionLogPath } from '@codeblitzjs/ide-browserfs/lib/backend/OverlayF
 import { IPluginConfig } from '@codeblitzjs/ide-plugin';
 
 import { getModules } from '../core/editor/modules';
-import { EXT_WORKER_HOST, WEBVIEW_ENDPOINT } from '../core/env';
+import { EXT_WORKER_HOST } from '../core/env';
 import { EditorLayoutComponent, getEditorLayoutConfig } from '../core/layout';
 import { disposableCollection, disposeMode } from '../core/patch';
 import { mergeConfig } from '../core/utils';
@@ -35,7 +35,6 @@ const getDefaultEditorAppConfig = (): IAppOpts => ({
   useCdnIcon: true,
   noExtHost: true,
   extWorkerHost: EXT_WORKER_HOST,
-  webviewEndpoint: WEBVIEW_ENDPOINT,
   defaultPreferences: {
     'general.theme': 'opensumi-design-light-theme',
     'application.confirmExit': 'never',
@@ -59,6 +58,7 @@ const getDefaultEditorAppConfig = (): IAppOpts => ({
   extensionStorageDirName: STORAGE_DIR,
   appName,
   allowSetDocumentTitleFollowWorkspaceDir: false,
+  useBuiltinWebview: true,
 });
 
 export function createEditor({ appConfig, runtimeConfig }: IConfig): IAppInstance {

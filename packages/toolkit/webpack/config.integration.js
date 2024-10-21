@@ -209,10 +209,6 @@ module.exports = (option) => {
         __WORKER_HOST__: process.env.WORKER_PATH
           ? JSON.stringify(`/assets/~${process.env.WORKER_PATH}`)
           : JSON.stringify(`${baseURL}/${config.workerEntry}.js`),
-        __WEBVIEW_ENDPOINT__: process.env.WEBVIEW_ENDPOINT
-          ? JSON.stringify(`/assets/~${process.env.WEBVIEW_ENDPOINT}`)
-          : JSON.stringify(`${baseURL}/${config.webviewEntry}`),
-        __WEBVIEW_SCRIPT__: JSON.stringify(''),
         __VERSION__: JSON.stringify(pkg.version),
         ...option.define,
       }),

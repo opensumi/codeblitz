@@ -30,7 +30,7 @@ import '../core/extension/extension.patch';
 import { disposableCollection, disposeMode } from '../core/patch';
 
 import { Injector } from '@opensumi/di';
-import { EXT_WORKER_HOST, WEBVIEW_ENDPOINT } from '../core/env';
+import { EXT_WORKER_HOST } from '../core/env';
 import { IconSlim, IDETheme } from '../core/extension/metadata';
 import { getDefaultLayoutConfig, LayoutComponent } from '../core/layout';
 import { modules } from '../core/modules';
@@ -46,7 +46,6 @@ export const getDefaultAppConfig = (): IAppOpts => ({
   useCdnIcon: true,
   noExtHost: true,
   extWorkerHost: EXT_WORKER_HOST,
-  webviewEndpoint: WEBVIEW_ENDPOINT,
   defaultPreferences: {
     'general.theme': 'opensumi-design-dark-theme',
     'general.icon': 'vsicons-slim',
@@ -75,6 +74,7 @@ export const getDefaultAppConfig = (): IAppOpts => ({
   extensionStorageDirName: STORAGE_DIR,
   appName,
   allowSetDocumentTitleFollowWorkspaceDir: false,
+  useBuiltinWebview: true,
   app: {
     logo: 'https://mdn.alipayobjects.com/huamei_hwfivk/afts/img/A*byvFQJURn0kAAAAAAAAAAAAADlyoAQ/original',
     brandName: 'Codeblitz',

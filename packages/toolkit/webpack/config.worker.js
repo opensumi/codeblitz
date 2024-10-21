@@ -3,6 +3,9 @@ const webpack = require('webpack');
 const { WebpackManifestPlugin } = require('webpack-manifest-plugin');
 const { nodePolyfill, config, manifestSeed } = require('./util');
 
+/**
+ * @returns {import('webpack').Configuration}
+ */
 module.exports = () => {
   const isDev = process.env.NODE_ENV === 'development';
 
@@ -13,8 +16,9 @@ module.exports = () => {
       ),
     },
     output: {
-      filename: `[name].${isDev ? 'js' : '[contenthash:8].js'}`,
+      filename: `[name].js`,
       path: path.resolve(__dirname, '../../sumi-core/resources'),
+      clean: true,
     },
     target: 'webworker',
     devtool: isDev ? 'inline-source-map' : false,
