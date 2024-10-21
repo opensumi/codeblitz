@@ -15,7 +15,7 @@
     "dev": "webpack serve --config webpack/config.dev.js",
     "build": "webpack --config webpack/config.build.js",
     "analyze": "ANALYZE=1 npm run build",
-    "build:host": "webpack --config webpack/config.worker.js --config webpack/config.webview.js",
+    "build:host": "webpack --config webpack/config.worker.js",
     "build:languages": "webpack --config webpack/config.languages.js",
     "playground": "webpack serve --config playground/webpack.config.js"
   },

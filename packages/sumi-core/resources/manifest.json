@@ -1,5 +1,3 @@
 {
-  "webview": "webview.9163a5b8.js",
-  "webview/index.html": "webview.20aad597/index.html",
-  "worker-host": "worker-host.509631ac.js"
+  "worker-host": "worker-host.js"
 }
