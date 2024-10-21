@@ -16,4 +16,4 @@ node scripts/upgrade-opensumi.js -v x.x.x
 
 发布流程和 OpenSumi 一样，参考这个 Wiki 即可：https://github.com/opensumi/core/wiki/%E5%8F%91%E5%B8%83%E6%96%87%E6%A1%A3
 
-Action 地址在这里：https://github.com/opensumi/codeblitz/actions/workflows/release.yml
+对应的 action 地址在这里：<https://github.com/opensumi/codeblitz/actions/workflows/release.yml>
