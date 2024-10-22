@@ -27,5 +27,6 @@ CodeBlitz 有很多集成场景，在开发的时候需要模拟这些场景，�
   `yarn diff-viewer`
 - code
   `yarn code`
-- provider 直接渲染编辑器
+- provider 直接渲染编辑器组件、Diff 组件的例子
+  使用 `CodeEditor`/`DiffEditor`。  
   `yarn provider`
