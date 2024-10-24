@@ -281,6 +281,9 @@ module.exports = (option) => {
         },
       },
     },
+    experiments: {
+      asyncWebAssembly: true
+    }
   };
 
   return merge(baseConfig, option.webpackConfig);

@@ -146,6 +146,7 @@ export class DiffViewerContribution implements ClientAppContribution, MenuContri
       Selection.fromRange(fullRange, SelectionDirection.LTR),
       {
         disposeWhenEditorClosed: false,
+        renderRemovedWidgetImmediately: true,
       },
     ) as LiveInlineDiffPreviewer;
     const whenReady = Event.toPromise(previewer.getNode()!.onDidEditChange);
