@@ -53,7 +53,7 @@
     "@opensumi/ide-keymaps": "3.4.5-next-1729601182.0",
     "@opensumi/ide-logs": "3.4.5-next-1729601182.0",
     "@opensumi/ide-main-layout": "3.4.5-next-1729601182.0",
-    "@opensumi/ide-markdown": "3.4.5-next-1729601182.0",
+    "@opensumi/ide-markdown": "3.5.0",
     "@opensumi/ide-markers": "3.4.5-next-1729601182.0",
     "@opensumi/ide-menu-bar": "3.4.5-next-1729601182.0",
     "@opensumi/ide-monaco": "3.4.5-next-1729601182.0",
