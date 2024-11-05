@@ -130,24 +130,23 @@ export class HelperService {
     }`;
     const platformConfig = CodePlatformRegistry.instance().getPlatformConfig(platform);
 
-    return this.messageService.open(
+    return this.messageService.open({
       message,
-      msg.type,
-      config?.buttons,
-      config?.closable,
-      platformConfig.brand,
-    );
+      type: msg.type,
+      buttons: config?.buttons,
+      closable: config?.closable,
+      from: platformConfig.brand,
+    });
   }
 
   async showDialog(
-    msg: {
+    options: {
       message: string | React.ReactNode;
       type: MessageType;
       buttons?: any[];
       closable?: boolean;
     },
   ) {
-    const { message, type, buttons = [], closable = true } = msg;
-    return this.dialogService.open(message, type, buttons, closable);
+    return this.dialogService.open(options);
   }
 }
