@@ -738,8 +738,8 @@ __metadata:
     "@types/react-dom": "npm:^18.2.0"
     tslib: "npm:^2.2.0"
   peerDependencies:
-    react: ^18.2.0
-    react-dom: ^18.2.0
+    react: ^18.2.0 || ^16.0.0
+    react-dom: ^18.2.0 || ^16.0.0
   bin:
     codeblitz: bin/codeblitz
   languageName: unknown

@@ -32,18 +32,6 @@ const libBundle = createWebpackConfig({
     },
     externals: [
       {
-        react: {
-          root: 'React',
-          commonjs2: 'react',
-          commonjs: 'react',
-          amd: 'react',
-        },
-        'react-dom': {
-          root: 'ReactDOM',
-          commonjs2: 'react-dom',
-          commonjs: 'react-dom',
-          amd: 'react-dom',
-        },
         moment: {
           root: 'moment',
           commonjs2: 'moment',
@@ -57,6 +45,9 @@ const libBundle = createWebpackConfig({
       minimize: false,
       concatenateModules: false,
       splitChunks: false,
+    },
+    experiments: {
+      asyncWebAssembly: true, // 启用 WebAssembly 支持
     },
   },
 });
