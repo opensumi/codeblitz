@@ -33,6 +33,7 @@ exports.nodePolyfill = {
 
 exports.config = {
   appEntry: 'codeblitz',
+  appEntryWithReact: 'codeblitz-with-react',
   appGlobalEntry: 'codeblitz.global',
   appGlobalMinEntry: 'codeblitz.global.min',
   editorEntry: 'codeblitz.editor',
