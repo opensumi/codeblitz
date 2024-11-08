@@ -1,3 +1,9 @@
+##  (2024-11-08)
+
+* v2.3.1 (#217) ([9bac1a0](https://github.com/opensumi/codeblitz/commit/9bac1a0)), closes [#217](https://github.com/opensumi/codeblitz/issues/217)
+
+
+
 ## [1.0.3](https://github.com/opensumi/codeblitz/compare/v1.0.2...v1.0.3) (2023-09-08)
 
 

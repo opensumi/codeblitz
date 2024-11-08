@@ -58,7 +58,7 @@
     "@types/jest": "^26.0.16",
     "@types/node": "^14.14.6",
     "chalk": "^4.1.0",
-    "conventional-changelog-cli": "^2.1.1",
+    "conventional-changelog-cli": "^5.0.0",
     "dotenv": "^8.2.0",
     "dprint": "^0.46.1",
     "execa": "^4.1.0",
