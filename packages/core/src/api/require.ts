@@ -55,6 +55,8 @@ import * as buffer from 'buffer';
 import * as crypto from 'crypto';
 import * as os from 'os';
 import * as path from 'path';
+import * as React from 'react';
+import ReactDOM, * as ReactDom from 'react-dom/client';
 
 export function requireModule(module: '@opensumi/ide-addons'): typeof Addons;
 export function requireModule(module: '@opensumi/ide-comments'): typeof Comments;
@@ -109,6 +111,8 @@ export function requireModule(module: 'buffer'): typeof buffer;
 export function requireModule(module: 'process'): typeof process;
 export function requireModule(module: 'assert'): typeof assert;
 export function requireModule(module: 'path'): typeof path;
+export function requireModule(module: 'react'): typeof React;
+export function requireModule(module: 'react-dom/client'): typeof ReactDom;
 
 export function requireModule(module: string): any {
   switch (module) {
@@ -215,7 +219,10 @@ export function requireModule(module: string): any {
       return assert;
     case 'path':
       return path;
-
+    case 'react':
+      return React;
+    case 'react-dom/client':
+      return ReactDOM;
     default:
       throw new Error(`not found module ${module}`);
   }
