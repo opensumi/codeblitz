@@ -1,6 +1,6 @@
 {
   "name": "@codeblitzjs/ide-cli",
-  "version": "2.2.1",
+  "version": "2.3.1",
   "description": "@codeblitzjs/ide-cli",
   "main": "lib/commander.js",
   "files": [
