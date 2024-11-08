@@ -65,6 +65,11 @@ const App = () => {
       appConfig={{
         layoutViewSize: {},
       }}
+      runtimeConfig={{
+        aiNative: {
+          enable: false,
+        }
+      }}
       onWillApplyTheme={() => {
         return overrideColorTokens;
       }}
