@@ -152,4 +152,44 @@ const globalBundle = createWebpackConfig({
   },
 });
 
-module.exports = [libBundle, libBundleWithReact, globalBundle];
+
+const globalBundleWithReact = createWebpackConfig({
+  mode: 'production',
+  tsconfigPath: path.join(__dirname, '../../../tsconfig.json'),
+  outputPath: path.join(__dirname, '../../core/bundle'),
+  define: Object.keys(define).reduce((obj, key) => {
+    obj[key] = JSON.stringify(define[key]);
+    return obj;
+  }, {}),
+  webpackConfig: {
+    context: path.join(__dirname, '../../..'),
+    entry: {
+      [config.appGlobalMinWithReactEntry]: './packages/core/src',
+    },
+    output: {
+      library: 'Alex',
+      libraryTarget: 'global',
+    },
+    externals: [
+      {
+        moment: 'moment',
+      },
+    ],
+    optimization: {
+      minimize: true,
+      minimizer: [
+        new TerserPlugin({
+          parallel: true,
+          include: /\.min\.js$/,
+        }),
+        new CssMinimizerPlugin({
+          include: /\.min\.css$/,
+        }),
+      ],
+      concatenateModules: false,
+      splitChunks: false,
+    },
+  },
+});
+
+module.exports = [libBundle, libBundleWithReact, globalBundle, globalBundleWithReact];
