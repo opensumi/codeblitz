@@ -36,6 +36,7 @@ exports.config = {
   appEntryWithReact: 'codeblitz-with-react',
   appGlobalEntry: 'codeblitz.global',
   appGlobalMinEntry: 'codeblitz.global.min',
+  appGlobalMinWithReactEntry: 'codeblitz.global-with-react.min',
   editorEntry: 'codeblitz.editor',
   editorAllEntry: 'codeblitz.editor.all',
   editorAllGlobalEntry: 'codeblitz.editor.all.global',
