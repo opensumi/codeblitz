@@ -85,7 +85,7 @@ export class AtomGitAPIService implements ICodeAPIService {
       let popupWindow;
       if (btn === '去授权') {
         popupWindow = window.open(
-          `${this.config.origin}login/oauth/authorize?client_id=9d8b531661f441d1`,
+          `${this.config.origin}/login/oauth/authorize?client_id=9d8b531661f441d1`,
           '_blank',
           'directories=no,titlebar=no,toolbar=no,location=no,status=no,menubar=no,scrollbars=no,resizable=no,width=800,height=520,top=150,left=150',
         );
