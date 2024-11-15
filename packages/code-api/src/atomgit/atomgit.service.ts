@@ -337,7 +337,6 @@ export class AtomGitAPIService implements ICodeAPIService {
             content: action.content,
             previous_path: action.file_path,
           })),
-          projectId: repo!.projectId,
           branch: header.branch,
           commit_message: header.commit_message,
         },
