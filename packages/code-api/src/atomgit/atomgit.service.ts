@@ -327,7 +327,7 @@ export class AtomGitAPIService implements ICodeAPIService {
     return [];
   }
   async bulkChangeFiles(repo: IRepositoryModel, actions: FileAction[], header: FileActionHeader): Promise<FileActionResult[]> {
-    const res = await this.request<API.ResponseCommit>(
+    const res = await this.request<API.ResponseCommitInfo>(
       `/repos/${this.getProjectPath(repo)}commits/create`,
       {
         data: {
