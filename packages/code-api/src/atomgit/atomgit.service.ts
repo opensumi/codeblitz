@@ -356,8 +356,24 @@ export class AtomGitAPIService implements ICodeAPIService {
     }
     return [];
   }
-  createBranch(_repo: IRepositoryModel, _newBranch: string, _ref: string): Promise<Branch> {
-    throw new Error('Method not implemented.');
+  async createBranch(repo: IRepositoryModel, newBranch: string, ref: string): Promise<Branch> {
+    const res = await this.request<API.ResponseBranch>(`/repos/${this.getProjectPath(repo)}/git/refs`, {
+      method: 'post',
+      data: {
+        sha: newBranch,
+        ref: ref,
+      },
+    });
+
+    const resBranch: Branch = {
+      commit: {
+        id: res.object?.sha,
+      },
+      name: res.ref,
+      ref: res.ref,
+    }
+
+    return resBranch;
   }
   getUser(_repo: IRepositoryModel): Promise<any> {
     throw new Error('Method not implemented.');

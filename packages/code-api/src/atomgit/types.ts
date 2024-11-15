@@ -58,4 +58,12 @@ export namespace API {
     name: string;
     default_branch: string;
   }
+
+  export interface ResponseBranch {
+    object: {
+      sha: string;
+      type: string;
+    }
+    ref: string;
+  }
 }
