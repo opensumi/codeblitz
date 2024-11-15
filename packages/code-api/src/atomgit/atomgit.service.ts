@@ -13,6 +13,7 @@ import {
   EntryParam,
   FileAction,
   FileActionHeader,
+  FileActionResult,
   GetEntryInfoParam,
   GitlensBlame,
   ICodeAPIService,
@@ -325,8 +326,36 @@ export class AtomGitAPIService implements ICodeAPIService {
   async getFiles(_repo: IRepositoryModel): Promise<string[]> {
     return [];
   }
-  bulkChangeFiles(_repo: IRepositoryModel, _actions: FileAction[], _header: FileActionHeader): Promise<any> {
-    throw new Error('Method not implemented.');
+  async bulkChangeFiles(repo: IRepositoryModel, actions: FileAction[], header: FileActionHeader): Promise<FileActionResult[]> {
+    const res = await this.request<API.ResponseCommit>(
+      `/repos/${this.getProjectPath(repo)}commits/create`,
+      {
+        data: {
+          actions: actions.map((action) => ({
+            action: action.action_type.toLocaleLowerCase(),
+            file_path: action.file_path,
+            content: action.content,
+            previous_path: action.file_path,
+          })),
+          projectId: repo!.projectId,
+          branch: header.branch,
+          commit_message: header.commit_message,
+        },
+        method: 'post',
+      },
+    );
+    const resCommit = {
+      branch_created: false,
+      branch: header.branch,
+      commit_id: res.id,
+      file_name: '',
+      ...res,
+    };
+    // 没有提交ID 说明提交失败
+    if (res.id) {
+      return [resCommit] as FileActionResult[];
+    }
+    return [];
   }
   createBranch(_repo: IRepositoryModel, _newBranch: string, _ref: string): Promise<Branch> {
     throw new Error('Method not implemented.');

@@ -40,9 +40,18 @@ export namespace API {
   }
 
   export interface ResponseCommit {
-    commit: {
-      sha: string;
-    };
+    author_email: string;
+    author_name: string;
+    authored_date: string;
+    committed_date: string;
+    committer_email: string;
+    committer_name: string;
+    created_at: string;
+    id: string;
+    message: string;
+    parent_ids: string[];
+    short_id: string;
+    title: string;
   }
 
   export interface ResponseRepoInfo {
