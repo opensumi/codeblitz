@@ -337,7 +337,7 @@ export class AtomGitAPIService implements ICodeAPIService {
   }
   async bulkChangeFiles(repo: IRepositoryModel, actions: FileAction[], header: FileActionHeader): Promise<FileActionResult[]> {
     const res = await this.request<API.ResponseCommitInfo>(
-      `/repos/${this.getProjectPath(repo)}commits/create`,
+      `/repos/${this.getProjectPath(repo)}/commits/create`,
       {
         data: {
           actions: actions.map((action) => ({
@@ -369,8 +369,8 @@ export class AtomGitAPIService implements ICodeAPIService {
     const res = await this.request<API.ResponseBranch>(`/repos/${this.getProjectPath(repo)}/git/refs`, {
       method: 'post',
       data: {
-        sha: newBranch,
-        ref: ref,
+        sha: ref,
+        ref: `refs/heads/${newBranch}`,
       },
     });
 
@@ -385,7 +385,7 @@ export class AtomGitAPIService implements ICodeAPIService {
     return resBranch;
   }
   getUser(_repo: IRepositoryModel): Promise<any> {
-    throw new Error('Method not implemented.');
+    return {} as any;
   }
 
   public async getProject(repo: IRepositoryModel): Promise<Project> {
