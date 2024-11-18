@@ -222,8 +222,17 @@ export class AtomGitAPIService implements ICodeAPIService {
 
     return Buffer.from(content);
   }
-  getBlobByCommitPath(_repo: IRepositoryModel, _commit: string, _path: string, _options?: any): Promise<Uint8Array> {
-    throw new Error('Method not implemented.');
+  async getBlobByCommitPath(repo: IRepositoryModel, commit: string, path: string): Promise<Uint8Array> {
+    const infoAndBlobs = await this.request<API.ResponseInfoAndBlobs>(
+      `/repos/${this.getProjectPath(repo)}/contents/file`,
+      {
+        params: {
+          path: path,
+          ref: commit
+        },
+      },
+    );
+    return new Uint8Array(new TextEncoder().encode(infoAndBlobs?.content || ''));
   }
   async getBranches(repo: IRepositoryModel): Promise<BranchOrTag[]> {
     if (!this.PRIVATE_TOKEN) {

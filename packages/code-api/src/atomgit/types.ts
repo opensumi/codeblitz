@@ -72,4 +72,15 @@ export namespace API {
     }
     ref: string;
   }
+
+  export interface ResponseInfoAndBlobs {
+    content: string;
+    download_url: string;
+    encoding: string;
+    name: string;
+    path: string;
+    sha: string;
+    size: number;
+    type: 'file' | string;
+  }
 }
