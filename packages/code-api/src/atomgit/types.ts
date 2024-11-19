@@ -45,8 +45,53 @@ export namespace API {
     };
   }
 
+  export interface ResponseCommitInfo {
+    author_email: string;
+    author_name: string;
+    authored_date: string;
+    committed_date: string;
+    committer_email: string;
+    committer_name: string;
+    created_at: string;
+    id: string;
+    message: string;
+    parent_ids: string[];
+    short_id: string;
+    title: string;
+  }
+
   export interface ResponseRepoInfo {
     name: string;
     default_branch: string;
+  }
+
+  export interface ResponseBranch {
+    object: {
+      sha: string;
+      type: string;
+    }
+    ref: string;
+  }
+
+  export interface ResponseInfoAndBlobs {
+    content: string;
+    download_url: string;
+    encoding: string;
+    name: string;
+    path: string;
+    sha: string;
+    size: number;
+    type: 'file' | string;
+  }
+
+  export interface ResponseFileNames {
+    path: string;
+    sha: string;
+    mode: string;
+    type: 'tree' | 'blob' | string;
+  }
+
+  export interface RequestResponseOptions {
+    errorOption?: boolean;
   }
 }
