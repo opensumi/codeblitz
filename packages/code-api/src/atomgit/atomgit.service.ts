@@ -13,6 +13,7 @@ import {
   EntryParam,
   FileAction,
   FileActionHeader,
+  FileActionResult,
   GetEntryInfoParam,
   GitlensBlame,
   ICodeAPIService,
@@ -135,7 +136,7 @@ export class AtomGitAPIService implements ICodeAPIService {
     });
   }
 
-  protected async request<T>(path: string, options?: RequestOptions): Promise<T> {
+  protected async request<T>(path: string, options?: RequestOptions, responseOptions?: API.RequestResponseOptions): Promise<T> {
     try {
       const { headers, ...rest } = options || {};
       const privateToken = this.PRIVATE_TOKEN;
@@ -161,6 +162,10 @@ export class AtomGitAPIService implements ICodeAPIService {
         await this.checkAccessToken();
       } else if (status === 404) {
         messageKey = 'error.resource-not-found';
+      }
+      if (responseOptions?.errorOption === false) {
+        console.log(err);
+        return undefined as any;
       }
       this.showErrorMessage(messageKey, status);
       throw err;
@@ -221,8 +226,29 @@ export class AtomGitAPIService implements ICodeAPIService {
 
     return Buffer.from(content);
   }
-  getBlobByCommitPath(_repo: IRepositoryModel, _commit: string, _path: string, _options?: any): Promise<Uint8Array> {
-    throw new Error('Method not implemented.');
+  async getBlobByCommitPath(repo: IRepositoryModel, commit: string, path: string, options?: API.RequestResponseOptions): Promise<Uint8Array> {
+    const res = await this.request<API.ResponseInfoAndBlobs>(
+      `/repos/${this.getProjectPath(repo)}/contents/file`,
+      {
+        params: {
+          path: path,
+          ref: commit
+        },
+      },
+      options
+    );
+
+    const { content, encoding, type } = res;
+
+    if (type !== 'file') {
+      throw new Error(`${path} is not a file.`);
+    }
+
+    if (encoding === 'base64') {
+      return Buffer.from(decodeURIComponent(escape(atob(content))));
+    }
+
+    return Buffer.from(content);
   }
   async getBranches(repo: IRepositoryModel): Promise<BranchOrTag[]> {
     if (!this.PRIVATE_TOKEN) {
@@ -322,17 +348,68 @@ export class AtomGitAPIService implements ICodeAPIService {
   getCommitCompare(_repo: IRepositoryModel, _from: string, _to: string): Promise<CommitFileChange[]> {
     throw new Error('Method not implemented.');
   }
-  async getFiles(_repo: IRepositoryModel): Promise<string[]> {
+  async getFiles(repo: IRepositoryModel): Promise<string[]> {
+    const fileList = await this.request<API.ResponseFileNames[]>(
+      `/repos/${this.getProjectPath(repo)}/trees/${repo.commit}`,
+      {
+        params: {
+          recursive: 'true',
+        },
+      },
+    );
+    return (fileList || []).filter(f => f.type === 'blob').map((f) => f.path);
+  }
+  async bulkChangeFiles(repo: IRepositoryModel, actions: FileAction[], header: FileActionHeader): Promise<FileActionResult[]> {
+    const res = await this.request<API.ResponseCommitInfo>(
+      `/repos/${this.getProjectPath(repo)}/commits/create`,
+      {
+        data: {
+          actions: actions.map((action) => ({
+            action: action.action_type.toLocaleLowerCase(),
+            file_path: action.file_path,
+            content: action.content,
+            previous_path: action.file_path,
+          })),
+          branch: header.branch,
+          commit_message: header.commit_message,
+        },
+        method: 'post',
+      },
+    );
+    const resCommit = {
+      branch_created: false,
+      branch: header.branch,
+      commit_id: res.id,
+      file_name: '',
+      ...res,
+    };
+    // 没有提交ID 说明提交失败
+    if (res.id) {
+      return [resCommit] as FileActionResult[];
+    }
     return [];
   }
-  bulkChangeFiles(_repo: IRepositoryModel, _actions: FileAction[], _header: FileActionHeader): Promise<any> {
-    throw new Error('Method not implemented.');
-  }
-  createBranch(_repo: IRepositoryModel, _newBranch: string, _ref: string): Promise<Branch> {
-    throw new Error('Method not implemented.');
+  async createBranch(repo: IRepositoryModel, newBranch: string, ref: string): Promise<Branch> {
+    const res = await this.request<API.ResponseBranch>(`/repos/${this.getProjectPath(repo)}/git/refs`, {
+      method: 'post',
+      data: {
+        sha: ref,
+        ref: newBranch,
+      },
+    });
+
+    const resBranch: Branch = {
+      commit: {
+        id: res.object?.sha,
+      },
+      name: res.ref,
+      ref: res.ref,
+    }
+
+    return resBranch;
   }
   getUser(_repo: IRepositoryModel): Promise<any> {
-    throw new Error('Method not implemented.');
+    return {} as any;
   }
 
   public async getProject(repo: IRepositoryModel): Promise<Project> {
