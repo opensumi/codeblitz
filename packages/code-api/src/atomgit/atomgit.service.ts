@@ -136,7 +136,7 @@ export class AtomGitAPIService implements ICodeAPIService {
     });
   }
 
-  protected async request<T>(path: string, options?: RequestOptions): Promise<T> {
+  protected async request<T>(path: string, options?: RequestOptions, responseOptions?: API.RequestResponseOptions): Promise<T> {
     try {
       const { headers, ...rest } = options || {};
       const privateToken = this.PRIVATE_TOKEN;
@@ -162,6 +162,10 @@ export class AtomGitAPIService implements ICodeAPIService {
         await this.checkAccessToken();
       } else if (status === 404) {
         messageKey = 'error.resource-not-found';
+      }
+      if (responseOptions?.errorOption === false) {
+        console.log(err);
+        return undefined as any;
       }
       this.showErrorMessage(messageKey, status);
       throw err;
@@ -222,7 +226,7 @@ export class AtomGitAPIService implements ICodeAPIService {
 
     return Buffer.from(content);
   }
-  async getBlobByCommitPath(repo: IRepositoryModel, commit: string, path: string): Promise<Uint8Array> {
+  async getBlobByCommitPath(repo: IRepositoryModel, commit: string, path: string, options?: API.RequestResponseOptions): Promise<Uint8Array> {
     const res = await this.request<API.ResponseInfoAndBlobs>(
       `/repos/${this.getProjectPath(repo)}/contents/file`,
       {
@@ -231,6 +235,7 @@ export class AtomGitAPIService implements ICodeAPIService {
           ref: commit
         },
       },
+      options
     );
 
     const { content, encoding, type } = res;

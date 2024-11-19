@@ -90,4 +90,8 @@ export namespace API {
     mode: string;
     type: 'tree' | 'blob' | string;
   }
+
+  export interface RequestResponseOptions {
+    errorOption?: boolean;
+  }
 }
