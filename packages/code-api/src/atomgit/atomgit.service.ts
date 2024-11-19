@@ -223,7 +223,7 @@ export class AtomGitAPIService implements ICodeAPIService {
     return Buffer.from(content);
   }
   async getBlobByCommitPath(repo: IRepositoryModel, commit: string, path: string): Promise<Uint8Array> {
-    const infoAndBlobs = await this.request<API.ResponseInfoAndBlobs>(
+    const res = await this.request<API.ResponseInfoAndBlobs>(
       `/repos/${this.getProjectPath(repo)}/contents/file`,
       {
         params: {
@@ -232,7 +232,18 @@ export class AtomGitAPIService implements ICodeAPIService {
         },
       },
     );
-    return new Uint8Array(new TextEncoder().encode(infoAndBlobs?.content || ''));
+
+    const { content, encoding, type } = res;
+
+    if (type !== 'file') {
+      throw new Error(`${path} is not a file.`);
+    }
+
+    if (encoding === 'base64') {
+      return Buffer.from(decodeURIComponent(escape(atob(content))));
+    }
+
+    return Buffer.from(content);
   }
   async getBranches(repo: IRepositoryModel): Promise<BranchOrTag[]> {
     if (!this.PRIVATE_TOKEN) {
@@ -332,8 +343,16 @@ export class AtomGitAPIService implements ICodeAPIService {
   getCommitCompare(_repo: IRepositoryModel, _from: string, _to: string): Promise<CommitFileChange[]> {
     throw new Error('Method not implemented.');
   }
-  async getFiles(_repo: IRepositoryModel): Promise<string[]> {
-    return [];
+  async getFiles(repo: IRepositoryModel): Promise<string[]> {
+    const fileList = await this.request<API.ResponseFileNames[]>(
+      `/repos/${this.getProjectPath(repo)}/trees/${repo.commit}`,
+      {
+        params: {
+          recursive: 'true',
+        },
+      },
+    );
+    return (fileList || []).filter(f => f.type === 'blob').map((f) => f.path);
   }
   async bulkChangeFiles(repo: IRepositoryModel, actions: FileAction[], header: FileActionHeader): Promise<FileActionResult[]> {
     const res = await this.request<API.ResponseCommitInfo>(

@@ -83,4 +83,11 @@ export namespace API {
     size: number;
     type: 'file' | string;
   }
+
+  export interface ResponseFileNames {
+    path: string;
+    sha: string;
+    mode: string;
+    type: 'tree' | 'blob' | string;
+  }
 }
