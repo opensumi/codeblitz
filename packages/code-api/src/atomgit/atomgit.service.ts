@@ -370,7 +370,7 @@ export class AtomGitAPIService implements ICodeAPIService {
       method: 'post',
       data: {
         sha: ref,
-        ref: `refs/heads/${newBranch}`,
+        ref: newBranch,
       },
     });
 
