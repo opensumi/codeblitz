@@ -78,6 +78,12 @@ export class FileTreeCustomContribution
       FILE_COMMANDS.PASTE_FILE,
       FILE_COMMANDS.CUT_FILE,
     ];
+    // codeblitz2 webscm rename 功能和 delete 功能失效，先禁用掉
+    const DISABLE_COMMANDS = [
+      FILE_COMMANDS.RENAME_FILE,
+      FILE_COMMANDS.DELETE_FILE,
+      FILE_COMMANDS.CUT_FILE,
+    ];
 
     const isContextMenuFile = () => {
       return (
@@ -103,54 +109,58 @@ export class FileTreeCustomContribution
     if (this.runtimeConfig.scmFileTree) {
       SCMFileCommand.forEach((cmd) => {
         commands.unregisterCommand(cmd.id);
+        if (DISABLE_COMMANDS.includes(cmd)) {
+          // 禁用命令需要注册一个空函数
+          commands.registerCommand(cmd);
+        }
       });
       const exitFilterMode = () => {
         if (this.fileTreeService.filterMode) {
           this.fileTreeService.toggleFilterMode();
         }
       };
-      commands.registerCommand<ExplorerContextCallback>(FILE_COMMANDS.RENAME_FILE, {
-        execute: (uri) => {
-          exitFilterMode();
-          if (!uri) {
-            if (this.fileTreeModelService.contextMenuFile) {
-              uri = this.fileTreeModelService.contextMenuFile.uri;
-            } else if (this.fileTreeModelService.focusedFile) {
-              uri = this.fileTreeModelService.focusedFile.uri;
-            } else {
-              return;
-            }
-          }
-          this.fileTreeModelService.renamePrompt(uri);
-        },
-        isEnabled: () => !Directory.is(this.fileTreeModelService.contextMenuFile),
-        isVisible: () => isContextMenuFile(),
-      });
+      // commands.registerCommand<ExplorerContextCallback>(FILE_COMMANDS.RENAME_FILE, {
+      //   execute: (uri) => {
+      //     exitFilterMode();
+      //     if (!uri) {
+      //       if (this.fileTreeModelService.contextMenuFile) {
+      //         uri = this.fileTreeModelService.contextMenuFile.uri;
+      //       } else if (this.fileTreeModelService.focusedFile) {
+      //         uri = this.fileTreeModelService.focusedFile.uri;
+      //       } else {
+      //         return;
+      //       }
+      //     }
+      //     this.fileTreeModelService.renamePrompt(uri);
+      //   },
+      //   isEnabled: () => !Directory.is(this.fileTreeModelService.contextMenuFile),
+      //   isVisible: () => isContextMenuFile(),
+      // });
 
-      commands.registerCommand<ExplorerContextCallback>(FILE_COMMANDS.DELETE_FILE, {
-        execute: (_, uris) => {
-          exitFilterMode();
-          if (!uris) {
-            if (this.fileTreeModelService.focusedFile) {
-              this.willDeleteUris.push(this.fileTreeModelService.focusedFile.uri);
-            } else if (
-              this.fileTreeModelService.selectedFiles
-              && this.fileTreeModelService.selectedFiles.length > 0
-            ) {
-              this.willDeleteUris = this.willDeleteUris.concat(
-                this.fileTreeModelService.selectedFiles.map((file) => file.uri),
-              );
-            } else {
-              return;
-            }
-          } else {
-            this.willDeleteUris = this.willDeleteUris.concat(uris);
-          }
-          return this.deleteThrottler.queue<void>(this.doDelete.bind(this));
-        },
-        isEnabled: () => !Directory.is(this.fileTreeModelService.contextMenuFile),
-        isVisible: () => isContextMenuFile(),
-      });
+      // commands.registerCommand<ExplorerContextCallback>(FILE_COMMANDS.DELETE_FILE, {
+      //   execute: (_, uris) => {
+      //     exitFilterMode();
+      //     if (!uris) {
+      //       if (this.fileTreeModelService.focusedFile) {
+      //         this.willDeleteUris.push(this.fileTreeModelService.focusedFile.uri);
+      //       } else if (
+      //         this.fileTreeModelService.selectedFiles
+      //         && this.fileTreeModelService.selectedFiles.length > 0
+      //       ) {
+      //         this.willDeleteUris = this.willDeleteUris.concat(
+      //           this.fileTreeModelService.selectedFiles.map((file) => file.uri),
+      //         );
+      //       } else {
+      //         return;
+      //       }
+      //     } else {
+      //       this.willDeleteUris = this.willDeleteUris.concat(uris);
+      //     }
+      //     return this.deleteThrottler.queue<void>(this.doDelete.bind(this));
+      //   },
+      //   isEnabled: () => !Directory.is(this.fileTreeModelService.contextMenuFile),
+      //   isVisible: () => isContextMenuFile(),
+      // });
 
       commands.registerCommand<ExplorerContextCallback>(FILE_COMMANDS.COPY_FILE, {
         execute: (_, uris) => {
@@ -167,20 +177,20 @@ export class FileTreeCustomContribution
         isVisible: () => isContextMenuFile() || isFocusedFile(),
       });
 
-      commands.registerCommand<ExplorerContextCallback>(FILE_COMMANDS.CUT_FILE, {
-        execute: (_, uris) => {
-          if (uris && uris.length) {
-            this.fileTreeModelService.cutFile(uris);
-          } else {
-            const selectedUris = this.fileTreeModelService.selectedFiles.map((file) => file.uri);
-            if (selectedUris && selectedUris.length) {
-              this.fileTreeModelService.cutFile(selectedUris);
-            }
-          }
-        },
-        isEnabled: () => !Directory.is(this.fileTreeModelService.contextMenuFile),
-        isVisible: () => isContextMenuFile() || isFocusedFile(),
-      });
+      // commands.registerCommand<ExplorerContextCallback>(FILE_COMMANDS.CUT_FILE, {
+      //   execute: (_, uris) => {
+      //     if (uris && uris.length) {
+      //       this.fileTreeModelService.cutFile(uris);
+      //     } else {
+      //       const selectedUris = this.fileTreeModelService.selectedFiles.map((file) => file.uri);
+      //       if (selectedUris && selectedUris.length) {
+      //         this.fileTreeModelService.cutFile(selectedUris);
+      //       }
+      //     }
+      //   },
+      //   isEnabled: () => !Directory.is(this.fileTreeModelService.contextMenuFile),
+      //   isVisible: () => isContextMenuFile() || isFocusedFile(),
+      // });
 
       commands.registerCommand<ExplorerContextCallback>(FILE_COMMANDS.PASTE_FILE, {
         execute: (uri) => {
