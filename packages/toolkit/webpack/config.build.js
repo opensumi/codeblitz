@@ -29,6 +29,7 @@ const libBundle = createWebpackConfig({
     output: {
       library: 'AlexLib',
       libraryTarget: 'umd',
+      publicPath: './',
     },
     externals: [
       {
@@ -84,6 +85,7 @@ const libBundleWithReact = createWebpackConfig({
     output: {
       library: 'AlexLib',
       libraryTarget: 'umd',
+      publicPath: './',
     },
     externals: [
       // 此处没有 external React，将 React 打包进去以应对 React16 的集成方
@@ -127,6 +129,7 @@ const globalBundle = createWebpackConfig({
     output: {
       library: 'Alex',
       libraryTarget: 'global',
+      publicPath: './',
     },
     externals: [
       {
@@ -169,6 +172,7 @@ const globalBundleWithReact = createWebpackConfig({
     output: {
       library: 'Alex',
       libraryTarget: 'global',
+      publicPath: './',
     },
     externals: [
       {
