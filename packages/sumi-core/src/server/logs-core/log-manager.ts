@@ -14,7 +14,8 @@ import { DEFAULT_LOG_FOLDER, LogService } from './log.service';
 @Injectable()
 export class LogServiceManager implements ILogServiceManager {
   @Autowired(ServerConfig)
-  private serverConfig: ServerConfig;
+  // 卸载时会有时序问题导致 serverConfig 被销毁，这边改为 Optional
+  private serverConfig?: ServerConfig;
 
   protected readonly logLevelChangeEmitter = new Emitter<LogLevel>();
   private globalLogLevel: LogLevel;
@@ -25,8 +26,8 @@ export class LogServiceManager implements ILogServiceManager {
 
   constructor() {
     this.init({
-      logDir: this.serverConfig.logDir,
-      logLevel: this.serverConfig.logLevel,
+      logDir: this.serverConfig?.logDir,
+      logLevel: this.serverConfig?.logLevel,
     });
     this.cleanOldLogs();
   }
@@ -35,7 +36,7 @@ export class LogServiceManager implements ILogServiceManager {
     this.logRootFolderPath = options.logDir || DEFAULT_LOG_FOLDER;
     this.logFolderPath = this._getLogFolder();
     this.globalLogLevel = options.logLevel || LogLevel.Info;
-    this.LogServiceClass = this.serverConfig.LogServiceClass || LogService;
+    this.LogServiceClass = this.serverConfig?.LogServiceClass || LogService;
   };
 
   getLogger = (
