@@ -56,13 +56,8 @@ codeblitz-root {
 }
 
 .hide-editor-tab {
-  [class^='kt_editor_group'] {
-    > [class^='editorGroupHeader'] {
-      display: none !important;
-    }
-    > [class^='kt_editor_body'] {
-      height: 100% !important;
-    }
+  :global(#opensumi-editor-tabs) {
+    display: none;
   }
 }
 
