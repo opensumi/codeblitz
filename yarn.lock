@@ -702,6 +702,7 @@ __metadata:
   dependencies:
     "@codeblitzjs/ide-common": "workspace:*"
     "@codeblitzjs/ide-sumi-core": "workspace:*"
+    mobx: "npm:^6.12.0"
     tslib: "npm:^2.2.0"
   languageName: unknown
   linkType: soft
