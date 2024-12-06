@@ -13,6 +13,7 @@
   "dependencies": {
     "@codeblitzjs/ide-common": "workspace:*",
     "@codeblitzjs/ide-sumi-core": "workspace:*",
+    "mobx": "^6.12.0",
     "tslib": "^2.2.0"
   }
 }
