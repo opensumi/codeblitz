@@ -776,7 +776,7 @@ __metadata:
     "@opensumi/ide-webview": "npm:3.5.0"
     "@opensumi/ide-workspace": "npm:3.5.0"
     "@opensumi/ide-workspace-edit": "npm:3.5.0"
-    "@opensumi/textmate-languages": "npm:^2.7.0"
+    "@opensumi/textmate-languages": "npm:^2.8.1"
     "@types/react": "npm:^18.2.0"
     "@types/react-dom": "npm:^18.2.0"
     tslib: "npm:^2.2.0"
@@ -2851,12 +2851,12 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@opensumi/textmate-languages@npm:^2.7.0":
-  version: 2.7.2
-  resolution: "@opensumi/textmate-languages@npm:2.7.2"
+"@opensumi/textmate-languages@npm:^2.8.1":
+  version: 2.8.1
+  resolution: "@opensumi/textmate-languages@npm:2.8.1"
   dependencies:
     plist: "npm:^3.0.1"
-  checksum: 10/5a23ffe73e819cfab55f3f1ad3a9b49e0f69aaedce554138eed83a4b78f212169e226f1c20c6e1e317c60583745f912867f3a468e1fcff5440871ed11283fceb
+  checksum: 10/aa25bac57a862bc58076df8f1e850ac94058661eadf5d515632225f0fb1a57204e7b50affe67cf4067a3483d90c8ba230d4c3170cd950ad80edb9f7d08413454
   languageName: node
   linkType: hard
 
