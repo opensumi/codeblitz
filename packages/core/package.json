@@ -75,7 +75,7 @@
     "@opensumi/ide-webview": "3.6.0",
     "@opensumi/ide-workspace": "3.6.0",
     "@opensumi/ide-workspace-edit": "3.6.0",
-    "@opensumi/textmate-languages": "^2.7.0",
+    "@opensumi/textmate-languages": "^2.8.1",
     "tslib": "^2.2.0"
   },
   "devDependencies": {
