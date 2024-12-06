@@ -67,7 +67,7 @@ const App = () => {
       }}
       runtimeConfig={{
         aiNative: {
-          enable: false,
+          enable: true,
         }
       }}
       onWillApplyTheme={() => {

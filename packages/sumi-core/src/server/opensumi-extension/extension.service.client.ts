@@ -12,7 +12,7 @@ const { posix } = path;
 
 @Injectable()
 export class ExtensionServiceClientImpl implements IExtensionNodeClientService {
-  getLanguagePack(languageId: string): IExtensionLanguagePack | undefined {
+  getLanguagePack(languageId: string): Promise<IExtensionLanguagePack | undefined> {
     throw new Error('Method not implemented.');
   }
 
