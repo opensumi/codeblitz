@@ -1,4 +1,5 @@
 declare module '@codeblitzjs/ide-core/languages' {}
+declare module '@codeblitzjs/ide-core/languages/arm' {}
 declare module '@codeblitzjs/ide-core/languages/bat' {}
 declare module '@codeblitzjs/ide-core/languages/clojure' {}
 declare module '@codeblitzjs/ide-core/languages/coffeescript' {}
@@ -16,8 +17,10 @@ declare module '@codeblitzjs/ide-core/languages/ini' {}
 declare module '@codeblitzjs/ide-core/languages/java' {}
 declare module '@codeblitzjs/ide-core/languages/javascript' {}
 declare module '@codeblitzjs/ide-core/languages/json' {}
+declare module '@codeblitzjs/ide-core/languages/kcl-vscode-extension' {}
 declare module '@codeblitzjs/ide-core/languages/kotlin' {}
 declare module '@codeblitzjs/ide-core/languages/less' {}
+declare module '@codeblitzjs/ide-core/languages/linkerscript' {}
 declare module '@codeblitzjs/ide-core/languages/log' {}
 declare module '@codeblitzjs/ide-core/languages/lua' {}
 declare module '@codeblitzjs/ide-core/languages/make' {}

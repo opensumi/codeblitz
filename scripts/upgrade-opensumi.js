@@ -29,7 +29,8 @@ invoke(async () => {
   await Promise.all(pkgPathList.map((pkgPath) => upgradeOpenSumiDeps(pkgPath, version, packages)));
   signale.await(`yarn 重装依赖`);
   await exec('yarn --network-timeout 100000');
-  await exec('node scripts/build-assets')
+  await exec('node scripts/build-assets');
+  await exec('node scripts/generate')
 });
 
 async function getOrCheckVersion(version) {
