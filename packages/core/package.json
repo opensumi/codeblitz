@@ -1,6 +1,6 @@
 {
   "name": "@codeblitzjs/ide-core",
-  "version": "2.4.1",
+  "version": "2.4.2",
   "description": "@codeblitzjs/ide-core",
   "main": "lib/index.js",
   "typings": "lib/index.d.ts",
