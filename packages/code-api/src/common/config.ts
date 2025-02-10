@@ -1,4 +1,5 @@
 import { CodePlatform, ICodePlatform } from './types';
+import merge from 'lodash/merge';
 
 export interface ICodePlatformConfig {
   platform: CodePlatform | string;
@@ -219,18 +220,7 @@ export class CodePlatformRegistry {
     if (!provider) {
       return;
     }
-    if (Array.isArray(data.hostname)) {
-      provider.hostname.push(...data.hostname);
-    }
-    if (data.origin) {
-      provider.origin = data.origin;
-    }
-    if (data.endpoint) {
-      provider.endpoint = data.endpoint;
-    }
-    if (data.token) {
-      provider.token = data.token;
-    }
+    merge(provider, data);
   }
 
   load(configs: Record<string, ICodePlatformConfig>) {
