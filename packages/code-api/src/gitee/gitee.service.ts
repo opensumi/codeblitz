@@ -52,7 +52,7 @@ export class GiteeAPIService implements ICodeAPIService {
 
   private redirectUrl = this.config.redirectUrl;
 
-  private client_id = '';
+  private client_id = this.config.clientId;
 
   get PRIVATE_TOKEN() {
     if (!this._PRIVATE_TOKEN) {
@@ -104,9 +104,64 @@ export class GiteeAPIService implements ICodeAPIService {
     throw new Error('Method not implemented.');
   }
 
+  private sleep(t: number) {
+    return new Promise(res => {
+      setTimeout(() => {
+        res(undefined);
+      }, t);
+    });
+  }
+
   private async checkAccessToken(): Promise<boolean> {
     return new Promise<boolean>(async (resolve, reject) => {
       resolve(true);
+       // 一开始就弹出弹窗会有颜色闪烁问题，先临时 sleep 处理，后面再优化
+      await this.sleep(300);
+      const btn = await this.helper.showDialog({
+        message: '检测到 OAuth 未授权',
+        type: MessageType.Info,
+        closable: false,
+        buttons: ['去授权'],
+      });
+
+      let popupWindow;
+      if (btn === '去授权') {
+        popupWindow = window.open(
+          `${this.config.origin}/oauth/authorize?client_id=${this.client_id}&response_type=code&redirect_uri=${this.redirectUrl}`,
+          '_blank',
+          'directories=no,titlebar=no,toolbar=no,location=no,status=no,menubar=no,scrollbars=no,resizable=no,width=800,height=520,top=150,left=150'
+        );
+      }
+      const handleMessage = async (event: MessageEvent) => {
+        try {
+          const { data } = event;
+          if (isObject(data) && data.type === 'gitee') {
+            const {
+              data: { token },
+            } = data;
+            popupWindow?.close();
+            if (!token) {
+              resolve(false);
+              return;
+            }
+
+            // 清理过期的 token；
+            this.clearToken();
+
+            this.helper.GITEE_TOKEN = token;
+            this.helper.reinitializeCodeService(true);
+            if(this.helper.GITEE_TOKEN){
+              // 需重新加载否则scm插件报错
+              window.location.reload();
+            }
+            resolve(true);
+          }
+        } catch (error) {
+          console.log(error);
+          reject(error);
+        }
+      };
+      window.addEventListener('message', handleMessage);
     });
   }
 
@@ -470,6 +525,6 @@ export class GiteeAPIService implements ICodeAPIService {
 
   clearToken() {
     this._PRIVATE_TOKEN = null;
-    this.helper.ATOMGIT_TOKEN = null;
+    this.helper.GITEE_TOKEN = null;
   }
 }
