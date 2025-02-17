@@ -202,7 +202,7 @@ export class LogServiceForClient extends RPCService implements ILogServiceForCli
     logger.sendLog(LogLevel.Critical, message);
   }
 
-  dispose(namespace: SupportLogNamespace) {
+  async disposeLogger(namespace: SupportLogNamespace) {
     this.getLogger(namespace).dispose();
   }
 
