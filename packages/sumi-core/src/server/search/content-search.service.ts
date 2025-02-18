@@ -134,7 +134,7 @@ export class ContentSearchService implements IContentSearchServer {
         && opts?.exclude?.map((str: string) => parse(anchorGlob(str))))
         || [];
       const wordSeparators = config.wordMatch === 'local' && opts?.matchWholeWord
-        ? getMapForWordSeparators('`~!@#$%^&*()-=+[{]}\\|;:\'",.<>/? \n')
+        ? getMapForWordSeparators('`~!@#$%^&*()-=+[{]}\\|;:\'",.<>/? \n', [])
         : null;
 
       const maxResults = opts?.maxResults || DEFAULT_SEARCH_IN_WORKSPACE_LIMIT;
