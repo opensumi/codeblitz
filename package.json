@@ -7,7 +7,7 @@
   "description": "codeblitzjs",
   "main": "index.js",
   "engines": {
-    "opensumi": "3.6.5-next-1766140030.0"
+    "opensumi": "3.6.5-next-1766394426.0"
   },
   "scripts": {
     "prepare": "husky install",
@@ -87,5 +87,5 @@
     "keytar": "npm:@favware/skip-dependency@latest"
   },
   "packageManager": "yarn@4.2.2",
-  "version": "2.4.5"
+  "version": "2.4.6"
 }
